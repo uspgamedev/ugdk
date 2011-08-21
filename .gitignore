@@ -1,0 +1,8 @@
+*~
+.*.swp
+CMake*
+!CMakeLists.txt
+Makefile
+cmake*
+lib/*
+src/config/config.h
