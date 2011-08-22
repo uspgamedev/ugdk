@@ -9,11 +9,18 @@ set (FRAMEWORK_RELEASENAME ugdk)
 set (FRAMEWORK_DEBUGNAME ugdk_d)
 set (FRAMEWORK_VERSION 1.0.0)
 
+# Some output.
+message ("=== ${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION} ===")
+
 # If the user did not define the parameteres, use default values.
 if (NOT BUILD_TYPE)
+    message ("-- No build type was defined, choosing default value: RELEASE")
     set (BUILD_TYPE RELEASE)
+else (NOT BUILD_TYPE)
+    message ("-- Build type: ${BUILD_TYPE}")
 endif (NOT BUILD_TYPE)
 if (NOT LINK_TYPE)
+    message ("-- No link type was defined, choosing default value: STATIC")
     set (LINK_TYPE STATIC)
 endif (NOT LINK_TYPE)
 
@@ -22,16 +29,12 @@ if (${BUILD_TYPE} STREQUAL RELEASE)
 elseif (${BUILD_TYPE} STREQUAL DEBUG)
     set (FRAMEWORK_BUILDNAME ${FRAMEWORK_DEBUGNAME})
 else ()
-    message (FATAL_ERROR "Unknown build type ${BUILD_TYPE}.")
+    message (FATAL_ERROR ">>> Unknown build type ${BUILD_TYPE}.")
 endif ()
-
 
 # Important build locations.
 set (SRC_DIR src)
 set (LIB_DIR lib)
-
-# Some output.
-message ("${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION}")
 
 include (${SRC_DIR}/src_list.cmake)
 
