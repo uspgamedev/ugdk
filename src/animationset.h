@@ -33,7 +33,7 @@ class AnimationSet {
     Animation::FrameSequence* Search(std::string name);
 
     // Optimizes access to the animations identified by the given name.
-    // The caller should be counscious of the returned indexes for later use
+    // The caller should be conscious of the returned indexes for later use
     // of these animations through the Get() method.
     // Returns the generated index or -1 if the animation was not found.
     uint32 MakeIndex(std::string name);
