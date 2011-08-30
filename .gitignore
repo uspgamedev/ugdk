@@ -5,4 +5,4 @@ CMake*
 Makefile
 cmake*
 lib/*
-src/config/config.h
+src/ugdk/config/config.h
