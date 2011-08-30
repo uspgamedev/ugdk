@@ -10,8 +10,6 @@ using std::vector;
 
 namespace ugdk {
 
-namespace base {
-
 class VideoManager;
 class InputManager;
 class TimeHandler;
@@ -76,8 +74,6 @@ class Engine {
 	Engine() : video_manager_(NULL), input_manager_(NULL), time_handler_(NULL), 
 		audio_manager_(NULL), text_manager_(NULL), path_manager_(NULL) {}
 };
-
-} // namespace base
 
 } // namespace ugdk
 

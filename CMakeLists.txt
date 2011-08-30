@@ -109,6 +109,8 @@ if (${BUILD_TYPE} EQUAL DEBUG)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
 endif (${BUILD_TYPE} EQUAL DEBUG)
 
+include_directories ("src")
+
 # *nix library
 if (UNIX)
     if (${LINK_TYPE} STREQUAL STATIC)
@@ -178,8 +180,8 @@ endif  (UNIX)
   #set (USER_HOME "$ENV{HOME}")
 
 CONFIGURE_FILE(
-    "${SRC_DIR}/config/config.h.in"
-    "${SRC_DIR}/config/config.h"
+    "${SRC_DIR}/ugdk/config/config.h.in"
+    "${SRC_DIR}/ugdk/config/config.h"
 )
 
 

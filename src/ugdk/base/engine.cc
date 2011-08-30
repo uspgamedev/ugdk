@@ -7,15 +7,13 @@
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/audio/audiomanager.h>
 #include <ugdk/time/timehandler.h>
-#include <ugdk/util/textmanager.h>
+#include <ugdk/graphic/textmanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/animationparser.h>
 
 using namespace std;
 
 namespace ugdk {
-
-namespace base {
 
 
 Vector2D Engine::window_size() {
@@ -168,8 +166,6 @@ Scene* Engine::CurrentScene() const {
 
 void Engine::PopScene() {
     scene_list_.pop_back();
-}
-
 }
 
 }
