@@ -1,9 +1,3 @@
-/*
- * descriptionparser.cc
- *
- *  Created on: Aug 30, 2011
- *      Author: kazuo
- */
 
 #include <ugdk/util/gdd/parser.h>
 

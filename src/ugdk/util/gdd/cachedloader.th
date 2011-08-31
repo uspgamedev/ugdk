@@ -3,6 +3,7 @@
 #define UGDK_UTIL_GDD_CACHEDLOADER_TH_
 
 #include <ugdk/util/gdd/abstractloader.h>
+#include <map>
 
 namespace ugdk {
 
@@ -18,6 +19,10 @@ class CachedLoader : public AbstractLoader<T> {
   protected:
 
     CachedLoader() {}
+
+  private:
+
+    std::map<std::string, T*> cache_;
 
 };
 

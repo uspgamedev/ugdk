@@ -1,9 +1,3 @@
-/*
- * simpleloader.tcc
- *
- *  Created on: Aug 31, 2011
- *      Author: kazuo
- */
 
 #include <ugdk/util/gdd/simpleloader.th>
 #include <ugdk/util/gdd/parser.h>
