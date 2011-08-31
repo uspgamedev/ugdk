@@ -9,13 +9,9 @@
 
 namespace ugdk {
 
-GameData::GameData() {
-    // TODO Auto-generated constructor stub
-
-}
-
 GameData::~GameData() {
-    // TODO Auto-generated destructor stub
+    for (size_t i = 0; i < segments_.size(); i++)
+        delete segments_.at(i);
 }
 
 } /* namespace ugdk */

@@ -12,7 +12,7 @@ class GameData {
 
   public:
 
-    typedef std::vector<std::string> Unity;
+    typedef std::vector<std::string> Entry;
 
     class Segment {
 
@@ -20,12 +20,12 @@ class GameData {
 
         Segment(std::string label) : label_(label) {}
 
-        void InsertUnity(Unity unity) { unities_.push_back(unity); }
+        void InsertEntry(Entry entry) { entries_.push_back(entry); }
 
       private:
 
         std::string         label_;
-        std::vector<Unity>  unities_;
+        std::vector<Entry>  entries_;
 
     };
 
