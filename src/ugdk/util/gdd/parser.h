@@ -2,7 +2,7 @@
 #ifndef UGDK_UTIL_GDD_PARSER_H_
 #define UGDK_UTIL_GDD_PARSER_H_
 
-#include <ugdk/util/gdd/baseloader.h>
+#include <ugdk/util/gdd/loaderinterface.h>
 #include <map>
 
 namespace ugdk {
@@ -22,7 +22,7 @@ class Parser {
 
     Parser() {}
 
-    ParseStatus Parse(std::string gddfile_path, BaseLoader* loader);
+    ParseStatus Parse(std::string gddfile_path, LoaderInterface* loader);
 
     virtual ~Parser() {}
 

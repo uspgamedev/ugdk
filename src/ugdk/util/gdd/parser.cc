@@ -13,7 +13,7 @@ namespace gdd {
 
 using std::string;
 
-Parser::ParseStatus Parser::Parse(string gddfile_path, BaseLoader* loader) {
+Parser::ParseStatus Parser::Parse(string gddfile_path, LoaderInterface* loader) {
 
     return ParseStatus::OK;
 }
