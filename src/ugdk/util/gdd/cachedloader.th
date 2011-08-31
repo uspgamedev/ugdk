@@ -1,0 +1,27 @@
+
+#ifndef UGDK_UTIL_GDD_CACHEDLOADER_TH_
+#define UGDK_UTIL_GDD_CACHEDLOADER_TH_
+
+#include <ugdk/util/gdd/abstractloader.h>
+
+namespace ugdk {
+
+namespace gdd {
+
+template <class T>
+class CachedLoader : public AbstractLoader<T> {
+
+  public:
+
+    ~CachedLoader() {}
+
+  protected:
+
+    CachedLoader() {}
+
+};
+
+} /* namespace gdd */
+
+} /* namespace ugdk */
+#endif /* UGDK_UTIL_GDD_CACHEDLOADER_TH_ */
