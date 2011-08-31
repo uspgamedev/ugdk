@@ -9,12 +9,12 @@
 
 namespace ugdk {
 
-DescriptionParser::DescriptionParser() {
+GDDParser::GDDParser() {
     // TODO Auto-generated constructor stub
 
 }
 
-DescriptionParser::~DescriptionParser() {
+GDDParser::~GDDParser() {
     // TODO Auto-generated destructor stub
 }
 
