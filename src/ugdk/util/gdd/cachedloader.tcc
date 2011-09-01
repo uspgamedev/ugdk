@@ -7,6 +7,12 @@ namespace ugdk {
 namespace gdd {
 
 using std::string;
+using std::map;
+
+template <class T>
+CachedLoader<T>::~CachedLoader() {
+    ClearCache();
+}
 
 template <class T>
 T* CachedLoader<T>::Load(string gddfile_path) {
@@ -19,6 +25,17 @@ T* CachedLoader<T>::Load(string gddfile_path) {
         break;
     }
     return NULL;
+}
+
+template <class T>
+void CachedLoader<T>::ClearCache() {
+    cache_.clear();
+    /*DataMap::iterator it;
+    it = cache_.begin();
+    for (it  = cache_.begin(); it != cache_.end(); ++it) {
+        delete it->second.ref_;
+    }
+    */
 }
 
 } /* namespace gdd */

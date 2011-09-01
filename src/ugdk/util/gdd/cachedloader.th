@@ -4,6 +4,7 @@
 
 #include <ugdk/util/gdd/abstractloader.h>
 #include <map>
+#include <string>
 
 namespace ugdk {
 
@@ -14,9 +15,20 @@ class CachedLoader : public AbstractLoader<T> {
 
   public:
 
-    ~CachedLoader() {}
+    ~CachedLoader();
+
+    T* Load(std::string gddfile_path);
+
+    void ClearCache();
 
   protected:
+
+    struct Data {
+        T* ref_;
+        ~Data() { delete ref_; }
+    };
+
+    typedef std::map<std::string, Data> DataMap;
 
     CachedLoader() {}
 

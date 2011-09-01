@@ -3,6 +3,7 @@
 #define UGDK_UTIL_GDD_SIMPLELOADER_TH_
 
 #include <ugdk/util/gdd/abstractloader.h>
+#include <string>
 
 namespace ugdk {
 
@@ -14,6 +15,8 @@ class SimpleLoader : public AbstractLoader<T> {
   public:
 
     ~SimpleLoader() {}
+
+    T* Load(std::string gddfile_path);
 
   protected:
 
