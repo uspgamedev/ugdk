@@ -12,7 +12,7 @@ using std::string;
 template <class T>
 ParseStatus Parser<T>::Parse(string gddfile_path) {
 
-    return PARSE_OK;
+    return ParseStatus::OK;
 
 }
 

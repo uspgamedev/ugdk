@@ -9,11 +9,13 @@ namespace ugdk {
 
 namespace gdd {
 
-typedef enum {
-    PARSE_OK,
-    PARSE_FILE_NOT_FOUND,
-    PARSE_SYNTAX_ERROR
-} ParseStatus;
+class ParseStatus {
+    enum {
+        OK,
+        FILE_NOT_FOUND,
+        SYNTAX_ERROR
+    };
+};
 
 /**
  * Parser for the Game Data Description (GDD) syntax.
