@@ -24,6 +24,12 @@ class SimpleLoader : public AbstractLoader<T> {
 
     T* loaded_data_;
 
+    void newData(T* new_data) { loaded_data_ = new_data; }
+
+    T*& data() { return loaded_data_; }
+
+    void cleanData() { loaded_data_ = NULL; }
+
 };
 
 } /* namespace gdd */

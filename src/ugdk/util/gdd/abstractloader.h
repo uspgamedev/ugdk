@@ -19,6 +19,12 @@ class AbstractLoader : public LoaderInterface {
 
   protected:
 
+    virtual void newData(T* new_data) = 0;
+
+    virtual T*& data() = 0;
+
+    virtual void cleanData() = 0;
+
     AbstractLoader() {}
 
 };

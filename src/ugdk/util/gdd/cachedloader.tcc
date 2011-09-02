@@ -15,28 +15,25 @@ CachedLoader<T>::~CachedLoader() {
 }
 
 template <class T>
-T* CachedLoader<T>::Load(string gddfile_path) {
-    Parser parser;
-    switch(parser.Parse(gddfile_path, this)) {
-      case Parser::OK:
-        break;
-      case Parser::NOT_FOUND:
-      case Parser::SYNTAX_ERROR:
-        break;
-    }
-    return NULL;
+T* CachedLoader<T>::Load(string& gddfile_path) {
+    T* cached_data = loadFromCache(gddfile_path);
+    if (cached_data) return cached_data;
+    T* new_data = SimpleLoader<T>::Load(gddfile_path);
+    if (new_data) addToCache(new_data);
+    return new_data;
 }
 
 template <class T>
 void CachedLoader<T>::ClearCache() {
-    cache_.clear();
-    /*DataMap::iterator it;
+    DataIterator it;
     it = cache_.begin();
     for (it  = cache_.begin(); it != cache_.end(); ++it) {
         delete it->second.ref_;
     }
-    */
+    cache_.clear();
 }
+
+
 
 } /* namespace gdd */
 
