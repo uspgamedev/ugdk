@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <ugdk/util/gdd/abstractloader.h>
 
 namespace ugdk {
 
@@ -13,15 +14,20 @@ namespace gdd {
 typedef const std::string               GDDString;
 typedef const std::vector<GDDString>    GDDArgs;
 
-class LoaderInterface {
+template <class T>
+class LoaderProtocol {
 
   public:
 
-    virtual ~LoaderInterface() {}
+    virtual ~LoaderProtocol() {}
 
     typedef enum {
         OK, TYPE_MISMATCH, INVALID_VALUE
     } LoadStatus;
+
+    void set_loader(AbstractLoader<T> *loader) { loader_ = loader; }
+
+    AbstractLoader<T>*& loader() const { return loader_; }
 
     virtual LoadStatus NewData(GDDString& data_name) = 0;
 
@@ -35,7 +41,11 @@ class LoaderInterface {
 
   protected:
 
-    LoaderInterface() {}
+    LoaderProtocol() : loader_(NULL) {}
+
+  private:
+
+    AbstractLoader<T> *loader_;
 
 };
 

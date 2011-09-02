@@ -10,13 +10,13 @@ using std::string;
 
 template <class T>
 T* SimpleLoader<T>::Load(string gddfile_path) {
-    Parser parser;
+    Parser<T> parser;
     switch(parser.Parse(gddfile_path, this)) {
-      case Parser::OK:
+      case PARSE_OK:
         return loaded_data_;
         break;
-      case Parser::NOT_FOUND:
-      case Parser::SYNTAX_ERROR:
+      case PARSE_FILE_NOT_FOUND:
+      case PARSE_SYNTAX_ERROR:
         break;
     }
     return NULL;

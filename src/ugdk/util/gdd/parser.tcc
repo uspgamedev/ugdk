@@ -1,5 +1,5 @@
 
-#include <ugdk/util/gdd/parser.h>
+#include <ugdk/util/gdd/parser.th>
 #include <ugdk/util/gdd/simpleloader.h>
 #include <ugdk/util/gdd/cachedloader.h>
 
@@ -9,9 +9,11 @@ namespace gdd {
 
 using std::string;
 
-Parser::ParseStatus Parser::Parse(string gddfile_path, LoaderInterface* loader) {
+template <class T>
+ParseStatus Parser<T>::Parse(string gddfile_path, LoaderProtocol<T>* loader) {
 
-    return OK;
+    return PARSE_OK;
+
 }
 
 } /* namespace gdd */

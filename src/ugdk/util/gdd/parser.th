@@ -1,0 +1,38 @@
+
+#ifndef UGDK_UTIL_GDD_PARSER_TH_
+#define UGDK_UTIL_GDD_PARSER_TH_
+
+#include <ugdk/util/gdd/loaderprotocol.h>
+#include <map>
+
+namespace ugdk {
+
+namespace gdd {
+
+typedef enum {
+    PARSE_OK,
+    PARSE_FILE_NOT_FOUND,
+    PARSE_SYNTAX_ERROR
+} ParseStatus;
+
+/**
+ * Parser for the Game Data Description (GDD) syntax.
+ */
+template <class T>
+class Parser {
+
+  public:
+
+    Parser() {}
+
+    ParseStatus Parse(std::string gddfile_path, LoaderProtocol<T>* loader);
+
+    virtual ~Parser() {}
+
+};
+
+} /* namespace gdd */
+
+} /* namespace ugdk */
+
+#endif /* UGDK_UTIL_GDD_PARSER_TH_ */

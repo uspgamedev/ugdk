@@ -2,14 +2,15 @@
 #ifndef UGDK_UTIL_GDD_ABSTRACTLOADER_H_
 #define UGDK_UTIL_GDD_ABSTRACTLOADER_H_
 
-#include <ugdk/util/gdd/loaderinterface.h>
-
 namespace ugdk {
 
 namespace gdd {
 
 template <class T>
-class AbstractLoader : public LoaderInterface {
+class LoaderProtocol;
+
+template <class T>
+class AbstractLoader {
 
   public:
 
@@ -19,13 +20,15 @@ class AbstractLoader : public LoaderInterface {
 
   protected:
 
+    LoaderProtocol<T> *protocol_;
+
     virtual void newData(T* new_data) = 0;
 
     virtual T*& data() = 0;
 
     virtual void cleanData() = 0;
 
-    AbstractLoader() {}
+    AbstractLoader(LoaderProtocol<T> *protocol) : protocol_(protocol) {}
 
 };
 
