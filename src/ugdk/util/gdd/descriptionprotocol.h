@@ -1,7 +1,7 @@
 
 
-#ifndef UGDK_UTIL_LOADERINTERFACE_H_
-#define UGDK_UTIL_LOADERINTERFACE_H_
+#ifndef UGDK_UTIL_DESCRIPTIONPROTOCOL_H_
+#define UGDK_UTIL_DESCRIPTIONPROTOCOL_H_
 
 #include <string>
 #include <vector>
@@ -21,11 +21,11 @@ typedef enum {
 } LoadStatus;
 
 template <class T>
-class LoaderProtocol {
+class DescriptionProtocol {
 
   public:
 
-    virtual ~LoaderProtocol() {}
+    virtual ~DescriptionProtocol() {}
 
     void set_loader(AbstractLoader<T> *loader) { loader_ = loader; }
 
@@ -43,7 +43,7 @@ class LoaderProtocol {
 
   protected:
 
-    LoaderProtocol() : loader_(NULL) {}
+    DescriptionProtocol() : loader_(NULL) {}
 
   private:
 
@@ -55,4 +55,4 @@ class LoaderProtocol {
 
 } /* namespace ugdk */
 
-#endif /* UGDK_UTIL_LOADERINTERFACE_H_ */
+#endif /* UGDK_UTIL_DESCRIPTIONPROTOCOL_H_ */

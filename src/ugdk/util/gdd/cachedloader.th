@@ -26,7 +26,7 @@ class CachedLoader : public SimpleLoader<T> {
     typedef std::map<std::string, T*>   DataMap;
     typedef typename DataMap::iterator  DataIterator;
 
-    CachedLoader(LoaderProtocol<T> *protocol) : SimpleLoader<T>(protocol) {}
+    CachedLoader(DescriptionProtocol<T> *protocol) : SimpleLoader<T>(protocol) {}
 
   private:
 

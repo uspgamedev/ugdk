@@ -55,7 +55,7 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/util/pathmanager.h
     ${SRC_DIR}/ugdk/util/gdd/abstractloader.h
     ${SRC_DIR}/ugdk/util/gdd/cachedloader.h
-    ${SRC_DIR}/ugdk/util/gdd/loaderprotocol.h
+    ${SRC_DIR}/ugdk/util/gdd/descriptionprotocol.h
     ${SRC_DIR}/ugdk/util/gdd/parser.h
     ${SRC_DIR}/ugdk/util/gdd/simpleloader.h
 )

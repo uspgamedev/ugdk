@@ -20,11 +20,11 @@ class SimpleLoader : public AbstractLoader<T> {
 
   protected:
 
-    SimpleLoader(LoaderProtocol<T> *protocol) : AbstractLoader<T>(protocol), loaded_data_(NULL) {}
+    SimpleLoader(DescriptionProtocol<T> *protocol) : AbstractLoader<T>(protocol), loaded_data_(NULL) {}
 
     T* loaded_data_;
 
-    LoaderProtocol<T>*& protocol() const;
+    DescriptionProtocol<T>*& protocol() const;
 
     void newData(T* new_data) { loaded_data_ = new_data; }
 

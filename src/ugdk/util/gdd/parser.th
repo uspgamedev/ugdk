@@ -2,7 +2,7 @@
 #ifndef UGDK_UTIL_GDD_PARSER_TH_
 #define UGDK_UTIL_GDD_PARSER_TH_
 
-#include <ugdk/util/gdd/loaderprotocol.h>
+#include <ugdk/util/gdd/descriptionprotocol.h>
 #include <map>
 
 namespace ugdk {
@@ -23,7 +23,7 @@ class Parser {
 
   public:
 
-    Parser(LoaderProtocol<T>*& loader) : loader_(loader) {}
+    Parser(DescriptionProtocol<T>*& loader) : loader_(loader) {}
 
     ParseStatus Parse(std::string gddfile_path);
 
@@ -31,7 +31,7 @@ class Parser {
 
   private:
 
-    LoaderProtocol<T>* loader_;
+    DescriptionProtocol<T>* loader_;
 
 };
 
