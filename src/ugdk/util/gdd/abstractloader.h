@@ -20,7 +20,7 @@ class AbstractLoader {
 
   protected:
 
-    LoaderProtocol<T> *protocol_;
+    LoaderProtocol<T>*& protocol() const { return protocol_; }
 
     virtual void newData(T* new_data) = 0;
 
@@ -29,6 +29,10 @@ class AbstractLoader {
     virtual void cleanData() = 0;
 
     AbstractLoader(LoaderProtocol<T> *protocol) : protocol_(protocol) {}
+
+  private:
+
+    LoaderProtocol<T> *protocol_;
 
 };
 

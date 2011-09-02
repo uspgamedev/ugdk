@@ -10,7 +10,7 @@ namespace gdd {
 using std::string;
 
 template <class T>
-ParseStatus Parser<T>::Parse(string gddfile_path, LoaderProtocol<T>* loader) {
+ParseStatus Parser<T>::Parse(string gddfile_path) {
 
     return PARSE_OK;
 

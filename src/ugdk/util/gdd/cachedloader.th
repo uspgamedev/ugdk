@@ -26,13 +26,15 @@ class CachedLoader : public SimpleLoader<T> {
     typedef std::map<std::string, T*>   DataMap;
     typedef typename DataMap::iterator  DataIterator;
 
-    CachedLoader() {}
+    CachedLoader(LoaderProtocol<T> *protocol) : SimpleLoader<T>(protocol) {}
 
   private:
 
     T* loadFromCache(std::string& gddfile_path);
 
-    void addToCache(T*& new_data);
+    T* loadNewData(std::string& gddfile_path);
+
+    void addToCache(std::string& gddfile_path, T*& new_data);
 
     DataMap cache_;
 

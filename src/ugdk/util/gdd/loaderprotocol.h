@@ -14,16 +14,18 @@ namespace gdd {
 typedef const std::string               GDDString;
 typedef const std::vector<GDDString>    GDDArgs;
 
+typedef enum {
+    LOAD_OK,
+    LOAD_ERROR_TYPE_MISMATCH,
+    LOAD_ERROR_INVALID_VALUE
+} LoadStatus;
+
 template <class T>
 class LoaderProtocol {
 
   public:
 
     virtual ~LoaderProtocol() {}
-
-    typedef enum {
-        OK, TYPE_MISMATCH, INVALID_VALUE
-    } LoadStatus;
 
     void set_loader(AbstractLoader<T> *loader) { loader_ = loader; }
 

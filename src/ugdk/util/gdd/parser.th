@@ -23,11 +23,15 @@ class Parser {
 
   public:
 
-    Parser() {}
+    Parser(LoaderProtocol<T>*& loader) : loader_(loader) {}
 
-    ParseStatus Parse(std::string gddfile_path, LoaderProtocol<T>* loader);
+    ParseStatus Parse(std::string gddfile_path);
 
     virtual ~Parser() {}
+
+  private:
+
+    LoaderProtocol<T>* loader_;
 
 };
 

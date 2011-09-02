@@ -10,7 +10,7 @@ using std::string;
 
 template <class T>
 T* SimpleLoader<T>::Load(string gddfile_path) {
-    Parser<T> parser;
+    Parser<T> parser(protocol());
     switch(parser.Parse(gddfile_path, this)) {
       case PARSE_OK:
         return loaded_data_;
