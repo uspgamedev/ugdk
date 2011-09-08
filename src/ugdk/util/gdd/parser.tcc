@@ -10,9 +10,9 @@ namespace gdd {
 using std::string;
 
 template <class T>
-ParseStatus Parser<T>::Parse(string gddfile_path) {
+ParseStatus::Type Parser<T>::Parse(string gddfile_path) {
 
-    return OK;
+    return ParseStatus::OK;
 
 }
 

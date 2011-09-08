@@ -9,12 +9,14 @@ namespace ugdk {
 
 namespace gdd {
 
-enum ParseStatus {
-    //enum {
+struct ParseStatus {
+    enum Type {
         OK,
         FILE_NOT_FOUND,
         SYNTAX_ERROR
-    //};
+    };
+  private:
+    ParseStatus() {}
 };
 
 /**
@@ -27,7 +29,7 @@ class Parser {
 
     Parser(DescriptionProtocol<T>*& loader) : loader_(loader) {}
 
-    ParseStatus Parse(std::string gddfile_path);
+    ParseStatus::Type Parse(std::string gddfile_path);
 
     virtual ~Parser() {}
 
