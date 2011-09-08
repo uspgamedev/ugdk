@@ -13,6 +13,7 @@ struct ParseStatus {
     enum Type {
         OK,
         FILE_NOT_FOUND,
+        LOAD_ERROR,
         SYNTAX_ERROR
     };
   private:
@@ -32,6 +33,14 @@ class Parser {
     ParseStatus::Type Parse(std::string gddfile_path);
 
     virtual ~Parser() {}
+
+  protected:
+
+    DescriptionProtocol<T>* loader() { return loader_; }
+
+    ParseStatus::Type parseDataName(FILE *file);
+
+    ParseStatus::Type parseSimpleSegment(FILE *file);
 
   private:
 
