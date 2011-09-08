@@ -26,7 +26,7 @@ void CachedLoader<T>::ClearCache() {
     DataIterator it;
     it = cache_.begin();
     for (it  = cache_.begin(); it != cache_.end(); ++it) {
-        delete it->second.ref_;
+        delete it->second;
     }
     cache_.clear();
 }

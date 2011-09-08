@@ -11,12 +11,12 @@ using std::string;
 template <class T>
 T* SimpleLoader<T>::Load(string gddfile_path) {
     Parser<T> parser(protocol());
-    switch(parser.Parse(gddfile_path, this)) {
-      case ParseStatus::OK:
+    switch(parser.Parse(gddfile_path)) {
+      case OK:
         return loaded_data_;
         break;
-      case ParseStatus::FILE_NOT_FOUND:
-      case ParseStatus::SYNTAX_ERROR:
+      case FILE_NOT_FOUND:
+      case SYNTAX_ERROR:
         break;
     }
     return NULL;

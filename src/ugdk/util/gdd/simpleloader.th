@@ -14,13 +14,14 @@ class SimpleLoader : public AbstractLoader<T> {
 
   public:
 
+    SimpleLoader(DescriptionProtocol<T> *protocol)
+        : AbstractLoader<T>(protocol), loaded_data_(NULL) {}
+
     ~SimpleLoader() {}
 
     T* Load(std::string gddfile_path);
 
   protected:
-
-    SimpleLoader(DescriptionProtocol<T> *protocol) : AbstractLoader<T>(protocol), loaded_data_(NULL) {}
 
     T* loaded_data_;
 

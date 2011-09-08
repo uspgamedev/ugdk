@@ -9,12 +9,12 @@ namespace ugdk {
 
 namespace gdd {
 
-class ParseStatus {
-    enum {
+enum ParseStatus {
+    //enum {
         OK,
         FILE_NOT_FOUND,
         SYNTAX_ERROR
-    };
+    //};
 };
 
 /**
