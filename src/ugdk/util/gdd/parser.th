@@ -3,6 +3,7 @@
 #define UGDK_UTIL_GDD_PARSER_TH_
 
 #include <ugdk/util/gdd/descriptionprotocol.h>
+#include <ugdk/util/gdd/reader.h>
 #include <map>
 
 namespace ugdk {
@@ -38,9 +39,11 @@ class Parser {
 
     DescriptionProtocol<T>* loader() { return loader_; }
 
-    ParseStatus::Type parseDataName(FILE *file);
+    ParseStatus::Type doParse(Reader &read);
 
-    ParseStatus::Type parseSimpleSegment(FILE *file);
+    ParseStatus::Type parseDataName(Reader &read);
+
+    ParseStatus::Type parseSimpleSegment(Reader &read);
 
   private:
 

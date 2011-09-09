@@ -18,6 +18,8 @@ T* SimpleLoader<T>::Load(string gddfile_path) {
       case ParseStatus::FILE_NOT_FOUND:
       case ParseStatus::SYNTAX_ERROR:
         break;
+      case ParseStatus::LOAD_ERROR:
+        break;
     }
     return NULL;
 }

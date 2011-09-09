@@ -1,7 +1,6 @@
 
 #include <ugdk/util/gdd/parser.th>
-#include <ugdk/util/gdd/simpleloader.h>
-#include <ugdk/util/gdd/cachedloader.h>
+#include <ugdk/util/gdd/parserutility.h>
 #include <cstdio>
 #include <cctype>
 #include <string>
@@ -14,95 +13,8 @@ namespace gdd {
 using std::string;
 using std::vector;
 
-void skipComment(FILE *file) {
-    int token = 0;
-    while ((token = fgetc(file)) != '\n' && token != EOF);
-}
-
-void skipSpace(FILE *file) {
-    int token = 0;
-    while ((token = fgetc(file)) == ' ' || token == '\t');
-    ungetc(token, file);
-}
-
-bool isReserved(int token) {
-    switch (token) {
-      case '#':
-      case '$':
-      case '%':
-      case '@':
-      case '+':
-      case '[':
-      case ']':
-          return true;
-      default:
-          return false;
-    }
-}
-
-bool next(FILE *file) {
-    int token = 0;
-    while ((token = fgetc(file)) == ' ' || token == '\t');
-    ungetc(token, file);
-    return !isReserved(token) && token != '\n' && token != EOF;
-}
-
-bool readName(FILE *file, string &name) {
-    int token = 0;
-    token = fgetc(file);
-    if (!isalpha(token) && token != '_') {
-        if (isReserved(token))
-            fputs("Data name must not be empty.", stderr);
-        else
-            fputs("Data name must begin with an alphabetic character or '_'.", stderr);
-        return false;
-    }
-    name.push_back(token);
-    while (isalnum(token = fgetc(file)) || token == '_')
-        name.push_back(token);
-    ungetc(token, file);
-    return true;
-}
-
-void readValue(FILE *file, string &value) {
-    int token = 0;
-    while (isalnum(token = fgetc(file)) || token == '_' || token == '.')
-        value.push_back(token);
-    ungetc(token, file);
-}
-
-void readValueSequence(FILE *file, vector<string>& values) {
-    while (next(file)) {
-        string value = "";
-        readValue(file, value);
-        if (value.length() == 0) break;
-        values.push_back(value);
-    }
-}
-
-template <class T>
-ParseStatus::Type Parser<T>::parseDataName(FILE *file) {
-    skipSpace(file);
-    string data_name = "";
-    if (!readName(file, data_name))
-        return ParseStatus::SYNTAX_ERROR;
-    if (loader()->NewData(data_name) != LoadStatus::LOAD_OK)
-        return ParseStatus::LOAD_ERROR;
-    return ParseStatus::OK;
-}
-
-template <class T>
-ParseStatus::Type Parser<T>::parseSimpleSegment(FILE *file) {
-    skipSpace(file);
-    string segment_type = "";
-    vector<string> values;
-    if (!readName(file, segment_type))
-        return ParseStatus::SYNTAX_ERROR;
-    readValueSequence(file, values);
-    if (loader()->NewSimpleSegment(segment_type, values) != LoadStatus::LOAD_OK)
-        return ParseStatus::LOAD_ERROR;
-    return ParseStatus::OK;
-}
+#define ASSERT_CHUNK(status, parseChunk, reader) \
+    ASSERT_PARSE(((status = parseChunk(reader)) == ParseStatus::OK), NO_MSG, status)
 
 template <class T>
 ParseStatus::Type Parser<T>::Parse(string gddfile_path) {
@@ -111,19 +23,24 @@ ParseStatus::Type Parser<T>::Parse(string gddfile_path) {
         fprintf(stderr, "Could not open file \"%s\"\n", gddfile_path.c_str());
         return ParseStatus::FILE_NOT_FOUND;
     }
-    int token = 0;
-    while ((token = fgetc(file)) != EOF)
+    Reader read(file);
+    return doParse(read);
+}
+
+template <class T>
+ParseStatus::Type Parser<T>::doParse(Reader &read) {
+    ParseStatus::Type   status;
+    int                 token = 0;
+    while ((token = read.Next()) != EOF)
         switch (token) {
           case '#':
-            skipComment(file);
+            read.SkipComment();
             break;
           case '$':
-            if (parseDataName(file) != ParseStatus::OK)
-                return ParseStatus::SYNTAX_ERROR;
+            ASSERT_CHUNK(status, parseDataName, read);
             break;
           case '%':
-            if (parseSimpleSegment(file) != ParseStatus::OK)
-                return ParseStatus::SYNTAX_ERROR;
+            ASSERT_CHUNK(status, parseSimpleSegment, read);
             break;
           case ' ':
           case '\t':
@@ -133,6 +50,27 @@ ParseStatus::Type Parser<T>::Parse(string gddfile_path) {
             fprintf(stderr, "Unknown token '%c'", token);
             return ParseStatus::SYNTAX_ERROR;
         }
+    return ParseStatus::OK;
+}
+
+
+template <class T>
+ParseStatus::Type Parser<T>::parseDataName(Reader &read) {
+    GDDString data_name = "";
+    ASSERT_PARSE(read.untilNext(), ERR_EMPTY_FIELD("data"), ParseStatus::SYNTAX_ERROR);
+    ASSERT_PARSE(read.Name(data_name), NO_MSG, ParseStatus::SYNTAX_ERROR);
+    ASSERT_PARSE(loader()->NewData(data_name), NO_MSG, ParseStatus::LOAD_ERROR);
+    return ParseStatus::OK;
+}
+
+template <class T>
+ParseStatus::Type Parser<T>::parseSimpleSegment(Reader &read) {
+    GDDString   segment_type = "";
+    GDDArgs     values;
+    ASSERT_PARSE(read.untilNext(), ERR_EMPTY_FIELD("simple segment"), ParseStatus::SYNTAX_ERROR);
+    ASSERT_PARSE(read.Name(segment_type), NO_MSG, ParseStatus::SYNTAX_ERROR);
+    read.ValueSequence(values);
+    ASSERT_PARSE(loader()->NewSimpleSegment(segment_type, values), NO_MSG, ParseStatus::LOAD_ERROR);
     return ParseStatus::OK;
 }
 

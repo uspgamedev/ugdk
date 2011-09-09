@@ -6,19 +6,19 @@
 #include <string>
 #include <vector>
 #include <ugdk/util/gdd/abstractloader.h>
+#include <cstdio>
 
 namespace ugdk {
 
 namespace gdd {
 
-typedef const std::string               GDDString;
-typedef const std::vector<GDDString>    GDDArgs;
+typedef std::string               GDDString;
+typedef std::vector<GDDString>    GDDArgs;
 
-class LoadStatus {
+class LoadError {
     enum Type {
-        LOAD_OK,
-        LOAD_ERROR_TYPE_MISMATCH,
-        LOAD_ERROR_INVALID_VALUE
+        TYPE_MISMATCH,
+        INVALID_VALUE
     };
 };
 
@@ -33,23 +33,39 @@ class DescriptionProtocol {
 
     AbstractLoader<T>*& loader() const { return loader_; }
 
-    virtual LoadStatus::Type NewData(GDDString& data_name) = 0;
+    virtual bool NewData(const GDDString& data_name) = 0;
 
-    virtual LoadStatus::Type NewProperty(GDDString& property_name, GDDArgs& property_args) = 0;
+    virtual bool NewProperty(const GDDString& property_name,
+                                         const GDDArgs& property_args) = 0;
 
-    virtual LoadStatus::Type NewSegment(GDDString& segment_typename);
+    virtual bool NewSegment(const GDDString& segment_typename);
 
-    virtual LoadStatus::Type NewEntry(GDDString& entry_name, GDDArgs& entry_args) = 0;
+    virtual bool NewEntry(const GDDString& entry_name, const GDDArgs& entry_args) = 0;
 
-    virtual LoadStatus::Type NewSimpleSegment(GDDString* segment_typename, GDDArgs& segment_args) = 0;
+    virtual bool NewSimpleSegment(const GDDString& segment_typename,
+                                              const GDDArgs& segment_args) = 0;
 
   protected:
 
     DescriptionProtocol() : loader_(NULL) {}
 
+    void error(LoadError::Type error_type, std::string &msg = "") {
+        switch (error_type) {
+          case LoadError::TYPE_MISMATCH:
+            fprintf(stderr, "Load Error: type mismatch. %s\n", msg.c_str());
+            break;
+          case LoadError::TYPE_MISMATCH:
+            fprintf(stderr, "Load Error: invalid value. %s\n", msg.c_str());
+            break;
+          default:
+            fprintf(stderr, "Load Error: unknown. %s\n", msg.c_str()); // \comofas
+            break;
+        }
+    }
+
   private:
 
-    AbstractLoader<T> *loader_;
+    AbstractLoader<T>   *loader_;
 
 };
 
