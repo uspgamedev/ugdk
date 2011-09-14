@@ -58,5 +58,6 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/util/gdd/descriptionprotocol.h
     ${SRC_DIR}/ugdk/util/gdd/parser.h
     ${SRC_DIR}/ugdk/util/gdd/parserutility.h
+    ${SRC_DIR}/ugdk/util/gdd/reader.h
     ${SRC_DIR}/ugdk/util/gdd/simpleloader.h
 )

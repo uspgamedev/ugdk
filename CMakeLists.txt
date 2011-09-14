@@ -22,6 +22,8 @@ endif (NOT BUILD_TYPE)
 if (NOT LINK_TYPE)
     message ("-- No link type was defined, choosing default value: STATIC")
     set (LINK_TYPE STATIC)
+else (NOT LONK_TYPE)
+    set (LINK_TYPE STATIC)
 endif (NOT LINK_TYPE)
 
 if (${BUILD_TYPE} STREQUAL RELEASE)
