@@ -3,7 +3,10 @@
 cd src
 
 directories=`find . -type d`
-headers=`find . -name *.h`
+headers_simple=`find . -name *.h`
+headers_template=`find . -name *.th`
+headers_template2=`find . -name *.tcc`
+headers="$headers_simple $headers_template $headers_template2"
 
 cd ..
 

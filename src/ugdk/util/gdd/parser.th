@@ -29,7 +29,7 @@ class Parser {
 
   public:
 
-    Parser(DescriptionProtocol<T>*& loader) : loader_(loader) {}
+    Parser(DescriptionProtocol<T>* loader) : loader_(loader) {}
 
     ParseStatus::Type Parse(std::string gddfile_path);
 

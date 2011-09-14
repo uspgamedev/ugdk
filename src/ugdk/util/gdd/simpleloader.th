@@ -31,7 +31,7 @@ class SimpleLoader : public AbstractLoader<T> {
 
     T* loaded_data_;
 
-    DescriptionProtocol<T>*& protocol() const;
+    //DescriptionProtocol<T>* protocol() const;
 
 };
 

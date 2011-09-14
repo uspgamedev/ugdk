@@ -13,7 +13,7 @@
     } while(0)
 
 // Checks if 'token' is a valid character for the beginning of a field name.
-#define VALID_NAME_BEGIN(token) ((!isalpha((token))) && ((token) != '_'))
+#define VALID_NAME_BEGIN(token) ((isalpha((token))) || ((token) == '_'))
 
 // Prints a bad name beginning error message.
 #define ERR_BAD_NAME_BEGIN() \

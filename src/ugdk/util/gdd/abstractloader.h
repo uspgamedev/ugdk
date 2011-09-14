@@ -26,7 +26,7 @@ class AbstractLoader {
 
   protected:
 
-    DescriptionProtocol<T>*& protocol() const { return protocol_; }
+    DescriptionProtocol<T>* protocol() const { return protocol_; }
 
     AbstractLoader(DescriptionProtocol<T> *protocol) : protocol_(protocol) {
         protocol_->set_loader(this);

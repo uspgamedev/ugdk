@@ -34,7 +34,7 @@ void CachedLoader<T>::ClearCache() {
 template <class T>
 T* CachedLoader<T>::loadFromCache(string& gddfile_path) {
     DataIterator it = cache_.find(gddfile_path);
-    if (it == cache_.end()) NULL;
+    if (it == cache_.end()) return NULL;
     else return it->second;
 }
 

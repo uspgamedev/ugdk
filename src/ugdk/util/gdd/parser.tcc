@@ -24,6 +24,7 @@ ParseStatus::Type Parser<T>::Parse(string gddfile_path) {
         return ParseStatus::FILE_NOT_FOUND;
     }
     Reader read(file);
+    ASSERT_PARSE(loader()->NewDescription(), NO_MSG, ParseStatus::LOAD_ERROR);
     return doParse(read);
 }
 
