@@ -48,6 +48,8 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/time/timehandler.h
     ${SRC_DIR}/ugdk/util/animationparser.cc
     ${SRC_DIR}/ugdk/util/animationparser.h
+    ${SRC_DIR}/ugdk/util/animationprotocol.cc
+    ${SRC_DIR}/ugdk/util/animationprotocol.h
     ${SRC_DIR}/ugdk/util/gamedata.cc
     ${SRC_DIR}/ugdk/util/gamedata.h
     ${SRC_DIR}/ugdk/util/gdd.cc

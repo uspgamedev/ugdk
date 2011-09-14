@@ -14,13 +14,9 @@ class AbstractLoader {
 
   public:
 
-    virtual ~AbstractLoader() {}
+    virtual ~AbstractLoader() { delete protocol_; }
 
     virtual T* Load(std::string gddfile_path) = 0;
-
-  protected:
-
-    DescriptionProtocol<T>*& protocol() const { return protocol_; }
 
     virtual void newData(T* new_data) = 0;
 
@@ -28,7 +24,13 @@ class AbstractLoader {
 
     virtual void cleanData() = 0;
 
-    AbstractLoader(DescriptionProtocol<T> *protocol) : protocol_(protocol) {}
+  protected:
+
+    DescriptionProtocol<T>*& protocol() const { return protocol_; }
+
+    AbstractLoader(DescriptionProtocol<T> *protocol) : protocol_(protocol) {
+        protocol_->set_loader(this);
+    }
 
   private:
 

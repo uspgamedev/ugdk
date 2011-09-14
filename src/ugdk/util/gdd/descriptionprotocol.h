@@ -16,6 +16,7 @@ typedef std::string               GDDString;
 typedef std::vector<GDDString>    GDDArgs;
 
 class LoadError {
+  public:
     enum Type {
         TYPE_MISMATCH,
         INVALID_VALUE
@@ -31,14 +32,16 @@ class DescriptionProtocol {
 
     void set_loader(AbstractLoader<T> *loader) { loader_ = loader; }
 
-    AbstractLoader<T>*& loader() const { return loader_; }
+    AbstractLoader<T>* loader() const { return loader_; }
+
+    virtual bool NewDescription() = 0;
 
     virtual bool NewData(const GDDString& data_name) = 0;
 
     virtual bool NewProperty(const GDDString& property_name,
                                          const GDDArgs& property_args) = 0;
 
-    virtual bool NewSegment(const GDDString& segment_typename);
+    virtual bool NewSegment(const GDDString& segment_typename) = 0;
 
     virtual bool NewEntry(const GDDString& entry_name, const GDDArgs& entry_args) = 0;
 
@@ -54,7 +57,7 @@ class DescriptionProtocol {
           case LoadError::TYPE_MISMATCH:
             fprintf(stderr, "Load Error: type mismatch. %s\n", msg.c_str());
             break;
-          case LoadError::TYPE_MISMATCH:
+          case LoadError::INVALID_VALUE:
             fprintf(stderr, "Load Error: invalid value. %s\n", msg.c_str());
             break;
           default:

@@ -21,17 +21,17 @@ class SimpleLoader : public AbstractLoader<T> {
 
     T* Load(std::string gddfile_path);
 
-  protected:
-
-    T* loaded_data_;
-
-    DescriptionProtocol<T>*& protocol() const;
-
     void newData(T* new_data) { loaded_data_ = new_data; }
 
     T*& data() { return loaded_data_; }
 
     void cleanData() { loaded_data_ = NULL; }
+
+  protected:
+
+    T* loaded_data_;
+
+    DescriptionProtocol<T>*& protocol() const;
 
 };
 
