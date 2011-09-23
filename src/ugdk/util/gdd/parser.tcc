@@ -43,6 +43,9 @@ ParseStatus::Type Parser<T>::doParse(Reader &read) {
           case '%':
             ASSERT_CHUNK(status, parseSimpleSegment, read);
             break;
+          case '@':
+            ASSERT_CHUNK(status, parseSimpleSegment, read);
+            break;
           case ' ':
           case '\t':
           case '\n':
@@ -57,7 +60,7 @@ ParseStatus::Type Parser<T>::doParse(Reader &read) {
 
 template <class T>
 ParseStatus::Type Parser<T>::parseDataName(Reader &read) {
-    GDDString data_name = "";
+    GDDString data_name;
     ASSERT_PARSE(read.untilNext(), ERR_EMPTY_FIELD("data"), ParseStatus::SYNTAX_ERROR);
     ASSERT_PARSE(read.Name(data_name), NO_MSG, ParseStatus::SYNTAX_ERROR);
     ASSERT_PARSE(loader()->NewData(data_name), NO_MSG, ParseStatus::LOAD_ERROR);
@@ -66,12 +69,23 @@ ParseStatus::Type Parser<T>::parseDataName(Reader &read) {
 
 template <class T>
 ParseStatus::Type Parser<T>::parseSimpleSegment(Reader &read) {
-    GDDString   segment_type = "";
+    GDDString   segment_type;
     GDDArgs     values;
     ASSERT_PARSE(read.untilNext(), ERR_EMPTY_FIELD("simple segment"), ParseStatus::SYNTAX_ERROR);
     ASSERT_PARSE(read.Name(segment_type), NO_MSG, ParseStatus::SYNTAX_ERROR);
     read.ValueSequence(values);
     ASSERT_PARSE(loader()->NewSimpleSegment(segment_type, values), NO_MSG, ParseStatus::LOAD_ERROR);
+    return ParseStatus::OK;
+}
+
+template <class T>
+ParseStatus::Type Parser<T>::parseProperty(Reader &read) {
+    GDDString   property_name;
+    GDDArgs     values;
+    ASSERT_PARSE(read.untilNext(), ERR_EMPTY_FIELD("property"), ParseStatus::SYNTAX_ERROR);
+    ASSERT_PARSE(read.Name(property_name), NO_MSG, ParseStatus::SYNTAX_ERROR);
+    read.ValueSequence(values);
+    ASSERT_PARSE(loader()->NewProperty(property_name, values), NO_MSG, ParseStatus::LOAD_ERROR);
     return ParseStatus::OK;
 }
 

@@ -45,6 +45,8 @@ class Parser {
 
     ParseStatus::Type parseSimpleSegment(Reader &read);
 
+    ParseStatus::Type parseProperty(Reader &read);
+
   private:
 
     DescriptionProtocol<T>* loader_;

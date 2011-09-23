@@ -25,6 +25,15 @@ bool AnimationProtocol::NewData(const GDDString& data_name) {
 }
 
 bool AnimationProtocol::NewProperty(const GDDString& property_name, const GDDArgs& property_args) {
+    if (property_name == "fps" && property_args.size() == 1) {
+        int value;
+        if (sscanf(property_args[0].c_str(), "%d", &value) != 1) {
+            string msg = "Could not read animation fps.";
+            error(LoadError::INVALID_VALUE, msg);
+            return false;
+        }
+        //curret_seq_->set_fps(value);
+    } else return false;
     return true;
 }
 
@@ -38,7 +47,7 @@ bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& ent
 
 bool AnimationProtocol::NewSimpleSegment(const GDDString& segment_typename,
                                          const GDDArgs& segment_args) {
-    if (segment_typename == "frames")
+    if (current_seq_ && segment_typename == "frames")
         for(size_t i = 0; i < segment_args.size(); i++) {
             int value;
             if (sscanf(segment_args[i].c_str(), "%d", &value) != 1) {

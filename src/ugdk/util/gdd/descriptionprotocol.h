@@ -39,14 +39,14 @@ class DescriptionProtocol {
     virtual bool NewData(const GDDString& data_name) = 0;
 
     virtual bool NewProperty(const GDDString& property_name,
-                                         const GDDArgs& property_args) = 0;
+                             const GDDArgs& property_args) = 0;
 
     virtual bool NewSegment(const GDDString& segment_typename) = 0;
 
     virtual bool NewEntry(const GDDString& entry_name, const GDDArgs& entry_args) = 0;
 
     virtual bool NewSimpleSegment(const GDDString& segment_typename,
-                                              const GDDArgs& segment_args) = 0;
+                                  const GDDArgs& segment_args) = 0;
 
   protected:
 
