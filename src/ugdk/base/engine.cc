@@ -33,7 +33,6 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
     text_manager_ = new TextManager();
     text_manager_->Initialize();
 	path_manager_ = new PathManager(base_path);
-	animation_parser_ = AnimationParser::reference();
     scene_list_.clear();
 
     frames_since_reset_ = reported_fps_ = 0;
@@ -151,7 +150,7 @@ void Engine::Release() {
     video_manager()->Release();
     delete video_manager_;
 
-    delete animation_parser_;
+    animation_loader_.ClearCache();
 
     SDL_Quit();
 }
