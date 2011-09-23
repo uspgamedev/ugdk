@@ -19,7 +19,7 @@ class CachedLoader : public SimpleLoader<T> {
 
     ~CachedLoader();
 
-    T* Load(std::string& gddfile_path);
+    T* Load(std::string gddfile_path);
 
     void ClearCache();
 

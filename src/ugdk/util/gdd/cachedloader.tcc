@@ -15,7 +15,7 @@ CachedLoader<T>::~CachedLoader() {
 }
 
 template <class T>
-T* CachedLoader<T>::Load(string& gddfile_path) {
+T* CachedLoader<T>::Load(string gddfile_path) {
     T* cached_data = loadFromCache(gddfile_path);
     if (cached_data) return cached_data;
     return loadNewData(gddfile_path);
