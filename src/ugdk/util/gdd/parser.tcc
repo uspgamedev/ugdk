@@ -44,7 +44,7 @@ ParseStatus::Type Parser<T>::doParse(Reader &read) {
             ASSERT_CHUNK(status, parseSimpleSegment, read);
             break;
           case '@':
-            ASSERT_CHUNK(status, parseSimpleSegment, read);
+            ASSERT_CHUNK(status, parseProperty, read);
             break;
           case ' ':
           case '\t':
