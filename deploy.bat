@@ -12,5 +12,7 @@ copy lib\Debug\ugdk_d.lib deploy\lib\ugdk_d.lib > nul
 echo Copying header files...
 
 xcopy "src\ugdk\*.h" "deploy\include\ugdk\" /s /e /c > nul
+xcopy "src\ugdk\*.th" "deploy\include\ugdk\" /s /e /c > nul
+xcopy "src\ugdk\*.tcc" "deploy\include\ugdk\" /s /e /c > nul
 
 pause
