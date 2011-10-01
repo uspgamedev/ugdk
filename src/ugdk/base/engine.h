@@ -5,6 +5,8 @@
 #include <string>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/action/scene.h>
+#include <ugdk/util/gdd/cachedloader.h>
+#include <ugdk/util/animationprotocol.h>
 
 using std::vector;
 
@@ -16,8 +18,10 @@ class TimeHandler;
 class AudioManager;
 class TextManager;
 class PathManager;
-class AnimationParser;
+class AnimationSet;
 class Scene;
+
+typedef gdd::CachedLoader<AnimationSet> AnimationLoader;
 
 class Engine {
   public:
@@ -32,7 +36,8 @@ class Engine {
     AudioManager *audio_manager() { return audio_manager_; }
     TextManager *text_manager() { return text_manager_; }
 	PathManager *path_manager() { return path_manager_; }
-	AnimationParser* animation_parser() { return animation_parser_; }
+
+	AnimationLoader& animation_loader() { return animation_loader_; }
     Vector2D window_size();
 
     // Gerenciamento do motor
@@ -65,14 +70,15 @@ class Engine {
     AudioManager *audio_manager_;
     TextManager *text_manager_;
 	PathManager *path_manager_;
-	AnimationParser *animation_parser_;
+	AnimationLoader animation_loader_;
     //Vector2D window_size_;
     bool quit_;
     vector<Scene*> scene_list_;
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 
 	Engine() : video_manager_(NULL), input_manager_(NULL), time_handler_(NULL), 
-		audio_manager_(NULL), text_manager_(NULL), path_manager_(NULL) {}
+		audio_manager_(NULL), text_manager_(NULL), path_manager_(NULL),
+		animation_loader_(new AnimationProtocol) {}
 };
 
 } // namespace ugdk

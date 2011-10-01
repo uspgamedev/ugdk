@@ -6,3 +6,11 @@ Makefile
 cmake*
 lib/*
 src/ugdk/config/config.h
+*.sln
+*.vcxproj*
+*.sdf
+/ugdk.dir
+/Win32
+/Release
+/lib
+*.suo

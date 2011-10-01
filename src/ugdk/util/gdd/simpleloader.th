@@ -1,0 +1,42 @@
+
+#ifndef UGDK_UTIL_GDD_SIMPLELOADER_TH_
+#define UGDK_UTIL_GDD_SIMPLELOADER_TH_
+
+#include <ugdk/util/gdd/abstractloader.h>
+#include <string>
+
+namespace ugdk {
+
+namespace gdd {
+
+template <class T>
+class SimpleLoader : public AbstractLoader<T> {
+
+  public:
+
+    SimpleLoader(DescriptionProtocol<T> *protocol)
+        : AbstractLoader<T>(protocol), loaded_data_(NULL) {}
+
+    ~SimpleLoader() {}
+
+    T* Load(std::string gddfile_path);
+
+    void newData(T* new_data) { loaded_data_ = new_data; }
+
+    T*& data() { return loaded_data_; }
+
+    void cleanData() { loaded_data_ = NULL; }
+
+  protected:
+
+    T* loaded_data_;
+
+    //DescriptionProtocol<T>* protocol() const;
+
+};
+
+} /* namespace gdd */
+
+} /* namespace ugdk */
+
+#endif /* UGDK_UTIL_GDD_SIMPLELOADER_TH_ */

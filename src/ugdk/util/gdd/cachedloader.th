@@ -1,0 +1,46 @@
+
+#ifndef UGDK_UTIL_GDD_CACHEDLOADER_TH_
+#define UGDK_UTIL_GDD_CACHEDLOADER_TH_
+
+#include <ugdk/util/gdd/simpleloader.h>
+#include <map>
+#include <string>
+
+namespace ugdk {
+
+namespace gdd {
+
+template <class T>
+class CachedLoader : public SimpleLoader<T> {
+
+  public:
+
+    CachedLoader(DescriptionProtocol<T> *protocol) : SimpleLoader<T>(protocol) {}
+
+    ~CachedLoader();
+
+    T* Load(std::string gddfile_path);
+
+    void ClearCache();
+
+  protected:
+
+    typedef std::map<std::string, T*>   DataMap;
+    typedef typename DataMap::iterator  DataIterator;
+
+  private:
+
+    T* loadFromCache(std::string& gddfile_path);
+
+    T* loadNewData(std::string& gddfile_path);
+
+    void addToCache(std::string& gddfile_path, T*& new_data);
+
+    DataMap cache_;
+
+};
+
+} /* namespace gdd */
+
+} /* namespace ugdk */
+#endif /* UGDK_UTIL_GDD_CACHEDLOADER_TH_ */

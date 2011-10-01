@@ -22,6 +22,8 @@ endif (NOT BUILD_TYPE)
 if (NOT LINK_TYPE)
     message ("-- No link type was defined, choosing default value: STATIC")
     set (LINK_TYPE STATIC)
+else (NOT LONK_TYPE)
+    set (LINK_TYPE STATIC)
 endif (NOT LINK_TYPE)
 
 if (${BUILD_TYPE} STREQUAL RELEASE)
@@ -52,9 +54,9 @@ set (LDFLAGS "" CACHE STRING "flags enviadas ao linker")
 if (UNIX OR MINGW)
     # se for o g++ para *nix ou o MinGW para Windows:
     set (CFLAGS "${CFLAGS} -Wall -ansi -O3 -U_FORTIFY_SOURCE")
-    if (BUILD_TYPE EQUAL debug)
+    if (${BUILD_TYPE} STREQUAL DEBUG)
         set (CFLAGS "${CFLAGS} -g")
-    endif (BUILD_TYPE EQUAL debug)
+    endif (${BUILD_TYPE} STREQUAL DEBUG)
 endif (UNIX OR MINGW)
 
 # ${FRAMEWORK_SRC} esta' definido?
