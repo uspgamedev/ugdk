@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ugdk_tests", "ugdk_tests.vcxproj", "{88426421-C8EA-4013-B7F8-6A07ADD23469}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		DebugFast|Win32 = DebugFast|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{88426421-C8EA-4013-B7F8-6A07ADD23469}.Debug|Win32.ActiveCfg = Debug|Win32
+		{88426421-C8EA-4013-B7F8-6A07ADD23469}.Debug|Win32.Build.0 = Debug|Win32
+		{88426421-C8EA-4013-B7F8-6A07ADD23469}.DebugFast|Win32.ActiveCfg = DebugFast|Win32
+		{88426421-C8EA-4013-B7F8-6A07ADD23469}.DebugFast|Win32.Build.0 = DebugFast|Win32
+		{88426421-C8EA-4013-B7F8-6A07ADD23469}.Release|Win32.ActiveCfg = Release|Win32
+		{88426421-C8EA-4013-B7F8-6A07ADD23469}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		AMDCaPersistentConfig = Release|Win32
+		AMDCaPersistentStartup = Horus Eye
+		AMDCaProjectFile = D:\stuff\programming\projects\gamedev\CodeAnalyst\Horus Eye.caw
+	EndGlobalSection
+EndGlobal
