@@ -10,8 +10,8 @@
 namespace ugdk {
 
 GameData::~GameData() {
-    for (size_t i = 0; i < segments_.size(); i++)
-        delete segments_.at(i);
+    for (size_t i = 0; i < rings_.size(); i++)
+        delete rings_.at(i);
 }
 
 } /* namespace ugdk */

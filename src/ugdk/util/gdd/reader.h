@@ -50,11 +50,11 @@ class Reader {
         }
     }
 
-    bool untilNext() {
+    bool UntilNextTag() {
         int token = 0;
         while ((token = fgetc(file_)) == ' ' || token == '\t');
         ungetc(token, file_);
-        return !IsReserved(token) && token != '\n' && token != EOF;
+        return !IsReserved(token) && token != '\n' && token != '\r' && token != EOF;
     }
 
     bool Name(std::string &name)  {
@@ -78,7 +78,7 @@ class Reader {
     }
 
     void ValueSequence(std::vector<std::string> &values) {
-        while (untilNext()) {
+        while (UntilNextTag()) {
             std::string value = "";
             Value(value);
             if (value.length() == 0) break;

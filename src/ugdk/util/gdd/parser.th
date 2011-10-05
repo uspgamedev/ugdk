@@ -43,7 +43,7 @@ class Parser {
 
     ParseStatus::Type parseDataName(Reader &read);
 
-    ParseStatus::Type parseSimpleSegment(Reader &read);
+    ParseStatus::Type parseSimpleChain(Reader &read);
 
     ParseStatus::Type parseProperty(Reader &read);
 

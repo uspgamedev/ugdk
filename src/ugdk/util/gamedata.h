@@ -14,11 +14,11 @@ class GameData {
 
     typedef std::vector<std::string> Entry;
 
-    class Segment {
+    class Ring {
 
       public:
 
-        Segment(std::string label) : label_(label) {}
+        Ring(std::string label) : label_(label) {}
 
         void InsertEntry(Entry entry) { entries_.push_back(entry); }
 
@@ -33,7 +33,7 @@ class GameData {
 
     void AddProperty(std::string id, std::string value) { properties_[id] = value; }
 
-    void AddSegment(Segment *segment) { segments_.push_back(segment); }
+    void AddRing(Ring *ring) { rings_.push_back(ring); }
 
     ~GameData();
 
@@ -41,7 +41,7 @@ class GameData {
 
     std::string                         name_;
     std::map<std::string, std::string>  properties_;
-    std::vector<Segment*>               segments_;
+    std::vector<Ring*>               rings_;
 
 
 };
