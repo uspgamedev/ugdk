@@ -14,3 +14,6 @@ src/ugdk/config/config.h
 /Release
 /lib
 *.suo
+/deploy
+/Debug
+/ugdk_d.dir
