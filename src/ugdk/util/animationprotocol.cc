@@ -20,7 +20,7 @@ bool AnimationProtocol::NewDescription() {
 }
 
 bool AnimationProtocol::NewData(const GDDString& data_name) {
-    loader()->data()->Add(data_name, current_seq_ = new Animation::FrameSequence);
+    loader()->data()->Add(data_name, current_seq_ = new AnimationManager::Animation);
     return true;
 }
 
@@ -55,7 +55,7 @@ bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
                 error(LoadError::INVALID_VALUE, msg);
                 return false;
             }
-            current_seq_->push_back(new Animation::AnimationFrame(value));
+            current_seq_->push_back(new AnimationManager::AnimationFrame(value));
         }
     else return false;
     return true;

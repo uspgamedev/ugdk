@@ -22,15 +22,15 @@ class AnimationSet {
     void Release();
 
     // Returns the animation indexed by index, or NULL if it is not there.
-    Animation::FrameSequence* Get(size_t index);
+    AnimationManager::Animation* Get(size_t index);
 
     // Adds a modifier sequence to the set, naming it for later requests.
-    void Add(std::string name, Animation::FrameSequence *sequence);
+    void Add(std::string name, AnimationManager::Animation *sequence);
     void Add(std::string name, ...);
 
     // Searches for the animation using the given name.
     // Returns it if it is found or NULL if else.
-    Animation::FrameSequence* Search(std::string name);
+    AnimationManager::Animation* Search(std::string name);
 
     // Optimizes access to the animations identified by the given name.
     // The caller should be conscious of the returned indexes for later use
@@ -42,8 +42,8 @@ class AnimationSet {
 
   private:
 
-    typedef std::map<std::string,Animation::FrameSequence*> SequenceMap;
-    typedef std::vector<Animation::FrameSequence*> IndexArray;
+    typedef std::map<std::string,AnimationManager::Animation*> SequenceMap;
+    typedef std::vector<AnimationManager::Animation*> IndexArray;
 
     SequenceMap sequences_;
     IndexArray indexed_sequences_;

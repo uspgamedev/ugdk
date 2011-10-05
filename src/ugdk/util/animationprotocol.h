@@ -28,7 +28,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
 
   private:
 
-    Animation::FrameSequence *current_seq_;
+    AnimationManager::Animation *current_seq_;
 
 };
 
