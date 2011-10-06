@@ -5,6 +5,8 @@
 #include <string>
 #include <ugdk/graphic/modifier.h>
 
+#define DEFAULT_PERIOD 0.1f
+
 namespace ugdk {
 
 class Observer;
@@ -55,11 +57,16 @@ class AnimationManager {
       /*
        * period_: the inverse of the animation's fps.
        */
-      public:/*TODO herpderp default value*/
-        Animation(float fps = 10.0f) : std::vector<AnimationFrame*>(), period_(1.0f/fps) {}
+      public:
+        Animation() : std::vector<AnimationFrame*>(), period_(DEFAULT_PERIOD) {}
 
-        float fps() const { return 1.0f/period_; } /* try to use period() whenever you can */
+        /* try to use period() instead whenever you can */
+        float fps() const { return 1.0f/period_; }
         float period() const { return period_; }
+
+        /* try to use set_period() instead whenever you can */
+        void set_fps(const float fps) { period_ = 1.0f/fps; }
+        void set_period(const float period) { period_ = period; }
 
       private:
         float period_;

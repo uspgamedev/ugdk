@@ -11,7 +11,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
 
   public:
 
-    AnimationProtocol() : current_seq_(NULL) {}
+    AnimationProtocol() : current_animation_(NULL) {}
     virtual ~AnimationProtocol() {}
 
     bool NewDescription();
@@ -28,7 +28,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
 
   private:
 
-    AnimationManager::Animation *current_seq_;
+    AnimationManager::Animation *current_animation_;
 
 };
 

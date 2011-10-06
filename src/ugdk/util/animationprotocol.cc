@@ -20,7 +20,7 @@ bool AnimationProtocol::NewDescription() {
 }
 
 bool AnimationProtocol::NewData(const GDDString& data_name) {
-    loader()->data()->Add(data_name, current_seq_ = new AnimationManager::Animation);
+    loader()->data()->Add(data_name, current_animation_ = new AnimationManager::Animation);
     return true;
 }
 
@@ -32,7 +32,7 @@ bool AnimationProtocol::NewProperty(const GDDString& property_name, const GDDArg
             error(LoadError::INVALID_VALUE, msg);
             return false;
         }
-        //curret_seq_->set_fps(value);
+        current_animation_->set_fps(value);
     } else return false;
     return true;
 }
@@ -47,7 +47,7 @@ bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& ent
 
 bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
                                          const GDDArgs& ring_args) {
-    if (current_seq_ && ring_typename == "frames")
+    if (current_animation_ && ring_typename == "frames")
         for(size_t i = 0; i < ring_args.size(); i++) {
             int value;
             if (sscanf(ring_args[i].c_str(), "%d", &value) != 1) {
@@ -55,7 +55,7 @@ bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
                 error(LoadError::INVALID_VALUE, msg);
                 return false;
             }
-            current_seq_->push_back(new AnimationManager::AnimationFrame(value));
+            current_animation_->push_back(new AnimationManager::AnimationFrame(value));
         }
     else return false;
     return true;
