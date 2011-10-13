@@ -47,6 +47,10 @@ class Parser {
 
     ParseStatus::Type parseProperty(Reader &read);
 
+    ParseStatus::Type parseEntry(Reader &read);
+
+    ParseStatus::Type parseRing(Reader &read);
+
   private:
 
     DescriptionProtocol<T>* loader_;

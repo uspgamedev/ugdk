@@ -4,6 +4,7 @@
 
 #include <ugdk/action/animationset.h>
 #include <ugdk/util/gdd/descriptionprotocol.h>
+#include <ugdk/base/types.h>
 
 namespace ugdk {
 
@@ -29,6 +30,12 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
   private:
 
     AnimationManager::Animation *current_animation_;
+
+    float effect_alpha_;
+
+    Color effect_color_;
+
+    Vector2D effect_position_;
 
 };
 

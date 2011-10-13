@@ -44,7 +44,7 @@ class Modifier {
   private:
 
     Vector2D        offset_,
-                    size_;
+                    size_; //TODO: SIZE? ISSO AQUI … UM SCALE, POARR “w”
     float           rotation_;
     Mirror          mirror_;
     Color           color_;

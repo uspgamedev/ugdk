@@ -21,6 +21,7 @@ bool AnimationProtocol::NewDescription() {
 
 bool AnimationProtocol::NewData(const GDDString& data_name) {
     loader()->data()->Add(data_name, current_animation_ = new AnimationManager::Animation);
+    //TODO: Verificar integridade da current_animation_ .
     return true;
 }
 
@@ -38,16 +39,27 @@ bool AnimationProtocol::NewProperty(const GDDString& property_name, const GDDArg
 }
 
 bool AnimationProtocol::NewRing(const GDDString& ring_typename) {
+
+    if (ring_typename == "effect") {
+
+
+    }
     return true;
 }
 
 bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& entry_args) {
+
+    //((void)*tmp(const GDDArgs&)
+    if (1) {
+        //alpha
+
+    }
     return true;
 }
 
 bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
                                          const GDDArgs& ring_args) {
-    if (current_animation_ && ring_typename == "frames")
+    if (ring_typename == "frames")
         for(size_t i = 0; i < ring_args.size(); i++) {
             int value;
             if (sscanf(ring_args[i].c_str(), "%d", &value) != 1) {
@@ -57,7 +69,7 @@ bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
             }
             current_animation_->push_back(new AnimationManager::AnimationFrame(value));
         }
-    else return false;
+    else return false; //TODO: Mensagem da load error.
     return true;
 }
 
