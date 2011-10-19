@@ -2,9 +2,11 @@
 #ifndef UGDK_UTIL_ANIMATIONPROTOCOL_H_
 #define UGDK_UTIL_ANIMATIONPROTOCOL_H_
 
+#include <map>
+#include <utility>
 #include <ugdk/action/animationset.h>
 #include <ugdk/util/gdd/descriptionprotocol.h>
-#include <ugdk/base/types.h>
+#include <ugdk/graphic/modifier.h>
 
 namespace ugdk {
 
@@ -12,8 +14,14 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
 
   public:
 
-    AnimationProtocol() : current_animation_(NULL) {}
-    virtual ~AnimationProtocol() {}
+    enum ParsingScope {
+        ANIMATION_DATA,
+        FRAME_RING,
+        EFFECT_RING
+    };
+
+    AnimationProtocol();
+    virtual ~AnimationProtocol() { if(current_effect_) delete current_effect_; }
 
     bool NewDescription();
 
@@ -31,11 +39,21 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
 
     AnimationManager::Animation *current_animation_;
 
-    float effect_alpha_;
+    Modifier* current_effect_;
 
-    Color effect_color_;
+    ParsingScope current_scope_;
 
-    Vector2D effect_position_;
+    bool composing_;
+
+    std::map< std::pair<ParsingScope, gdd::GDDString>, void (AnimationProtocol::*) (const gdd::GDDArgs&) > entry_functions_;
+
+    void NewEntry_EffectNumber(const gdd::GDDArgs &);
+    void NewEntry_EffectAlpha(const gdd::GDDArgs &);
+    void NewEntry_EffectColor(const gdd::GDDArgs &);
+    void NewEntry_EffectPosition(const gdd::GDDArgs &);
+    void NewEntry_EffectMirror(const gdd::GDDArgs &);
+    void NewEntry_EffectSize(const gdd::GDDArgs &);
+    void NewEntry_EffectRotation(const gdd::GDDArgs &);
 
 };
 

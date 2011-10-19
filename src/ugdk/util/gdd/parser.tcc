@@ -107,9 +107,9 @@ ParseStatus::Type Parser<T>::parseEntry(Reader &read) {
     GDDArgs     values;
 
     ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD("entry"), ParseStatus::SYNTAX_ERROR);
-    ASSERT_PARSE(read.Name(entry_name), NO_MSG/*TODO*/, ParseStatus::SYNTAX_ERROR);
+    ASSERT_PARSE(read.Name(entry_type), NO_MSG/*TODO*/, ParseStatus::SYNTAX_ERROR);
     read.ValueSequence(values);
-    ASSERT_PARSE(loader()->NewEntry(entry_name, values), NO_MSG, ParseStatus::LOAD_ERROR);
+    ASSERT_PARSE(loader()->NewEntry(entry_type, values), NO_MSG, ParseStatus::LOAD_ERROR);
     return ParseStatus::OK;
 }
 
