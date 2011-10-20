@@ -69,23 +69,24 @@ class Sprite {
 
     // Changes the current animation to a new animation from the previously selected AnimationSet.
     void SelectAnimation(std::string animation_name) {
-        animation_->Select(animation_name);
+        animation_manager_->Select(animation_name);
     }
     void SelectAnimation(int animation_index) {
-        animation_->Select(animation_index);
+        animation_manager_->Select(animation_index);
     }
 
 
-    void SetAnimationFPS(float fps) { animation_->set_fps(fps); }
-    float GetAnimationFPS() const { return animation_->fps(); }
+    void SetAnimationSpeedupFactor(float factor)  { animation_manager_->set_speedup_factor(factor);  }
+    void SetAnimationSlowdownFactor(float factor) { animation_manager_->set_slowdown_factor(factor); }
+    float GetAnimationFPS() const { return animation_manager_->fps(); }
 
 
     void AddObserverToAnimation(Observer *observer) {
-        animation_->AddObserver(observer);
+        animation_manager_->AddObserver(observer);
     }
-    int GetAnimationFrameNumber() const { return animation_->n_frames(); }
+    int GetAnimationFrameNumber() const { return animation_manager_->n_frames(); }
     void SetDefaultFrame(int frame) {
-        animation_->set_default_frame(frame);
+        animation_manager_->set_default_frame(frame);
     }
 
     virtual void Render();
@@ -105,7 +106,7 @@ class Sprite {
   private:
     Vector2D position_, hotspot_, size_;
     Drawable *image_;
-    Animation *animation_;
+    AnimationManager *animation_manager_;
     Modifier *modifier_;
     bool visible_, delete_image_;
 

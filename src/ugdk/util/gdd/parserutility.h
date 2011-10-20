@@ -13,11 +13,11 @@
     } while(0)
 
 // Checks if 'token' is a valid character for the beginning of a field name.
-#define VALID_NAME_BEGIN(token) ((isalpha((token))) || ((token) == '_'))
+#define VALID_NAME_BEGIN(token) ((isalnum((token))) || ((token) == '_'))
 
 // Prints a bad name beginning error message.
 #define ERR_BAD_NAME_BEGIN() \
-    fputs("Data name must begin with an alphabetic character or '_'.", stderr)
+    fputs("Names and types must begin with an alphanumeric character or '_'.", stderr)
 
 // Checks if 'token' is a valid field name character.
 #define VALID_NAME_TOKEN(token) ((isalnum((token))) || ((token) == '_'))

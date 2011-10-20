@@ -11,7 +11,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
 
   public:
 
-    AnimationProtocol() : current_seq_(NULL) {}
+    AnimationProtocol() : current_animation_(NULL) {}
     virtual ~AnimationProtocol() {}
 
     bool NewDescription();
@@ -20,15 +20,15 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
 
     bool NewProperty(const gdd::GDDString& property_name, const gdd::GDDArgs& property_args);
 
-    bool NewSegment(const gdd::GDDString& segment_typename);
+    bool NewRing(const gdd::GDDString& ring_typename);
 
     bool NewEntry(const gdd::GDDString& entry_name, const gdd::GDDArgs& entry_args);
 
-    bool NewSimpleSegment(const gdd::GDDString& segment_typename, const gdd::GDDArgs& segment_args);
+    bool NewSimpleChain(const gdd::GDDString& ring_typename, const gdd::GDDArgs& ring_args);
 
   private:
 
-    Animation::FrameSequence *current_seq_;
+    AnimationManager::Animation *current_animation_;
 
 };
 
