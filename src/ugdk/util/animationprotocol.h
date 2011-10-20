@@ -45,15 +45,42 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
 
     bool composing_;
 
-    std::map< std::pair<ParsingScope, gdd::GDDString>, void (AnimationProtocol::*) (const gdd::GDDArgs&) > entry_functions_;
 
-    void NewEntry_EffectNumber(const gdd::GDDArgs &);
-    void NewEntry_EffectAlpha(const gdd::GDDArgs &);
-    void NewEntry_EffectColor(const gdd::GDDArgs &);
-    void NewEntry_EffectPosition(const gdd::GDDArgs &);
-    void NewEntry_EffectMirror(const gdd::GDDArgs &);
-    void NewEntry_EffectSize(const gdd::GDDArgs &);
-    void NewEntry_EffectRotation(const gdd::GDDArgs &);
+    std::map< std::pair<ParsingScope, gdd::GDDString>, bool (AnimationProtocol::*) (const gdd::GDDArgs&) > entry_functions_;
+
+    bool NewEntry_EffectNumber(   const gdd::GDDArgs& ); //TODO: implement this function.
+    bool NewEntry_EffectAlpha(    const gdd::GDDArgs& );
+    bool NewEntry_EffectColor(    const gdd::GDDArgs& );
+    bool NewEntry_EffectPosition( const gdd::GDDArgs& );
+    bool NewEntry_EffectMirror(   const gdd::GDDArgs& );
+    bool NewEntry_EffectSize(     const gdd::GDDArgs& );
+    bool NewEntry_EffectRotation( const gdd::GDDArgs& );
+
+    bool NewEntry_FrameNumber(   const gdd::GDDArgs& );
+    bool NewEntry_FrameAlpha(    const gdd::GDDArgs& );
+    bool NewEntry_FrameColor(    const gdd::GDDArgs& );
+    bool NewEntry_FramePosition( const gdd::GDDArgs& );
+    bool NewEntry_FrameMirror(   const gdd::GDDArgs& );
+    bool NewEntry_FrameSize(     const gdd::GDDArgs& );
+    bool NewEntry_FrameRotation( const gdd::GDDArgs& );
+
+
+    const bool arg_is_not_floating(const gdd::GDDString&) {
+        //TODO: Implement this.
+        return false;
+    }
+    const bool arg_is_not_integer(const gdd::GDDString&) {
+        //TODO: Implement this.
+        return false;
+    }
+    const bool arg_is_not_hexadecimal(const gdd::GDDString&) {
+        //TODO: Implement this.
+        return false;
+    }
+    const bool arg_is_not_flip_axis(const gdd::GDDString&) {
+        //TODO: Implement this.
+        return false;
+    }
 
 };
 

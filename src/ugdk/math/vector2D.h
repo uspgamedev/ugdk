@@ -68,6 +68,9 @@ class Vector2D {
     static Vector2D Rotate(Vector2D &a, float angle) {
         return a.Rotate(angle);
     }
+
+    Vector2D operator+=(const Vector2D &other);
+
 };
 
 Vector2D operator+(const Vector2D &left, const Vector2D &right);

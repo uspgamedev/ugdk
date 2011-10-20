@@ -43,6 +43,24 @@ class Modifier {
     void set_color(const Color color)       { color_    = color;    }
     void set_alpha(const float alpha)       { alpha_    = alpha;    }
 
+    // Component composers.
+    void ComposeOffset(const Vector2D& offset) { offset_    += offset;   }
+    void ComposeSize(const Vector2D& size)     { size_.x    *= size.x;
+                                                 size_.y    *= size.y;   }
+    void ComposeRotation(const float rotation) { rotation_  *= rotation; }
+    void ComposeMirror(const Mirror mirror)    { mirror_    ^= mirror;   }
+    void ComposeColor(const Color& color)      { color_.r   *= color.r;
+                                                 color_.g   *= color.g;
+                                                 color_.b   *= color.b;  }
+    void ComposeAlpha(const float alpha)       { alpha_     *= alpha;    }
+
+    void ComposeOffset(const Modifier *mod2)   { ComposeOffset(   mod2->offset()   ); }
+    void ComposeSize(const Modifier *mod2)     { ComposeSize(     mod2->size()     ); }
+    void ComposeRotation(const Modifier *mod2) { ComposeRotation( mod2->rotation() ); }
+    void ComposeMirror(const Modifier *mod2)   { ComposeMirror(   mod2->mirror()   ); }
+    void ComposeColor(const Modifier *mod2)    { ComposeColor(    mod2->color()    ); }
+    void ComposeAlpha(const Modifier *mod2)    { ComposeAlpha(    mod2->alpha()    ); }
+
     void Compose(const Modifier *mod2);
 
   private:
@@ -53,6 +71,7 @@ class Modifier {
     Mirror          mirror_;
     Color           color_;
     float           alpha_;
+    //TODO: colocar spreadsheet number no modifier.
 
 };
 
