@@ -6,8 +6,7 @@ Makefile
 cmake*
 lib/*
 src/ugdk/config/config.h
-*.sln
-*.vcxproj*
+*.user
 *.sdf
 /ugdk.dir
 /Win32
@@ -17,3 +16,9 @@ src/ugdk/config/config.h
 /deploy
 /Debug
 /ugdk_d.dir
+/test/bin
+/test/ipch
+/test/lib/ugdk.lib
+/test/lib/gtest.lib
+/test/lib/gtest_main.lib
+/test/tmp
