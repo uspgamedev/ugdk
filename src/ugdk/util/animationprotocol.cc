@@ -69,7 +69,10 @@ bool AnimationProtocol::NewRing(const GDDString& ring_typename) {
 
     if(ring_typename == "effect") {
         if(!composing_) {
-            if(current_effect_) delete current_effect_;
+            if(current_effect_) {
+                delete current_effect_;
+                current_effect_ = NULL;
+            }
             current_effect_ = new Modifier();
         }
         current_scope_ = EFFECT_RING;
@@ -97,7 +100,7 @@ bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& ent
     */
     ENTRY_METHOD(current_scope_, entry_name)(entry_args);
 
-    if (1) {
+    if (0) {
         //alpha
         switch (current_scope_) {
           case EFFECT_RING: {
@@ -162,7 +165,7 @@ bool AnimationProtocol::NewEntry_EffectNumber(const gdd::GDDArgs &args) {
     }
 
     //TODO: Colocar spreadsheet number no modifier.
-    //TODO: implementar esta função..
+    //TODO: implementar esta funï¿½ï¿½o..
     return true;
 
 }
@@ -230,7 +233,7 @@ bool AnimationProtocol::NewEntry_EffectMirror(const gdd::GDDArgs &args) {
         return false;
     }
 
-    Mirror new_mirror;
+    Mirror new_mirror = MIRROR_NONE;
     string fst_mirror = args[0], snd_mirror;
     if( tolower(args[0].at(0)) == 'h' || (args.size() >= 2 && tolower(args[1].at(1)) == 'h') )
         new_mirror |= MIRROR_HFLIP;
@@ -355,7 +358,7 @@ bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
         return false;
     }
 
-    Mirror new_mirror;
+    Mirror new_mirror = MIRROR_NONE;
     string fst_mirror = args[0], snd_mirror;
     if( tolower(args[0].at(0)) == 'h' || (args.size() >= 2 && tolower(args[1].at(1)) == 'h') )
         new_mirror |= MIRROR_HFLIP;
