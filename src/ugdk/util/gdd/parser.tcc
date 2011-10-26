@@ -44,7 +44,7 @@ ParseStatus::Type Parser<T>::doParse(Reader &read) {
             ASSERT_CHUNK(status, parseProperty, read);
             break;
           case '+': // Ring
-            //TODO: Ring
+            ASSERT_CHUNK(status, parseRing, read);
             break;
           case '[': // Begin Entry
             ASSERT_CHUNK(status, parseEntry, read);

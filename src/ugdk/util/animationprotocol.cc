@@ -71,7 +71,10 @@ bool AnimationProtocol::NewRing(const GDDString& ring_typename) {
 
     if(ring_typename == "effect") {
         if(!composing_) {
-            if(current_effect_) delete current_effect_;
+            if(current_effect_) {
+                delete current_effect_;
+                current_effect_ = NULL;
+            }
             current_effect_ = new Modifier();
         }
         current_scope_ = EFFECT_RING;
@@ -99,7 +102,7 @@ bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& ent
     */
     ENTRY_METHOD(current_scope_, entry_name)(entry_args);
 
-    if (1) {
+    if (0) {
         //alpha
         switch (current_scope_) {
           case EFFECT_RING: {
@@ -164,7 +167,7 @@ bool AnimationProtocol::NewEntry_EffectNumber(const gdd::GDDArgs &args) {
     }
 
     //TODO: Colocar spreadsheet number no modifier.
-    //TODO: implementar esta função..
+    //TODO: implementar esta fun??o..
     return true;
 
 }
