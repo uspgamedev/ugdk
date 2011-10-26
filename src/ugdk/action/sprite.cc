@@ -34,7 +34,7 @@ void Sprite::Render() {
         Modifier render_mod(*modifier_);
         const Modifier *animation_mod = animation_manager_->get_current_modifier();
         if (animation_mod) render_mod.Compose(animation_mod);
-        Vector2D true_hotspot = hotspot_.Scale(render_mod.size());
+        Vector2D true_hotspot = hotspot_.Scale(render_mod.scale());
         image_->DrawTo(position_ - true_hotspot, frame_number, &render_mod, size_);
     }
 }

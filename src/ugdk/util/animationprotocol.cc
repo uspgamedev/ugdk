@@ -24,7 +24,7 @@ AnimationProtocol::AnimationProtocol() : current_animation_(NULL), current_effec
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "color")    ] = &AnimationProtocol::NewEntry_EffectColor;
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "position") ] = &AnimationProtocol::NewEntry_EffectPosition;
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "mirror")   ] = &AnimationProtocol::NewEntry_EffectMirror;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "size")     ] = &AnimationProtocol::NewEntry_EffectSize;
+    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "scale")     ] = &AnimationProtocol::NewEntry_EffectSize;
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "rotation") ] = &AnimationProtocol::NewEntry_EffectRotation;
 
     entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "number")   ] = &AnimationProtocol::NewEntry_FrameNumber;
@@ -148,7 +148,10 @@ bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
                 error(LoadError::INVALID_VALUE, msg);
                 return false;
             }
-            current_animation_->push_back(new AnimationManager::AnimationFrame(value));
+            Modifier temp_modifier = *current_effect_;
+            current_animation_->push_back(
+                    new AnimationManager::AnimationFrame(value, new Modifier(temp_modifier))
+            );
         }
     else return false; //TODO: Mensagem da load error.
     return true;
@@ -167,7 +170,7 @@ bool AnimationProtocol::NewEntry_EffectNumber(const gdd::GDDArgs &args) {
     }
 
     //TODO: Colocar spreadsheet number no modifier.
-    //TODO: implementar esta fun??o..
+    //TODO: implementar esta função..
     return true;
 
 }
@@ -182,8 +185,7 @@ bool AnimationProtocol::NewEntry_EffectAlpha(const gdd::GDDArgs &args) {
     float new_alpha = atof(args[0].c_str());
     new_alpha = std::min( std::max(new_alpha,0.0f), 1.0f ); // new_alpha is of [0.0f,1.0f]
 
-    if(composing_) current_effect_->ComposeAlpha(new_alpha);
-    else current_effect_->set_alpha(new_alpha);
+    current_effect_->set_alpha(new_alpha);
     return true;
 
 }
@@ -203,8 +205,7 @@ bool AnimationProtocol::NewEntry_EffectColor(const gdd::GDDArgs &args) {
 
     Color c = Color(r/255.0f, g/255.0f, b/255.0f);
 
-    if(composing_) current_effect_->ComposeColor(c);
-    else current_effect_->set_color(c);
+    current_effect_->set_color(c);
     return true;
 
 }
@@ -218,8 +219,7 @@ bool AnimationProtocol::NewEntry_EffectPosition(const gdd::GDDArgs &args) {
 
     Vector2D new_pos = Vector2D( atof(args[0].c_str()), atof(args[1].c_str()) );
 
-    if(composing_) current_effect_->ComposeOffset(new_pos);
-    else current_effect_->set_offset(new_pos);
+    current_effect_->set_offset(new_pos);
     return true;
 
 }
@@ -248,8 +248,7 @@ bool AnimationProtocol::NewEntry_EffectMirror(const gdd::GDDArgs &args) {
     if( fst_mirror_id == 'v' || snd_mirror_id == 'v' )
         new_mirror |= MIRROR_VFLIP;
 
-    if(composing_) current_effect_->ComposeMirror(new_mirror);
-    else current_effect_->set_mirror(new_mirror);
+    current_effect_->set_mirror(new_mirror);
     return true;
 
 }
@@ -263,8 +262,7 @@ bool AnimationProtocol::NewEntry_EffectSize(const gdd::GDDArgs &args) {
 
     Vector2D new_size = Vector2D( atof(args[0].c_str()), atof(args[1].c_str()) );
 
-    if(composing_) current_effect_->ComposeSize(new_size);
-    else current_effect_->set_size(new_size);
+    current_effect_->set_scale(new_size);
     return true;
 
 }
@@ -279,8 +277,7 @@ bool AnimationProtocol::NewEntry_EffectRotation(const gdd::GDDArgs &args) {
     float new_rot  = atof(args[0].c_str());
           new_rot *= DEG_TO_RAD_FACTOR;
 
-    if(composing_) current_effect_->ComposeRotation(new_rot);
-    else current_effect_->set_alpha(new_rot);
+    current_effect_->set_rotation(new_rot);
     return true;
 
 }
@@ -314,7 +311,7 @@ bool AnimationProtocol::NewEntry_FrameAlpha(const gdd::GDDArgs &args) {
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    //fprintf(stderr, "===========> NEW ALPHA %f\n", new_alpha);
+
     if (composing_) cur_frame->modifier()->ComposeAlpha(new_alpha);
     else            cur_frame->modifier()->set_alpha(new_alpha);
     return true;
@@ -338,7 +335,8 @@ bool AnimationProtocol::NewEntry_FrameColor(const gdd::GDDArgs &args) {
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    cur_frame->modifier()->ComposeColor(c);
+    if (composing_) cur_frame->modifier()->ComposeColor(c);
+    else            cur_frame->modifier()->set_color(c);
     return true;
 
 }
@@ -354,7 +352,8 @@ bool AnimationProtocol::NewEntry_FramePosition(const gdd::GDDArgs &args) {
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    cur_frame->modifier()->ComposeOffset(new_pos);
+    if (composing_) cur_frame->modifier()->ComposeOffset(new_pos);
+    else            cur_frame->modifier()->set_offset(new_pos);
     return true;
 
 }
@@ -385,7 +384,8 @@ bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    cur_frame->modifier()->ComposeMirror(new_mirror);
+    if (composing_) cur_frame->modifier()->ComposeMirror(new_mirror);
+    else            cur_frame->modifier()->set_mirror(new_mirror);
     return true;
 
 }
@@ -401,7 +401,8 @@ bool AnimationProtocol::NewEntry_FrameSize(const gdd::GDDArgs &args) {
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    cur_frame->modifier()->ComposeSize(new_size);
+    if (composing_) cur_frame->modifier()->ComposeScale(new_size);
+    else            cur_frame->modifier()->set_scale(new_size);
     return true;
 
 }
@@ -418,7 +419,8 @@ bool AnimationProtocol::NewEntry_FrameRotation(const gdd::GDDArgs &args) {
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    cur_frame->modifier()->ComposeRotation(new_rot);
+    if (composing_) cur_frame->modifier()->ComposeRotation(new_rot);
+    else            cur_frame->modifier()->set_rotation(new_rot);
     return true;
 
 }
