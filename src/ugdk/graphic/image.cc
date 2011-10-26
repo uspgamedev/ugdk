@@ -59,11 +59,11 @@ bool Image::DrawTo(const Vector2D& position, int frame_number,
         size.y *= -1;
 	}
 
+    glPushMatrix();
 	// Sets the color to tint the image with to the color the image has modified with the color given.
 	// Also sets the alpha.
     glColor4f(color.r * color_.r, color.g * color_.g, color.b * color_.b, alpha_ * alpha);
 
-	glPushMatrix();
 	// Modifies the origin so it points to where this image is to be rendered.
 	glTranslatef( target.x, target.y, 0 );
 	// Modifies the scale so a 1.0f x 1.0f square matches size.
