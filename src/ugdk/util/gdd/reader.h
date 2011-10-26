@@ -16,17 +16,28 @@ class Reader {
 
   public:
 
-    Reader(FILE *file) : file_(file) {}
+    Reader(FILE *file) : file_path_("<unknown>"), file_(file), line_(0) {}
+
+    Reader(std::string &file_path) : file_path_(file_path), file_(NULL), line_(0) {}
 
     ~Reader() {}
 
+    bool Begin() {
+        file_ = fopen(file_path_.c_str(), "r");
+        return file_ != NULL;
+    }
+
     int Next() {
-        return fgetc(file_);
+        int token = fgetc(file_);
+        if (token == '\n')
+            line_++;
+        return token;
     }
 
     void SkipComment()  {
         int token = 0;
         while ((token = fgetc(file_)) != '\n' && token != EOF);
+        line_++;
     }
 
     void SkipSpace() {
@@ -88,7 +99,9 @@ class Reader {
 
   private:
 
-    FILE *file_;
+    std::string file_path_;
+    FILE        *file_;
+    size_t      line_;
 
 };
 

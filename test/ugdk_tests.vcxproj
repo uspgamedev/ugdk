@@ -16,14 +16,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\math\vector2D.cc" />
+    <ClCompile Include="src\util\animationprotocol.cc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{88426421-C8EA-4013-B7F8-6A07ADD23469}</ProjectGuid>
     <RootNamespace>Horus Eye</RootNamespace>
-    <SccProjectName>Svn</SccProjectName>
-    <SccAuxPath>Svn</SccAuxPath>
-    <SccLocalPath>Svn</SccLocalPath>
-    <SccProvider>SubversionScc</SccProvider>
+    <SccProjectName>
+    </SccProjectName>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

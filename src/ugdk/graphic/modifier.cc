@@ -6,7 +6,7 @@ namespace ugdk {
 
 Modifier::Modifier (Modifier &mod) :
         offset_(mod.offset_),
-        size_(mod.size_),
+        scale_(mod.scale_),
         rotation_(mod.rotation_),
         mirror_(mod.mirror_),
         color_(mod.color_),
@@ -14,8 +14,8 @@ Modifier::Modifier (Modifier &mod) :
 
 void Modifier::Compose(const Modifier *mod) {
     offset_ = offset_ + mod->offset_;
-    size_ = Vector2D(size_.x*mod->size_.x,
-                     size_.y*mod->size_.y);
+    scale_ = Vector2D(scale_.x*mod->scale_.x,
+                     scale_.y*mod->scale_.y);
     rotation_ *= mod->rotation_;
     mirror_ ^= mod->mirror_;
     color_.r *= mod->color_.r;

@@ -22,7 +22,7 @@ void Sprite::Initialize(Drawable *image, AnimationSet *set, bool delete_image)
     image_ = image;
   	set_zindex(0.0f);
     visible_ = true;
-    animation_manager_ = new AnimationManager(10, set);/*TODO: MANO TEM UM 10 NO MEU CÓDIGO */
+    animation_manager_ = new AnimationManager(10, set);/*TODO: MANO TEM UM 10 NO MEU Cï¿½DIGO */
     hotspot_ = position_ = Vector2D(0,0);
     delete_image_ = delete_image;
 	size_ = image->render_size();
@@ -34,7 +34,8 @@ void Sprite::Render() {
         Modifier render_mod(*modifier_);
         const Modifier *animation_mod = animation_manager_->get_current_modifier();
         if (animation_mod) render_mod.Compose(animation_mod);
-        image_->DrawTo(position_ - hotspot_, frame_number, &render_mod, size_);
+        Vector2D true_hotspot = hotspot_.Scale(render_mod.scale());
+        image_->DrawTo(position_ - true_hotspot, frame_number, &render_mod, size_);
     }
 }
 

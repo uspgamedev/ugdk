@@ -15,7 +15,7 @@ class Vector2D {
     /** Create the vector (x,y) with x = val and y = val being val a constant
     *  @param val is a constant
     */
-    Vector2D(float val) : x(val), y(val) {}
+    explicit Vector2D(float val) : x(val), y(val) {}
 
     /// Initializes both fields with given values.
     /** Create the vector (x,y) with x = x-value and y = y-value
@@ -75,10 +75,16 @@ class Vector2D {
     */
     Vector2D Rotate(const float angle) const;
 
+<<<<<<< HEAD
     /// Static method that returns a vector iqual to the sum of two others
     /** The sum of two vectors (x,y) (w,z) is igual to the vector (x+w, y+z)
     *  @return Sum Vector
     */
+=======
+    Vector2D Scale(const Vector2D &scale) const;
+
+    // Static methods
+>>>>>>> GDD_integration_revamp
     static Vector2D Add(const Vector2D &a, const Vector2D &b) {
         return Vector2D(a.x + b.x, a.y + b.y);
     }
@@ -136,6 +142,9 @@ class Vector2D {
     static Vector2D Rotate(Vector2D &a, float angle) {
         return a.Rotate(angle);
     }
+
+    Vector2D operator+=(const Vector2D &other);
+
 };
 
 /// Method that returns a vector iqual to the sum of two others
