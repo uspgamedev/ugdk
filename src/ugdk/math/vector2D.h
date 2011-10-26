@@ -68,23 +68,25 @@ class Vector2D {
     */
     Vector2D Normalize() const;
 
-    /// Returns a new vector iqual to this vector rotated "angle" counter-clockwise
+    /// Returns a new vector equal to this vector rotated by "angle" counter-clockwise.
     /** The vector rotated of a vector (x,y) is (x * cos(angle) - y * sin(angle) , x * sin(angle) + y * cos(angle))
     *  @return Rotated Vector
     *  @see Angle
     */
     Vector2D Rotate(const float angle) const;
 
-<<<<<<< HEAD
+    /// Returns a new vector which is this vector scaled coordinate by coordinate with "scale".
+    /** The resulting scaled vector is (this->x * scale.x, this->y * scale.y).
+     *  @return scaled vector
+     */
+    Vector2D Scale(const Vector2D &scale) const;
+
+    // Static methods
+
     /// Static method that returns a vector iqual to the sum of two others
     /** The sum of two vectors (x,y) (w,z) is igual to the vector (x+w, y+z)
     *  @return Sum Vector
     */
-=======
-    Vector2D Scale(const Vector2D &scale) const;
-
-    // Static methods
->>>>>>> GDD_integration_revamp
     static Vector2D Add(const Vector2D &a, const Vector2D &b) {
         return Vector2D(a.x + b.x, a.y + b.y);
     }
