@@ -367,8 +367,11 @@ bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
     }
 
     Mirror new_mirror = MIRROR_NONE;
-    char fst_mirror_id = tolower(args[0].at(0)), snd_mirror_id = '0';
-    if(args.size() >= 2) snd_mirror_id = tolower(args[1].at(0));
+    char fst_mirror_id = '0', snd_mirror_id = '0';
+    if(args.size() >= 1) {
+        fst_mirror_id = tolower(args[0].at(0));
+        if(args.size() >= 2) snd_mirror_id = tolower(args[1].at(0));
+    }
 
     if( fst_mirror_id == 'h' || snd_mirror_id == 'h' )
         new_mirror |= MIRROR_HFLIP;
