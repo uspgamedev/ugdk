@@ -12,12 +12,12 @@ class Modifier {
   public:
 
     /**
-     * Creates a new Modifier object with the specified values. The names of
-     * the parameters are self explanatories.
+     * Creates a new Modifier object with the specified values.
+     * The names of the parameters are self-explanatory.
      */
     Modifier(Vector2D offset = Vector2D(), Vector2D size = Vector2D(1.0f,1.0f),
               float rotation = 0.0f, Mirror mirror = MIRROR_NONE,
-              Color color = WHITE, float alpha = 1.0) :
+              Color color = WHITE, float alpha = 1.0f) :
                   offset_(offset), size_(size), rotation_(rotation),
                   mirror_(mirror), color_(color), alpha_(alpha) {}
 
@@ -38,21 +38,27 @@ class Modifier {
     // Setters.
     void set_offset(const Vector2D& offset) { offset_   = offset;   }
     void set_size(const Vector2D& size)     { size_     = size;     }
-    void set_rotation(const float rotation) { rotation_ = rotation; }
-    void set_mirror(const Mirror mirror)    { mirror_   = mirror;   }
+    /// Truncates rotation to [0,2PI] and sets it to the Modifier.
+    void set_rotation(const float rotation);
+    /// Assigns MIRROR_NONE in case of an invalid argument.
+    void set_mirror(const Mirror mirror);
     void set_color(const Color color)       { color_    = color;    }
-    void set_alpha(const float alpha)       { alpha_    = alpha;    }
+    /// Truncates alpha to [0,1] and sets it to the Modifier.
+    void set_alpha(const float alpha);
 
     // Component composers.
     void ComposeOffset(const Vector2D& offset) { offset_    += offset;   }
     void ComposeSize(const Vector2D& size)     { size_.x    *= size.x;
                                                  size_.y    *= size.y;   }
-    void ComposeRotation(const float rotation) { rotation_  *= rotation; }
-    void ComposeMirror(const Mirror mirror)    { mirror_    ^= mirror;   }
+    /// Truncates rotation to [0,2PI] and composes on the Modifier.
+    void ComposeRotation(const float rotation);
+    /// Does nothing if mirror == MIRROR_NONE or if mirror is invalid.
+    void ComposeMirror(const Mirror mirror);
     void ComposeColor(const Color& color)      { color_.r   *= color.r;
                                                  color_.g   *= color.g;
-                                                 color_.b   *= color.b;  }
-    void ComposeAlpha(const float alpha)       { alpha_     *= alpha;    }
+                                                 color_.b   *= color.b;  } //TODO: This is LIGHT composition, not COLOR.
+    /// Truncates alpha to [0,1] and composes on the Modifier.
+    void ComposeAlpha(const float alpha);
 
     void ComposeOffset(const Modifier *mod2)   { ComposeOffset(   mod2->offset()   ); }
     void ComposeSize(const Modifier *mod2)     { ComposeSize(     mod2->size()     ); }
