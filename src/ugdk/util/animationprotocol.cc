@@ -314,7 +314,9 @@ bool AnimationProtocol::NewEntry_FrameAlpha(const gdd::GDDArgs &args) {
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    cur_frame->modifier()->ComposeAlpha(new_alpha);
+    //fprintf(stderr, "===========> NEW ALPHA %f\n", new_alpha);
+    if (composing_) cur_frame->modifier()->ComposeAlpha(new_alpha);
+    else            cur_frame->modifier()->set_alpha(new_alpha);
     return true;
 
 }
@@ -377,9 +379,11 @@ bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
     }
 
     if( fst_mirror_id == 'h' || snd_mirror_id == 'h' )
-        new_mirror |= MIRROR_HFLIP;
+        new_mirror ^= MIRROR_HFLIP;
     if( fst_mirror_id == 'v' || snd_mirror_id == 'v' )
-        new_mirror |= MIRROR_VFLIP;
+        new_mirror ^= MIRROR_VFLIP;
+
+    fprintf(stderr, "==========> MIRROR %d\n", new_mirror);
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
