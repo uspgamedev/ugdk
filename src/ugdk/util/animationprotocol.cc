@@ -263,8 +263,8 @@ bool AnimationProtocol::NewEntry_EffectSize(const gdd::GDDArgs &args) {
 
     Vector2D new_size = Vector2D( atof(args[0].c_str()), atof(args[1].c_str()) );
 
-    if(composing_) current_effect_->ComposeSize(new_size);
-    else current_effect_->set_size(new_size);
+    if(composing_) current_effect_->ComposeScale(new_size);
+    else current_effect_->set_scale(new_size);
     return true;
 
 }
@@ -401,7 +401,7 @@ bool AnimationProtocol::NewEntry_FrameSize(const gdd::GDDArgs &args) {
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    cur_frame->modifier()->ComposeSize(new_size);
+    cur_frame->modifier()->ComposeScale(new_size);
     return true;
 
 }
