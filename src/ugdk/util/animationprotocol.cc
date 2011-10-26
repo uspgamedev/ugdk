@@ -383,11 +383,9 @@ bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
     if( fst_mirror_id == 'v' || snd_mirror_id == 'v' )
         new_mirror ^= MIRROR_VFLIP;
 
-    fprintf(stderr, "==========> MIRROR %d\n", new_mirror);
-
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    cur_frame->modifier()->ComposeOffset(new_mirror);
+    cur_frame->modifier()->ComposeMirror(new_mirror);
     return true;
 
 }
@@ -403,7 +401,7 @@ bool AnimationProtocol::NewEntry_FrameSize(const gdd::GDDArgs &args) {
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    cur_frame->modifier()->ComposeOffset(new_size);
+    cur_frame->modifier()->ComposeSize(new_size);
     return true;
 
 }
@@ -420,7 +418,7 @@ bool AnimationProtocol::NewEntry_FrameRotation(const gdd::GDDArgs &args) {
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-    cur_frame->modifier()->ComposeOffset(new_rot);
+    cur_frame->modifier()->ComposeRotation(new_rot);
     return true;
 
 }

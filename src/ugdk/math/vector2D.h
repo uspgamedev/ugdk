@@ -10,7 +10,7 @@ class Vector2D {
     Vector2D() : x(0.0f), y(0.0f) {}
 
     // Initializes both fields with val.
-    Vector2D(float val) : x(val), y(val) {}
+    explicit Vector2D(float val) : x(val), y(val) {}
 
     // Initializes both fields with given values.
     Vector2D(float x, float y) : x(x), y(y) {}
@@ -40,6 +40,8 @@ class Vector2D {
 
     // Returns a new vector equivalent to this vector rotated "angle" counter-clockwise.
     Vector2D Rotate(const float angle) const;
+
+    Vector2D Scale(const Vector2D &scale) const;
 
     // Static methods
     static Vector2D Add(const Vector2D &a, const Vector2D &b) {
