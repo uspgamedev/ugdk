@@ -22,7 +22,7 @@ void Sprite::Initialize(Drawable *image, AnimationSet *set, bool delete_image)
     image_ = image;
   	set_zindex(0.0f);
     visible_ = true;
-    animation_manager_ = new AnimationManager(10, set);/*TODO: MANO TEM UM 10 NO MEU CÓDIGO */
+    animation_manager_ = new AnimationManager(10, set);/*TODO: MANO TEM UM 10 NO MEU Cï¿½DIGO */
     hotspot_ = position_ = Vector2D(0,0);
     delete_image_ = delete_image;
 	size_ = image->render_size();
