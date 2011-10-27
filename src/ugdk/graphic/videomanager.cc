@@ -147,10 +147,12 @@ void VideoManager::BlendLightIntoBuffer() {
     glScalef(video_size_.x, video_size_.y, 1);
 
     // BLEND FUNC FOR BLENDING THE LIGHT WITH DA SCREEN
-    glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-    DrawLightRect();
 
-    glBlendFunc(GL_ZERO, GL_SRC_ALPHA);
+    // TODO: check why the hell when using 
+    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // Sometimes a light sets the entire scene to that color.
+
+    glBlendFunc(GL_ZERO, GL_SRC_COLOR);
     DrawLightRect();
 
     glPopMatrix();
@@ -168,7 +170,6 @@ void VideoManager::Render(std::vector<Scene*> scene_list) {
     // BLEND FUNC FOR RGBA SPRITES!!!
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    
     for (int i = 0; i < static_cast<int>(scene_list.size()); i++)
         if (!scene_list[i]->finished())
             scene_list[i]->Render();

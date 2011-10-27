@@ -307,7 +307,7 @@ bool Image::CreateFogTransparency(const Vector2D& size, const Vector2D& ellipse_
             float distance = Vector2D::InnerProduct(dist, dist);
             if(distance <= 1)
                 alpha = static_cast<Uint8>(SDL_ALPHA_OPAQUE * exp(-distance * 5.5412635451584261462455391880218));
-            pixels[i * width + j] = SDL_MapRGBA(data->format, 255, 255, 255, alpha);
+            pixels[i * width + j] = SDL_MapRGBA(data->format, alpha, alpha, alpha, alpha);
         }
     }
     SDL_UnlockSurface(data);
