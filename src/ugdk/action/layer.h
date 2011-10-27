@@ -16,7 +16,7 @@ namespace ugdk {
 class Layer {
   public:
     // Construtores e destrutores.
-    Layer(Vector2D offset = Vector2D()) : visible_(true), light_type_(LIGHT_IGNORE) {}
+    Layer(Vector2D offset = Vector2D()) : visible_(true) {}
     virtual ~Layer();
 
     // Acesso e leitura de atributos.
@@ -24,8 +24,6 @@ class Layer {
     void set_visible(bool visible) { visible_ = visible; }
     void set_offset(Vector2D offset) { offset_ = offset; }
     Vector2D offset() { return offset_; }
-    void set_light_type(LightType type) { light_type_ = type; }
-    LightType light_type() { return light_type_; }
 
     // Adicionando e removendo Sprites.
     void AddSprite(Sprite *sprite);
@@ -46,8 +44,6 @@ class Layer {
   private:
     // Atributos.
     Vector2D offset_;
-
-    LightType light_type_;
 
     // Ordena os sprites pelo zindex
     virtual void SortSprites();

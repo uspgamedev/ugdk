@@ -30,7 +30,6 @@ void Layer::Update(float delta_t) {
 void Layer::Render() {
     if(visible_) {
         std::vector<Sprite*>::iterator it = sprite_list_.begin();
-        VIDEO_MANAGER()->set_light_draw_mode(light_type_);
         Vector2D pos = Vector2D()-offset_;
         VIDEO_MANAGER()->TranslateTo(pos);
         while (it != sprite_list_.end()) {
@@ -42,7 +41,6 @@ void Layer::Render() {
 void Layer::RenderLight() {
     if(visible_) {
         std::vector<Sprite*>::iterator it = sprite_list_.begin();
-        VIDEO_MANAGER()->set_light_draw_mode(LIGHT_SOURCE);
         while (it != sprite_list_.end()) {
 			(*it)->RenderLight(offset_);
             ++it;
