@@ -101,6 +101,9 @@ if (MSVC)
   foreach (d ${DEFS})
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
   endforeach (d)
+  
+  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS")
+  
 else (MSVC)
   foreach (d ${DEFS})
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -D${d}")

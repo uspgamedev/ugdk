@@ -2,6 +2,7 @@
 #define UGDK_BASE_ENGINE_H_
 
 #include <vector>
+#include <list>
 #include <string>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/action/scene.h>
@@ -54,6 +55,11 @@ class Engine {
     Scene* CurrentScene() const;
     void PopScene();
 
+    // TODO: SERIOUSLY FIX THIS. Big fat ugly code to allow some special 
+    // layers to be unnafected by the light system. Meant for user interface.
+    void PushInterface(Layer* layer);
+    void RemoveInterface(Layer *layer);
+
     uint32 current_fps() { return reported_fps_; }
 
     // Saida do motor
@@ -74,6 +80,7 @@ class Engine {
     //Vector2D window_size_;
     bool quit_;
     vector<Scene*> scene_list_;
+    std::list<Layer*> interface_list_;
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 
 	Engine() : video_manager_(NULL), input_manager_(NULL), time_handler_(NULL), 

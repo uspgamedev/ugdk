@@ -14,7 +14,7 @@ namespace ugdk {
 class Layer {
   public:
     /// Consructor of the layer class.
-    Layer(Vector2D offset = Vector2D()) : visible_(true), light_type_(LIGHT_IGNORE) {}
+    Layer(Vector2D offset = Vector2D()) : visible_(true) {}
     virtual ~Layer();
 
     /// Manage the atributes.
@@ -34,12 +34,6 @@ class Layer {
     /** @return  offset is a Vector2D object
     */ 
     Vector2D offset() { return offset_; }
-    /// Set the light type
-    /** @param type is a LightType object*/
-    void set_light_type(LightType type) { light_type_ = type; }
-    /// Return the light type
-    /** @return light_type_ is a LightType object*/
-    LightType light_type() { return light_type_; }
 
     /// Add a sprite to the Layer
     /** @param sprite is a pointer to a sprite*/
@@ -64,8 +58,6 @@ class Layer {
   private:
     /// Atributes.
     Vector2D offset_;
-
-    LightType light_type_;
 
     /// Sort sprites using zindex
     virtual void SortSprites();

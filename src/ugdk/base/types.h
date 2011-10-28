@@ -5,12 +5,6 @@
 
 namespace ugdk {
 
-typedef enum {
-    LIGHT_IGNORE,
-    LIGHT_SOURCE,
-    LIGHT_ILLUMINATED
-} LightType;
-
 typedef struct Color {
     Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f)
           : r(_r), g(_g), b(_b) {}
