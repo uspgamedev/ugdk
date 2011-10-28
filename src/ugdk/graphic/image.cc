@@ -149,10 +149,6 @@ Color Image::CreateColor(float red, float green, float blue) {
     return color;
 }
 
-
-
-
-
 // Loads the texture from the given surface. Surface is used only as a
 // reference and necessary data is copied.
 // Returns true on success, false otherwise.
@@ -263,13 +259,11 @@ bool Image::LoadFromSurface(SDL_Surface* data, bool linear) {
 
 bool Image::LoadFromFile(std::string filepath) {
     SDL_Surface* data = IMG_Load(filepath.c_str());
-    fprintf(stderr, "New Surface from \"%s\", ", filepath.c_str());
     bool result;
     if(data == NULL) {
-        fprintf(stderr, "File not found\n");
+        fprintf(stderr, "Could not load file \"%s\".\n", filepath.c_str());
         result = false;
     } else {
-        fprintf(stderr, "File Found!\n");
         result = LoadFromSurface(data);
         SDL_FreeSurface(data);
     }

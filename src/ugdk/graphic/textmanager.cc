@@ -86,7 +86,9 @@ void TextManager::AddFont(wstring name, wstring path, int size, char ident, bool
 	if(fonts_.count(name) > 0)
 		return;
 	Image **font_image = NULL;
+#ifdef DEBUG
 	fwprintf(stderr, L"Loading new font tag: \"%s\"\n", name.c_str());
+#endif
 	if(font_images_.count(path) == 0) {
 		// Given file not loaded, loading it.
 		font_image = new Image*[65535];

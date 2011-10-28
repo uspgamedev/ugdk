@@ -216,8 +216,6 @@ void VideoManager::InitializeLight() {
         light_texture_ = 0;
     }
 
-    puts("Lights initialized.");
-
     glGenTextures(1, &light_texture_);
     glBindTexture(GL_TEXTURE_2D, light_texture_);
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
