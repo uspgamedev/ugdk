@@ -15,7 +15,8 @@ namespace ugdk {
 // This calls the method stored in "entry_functions_[RING_TYPE][NAME]"
 #define ENTRY_METHOD(RING_TYPE, NAME) (this->*ENTRY_METHOD_PTR(RING_TYPE, NAME))
 
-// Pretty much "entry_functions_[RING_TYPE][KEYWORD] = ENTRY_FUNCTION_NAME".
+// Pretty much "entry_functions_[RING_TYPE][KEYWORD] = func",
+//      where "func" is the function with name ENTRY_FUNCTION_NAME.
 // You'll probably want to use the version below this one instead.
 #define ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEYWORD, ENTRY_FUNCTION_NAME)                   \
     (ENTRY_METHOD_PTR(RING_TYPE, KEYWORD) = &AnimationProtocol::ENTRY_FUNCTION_NAME)

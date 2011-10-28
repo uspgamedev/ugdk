@@ -19,8 +19,11 @@ class Modifier {
              float rotation = 0.0f, Mirror mirror = MIRROR_NONE, Color color = WHITE, float alpha = 1.0f) :
         offset_(offset), scale_(scale), rotation_(rotation), mirror_(mirror), color_(color), alpha_(alpha) {}
 
-    // Copy constructor
-    Modifier(Modifier &mod);
+    // Copy constructors
+    Modifier(const Modifier& mod);
+    // This one is private:
+    // Modifier(const Modifier* mod);
+    // Use Modifier::Copy(const Modifier* mod2) instead.
 
     // Destructor
     ~Modifier() {}
@@ -58,17 +61,25 @@ class Modifier {
     /// Truncates alpha to [0,1] and composes on the Modifier.
     void ComposeAlpha(const float alpha);
 
-    void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeOffset(   mod2->offset()   ); }
-    void ComposeScale(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeScale(    mod2->scale()    ); }
-    void ComposeRotation( const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeRotation( mod2->rotation() ); }
-    void ComposeMirror(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeMirror(   mod2->mirror()   ); }
-    void ComposeColor(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeColor(    mod2->color()    ); }
-    void ComposeAlpha(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeAlpha(    mod2->alpha()    ); }
+    void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeOffset(   mod2->offset_   ); }
+    void ComposeScale(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeScale(    mod2->scale_    ); }
+    void ComposeRotation( const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeRotation( mod2->rotation_ ); }
+    void ComposeMirror(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeMirror(   mod2->mirror_   ); }
+    void ComposeColor(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeColor(    mod2->color_    ); }
+    void ComposeAlpha(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeAlpha(    mod2->alpha_    ); }
 
+    // Global composer and copy from pointer function.
     void Compose(const Modifier* mod2);
+    /// Remember to free your new Modifier created through this static function!
+    static Modifier* Compose(const Modifier* mod1, const Modifier* mod2);
+    /// Remember to free your new Modifier created through this static function!
+    static Modifier* Copy(const Modifier* mod2) { if(mod2 == NULL) return NULL; return new Modifier(mod2); }
 
   private:
+    // Copy constructor from pointer:
+    Modifier(const Modifier* mod);
 
+    // Attributes
     Vector2D        offset_,
                     scale_;
     float           rotation_;
