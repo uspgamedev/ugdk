@@ -140,8 +140,14 @@ bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& ent
 
 bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
                                          const GDDArgs& ring_args) {
-    if (ring_typename == "frames")
+    //if (ring_typename == "frames")
         for(size_t i = 0; i < ring_args.size(); i++) {
+            GDDArgs entry_arg;
+            entry_arg.push_back(ring_args[i]);
+
+            if (!NewRing("frame")) return false;
+            if (!NewEntry(ring_typename, entry_arg)) return false;
+            /*
             int value;
             if (sscanf(ring_args[i].c_str(), "%d", &value) != 1) {
                 string msg = "Could not read animation frame number.";
@@ -152,8 +158,9 @@ bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
             current_animation_->push_back(
                     new AnimationManager::AnimationFrame(value, new Modifier(temp_modifier))
             );
+            */
         }
-    else return false; //TODO: Mensagem da load error.
+    //else return false; //TODO: Mensagem da load error.
     return true;
 }
 

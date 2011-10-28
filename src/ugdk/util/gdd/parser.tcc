@@ -59,7 +59,8 @@ ParseStatus::Type Parser<T>::doParse(Reader &read) {
           case '\n':
             break;
           default:
-            fprintf(stderr, "Unknown token '%c'", token);
+            ERR_LOCATION(read);
+            fprintf(stderr, "Unknown token '%c'\n", token);
             return ParseStatus::SYNTAX_ERROR;
         }
     return ParseStatus::OK;
@@ -70,7 +71,7 @@ template <class T>
 ParseStatus::Type Parser<T>::parseDataName(Reader &read) {
     GDDString data_name;
 
-    ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD("data"), ParseStatus::SYNTAX_ERROR);
+    ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD(read, "data"), ParseStatus::SYNTAX_ERROR);
     ASSERT_PARSE(read.Name(data_name), NO_MSG/*TODO*/, ParseStatus::SYNTAX_ERROR);
     ASSERT_PARSE(loader()->NewData(data_name), NO_MSG, ParseStatus::LOAD_ERROR);
     return ParseStatus::OK;
@@ -81,10 +82,16 @@ ParseStatus::Type Parser<T>::parseSimpleChain(Reader &read) {
     GDDString   segment_type;
     GDDArgs     values;
 
-    ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD("simple segment"), ParseStatus::SYNTAX_ERROR);
+    ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD(read, "simple segment"), ParseStatus::SYNTAX_ERROR);
     ASSERT_PARSE(read.Name(segment_type), NO_MSG/*TODO*/, ParseStatus::SYNTAX_ERROR);
     read.ValueSequence(values);
-    ASSERT_PARSE(loader()->NewSimpleChain(segment_type, values), NO_MSG, ParseStatus::LOAD_ERROR);
+    ASSERT_PARSE(loader()->NewSimpleChain(segment_type, values),
+                 fprintf(stderr,
+                         "%s:%u -> Could not load simple chain.\n",
+                         read.file_path().c_str(),
+                         (unsigned)(read.line())),
+                 /*NO_MSG,*/
+                 ParseStatus::LOAD_ERROR);
     return ParseStatus::OK;
 }
 
@@ -93,7 +100,7 @@ ParseStatus::Type Parser<T>::parseProperty(Reader &read) {
     GDDString   property_name;
     GDDArgs     values;
 
-    ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD("property"), ParseStatus::SYNTAX_ERROR);
+    ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD(read, "property"), ParseStatus::SYNTAX_ERROR);
     ASSERT_PARSE(read.Name(property_name), NO_MSG/*TODO*/, ParseStatus::SYNTAX_ERROR);
     read.ValueSequence(values);
     ASSERT_PARSE(loader()->NewProperty(property_name, values), NO_MSG, ParseStatus::LOAD_ERROR);
@@ -105,7 +112,7 @@ ParseStatus::Type Parser<T>::parseEntry(Reader &read) {
     GDDString   entry_type;
     GDDArgs     values;
 
-    ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD("entry"), ParseStatus::SYNTAX_ERROR);
+    ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD(read, "entry"), ParseStatus::SYNTAX_ERROR);
     ASSERT_PARSE(read.Name(entry_type), NO_MSG/*TODO*/, ParseStatus::SYNTAX_ERROR);
     read.ValueSequence(values);
     ASSERT_PARSE(loader()->NewEntry(entry_type, values), NO_MSG, ParseStatus::LOAD_ERROR);
@@ -116,7 +123,7 @@ template <class T>
 ParseStatus::Type Parser<T>::parseRing(Reader &read) {
     GDDString   ring_type;
 
-    ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD("ring"), ParseStatus::SYNTAX_ERROR);
+    ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD(read, "ring"), ParseStatus::SYNTAX_ERROR);
     ASSERT_PARSE(read.Name(ring_type), NO_MSG/*TODO*/, ParseStatus::SYNTAX_ERROR);
     ASSERT_PARSE(loader()->NewRing(ring_type), NO_MSG, ParseStatus::LOAD_ERROR);
     return ParseStatus::OK;

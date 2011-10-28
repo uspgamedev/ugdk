@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <clocale>
+#include <cwchar>
 #include <SDL/SDL_opengl.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/textmanager.h>
@@ -85,7 +86,7 @@ void TextManager::AddFont(wstring name, wstring path, int size, char ident, bool
 	if(fonts_.count(name) > 0)
 		return;
 	Image **font_image = NULL;
-	fprintf(stderr, "Loading new font tag: \"%s\"\n", name.c_str());
+	fwprintf(stderr, L"Loading new font tag: \"%s\"\n", name.c_str());
 	if(font_images_.count(path) == 0) {
 		// Given file not loaded, loading it.
 		font_image = new Image*[65535];
