@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <list>
 #include <ugdk/base/types.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/frame.h>
@@ -16,6 +17,7 @@ using std::map;
 namespace ugdk {
 class Image;
 class Scene;
+class Layer;
 
 class VideoManager {
   public:
@@ -27,7 +29,7 @@ class VideoManager {
 	bool Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon);
     bool ChangeResolution(const Vector2D& size, bool fullscreen);
     bool Release();
-    void Render(std::vector<Scene*>);
+    void Render(std::vector<Scene*>, std::list<Layer*>);
 
     Image* LoadImageFile(const string& filepath);
     Image* LoadImage(const string& filepath) {

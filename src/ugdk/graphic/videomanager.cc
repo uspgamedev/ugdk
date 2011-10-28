@@ -5,6 +5,7 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/image.h>
 #include <ugdk/action/scene.h>
+#include <ugdk/action/layer.h>
 
 namespace ugdk {
 
@@ -49,7 +50,7 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
         return false;
 
     //Set projection
-	glViewport(0, 0, size.x, size.y);
+	glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
     glMatrixMode( GL_PROJECTION );
 
     glLoadIdentity();
@@ -111,7 +112,7 @@ void VideoManager::MergeLights(std::vector<Scene*> scene_list) {
 
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_texture_);
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, video_size_.x, video_size_.y);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, (GLsizei) video_size_.x, (GLsizei) video_size_.y);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glPopAttrib(); // GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
@@ -158,7 +159,7 @@ void VideoManager::BlendLightIntoBuffer() {
 }
 
 // Desenha backbuffer na tela
-void VideoManager::Render(std::vector<Scene*> scene_list) {
+void VideoManager::Render(std::vector<Scene*> scene_list, std::list<Layer*> interface_list) {
 
     // DRAWING DA LIGHT!!!!
     MergeLights(scene_list);
@@ -174,6 +175,11 @@ void VideoManager::Render(std::vector<Scene*> scene_list) {
             scene_list[i]->Render();
 
     BlendLightIntoBuffer();
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    for (std::list<Layer*>::iterator it = interface_list.begin(); it != interface_list.end(); ++it)
+        (*it)->Render();
 
     //Update screen
     SDL_GL_SwapBuffers();
@@ -219,7 +225,8 @@ void VideoManager::InitializeLight() {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, video_size_.x, video_size_.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (GLsizei) video_size_.x, 
+        (GLsizei) video_size_.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
