@@ -1,0 +1,8 @@
+$sample_4
+@fps 120
+@compose
++effect [a 0.3]
++frame [n 1]
++frame [n 2] [a 0.5]
++effect [a 0.8]
++frame [n 4] [c 0xDDCCBB] [p 1.25 -3] [m Vert Horz] [r -110] [s 2]

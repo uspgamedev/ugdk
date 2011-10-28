@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <clocale>
+#include <cwchar>
 #include <SDL/SDL_opengl.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/textmanager.h>

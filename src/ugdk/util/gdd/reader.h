@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <string>
 #include <vector>
+
 #include <ugdk/util/gdd/parserutility.h>
 
 namespace ugdk {
@@ -16,17 +17,32 @@ class Reader {
 
   public:
 
-    Reader(FILE *file) : file_(file) {}
+    Reader(FILE *file) : file_path_("<unknown>"), file_(file), line_(1) {}
+
+    Reader(std::string &file_path) : file_path_(file_path), file_(NULL), line_(1) {}
 
     ~Reader() {}
 
+    std::string& file_path() { return file_path_; }
+
+    size_t line() { return line_; }
+
+    bool Begin() {
+        file_ = fopen(file_path_.c_str(), "r");
+        return file_ != NULL;
+    }
+
     int Next() {
-        return fgetc(file_);
+        int token = fgetc(file_);
+        if (token == '\n')
+            line_++;
+        return token;
     }
 
     void SkipComment()  {
         int token = 0;
         while ((token = fgetc(file_)) != '\n' && token != EOF);
+        line_++;
     }
 
     void SkipSpace() {
@@ -50,18 +66,18 @@ class Reader {
         }
     }
 
-    bool untilNext() {
+    bool UntilNextTag() {
         int token = 0;
         while ((token = fgetc(file_)) == ' ' || token == '\t');
         ungetc(token, file_);
-        return !IsReserved(token) && token != '\n' && token != EOF;
+        return !IsReserved(token) && token != '\n' && token != '\r' && token != EOF;
     }
 
     bool Name(std::string &name)  {
         int token = 0;
         token = fgetc(file_);
         ASSERT_PARSE(VALID_NAME_BEGIN(token),
-                     ERR_BAD_NAME_BEGIN(),
+                     ERR_BAD_NAME_BEGIN((*this)),
                      false);
         name.push_back(token);
         for (token = fgetc(file_); VALID_NAME_TOKEN(token); token = fgetc(file_))
@@ -78,7 +94,7 @@ class Reader {
     }
 
     void ValueSequence(std::vector<std::string> &values) {
-        while (untilNext()) {
+        while (UntilNextTag()) {
             std::string value = "";
             Value(value);
             if (value.length() == 0) break;
@@ -88,7 +104,9 @@ class Reader {
 
   private:
 
-    FILE *file_;
+    std::string file_path_;
+    FILE        *file_;
+    size_t      line_;
 
 };
 

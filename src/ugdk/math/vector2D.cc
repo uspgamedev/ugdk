@@ -29,6 +29,16 @@ Vector2D Vector2D::Rotate(const float angle) const {
     return Vector2D(x * ca - y * sa, x * sa + y * ca);
 }
 
+Vector2D Vector2D::Scale(const Vector2D &scale) const {
+    return Vector2D(x * scale.x, y * scale.y);
+}
+
+Vector2D Vector2D::operator+=(const Vector2D &other) {
+    x += other.x;  
+    y += other.y;
+    return *this;
+}
+
 Vector2D operator+(const Vector2D &left, const Vector2D &right) {
     return Vector2D::Add(left, right);
 }
