@@ -1,6 +1,9 @@
 
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/image.h>
+#include <algorithm>
+
+#define TWO_PI 6.28318530f
 
 namespace ugdk {
 
@@ -24,4 +27,35 @@ void Modifier::Compose(const Modifier *mod) {
     alpha_ *= mod->alpha_;
 }
 
+
+
+
+void Modifier::set_mirror(const Mirror mirror) {
+    if( mirror == MIRROR_HFLIP || mirror == MIRROR_VFLIP )
+        mirror_  = mirror;
+    else mirror_ = MIRROR_NONE;
 }
+
+void Modifier::set_rotation(const float rotation) {
+    rotation_ = std::fmod(rotation,TWO_PI);
+}
+
+void Modifier::set_alpha(const float alpha) {
+    alpha_ = std::min( std::max(alpha, 0.0f), 1.0f );
+}
+
+
+void Modifier::ComposeMirror(const Mirror mirror) {
+    if( mirror == MIRROR_HFLIP || mirror == MIRROR_VFLIP )
+        mirror_ ^= mirror;
+}
+
+void Modifier::ComposeRotation(const float rotation) {
+    rotation_ *= std::fmod(rotation,TWO_PI);
+}
+
+void Modifier::ComposeAlpha(const float alpha) {
+    alpha_ *= std::min( std::max(alpha, 0.0f), 1.0f );
+}
+
+} // namespace ugdk
