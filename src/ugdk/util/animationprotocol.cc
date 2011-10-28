@@ -8,7 +8,17 @@
 
 namespace ugdk {
 
-#define ENTRY_METHOD(RING_TYPE, NAME) (this->*entry_functions_[ pair<ParsingScope, GDDString>( RING_TYPE , NAME ) ])
+#define ENTRY_METHOD_PTR(RING_TYPE, NAME) (entry_functions_[ pair<ParsingScope, GDDString>( RING_TYPE , NAME ) ])
+#define ENTRY_METHOD(RING_TYPE, NAME) (this->*ENTRY_METHOD_PTR(RING_TYPE, NAME))
+#define ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEYWORD, ENTRY_FUNCTION_NAME) (             \
+    ENTRY_METHOD_PTR(RING_TYPE, KEYWORD) = &AnimationProtocol::ENTRY_FUNCTION_NAME  \
+)
+#define ENTRY_MAP_BULK_ASSIGN(RING_TYPE, ENTRY_FUNCTION, KEY_0, KEY_1, KEY_2, KEY_3, KEY_4) \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_0, ENTRY_FUNCTION);                                 \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_1, ENTRY_FUNCTION);                                 \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_2, ENTRY_FUNCTION);                                 \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_3, ENTRY_FUNCTION);                                 \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_4, ENTRY_FUNCTION)
 
 using std::string;
 using std::pair;
@@ -19,12 +29,14 @@ using gdd::LoadError;
 
 AnimationProtocol::AnimationProtocol() : current_animation_(NULL), current_effect_(NULL), composing_(false) {
     //TODO: Make this map static maybe?
+
+    /*TODO: Nuke this commented code when you're sure the new ver. works.
     //entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "number")   ] = &AnimationProtocol::NewEntry_EffectNumber;
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "alpha")    ] = &AnimationProtocol::NewEntry_EffectAlpha;
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "color")    ] = &AnimationProtocol::NewEntry_EffectColor;
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "position") ] = &AnimationProtocol::NewEntry_EffectPosition;
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "mirror")   ] = &AnimationProtocol::NewEntry_EffectMirror;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "scale")     ] = &AnimationProtocol::NewEntry_EffectSize;
+    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "scale")    ] = &AnimationProtocol::NewEntry_EffectSize;
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "rotation") ] = &AnimationProtocol::NewEntry_EffectRotation;
 
     entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "number")   ] = &AnimationProtocol::NewEntry_FrameNumber;
@@ -34,6 +46,23 @@ AnimationProtocol::AnimationProtocol() : current_animation_(NULL), current_effec
     entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "mirror")   ] = &AnimationProtocol::NewEntry_FrameMirror;
     entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "size")     ] = &AnimationProtocol::NewEntry_FrameSize;
     entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "rotation") ] = &AnimationProtocol::NewEntry_FrameRotation;
+    */
+
+    //ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectNumber  , "number"  , "n", "Number"  , "N", "NUMBER"  );
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectAlpha   , "alpha"   , "a", "Alpha"   , "A", "ALPHA"   );
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectColor   , "color"   , "c", "Color"   , "C", "COLOR"   );
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectPosition, "position", "p", "Position", "P", "POSITION");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectMirror  , "mirror"  , "m", "Mirror"  , "M", "MIRROR"  );
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectSize    , "size"    , "s", "Size"    , "S", "SIZE"    );
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectRotation, "rotation", "r", "Rotation", "R", "ROTATION");
+
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameNumber   , "number"  , "n", "Number"  , "N", "NUMBER"  );
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameAlpha    , "alpha"   , "a", "Alpha"   , "A", "ALPHA"   );
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameColor    , "color"   , "c", "Color"   , "C", "COLOR"   );
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FramePosition , "position", "p", "Position", "P", "POSITION");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameMirror   , "mirror"  , "m", "Mirror"  , "M", "MIRROR"  );
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameSize     , "size"    , "s", "Size"    , "S", "SIZE"    );
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameRotation , "rotation", "r", "Rotation", "R", "ROTATION");
 }
 
 bool AnimationProtocol::NewDescription() {
@@ -100,41 +129,7 @@ bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& ent
     * We don't need to check the scope here, the parser will throw a Syntax Error in case of bad scope,
     * or the protocol will throw a Load Error in the case of Invalid Ring
     */
-    ENTRY_METHOD(current_scope_, entry_name)(entry_args);
-
-    if (0) {
-        //alpha
-        switch (current_scope_) {
-          case EFFECT_RING: {
-            Modifier* temp_modifier = new Modifier();
-            temp_modifier->set_alpha(atof(entry_args[0].c_str()));
-
-            
-            if(composing_) {
-                current_effect_->Compose(temp_modifier);
-                
-
-            } else {
-                current_effect_->set_alpha(temp_modifier->alpha());
-            }
-            delete temp_modifier;
-            break;
-          }
-          case FRAME_RING: {
-            AnimationManager::AnimationFrame* cur_frame
-                = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-
-            Modifier* temp_modifier = new Modifier();
-            temp_modifier->set_alpha(atof(entry_args[0].c_str()));
-
-            cur_frame->modifier()->Compose(temp_modifier);
-
-            delete temp_modifier;
-            break;
-          }
-        }
-    }
-
+    ENTRY_METHOD(current_scope_, entry_name) (entry_args);
     return true;
 }
 
@@ -251,9 +246,9 @@ bool AnimationProtocol::NewEntry_EffectMirror(const gdd::GDDArgs &args) {
     }
 
     if( fst_mirror_id == 'h' || snd_mirror_id == 'h' )
-        new_mirror |= MIRROR_HFLIP;
+        new_mirror ^= MIRROR_HFLIP;
     if( fst_mirror_id == 'v' || snd_mirror_id == 'v' )
-        new_mirror |= MIRROR_VFLIP;
+        new_mirror ^= MIRROR_VFLIP;
 
     current_effect_->set_mirror(new_mirror);
     return true;

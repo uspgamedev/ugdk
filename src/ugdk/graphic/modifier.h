@@ -15,10 +15,10 @@ class Modifier {
      * Creates a new Modifier object with the specified values.
      * The names of the parameters are self-explanatory.
      */
-    Modifier(Vector2D offset = Vector2D(), Vector2D size = Vector2D(1.0f,1.0f),
+    Modifier(Vector2D offset = Vector2D(), Vector2D scale = Vector2D(1.0f,1.0f),
               float rotation = 0.0f, Mirror mirror = MIRROR_NONE,
               Color color = WHITE, float alpha = 1.0f) :
-                  offset_(offset), scale_(size), rotation_(rotation),
+                  offset_(offset), scale_(scale), rotation_(rotation),
                   mirror_(mirror), color_(color), alpha_(alpha) {}
 
     // Copy constructor
@@ -29,7 +29,7 @@ class Modifier {
 
     // Getters.
     Vector2D offset()   const { return   offset_; }
-    Vector2D scale()     const { return     scale_; }
+    Vector2D scale()    const { return    scale_; }
     float    rotation() const { return rotation_; }
     Mirror   mirror()   const { return   mirror_; }
     Color    color()    const { return    color_; }
@@ -37,7 +37,7 @@ class Modifier {
 
     // Setters.
     void set_offset(const Vector2D& offset) { offset_   = offset;   }
-    void set_scale(const Vector2D& size)     { scale_     = size;     }
+    void set_scale(const Vector2D& scale)   { scale_    = scale;    }
     /// Truncates rotation to [0,2PI] and sets it to the Modifier.
     void set_rotation(const float rotation);
     /// Assigns MIRROR_NONE in case of an invalid argument.
@@ -48,8 +48,8 @@ class Modifier {
 
     // Component composers.
     void ComposeOffset(const Vector2D& offset) { offset_    += offset;   }
-    void ComposeScale(const Vector2D& size)     { scale_.x    *= size.x;
-                                                 scale_.y    *= size.y;   }
+    void ComposeScale(const Vector2D& scale)   { scale_.x    *= scale.x;
+                                                 scale_.y    *= scale.y; }
     /// Truncates rotation to [0,2PI] and composes on the Modifier.
     void ComposeRotation(const float rotation);
     /// Does nothing if mirror == MIRROR_NONE or if mirror is invalid.
@@ -61,7 +61,7 @@ class Modifier {
     void ComposeAlpha(const float alpha);
 
     void ComposeOffset(const Modifier *mod2)   { ComposeOffset(   mod2->offset()   ); }
-    void ComposeScale(const Modifier *mod2)     { ComposeScale(     mod2->scale()     ); }
+    void ComposeScale(const Modifier *mod2)    { ComposeScale(    mod2->scale()    ); }
     void ComposeRotation(const Modifier *mod2) { ComposeRotation( mod2->rotation() ); }
     void ComposeMirror(const Modifier *mod2)   { ComposeMirror(   mod2->mirror()   ); }
     void ComposeColor(const Modifier *mod2)    { ComposeColor(    mod2->color()    ); }
