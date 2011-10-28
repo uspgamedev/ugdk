@@ -1,5 +1,4 @@
-#include <GL/glew.h>
-#include <SDL/SDL.h>
+#include <SDL/SDL_opengl.h>
 #include <cmath>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/util/pathmanager.h>
@@ -21,10 +20,10 @@ bool VideoManager::Initialize(const string& title, const Vector2D& size,
     SDL_WM_SetCaption(title.c_str(), NULL);
     title_ = title;
 
-    GLenum err = glewInit();
+    /*GLenum err = glewInit();
     if (GLEW_OK != err) {
         // TODO: check errors with glew
-    }
+    }*/
     
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 
@@ -32,9 +31,9 @@ bool VideoManager::Initialize(const string& title, const Vector2D& size,
     blank_image_->set_frame_size(Vector2D(50.0f, 50.0f));
     blank_image_->set_color(Image::CreateColor(0.0f, 1.0f, 0.0f));
 
-    if(GLEW_ARB_framebuffer_object) {
+    /*if(GLEW_ARB_framebuffer_object) {
         glGenFramebuffersEXT(1, &light_buffer_id_);
-    }
+    }*/
     return true;
 }
 
@@ -83,9 +82,9 @@ bool VideoManager::Release() {
         delete img;
     }
     image_memory_.clear();
-    if(GLEW_ARB_framebuffer_object) {
+    /*if(GLEW_ARB_framebuffer_object) {
         glDeleteFramebuffersEXT(1, &light_buffer_id_);
-    }
+    }*/
     return true;
 }
 
