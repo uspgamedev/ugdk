@@ -8,11 +8,23 @@
 
 namespace ugdk {
 
+// This is the method pointer stored at "entry_functions[RING_TYPE][NAME]".
+// Used mostly to make the other macros more readable. Use the one below to call the method.
 #define ENTRY_METHOD_PTR(RING_TYPE, NAME) (entry_functions_[ pair<ParsingScope, GDDString>( RING_TYPE , NAME ) ])
+
+// This calls the method stored in "entry_functions_[RING_TYPE][NAME]"
 #define ENTRY_METHOD(RING_TYPE, NAME) (this->*ENTRY_METHOD_PTR(RING_TYPE, NAME))
-#define ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEYWORD, ENTRY_FUNCTION_NAME) (             \
-    ENTRY_METHOD_PTR(RING_TYPE, KEYWORD) = &AnimationProtocol::ENTRY_FUNCTION_NAME  \
-)
+
+// Pretty much "entry_functions_[RING_TYPE][KEYWORD] = ENTRY_FUNCTION_NAME".
+// You'll probably want to use the version below this one instead.
+#define ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEYWORD, ENTRY_FUNCTION_NAME)                   \
+    (ENTRY_METHOD_PTR(RING_TYPE, KEYWORD) = &AnimationProtocol::ENTRY_FUNCTION_NAME)
+
+// Same as above, but assigns 5 keywords. i.e.:
+//      entry_functions_[RING_TYPE][KEY_0] = ENTRY_FUNCTION_NAME;
+//      entry_functions_[RING_TYPE][KEY_1] = ENTRY_FUNCTION_NAME;
+//      etc...
+// 5 since there are five standard ids for keywords: "foo", "f", "Foo", "F", "FOO".
 #define ENTRY_MAP_BULK_ASSIGN(RING_TYPE, ENTRY_FUNCTION, KEY_0, KEY_1, KEY_2, KEY_3, KEY_4) \
     ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_0, ENTRY_FUNCTION);                                 \
     ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_1, ENTRY_FUNCTION);                                 \
@@ -37,7 +49,7 @@ AnimationProtocol::AnimationProtocol() : current_animation_(NULL), current_effec
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "position") ] = &AnimationProtocol::NewEntry_EffectPosition;
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "mirror")   ] = &AnimationProtocol::NewEntry_EffectMirror;
     entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "scale")    ] = &AnimationProtocol::NewEntry_EffectSize;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "rotation") ] = &AnimationProtocol::NewEntry_EffectRotation;
+    entry_functions_[ pair<ParsingScope, GDDString>(EFFECentãT_RING, "rotation") ] = &AnimationProtocol::NewEntry_EffectRotation;
 
     entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "number")   ] = &AnimationProtocol::NewEntry_FrameNumber;
     entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "alpha")    ] = &AnimationProtocol::NewEntry_FrameAlpha;
@@ -227,12 +239,10 @@ bool AnimationProtocol::NewEntry_EffectPosition(const gdd::GDDArgs &args) {
 }
 bool AnimationProtocol::NewEntry_EffectMirror(const gdd::GDDArgs &args) {
 
-    // Mirror with 0 arguments is permitted:
-    if( args.size() == 0 ) return true;
-
+    // Mirror with 0 arguments is permitted.
     if( args.size() > 2 || args.size() < 0
-        || arg_is_not_flip_axis(args[0])
-        || (args.size() == 2 && arg_is_not_flip_axis(args[1]) ) ) {
+        || (args.size() >= 1 && arg_is_not_flip_axis(args[0]) )
+        || (args.size() >= 2 && arg_is_not_flip_axis(args[1]) ) ) {
         string msg = "Invalid argument in an Entry of type Mirror,\n  in a Ring of type Effect.";
         error(LoadError::INVALID_VALUE, msg);
         return false;
@@ -361,12 +371,10 @@ bool AnimationProtocol::NewEntry_FramePosition(const gdd::GDDArgs &args) {
 }
 bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
 
-    // Mirror with 0 arguments is permitted:
-    if( args.size() == 0 ) return true;
-
+    // Mirror with 0 arguments is permitted.
     if( args.size() > 2 || args.size() < 0
-        || arg_is_not_flip_axis(args[0])
-        || (args.size() == 2 && arg_is_not_flip_axis(args[1]) ) ) {
+        || (args.size() >= 1 && arg_is_not_flip_axis(args[0]) )
+        || (args.size() >= 2 && arg_is_not_flip_axis(args[1]) ) ) {
         string msg = "Invalid argument in an Entry of type Mirror,\n  in a Ring of type Frame.";
         error(LoadError::INVALID_VALUE, msg);
         return false;

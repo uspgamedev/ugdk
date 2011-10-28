@@ -26,9 +26,10 @@ typedef Sint32 int32;
 typedef Sint64 int64;
 
 typedef Uint8 Mirror;
-static const Mirror MIRROR_NONE = 0;
-static const Mirror MIRROR_HFLIP = 1;
-static const Mirror MIRROR_VFLIP = 2;
+static const Mirror MIRROR_NONE   = 0;
+static const Mirror MIRROR_HFLIP  = 1;
+static const Mirror MIRROR_VFLIP  = 2;
+static const Mirror MIRROR_HVFLIP = 3;
 
 }  // namespace framework
 
