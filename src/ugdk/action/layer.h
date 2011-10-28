@@ -8,44 +8,58 @@
 
 namespace ugdk {
 
-// Representa uma camada grafica na qual os Sprites sao desenhados.
-//
-// Um objeto Layer pode ter um offset, que e' o deslocamento da camada inteira
-// com relacao 'a origem da tela(fullscreen) ou janela.
-//
+/// Represents a graphic layer where the sprites will be drawn
+/** A Layer object can have an offset, that is the shift of the hole layer in relation to the origin of the screen (fullscreen) or the window
+*/
 class Layer {
   public:
-    // Construtores e destrutores.
+    /// Consructor of the layer class.
     Layer(Vector2D offset = Vector2D()) : visible_(true) {}
     virtual ~Layer();
 
-    // Acesso e leitura de atributos.
+    /// Manage the atributes.
+    /// Return if the layer is visible
+    /**  @return visible is a bool variable
+    */  
     bool IsVisible() { return visible_; }
+    /// Set if the layer is visible 
+    /** @param visible is a bool variable
+    */
     void set_visible(bool visible) { visible_ = visible; }
+    /// Set the offset
+    /** @param  offset is a Vector2D
+    */ 
     void set_offset(Vector2D offset) { offset_ = offset; }
+    /// Return the offset
+    /** @return  offset is a Vector2D object
+    */ 
     Vector2D offset() { return offset_; }
 
-    // Adicionando e removendo Sprites.
+    /// Add a sprite to the Layer
+    /** @param sprite is a pointer to a sprite*/
     void AddSprite(Sprite *sprite);
+    /// Remove a sprite from the Layer
+    /** @param sprite is a pointer to a sprite*/
     void RemoveSprite(Sprite *sprite);
 
-    // Atualiza a camada e seus Sprites.
+    /// Update the layer and it sprites 
     virtual void Update(float delta_t);
 
-    // Desenha a camada.
+    /// Draw the layer
     virtual void Render();
+        /// Render the light
 	virtual void RenderLight();
 
   protected:
-    // Estrutura basica para armazenar os Sprites. Nao definitivo.
+    /// Basic structure to store the Sprites. Not definitive.
     std::vector<Sprite*> sprite_list_;
     bool visible_;
 
   private:
-    // Atributos.
+    /// Atributes.
     Vector2D offset_;
 
-    // Ordena os sprites pelo zindex
+    /// Sort sprites using zindex
     virtual void SortSprites();
 
 }; // class Layer.
