@@ -101,15 +101,18 @@ if (MSVC)
   foreach (d ${DEFS})
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
   endforeach (d)
+  
+  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS")
+  
 else (MSVC)
   foreach (d ${DEFS})
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -D${d}")
   endforeach (d)
 endif  (MSVC)
 
-if (${BUILD_TYPE} EQUAL DEBUG)
+if (${BUILD_TYPE} STREQUAL DEBUG)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
-endif (${BUILD_TYPE} EQUAL DEBUG)
+endif (${BUILD_TYPE} STREQUAL DEBUG)
 
 include_directories ("src")
 

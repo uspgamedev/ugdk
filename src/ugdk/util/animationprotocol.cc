@@ -1,15 +1,82 @@
 
 #include <string>
-
+#include <algorithm>
 #include <ugdk/util/animationprotocol.h>
+
+#define DEFAULT_FRAME 0
+#define DEG_TO_RAD_FACTOR 0.00872664626f
 
 namespace ugdk {
 
+// This is the method pointer stored at "entry_functions[RING_TYPE][NAME]".
+// Used mostly to make the other macros more readable. Use the one below to call the method.
+#define ENTRY_METHOD_PTR(RING_TYPE, NAME) (entry_functions_[ pair<ParsingScope, GDDString>( RING_TYPE , NAME ) ])
+
+// This calls the method stored in "entry_functions_[RING_TYPE][NAME]"
+#define ENTRY_METHOD(RING_TYPE, NAME) (this->*ENTRY_METHOD_PTR(RING_TYPE, NAME))
+
+// Pretty much "entry_functions_[RING_TYPE][KEYWORD] = func",
+//      where "func" is the function with name ENTRY_FUNCTION_NAME.
+// You'll probably want to use the version below this one instead.
+#define ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEYWORD, ENTRY_FUNCTION_NAME)                   \
+    (ENTRY_METHOD_PTR(RING_TYPE, KEYWORD) = &AnimationProtocol::ENTRY_FUNCTION_NAME)
+
+// Same as above, but assigns 5 keywords. i.e.:
+//      entry_functions_[RING_TYPE][KEY_0] = ENTRY_FUNCTION_NAME;
+//      entry_functions_[RING_TYPE][KEY_1] = ENTRY_FUNCTION_NAME;
+//      etc...
+// 5 since there are five standard ids for keywords: "foo", "f", "Foo", "F", "FOO".
+#define ENTRY_MAP_BULK_ASSIGN(RING_TYPE, ENTRY_FUNCTION, KEY_0, KEY_1, KEY_2, KEY_3, KEY_4) \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_0, ENTRY_FUNCTION);                                 \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_1, ENTRY_FUNCTION);                                 \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_2, ENTRY_FUNCTION);                                 \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_3, ENTRY_FUNCTION);                                 \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_4, ENTRY_FUNCTION)
+
 using std::string;
+using std::pair;
 
 using gdd::GDDString;
 using gdd::GDDArgs;
 using gdd::LoadError;
+
+AnimationProtocol::AnimationProtocol() : current_animation_(NULL), current_effect_(NULL), composing_(false) {
+    //TODO: Make this map static maybe?
+
+    /*TODO: Nuke this commented code when you're sure the new ver. works.
+    //entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "number")   ] = &AnimationProtocol::NewEntry_EffectNumber;
+    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "alpha")    ] = &AnimationProtocol::NewEntry_EffectAlpha;
+    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "color")    ] = &AnimationProtocol::NewEntry_EffectColor;
+    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "position") ] = &AnimationProtocol::NewEntry_EffectPosition;
+    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "mirror")   ] = &AnimationProtocol::NewEntry_EffectMirror;
+    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "scale")    ] = &AnimationProtocol::NewEntry_EffectSize;
+    entry_functions_[ pair<ParsingScope, GDDString>(EFFECentãT_RING, "rotation") ] = &AnimationProtocol::NewEntry_EffectRotation;
+
+    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "number")   ] = &AnimationProtocol::NewEntry_FrameNumber;
+    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "alpha")    ] = &AnimationProtocol::NewEntry_FrameAlpha;
+    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "color")    ] = &AnimationProtocol::NewEntry_FrameColor;
+    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "position") ] = &AnimationProtocol::NewEntry_FramePosition;
+    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "mirror")   ] = &AnimationProtocol::NewEntry_FrameMirror;
+    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "size")     ] = &AnimationProtocol::NewEntry_FrameSize;
+    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "rotation") ] = &AnimationProtocol::NewEntry_FrameRotation;
+    */
+
+    //ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectNumber  , "number"  , "n", "Number"  , "N", "NUMBER"  );
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectAlpha   , "alpha"   , "a", "Alpha"   , "A", "ALPHA"   );
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectColor   , "color"   , "c", "Color"   , "C", "COLOR"   );
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectPosition, "position", "p", "Position", "P", "POSITION");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectMirror  , "mirror"  , "m", "Mirror"  , "M", "MIRROR"  );
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectSize    , "size"    , "s", "Size"    , "S", "SIZE"    );
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectRotation, "rotation", "r", "Rotation", "R", "ROTATION");
+
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameNumber   , "number"  , "n", "Number"  , "N", "NUMBER"  );
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameAlpha    , "alpha"   , "a", "Alpha"   , "A", "ALPHA"   );
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameColor    , "color"   , "c", "Color"   , "C", "COLOR"   );
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FramePosition , "position", "p", "Position", "P", "POSITION");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameMirror   , "mirror"  , "m", "Mirror"  , "M", "MIRROR"  );
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameSize     , "size"    , "s", "Size"    , "S", "SIZE"    );
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameRotation , "rotation", "r", "Rotation", "R", "ROTATION");
+}
 
 bool AnimationProtocol::NewDescription() {
     if (loader()->data()) {
@@ -21,6 +88,9 @@ bool AnimationProtocol::NewDescription() {
 
 bool AnimationProtocol::NewData(const GDDString& data_name) {
     loader()->data()->Add(data_name, current_animation_ = new AnimationManager::Animation);
+    if(current_effect_) delete current_effect_;
+    current_effect_ = new Modifier;
+    //TODO: Verificar integridade da current_animation_ .
     return true;
 }
 
@@ -32,33 +102,338 @@ bool AnimationProtocol::NewProperty(const GDDString& property_name, const GDDArg
             error(LoadError::INVALID_VALUE, msg);
             return false;
         }
-        current_animation_->set_fps(value);
+        current_animation_->set_fps((float)(value));
+    } else if (property_name == "compose" && property_args.size() == 0) {
+        composing_ = true;
     } else return false;
     return true;
 }
 
 bool AnimationProtocol::NewRing(const GDDString& ring_typename) {
+
+    if(ring_typename == "effect") {
+        if(!composing_) {
+            if(current_effect_) {
+                delete current_effect_;
+                current_effect_ = NULL;
+            }
+            current_effect_ = new Modifier();
+        }
+        current_scope_ = EFFECT_RING;
+    }
+    else if(ring_typename == "frame") {
+        Modifier temp_modifier = *current_effect_;
+        current_animation_->push_back(new AnimationManager::AnimationFrame(DEFAULT_FRAME,new Modifier(temp_modifier)));
+
+        current_scope_ = FRAME_RING;
+    }
+    else {
+        string msg  = "Unkown Ring: \"";
+        msg += "TODO: Fix this error message"; //TODO: scope_to_string(current_scope_);
+        msg += "\".";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
     return true;
 }
 
 bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& entry_args) {
+   /*
+    * We don't need to check the scope here, the parser will throw a Syntax Error in case of bad scope,
+    * or the protocol will throw a Load Error in the case of Invalid Ring
+    */
+    ENTRY_METHOD(current_scope_, entry_name) (entry_args);
     return true;
 }
 
 bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
                                          const GDDArgs& ring_args) {
-    if (current_animation_ && ring_typename == "frames")
+    //if (ring_typename == "frames")
         for(size_t i = 0; i < ring_args.size(); i++) {
+            GDDArgs entry_arg;
+            entry_arg.push_back(ring_args[i]);
+
+            if (!NewRing("frame")) return false;
+            if (!NewEntry(ring_typename, entry_arg)) return false;
+            /*
             int value;
             if (sscanf(ring_args[i].c_str(), "%d", &value) != 1) {
                 string msg = "Could not read animation frame number.";
                 error(LoadError::INVALID_VALUE, msg);
                 return false;
             }
-            current_animation_->push_back(new AnimationManager::AnimationFrame(value));
+            Modifier temp_modifier = *current_effect_;
+            current_animation_->push_back(
+                    new AnimationManager::AnimationFrame(value, new Modifier(temp_modifier))
+            );
+            */
         }
-    else return false;
+    //else return false; //TODO: Mensagem da load error.
     return true;
+}
+
+
+
+// NewEntry Functions
+// Effect
+bool AnimationProtocol::NewEntry_EffectNumber(const gdd::GDDArgs &args) {
+
+    if( args.size() != 1 || arg_is_not_integer(args[0]) ) {
+        string msg = "Invalid argument in an Entry of type Number,\n  in a Ring of type Effect.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    //TODO: Colocar spreadsheet number no modifier.
+    //TODO: implementar esta função..
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_EffectAlpha(const gdd::GDDArgs &args) {
+
+    if( args.size() != 1 || arg_is_not_floating(args[0]) ) {
+        string msg = "Invalid argument in an Entry of type Alpha,\n  in a Ring of type Effect.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    float new_alpha = (float)(atof(args[0].c_str()));
+    new_alpha = std::min( std::max(new_alpha,0.0f), 1.0f ); // new_alpha is of [0.0f,1.0f]
+
+    current_effect_->set_alpha(new_alpha);
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_EffectColor(const gdd::GDDArgs &args) {
+
+    if( args.size() != 1 || arg_is_not_hexadecimal(args[0]) ) {
+        string msg = "Invalid argument in an Entry of type Color,\n  in a Ring of type Effect.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    int new_color;
+    sscanf(args[0].c_str(), "%x", &new_color);
+    int r = (new_color & 0xFF0000) >> 0x10  ,
+        g = (new_color & 0x00FF00) >> 0x08  ,
+        b =  new_color & 0x0000FF/*>> 0x00*/;
+
+    Color c = Color(r/255.0f, g/255.0f, b/255.0f);
+
+    current_effect_->set_color(c);
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_EffectPosition(const gdd::GDDArgs &args) {
+
+    if( args.size() != 2 || arg_is_not_floating(args[0]) || arg_is_not_floating(args[1]) ) {
+        string msg = "Invalid argument in an Entry of type Position,\n  in a Ring of type Effect.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    Vector2D new_pos = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
+
+    current_effect_->set_offset(new_pos);
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_EffectMirror(const gdd::GDDArgs &args) {
+
+    // Mirror with 0 arguments is permitted.
+    if( args.size() > 2 || args.size() < 0
+        || (args.size() >= 1 && arg_is_not_flip_axis(args[0]) )
+        || (args.size() >= 2 && arg_is_not_flip_axis(args[1]) ) ) {
+        string msg = "Invalid argument in an Entry of type Mirror,\n  in a Ring of type Effect.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    Mirror new_mirror = MIRROR_NONE;
+    char fst_mirror_id = '0', snd_mirror_id = '0';
+    if(args.size() >= 1) {
+        fst_mirror_id = tolower(args[0].at(0));
+        if(args.size() >= 2) snd_mirror_id = tolower(args[1].at(0));
+    }
+
+    if( fst_mirror_id == 'h' || snd_mirror_id == 'h' )
+        new_mirror ^= MIRROR_HFLIP;
+    if( fst_mirror_id == 'v' || snd_mirror_id == 'v' )
+        new_mirror ^= MIRROR_VFLIP;
+
+    current_effect_->set_mirror(new_mirror);
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_EffectSize(const gdd::GDDArgs &args) {
+
+    if( args.size() != 2 || arg_is_not_floating(args[0]) || arg_is_not_floating(args[1]) ) {
+        string msg = "Invalid argument in an Entry of type Size,\n  in a Ring of type Effect.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    Vector2D new_size = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
+
+    current_effect_->set_scale(new_size);
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_EffectRotation(const gdd::GDDArgs &args) {
+
+    if( args.size() != 1 || arg_is_not_floating(args[0]) ) {
+        string msg = "Invalid argument in an Entry of type Rotation,\n  in a Ring of type Effect.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    float new_rot  = (float)(atof(args[0].c_str()));
+          new_rot *= DEG_TO_RAD_FACTOR;
+
+    current_effect_->set_rotation(new_rot);
+    return true;
+
+}
+// Frame
+bool AnimationProtocol::NewEntry_FrameNumber(const gdd::GDDArgs &args) {
+
+    if( args.size() != 1 || arg_is_not_integer(args[0]) ) {
+        string msg = "Invalid argument in an Entry of type Number,\n  in a Ring of type Frame.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    AnimationManager::AnimationFrame* cur_frame
+        = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
+
+    cur_frame->set_frame(atoi(args[0].c_str()));
+
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_FrameAlpha(const gdd::GDDArgs &args) {
+
+    if( args.size() != 1 || arg_is_not_floating(args[0]) ) {
+        string msg = "Invalid argument in an Entry of type Alpha,\n  in a Ring of type Frame.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    float new_alpha = (float)(atof(args[0].c_str()));
+    new_alpha = std::min( std::max(new_alpha,0.0f), 1.0f ); // new_alpha is of [0.0f,1.0f]
+
+    AnimationManager::AnimationFrame* cur_frame
+        = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
+
+    if (composing_) cur_frame->modifier()->ComposeAlpha(new_alpha);
+    else            cur_frame->modifier()->set_alpha(new_alpha);
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_FrameColor(const gdd::GDDArgs &args) {
+
+    if( args.size() != 1 || arg_is_not_hexadecimal(args[0]) ) {
+        string msg = "Invalid argument in an Entry of type Color,\n  in a Ring of type Frame.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    int new_color;
+    sscanf(args[0].c_str(), "%x", &new_color);
+    int r = (new_color & 0xFF0000) >> 0x10  ,
+        g = (new_color & 0x00FF00) >> 0x08  ,
+        b =  new_color & 0x0000FF/*>> 0x00*/;
+
+    Color c = Color(r/255.0f, g/255.0f, b/255.0f);
+
+    AnimationManager::AnimationFrame* cur_frame
+        = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
+    if (composing_) cur_frame->modifier()->ComposeColor(c);
+    else            cur_frame->modifier()->set_color(c);
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_FramePosition(const gdd::GDDArgs &args) {
+
+    if( args.size() != 2 || arg_is_not_floating(args[0]) || arg_is_not_floating(args[1]) ) {
+        string msg = "Invalid argument in an Entry of type Position,\n  in a Ring of type Frame.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    Vector2D new_pos = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
+
+    AnimationManager::AnimationFrame* cur_frame
+        = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
+    if (composing_) cur_frame->modifier()->ComposeOffset(new_pos);
+    else            cur_frame->modifier()->set_offset(new_pos);
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
+
+    // Mirror with 0 arguments is permitted.
+    if( args.size() > 2 || args.size() < 0
+        || (args.size() >= 1 && arg_is_not_flip_axis(args[0]) )
+        || (args.size() >= 2 && arg_is_not_flip_axis(args[1]) ) ) {
+        string msg = "Invalid argument in an Entry of type Mirror,\n  in a Ring of type Frame.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    Mirror new_mirror = MIRROR_NONE;
+    char fst_mirror_id = '0', snd_mirror_id = '0';
+    if(args.size() >= 1) {
+        fst_mirror_id = tolower(args[0].at(0));
+        if(args.size() >= 2) snd_mirror_id = tolower(args[1].at(0));
+    }
+
+    if( fst_mirror_id == 'h' || snd_mirror_id == 'h' )
+        new_mirror ^= MIRROR_HFLIP;
+    if( fst_mirror_id == 'v' || snd_mirror_id == 'v' )
+        new_mirror ^= MIRROR_VFLIP;
+
+    AnimationManager::AnimationFrame* cur_frame
+        = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
+    if (composing_) cur_frame->modifier()->ComposeMirror(new_mirror);
+    else            cur_frame->modifier()->set_mirror(new_mirror);
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_FrameSize(const gdd::GDDArgs &args) {
+
+    if( args.size() != 2 || arg_is_not_floating(args[0]) || arg_is_not_floating(args[1]) ) {
+        string msg = "Invalid argument in an Entry of type Size,\n  in a Ring of type Frame.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    Vector2D new_size = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
+
+    AnimationManager::AnimationFrame* cur_frame
+        = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
+    if (composing_) cur_frame->modifier()->ComposeScale(new_size);
+    else            cur_frame->modifier()->set_scale(new_size);
+    return true;
+
+}
+bool AnimationProtocol::NewEntry_FrameRotation(const gdd::GDDArgs &args) {
+
+    if( args.size() != 1 || arg_is_not_floating(args[0]) ) {
+        string msg = "Invalid argument in an Entry of type Rotation,\n  in a Ring of type Frame.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
+
+    float new_rot = (float)(atof(args[0].c_str()));
+          new_rot *= DEG_TO_RAD_FACTOR;
+
+    AnimationManager::AnimationFrame* cur_frame
+        = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
+    if (composing_) cur_frame->modifier()->ComposeRotation(new_rot);
+    else            cur_frame->modifier()->set_rotation(new_rot);
+    return true;
+
 }
 
 } /* namespace ugdk */

@@ -5,12 +5,6 @@
 
 namespace ugdk {
 
-typedef enum {
-    LIGHT_IGNORE,
-    LIGHT_SOURCE,
-    LIGHT_ILLUMINATED
-} LightType;
-
 typedef struct Color {
     Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f)
           : r(_r), g(_g), b(_b) {}
@@ -32,9 +26,10 @@ typedef Sint32 int32;
 typedef Sint64 int64;
 
 typedef Uint8 Mirror;
-static const Mirror MIRROR_NONE = 0;
-static const Mirror MIRROR_HFLIP = 1;
-static const Mirror MIRROR_VFLIP = 2;
+static const Mirror MIRROR_NONE   = 0;
+static const Mirror MIRROR_HFLIP  = 1;
+static const Mirror MIRROR_VFLIP  = 2;
+static const Mirror MIRROR_HVFLIP = 3;
 
 }  // namespace framework
 

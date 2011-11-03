@@ -4,10 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ugdk_tests", "ugdk_tests.vcxproj", "{88426421-C8EA-4013-B7F8-6A07ADD23469}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		DebugFast|Win32 = DebugFast|Win32
@@ -25,8 +21,12 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		AMDCaPersistentConfig = Release|Win32
-		AMDCaPersistentStartup = Horus Eye
 		AMDCaProjectFile = D:\stuff\programming\projects\gamedev\CodeAnalyst\Horus Eye.caw
+		AMDCaPersistentStartup = Horus Eye
+		AMDCaPersistentConfig = Release|Win32
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

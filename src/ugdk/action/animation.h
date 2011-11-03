@@ -45,6 +45,8 @@ class AnimationManager {
 
         int frame() const { return frame_; }
         Modifier *modifier() const { return modifier_; }
+
+        void set_frame(const int frame) { frame_ = frame; }
       private:
         int frame_;
         Modifier *modifier_;

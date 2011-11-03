@@ -15,7 +15,7 @@ namespace ugdk {
 Image::Image() : alpha_(1.0f), texture_width_(10), texture_height_(10) {
     color_ = CreateColor(1.0f, 1.0f, 1.0f);
 	texture_ = 0;
-    set_frame_size(Vector2D(width(), height()));
+    set_frame_size(Vector2D( (float)(width()), (float)(height()) ));
 }
 
 // Destroys the image.
@@ -59,11 +59,11 @@ bool Image::DrawTo(const Vector2D& position, int frame_number,
         size.y *= -1;
 	}
 
+    glPushMatrix();
 	// Sets the color to tint the image with to the color the image has modified with the color given.
 	// Also sets the alpha.
     glColor4f(color.r * color_.r, color.g * color_.g, color.b * color_.b, alpha_ * alpha);
 
-	glPushMatrix();
 	// Modifies the origin so it points to where this image is to be rendered.
 	glTranslatef( target.x, target.y, 0 );
 	// Modifies the scale so a 1.0f x 1.0f square matches size.
@@ -157,13 +157,11 @@ Color Image::CreateColor(float red, float green, float blue) {
 // reference and necessary data is copied.
 // Returns true on success, false otherwise.
 bool Image::LoadFromSurface(SDL_Surface* data, bool linear) {
-    fprintf(stderr, "LoadSurface - ");
     if(data == NULL) {
-        fprintf(stderr, "No Data\n");
+        fprintf(stderr, "Error: LoadSurface - No Data\n");
         return false;
     }
     if(texture_ != 0) {
-    	fprintf(stderr, "(Del Tex %d) ", texture_);
         glDeleteTextures(1, &texture_);
     }
 
@@ -200,7 +198,7 @@ bool Image::LoadFromSurface(SDL_Surface* data, bool linear) {
                 break;
 
             default:
-            	fprintf(stderr, "Image BPP of %d unsupported\n", bpp);
+            	fprintf(stderr, "Error: LoadSurface - Image BPP of %d unsupported\n", bpp);
                 free(raw);
                 return false;
                 break;
@@ -239,9 +237,9 @@ bool Image::LoadFromSurface(SDL_Surface* data, bool linear) {
     GLenum errorCode = glGetError();
     if ( errorCode != 0 ) {
         if ( errorCode == GL_OUT_OF_MEMORY )
-            fprintf(stderr, "Out of texture memory!\n");
+            fprintf(stderr, "Error: LoadSurface - Out of texture memory!\n");
         else
-        	fprintf(stderr, "Unknown error!\n");
+        	fprintf(stderr, "Error: LoadSurface - Unknown error!\n");
         free(raw);
         return false;
     }
@@ -252,17 +250,14 @@ bool Image::LoadFromSurface(SDL_Surface* data, bool linear) {
     errorCode = glGetError();
     if ( errorCode != 0 ) {
         if ( errorCode == GL_OUT_OF_MEMORY )
-            fprintf(stderr, "Out of texture memory!\n");
+            fprintf(stderr, "Error: LoadSurface - Out of texture memory!\n");
         else
-        	fprintf(stderr, "Unknown error!\n");
+        	fprintf(stderr, "Error: LoadSurface - Unknown error!\n");
         return false;
     }
 
     frame_size_ = Vector2D(1.0f, 1.0f);
-	render_size_ = Vector2D(texture_width_, texture_height_);
-
-	fprintf(stderr, "Success (ID %d)\n", texture_);
-
+	render_size_ = Vector2D((float)(texture_width_), (float)(texture_height_));
     return true;
 }
 
@@ -274,6 +269,7 @@ bool Image::LoadFromFile(std::string filepath) {
         fprintf(stderr, "File not found\n");
         result = false;
     } else {
+        fprintf(stderr, "File Found!\n");
         result = LoadFromSurface(data);
         SDL_FreeSurface(data);
     }
@@ -311,7 +307,7 @@ bool Image::CreateFogTransparency(const Vector2D& size, const Vector2D& ellipse_
             float distance = Vector2D::InnerProduct(dist, dist);
             if(distance <= 1)
                 alpha = static_cast<Uint8>(SDL_ALPHA_OPAQUE * exp(-distance * 5.5412635451584261462455391880218));
-            pixels[i * width + j] = SDL_MapRGBA(data->format, 0, 0, 0, alpha);
+            pixels[i * width + j] = SDL_MapRGBA(data->format, alpha, alpha, alpha, alpha);
         }
     }
     SDL_UnlockSurface(data);

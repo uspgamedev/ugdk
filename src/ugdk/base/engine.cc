@@ -111,16 +111,14 @@ void Engine::Run() {
 
         if (!quit_) {
             CurrentScene()->Update(delta_t);
-            //CurrentScene()->RenderLight();
-            for (int i = 0; i < static_cast<int>(scene_list_.size()); i++)
-                if (!scene_list_[i]->finished())
-                    scene_list_[i]->RenderLight();
-            for (int i = 0; i < static_cast<int>(scene_list_.size()); i++)
-                if (!scene_list_[i]->finished())
-                    scene_list_[i]->Render();
+            for (std::list<Layer*>::iterator it = interface_list_.begin(); 
+                it != interface_list_.end(); ++it)
+                (*it)->Update(delta_t);
 
-            // gerenciamento de video
-            video_manager_->Render();
+            // Sends the scene list to the videomanager, who handles everything 
+            // needed to draw
+            video_manager_->Render(scene_list_, interface_list_);
+
             ++frames_since_reset_;
             total_fps += 1.0f/delta_t;
             if(frames_since_reset_ == 10) {
@@ -165,6 +163,13 @@ Scene* Engine::CurrentScene() const {
 
 void Engine::PopScene() {
     scene_list_.pop_back();
+}
+
+void Engine::PushInterface(Layer* layer) {
+    interface_list_.push_back(layer);
+}
+void Engine::RemoveInterface(Layer *layer) {
+    interface_list_.remove(layer);
 }
 
 }

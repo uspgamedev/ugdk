@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <clocale>
+#include <cwchar>
 #include <SDL/SDL_opengl.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/textmanager.h>
@@ -85,13 +86,14 @@ void TextManager::AddFont(wstring name, wstring path, int size, char ident, bool
 	if(fonts_.count(name) > 0)
 		return;
 	Image **font_image = NULL;
-	fprintf(stderr, "Loading new font tag: \"%s\"\n", name.c_str());
+	fwprintf(stderr, L"Loading new font tag: \"%s\"\n", name.c_str());
 	if(font_images_.count(path) == 0) {
 		// Given file not loaded, loading it.
 		font_image = new Image*[65535];
 		memset(font_image, NULL, 4*65535);
 		TTF_Font *ttf_font = TTF_OpenFont( PATH_MANAGER()->ResolvePath(path).c_str(), 100 );
-		fwprintf(stderr, L"-- Processing new font file: \"%s\"\n", path.c_str());
+        //TODO: revise this. Too noisy.
+		//fwprintf(stderr, L"-- Processing new font file: \"%s\"\n", path.c_str());
 		SDL_Color sdlcolor = { 255, 255, 255 };
 		uint16 str[2];
 		str[1] = '\0'; // End of string
@@ -100,7 +102,9 @@ void TextManager::AddFont(wstring name, wstring path, int size, char ident, bool
 			// For each possible character in the extended ASCII table, render and store it.
 			// Could be improved to ignore non-renderable characters, like linefeed.
 			str[0] = (uint16)(i);
-			fwprintf(stderr, L"\t(%u) \"%c\": ", i, str[0]);
+
+            //TODO: revise this. Too noisy.
+			//fwprintf(stderr, L"\t(%u) \"%c\": ", i, str[0]);
 			SDL_Surface *letter = TTF_RenderUNICODE_Blended( ttf_font, str, sdlcolor );
 			font_image[i] = new Image;
 			font_image[i]->LoadFromSurface(letter);

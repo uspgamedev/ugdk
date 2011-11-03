@@ -13,10 +13,10 @@ Text::Text(std::wstring message, Font *font) : font_(font) {
 	width_ = 0;
 	line_height_ = height_ = 
 		(message.length() == 0)
-		? (font_->GetLetterSize('\n').y)
-		: (font_->GetLetterSize(message[0]).y);
+		? (int)(font_->GetLetterSize(L'\n').y)
+		: (int)(font_->GetLetterSize(message[0]).y);
 	for(i = 0; i < message.length(); i++)
-		width_ += font_->GetLetterSize(message[i]).x;
+		width_ += (int)(font_->GetLetterSize(message[i]).x);
 }
 
 Text::Text(std::vector<std::wstring> message, Font *font) : font_(font) {
@@ -32,10 +32,10 @@ Text::Text(std::vector<std::wstring> message, Font *font) : font_(font) {
 		message_.push_back(message[j]);
 		height_ += size =
 			(message[j].length() == 0 || message[j][0] == L'\0')
-			? (font_->GetLetterSize(L'\n').y)
-			: (font_->GetLetterSize(message[j][0]).y);
+			? (int)(font_->GetLetterSize(L'\n').y)
+			: (int)(font_->GetLetterSize(message[j][0]).y);
 		for(i = 0; i < message[j].length(); i++)
-			width += font_->GetLetterSize(message[j][i]).x;
+			width += (int)(font_->GetLetterSize(message[j][i]).x);
 		line_width_.push_back(width);
 		width_ = std::max(width, width_);
 		line_height_ = std::max(size, line_height_);
@@ -43,7 +43,7 @@ Text::Text(std::vector<std::wstring> message, Font *font) : font_(font) {
 }
 
 Vector2D Text::render_size() const {
-	return Vector2D(width_, height_);
+	return Vector2D((float)(width_), (float)(height_));
 }
 
 int Text::width() {
@@ -86,10 +86,10 @@ bool Text::DrawTo(const Vector2D& position, int frame_number, uint8 mirror,
 				glPushMatrix();
 				switch(ident) {
 					case Font::CENTER:
-						glTranslatef((this->width_ - this->line_width_[i])/2.0f,0,0);
+						glTranslatef((GLfloat)(this->width_ - this->line_width_[i])/2.0f,0,0);
 						break;
 					case Font::RIGHT:
-						glTranslatef(this->width_ - this->line_width_[i],0,0);
+						glTranslatef((GLfloat)(this->width_ - this->line_width_[i]),0,0);
 						break;
 					default:
 						break;
@@ -101,7 +101,7 @@ bool Text::DrawTo(const Vector2D& position, int frame_number, uint8 mirror,
 #endif
 				glPopMatrix();
 			}
-			glTranslatef( 0, line_height_, 0);
+			glTranslatef( 0, (GLfloat)(line_height_), 0);
 			current_height += line_height_;
 		}
 		glPopMatrix();
