@@ -44,7 +44,13 @@ Font::~Font() {
 	glDeleteLists(id_, MAX_UNICODE_CODE);
 }
 
+/*FUCKYOU ANSI
 Vector2D Font::GetLetterSize(unsigned char letter) {
+	if(letters_[letter] == NULL) return Vector2D(0,0);
+	return letters_[letter]->render_size() * (size_ * 0.01f);
+}*/
+
+Vector2D Font::GetLetterSize(wchar_t letter) {
 	if(letters_[letter] == NULL) return Vector2D(0,0);
 	return letters_[letter]->render_size() * (size_ * 0.01f);
 }

@@ -102,7 +102,7 @@ bool AnimationProtocol::NewProperty(const GDDString& property_name, const GDDArg
             error(LoadError::INVALID_VALUE, msg);
             return false;
         }
-        current_animation_->set_fps(value);
+        current_animation_->set_fps((float)(value));
     } else if (property_name == "compose" && property_args.size() == 0) {
         composing_ = true;
     } else return false;
@@ -197,7 +197,7 @@ bool AnimationProtocol::NewEntry_EffectAlpha(const gdd::GDDArgs &args) {
         return false;
     }
 
-    float new_alpha = atof(args[0].c_str());
+    float new_alpha = (float)(atof(args[0].c_str()));
     new_alpha = std::min( std::max(new_alpha,0.0f), 1.0f ); // new_alpha is of [0.0f,1.0f]
 
     current_effect_->set_alpha(new_alpha);
@@ -232,7 +232,7 @@ bool AnimationProtocol::NewEntry_EffectPosition(const gdd::GDDArgs &args) {
         return false;
     }
 
-    Vector2D new_pos = Vector2D( atof(args[0].c_str()), atof(args[1].c_str()) );
+    Vector2D new_pos = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
 
     current_effect_->set_offset(new_pos);
     return true;
@@ -273,7 +273,7 @@ bool AnimationProtocol::NewEntry_EffectSize(const gdd::GDDArgs &args) {
         return false;
     }
 
-    Vector2D new_size = Vector2D( atof(args[0].c_str()), atof(args[1].c_str()) );
+    Vector2D new_size = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
 
     current_effect_->set_scale(new_size);
     return true;
@@ -287,7 +287,7 @@ bool AnimationProtocol::NewEntry_EffectRotation(const gdd::GDDArgs &args) {
         return false;
     }
 
-    float new_rot  = atof(args[0].c_str());
+    float new_rot  = (float)(atof(args[0].c_str()));
           new_rot *= DEG_TO_RAD_FACTOR;
 
     current_effect_->set_rotation(new_rot);
@@ -319,7 +319,7 @@ bool AnimationProtocol::NewEntry_FrameAlpha(const gdd::GDDArgs &args) {
         return false;
     }
 
-    float new_alpha = atof(args[0].c_str());
+    float new_alpha = (float)(atof(args[0].c_str()));
     new_alpha = std::min( std::max(new_alpha,0.0f), 1.0f ); // new_alpha is of [0.0f,1.0f]
 
     AnimationManager::AnimationFrame* cur_frame
@@ -361,7 +361,7 @@ bool AnimationProtocol::NewEntry_FramePosition(const gdd::GDDArgs &args) {
         return false;
     }
 
-    Vector2D new_pos = Vector2D( atof(args[0].c_str()), atof(args[1].c_str()) );
+    Vector2D new_pos = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
@@ -408,7 +408,7 @@ bool AnimationProtocol::NewEntry_FrameSize(const gdd::GDDArgs &args) {
         return false;
     }
 
-    Vector2D new_size = Vector2D( atof(args[0].c_str()), atof(args[1].c_str()) );
+    Vector2D new_size = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
@@ -425,7 +425,7 @@ bool AnimationProtocol::NewEntry_FrameRotation(const gdd::GDDArgs &args) {
         return false;
     }
 
-    float new_rot = atof(args[0].c_str());
+    float new_rot = (float)(atof(args[0].c_str()));
           new_rot *= DEG_TO_RAD_FACTOR;
 
     AnimationManager::AnimationFrame* cur_frame

@@ -15,7 +15,7 @@ namespace ugdk {
 Image::Image() : alpha_(1.0f), texture_width_(10), texture_height_(10) {
     color_ = CreateColor(1.0f, 1.0f, 1.0f);
 	texture_ = 0;
-    set_frame_size(Vector2D(width(), height()));
+    set_frame_size(Vector2D( (float)(width()), (float)(height()) ));
 }
 
 // Destroys the image.
@@ -257,7 +257,7 @@ bool Image::LoadFromSurface(SDL_Surface* data, bool linear) {
     }
 
     frame_size_ = Vector2D(1.0f, 1.0f);
-	render_size_ = Vector2D(texture_width_, texture_height_);
+	render_size_ = Vector2D((float)(texture_width_), (float)(texture_height_));
     return true;
 }
 
