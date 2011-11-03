@@ -2,6 +2,7 @@
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/image.h>
 #include <algorithm>
+#include <cmath>
 
 #define TWO_PI 6.28318530f
 #define TO_UNIT_INTERVAL(FLOAT) ( std::min(std::max(FLOAT, 0.0f), 1.0f) )
