@@ -2,6 +2,7 @@
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/image.h>
 #include <algorithm>
+#include <cmath>
 
 #define TWO_PI 6.28318530f
 #define TO_UNIT_INTERVAL(FLOAT) ( std::min(std::max(FLOAT, 0.0f), 1.0f) )
@@ -60,7 +61,7 @@ void Modifier::set_color(const Color color) {
 }
 
 void Modifier::set_rotation(const float rotation) {
-    rotation_ = std::fmod(rotation,TWO_PI);
+    rotation_ = fmod(rotation,TWO_PI);
 }
 
 void Modifier::set_alpha(const float alpha) {
@@ -80,7 +81,7 @@ void Modifier::ComposeColor(const Color& color) {
 }
 
 void Modifier::ComposeRotation(const float rotation) {
-    rotation_ *= std::fmod(rotation,TWO_PI);
+    rotation_ *= fmod(rotation,TWO_PI);
 }
 
 void Modifier::ComposeAlpha(const float alpha) {
