@@ -16,11 +16,24 @@ class AudioManager {
     AudioManager();
     ~AudioManager();
 
+    ///Initializes audio channels.
+    /** @return True if successful, false otherwise.
+     */
     bool Initialize();
+    ///Frees all audio samples and music, and closes the audio channels.
+    /** @return True if successfull, false otherwise.
+     */
     bool Release();
+    ///Logical update. Currently does nothing.
     void Update();
 
+    ///Loads an audio sample.
+    /**@param filepath The path to the audio sample.
+     */
     Sample* LoadSample(const std::string& filepath);
+    ///Loads a music.
+    /**@param filepath The path to the music file.
+     */ 
     Music* LoadMusic(const std::string& filepath);
 
   private:
