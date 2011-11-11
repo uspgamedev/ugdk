@@ -11,15 +11,23 @@ class Modifier {
 
   public:
 
+     ///Creates a new image Modifier object with the specified values. 
     /**
-     * Creates a new Modifier object with the specified values.
-     * The names of the parameters are self-explanatory.
+     * @param offset The offset of the image.
+     * @param size The size modifiers for the image. X and Y values can be set
+     * independently.
+     * @param rotation Rotation angle in radians. 0 points to the right, increases in
+     * counterclockwise fashion.
+     * @param mirror Mirrors the image. Can be MIRROR_NONE for no mirroring, 
+     * MIRROR_HFLIP for horizontal mirroring or MIRROR_VFLIP for vetical mirroring.
+     * @param color The color filter.
+     * @param alpha The alpha value for the image.
      */
     Modifier(Vector2D offset = Vector2D(), Vector2D scale = Vector2D(1.0f,1.0f),
              float rotation = 0.0f, Mirror mirror = MIRROR_NONE, Color color = WHITE, float alpha = 1.0f) :
         offset_(offset), scale_(scale), rotation_(rotation), mirror_(mirror), color_(color), alpha_(alpha) {}
 
-    // Copy constructors
+    /// Creates a copy of another modifier.
     Modifier(const Modifier& mod);
     // This one is private:
     // Modifier(const Modifier* mod);
@@ -29,6 +37,9 @@ class Modifier {
     ~Modifier() {}
 
     // Getters.
+    /**@name Getters and Setters
+     *@{
+     */
     Vector2D offset()   const { return   offset_; }
     Vector2D scale()    const { return    scale_; }
     float    rotation() const { return rotation_; }
@@ -47,8 +58,11 @@ class Modifier {
     void set_color(const Color color);
     /// Truncates alpha to [0,1] and sets it to the Modifier.
     void set_alpha(const float alpha);
-
-    // Component composers.
+    /**@}
+     */
+    /**@name Component composers.
+     *@{
+     */
     void ComposeOffset(const Vector2D& offset) { offset_  += offset;  }
     void ComposeScale(const Vector2D& scale)   { scale_.x *= scale.x;
                                                  scale_.y *= scale.y; }
@@ -68,10 +82,12 @@ class Modifier {
     void ComposeColor(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeColor(    mod2->color_    ); }
     void ComposeAlpha(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeAlpha(    mod2->alpha_    ); }
 
-    // Global composer and copy from pointer function.
+    /// Global composer and copy from pointer function.
     void Compose(const Modifier* mod2);
     /// Remember to free your new Modifier created through this static function!
     static Modifier* Compose(const Modifier* mod1, const Modifier* mod2);
+    /**@}
+     */
     /// Remember to free your new Modifier created through this static function!
     static Modifier* Copy(const Modifier* mod2) { if(mod2 == NULL) return NULL; return new Modifier(mod2); }
 
