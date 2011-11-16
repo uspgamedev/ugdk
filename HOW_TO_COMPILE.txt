@@ -1,0 +1,35 @@
+==========
+GNU/Linux:
+==========
+
+1) Get CMake 2.6 or a higher version
+
+2) Get the folowing libraries: 
+ * libsdl1.2-dev
+ * libsdl-image1.2-dev
+ * libsdl-mixer1.2-dev
+ * libsdl-ttf2.0-dev
+
+3) Open a terminal in the same folder of this file.
+
+4) $ cmake . (Do not forget the '.' at the end)
+   $ make
+
+Optionally, you can use CMake to generate files for your favorite IDE. Search
+for cmake -G options.
+
+=======
+Windows
+=======
+
+1) Get CMake 2.6 or a higher version
+
+2) Using CMake, generate the project files for the IDE you wish to use. Make sure this
+IDE has the following headers and libraries installed:
+- SDL 1.2
+- SDL_Image 1.2
+- SDL_Mixer 1.2
+- SDL_TTF 2.0
+
+3) Build using the generated project.
+
