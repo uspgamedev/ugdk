@@ -50,12 +50,12 @@ bool Image::DrawTo(const Vector2D& position, int frame_number,
 
 	if(mirror & MIRROR_HFLIP) {
 		// Flip the image horizontally and move it to the right, so it renders at the same place.
-        target.x += frame_size().x;
+        target.x += draw_size.x;
         size.x *= -1;
     }
     if(mirror & MIRROR_VFLIP) {
 		// Flip the image vertically and move it down, so it renders at the same place.
-        target.y += frame_size().y;
+        target.y += draw_size.y;
         size.y *= -1;
 	}
 
