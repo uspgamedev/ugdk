@@ -7,6 +7,16 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/action/layer.h>
 
+// VSync
+//TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
+#ifdef WIN32
+    // VSync
+    #include <gl/GL.h>
+    #include "wglext.h"
+    typedef BOOL (APIENTRY *PFNWGLSWAPINTERVALFARPROC)( int );
+    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = 0;
+#endif
+
 namespace ugdk {
 
 static Vector2D default_resolution(800.0f, 600.0f);
@@ -16,6 +26,7 @@ static Vector2D default_resolution(800.0f, 600.0f);
 // sucesso.
 bool VideoManager::Initialize(const string& title, const Vector2D& size,
                               bool fullscreen, const string& icon) {
+
 	if(ChangeResolution(size, fullscreen) == false)
         ChangeResolution(default_resolution, false);
 
@@ -46,6 +57,7 @@ bool VideoManager::Initialize(const string& title, const Vector2D& size,
 // Changes the resolution to the requested value.
 // Returns true on success.
 bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
+
     Uint32 flags = SDL_OPENGL;
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     if(fullscreen)
@@ -53,6 +65,13 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
     if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y),
             VideoManager::COLOR_DEPTH, flags) == NULL)
         return false;
+
+    // VSync
+    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
+#ifdef WIN32
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
+    if(wglSwapIntervalEXT != 0) wglSwapIntervalEXT(1); // sets VSync to "ON".
+#endif
 
     //Set projection
 	glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
