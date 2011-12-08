@@ -102,8 +102,6 @@ class Modifier {
     Mirror          mirror_;
     Color           color_; //TODO: Modifier's "color_" is actually a light filter.
     float           alpha_;
-    //TODO: colocar spreadsheet number no modifier.
-
 };
 
 }
