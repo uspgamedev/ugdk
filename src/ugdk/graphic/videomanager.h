@@ -50,8 +50,7 @@ class VideoManager {
 
     void TranslateTo (Vector2D& offset);
 
-    void PushModifier();
-    void ApplyModifier(Modifier*);
+    void PushAndApplyModifier(Modifier*);
     bool PopModifier();
 
   private:

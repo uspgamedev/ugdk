@@ -5,10 +5,8 @@
 namespace ugdk {
 
 bool Node::Render() {
-    if(modifier_) {
-        VIDEO_MANAGER()->PushModifier();
-        VIDEO_MANAGER()->ApplyModifier(modifier_);
-    }
+    if(modifier_)
+        VIDEO_MANAGER()->PushAndApplyModifier(modifier_);
     if(drawable_)
         drawable_->Draw();
     std::list<Node*>::iterator it;
