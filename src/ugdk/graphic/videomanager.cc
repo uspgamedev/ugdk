@@ -7,17 +7,33 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/action/layer.h>
 
+// VSync
+//TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
+#ifdef WIN32
+    // VSync
+    #include <gl/GL.h>
+    #include "wglext.h"
+    typedef BOOL (APIENTRY *PFNWGLSWAPINTERVALFARPROC)( int );
+    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = 0;
+#endif
+
 namespace ugdk {
+
+static Vector2D default_resolution(800.0f, 600.0f);
 
 // Inicializa o gerenciador de video, definindo uma
 // resolucao para o programa. Retorna true em caso de
 // sucesso.
 bool VideoManager::Initialize(const string& title, const Vector2D& size,
                               bool fullscreen, const string& icon) {
-	ChangeResolution(size, fullscreen);
-	if(icon.length() > 0) {
+
+	if(ChangeResolution(size, fullscreen) == false)
+        ChangeResolution(default_resolution, false);
+
+	if(icon.length() > 0)
 		SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
-	}
+
+    // Set window title.
     SDL_WM_SetCaption(title.c_str(), NULL);
     title_ = title;
 
@@ -41,6 +57,7 @@ bool VideoManager::Initialize(const string& title, const Vector2D& size,
 // Changes the resolution to the requested value.
 // Returns true on success.
 bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
+
     Uint32 flags = SDL_OPENGL;
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     if(fullscreen)
@@ -48,6 +65,13 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
     if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y),
             VideoManager::COLOR_DEPTH, flags) == NULL)
         return false;
+
+    // VSync
+    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
+#ifdef WIN32
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
+    if(wglSwapIntervalEXT != 0) wglSwapIntervalEXT(1); // sets VSync to "ON".
+#endif
 
     //Set projection
 	glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
@@ -79,7 +103,6 @@ bool VideoManager::Release() {
     for(map<string,Image*>::iterator it = image_memory_.begin();
             it != image_memory_.end(); ++it) {
         Image* img = it->second;
-        img->Destroy();
         delete img;
     }
     image_memory_.clear();
@@ -99,7 +122,7 @@ void VideoManager::TranslateTo(Vector2D& offset) {
 }
 
 void VideoManager::MergeLights(std::vector<Scene*> scene_list) {
-    // BLEND FUNC TO JUST ADD LIGHTS
+    // Lights are simply added together.
     glBlendFunc(GL_ONE, GL_ONE);
 
     glPushAttrib(GL_COLOR_BUFFER_BIT | GL_PIXEL_MODE_BIT); // for GL_DRAW_BUFFER and GL_READ_BUFFER
@@ -116,8 +139,10 @@ void VideoManager::MergeLights(std::vector<Scene*> scene_list) {
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glPopAttrib(); // GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
-}
 
+    // Clear the screen so it's back to how it was before.
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
 
 static void DrawLightRect() {
     glEnable(GL_BLEND);
@@ -161,27 +186,27 @@ void VideoManager::BlendLightIntoBuffer() {
 // Desenha backbuffer na tela
 void VideoManager::Render(std::vector<Scene*> scene_list, std::list<Layer*> interface_list) {
 
-    // DRAWING DA LIGHT!!!!
+    // Draw all lights to a buffer, merging then to a light texture.
     MergeLights(scene_list);
 
-    // NOW DRAWING DA SPRITES!!!!!
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-    // BLEND FUNC FOR RGBA SPRITES!!!
+    // Usual blend function for drawing RGBA images.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    // Draw all the sprites from all scenes.
     for (int i = 0; i < static_cast<int>(scene_list.size()); i++)
         if (!scene_list[i]->finished())
             scene_list[i]->Render();
 
+    // Using the light texture, merge it into the screen.
     BlendLightIntoBuffer();
 
+    // Draw all interface layers, with the usual RGBA blend.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     for (std::list<Layer*>::iterator it = interface_list.begin(); it != interface_list.end(); ++it)
         (*it)->Render();
 
-    //Update screen
+
+    // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapBuffers();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
@@ -205,19 +230,18 @@ Image* VideoManager::LoadImageFile(const string& filepath) {
 }
 
 void VideoManager::InitializeLight() {
-	light_size_ = Vector2D(40.0f, 40.0f);
+	light_size_ = Vector2D(32.0f, 32.0f);
 	if(light_image_ != NULL) {
 		delete light_image_;
 	}
     light_image_ = new Image;
-    light_image_->CreateFogTransparency(light_size_ * 4.0f, light_size_);
+    light_image_->CreateFogTransparency(light_size_ * 2.0f, light_size_);
+
+
     if(light_texture_ != 0) {
         glDeleteTextures(1, &light_texture_);
         light_texture_ = 0;
     }
-
-    puts("Lights initialized.");
-
     glGenTextures(1, &light_texture_);
     glBindTexture(GL_TEXTURE_2D, light_texture_);
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
