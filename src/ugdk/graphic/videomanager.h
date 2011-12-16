@@ -9,6 +9,7 @@
 #include <ugdk/base/types.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/frame.h>
+#include <ugdk/graphic/modifier.h>
 
 using std::string;
 using std::map;

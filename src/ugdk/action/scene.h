@@ -2,6 +2,7 @@
 #define HORUSEYE_FRAMEWORK_SCENE_H_
 
 #include <ugdk/action/layer.h>
+#include <ugdk/graphic/node.h>
 #include <list>
 
 namespace ugdk {
@@ -18,7 +19,7 @@ class Music;
 */
 class Scene {
   public:
-    Scene() : finished_(false), visible_(true), background_music_(NULL), stops_previous_music_(true) {}
+    Scene() : finished_(false), background_music_(NULL), stops_previous_music_(true), root_node_(new Node(NULL)) {}
   /**
      Note: Destroys all layers in the scene.
   */
@@ -54,17 +55,21 @@ class Scene {
     void StopsPreviousMusic(bool set) { stops_previous_music_ = set; }
 
     /** @name Getters and Setters
-	@{
+    @{
     */
     bool finished() const { return finished_; }
 
-    bool visible () const { return visible_; }
-    void set_visible (bool set) { visible_ = set; }
+    Node* root_node() { return root_node_; }
+    const Node* root_node() const { return root_node_; }
 
     Music* background_music() const { return background_music_; }
     void set_background_music(Music* music) { background_music_ = music; }
+    
+    bool visible() const { return root_node_->visible(); }
+    void set_visible(bool set) { root_node_->set_visible(set); }
     /**@}
      */
+
   protected:
 
     /// Ends the scene activity.
@@ -75,8 +80,6 @@ class Scene {
 
     /// Tells whether scene is finished or not.
     bool finished_;
-
-    /// Tells whether scene is visible or not.
     bool visible_;
 
     /// The background music when this scene is on top.
@@ -85,6 +88,8 @@ class Scene {
   private:
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;
+
+    Node* root_node_;
 
 }; // class Scene.
 

@@ -19,6 +19,8 @@ class Image : public Drawable {
 	virtual ~Image() {}
     bool Destroy();
 
+    void Draw() { } //TODO
+
 	int width() const { return texture_width_; }
     int height() const { return texture_height_; }
 

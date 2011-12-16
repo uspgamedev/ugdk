@@ -14,6 +14,8 @@ Scene::~Scene() {
         delete (*it);
         ++it;
     }
+
+    delete root_node_;
 }
 
 void Scene::Focus() {
@@ -42,7 +44,7 @@ void Scene::Update(float delta_t) {
 }
 
 void Scene::Render() {
-    if (visible_) {
+    if (visible()) {
         list<Layer*>::iterator it = layers_.begin();
         while (it != layers_.end()) {
             (*it)->Render();
@@ -52,7 +54,7 @@ void Scene::Render() {
 }
 
 void Scene::RenderLight() {
-    if (visible_) {
+    if (visible()) {
         list<Layer*>::iterator it = layers_.begin();
         while (it != layers_.end()) {
             (*it)->RenderLight();

@@ -4,20 +4,22 @@
 #include <list>
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/drawable.h>
+#include <ugdk/graphic/light.h>
 
 namespace ugdk {
 
 class Node {
   public:
-    Node(Drawable* drawable, const Node* parent = NULL) 
+    Node(Drawable* drawable, Light* light = NULL) 
         :   modifier_(new Modifier), 
             drawable_(drawable),
-            visible_(true),
-            parent_(parent) {}
+            light_(light),
+            visible_(true) {}
 
     ~Node() { if(modifier_) delete modifier_; }
 
-    bool Render();
+    void Render();
+    void RenderLight();
 
     const Modifier* modifier() const { return modifier_; }
     Modifier* modifier() { return modifier_; }
@@ -25,18 +27,15 @@ class Node {
     void set_visible(const bool visible) { visible_ = visible; }
     bool visible() const { return visible_; }
 
-    void set_parent(const Node* parent) { parent_ = parent; }
-    const Node* parent() const { return parent_; }
-
     void AddChild(Node *child) { childs_.push_back(child); }
     void RemoveChild(Node *child) { childs_.remove(child); }
 
   private:
     Modifier* modifier_;
     Drawable* drawable_;
+    Light* light_;
     bool visible_;
 
-    const Node* parent_;
     std::list<Node*> childs_;
 };
 

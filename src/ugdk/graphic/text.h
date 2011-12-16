@@ -15,6 +15,8 @@ class Text : public Drawable {
 	Text(std::vector<std::wstring> message, Font* font);
 	~Text() {}
 
+    void Draw() { } //TODO
+
 	bool DrawTo(const Vector2D& position, int frame_number, uint8 mirror, 
 		const Color& color, float alpha, const Vector2D& draw_size);
 
