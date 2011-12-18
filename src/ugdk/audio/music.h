@@ -16,21 +16,36 @@ class AudioManager;
  */
 class Music {
   public:
-    ///Plays the music once.
-    void Play(); // toca musica uma vez
-    ///Plays the music the given number of times.
-    void Play(int loops); // toca musica loops vezes
-    ///Plays the music until told to stop.
-    void PlayForever(); // toca musica infinitas vezes
-    ///Stops playing hte music.
-    void Stop(); // para musica
-    ///Return whether the music is playing or not.
-    bool IsPlaying(); // esta musica esta' tocando?
+    /// Plays this music once.
+    void Play();
 
-    ///Sets the volume. 0 is quiet, 1 is the full volume.
-    void SetVolume(float vol); // 0.0f (quiet) <= vol <= 1.0f (loud)
-    ///Returns the music's curretn volume, between 0 and 1.
-    float Volume(); // obtem volume, 0.0f <= volume <= 1.0f
+    /// Plays this music the given number of times.
+    void Play(int loops);
+
+    /// Plays this music until told to stop.
+    void PlayForever();
+
+    /// Stops playing this music.
+    void Stop();
+
+    /// Return whether this music is playing or not.
+    bool IsPlaying() const;
+
+    /// Pauses the music, allowing it to be resumed from the same point.
+    void Pause();
+
+    /// Unpauses the music if it's the last played music.
+    void Unpause();
+
+    /// Return whether this can be unpaused.
+    bool IsPaused() const;
+
+    /// Sets the volume. 0.0f is quiet, 1.0f is the full volume.
+    /** @param vol 0.0f (quiet) <= vol <= 1.0f (loud) */
+    void SetVolume(float vol);
+
+    /// Returns this music's current volume, between 0.0f and 1.0f.
+    float Volume();
 
   private:
     Music(const std::string& filepath);
@@ -40,7 +55,7 @@ class Music {
 
     static void UpdateVolume(float vol);
     static void MusicDone();
-    static Mix_Music *playing_music_;
+    static Music *playing_music_;
 
   friend class AudioManager;
 };

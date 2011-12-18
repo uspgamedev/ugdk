@@ -74,5 +74,9 @@ Music* AudioManager::LoadMusic(const std::string& filepath) {
     return music_data_[filepath];
 }
 
+Music* AudioManager::CurrentMusic() const {
+    return Music::playing_music_;
+}
+
 }  // namespace framework
 

@@ -20,10 +20,12 @@ class AudioManager {
     /** @return True if successful, false otherwise.
      */
     bool Initialize();
+
     ///Frees all audio samples and music, and closes the audio channels.
     /** @return True if successfull, false otherwise.
      */
     bool Release();
+
     ///Logical update. Currently does nothing.
     void Update();
 
@@ -31,10 +33,16 @@ class AudioManager {
     /**@param filepath The path to the audio sample.
      */
     Sample* LoadSample(const std::string& filepath);
+
     ///Loads a music.
     /**@param filepath The path to the music file.
      */ 
     Music* LoadMusic(const std::string& filepath);
+
+    /// Getter for the music that is currently playing.
+    /** @return NULL is no music is currently playing, a
+        Music* otherwise. */
+    Music* CurrentMusic() const;
 
   private:
     std::map<std::string, Sample*> sample_data_;
