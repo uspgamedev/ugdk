@@ -63,10 +63,17 @@ void Engine::Run() {
     Key key;
     SDL_Event event;
     float delta_t, total_fps = 0;
+    Scene* current_top_scene = NULL;
 
     quit_ = false;
     while(!quit_) {
+        if(current_top_scene && current_top_scene != CurrentScene()) {
+            current_top_scene->DeFocus();
+            (current_top_scene = CurrentScene())->Focus();
+        }
         DeleteFinishedScenes();
+        if(current_top_scene != CurrentScene())
+            (current_top_scene = CurrentScene())->Focus();
 
         // gerenciamento das cenas
         if (scene_list_.size() == 0) {
