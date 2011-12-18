@@ -1,4 +1,7 @@
 #include <ugdk/action/scene.h>
+#include <ugdk/base/engine.h>
+#include <ugdk/audio/audiomanager.h>
+#include <ugdk/audio/music.h>
 
 namespace ugdk {
 
@@ -10,6 +13,19 @@ Scene::~Scene() {
     while (it != layers_.end()) {
         delete (*it);
         ++it;
+    }
+}
+
+void Scene::Focus() {
+    if(background_music_ != NULL) { 
+        if(!background_music_->IsPlaying())
+            background_music_->PlayForever();
+        else
+            background_music_->Unpause();
+    } else if(stops_previous_music_) {
+        Music* current_music = AUDIO_MANAGER()->CurrentMusic();
+        if(current_music != NULL)
+            current_music->Stop();
     }
 }
 
@@ -43,6 +59,11 @@ void Scene::RenderLight() {
             ++it;
         }
     }
+}
+
+void Scene::End() {
+    if(background_music_ != NULL)
+        background_music_->Pause();
 }
 
 }
