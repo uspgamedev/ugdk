@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <ugdk/action/layer.h>
+#include <ugdk/action/sprite.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
 
@@ -10,9 +11,9 @@ Layer::~Layer() {
 }
 
 void Layer::Update(float delta_t) {
-    //SortSprites();
+    SortSprites();
 
-    std::map<Sprite*,Node*>::iterator it = sprite_list_.begin();
+    std::list< std::pair<Sprite*, Node*> >::iterator it = sprite_list_.begin();
     while (it != sprite_list_.end()) {
         it->first->Update(delta_t);
         ++it;
@@ -44,26 +45,30 @@ void Layer::RenderLight() {
 
 void Layer::AddSprite(Sprite* sprite) {
     if(sprite != NULL) {
-        Node* sprite_node = sprite_list_[sprite] = new Node(sprite);
+        Node* sprite_node = new Node(sprite);
+        sprite_list_.push_front(std::pair<Sprite*, Node*>(sprite, sprite_node));
         node_->AddChild(sprite_node);
+        sprite->set_node(sprite_node);
     }
 }
 
 void Layer::RemoveSprite(Sprite* sprite) {
-
-    Node* sprite_node = sprite_list_[sprite];
-    if(sprite_node != NULL) {
-        sprite_list_[sprite] = NULL;
-        node_->RemoveChild(sprite_node);
-        delete sprite_node;
+    std::list< std::pair<Sprite*, Node*> >::iterator it;
+    for(it = sprite_list_.begin(); it != sprite_list_.end(); ++it) {
+        if(it->first != sprite) continue;
+        node_->RemoveChild(it->second);
+        delete it->second;
+        sprite_list_.erase(it);
+        return;
     }
 }
 
-void Layer::SortSprites() {
-    // ordena sprites pelo valor de zindex
-    //std::sort(sprite_list_.begin(), sprite_list_.end(), Sprite::CompareByZIndex);
+/*bool ListCompareFunc(std::pair<Sprite*, Node*> a, std::pair<Sprite*, Node*> b) {
+    return Sprite::CompareByZIndex(a.first, b.first);
+}*/
 
-    // TODO: SCREW THIS SHIT, NO ORDERING FOR U
+void Layer::SortSprites() {
+    node_->SortChildren();
 }
 
 }

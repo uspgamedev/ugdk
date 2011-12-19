@@ -5,11 +5,12 @@
 #include <map>
 #include <ugdk/base/types.h>
 #include <ugdk/math/vector2D.h>
-#include <ugdk/action/sprite.h>
 #include <ugdk/graphic/node.h>
 
 namespace ugdk {
 
+class Sprite;
+    
 /// Represents a graphic layer where the sprites will be drawn
 /** A Layer object can have an offset, that is the shift of the hole layer in relation to the origin of the screen (fullscreen) or the window
 */
@@ -31,11 +32,11 @@ class Layer {
     /// Set the offset
     /** @param  offset is a Vector2D
     */ 
-    void set_offset(Vector2D offset) { node_->modifier()->set_offset(offset); }
+    void set_offset(Vector2D offset) { node_->modifier()->set_offset(-offset); }
     /// Return the offset
     /** @return  offset is a Vector2D object
     */ 
-    Vector2D offset() { return node_->modifier()->offset(); }
+    Vector2D offset() { return -node_->modifier()->offset(); }
 
     /// Add a sprite to the Layer
     /** @param sprite is a pointer to a sprite*/
@@ -56,7 +57,7 @@ class Layer {
 
   protected:
     /// Basic structure to store the Sprites. Not definitive.
-    std::map<Sprite*, Node*> sprite_list_;
+    std::list< std::pair<Sprite*, Node*> > sprite_list_;
 
   private:
     Node* node_;
