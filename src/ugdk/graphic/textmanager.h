@@ -10,6 +10,7 @@
 namespace ugdk {
 
 using std::wstring;
+class Image;
 class Text;
 class Font;
 class TextManager {

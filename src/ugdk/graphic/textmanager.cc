@@ -10,6 +10,7 @@
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/text.h>
 #include <ugdk/graphic/font.h>
+#include <ugdk/graphic/image.h>
 
 using namespace std;
 
