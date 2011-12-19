@@ -45,6 +45,9 @@ Vector2D operator+(const Vector2D &left, const Vector2D &right) {
 Vector2D operator-(const Vector2D &left, const Vector2D &right) {
     return Vector2D::Subtract(left, right);
 }
+Vector2D operator-(const Vector2D &left) {
+    return Vector2D(-left.x, -left.y);
+}
 Vector2D operator*(const float  &scalar, const Vector2D &right) {
     return Vector2D::Multiply(right, scalar);
 }
