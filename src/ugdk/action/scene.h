@@ -19,7 +19,7 @@ class Music;
 */
 class Scene {
   public:
-    Scene() : finished_(false), background_music_(NULL), stops_previous_music_(true), root_node_(new Node(NULL)) {}
+    Scene() : finished_(false), background_music_(NULL), stops_previous_music_(true), root_node_(new Node) {}
   /**
      Note: Destroys all layers in the scene.
   */

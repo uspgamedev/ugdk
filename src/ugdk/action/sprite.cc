@@ -17,6 +17,10 @@ Sprite::~Sprite() {
     if (modifier_) delete modifier_;
 }
 
+void Sprite::Draw() {
+    Render();
+}
+
 void Sprite::Initialize(Drawable *image, AnimationSet *set, bool delete_image)
 {
     image_ = image;

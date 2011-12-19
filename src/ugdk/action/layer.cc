@@ -6,27 +6,20 @@
 namespace ugdk {
 
 Layer::~Layer() {
-
-    std::vector<Sprite*>::iterator it = sprite_list_.begin();
-    while (it != sprite_list_.end()) {
-        delete (*it);
-        ++it;
-    }
-
+    delete node_; // This also clears all our nodes, for free!
 }
 
 void Layer::Update(float delta_t) {
+    //SortSprites();
 
-    std::vector<Sprite*>::iterator it = sprite_list_.begin();
-
-    SortSprites();
-
+    std::map<Sprite*,Node*>::iterator it = sprite_list_.begin();
     while (it != sprite_list_.end()) {
-        (*it)->Update(delta_t);
+        it->first->Update(delta_t);
         ++it;
     }
 }
 
+/*
 void Layer::Render() {
     if(visible_) {
         std::vector<Sprite*>::iterator it = sprite_list_.begin();
@@ -42,31 +35,35 @@ void Layer::RenderLight() {
     if(visible_) {
         std::vector<Sprite*>::iterator it = sprite_list_.begin();
         while (it != sprite_list_.end()) {
-			(*it)->RenderLight(offset_);
+            (*it)->RenderLight(offset_);
             ++it;
         }
     }
 }
+*/
 
-void Layer::AddSprite(Sprite* sprite)
-{
-    if(sprite != NULL)
-        sprite_list_.push_back(sprite);
+void Layer::AddSprite(Sprite* sprite) {
+    if(sprite != NULL) {
+        Node* sprite_node = sprite_list_[sprite] = new Node(sprite);
+        node_->AddChild(sprite_node);
+    }
 }
 
-void Layer::RemoveSprite(Sprite* sprite)
-{
-    // nao use RemoveSprite() se estiver iterando pela sprite_list_!
-    std::vector<Sprite*>::iterator it;
+void Layer::RemoveSprite(Sprite* sprite) {
 
-    it = std::find(sprite_list_.begin(), sprite_list_.end(), sprite);
-    if(it != sprite_list_.end())
-        sprite_list_.erase(it);
+    Node* sprite_node = sprite_list_[sprite];
+    if(sprite_node != NULL) {
+        sprite_list_[sprite] = NULL;
+        node_->RemoveChild(sprite_node);
+        delete sprite_node;
+    }
 }
 
 void Layer::SortSprites() {
     // ordena sprites pelo valor de zindex
-    std::sort(sprite_list_.begin(), sprite_list_.end(), Sprite::CompareByZIndex);
+    //std::sort(sprite_list_.begin(), sprite_list_.end(), Sprite::CompareByZIndex);
+
+    // TODO: SCREW THIS SHIT, NO ORDERING FOR U
 }
 
 }

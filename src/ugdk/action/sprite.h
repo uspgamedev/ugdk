@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <ugdk/math/vector2D.h>
+#include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/image.h>
 #include <ugdk/base/types.h>
 #include <ugdk/action/animation.h>
@@ -15,7 +16,7 @@ class Modifier;
 class Light;
 class AnimationSet;
 
-class Sprite {
+class Sprite : public Drawable {
   public:
     Sprite();
 
@@ -23,6 +24,8 @@ class Sprite {
     Sprite(Modifier *modifier);
 
     virtual ~Sprite();
+
+    void Draw();
 
     /// Initializes the Sprite with a drawable to render and an AnimationSet.
     /** If no AnimationSet is defined, the first frame will be used.*/
