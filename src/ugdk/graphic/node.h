@@ -10,13 +10,13 @@ namespace ugdk {
 
 class Node {
   public:
-    Node(Drawable* drawable, Light* light = NULL) 
+    Node(Drawable* drawable = NULL, Light* light = NULL) 
         :   modifier_(new Modifier), 
             drawable_(drawable),
             light_(light),
             visible_(true) {}
 
-    ~Node() { if(modifier_) delete modifier_; }
+    ~Node();
 
     void Render();
     void RenderLight();

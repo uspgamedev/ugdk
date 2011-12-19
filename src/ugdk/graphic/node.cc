@@ -4,6 +4,13 @@
 
 namespace ugdk {
 
+Node::~Node() {
+    if(modifier_) delete modifier_;
+    std::list<Node*>::iterator it;
+    for(it = childs_.begin(); it != childs_.end(); ++it)
+        delete *it;
+}
+
 void Node::Render() {
     if(!visible_) return;
 
