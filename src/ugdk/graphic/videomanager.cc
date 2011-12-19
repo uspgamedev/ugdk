@@ -4,6 +4,7 @@
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/image.h>
+#include <ugdk/graphic/modifier.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/action/layer.h>
 
@@ -27,11 +28,11 @@ static Vector2D default_resolution(800.0f, 600.0f);
 bool VideoManager::Initialize(const string& title, const Vector2D& size,
                               bool fullscreen, const string& icon) {
 
-	if(ChangeResolution(size, fullscreen) == false)
+    if(ChangeResolution(size, fullscreen) == false)
         ChangeResolution(default_resolution, false);
 
-	if(icon.length() > 0)
-		SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
+    if(icon.length() > 0)
+        SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
 
     // Set window title.
     SDL_WM_SetCaption(title.c_str(), NULL);
@@ -74,7 +75,7 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
 #endif
 
     //Set projection
-	glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
+    glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
     glMatrixMode( GL_PROJECTION );
 
     glLoadIdentity();
@@ -93,7 +94,7 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
     virtual_bounds_ = Frame(0, 0, video_size_.x, video_size_.y);
 
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
-	InitializeLight();
+    InitializeLight();
     return true;
 }
 
@@ -114,8 +115,8 @@ bool VideoManager::Release() {
 
 void VideoManager::TranslateTo(Vector2D& offset) {
     glLoadIdentity();
-	// Smaller values causes floating point errors and don't increase the image quality.
-	glTranslatef(floor(offset.x), floor(offset.y), 0);
+    // Smaller values causes floating point errors and don't increase the image quality.
+    glTranslatef(floor(offset.x), floor(offset.y), 0);
     this->virtual_bounds_ = Frame(-offset.x, -offset.y,
                                   -offset.x+video_size_.x,
                                   -offset.y+video_size_.y);
@@ -146,7 +147,7 @@ void VideoManager::MergeLights(std::vector<Scene*> scene_list) {
 
 static void DrawLightRect() {
     glEnable(GL_BLEND);
-	glBegin( GL_QUADS ); //Start quad
+    glBegin( GL_QUADS ); //Start quad
         //Draw square
         glTexCoord2f(0.0f, 1.0f);
         glVertex2f(  0.0f, 0.0f );
@@ -160,7 +161,7 @@ static void DrawLightRect() {
         glTexCoord2f(0.0f, 0.0f);
         glVertex2f(  0.0f, 1.0f );
     glEnd();
-	glDisable(GL_BLEND);
+    glDisable(GL_BLEND);
 }
 
 void VideoManager::BlendLightIntoBuffer() {
@@ -216,24 +217,24 @@ void VideoManager::Render(std::vector<Scene*> scene_list, std::list<Layer*> inte
 // em caso de falha.
 Image* VideoManager::LoadImageFile(const string& filepath) {
     if(image_memory_.count(filepath) == 0) {
-    	std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
-		Image* img = new Image();
-		if(img == NULL)
-			return NULL;
-		if(!img->LoadFromFile(fullpath)) {
-			delete img;
-			return NULL;
-		}
+        std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
+        Image* img = new Image();
+        if(img == NULL)
+            return NULL;
+        if(!img->LoadFromFile(fullpath)) {
+            delete img;
+            return NULL;
+        }
         image_memory_[filepath] = img;
     }
     return image_memory_[filepath];
 }
 
 void VideoManager::InitializeLight() {
-	light_size_ = Vector2D(32.0f, 32.0f);
-	if(light_image_ != NULL) {
-		delete light_image_;
-	}
+    light_size_ = Vector2D(32.0f, 32.0f);
+    if(light_image_ != NULL) {
+        delete light_image_;
+    }
     light_image_ = new Image;
     light_image_->CreateFogTransparency(light_size_ * 2.0f, light_size_);
 
@@ -252,6 +253,18 @@ void VideoManager::InitializeLight() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (GLsizei) video_size_.x, 
         (GLsizei) video_size_.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void VideoManager::PushAndApplyModifier(const Modifier* apply) {
+    Modifier top = modifiers_.top();
+    top.Compose(apply);
+    modifiers_.push(top);
+}
+
+bool VideoManager::PopModifier() {
+    if(modifiers_.size() == 0) return false;
+    modifiers_.pop();
+    return true;
 }
 
 }  // namespace framework

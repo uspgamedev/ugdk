@@ -51,8 +51,11 @@ class VideoManager {
 
     void TranslateTo (Vector2D& offset);
 
-    void PushAndApplyModifier(Modifier*);
+    void PushAndApplyModifier(const Modifier*);
+    void PushAndApplyModifier(const Modifier& apply) { PushAndApplyModifier(&apply); }
     bool PopModifier();
+
+    const Modifier& CurrentModifier() const { return modifiers_.top(); }
 
   private:
     Image *blank_image_, *light_image_;
