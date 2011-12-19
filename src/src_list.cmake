@@ -27,6 +27,8 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/graphic/image.h
     ${SRC_DIR}/ugdk/graphic/light.cc
     ${SRC_DIR}/ugdk/graphic/light.h
+    ${SRC_DIR}/ugdk/graphic/node.cc
+    ${SRC_DIR}/ugdk/graphic/node.h
     ${SRC_DIR}/ugdk/graphic/modifier.cc
     ${SRC_DIR}/ugdk/graphic/modifier.h
     ${SRC_DIR}/ugdk/graphic/text.cc

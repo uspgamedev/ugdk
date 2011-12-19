@@ -122,7 +122,7 @@ void VideoManager::TranslateTo(Vector2D& offset) {
                                   -offset.y+video_size_.y);
 }
 
-void VideoManager::MergeLights(std::vector<Scene*> scene_list) {
+void VideoManager::MergeLights(std::list<Scene*> scene_list) {
     // Lights are simply added together.
     glBlendFunc(GL_ONE, GL_ONE);
 
@@ -130,9 +130,9 @@ void VideoManager::MergeLights(std::vector<Scene*> scene_list) {
     glDrawBuffer(GL_BACK);
     glReadBuffer(GL_BACK);
 
-    for (int i = 0; i < static_cast<int>(scene_list.size()); i++)
-        if (!scene_list[i]->finished())
-           scene_list[i]->RenderLight();
+    for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+        if (!(*it)->finished())
+           (*it)->RenderLight();
 
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_texture_);
@@ -185,7 +185,7 @@ void VideoManager::BlendLightIntoBuffer() {
 }
 
 // Desenha backbuffer na tela
-void VideoManager::Render(std::vector<Scene*> scene_list, std::list<Layer*> interface_list) {
+void VideoManager::Render(std::list<Scene*> scene_list, std::list<Layer*> interface_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     MergeLights(scene_list);
@@ -194,9 +194,9 @@ void VideoManager::Render(std::vector<Scene*> scene_list, std::list<Layer*> inte
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Draw all the sprites from all scenes.
-    for (int i = 0; i < static_cast<int>(scene_list.size()); i++)
-        if (!scene_list[i]->finished())
-            scene_list[i]->Render();
+    for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+        if (!(*it)->finished())
+           (*it)->Render();
 
     // Using the light texture, merge it into the screen.
     BlendLightIntoBuffer();
@@ -209,7 +209,9 @@ void VideoManager::Render(std::vector<Scene*> scene_list, std::list<Layer*> inte
 
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapBuffers();
+    glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 }
 
 // Carrega imagem de um arquivo, fazendo o
@@ -262,7 +264,7 @@ void VideoManager::PushAndApplyModifier(const Modifier* apply) {
 }
 
 bool VideoManager::PopModifier() {
-    if(modifiers_.size() == 0) return false;
+    if(modifiers_.size() <= 1) return false;
     modifiers_.pop();
     return true;
 }

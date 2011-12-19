@@ -43,18 +43,15 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
 }
 
 void Engine::DeleteFinishedScenes() {
-	bool deleted = true;
-	while(deleted){
-		deleted = false;
-		for(vector<Scene* >::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it) {
-			if ((*it)->finished()) {
-			    delete (*it);
-				scene_list_.erase(it);
-				deleted = true;
-				break;
-			}
-		}
-	}
+    std::list<Scene*> to_delete;
+    for(std::list<Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it)
+        if((*it)->finished())
+            to_delete.push_front(*it);
+
+    for(std::list<Scene*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it) {
+        delete (*it);
+        scene_list_.remove(*it);
+    }
 }
 
 
@@ -135,9 +132,9 @@ void Engine::Run() {
             }
         }
     }
-    for (int i = 0; i < static_cast<int>(scene_list_.size()); i++) {
-        scene_list_[i]->Finish();
-        delete scene_list_[i];
+    for(std::list<Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it) {
+        (*it)->Finish();
+        delete (*it);
     }
     scene_list_.clear();
 }
@@ -165,7 +162,7 @@ void Engine::PushScene(Scene* scene) {
 }
 
 Scene* Engine::CurrentScene() const {
-    return scene_list_[scene_list_.size() - 1];
+    return scene_list_.back();
 }
 
 void Engine::PopScene() {

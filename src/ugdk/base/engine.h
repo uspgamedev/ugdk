@@ -9,8 +9,6 @@
 #include <ugdk/util/gdd/cachedloader.h>
 #include <ugdk/util/animationprotocol.h>
 
-using std::vector;
-
 namespace ugdk {
 
 class VideoManager;
@@ -132,7 +130,7 @@ class Engine {
 	AnimationLoader animation_loader_;
     //Vector2D window_size_;
     bool quit_;
-    vector<Scene*> scene_list_;
+    std::list<Scene*> scene_list_;
     std::list<Layer*> interface_list_;
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 

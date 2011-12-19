@@ -26,13 +26,13 @@ class VideoManager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : light_image_(NULL), fullscreen_(false), light_texture_(0) {}
+    VideoManager() : light_image_(NULL), fullscreen_(false), light_texture_(0) { modifiers_.push(Modifier()); }
     ~VideoManager() {}
 
     bool Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon);
     bool ChangeResolution(const Vector2D& size, bool fullscreen);
     bool Release();
-    void Render(std::vector<Scene*>, std::list<Layer*>);
+    void Render(std::list<Scene*>, std::list<Layer*>);
 
     Image* LoadImageFile(const string& filepath);
     Image* LoadImage(const string& filepath) {
@@ -71,7 +71,7 @@ class VideoManager {
     void InitializeLight();
 
 
-    void MergeLights(std::vector<Scene*> scene_list);
+    void MergeLights(std::list<Scene*> scene_list);
     void BlendLightIntoBuffer();
 
 };

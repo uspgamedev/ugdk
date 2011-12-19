@@ -73,6 +73,7 @@ class Scene {
   protected:
 
     /// Ends the scene activity.
+    /** Note: do not release any resources in this method. */
     virtual void End();
 
     /// Layer list
@@ -90,7 +91,8 @@ class Scene {
     bool stops_previous_music_;
 
     Node* root_node_;
-
+   
+  friend class Engine;
 }; // class Scene.
 
 }
