@@ -199,7 +199,7 @@ void VideoManager::Render(std::list<Scene*> scene_list, std::list<Layer*> interf
            (*it)->Render();
 
     // Using the light texture, merge it into the screen.
-    BlendLightIntoBuffer();
+    //BlendLightIntoBuffer();
 
     // Draw all interface layers, with the usual RGBA blend.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -209,9 +209,7 @@ void VideoManager::Render(std::list<Scene*> scene_list, std::list<Layer*> interf
 
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapBuffers();
-    glClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 }
 
 // Carrega imagem de um arquivo, fazendo o

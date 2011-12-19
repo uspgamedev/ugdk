@@ -15,6 +15,7 @@ class Drawable;
 class Modifier;
 class Light;
 class AnimationSet;
+class Node;
 
 class Sprite : public Drawable {
   public:
@@ -26,6 +27,7 @@ class Sprite : public Drawable {
     virtual ~Sprite();
 
     void Draw();
+    void set_node(Node* node) { node_ = node; }
 
     /// Initializes the Sprite with a drawable to render and an AnimationSet.
     /** If no AnimationSet is defined, the first frame will be used.*/
@@ -193,8 +195,10 @@ class Sprite : public Drawable {
     AnimationManager *animation_manager_;
     Modifier *modifier_;
     bool visible_, delete_image_;
+    Node* node_;
 
 };
+
 }
 
 #endif //HORUSEYE_FRAMEWORK_SPRITE_H_

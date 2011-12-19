@@ -1,12 +1,13 @@
 #include <ugdk/action/sprite.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/light.h>
+#include <ugdk/graphic/node.h>
 #include <ugdk/action/animation.h>
 
 namespace ugdk {
 
 Sprite::Sprite() : light_(NULL), image_(NULL), animation_manager_(NULL),
-    modifier_(new Modifier), delete_image_(false) {}
+    modifier_(new Modifier), delete_image_(false), node_(NULL) {}
 
 Sprite::Sprite(Modifier *mod) : light_(NULL), image_(NULL), animation_manager_(NULL),
     modifier_(mod), delete_image_(false) {}
@@ -52,6 +53,7 @@ void Sprite::RenderLight(Vector2D &offset) {
 
 void Sprite::Update(float delta_t) {
     animation_manager_->Update(delta_t);
+    if(node_) node_->set_zindex(this->zindex());
 }
 
 bool Sprite::CompareByZIndex(Sprite *a, Sprite *b) {
