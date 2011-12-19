@@ -59,7 +59,16 @@ bool Text::DrawTo(const Vector2D& position, int frame_number, uint8 mirror,
 	int fancy_line_number = 0, current_height;
 	glPushMatrix();
 	Font::IdentType ident = font_->ident();
-	glTranslatef( position.x, position.y, 0 );
+
+    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
+
+    Vector2D target = position + mod.offset();
+
+    glTranslatef( target.x, target.y, 0 );
+    glScalef(mod.scale().x, mod.scale().y, 0);
+
+
+
 	glListBase(font_->id());
 	glColor3ub(255, 255, 255);
 	Frame bounds = VIDEO_MANAGER()->virtual_bounds();

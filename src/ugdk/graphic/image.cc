@@ -42,6 +42,14 @@ bool Image::DrawTo(const Vector2D& position, int frame_number,
     Vector2D size = draw_size, 
 			 target = position;
 
+    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
+
+    target.x += mod.offset().x;
+    target.y += mod.offset().y;
+
+    size.x *= mod.scale().x;
+    size.y *= mod.scale().y;
+
     Frame bounds = VIDEO_MANAGER()->virtual_bounds();
     if (target.x > bounds.right() || target.y > bounds.bottom() ||
         target.x + size.x < bounds.left() || target.y + size.y < bounds.top() ) {
