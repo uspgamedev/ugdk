@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
 #include "node.h"
@@ -38,6 +39,10 @@ void Node::RenderLight() {
         (*it)->RenderLight();
     
     if(modifier_) VIDEO_MANAGER()->PopModifier();
+}
+
+void Node::SortChildren() { 
+    childs_.sort(Node::CompareByZIndex);
 }
     
 }  // namespace ugdk
