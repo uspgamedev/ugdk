@@ -9,6 +9,8 @@
 
 namespace ugdk {
 
+const Modifier Modifier::IDENTITY;
+
 Modifier::Modifier(const Modifier& mod) :
         offset_(mod.offset_),
         scale_(mod.scale_),

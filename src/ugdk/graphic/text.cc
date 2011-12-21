@@ -60,14 +60,8 @@ bool Text::DrawTo(const Vector2D& position, int frame_number, uint8 mirror,
 	glPushMatrix();
 	Font::IdentType ident = font_->ident();
 
-    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
-
-    Vector2D target = position + mod.offset();
-
+    Vector2D target = position;
     glTranslatef( target.x, target.y, 0 );
-    glScalef(mod.scale().x, mod.scale().y, 0);
-
-
 
 	glListBase(font_->id());
 	glColor3ub(255, 255, 255);

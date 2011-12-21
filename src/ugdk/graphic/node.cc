@@ -14,6 +14,7 @@ Node::~Node() {
 
 void Node::Render() {
     if(!visible_) return;
+    if(childs_.empty() && !drawable_) return; // optimization!
 
     if(modifier_) VIDEO_MANAGER()->PushAndApplyModifier(modifier_);
 
@@ -28,6 +29,7 @@ void Node::Render() {
 
 void Node::RenderLight() {
     if(!visible_) return;
+    if(childs_.empty() && !light_) return; // optimization!
 
     if(modifier_) VIDEO_MANAGER()->PushAndApplyModifier(modifier_);
 

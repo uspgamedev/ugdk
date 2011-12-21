@@ -91,6 +91,8 @@ class Modifier {
     /// Remember to free your new Modifier created through this static function!
     static Modifier* Copy(const Modifier* mod2) { if(mod2 == NULL) return NULL; return new Modifier(mod2); }
 
+    static const Modifier IDENTITY;
+
   private:
     // Copy constructor from pointer:
     Modifier(const Modifier* mod);

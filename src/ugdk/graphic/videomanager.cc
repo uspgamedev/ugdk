@@ -25,8 +25,8 @@ static Vector2D default_resolution(800.0f, 600.0f);
 // Inicializa o gerenciador de video, definindo uma
 // resolucao para o programa. Retorna true em caso de
 // sucesso.
-bool VideoManager::Initialize(const string& title, const Vector2D& size,
-                              bool fullscreen, const string& icon) {
+bool VideoManager::Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon) {
+    modifiers_.empty();
 
     if(ChangeResolution(size, fullscreen) == false)
         ChangeResolution(default_resolution, false);
@@ -58,13 +58,11 @@ bool VideoManager::Initialize(const string& title, const Vector2D& size,
 // Changes the resolution to the requested value.
 // Returns true on success.
 bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
-
     Uint32 flags = SDL_OPENGL;
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-    if(fullscreen)
-        flags |= SDL_FULLSCREEN;
-    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y),
-            VideoManager::COLOR_DEPTH, flags) == NULL)
+    if(fullscreen) flags |= SDL_FULLSCREEN;
+
+    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == NULL)
         return false;
 
     // VSync
@@ -83,6 +81,7 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
 
     //Initialize modelview matrix
     glMatrixMode( GL_MODELVIEW );
+    ClearModiferStack();
     glLoadIdentity();
 
     //If there was any errors
@@ -256,15 +255,40 @@ void VideoManager::InitializeLight() {
 }
 
 void VideoManager::PushAndApplyModifier(const Modifier* apply) {
-    Modifier top = modifiers_.top();
-    top.Compose(apply);
+    Modifier top = (modifiers_.empty()) ? Modifier::IDENTITY : modifiers_.top();
+
+    top.ComposeAlpha(apply);
+    top.ComposeColor(apply);
+    top.ComposeMirror(apply);
+
+    glPushMatrix();
+
+    float tx = apply->offset().x, ty = apply->offset().y;
+    float sx = apply->offset().x, sy = apply->offset().y;
+    float s = sin(apply->rotation()), c = cos(apply->rotation());
+    float M[16] = {  sx*c, sy*s, 0.0f, 0.0f, // First column
+                    -sx*s, sy*c, 0.0f, 0.0f,
+                     0.0f, 0.0f, 1.0f, 0.0f,
+                       tx,   ty, 0.0f, 1.0f };
+
+    //glTranslatef(apply->offset().x, apply->offset().y, 0.0f);
+    //glScalef(apply->scale().x, apply->scale().y, 0.0f);
+    //glRotatef(apply->rotation() * 57.2957795f, 0.0f, 0.0f, 1.0f);
+
+    glMultMatrixf(M);
+
     modifiers_.push(top);
 }
 
 bool VideoManager::PopModifier() {
-    if(modifiers_.size() <= 1) return false;
+    if(modifiers_.empty()) return false;
     modifiers_.pop();
+    glPopMatrix();
     return true;
+}
+
+void VideoManager::ClearModiferStack() {
+    while(PopModifier());
 }
 
 }  // namespace framework

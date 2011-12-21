@@ -26,7 +26,7 @@ class VideoManager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : light_image_(NULL), fullscreen_(false), light_texture_(0) { modifiers_.push(Modifier()); }
+    VideoManager() : light_image_(NULL), fullscreen_(false), light_texture_(0) {}
     ~VideoManager() {}
 
     bool Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon);
@@ -54,8 +54,9 @@ class VideoManager {
     void PushAndApplyModifier(const Modifier*);
     void PushAndApplyModifier(const Modifier& apply) { PushAndApplyModifier(&apply); }
     bool PopModifier();
-
-    const Modifier& CurrentModifier() const { return modifiers_.top(); }
+    const Modifier& CurrentModifier() const {
+        return (modifiers_.empty()) ? Modifier::IDENTITY : modifiers_.top(); 
+    }
 
   private:
     Image *blank_image_, *light_image_;
@@ -73,6 +74,8 @@ class VideoManager {
 
     void MergeLights(std::list<Scene*> scene_list);
     void BlendLightIntoBuffer();
+
+    void ClearModiferStack();
 
 };
 
