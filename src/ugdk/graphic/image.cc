@@ -43,10 +43,10 @@ bool Image::DrawTo(const Vector2D& position, int frame_number,
 			 target = position;
 
     Frame bounds = VIDEO_MANAGER()->virtual_bounds();
-    if (target.x > bounds.right() || target.y > bounds.bottom() ||
+    /*if (target.x > bounds.right() || target.y > bounds.bottom() ||
         target.x + size.x < bounds.left() || target.y + size.y < bounds.top() ) {
         return false;
-    }
+    }*/
 
 	if(mirror & MIRROR_HFLIP) {
 		// Flip the image horizontally and move it to the right, so it renders at the same place.

@@ -264,7 +264,7 @@ void VideoManager::PushAndApplyModifier(const Modifier* apply) {
     glPushMatrix();
 
     float tx = apply->offset().x, ty = apply->offset().y;
-    float sx = apply->offset().x, sy = apply->offset().y;
+    float sx = apply->scale().x, sy = apply->scale().y;
     float s = sin(apply->rotation()), c = cos(apply->rotation());
     float M[16] = {  sx*c, sy*s, 0.0f, 0.0f, // First column
                     -sx*s, sy*c, 0.0f, 0.0f,
