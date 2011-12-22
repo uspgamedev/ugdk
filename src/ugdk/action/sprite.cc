@@ -10,7 +10,7 @@ Sprite::Sprite() : light_(NULL), image_(NULL), animation_manager_(NULL),
     modifier_(new Modifier), delete_image_(false), node_(NULL) {}
 
 Sprite::Sprite(Modifier *mod) : light_(NULL), image_(NULL), animation_manager_(NULL),
-    modifier_(mod), delete_image_(false) {}
+    modifier_(mod), delete_image_(false), node_(NULL) {}
 
 Sprite::~Sprite() {
     if (animation_manager_) delete animation_manager_;
@@ -28,7 +28,7 @@ void Sprite::Initialize(Drawable *image, AnimationSet *set, bool delete_image)
   	set_zindex(0.0f);
     visible_ = true;
     animation_manager_ = new AnimationManager(10, set);/*TODO: MANO TEM UM 10 NO MEU C�DIGO */
-    hotspot_ = position_ = Vector2D(0,0);
+    hotspot_ = Vector2D(0,0);
     delete_image_ = delete_image;
 	size_ = image->render_size();
 }
@@ -40,13 +40,13 @@ void Sprite::Render() {
         const Modifier *animation_mod = animation_manager_->get_current_modifier();
         if (animation_mod) render_mod.Compose(animation_mod);
         Vector2D true_hotspot = hotspot_.Scale(render_mod.scale());
-        image_->DrawTo(position_ - true_hotspot, frame_number, &render_mod, size_);
+        image_->DrawTo(Vector2D() - true_hotspot, frame_number, &render_mod, size_);
     }
 }
 
 void Sprite::RenderLight(Vector2D &offset) {
     if (visible_ && light_) {
-		Vector2D pos = position_ - offset;
+		Vector2D pos = - offset;
         light_->Render(pos);
     }
 }

@@ -5,6 +5,8 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/image.h>
+#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/node.h>
 #include <ugdk/base/types.h>
 #include <ugdk/action/animation.h>
 
@@ -12,10 +14,8 @@
 namespace ugdk {
 
 class Drawable;
-class Modifier;
 class Light;
 class AnimationSet;
-class Node;
 
 class Sprite : public Drawable {
   public:
@@ -27,7 +27,7 @@ class Sprite : public Drawable {
     virtual ~Sprite();
 
     void Draw();
-    void set_node(Node* node) { node_ = node; }
+    void set_node(Node* node) { node_ = node; node_->modifier()->set_offset(tmppos); }
 
     /// Initializes the Sprite with a drawable to render and an AnimationSet.
     /** If no AnimationSet is defined, the first frame will be used.*/
@@ -35,9 +35,9 @@ class Sprite : public Drawable {
                     bool delete_image = false);
 
     /// Acessors e mutators
-    Vector2D position() const { return position_; }
-    void set_position(const Vector2D& position) { position_ = position; }
-    void set_position(float x, float y) { position_ = Vector2D(x, y); }
+    Vector2D position() const { return node_ ? node_->modifier()->offset() : tmppos; }
+    void set_position(const Vector2D& position) { if(node_) node_->modifier()->set_offset(position); else tmppos = position; }
+    void set_position(float x, float y) { if(node_) node_->modifier()->set_offset(Vector2D(x, y)); else tmppos = Vector2D(x, y); }
 
     /// Returns if the sprite is visible or not.
     /**Visibility controls wether the Sprite is rendered or not. This function returns
@@ -190,7 +190,7 @@ class Sprite : public Drawable {
     float zindex_;
 
   private:
-    Vector2D position_, hotspot_, size_;
+    Vector2D tmppos, hotspot_, size_;
     Drawable *image_;
     AnimationManager *animation_manager_;
     Modifier *modifier_;
