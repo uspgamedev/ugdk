@@ -35,6 +35,7 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/graphic/textmanager.h
     ${SRC_DIR}/ugdk/graphic/videomanager.cc
     ${SRC_DIR}/ugdk/graphic/videomanager.h
+    ${SRC_DIR}/ugdk/graphic/wglext.h
     ${SRC_DIR}/ugdk/input/inputmanager.cc
     ${SRC_DIR}/ugdk/input/inputmanager.h
     ${SRC_DIR}/ugdk/input/keys.h
