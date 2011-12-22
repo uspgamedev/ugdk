@@ -22,3 +22,4 @@ src/ugdk/config/config.h
 /test/lib/gtest.lib
 /test/lib/gtest_main.lib
 /test/tmp
+*.deb
