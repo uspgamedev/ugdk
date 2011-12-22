@@ -18,6 +18,7 @@ using std::map;
 
 namespace ugdk {
 class Image;
+class Spritesheet;
 class Scene;
 class Layer;
 class Modifier;
@@ -38,6 +39,7 @@ class VideoManager {
     Image* LoadImage(const string& filepath) {
         return LoadImageFile(filepath);
     }
+    Spritesheet* LoadSpritesheet(const std::string& filepath);
 
     Vector2D video_size() const { return video_size_; }
     bool fullscreen() const { return fullscreen_; }
@@ -65,6 +67,7 @@ class VideoManager {
     bool fullscreen_;
     string title_;
     map<string, Image*> image_memory_;
+    map<std::string, Spritesheet*> spritesheet_memory_;
     std::stack<Modifier> modifiers_;
 
     unsigned int light_texture_, light_buffer_id_;

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic/drawable.h>
+#include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/image.h>
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/node.h>
@@ -31,8 +32,8 @@ class Sprite : public Drawable {
 
     /// Initializes the Sprite with a drawable to render and an AnimationSet.
     /** If no AnimationSet is defined, the first frame will be used.*/
-    virtual void Initialize(Drawable *image, AnimationSet *set = NULL,
-                    bool delete_image = false);
+    virtual void Initialize(Drawable *image, AnimationSet *set = NULL, bool delete_image = false);
+    virtual void Initialize(Spritesheet *image, AnimationSet *set = NULL);
 
     /// Acessors e mutators
     Vector2D position() const { return node_ ? node_->modifier()->offset() : tmppos; }
@@ -192,6 +193,7 @@ class Sprite : public Drawable {
   private:
     Vector2D tmppos, hotspot_, size_;
     Drawable *image_;
+    Spritesheet *spritesheet_;
     AnimationManager *animation_manager_;
     Modifier *modifier_;
     bool visible_, delete_image_;

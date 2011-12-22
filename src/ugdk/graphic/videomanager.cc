@@ -1,6 +1,7 @@
 #include <SDL/SDL_opengl.h>
 #include <cmath>
 #include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/flexiblespritesheet.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/image.h>
@@ -227,6 +228,21 @@ Image* VideoManager::LoadImageFile(const string& filepath) {
         image_memory_[filepath] = img;
     }
     return image_memory_[filepath];
+}
+
+Spritesheet* VideoManager::LoadSpritesheet(const std::string& filepath) {
+    if(spritesheet_memory_.count(filepath) == 0) {
+        std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
+        FlexibleSpritesheet* ss = new FlexibleSpritesheet();
+        if(ss == NULL)
+            return NULL;
+        if(!ss->LoadFromFile(fullpath)) {
+            delete ss;
+            return NULL;
+        }
+        spritesheet_memory_[filepath] = ss;
+    }
+    return spritesheet_memory_[filepath];
 }
 
 void VideoManager::InitializeLight() {
