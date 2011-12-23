@@ -34,6 +34,7 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
     text_manager_->Initialize();
 	path_manager_ = new PathManager(base_path);
     scene_list_.clear();
+    interface_list_.clear();
 
     frames_since_reset_ = reported_fps_ = 0;
     if(time_handler_ != NULL)

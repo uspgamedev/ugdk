@@ -13,10 +13,8 @@
 
 namespace ugdk {
 
-FlexibleSpritesheet::FlexibleSpritesheet() : texture_width_(10), texture_height_(10) {
-	texture_ = 0;
-    set_frame_size(Vector2D( (float)(width()), (float)(height()) ));
-}
+FlexibleSpritesheet::FlexibleSpritesheet() : 
+    texture_(0), texture_width_(10), texture_height_(10), frame_size_(1.0f, 1.0f) {}
 
 FlexibleSpritesheet::~FlexibleSpritesheet() {
 	if(texture_ != 0) {

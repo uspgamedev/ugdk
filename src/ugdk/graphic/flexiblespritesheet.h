@@ -20,6 +20,7 @@ class FlexibleSpritesheet : public Spritesheet {
     int height() const { return texture_height_; }
 
 	// Sets the frame_size to use with the texture.
+    // 0.0f <= size.x,size.y <= 1.0f
     void set_frame_size(const Vector2D& size) { frame_size_ = size; }
     const Vector2D& frame_size() const { return frame_size_; }
     

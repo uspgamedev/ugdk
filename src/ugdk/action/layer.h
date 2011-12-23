@@ -1,8 +1,7 @@
 #ifndef HORUSEYE_FRAMEWORK_LAYER_H_
 #define HORUSEYE_FRAMEWORK_LAYER_H_
 
-#include <vector>
-#include <map>
+#include <list>
 #include <ugdk/base/types.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic/node.h>

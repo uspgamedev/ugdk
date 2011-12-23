@@ -5,7 +5,7 @@ namespace ugdk {
 
 class Spritesheet {
   public:
-    Spritesheet();
+    Spritesheet() {}
 	virtual ~Spritesheet() {}
 
     virtual void Draw(int frame_number) = 0; //TODO

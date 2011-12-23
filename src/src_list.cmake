@@ -21,22 +21,26 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/base/types.h
     ${SRC_DIR}/ugdk/config/config.h
     ${SRC_DIR}/ugdk/graphic/drawable.h
+    ${SRC_DIR}/ugdk/graphic/flexiblespritesheet.cc
+    ${SRC_DIR}/ugdk/graphic/flexiblespritesheet.h
     ${SRC_DIR}/ugdk/graphic/font.cc
     ${SRC_DIR}/ugdk/graphic/font.h
     ${SRC_DIR}/ugdk/graphic/image.cc
     ${SRC_DIR}/ugdk/graphic/image.h
     ${SRC_DIR}/ugdk/graphic/light.cc
     ${SRC_DIR}/ugdk/graphic/light.h
-    ${SRC_DIR}/ugdk/graphic/node.cc
-    ${SRC_DIR}/ugdk/graphic/node.h
     ${SRC_DIR}/ugdk/graphic/modifier.cc
     ${SRC_DIR}/ugdk/graphic/modifier.h
+    ${SRC_DIR}/ugdk/graphic/node.cc
+    ${SRC_DIR}/ugdk/graphic/node.h
+    ${SRC_DIR}/ugdk/graphic/spritesheet.h
     ${SRC_DIR}/ugdk/graphic/text.cc
     ${SRC_DIR}/ugdk/graphic/text.h
     ${SRC_DIR}/ugdk/graphic/textmanager.cc
     ${SRC_DIR}/ugdk/graphic/textmanager.h
     ${SRC_DIR}/ugdk/graphic/videomanager.cc
     ${SRC_DIR}/ugdk/graphic/videomanager.h
+    ${SRC_DIR}/ugdk/graphic/wglext.h
     ${SRC_DIR}/ugdk/input/inputmanager.cc
     ${SRC_DIR}/ugdk/input/inputmanager.h
     ${SRC_DIR}/ugdk/input/keys.h
