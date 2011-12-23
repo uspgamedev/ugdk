@@ -58,20 +58,20 @@ class Sprite : public Drawable {
     /** The hotspot controls the offset from the image origin to the sprite position.
     *  @return Vector2D of the hotspot
     */
-    Vector2D hotspot() const { return hotspot_; }
+    Vector2D hotspot() const { return spritesheet_ ? spritesheet_->hotspot() : hotspot_; }
     /// Set the hotspot of the sprite
     /** Given a hotspot Vector2D, this function sets the hotspot of the sprite
     *  @param hotspost is a Vector2D 
     *  @see hotspot()
     */
-    void set_hotspot(const Vector2D& hotspot) { hotspot_ = hotspot; }
+    void set_hotspot(const Vector2D& hotspot) { if(spritesheet_) spritesheet_->set_hotspot(hotspot); else hotspot_ = hotspot; }
     /// Set the hotspot of the sprite
     /** Given two float (x,y), this function sets the hotspot of the sprite
     *  @param x is the x coordinate of the hotspot
     *  @param y is the y coordinate of the hotspot
     *  @see hotspot()
     */
-    void set_hotspot(float x, float y) { hotspot_ = Vector2D(x, y); }
+    void set_hotspot(float x, float y) { if(spritesheet_) spritesheet_->set_hotspot(Vector2D(x, y)); else hotspot_ = Vector2D(x, y); }
 
     ///  Return the zindex of the sprite
     /** The Sprites are rendered in order, with non-decreasing Z-Index.

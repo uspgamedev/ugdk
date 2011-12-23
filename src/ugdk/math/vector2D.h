@@ -145,8 +145,11 @@ class Vector2D {
         return a.Rotate(angle);
     }
 
+    // TODO document and revise
     Vector2D operator+=(const Vector2D &other);
-
+    
+    // TODO document and revise
+    Vector2D operator-=(const Vector2D &other);
 };
 
 /// Method that returns a vector equal to the sum of two others
@@ -159,6 +162,7 @@ Vector2D operator+(const Vector2D &left, const Vector2D &right);
     /** The oposite of a vector (x,y) is equal to the vector (-x,-y) in this order
     *  @return Oposite Vector 
     */
+// TODO revise
 Vector2D operator-(const Vector2D &left);
 
  /// Method that returns a vector equal to the subtraction of two others

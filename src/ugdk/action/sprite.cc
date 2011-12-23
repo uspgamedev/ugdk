@@ -1,4 +1,6 @@
 #include <ugdk/action/sprite.h>
+#include <ugdk/base/engine.h>
+#include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/light.h>
 #include <ugdk/graphic/node.h>
@@ -53,7 +55,9 @@ void Sprite::Render() {
             Vector2D true_hotspot = hotspot_.Scale(render_mod.scale());
             image_->DrawTo(Vector2D() - true_hotspot, frame_number, &render_mod, size_);
         } else {
+            VIDEO_MANAGER()->PushAndApplyModifier(render_mod);
             spritesheet_->Draw(frame_number);
+            VIDEO_MANAGER()->PopModifier();
         }
     }
 }

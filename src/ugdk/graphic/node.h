@@ -10,7 +10,6 @@ namespace ugdk {
 
 class Node {
   public:
-    //typedef std::set<Node*, bool(*)(const Node*, const Node*)> NodeSet;
     typedef std::vector<Node*> NodeSet;
 
     Node(Drawable* drawable = NULL, Modifier* modifier = new Modifier) 
@@ -18,7 +17,6 @@ class Node {
             drawable_(drawable),
             light_(NULL),
             visible_(true),
-            //childs_(CompareByZIndex),
             parent_(NULL) {}
 
     ~Node();
@@ -38,9 +36,7 @@ class Node {
     float zindex() const { return zindex_; }
 
     void AddChild(Node *child) {
-        printf("Inserting node %d into set of %d. Previously %d elements.", (int)child, (int)this, childs_.size());
         childs_.push_back(child);
-        printf(" Size after: %d\n", childs_.size());
         child->parent_ = this;
     }
     void RemoveChild(Node *child);

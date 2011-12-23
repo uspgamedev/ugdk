@@ -39,6 +39,12 @@ Vector2D Vector2D::operator+=(const Vector2D &other) {
     return *this;
 }
 
+Vector2D Vector2D::operator-=(const Vector2D &other) {
+    x -= other.x;
+    y -= other.y;
+    return *this;
+}
+
 Vector2D operator+(const Vector2D &left, const Vector2D &right) {
     return Vector2D::Add(left, right);
 }

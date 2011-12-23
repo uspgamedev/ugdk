@@ -70,7 +70,7 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
     //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
 #ifdef WIN32
     wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
-    if(wglSwapIntervalEXT != 0) wglSwapIntervalEXT(1); // sets VSync to "ON".
+    //if(wglSwapIntervalEXT != 0) wglSwapIntervalEXT(1); // sets VSync to "ON".
 #endif
 
     //Set projection
@@ -230,7 +230,7 @@ Image* VideoManager::LoadImageFile(const string& filepath) {
     return image_memory_[filepath];
 }
 
-Spritesheet* VideoManager::LoadSpritesheet(const std::string& filepath) {
+FlexibleSpritesheet* VideoManager::LoadSpritesheet(const std::string& filepath) {
     if(spritesheet_memory_.count(filepath) == 0) {
         std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
         FlexibleSpritesheet* ss = new FlexibleSpritesheet();
