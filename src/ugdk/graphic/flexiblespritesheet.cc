@@ -32,7 +32,7 @@ void FlexibleSpritesheet::Draw(int frame_number) {
         return false;
     }*/
 
-    Vector2D origin, target((float)texture_width_, (float)texture_height_);
+    Vector2D origin, target(texture_width_ * frame_size_.x, texture_height_ * frame_size_.y);
 
     if(mod.mirror() & MIRROR_HFLIP) {
 		// Flip the image horizontally and move it to the right, so it renders at the same place.
@@ -44,13 +44,15 @@ void FlexibleSpritesheet::Draw(int frame_number) {
         origin.y = target.y;
         target.y = 0.0f;
 	}
+    
+    origin -= hotspot_;
+    target -= hotspot_;
 
 	// Sets the color to tint the image with to the color the image has modified with the color given.
 	// Also sets the alpha.
     glColor4f(mod.color().r, mod.color().g, mod.color().b, mod.alpha());
 
-    int frame_width = static_cast<int>(frame_size().x);
-    int nx = std::max(width()/frame_width, 1);
+    int nx = (int)(ceil(1.0f / frame_size_.x));
     float xpos = frame_size_.x * (frame_number % nx);
     float ypos = frame_size_.y * (frame_number / nx);
 
@@ -91,13 +93,13 @@ int FlexibleSpritesheet::FrameCount() const {
 // Loads the texture from the given surface. Surface is used only as a
 // reference and necessary data is copied.
 // Returns true on success, false otherwise.
-static bool ConvertSurfaceToTexture(SDL_Surface* data, uint32& texture_, int& texture_width_, int& texture_height_) {
+static bool ConvertSurfaceToTexture(SDL_Surface* data, uint32* texture_, int* texture_width_, int* texture_height_) {
     if(data == NULL) {
         fprintf(stderr, "Error: LoadSurface - No Data\n");
         return false;
     }
-    if(texture_ != 0) {
-        glDeleteTextures(1, &texture_);
+    if(*texture_ != 0) {
+        glDeleteTextures(1, texture_);
     }
 
     Uint8 *raw = static_cast<Uint8*>( malloc( data->w * data->h * 4 ) );
@@ -147,15 +149,15 @@ static bool ConvertSurfaceToTexture(SDL_Surface* data, uint32& texture_, int& te
         }
     }
     SDL_UnlockSurface( data );
-    texture_width_ = data->w;
-    texture_height_ = data->h;
+    *texture_width_ = data->w;
+    *texture_height_ = data->h;
 
     while ( glGetError() ) { ; }
 
     GLuint texture;
     glGenTextures( 1, &texture );
     glBindTexture( GL_TEXTURE_2D, texture );
-    texture_ = static_cast<uint32>(texture);
+    *texture_ = static_cast<uint32>(texture);
     /*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);*/
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -173,7 +175,7 @@ static bool ConvertSurfaceToTexture(SDL_Surface* data, uint32& texture_, int& te
         return false;
     }
     // Many VGA works faster if you use BGR instead of RGB
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, texture_width_, texture_height_, 0, GL_BGRA, GL_UNSIGNED_BYTE, raw);
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, *texture_width_, *texture_height_, 0, GL_BGRA, GL_UNSIGNED_BYTE, raw);
     free(raw);
 
     errorCode = glGetError();
@@ -194,7 +196,10 @@ bool FlexibleSpritesheet::LoadFromFile(const std::string& filepath) {
         fprintf(stderr, "Could not load file \"%s\".\n", filepath.c_str());
         result = false;
     } else {
-        result = ConvertSurfaceToTexture(data, texture_, texture_width_, texture_height_);
+        
+        printf("Hey my texture_ is %d, ", texture_);
+        result = ConvertSurfaceToTexture(data, &texture_, &texture_width_, &texture_height_);
+        printf("Now it's %d!\n", texture_);
         SDL_FreeSurface(data);
 
         frame_size_ = Vector2D(1.0f, 1.0f);

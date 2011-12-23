@@ -18,11 +18,21 @@ class FlexibleSpritesheet : public Spritesheet {
 
 	int width() const { return texture_width_; }
     int height() const { return texture_height_; }
+    const Vector2D render_size() const { return Vector2D((float)texture_width_, (float)texture_height_); }
 
 	// Sets the frame_size to use with the texture.
     // 0.0f <= size.x,size.y <= 1.0f
-    void set_frame_size(const Vector2D& size) { frame_size_ = size; }
+    void set_frame_size(const Vector2D& size) { 
+        frame_size_ = size;
+        if(frame_size_.x > 1 || frame_size_.y > 1) {
+            frame_size_.x /= texture_width_;
+            frame_size_.y /= texture_height_;
+        }
+    }
     const Vector2D& frame_size() const { return frame_size_; }
+    
+    void set_hotspot(const Vector2D& hotspot) { hotspot_ = hotspot; }
+    const Vector2D& hotspot() const { return hotspot_; }
     
 	int FrameCount() const;
 
@@ -36,7 +46,7 @@ class FlexibleSpritesheet : public Spritesheet {
   private:
     uint32 texture_;
     int texture_width_, texture_height_;
-    Vector2D frame_size_;
+    Vector2D frame_size_, hotspot_;
 };
 
 }  // namespace framework
