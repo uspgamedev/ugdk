@@ -5,9 +5,13 @@
 
 namespace ugdk {
 
+bool Node::CompareByZIndex(const Node *a, const Node *b) {
+    return a->zindex() < b->zindex();
+}
+
 Node::~Node() {
     if(modifier_) delete modifier_;
-    std::list<Node*>::iterator it;
+    NodeSet::iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
         delete *it;
 }
@@ -20,7 +24,8 @@ void Node::Render() {
 
     if(drawable_) drawable_->Draw();
 
-    std::list<Node*>::iterator it;
+    if(must_sort_) SortChildren();
+    NodeSet::iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
         (*it)->Render();
     
@@ -36,15 +41,32 @@ void Node::RenderLight() {
     Vector2D off;
     if(light_) light_->Render(off);
 
-    std::list<Node*>::iterator it;
+    NodeSet::iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
         (*it)->RenderLight();
     
     if(modifier_) VIDEO_MANAGER()->PopModifier();
 }
 
-void Node::SortChildren() { 
-    childs_.sort(Node::CompareByZIndex);
+void Node::set_zindex(const float zindex) {
+    //Node* parent = parent_;
+    //if(parent) parent->RemoveChild(this);
+    zindex_ = zindex;
+    if(parent_) parent_->must_sort_ = true;
+}
+
+void Node::RemoveChild(Node *child) {
+    NodeSet::iterator it = childs_.begin();
+    while(it != childs_.end() && *it != child) ++it;
+    if(it != childs_.end())
+        childs_.erase(it);
+    child->parent_ = NULL;
+}
+
+void Node::SortChildren() {
+    std::sort(childs_.begin(), childs_.end(), Node::CompareByZIndex);
+    must_sort_ = false;
+    //childs_.sort(Node::CompareByZIndex);
 }
     
 }  // namespace ugdk

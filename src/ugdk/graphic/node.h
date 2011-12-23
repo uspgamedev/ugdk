@@ -1,7 +1,7 @@
 #ifndef UGDK_GRAPHIC_NODE_H_
 #define UGDK_GRAPHIC_NODE_H_
 
-#include <list>
+#include <vector>
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/light.h>
@@ -10,11 +10,16 @@ namespace ugdk {
 
 class Node {
   public:
+    //typedef std::set<Node*, bool(*)(const Node*, const Node*)> NodeSet;
+    typedef std::vector<Node*> NodeSet;
+
     Node(Drawable* drawable = NULL, Modifier* modifier = new Modifier) 
         :   modifier_(modifier), 
             drawable_(drawable),
             light_(NULL),
-            visible_(true) {}
+            visible_(true),
+            //childs_(CompareByZIndex),
+            parent_(NULL) {}
 
     ~Node();
 
@@ -29,14 +34,19 @@ class Node {
     void set_visible(const bool visible) { visible_ = visible; }
     bool visible() const { return visible_; }
 
-    void set_zindex(const float zindex) { zindex_ = zindex; }
+    void set_zindex(const float zindex);
     float zindex() const { return zindex_; }
 
-    void AddChild(Node *child) { childs_.push_back(child); }
-    void RemoveChild(Node *child) { childs_.remove(child); }
+    void AddChild(Node *child) {
+        printf("Inserting node %d into set of %d. Previously %d elements.", (int)child, (int)this, childs_.size());
+        childs_.push_back(child);
+        printf(" Size after: %d\n", childs_.size());
+        child->parent_ = this;
+    }
+    void RemoveChild(Node *child);
 
 
-    static bool CompareByZIndex(Node *a, Node *b) { return a->zindex() < b->zindex(); }
+    static bool CompareByZIndex(const Node *a, const Node *b);
     void SortChildren();
 
   private:
@@ -46,7 +56,9 @@ class Node {
     bool visible_;
     float zindex_;
 
-    std::list<Node*> childs_;
+    NodeSet childs_;
+    Node* parent_;
+    bool must_sort_;
 };
 
 }  // namespace ugdk
