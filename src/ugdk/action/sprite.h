@@ -1,132 +1,24 @@
 #ifndef HORUSEYE_FRAMEWORK_SPRITE_H_
 #define HORUSEYE_FRAMEWORK_SPRITE_H_
 
-#include <algorithm>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic/drawable.h>
-#include <ugdk/graphic/spritesheet.h>
-#include <ugdk/graphic/image.h>
-#include <ugdk/graphic/modifier.h>
-#include <ugdk/graphic/node.h>
-#include <ugdk/base/types.h>
+
 #include <ugdk/action/animation.h>
 
 
 namespace ugdk {
 
-class Drawable;
-class Light;
 class AnimationSet;
+class Spritesheet;
 
 class Sprite : public Drawable {
   public:
-    Sprite();
-
-    /// This modifier will be deleted together with the Sprite.
-    Sprite(Modifier *modifier);
-
+    Sprite(Spritesheet *spritesheet, AnimationSet *set = NULL);
     virtual ~Sprite();
 
     void Draw();
-    void set_node(Node* node) { node_ = node; node_->modifier()->set_offset(tmppos); }
-
-    /// Initializes the Sprite with a drawable to render and an AnimationSet.
-    /** If no AnimationSet is defined, the first frame will be used.*/
-    virtual void Initialize(Drawable *image, AnimationSet *set = NULL, bool delete_image = false);
-    virtual void Initialize(Spritesheet *image, AnimationSet *set = NULL);
-
-    /// Acessors e mutators
-    Vector2D position() const { return node_ ? node_->modifier()->offset() : tmppos; }
-    void set_position(const Vector2D& position) { if(node_) node_->modifier()->set_offset(position); else tmppos = position; }
-    void set_position(float x, float y) { if(node_) node_->modifier()->set_offset(Vector2D(x, y)); else tmppos = Vector2D(x, y); }
-
-    /// Returns if the sprite is visible or not.
-    /**Visibility controls wether the Sprite is rendered or not. This function returns
-       a boolean value if the sprite is visible or not.
-    *  @return boolean value visible
-    */
-    bool visible() const { return visible_; }
-
-    /// Set if the sprite is visible or not.
-    /** This function recive a boolean value and set if the sprite is visible or not.
-    *  @param visible is a boolean value
-    *  @see visible()
-    */
-    void set_visible(bool visible) { visible_ = visible; }
     
-    /// Return the hotspot of the sprite
-    /** The hotspot controls the offset from the image origin to the sprite position.
-    *  @return Vector2D of the hotspot
-    */
-    Vector2D hotspot() const { return spritesheet_ ? spritesheet_->hotspot() : hotspot_; }
-    /// Set the hotspot of the sprite
-    /** Given a hotspot Vector2D, this function sets the hotspot of the sprite
-    *  @param hotspost is a Vector2D 
-    *  @see hotspot()
-    */
-    void set_hotspot(const Vector2D& hotspot) { if(spritesheet_) spritesheet_->set_hotspot(hotspot); else hotspot_ = hotspot; }
-    /// Set the hotspot of the sprite
-    /** Given two float (x,y), this function sets the hotspot of the sprite
-    *  @param x is the x coordinate of the hotspot
-    *  @param y is the y coordinate of the hotspot
-    *  @see hotspot()
-    */
-    void set_hotspot(float x, float y) { if(spritesheet_) spritesheet_->set_hotspot(Vector2D(x, y)); else hotspot_ = Vector2D(x, y); }
-
-    ///  Return the zindex of the sprite
-    /** The Sprites are rendered in order, with non-decreasing Z-Index.
-    *  @return zindex
-    */
-    float zindex() const { return zindex_; }
-    /// Set the zindex of the sprite
-    /** @param z is a float
-    *  @see zindex()
-    */
-    void set_zindex(float z) { zindex_= z; }
-    static bool CompareByZIndex(Sprite *a, Sprite *b);
-
-        /// Return the modifier color
-        /** @return Color object
-        */ 
-	Color color() { return modifier_->color(); }
-        /// Set the modifier color
-        /** @param color is a Color object
-        */ 
-	void set_color(Color color) { modifier_->set_color(color); }
-	
-        /// Return alpha
-        /** @return alpha is a float*/
-	float alpha() { return modifier_->alpha(); }
-        /// Set alpha
-        /** @param alpha is a float*/
-	void set_alpha(float alpha) { modifier_->set_alpha(alpha); }
-
-        /// Return the Vector2D size of the sprite
-        /** @return size_ is a const*/
-	const Vector2D size() { return size_; }
-        /// Set the size of the Vector2D
-        /** @param size is a Vector2D size*/
-	void set_size(const Vector2D& size) { size_ = size; }
-	
-    /// Return a pointer to the light object an animation
-    /** The light determines how much this Sprite illuminates the ambient. 
-        By default, a Sprite has no light.
-    *  @return light pointer
-    */
-	Light* light() { return light_; }
-    
-    /// Set a new light to the animation
-    /** Given a light pointer, this function switches the current light of the animation 
-        to the new one given.
-    *  @param pointer to a light object
-    */
-	void set_light(Light* light) { light_ = light; }
-
-    /// Return the mirror of the sprite
-    /** The mirror ammount is combined with whatever mirror the image or the animation has. */
-    Mirror mirror() const { return modifier_->mirror(); }
-    void set_mirror(Mirror mirror) { modifier_->set_mirror(mirror); }
-
     /// Change the current animation to a new animation from the previously selected AnimationSet.
     /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/
     void SelectAnimation(std::string animation_name) {
@@ -168,37 +60,22 @@ class Sprite : public Drawable {
     /** @return an integer that is the animation frame number
     */
     int GetAnimationFrameNumber() const { return animation_manager_->n_frames(); }
+    
     /// Set the default frame
-    /** @param frama is a integer
+    /** @param frame is a integer
     */
     void SetDefaultFrame(int frame) {
         animation_manager_->set_default_frame(frame);
     }
 
-    virtual void Render();
-
-    /// Illuminate the ambient.
-    /**All lights are rendered before any actual image.*/
-	void RenderLight(Vector2D &offset);
-
     /// Update the Sprite based on the time variation.
     /** One of the two main functions of the UGDK Engine. Most of the game logic 
         resides within the Update of child classes.*/
     virtual void Update(float delta_t);
-
-  protected:
-    Light *light_;
-    float zindex_;
-
+    
   private:
-    Vector2D tmppos, hotspot_, size_;
-    Drawable *image_;
     Spritesheet *spritesheet_;
     AnimationManager *animation_manager_;
-    Modifier *modifier_;
-    bool visible_, delete_image_;
-    Node* node_;
-
 };
 
 }

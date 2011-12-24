@@ -27,6 +27,8 @@ class Node {
     const Modifier* modifier() const { return modifier_; }
     Modifier* modifier() { return modifier_; }
 
+    void set_drawable(Drawable* drawable) { drawable_ = drawable; }
+
     void set_light(Light* light) { light_ = light; }
     Light* light() { return light_; }
     const Light* light() const { return light_; }
