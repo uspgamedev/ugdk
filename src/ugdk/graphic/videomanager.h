@@ -20,7 +20,7 @@ namespace ugdk {
 class Image;
 class FlexibleSpritesheet;
 class Scene;
-class Layer;
+class Node;
 class Modifier;
 
 class VideoManager {
@@ -33,7 +33,7 @@ class VideoManager {
     bool Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon);
     bool ChangeResolution(const Vector2D& size, bool fullscreen);
     bool Release();
-    void Render(std::list<Scene*>, std::list<Layer*>);
+    void Render(std::list<Scene*>, std::list<Node*>);
 
     Image* LoadImageFile(const string& filepath);
     Image* LoadImage(const string& filepath) {

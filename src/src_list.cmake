@@ -4,8 +4,6 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/action/animationset.cc
     ${SRC_DIR}/ugdk/action/animationset.h
     ${SRC_DIR}/ugdk/action/entity.h
-    ${SRC_DIR}/ugdk/action/layer.cc
-    ${SRC_DIR}/ugdk/action/layer.h
     ${SRC_DIR}/ugdk/action/observer.h
     ${SRC_DIR}/ugdk/action/scene.cc
     ${SRC_DIR}/ugdk/action/scene.h

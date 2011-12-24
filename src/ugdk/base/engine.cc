@@ -116,9 +116,6 @@ void Engine::Run() {
 
         if (!quit_) {
             CurrentScene()->Update(delta_t);
-            for (std::list<Layer*>::iterator it = interface_list_.begin(); 
-                it != interface_list_.end(); ++it)
-                (*it)->Update(delta_t);
 
             // Sends the scene list to the videomanager, who handles everything 
             // needed to draw
@@ -170,11 +167,11 @@ void Engine::PopScene() {
     scene_list_.pop_back();
 }
 
-void Engine::PushInterface(Layer* layer) {
-    interface_list_.push_back(layer);
+void Engine::PushInterface(Node* node) {
+    interface_list_.push_back(node);
 }
-void Engine::RemoveInterface(Layer *layer) {
-    interface_list_.remove(layer);
+void Engine::RemoveInterface(Node* node) {
+    interface_list_.remove(node);
 }
 
 }

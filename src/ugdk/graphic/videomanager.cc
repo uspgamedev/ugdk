@@ -1,13 +1,15 @@
 #include <SDL/SDL_opengl.h>
 #include <cmath>
+
 #include <ugdk/graphic/videomanager.h>
+
 #include <ugdk/graphic/flexiblespritesheet.h>
+#include <ugdk/graphic/node.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/image.h>
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/action/scene.h>
-#include <ugdk/action/layer.h>
 
 // VSync
 //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
@@ -185,7 +187,7 @@ void VideoManager::BlendLightIntoBuffer() {
 }
 
 // Desenha backbuffer na tela
-void VideoManager::Render(std::list<Scene*> scene_list, std::list<Layer*> interface_list) {
+void VideoManager::Render(std::list<Scene*> scene_list, std::list<Node*> interface_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     MergeLights(scene_list);
@@ -203,7 +205,7 @@ void VideoManager::Render(std::list<Scene*> scene_list, std::list<Layer*> interf
 
     // Draw all interface layers, with the usual RGBA blend.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    for (std::list<Layer*>::iterator it = interface_list.begin(); it != interface_list.end(); ++it)
+    for (std::list<Node*>::iterator it = interface_list.begin(); it != interface_list.end(); ++it)
         (*it)->Render();
 
 

@@ -11,9 +11,13 @@ bool Node::CompareByZIndex(const Node *a, const Node *b) {
 
 Node::~Node() {
     if(modifier_) delete modifier_;
+    if(parent_) parent_->RemoveChild(this);
+
     NodeSet::iterator it;
-    for(it = childs_.begin(); it != childs_.end(); ++it)
+    for(it = childs_.begin(); it != childs_.end(); ++it) {
+        (*it)->parent_ = NULL;
         delete *it;
+    }
 }
 
 void Node::Render() {
