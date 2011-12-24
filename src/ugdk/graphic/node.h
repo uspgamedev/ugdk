@@ -28,6 +28,8 @@ class Node {
     Modifier* modifier() { return modifier_; }
 
     void set_light(Light* light) { light_ = light; }
+    Light* light() { return light_; }
+    const Light* light() const { return light_; }
 
     void set_visible(const bool visible) { visible_ = visible; }
     bool visible() const { return visible_; }
