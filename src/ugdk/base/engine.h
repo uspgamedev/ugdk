@@ -6,6 +6,7 @@
 #include <string>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/action/scene.h>
+#include <ugdk/action/layer.h>
 #include <ugdk/util/gdd/cachedloader.h>
 #include <ugdk/util/animationprotocol.h>
 

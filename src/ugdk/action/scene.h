@@ -1,13 +1,13 @@
-#ifndef HORUSEYE_FRAMEWORK_SCENE_H_
-#define HORUSEYE_FRAMEWORK_SCENE_H_
+#ifndef UGDK_ACTION_SCENE_H_
+#define UGDK_ACTION_SCENE_H_
 
-#include <ugdk/action/layer.h>
-#include <ugdk/graphic/node.h>
 #include <list>
 
 namespace ugdk {
 
 class Music;
+class Node;
+class Entity;
 
 /**
    @class Scene
@@ -19,10 +19,7 @@ class Music;
 */
 class Scene {
   public:
-    Scene() : finished_(false), background_music_(NULL), stops_previous_music_(true), root_node_(new Node) {}
-  /**
-     Note: Destroys all layers in the scene.
-  */
+    Scene();
     virtual ~Scene();
 
     /// Method called when this Scene arrives on the top of the Scene stack.
@@ -31,10 +28,10 @@ class Scene {
     /// Method called when this Scene leaves the top of the Scene stack.
     virtual void DeFocus() {}
 
-    /// Adds a Layer to the scene on top of current layers.
-    void AddLayer(Layer *layer) { layers_.push_back(layer); };
-    /// Removes the specified Layer from the scene.
-    void RemoveLayer(Layer *layer) { layers_.remove(layer); };
+    /// Adds an Entity to the scene.
+    void AddEntity(Entity *entity) { entities_.push_back(entity); };
+    /// Removes the specified Entity from the scene.
+    void RemoveEntity(Entity *entity) { entities_.remove(entity); };
 
     /// Finishes the scene.
     void Finish() { End(); finished_ = true; }
@@ -65,8 +62,8 @@ class Scene {
     Music* background_music() const { return background_music_; }
     void set_background_music(Music* music) { background_music_ = music; }
     
-    bool visible() const { return root_node_->visible(); }
-    void set_visible(bool set) { root_node_->set_visible(set); }
+    bool visible() const;
+    void set_visible(bool set);
     /**@}
      */
 
@@ -76,12 +73,8 @@ class Scene {
     /** Note: do not release any resources in this method. */
     virtual void End();
 
-    /// Layer list
-    ::std::list<Layer*> layers_;
-
     /// Tells whether scene is finished or not.
     bool finished_;
-    bool visible_;
 
     /// The background music when this scene is on top.
     Music* background_music_;
@@ -91,10 +84,12 @@ class Scene {
     bool stops_previous_music_;
 
     Node* root_node_;
+
+    std::list<Entity*> entities_;
    
   friend class Engine;
 }; // class Scene.
 
 }
 
-#endif /* HORUSEYE_FRAMEWORK_SCENE_H_ */
+#endif /* UGDK_ACTION_SCENE_H_ */
