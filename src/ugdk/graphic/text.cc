@@ -54,22 +54,19 @@ int Text::height() {
 	return 0;
 }
 
-bool Text::DrawTo(const Vector2D& position, int frame_number, uint8 mirror, 
-				  const Color& color, float alpha, const Vector2D& draw_size) {
+//bool Text::DrawTo(const Vector2D& position, int frame_number, uint8 mirror,  const Color& color, float alpha, const Vector2D& draw_size) {
+void Text::Draw() {
 	int fancy_line_number = 0, current_height;
 	glPushMatrix();
 	Font::IdentType ident = font_->ident();
 
-    Vector2D target = position;
-    glTranslatef( target.x, target.y, 0 );
-
 	glListBase(font_->id());
 	glColor3ub(255, 255, 255);
-	Frame bounds = VIDEO_MANAGER()->virtual_bounds();
+	/*Frame bounds = VIDEO_MANAGER()->virtual_bounds();
 	if (position.x > bounds.right() || position.y > bounds.bottom() ||
         position.x + width_ < bounds.left() || position.y + height_ < bounds.top() ) {
         return true;
-    }
+    }*/
 	if (font_->IsFancy())
 		fancy_line_number = 2;
 	for(; fancy_line_number >= 0; fancy_line_number--) {
@@ -83,9 +80,9 @@ bool Text::DrawTo(const Vector2D& position, int frame_number, uint8 mirror,
 		else if (fancy_line_number == 0)
 			glColor3ub(255, 255, 255);
 		for(size_t i = 0; i < message_.size(); ++i) {
-			if(message_[i].length() > 0 &&
+			if(message_[i].length() > 0 /*&&
 				(position.y + current_height < bounds.bottom() && 
-				position.y + current_height + line_height_ > bounds.top())) {
+				position.y + current_height + line_height_ > bounds.top())*/) {
 				glPushMatrix();
 				switch(ident) {
 					case Font::CENTER:
@@ -110,7 +107,6 @@ bool Text::DrawTo(const Vector2D& position, int frame_number, uint8 mirror,
 		glPopMatrix();
 	}
 	glPopMatrix();
-	return true;
 }
 
 }  // namespace framework

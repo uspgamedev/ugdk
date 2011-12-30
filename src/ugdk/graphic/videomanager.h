@@ -33,7 +33,7 @@ class VideoManager {
     bool Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon);
     bool ChangeResolution(const Vector2D& size, bool fullscreen);
     bool Release();
-    void Render(std::list<Scene*>, std::list<Node*>);
+    void Render(std::list<Scene*>&, std::list<Node*>&);
 
     Image* LoadImageFile(const string& filepath);
     Image* LoadImage(const string& filepath) {
@@ -50,8 +50,6 @@ class VideoManager {
     Image* light_image() const { return light_image_; }
     Vector2D light_size() const { return light_size_; }
     Frame virtual_bounds() const { return virtual_bounds_; }
-
-    void TranslateTo (Vector2D& offset);
 
     void PushAndApplyModifier(const Modifier*);
     void PushAndApplyModifier(const Modifier& apply) { PushAndApplyModifier(&apply); }
@@ -75,7 +73,7 @@ class VideoManager {
     void InitializeLight();
 
 
-    void MergeLights(std::list<Scene*> scene_list);
+    void MergeLights(std::list<Scene*>& scene_list);
     void BlendLightIntoBuffer();
 
     void ClearModiferStack();

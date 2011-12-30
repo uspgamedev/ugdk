@@ -115,16 +115,16 @@ bool VideoManager::Release() {
     return true;
 }
 
-void VideoManager::TranslateTo(Vector2D& offset) {
+/*void VideoManager::TranslateTo(Vector2D& offset) {
     glLoadIdentity();
     // Smaller values causes floating point errors and don't increase the image quality.
     glTranslatef(floor(offset.x), floor(offset.y), 0);
     this->virtual_bounds_ = Frame(-offset.x, -offset.y,
                                   -offset.x+video_size_.x,
                                   -offset.y+video_size_.y);
-}
+}*/
 
-void VideoManager::MergeLights(std::list<Scene*> scene_list) {
+void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
     // Lights are simply added together.
     glBlendFunc(GL_ONE, GL_ONE);
 
@@ -187,7 +187,7 @@ void VideoManager::BlendLightIntoBuffer() {
 }
 
 // Desenha backbuffer na tela
-void VideoManager::Render(std::list<Scene*> scene_list, std::list<Node*> interface_list) {
+void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& interface_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     MergeLights(scene_list);
