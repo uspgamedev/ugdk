@@ -35,14 +35,6 @@ void Scene::Update(float delta_t) {
         (*it)->Update(delta_t);
 }
 
-void Scene::Render() {
-    root_node()->Render();
-}
-
-void Scene::RenderLight() {
-    root_node()->RenderLight();
-}
-
 bool Scene::visible() const { return root_node_->visible(); }
 void Scene::set_visible(bool set) { root_node_->set_visible(set); }
 

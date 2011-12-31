@@ -27,4 +27,8 @@ void Sprite::Update(float delta_t) {
     animation_manager_->Update(delta_t);
 }
 
+Vector2D Sprite::render_size() const {
+    return Vector2D(); // TODO: requires some info from the spritesheet
+}
+
 }

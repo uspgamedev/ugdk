@@ -2,11 +2,12 @@
 #define UGDK_ACTION_SCENE_H_
 
 #include <list>
+#include <ugdk/audio.h>
+#include <ugdk/graphic.h>
+#include <ugdk/base/types.h>
 
 namespace ugdk {
 
-class Music;
-class Node;
 class Entity;
 
 /**
@@ -41,12 +42,6 @@ class Scene {
        @param delta_t Time in seconds since last update
     */
     virtual void Update(float delta_t);
-
-    /// Redraws the scene's graphics.
-    void Render();
-
-    /// Redraws the lightsources.
-    void RenderLight();
 
     /// Whether this scene stops the previous music even if wont play any music.
     void StopsPreviousMusic(bool set) { stops_previous_music_ = set; }
