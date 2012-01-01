@@ -160,11 +160,11 @@ void Engine::PushScene(Scene* scene) {
 }
 
 Scene* Engine::CurrentScene() const {
-    return scene_list_.back();
+    return scene_list_.empty() ? NULL : scene_list_.back();
 }
 
 void Engine::PopScene() {
-    scene_list_.pop_back();
+    if(!scene_list_.empty()) scene_list_.pop_back();
 }
 
 void Engine::PushInterface(Node* node) {
