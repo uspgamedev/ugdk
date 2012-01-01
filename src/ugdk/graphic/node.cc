@@ -24,7 +24,8 @@ void Node::Render() {
     if(!visible_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
-    if(modifier_) VIDEO_MANAGER()->PushAndApplyModifier(modifier_);
+    Modifier* modifier = modifier_;
+    if(modifier) VIDEO_MANAGER()->PushAndApplyModifier(modifier);
 
     if(drawable_) drawable_->Draw();
 
@@ -33,14 +34,15 @@ void Node::Render() {
     for(it = childs_.begin(); it != childs_.end(); ++it)
         (*it)->Render();
     
-    if(modifier_) VIDEO_MANAGER()->PopModifier();
+    if(modifier) VIDEO_MANAGER()->PopModifier();
 }
 
 void Node::RenderLight() {
     if(!visible_) return;
     if(childs_.empty() && !light_) return; // optimization!
 
-    if(modifier_) VIDEO_MANAGER()->PushAndApplyModifier(modifier_);
+    Modifier* modifier = modifier_;
+    if(modifier) VIDEO_MANAGER()->PushAndApplyModifier(modifier);
 
     Vector2D off;
     if(light_) light_->Render(off);
@@ -49,7 +51,7 @@ void Node::RenderLight() {
     for(it = childs_.begin(); it != childs_.end(); ++it)
         (*it)->RenderLight();
     
-    if(modifier_) VIDEO_MANAGER()->PopModifier();
+    if(modifier) VIDEO_MANAGER()->PopModifier();
 }
 
 void Node::set_zindex(const float zindex) {

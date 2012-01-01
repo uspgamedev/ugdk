@@ -12,7 +12,7 @@ class Node {
   public:
     typedef std::vector<Node*> NodeSet;
 
-    Node(Drawable* drawable = NULL, Modifier* modifier = new Modifier) 
+    Node(Drawable* drawable = NULL, Modifier* modifier = NULL) 
         :   modifier_(modifier), 
             drawable_(drawable),
             light_(NULL),
@@ -25,7 +25,7 @@ class Node {
     void RenderLight();
 
     const Modifier* modifier() const { return modifier_; }
-    Modifier* modifier() { return modifier_; }
+    Modifier* modifier() { return (modifier_ != NULL) ? modifier_ : (modifier_ = new Modifier); }
 
     void set_drawable(Drawable* drawable) { drawable_ = drawable; }
 
