@@ -5,7 +5,7 @@
 #include <cmath>
 
 #define TWO_PI 6.28318530f
-#define TO_UNIT_INTERVAL(FLOAT) ( std::min(std::max(FLOAT, 0.0f), 1.0f) )
+#define TO_UNIT_INTERVAL(FLOAT) ( std::min(std::max((FLOAT), 0.0f), 1.0f) )
 
 namespace ugdk {
 
@@ -56,7 +56,7 @@ void Modifier::set_mirror(const Mirror mirror) {
     else mirror_ = MIRROR_NONE;
 }
 
-void Modifier::set_color(const Color color) {
+void Modifier::set_color(const Color& color) {
     color_.r = TO_UNIT_INTERVAL(color.r);
     color_.g = TO_UNIT_INTERVAL(color.g);
     color_.b = TO_UNIT_INTERVAL(color.b);
@@ -71,7 +71,7 @@ void Modifier::set_alpha(const float alpha) {
 }
 
 
-void Modifier::ComposeMirror(const Mirror mirror) {
+void Modifier::ComposeMirror(const Mirror& mirror) {
     if( mirror == MIRROR_HFLIP || mirror == MIRROR_VFLIP )
         mirror_ ^= mirror;
 }

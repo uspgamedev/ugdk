@@ -14,7 +14,7 @@
 namespace ugdk {
 
 FlexibleSpritesheet::FlexibleSpritesheet() : 
-    texture_(0), texture_width_(10), texture_height_(10), frame_size_(1.0f, 1.0f) {}
+    texture_(0), texture_width_(10), texture_height_(10), frame_size_(1.0f, 1.0f), filename_("<none>") {}
 
 FlexibleSpritesheet::~FlexibleSpritesheet() {
 	if(texture_ != 0) {
@@ -197,12 +197,10 @@ bool FlexibleSpritesheet::LoadFromFile(const std::string& filepath) {
         result = false;
     } else {
         
-        printf("Hey my texture_ is %d, ", texture_);
         result = ConvertSurfaceToTexture(data, &texture_, &texture_width_, &texture_height_);
-        printf("Now it's %d!\n", texture_);
         SDL_FreeSurface(data);
-
         frame_size_ = Vector2D(1.0f, 1.0f);
+        filename_ = filepath;
     }
     return result;
 }

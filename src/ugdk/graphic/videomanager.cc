@@ -134,7 +134,7 @@ void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
 
     for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-           (*it)->RenderLight();
+           (*it)->root_node()->RenderLight();
 
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_texture_);
@@ -198,7 +198,7 @@ void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& inter
     // Draw all the sprites from all scenes.
     for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-           (*it)->Render();
+            (*it)->root_node()->Render();
 
     // Using the light texture, merge it into the screen.
     //BlendLightIntoBuffer();

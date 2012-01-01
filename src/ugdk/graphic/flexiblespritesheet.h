@@ -47,6 +47,8 @@ class FlexibleSpritesheet : public Spritesheet {
     uint32 texture_;
     int texture_width_, texture_height_;
     Vector2D frame_size_, hotspot_;
+
+    std::string filename_;
 };
 
 }  // namespace framework

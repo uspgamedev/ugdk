@@ -1,5 +1,5 @@
-#ifndef HORUSEYE_FRAMEWORK_MODIFIER_H_
-#define HORUSEYE_FRAMEWORK_MODIFIER_H_
+#ifndef UGDK_GRAPHIC_MODIFIER_H_
+#define UGDK_GRAPHIC_MODIFIER_H_
 
 #include <vector>
 #include <ugdk/math/vector2D.h>
@@ -11,7 +11,9 @@ class Modifier {
 
   public:
 
-     ///Creates a new image Modifier object with the specified values. 
+    Modifier() : offset_(), scale_(1.0f, 1.0f), rotation_(0.0f), mirror_(MIRROR_NONE), color_(WHITE), alpha_(1.0f) {}
+
+    ///Creates a new image Modifier object with the specified values. 
     /**
      * @param offset The offset of the image.
      * @param size The size modifiers for the image. X and Y values can be set
@@ -23,8 +25,8 @@ class Modifier {
      * @param color The color filter.
      * @param alpha The alpha value for the image.
      */
-    Modifier(Vector2D offset = Vector2D(), Vector2D scale = Vector2D(1.0f,1.0f),
-             float rotation = 0.0f, Mirror mirror = MIRROR_NONE, Color color = WHITE, float alpha = 1.0f) :
+    Modifier(const Vector2D offset, const Vector2D scale = Vector2D(1.0f,1.0f),
+             float rotation = 0.0f, Mirror mirror = MIRROR_NONE, const Color color = WHITE, float alpha = 1.0f) :
         offset_(offset), scale_(scale), rotation_(rotation), mirror_(mirror), color_(color), alpha_(alpha) {}
 
     /// Creates a copy of another modifier.
@@ -40,12 +42,12 @@ class Modifier {
     /**@name Getters and Setters
      *@{
      */
-    Vector2D offset()   const { return   offset_; }
-    Vector2D scale()    const { return    scale_; }
-    float    rotation() const { return rotation_; }
-    Mirror   mirror()   const { return   mirror_; }
-    Color    color()    const { return    color_; }
-    float    alpha()    const { return    alpha_; }
+    const Vector2D& offset()   const { return   offset_; }
+    const Vector2D& scale()    const { return    scale_; }
+    float           rotation() const { return rotation_; }
+    const Mirror&   mirror()   const { return   mirror_; }
+    const Color&    color()    const { return    color_; }
+    float           alpha()    const { return    alpha_; }
 
     // Setters.
     void set_offset(const Vector2D& offset) { offset_ = offset; }
@@ -55,7 +57,7 @@ class Modifier {
     /// Assigns MIRROR_NONE in case of an invalid argument.
     void set_mirror(const Mirror mirror);
     /// Truncates each component to [0,1] and sets it to the Modifier.
-    void set_color(const Color color);
+    void set_color(const Color& color);
     /// Truncates alpha to [0,1] and sets it to the Modifier.
     void set_alpha(const float alpha);
     /**@}
@@ -69,7 +71,7 @@ class Modifier {
     /// Adjusts rotation to use the [0,2PI] space and composes on the Modifier.
     void ComposeRotation(const float rotation);
     /// Does nothing if mirror == MIRROR_NONE or if mirror is invalid.
-    void ComposeMirror(const Mirror mirror);
+    void ComposeMirror(const Mirror& mirror);
     /// Truncates each component to [0,1] and composes on the Modifier.
     void ComposeColor(const Color& color);
     /// Truncates alpha to [0,1] and composes on the Modifier.
@@ -108,4 +110,4 @@ class Modifier {
 
 }
 
-#endif /* HORUSEYE_FRAMEWORK_MODIFIER_H_ */
+#endif /* UGDK_GRAPHIC_MODIFIER_H_ */
