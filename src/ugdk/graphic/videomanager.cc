@@ -3,13 +3,13 @@
 
 #include <ugdk/graphic/videomanager.h>
 
-#include <ugdk/graphic/flexiblespritesheet.h>
-#include <ugdk/graphic/node.h>
-#include <ugdk/util/pathmanager.h>
 #include <ugdk/base/engine.h>
-#include <ugdk/graphic/image.h>
-#include <ugdk/graphic/modifier.h>
 #include <ugdk/action/scene.h>
+#include <ugdk/graphic/node.h>
+#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/drawable/flexiblespritesheet.h>
+#include <ugdk/graphic/drawable/image.h>
+#include <ugdk/util/pathmanager.h>
 
 // VSync
 //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
@@ -67,14 +67,9 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
 
     if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == NULL)
         return false;
-
-    // VSync
-    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
-#ifdef WIN32
-    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
-    //if(wglSwapIntervalEXT != 0) wglSwapIntervalEXT(1); // sets VSync to "ON".
-#endif
-
+      
+    SetVSync(vsync_);
+        
     //Set projection
     glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
     glMatrixMode( GL_PROJECTION );
@@ -86,6 +81,12 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
     glMatrixMode( GL_MODELVIEW );
     ClearModiferStack();
     glLoadIdentity();
+
+    // This hint can improve the speed of texturing when perspective- correct texture coordinate interpolation isn't needed, such as when using a glOrtho() projection.
+    // From http://www.mesa3d.org/brianp/sig97/perfopt.htm
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+
+    glEnable(GL_BLEND);
 
     //If there was any errors
     if( glGetError() != GL_NO_ERROR )
@@ -115,14 +116,14 @@ bool VideoManager::Release() {
     return true;
 }
 
-/*void VideoManager::TranslateTo(Vector2D& offset) {
-    glLoadIdentity();
-    // Smaller values causes floating point errors and don't increase the image quality.
-    glTranslatef(floor(offset.x), floor(offset.y), 0);
-    this->virtual_bounds_ = Frame(-offset.x, -offset.y,
-                                  -offset.x+video_size_.x,
-                                  -offset.y+video_size_.y);
-}*/
+void VideoManager::SetVSync(const bool active) {
+    vsync_ = active;
+    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
+#ifdef WIN32
+    if(wglSwapIntervalEXT == 0) wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
+    if(wglSwapIntervalEXT != 0) wglSwapIntervalEXT(vsync_ ? 1 : 0); // sets VSync to "ON".
+#endif
+}
 
 void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
     // Lights are simply added together.
@@ -148,7 +149,6 @@ void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
 }
 
 static void DrawLightRect() {
-    glEnable(GL_BLEND);
     glBegin( GL_QUADS ); //Start quad
         //Draw square
         glTexCoord2f(0.0f, 1.0f);
@@ -163,7 +163,6 @@ static void DrawLightRect() {
         glTexCoord2f(0.0f, 0.0f);
         glVertex2f(  0.0f, 1.0f );
     glEnd();
-    glDisable(GL_BLEND);
 }
 
 void VideoManager::BlendLightIntoBuffer() {
@@ -190,7 +189,8 @@ void VideoManager::BlendLightIntoBuffer() {
 void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& interface_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
-    MergeLights(scene_list);
+    if(light_system_)
+        MergeLights(scene_list);
 
     // Usual blend function for drawing RGBA images.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -201,7 +201,8 @@ void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& inter
             (*it)->root_node()->Render();
 
     // Using the light texture, merge it into the screen.
-    //BlendLightIntoBuffer();
+    if(light_system_)
+        BlendLightIntoBuffer();
 
     // Draw all interface layers, with the usual RGBA blend.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

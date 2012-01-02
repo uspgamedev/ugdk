@@ -27,12 +27,16 @@ class VideoManager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : light_image_(NULL), fullscreen_(false), light_texture_(0) {}
+    VideoManager() : light_image_(NULL), fullscreen_(false), vsync_(false), light_system_(true), light_texture_(0) {}
     ~VideoManager() {}
 
     bool Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon);
     bool ChangeResolution(const Vector2D& size, bool fullscreen);
     bool Release();
+    
+    void SetVSync(const bool active);
+    void SetLightSystem(const bool active) { light_system_ = active; }
+    
     void Render(std::list<Scene*>&, std::list<Node*>&);
 
     Image* LoadImageFile(const string& filepath);
@@ -63,6 +67,8 @@ class VideoManager {
     Vector2D video_size_, light_size_;
     Frame virtual_bounds_;
     bool fullscreen_;
+    bool vsync_;
+    bool light_system_;
     string title_;
     map<string, Image*> image_memory_;
     map<std::string, FlexibleSpritesheet*> spritesheet_memory_;

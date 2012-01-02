@@ -2,7 +2,7 @@
 #include <SDL/SDL_ttf.h>
 #include <ugdk/base/types.h>
 #include <ugdk/graphic/font.h>
-#include <ugdk/graphic/image.h>
+#include <ugdk/graphic/drawable/image.h>
 
 #define MAX_UNICODE_CODE 18431
 
@@ -18,7 +18,7 @@ Font::Font(Image ** letters, int fontsize, char ident, bool fancy)
 			continue;
 		glNewList(id_ + i, GL_COMPILE);
 			glPushMatrix();
-			Vector2D lettersize = letters_[i]->render_size() * (size_ * 0.01f);
+			Vector2D lettersize = letters_[i]->size() * (size_ * 0.01f);
 			glScalef(lettersize.x, lettersize.y, 1.0f);
 			letters_[i]->RawDraw(0);
 			glPopMatrix();
@@ -52,7 +52,7 @@ Vector2D Font::GetLetterSize(unsigned char letter) {
 
 Vector2D Font::GetLetterSize(wchar_t letter) {
 	if(letters_[letter] == NULL) return Vector2D(0,0);
-	return letters_[letter]->render_size() * (size_ * 0.01f);
+	return letters_[letter]->size() * (size_ * 0.01f);
 }
 
 }  // namespace framework

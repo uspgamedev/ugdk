@@ -17,6 +17,7 @@ class Node {
             drawable_(drawable),
             light_(NULL),
             visible_(true),
+            zindex_(0.0f),
             parent_(NULL) {}
 
     ~Node();

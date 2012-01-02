@@ -8,9 +8,9 @@
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/text.h>
+#include <ugdk/graphic/drawable/text.h>
 #include <ugdk/graphic/font.h>
-#include <ugdk/graphic/image.h>
+#include <ugdk/graphic/drawable/image.h>
 
 using namespace std;
 

@@ -1,26 +1,33 @@
 #include <iostream>
-#include <cstdio>
 #include <cstring>
 #include <cmath>
 #include <algorithm>
+
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_opengl.h>
-#include <ugdk/math/frame.h>
-#include <ugdk/graphic/videomanager.h>
-#include <ugdk/base/engine.h>
 #include <ugdk/base/types.h>
-#include <ugdk/graphic/flexiblespritesheet.h>
+#include <ugdk/base/engine.h>
+#include <ugdk/graphic/drawable/flexiblespritesheet.h>
+#include <ugdk/graphic/texture.h>
+#include <ugdk/graphic/videomanager.h>
 
 namespace ugdk {
 
 FlexibleSpritesheet::FlexibleSpritesheet() : 
-    texture_(0), texture_width_(10), texture_height_(10), frame_size_(1.0f, 1.0f), filename_("<none>") {}
+    texture_(NULL), frame_size_(1.0f, 1.0f), filename_("<none>") {}
 
-FlexibleSpritesheet::~FlexibleSpritesheet() {
-	if(texture_ != 0) {
-        glDeleteTextures(1, &texture_);
-		texture_ = 0;
-	}
+FlexibleSpritesheet::~FlexibleSpritesheet() {}
+
+const Vector2D FlexibleSpritesheet::render_size() const { 
+    return Vector2D((float)texture_->width(), (float)texture_->height());
+}
+
+void FlexibleSpritesheet::set_frame_size(const Vector2D& size) {
+    frame_size_ = (real_frame_size = size);
+    if(frame_size_.x > 1 || frame_size_.y > 1) {
+        frame_size_.x /= texture_->width();
+        frame_size_.y /= texture_->height();
+    }
 }
 
 void FlexibleSpritesheet::Draw(int frame_number) {
@@ -32,7 +39,7 @@ void FlexibleSpritesheet::Draw(int frame_number) {
         return false;
     }*/
 
-    Vector2D origin, target(texture_width_ * frame_size_.x, texture_height_ * frame_size_.y);
+    Vector2D origin, target = GetFrameSize(frame_number);
 
     if(mod.mirror() & MIRROR_HFLIP) {
 		// Flip the image horizontally and move it to the right, so it renders at the same place.
@@ -59,14 +66,13 @@ void FlexibleSpritesheet::Draw(int frame_number) {
     float xend = xpos + frame_size_.x;
     float yend = ypos + frame_size_.y;
 
-    GLuint texture = static_cast<GLuint>(texture_);
+    GLuint texture = texture_->gltexture();
     if(texture != 0) {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, texture);
     } else
         glDisable(GL_TEXTURE_2D);
 
-	glEnable(GL_BLEND);
 	glBegin( GL_QUADS ); //Start quad
         //Draw square
         glTexCoord2f(xpos, ypos);
@@ -81,7 +87,6 @@ void FlexibleSpritesheet::Draw(int frame_number) {
         glTexCoord2f(xpos, yend);
         glVertex2f(  origin.x, target.y );
     glEnd();
-	glDisable(GL_BLEND);
 }
 
 // devolve o numero de frames que esta imagem armazena
@@ -196,9 +201,10 @@ bool FlexibleSpritesheet::LoadFromFile(const std::string& filepath) {
         fprintf(stderr, "Could not load file \"%s\".\n", filepath.c_str());
         result = false;
     } else {
-        
-        result = ConvertSurfaceToTexture(data, &texture_, &texture_width_, &texture_height_);
+        texture_ = Texture::CreateFromSurface(data);
         SDL_FreeSurface(data);
+        result = texture_ != NULL;
+
         frame_size_ = Vector2D(1.0f, 1.0f);
         filename_ = filepath;
     }

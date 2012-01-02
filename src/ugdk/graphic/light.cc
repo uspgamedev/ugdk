@@ -1,4 +1,4 @@
-#include <ugdk/graphic/image.h>
+#include <ugdk/graphic/drawable/image.h>
 #include <ugdk/graphic/light.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
@@ -13,7 +13,7 @@ void Light::Render(Vector2D &offset) {
 	Vector2D size = VIDEO_MANAGER()->light_size() * 2.0f;
     size.x *= dimension_.x / VIDEO_MANAGER()->light_size().x;
     size.y *= dimension_.y / VIDEO_MANAGER()->light_size().y;
-	img->DrawTo(offset - hotspot_ - size * 0.5f, 0, 0, color_, 1, size);
+	//img->DrawTo(offset - hotspot_ - size * 0.5f, 0, 0, color_, 1, size); TODO fix light
 }
 
 }  // namespace framework

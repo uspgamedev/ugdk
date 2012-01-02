@@ -1,6 +1,5 @@
 
 #include <ugdk/graphic/modifier.h>
-#include <ugdk/graphic/image.h>
 #include <algorithm>
 #include <cmath>
 
