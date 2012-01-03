@@ -4,15 +4,13 @@
 #include <vector>
 #include <SDL/SDL_ttf.h>
 #include <ugdk/math/vector2D.h>
+#include <ugdk/graphic.h>
 
 #define TEXT_MANAGER() ugdk::Engine::reference()->text_manager()
 
 namespace ugdk {
 
 using std::wstring;
-class Image;
-class Text;
-class Font;
 class TextManager {
     public:
         TextManager() : current_font_(NULL) {}
@@ -27,7 +25,7 @@ class TextManager {
 
     private:
 		Font *current_font_;
-		std::map<wstring,Image**> font_images_;
+		std::map<wstring,Texture**> font_images_;
 		std::map<wstring,Font*> fonts_;
 };
 

@@ -267,6 +267,7 @@ void VideoManager::PushAndApplyModifier(const Modifier* apply) {
     glPushMatrix();
 
     if(apply->flags() & Modifier::HAS_TRANSFORMATION) {
+        // Calculates the translation
         float tx, ty;
         if(apply->flags() & Modifier::TRUNCATES_WHEN_APPLIED) {
             tx = std::floor(apply->offset().x);
@@ -275,8 +276,14 @@ void VideoManager::PushAndApplyModifier(const Modifier* apply) {
             tx = apply->offset().x;
             ty = apply->offset().y;
         }
+
+        // Calculates the scale
         float sx = apply->scale().x, sy = apply->scale().y;
+
+        // Calculates the rotation
         float s = sin(apply->rotation()), c = cos(apply->rotation());
+
+        // Builds the full transformation matrix all at once.
         float M[16] = {  sx*c, sy*s, 0.0f, 0.0f, // First column
                         -sx*s, sy*c, 0.0f, 0.0f,
                          0.0f, 0.0f, 1.0f, 0.0f,

@@ -3,11 +3,11 @@
 
 #include <string>
 #include <ugdk/math/vector2D.h>
+#include <ugdk/graphic.h>
+
 
 namespace ugdk {
 
-using std::string;
-class Image;
 class Font {
   public:
 	enum IdentType {
@@ -15,7 +15,7 @@ class Font {
 		CENTER,
 		RIGHT
 	};
-	Font(Image ** letters, int fontsize, char ident, bool fancy);
+	Font(Texture** letters, int fontsize, char ident, bool fancy);
 	~Font();
 	int id() { return id_; }
 	IdentType ident() { return ident_; }
@@ -25,7 +25,7 @@ class Font {
   private:
 	int id_;
 	int size_;
-	Image ** letters_;
+	Texture** letters_;
 	IdentType ident_;
 	bool fancy_;
 };

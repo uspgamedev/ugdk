@@ -10,6 +10,7 @@
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/drawable/text.h>
 #include <ugdk/graphic/font.h>
+#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/drawable/image.h>
 
 using namespace std;
@@ -35,11 +36,10 @@ bool TextManager::Release() {
         delete font_it->second;
     fonts_.clear();
 
-	map<wstring,Image**>::iterator imgs_it;
+	map<wstring,Texture**>::iterator imgs_it;
     for(imgs_it = font_images_.begin(); imgs_it != font_images_.end(); ++imgs_it) {
 		for(int i = 0; i < 65535; i++)
 			if(imgs_it->second[i] != NULL) {
-				imgs_it->second[i]->Destroy();
 				delete imgs_it->second[i];
 			}
         delete imgs_it->second;
@@ -86,13 +86,13 @@ Text* TextManager::GetTextFromFile(wstring path, wstring font, int width) {
 void TextManager::AddFont(wstring name, wstring path, int size, char ident, bool fancy) {
 	if(fonts_.count(name) > 0)
 		return;
-	Image **font_image = NULL;
+	Texture **font_image = NULL;
 #ifdef DEBUG
 	fwprintf(stderr, L"Loading new font tag: \"%s\"\n", name.c_str());
 #endif
 	if(font_images_.count(path) == 0) {
 		// Given file not loaded, loading it.
-		font_image = new Image*[65535];
+		font_image = new Texture*[65535];
 		memset(font_image, 0, 4*65535);
 		TTF_Font *ttf_font = TTF_OpenFont( PATH_MANAGER()->ResolvePath(path).c_str(), 100 );
         //TODO: revise this. Too noisy.
@@ -109,8 +109,7 @@ void TextManager::AddFont(wstring name, wstring path, int size, char ident, bool
             //TODO: revise this. Too noisy.
 			//fwprintf(stderr, L"\t(%u) \"%c\": ", i, str[0]);
 			SDL_Surface *letter = TTF_RenderUNICODE_Blended( ttf_font, str, sdlcolor );
-			font_image[i] = new Image;
-			font_image[i]->LoadFromSurface(letter);
+            font_image[i] = Texture::CreateFromSurface(letter);
 			SDL_FreeSurface(letter);
 
 			i++;

@@ -62,6 +62,7 @@ void Text::Draw() {
 	glPushMatrix();
 	Font::IdentType ident = font_->ident();
 
+    glEnable(GL_TEXTURE_2D);
 	glListBase(font_->id());
 	glColor3ub(255, 255, 255);
 	/*Frame bounds = VIDEO_MANAGER()->virtual_bounds();
