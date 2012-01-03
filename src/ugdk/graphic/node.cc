@@ -55,10 +55,8 @@ void Node::RenderLight() {
 }
 
 void Node::set_zindex(const float zindex) {
-    //Node* parent = parent_;
-    //if(parent) parent->RemoveChild(this);
+    if(parent_ && (zindex - zindex_ > 1.0e-6)) parent_->must_sort_ = true;
     zindex_ = zindex;
-    if(parent_) parent_->must_sort_ = true;
 }
 
 void Node::RemoveChild(Node *child) {

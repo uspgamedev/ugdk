@@ -261,24 +261,33 @@ void VideoManager::PushAndApplyModifier(const Modifier* apply) {
     Modifier top = (modifiers_.empty()) ? Modifier::IDENTITY : modifiers_.top();
 
     top.ComposeAlpha(apply);
-    top.ComposeColor(apply);
+    if(apply->flags() & Modifier::HAS_COLOR) top.ComposeColor(apply);
     top.ComposeMirror(apply);
 
     glPushMatrix();
 
-    float tx = apply->offset().x, ty = apply->offset().y;
-    float sx = apply->scale().x, sy = apply->scale().y;
-    float s = sin(apply->rotation()), c = cos(apply->rotation());
-    float M[16] = {  sx*c, sy*s, 0.0f, 0.0f, // First column
-                    -sx*s, sy*c, 0.0f, 0.0f,
-                     0.0f, 0.0f, 1.0f, 0.0f,
-                       tx,   ty, 0.0f, 1.0f };
+    if(apply->flags() & Modifier::HAS_TRANSFORMATION) {
+        float tx, ty;
+        if(apply->flags() & Modifier::TRUNCATES_WHEN_APPLIED) {
+            tx = std::floor(apply->offset().x);
+            ty = std::floor(apply->offset().y);
+        } else {
+            tx = apply->offset().x;
+            ty = apply->offset().y;
+        }
+        float sx = apply->scale().x, sy = apply->scale().y;
+        float s = sin(apply->rotation()), c = cos(apply->rotation());
+        float M[16] = {  sx*c, sy*s, 0.0f, 0.0f, // First column
+                        -sx*s, sy*c, 0.0f, 0.0f,
+                         0.0f, 0.0f, 1.0f, 0.0f,
+                           tx,   ty, 0.0f, 1.0f };
 
-    //glTranslatef(apply->offset().x, apply->offset().y, 0.0f);
-    //glScalef(apply->scale().x, apply->scale().y, 0.0f);
-    //glRotatef(apply->rotation() * 57.2957795f, 0.0f, 0.0f, 1.0f);
+        //glTranslatef(apply->offset().x, apply->offset().y, 0.0f);
+        //glScalef(apply->scale().x, apply->scale().y, 0.0f);
+        //glRotatef(apply->rotation() * 57.2957795f, 0.0f, 0.0f, 1.0f);
 
-    glMultMatrixf(M);
+        glMultMatrixf(M);
+    }
 
     modifiers_.push(top);
 }

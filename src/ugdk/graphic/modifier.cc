@@ -59,10 +59,12 @@ void Modifier::set_color(const Color& color) {
     color_.r = TO_UNIT_INTERVAL(color.r);
     color_.g = TO_UNIT_INTERVAL(color.g);
     color_.b = TO_UNIT_INTERVAL(color.b);
+    flags_ |= HAS_COLOR;
 }
 
 void Modifier::set_rotation(const float rotation) {
     rotation_ = fmod(rotation,TWO_PI);
+    flags_ |= HAS_TRANSFORMATION;
 }
 
 void Modifier::set_alpha(const float alpha) {
@@ -79,10 +81,12 @@ void Modifier::ComposeColor(const Color& color) {
     color_.r *= TO_UNIT_INTERVAL(color.r);
     color_.g *= TO_UNIT_INTERVAL(color.g);
     color_.b *= TO_UNIT_INTERVAL(color.b);
+    flags_ |= HAS_COLOR;
 }
 
 void Modifier::ComposeRotation(const float rotation) {
     rotation_ *= fmod(rotation,TWO_PI);
+    flags_ |= HAS_TRANSFORMATION;
 }
 
 void Modifier::ComposeAlpha(const float alpha) {
