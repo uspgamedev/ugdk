@@ -9,6 +9,7 @@ namespace ugdk {
 
 class TexturedRectangle : public Shape {
   public:
+    TexturedRectangle(Texture* texture);
     TexturedRectangle(Texture* texture, const Vector2D& size);
     ~TexturedRectangle();
 

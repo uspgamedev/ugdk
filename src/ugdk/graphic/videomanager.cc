@@ -1,4 +1,5 @@
 #include <SDL/SDL_opengl.h>
+#include <SDL/SDL_image.h>
 #include <cmath>
 
 #include <ugdk/graphic/videomanager.h>
@@ -7,6 +8,7 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/drawable/flexiblespritesheet.h>
 #include <ugdk/graphic/drawable/image.h>
 #include <ugdk/util/pathmanager.h>
@@ -47,10 +49,6 @@ bool VideoManager::Initialize(const string& title, const Vector2D& size, bool fu
     }*/
     
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-
-    blank_image_ = new Image;
-    blank_image_->set_frame_size(Vector2D(50.0f, 50.0f));
-    blank_image_->set_color(Image::CreateColor(0.0f, 1.0f, 0.0f));
 
     /*if(GLEW_ARB_framebuffer_object) {
         glGenFramebuffersEXT(1, &light_buffer_id_);
@@ -104,10 +102,9 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
 // Termina o gerenciador de video, retornando true em
 // caso de sucesso.
 bool VideoManager::Release() {
-    for(map<string,Image*>::iterator it = image_memory_.begin();
+    for(std::map<string,Texture*>::iterator it = image_memory_.begin();
             it != image_memory_.end(); ++it) {
-        Image* img = it->second;
-        delete img;
+        delete it->second;
     }
     image_memory_.clear();
     /*if(GLEW_ARB_framebuffer_object) {
@@ -148,39 +145,32 @@ void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-static void DrawLightRect() {
-    glBegin( GL_QUADS ); //Start quad
-        //Draw square
-        glTexCoord2f(0.0f, 1.0f);
-        glVertex2f(  0.0f, 0.0f );
-
-        glTexCoord2f(1.0f, 1.0f);
-        glVertex2f(  1.0f, 0.0f );
-
-        glTexCoord2f(1.0f, 0.0f);
-        glVertex2f(  1.0f, 1.0f );
-
-        glTexCoord2f(0.0f, 0.0f);
-        glVertex2f(  0.0f, 1.0f );
-    glEnd();
-}
-
 void VideoManager::BlendLightIntoBuffer() {
     // BIND DA LIGHT TEXTURE. IT'S SO AWESOME
     glBindTexture(GL_TEXTURE_2D, light_texture_);
 
     glPushMatrix();
     glLoadIdentity();
-    glScalef(video_size_.x, video_size_.y, 1);
-
-    // BLEND FUNC FOR BLENDING THE LIGHT WITH DA SCREEN
 
     // TODO: check why the hell when using 
     //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // Sometimes a light sets the entire scene to that color.
 
     glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-    DrawLightRect();
+
+    glBegin( GL_QUADS );
+        glTexCoord2f(         0.0f,          1.0f );
+        glVertex2f(           0.0f,          0.0f );
+
+        glTexCoord2f(         1.0f,          1.0f );
+        glVertex2f(  video_size_.x,          0.0f );
+
+        glTexCoord2f(         1.0f,          0.0f );
+        glVertex2f(  video_size_.x, video_size_.y );
+
+        glTexCoord2f(         0.0f,          0.0f );
+        glVertex2f(           0.0f, video_size_.y );
+    glEnd();
 
     glPopMatrix();
 }
@@ -218,31 +208,25 @@ void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& inter
 // Carrega imagem de um arquivo, fazendo o
 // gerenciamento de memoria. Retorna NULL
 // em caso de falha.
-Image* VideoManager::LoadImageFile(const string& filepath) {
+Texture* VideoManager::LoadTexture(const string& filepath) {
     if(image_memory_.count(filepath) == 0) {
         std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
-        Image* img = new Image();
-        if(img == NULL)
-            return NULL;
-        if(!img->LoadFromFile(fullpath)) {
-            delete img;
-            return NULL;
-        }
-        image_memory_[filepath] = img;
+        SDL_Surface* data = IMG_Load(fullpath.c_str());
+
+        Texture* tex = Texture::CreateFromSurface(data);
+        if(data != NULL) SDL_FreeSurface(data);
+
+        image_memory_[filepath] = tex;
     }
     return image_memory_[filepath];
 }
 
 FlexibleSpritesheet* VideoManager::LoadSpritesheet(const std::string& filepath) {
     if(spritesheet_memory_.count(filepath) == 0) {
-        std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
-        FlexibleSpritesheet* ss = new FlexibleSpritesheet();
-        if(ss == NULL)
-            return NULL;
-        if(!ss->LoadFromFile(fullpath)) {
-            delete ss;
-            return NULL;
-        }
+        FlexibleSpritesheet* ss = NULL;
+        Texture* tex = LoadTexture(filepath);
+        if(tex != NULL)
+            ss = new FlexibleSpritesheet(tex);
         spritesheet_memory_[filepath] = ss;
     }
     return spritesheet_memory_[filepath];

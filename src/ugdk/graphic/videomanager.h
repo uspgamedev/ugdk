@@ -1,14 +1,15 @@
-#ifndef HORUSEYE_FRAMEWORK_VIDEOMANAGER_H_
-#define HORUSEYE_FRAMEWORK_VIDEOMANAGER_H_
+#ifndef UGDK_GRAPHIC_VIDEOMANAGER_H_
+#define UGDK_GRAPHIC_VIDEOMANAGER_H_
 
 #include <string>
 #include <map>
-#include <vector>
 #include <list>
 #include <stack>
 #include <ugdk/base/types.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/frame.h>
+
+#include <ugdk/graphic.h>
 #include <ugdk/graphic/modifier.h>
 
 using std::string;
@@ -17,11 +18,8 @@ using std::map;
 #define VIDEO_MANAGER() (ugdk::Engine::reference()->video_manager())
 
 namespace ugdk {
-class Image;
-class FlexibleSpritesheet;
+
 class Scene;
-class Node;
-class Modifier;
 
 class VideoManager {
   public:
@@ -39,18 +37,14 @@ class VideoManager {
     
     void Render(std::list<Scene*>&, std::list<Node*>&);
 
-    Image* LoadImageFile(const string& filepath);
-    Image* LoadImage(const string& filepath) {
-        return LoadImageFile(filepath);
-    }
+    Texture* LoadTexture(const string& filepath);
     FlexibleSpritesheet* LoadSpritesheet(const std::string& filepath);
 
     Vector2D video_size() const { return video_size_; }
     bool fullscreen() const { return fullscreen_; }
-    string title() const { return title_; }
-    Image* backbuffer() const { return NULL; }
-    Image* screen() const { return NULL; }
-    Image* blank_image() const { return blank_image_; }
+
+    const std::string& title() const { return title_; }
+
     Image* light_image() const { return light_image_; }
     Vector2D light_size() const { return light_size_; }
     Frame virtual_bounds() const { return virtual_bounds_; }
@@ -63,21 +57,22 @@ class VideoManager {
     }
 
   private:
-    Image *blank_image_, *light_image_;
+    Image *light_image_;
     Vector2D video_size_, light_size_;
     Frame virtual_bounds_;
     bool fullscreen_;
     bool vsync_;
     bool light_system_;
-    string title_;
-    map<string, Image*> image_memory_;
-    map<std::string, FlexibleSpritesheet*> spritesheet_memory_;
+    std::string title_;
+
+
+    std::map<std::string, Texture*> image_memory_;
+    std::map<std::string, FlexibleSpritesheet*> spritesheet_memory_;
     std::stack<Modifier> modifiers_;
 
     unsigned int light_texture_, light_buffer_id_;
 
     void InitializeLight();
-
 
     void MergeLights(std::list<Scene*>& scene_list);
     void BlendLightIntoBuffer();

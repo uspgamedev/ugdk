@@ -7,6 +7,8 @@ namespace ugdk {
 
 class Drawable {
   public:
+    virtual ~Drawable() {};
+
     virtual void Draw() = 0;
 
     virtual const Vector2D& size() const = 0;

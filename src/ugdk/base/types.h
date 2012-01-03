@@ -5,13 +5,15 @@
 
 namespace ugdk {
 
-typedef struct Color {
+struct Color {
     Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f)
           : r(_r), g(_g), b(_b) {}
-    float r;
-    float g;
-    float b;
-} Color;
+
+    union {
+        struct { float r, g, b; };
+        struct { float val[3];  };
+    };
+};
 
 //static Color BLACK = {0.0f, 0.0f, 0.0f};
 static const Color WHITE(1.0f, 1.0f, 1.0f);

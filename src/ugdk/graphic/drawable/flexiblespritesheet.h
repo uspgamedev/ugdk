@@ -12,7 +12,7 @@ namespace ugdk {
 // Square with texture implementation of a Drawable.
 class FlexibleSpritesheet : public Spritesheet {
   public:
-    FlexibleSpritesheet();
+    FlexibleSpritesheet(Texture* texture);
     virtual ~FlexibleSpritesheet();
 
     const Vector2D render_size() const;
@@ -35,14 +35,9 @@ class FlexibleSpritesheet : public Spritesheet {
     // modified by mirror and both the image and given color and alpha.
     void Draw(int frame_number);
 
-    // Loads the image at filepath and creates a texture from the data.
-    bool LoadFromFile(const std::string& filepath);
-
   private:
     Texture* texture_;
     Vector2D frame_size_, hotspot_, real_frame_size;
-
-    std::string filename_;
 };
 
 }  // namespace framework

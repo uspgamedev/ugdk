@@ -13,8 +13,8 @@
 
 namespace ugdk {
 
-FlexibleSpritesheet::FlexibleSpritesheet() : 
-    texture_(NULL), frame_size_(1.0f, 1.0f), filename_("<none>") {}
+FlexibleSpritesheet::FlexibleSpritesheet(Texture* texture) : 
+    texture_(texture), frame_size_(1.0f, 1.0f) {}
 
 FlexibleSpritesheet::~FlexibleSpritesheet() {}
 
@@ -23,11 +23,13 @@ const Vector2D FlexibleSpritesheet::render_size() const {
 }
 
 void FlexibleSpritesheet::set_frame_size(const Vector2D& size) {
-    frame_size_ = (real_frame_size = size);
+    frame_size_ = size;
     if(frame_size_.x > 1 || frame_size_.y > 1) {
         frame_size_.x /= texture_->width();
         frame_size_.y /= texture_->height();
     }
+    real_frame_size.x = frame_size_.x * texture_->width();
+    real_frame_size.y = frame_size_.y * texture_->height();
 }
 
 void FlexibleSpritesheet::Draw(int frame_number) {
@@ -42,12 +44,10 @@ void FlexibleSpritesheet::Draw(int frame_number) {
     Vector2D origin, target = GetFrameSize(frame_number);
 
     if(mod.mirror() & MIRROR_HFLIP) {
-		// Flip the image horizontally and move it to the right, so it renders at the same place.
         origin.x = target.x;
         target.x = 0.0f;
     }
     if(mod.mirror() & MIRROR_VFLIP) {
-		// Flip the image vertically and move it down, so it renders at the same place.
         origin.y = target.y;
         target.y = 0.0f;
 	}
@@ -93,122 +93,6 @@ void FlexibleSpritesheet::Draw(int frame_number) {
 int FlexibleSpritesheet::FrameCount() const {
     Vector2D size = frame_size();
     return static_cast<int>(std::max(1.0f / (size.x * size.y), 1.0f));
-}
-
-// Loads the texture from the given surface. Surface is used only as a
-// reference and necessary data is copied.
-// Returns true on success, false otherwise.
-static bool ConvertSurfaceToTexture(SDL_Surface* data, uint32* texture_, int* texture_width_, int* texture_height_) {
-    if(data == NULL) {
-        fprintf(stderr, "Error: LoadSurface - No Data\n");
-        return false;
-    }
-    if(*texture_ != 0) {
-        glDeleteTextures(1, texture_);
-    }
-
-    Uint8 *raw = static_cast<Uint8*>( malloc( data->w * data->h * 4 ) );
-    Uint8 *dstPixel = raw;
-
-    SDL_LockSurface( data );
-    int bpp = data->format->BytesPerPixel;
-    Uint8 *srcPixel;
-    Uint32 truePixel;
-
-    for ( int i = 0; i < data->h ; i++ ) {
-        for ( int j = 0 ; j < data->w ; j++ ) {
-            srcPixel = (Uint8 *)data->pixels + i * data->pitch + j * bpp;
-            switch (bpp) {
-            case 1:
-                truePixel = *srcPixel;
-                break;
-
-            case 2:
-                truePixel = *srcPixel;
-                break;
-
-            case 3:
-                if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-                    truePixel = srcPixel[0] << 16 | srcPixel[1] << 8 | srcPixel[2];
-                } else {
-                    truePixel = srcPixel[0] | srcPixel[1] << 8 | srcPixel[2] << 16;
-                }
-                break;
-
-            case 4:
-                truePixel = srcPixel[0] | srcPixel[1] << 8 | srcPixel[2] << 16 | srcPixel[3] << 24;
-                break;
-
-            default:
-            	fprintf(stderr, "Error: LoadSurface - Image BPP of %d unsupported\n", bpp);
-                free(raw);
-                return false;
-                break;
-            }
-            // Changing pixel order from RGBA to BGRA.
-            SDL_GetRGBA( truePixel, data->format, &(dstPixel[2]), &(dstPixel[1]), &(dstPixel[0]), &(dstPixel[3]));
-            dstPixel++;
-            dstPixel++;
-            dstPixel++;
-            dstPixel++;
-        }
-    }
-    SDL_UnlockSurface( data );
-    *texture_width_ = data->w;
-    *texture_height_ = data->h;
-
-    while ( glGetError() ) { ; }
-
-    GLuint texture;
-    glGenTextures( 1, &texture );
-    glBindTexture( GL_TEXTURE_2D, texture );
-    *texture_ = static_cast<uint32>(texture);
-    /*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);*/
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-
-	glHint(GL_TEXTURE_COMPRESSION_HINT, GL_NICEST);
-
-    GLenum errorCode = glGetError();
-    if ( errorCode != 0 ) {
-        if ( errorCode == GL_OUT_OF_MEMORY )
-            fprintf(stderr, "Error: LoadSurface - Out of texture memory!\n");
-        else
-        	fprintf(stderr, "Error: LoadSurface - Unknown error!\n");
-        free(raw);
-        return false;
-    }
-    // Many VGA works faster if you use BGR instead of RGB
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, *texture_width_, *texture_height_, 0, GL_BGRA, GL_UNSIGNED_BYTE, raw);
-    free(raw);
-
-    errorCode = glGetError();
-    if ( errorCode != 0 ) {
-        if ( errorCode == GL_OUT_OF_MEMORY )
-            fprintf(stderr, "Error: LoadSurface - Out of texture memory!\n");
-        else
-        	fprintf(stderr, "Error: LoadSurface - Unknown error!\n");
-        return false;
-    }
-    return true;
-}
-
-bool FlexibleSpritesheet::LoadFromFile(const std::string& filepath) {
-    SDL_Surface* data = IMG_Load(filepath.c_str());
-    bool result;
-    if(data == NULL) {
-        fprintf(stderr, "Could not load file \"%s\".\n", filepath.c_str());
-        result = false;
-    } else {
-        texture_ = Texture::CreateFromSurface(data);
-        SDL_FreeSurface(data);
-        result = texture_ != NULL;
-
-        frame_size_ = Vector2D(1.0f, 1.0f);
-        filename_ = filepath;
-    }
-    return result;
 }
 
 }  // namespace framework

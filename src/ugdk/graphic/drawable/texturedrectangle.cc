@@ -9,6 +9,9 @@
 
 namespace ugdk {
 
+TexturedRectangle::TexturedRectangle(Texture* texture) 
+    : texture_(texture), size_(static_cast<float>(texture->width()), static_cast<float>(texture->height())) {}
+
 TexturedRectangle::TexturedRectangle(Texture* texture, const Vector2D& size) 
     : texture_(texture), size_(size) {}
 

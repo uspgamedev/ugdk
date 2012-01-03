@@ -7,10 +7,7 @@ namespace ugdk {
 
 class Shape : public Drawable {
   public:
-    virtual ~Shape() = 0;
-
-    virtual void Draw() = 0;
-    virtual Vector2D render_size() const = 0;
+    virtual ~Shape() {};
     
   protected:
     Shape() {}
