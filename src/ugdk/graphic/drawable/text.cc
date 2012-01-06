@@ -84,24 +84,25 @@ void Text::Draw() {
         glPushMatrix();
         glColor3fv(FANCY_COLORS[fancy_line_number]);
         for(size_t i = 0; i < message_.size(); ++i) {
-            if(message_[i].length() == 0) continue;
-            glPushMatrix();
-            switch(ident) {
-                case Font::CENTER:
-                    glTranslatef((this->width_ - this->line_width_[i])*0.5f, 0.0f, 0.0f);
-                    break;
-                case Font::RIGHT:
-                    glTranslatef((this->width_ - this->line_width_[i])*1.0f, 0.0f, 0.0f);
-                    break;
-                default:
-                    break;
+            if(message_[i].length() > 0) {
+                glPushMatrix();
+                switch(ident) {
+                    case Font::CENTER:
+                        glTranslatef((this->width_ - this->line_width_[i])*0.5f, 0.0f, 0.0f);
+                        break;
+                    case Font::RIGHT:
+                        glTranslatef((this->width_ - this->line_width_[i])*1.0f, 0.0f, 0.0f);
+                        break;
+                    default:
+                        break;
+                }
+                #ifdef WIN32
+                    glCallLists(message_[i].length(), GL_SHORT, (GLshort *) message_[i].c_str());
+                #else
+                    glCallLists(message_[i].length(), GL_INT, (GLint *) message_[i].c_str());
+                #endif
+                glPopMatrix();
             }
-#ifdef WIN32
-            glCallLists(message_[i].length(), GL_SHORT, (GLshort *) message_[i].c_str());
-#else
-            glCallLists(message_[i].length(), GL_INT, (GLint *) message_[i].c_str());
-#endif
-            glPopMatrix();
             glTranslatef( 0, (GLfloat)(line_height_), 0);
         }
         glPopMatrix();
