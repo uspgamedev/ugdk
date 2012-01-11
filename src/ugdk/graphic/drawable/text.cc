@@ -56,8 +56,8 @@ int Text::height() {
     return height_;
 }
 
-//bool Text::DrawTo(const Vector2D& position, int frame_number, uint8 mirror,  const Color& color, float alpha, const Vector2D& draw_size) {
-void Text::Draw() {
+void Text::Draw(float dt) {
+    // DOES NOTHING WITH TIME! TODO?
     Font::IdentType ident = font_->ident();
 
     glEnable(GL_TEXTURE_2D);

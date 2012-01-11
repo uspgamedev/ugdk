@@ -16,8 +16,8 @@ class Sprite : public Drawable {
     Sprite(Spritesheet *spritesheet, AnimationSet *set = NULL);
     virtual ~Sprite();
 
-    void Draw();
-    virtual const Vector2D& size() const;
+    void Draw(float dt);
+    const Vector2D& size() const;
     
     /// Change the current animation to a new animation from the previously selected AnimationSet.
     /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/
@@ -68,14 +68,15 @@ class Sprite : public Drawable {
         animation_manager_->set_default_frame(frame);
     }
 
-    /// Update the Sprite based on the time variation.
-    /** One of the two main functions of the UGDK Engine. Most of the game logic 
-        resides within the Update of child classes.*/
-    virtual void Update(float delta_t);
-    
+       
   private:
     Spritesheet *spritesheet_;
     AnimationManager *animation_manager_;
+
+    /// Update the Sprite based on the time variation.
+    /** One of the two main functions of the UGDK Engine. Most of the game logic 
+        resides within the Update of child classes.*/
+    void Update(float delta_t);
 };
 
 }

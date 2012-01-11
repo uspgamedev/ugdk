@@ -14,13 +14,15 @@ Sprite::~Sprite() {
     if (animation_manager_) delete animation_manager_;
 }
 
-void Sprite::Draw() {
+void Sprite::Draw(float dt) {
     int frame_number = animation_manager_->GetFrame();
 
     const Modifier *animation_mod = animation_manager_->get_current_modifier();
     if(animation_mod) VIDEO_MANAGER()->PushAndApplyModifier(animation_mod);
     spritesheet_->Draw(frame_number);
     if(animation_mod) VIDEO_MANAGER()->PopModifier();
+
+    Update(dt);
 }
 
 void Sprite::Update(float delta_t) {

@@ -12,7 +12,7 @@ SolidRectangle::SolidRectangle(const Vector2D& size) : size_(size) {}
 
 SolidRectangle::~SolidRectangle() {}
 
-void SolidRectangle::Draw() {
+void SolidRectangle::Draw(float dt) {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
 
     Vector2D origin, target(size_);

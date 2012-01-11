@@ -17,7 +17,7 @@ TexturedRectangle::TexturedRectangle(Texture* texture, const Vector2D& size)
 
 TexturedRectangle::~TexturedRectangle() {}
 
-void TexturedRectangle::Draw() {
+void TexturedRectangle::Draw(float dt) {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
 
     Vector2D origin, target(size_);

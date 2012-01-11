@@ -9,7 +9,7 @@ class Drawable {
   public:
     virtual ~Drawable() {};
 
-    virtual void Draw() = 0;
+    virtual void Draw(float dt) = 0;
 
     virtual const Vector2D& size() const = 0;
     Vector2D render_size() const { return size(); }

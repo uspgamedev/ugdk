@@ -15,7 +15,7 @@ class Text : public Drawable {
 	Text(std::vector<std::wstring> message, Font* font);
 	~Text() {}
 
-    void Draw();
+    void Draw(float dt);
 
 	virtual const Vector2D& size() const;
 	int width();

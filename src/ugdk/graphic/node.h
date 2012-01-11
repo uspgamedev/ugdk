@@ -22,7 +22,7 @@ class Node {
 
     ~Node();
 
-    void Render();
+    void Render(float dt);
     void RenderLight();
 
     const Modifier* modifier() const { return modifier_; }

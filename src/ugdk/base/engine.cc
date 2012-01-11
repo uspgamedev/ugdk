@@ -119,7 +119,7 @@ void Engine::Run() {
 
             // Sends the scene list to the videomanager, who handles everything 
             // needed to draw
-            video_manager_->Render(scene_list_, interface_list_);
+            video_manager_->Render(scene_list_, interface_list_, delta_t);
 
             ++frames_since_reset_;
             total_fps += 1.0f/delta_t;

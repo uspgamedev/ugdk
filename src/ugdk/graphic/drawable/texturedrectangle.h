@@ -13,7 +13,7 @@ class TexturedRectangle : public Shape {
     TexturedRectangle(Texture* texture, const Vector2D& size);
     ~TexturedRectangle();
 
-    void Draw();
+    void Draw(float dt);
 
     const Vector2D& size() const { return size_; }
     void set_size(const Vector2D& size) { size_ = size; }

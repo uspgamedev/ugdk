@@ -35,7 +35,7 @@ class VideoManager {
     void SetVSync(const bool active);
     void SetLightSystem(const bool active) { light_system_ = active; }
     
-    void Render(std::list<Scene*>&, std::list<Node*>&);
+    void Render(std::list<Scene*>&, std::list<Node*>&, float dt);
 
     Texture* LoadTexture(const string& filepath);
     FlexibleSpritesheet* LoadSpritesheet(const std::string& filepath);
