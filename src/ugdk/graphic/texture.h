@@ -10,6 +10,7 @@ class Texture {
   public:
     ~Texture();
     static Texture* CreateFromSurface(SDL_Surface* data);
+    static Texture* CreateRawTexture(int texture_width, int texture_height);
 
     GLuint gltexture() const { return gltexture_; }
     const int width() const { return texture_width_; }

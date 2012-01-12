@@ -44,8 +44,8 @@ void Node::RenderLight() {
     Modifier* modifier = modifier_;
     if(modifier) VIDEO_MANAGER()->PushAndApplyModifier(modifier);
 
-    Vector2D off;
-    if(light_) light_->Render(off);
+    if(light_)
+        light_->Draw();
 
     NodeSet::iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)

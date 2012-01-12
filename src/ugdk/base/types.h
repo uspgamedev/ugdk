@@ -1,7 +1,7 @@
 #ifndef HORUSEYE_FRAMEWORK_TYPES_H_
 #define HORUSEYE_FRAMEWORK_TYPES_H_
 
-#include <SDL/SDL.h>
+#include <SDL/SDL_stdinc.h>
 
 namespace ugdk {
 

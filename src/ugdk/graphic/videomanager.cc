@@ -23,6 +23,9 @@
     PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = 0;
 #endif
 
+
+#define LN255 5.5412635451584261462455391880218
+
 namespace ugdk {
 
 static Vector2D default_resolution(800.0f, 600.0f);
@@ -66,7 +69,7 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
     if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == NULL)
         return false;
       
-    SetVSync(vsync_);
+    SetVSync(settings_.vsync);
         
     //Set projection
     glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
@@ -91,7 +94,7 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
         return false;
 
     video_size_ = size;
-    fullscreen_ = fullscreen;
+    settings_.fullscreen = fullscreen;
     virtual_bounds_ = Frame(0, 0, video_size_.x, video_size_.y);
 
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
@@ -114,11 +117,11 @@ bool VideoManager::Release() {
 }
 
 void VideoManager::SetVSync(const bool active) {
-    vsync_ = active;
+    settings_.vsync = active;
     //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
 #ifdef WIN32
     if(wglSwapIntervalEXT == 0) wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
-    if(wglSwapIntervalEXT != 0) wglSwapIntervalEXT(vsync_ ? 1 : 0); // sets VSync to "ON".
+    if(wglSwapIntervalEXT != 0) wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
 #endif
 }
 
@@ -135,7 +138,7 @@ void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
            (*it)->root_node()->RenderLight();
 
     // copy the framebuffer pixels to a texture
-    glBindTexture(GL_TEXTURE_2D, light_texture_);
+    glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, (GLsizei) video_size_.x, (GLsizei) video_size_.y);
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -147,7 +150,7 @@ void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
 
 void VideoManager::BlendLightIntoBuffer() {
     // BIND DA LIGHT TEXTURE. IT'S SO AWESOME
-    glBindTexture(GL_TEXTURE_2D, light_texture_);
+    glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
 
     glPushMatrix();
     glLoadIdentity();
@@ -179,7 +182,7 @@ void VideoManager::BlendLightIntoBuffer() {
 void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& interface_list, float dt) {
 
     // Draw all lights to a buffer, merging then to a light texture.
-    if(light_system_)
+    if(settings_.light_system)
         MergeLights(scene_list);
 
     // Usual blend function for drawing RGBA images.
@@ -191,7 +194,7 @@ void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& inter
             (*it)->root_node()->Render(dt);
 
     // Using the light texture, merge it into the screen.
-    if(light_system_)
+    if(settings_.light_system)
         BlendLightIntoBuffer();
 
     // Draw all interface layers, with the usual RGBA blend.
@@ -232,26 +235,59 @@ FlexibleSpritesheet* VideoManager::LoadSpritesheet(const std::string& filepath) 
     return spritesheet_memory_[filepath];
 }
 
+static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ellipse_coef) {
+    int width = static_cast<int>(size.x);
+    int height = static_cast<int>(size.y);
+    SDL_Surface *screen = SDL_GetVideoSurface();
+
+    SDL_Surface *temp = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, screen->format->BitsPerPixel,
+                                 screen->format->Rmask, screen->format->Gmask,
+                                 screen->format->Bmask, screen->format->Amask);
+    if(temp == NULL)
+        return false;
+    SDL_Surface *data = SDL_DisplayFormatAlpha(temp);
+    SDL_FreeSurface(temp);
+    if(data == NULL)
+        return false;
+
+    Vector2D origin = size * 0.5f;
+
+    // Locks the surface so we can manage the pixel data.
+    SDL_LockSurface(data);
+    Uint32 *pixels = static_cast<Uint32*>(data->pixels);
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width; ++j) {
+            Uint8 alpha = 0;
+
+            // Formulae to detect if the point is inside the ellipse.
+            Vector2D dist = Vector2D(j + 0.0f, i + 0.0f) - origin;
+            dist.x /= ellipse_coef.x;
+            dist.y /= ellipse_coef.y;
+            float distance = Vector2D::InnerProduct(dist, dist);
+            if(distance <= 1)
+                alpha = static_cast<Uint8>(SDL_ALPHA_OPAQUE * exp(-distance * LN255));
+            pixels[i * width + j] = SDL_MapRGBA(data->format, alpha, alpha, alpha, alpha);
+        }
+    }
+    SDL_UnlockSurface(data);
+    return data;
+}
+
 void VideoManager::InitializeLight() {
-    light_size_ = Vector2D(32.0f, 32.0f);
-    if(light_image_ != NULL) {
-        delete light_image_;
-    }
-    light_image_ = new Image;
-    light_image_->CreateFogTransparency(light_size_ * 2.0f, light_size_);
+    Vector2D light_size(32.0f, 32.0f);
+    if(light_texture_ != NULL) delete light_texture_;
 
+    SDL_Surface* light_surface = CreateLightSurface(light_size * 2.0f, light_size);
+    light_texture_ = Texture::CreateFromSurface(light_surface);
+    SDL_FreeSurface(light_surface);
 
-    if(light_texture_ != 0) {
-        glDeleteTextures(1, &light_texture_);
-        light_texture_ = 0;
-    }
-    glGenTextures(1, &light_texture_);
-    glBindTexture(GL_TEXTURE_2D, light_texture_);
+    if(light_buffer_ != NULL) delete light_buffer_;
+    light_buffer_ = Texture::CreateRawTexture(static_cast<int>(video_size_.x), static_cast<int>(video_size_.y));
+    glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (GLsizei) video_size_.x, 
         (GLsizei) video_size_.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);

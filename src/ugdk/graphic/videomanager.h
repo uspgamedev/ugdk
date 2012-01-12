@@ -25,28 +25,27 @@ class VideoManager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : light_image_(NULL), fullscreen_(false), vsync_(false), light_system_(true), light_texture_(0) {}
+    VideoManager() : settings_(false, false, false), light_buffer_(NULL), light_texture_(NULL) {}
     ~VideoManager() {}
 
-    bool Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon);
+    bool Initialize(const std::string& title, const Vector2D& size, bool fullscreen, const std::string& icon);
     bool ChangeResolution(const Vector2D& size, bool fullscreen);
     bool Release();
     
     void SetVSync(const bool active);
-    void SetLightSystem(const bool active) { light_system_ = active; }
+    void SetLightSystem(const bool active) { settings_.light_system = active; }
     
     void Render(std::list<Scene*>&, std::list<Node*>&, float dt);
 
-    Texture* LoadTexture(const string& filepath);
+    Texture* LoadTexture(const std::string& filepath);
     FlexibleSpritesheet* LoadSpritesheet(const std::string& filepath);
 
     Vector2D video_size() const { return video_size_; }
-    bool fullscreen() const { return fullscreen_; }
+    bool fullscreen() const { return settings_.fullscreen; }
 
     const std::string& title() const { return title_; }
+    const Texture* light_texture() const { return light_texture_; }
 
-    Image* light_image() const { return light_image_; }
-    Vector2D light_size() const { return light_size_; }
     Frame virtual_bounds() const { return virtual_bounds_; }
 
     void PushAndApplyModifier(const Modifier*);
@@ -57,20 +56,24 @@ class VideoManager {
     }
 
   private:
-    Image *light_image_;
-    Vector2D video_size_, light_size_;
+    Vector2D video_size_;
     Frame virtual_bounds_;
-    bool fullscreen_;
-    bool vsync_;
-    bool light_system_;
     std::string title_;
 
+    struct Settings {
+        bool fullscreen;
+        bool vsync;
+        bool light_system;
+
+        Settings(bool fs, bool vs, bool light) : fullscreen(fs), vsync(vs), light_system(light) {}
+    } settings_;
 
     std::map<std::string, Texture*> image_memory_;
     std::map<std::string, FlexibleSpritesheet*> spritesheet_memory_;
     std::stack<Modifier> modifiers_;
 
-    unsigned int light_texture_, light_buffer_id_;
+    Texture* light_buffer_;
+    Texture* light_texture_;
 
     void InitializeLight();
 

@@ -109,6 +109,12 @@ Texture* Texture::CreateFromSurface(SDL_Surface* data) {
     return new Texture(gltex, texture_width, texture_height);
 }
 
+Texture* Texture::CreateRawTexture(int texture_width, int texture_height) {
+    GLuint texture;
+    glGenTextures( 1, &texture );
+    return new Texture(texture, texture_width, texture_height);
+}
+
 Texture::Texture(GLuint gltexture, int texture_width, int texture_height) 
     : gltexture_(gltexture), texture_width_(texture_width), texture_height_(texture_height) {}
 
