@@ -37,8 +37,6 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/graphic/wglext.h
     ${SRC_DIR}/ugdk/graphic/drawable/flexiblespritesheet.cc
     ${SRC_DIR}/ugdk/graphic/drawable/flexiblespritesheet.h
-    ${SRC_DIR}/ugdk/graphic/drawable/image.cc
-    ${SRC_DIR}/ugdk/graphic/drawable/image.h
     ${SRC_DIR}/ugdk/graphic/drawable/shape.h
     ${SRC_DIR}/ugdk/graphic/drawable/solidrectangle.cc
     ${SRC_DIR}/ugdk/graphic/drawable/solidrectangle.h

@@ -10,7 +10,6 @@
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/drawable/flexiblespritesheet.h>
-#include <ugdk/graphic/drawable/image.h>
 #include <ugdk/util/pathmanager.h>
 
 // VSync

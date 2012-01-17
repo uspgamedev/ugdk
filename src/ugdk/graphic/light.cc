@@ -5,7 +5,6 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/graphic/drawable/image.h>
 
 namespace ugdk {
 

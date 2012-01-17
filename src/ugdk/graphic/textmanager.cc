@@ -11,7 +11,6 @@
 #include <ugdk/graphic/drawable/text.h>
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/graphic/drawable/image.h>
 
 using namespace std;
 
