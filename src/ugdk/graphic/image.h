@@ -3,7 +3,12 @@
 
 #include <string>
 #include <map>
-#include <SDL/SDL.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL.h"
+#else
+    #include <SDL/SDL.h>
+#endif
 #include <ugdk/math/vector2D.h>
 #include <ugdk/base/types.h>
 #include <ugdk/graphic/drawable.h>

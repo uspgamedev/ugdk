@@ -1,7 +1,12 @@
 #ifndef HORUSEYE_FRAMEWORK_KEYS_H_
 #define HORUSEYE_FRAMEWORK_KEYS_H_
 
-#include <SDL/SDL.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL.h"
+#else
+    #include <SDL/SDL.h>
+#endif
 namespace ugdk {
 
 typedef enum {

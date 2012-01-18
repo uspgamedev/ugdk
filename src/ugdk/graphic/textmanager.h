@@ -2,7 +2,12 @@
 #define HORUSEYE_FRAMEWORK_TEXTMANAGER_H_
 
 #include <vector>
-#include <SDL/SDL_ttf.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL_ttf.h"
+#else
+    #include <SDL/SDL_ttf.h>
+#endif
 #include <ugdk/math/vector2D.h>
 
 #define TEXT_MANAGER() ugdk::Engine::reference()->text_manager()

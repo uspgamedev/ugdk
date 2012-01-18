@@ -1,4 +1,9 @@
-#include <SDL/SDL_opengl.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL_opengl.h"
+#else
+    #include <SDL/SDL_opengl.h>
+#endif
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/math/frame.h>

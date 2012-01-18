@@ -10,8 +10,14 @@
 // memoria para voce)
 
 #include <string>
-#include <SDL/SDL.h>
-#include <SDL/SDL_mixer.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL.h"
+    #include "SDL_mixer.h"
+#else
+    #include <SDL/SDL.h>
+    #include <SDL/SDL_mixer.h>
+#endif
 
 namespace ugdk {
 

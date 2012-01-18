@@ -1,6 +1,11 @@
 #include <string>
 #include <algorithm>
-#include <SDL/SDL.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL.h"
+#else
+    #include <SDL/SDL.h>
+#endif
 #include <ugdk/base/engine.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/input/inputmanager.h>

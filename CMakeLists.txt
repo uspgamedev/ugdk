@@ -39,6 +39,14 @@ if ((NOT (${LINK_TYPE} STREQUAL STATIC)) AND (NOT (${LINK_TYPE} STREQUAL SHARED)
     message (FATAL_ERROR ">>> Unknown link type ${LINK_TYPE}.")
 endif ()
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    SET (CHECKMAC "#define ISMAC")
+endif ()
+
+# Necessary for a Mac Universal Binary
+SET (CMAKE_OSX_ARCHITECTURES ppc;i386;x86_64)
+SET (CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.5.sdk)
+SET (MACOSX_DEPLOYMENT_TARGET 10.5)
 
 # Important build locations.
 set (SRC_DIR src)
@@ -72,34 +80,20 @@ endif (NOT FRAMEWORK_SRC)
 
 # Encontrando as bibliotecas necessarias:
 if (NOT MSVC)
-	if (WIN32)
-		find_library (LGL NAMES OpenGL32 PATH "${CMAKE_LIBRARY_PATH}")
-	else (WIN32)
-		find_library (LGL NAMES GL PATH "${CMAKE_LIBRARY_PATH}")
-	endif (WIN32)
-	if (NOT LGL)
-		message (FATAL_ERROR "Fatal error: libGL/libOpenGL32 not found!")
-	endif (NOT LGL)
-
-	find_library (LSDL NAMES SDL PATH "${CMAKE_LIBRARY_PATH}")
-	if (NOT LSDL)
-		message (FATAL_ERROR "Fatal error: libSDL not found!")
-	endif  (NOT LSDL)
-
-	find_library (LSDLIMAGE NAMES SDL_image PATH "${CMAKE_LIBRARY_PATH}")
-	if (NOT LSDLIMAGE)
-		message (FATAL_ERROR "Fatal error: libSDL_image not found!")
-	endif  (NOT LSDLIMAGE)
-
-	find_library (LSDLMIXER NAMES SDL_mixer PATH "${CMAKE_LIBRARY_PATH}")
-	if (NOT LSDLMIXER)
-		message (FATAL_ERROR "Fatal error: libSDL_mixer not found!")
-	endif  (NOT LSDLMIXER)
-
-	find_library (LSDLTTF NAMES SDL_ttf PATH "${CMAKE_LIBRARY_PATH}")
-	if (NOT LSDLTTF)
-		message (FATAL_ERROR "Fatal error: libSDL_ttf not found!")
-	endif  (NOT LSDLTTF)
+    find_package(OPENGL REQUIRED)
+    include_directories(${OPENGL_INCLUDE_DIR})
+    
+    find_package(SDL REQUIRED)
+    include_directories(${SDL_INCLUDE_DIR})
+    
+    find_package(SDL_mixer REQUIRED)
+    include_directories(${SDLMIXER_INCLUDE_DIR})
+    
+    find_package(SDL_ttf REQUIRED)
+    include_directories(${SDLTTF_INCLUDE_DIR})
+    
+    find_package(SDL_image REQUIRED)
+    include_directories(${SDLIMAGE_INCLUDE_DIR})
 endif(NOT MSVC)
 
 # pre-processor: #define's
@@ -134,7 +128,14 @@ set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTOR
 
 # *nix library
 if (UNIX)
-    target_link_libraries (${FRAMEWORK_BUILDNAME} m SDL SDL_image SDL_mixer SDL_ttf GL GLU)
+    target_link_libraries (${FRAMEWORK_BUILDNAME}
+                           m
+                           ${SDL_LIBRARY}
+                           ${SDLMIXER_LIBRARY}
+                           ${SDLTTF_LIBRARY}
+                           ${SDLIMAGE_LIBRARY}
+                           ${OPENGL_LIBRARIES}
+                          )
 
 # Windows library
 elseif (WIN32)
@@ -146,7 +147,12 @@ elseif (WIN32)
     endif (MSVC)
 endif  (UNIX)
 
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS}")
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS} -mmacosx-version-min=10.5")
+else ()
+    set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS}")
+endif ()
+
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA}")
 if (${BUILD_TYPE} STREQUAL RELEASE)
     set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")

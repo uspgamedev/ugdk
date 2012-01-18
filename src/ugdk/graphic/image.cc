@@ -3,8 +3,14 @@
 #include <cstring>
 #include <cmath>
 #include <algorithm>
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_opengl.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL_image.h"
+    #include "SDL_opengl.h"
+#else
+    #include <SDL/SDL_image.h>
+    #include <SDL/SDL_opengl.h>
+#endif
 #include <ugdk/math/frame.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/base/engine.h>
