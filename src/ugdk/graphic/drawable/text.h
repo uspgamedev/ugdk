@@ -24,6 +24,7 @@ class Text : public Drawable {
   private:
     Font* font_;
 	int width_, height_, line_height_;
+    Vector2D size_;
 	std::vector<std::wstring> message_;
 	std::vector<int> line_width_;
 };

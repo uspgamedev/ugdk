@@ -19,6 +19,7 @@ Text::Text(std::wstring message, Font *font) : font_(font) {
         : (int)(font_->GetLetterSize(message[0]).y);
     for(i = 0; i < message.length(); i++)
         width_ += (int)(font_->GetLetterSize(message[i]).x);
+    size_ = Vector2D(static_cast<float>(width_), static_cast<float>(height_));
 }
 
 Text::Text(std::vector<std::wstring> message, Font *font) : font_(font) {
@@ -42,10 +43,11 @@ Text::Text(std::vector<std::wstring> message, Font *font) : font_(font) {
         width_ = std::max(width, width_);
         line_height_ = std::max(size, line_height_);
     }
+    size_ = Vector2D(static_cast<float>(width_), static_cast<float>(height_));
 }
 
 const Vector2D& Text::size() const {
-    return Vector2D((float)(width_), (float)(height_));
+    return size_;
 }
 
 int Text::width() {
