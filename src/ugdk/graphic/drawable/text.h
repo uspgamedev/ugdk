@@ -11,22 +11,21 @@ namespace ugdk {
 class Font;
 class Text : public Drawable {
   public:
-	Text(std::wstring message, Font* font);
-	Text(std::vector<std::wstring> message, Font* font);
+	Text(const std::wstring& message, Font* font);
+	Text(const std::vector<std::wstring>& message, Font* font);
 	~Text() {}
 
     void Draw(float dt);
 
 	virtual const Vector2D& size() const;
-	int width();
-	int height();
 
   private:
     Font* font_;
-	int width_, height_, line_height_;
-    Vector2D size_;
 	std::vector<std::wstring> message_;
-	std::vector<int> line_width_;
+
+    Vector2D size_;
+    float line_height_;
+	std::vector<float> line_width_;
 };
 
 }  // namespace framework

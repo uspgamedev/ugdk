@@ -12,11 +12,9 @@ class Drawable {
     virtual void Draw(float dt) = 0;
 
     virtual const Vector2D& size() const = 0;
-    Vector2D render_size() const { return size(); }
 
-    // DEPRECATED DO NOT USE OR DIE LOLOL
-    virtual int width() const { return (int)(render_size().x); }
-    virtual int height() const { return (int)(render_size().y); }
+    float  width() const { return size().x; }
+    float height() const { return size().y; }
 
   protected:
     Drawable() {}
