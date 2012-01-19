@@ -25,20 +25,19 @@ class Node {
     void Render(float dt);
     void RenderLight();
 
-    const Modifier* modifier() const { return modifier_; }
-    Modifier* modifier() { return (modifier_ != NULL) ? modifier_ : (modifier_ = new Modifier); }
-
     void set_drawable(Drawable* drawable) { drawable_ = drawable; }
-
-    void set_light(Light* light) { light_ = light; }
-    Light* light() { return light_; }
-    const Light* light() const { return light_; }
-
-    void set_visible(const bool visible) { visible_ = visible; }
-    bool visible() const { return visible_; }
-
+    void set_light(Light* light)          {    light_ =    light; }
+    void set_visible(const bool visible)  {  visible_ =  visible; }
     void set_zindex(const float zindex);
-    float zindex() const { return zindex_; }
+    
+          Modifier* modifier() { return (modifier_ != NULL) ? modifier_ : (modifier_ = new Modifier); }
+    const Modifier* modifier() const { return modifier_; }
+          Drawable* drawable()       { return drawable_; }
+    const Drawable* drawable() const { return drawable_; }
+          Light* light()             { return    light_; }
+    const Light* light()       const { return    light_; }
+          bool   visible()     const { return  visible_; }
+          float  zindex()      const { return   zindex_; }
 
     void AddChild(Node *child) {
         childs_.push_back(child);

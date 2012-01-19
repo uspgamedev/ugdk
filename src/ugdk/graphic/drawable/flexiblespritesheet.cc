@@ -25,14 +25,15 @@ const Vector2D FlexibleSpritesheet::render_size() const {
 void FlexibleSpritesheet::set_frame_size(const Vector2D& size) {
     frame_size_ = size;
     if(frame_size_.x > 1 || frame_size_.y > 1) {
+        // TODO: deprecated conversion!
         frame_size_.x /= texture_->width();
         frame_size_.y /= texture_->height();
     }
-    real_frame_size.x = frame_size_.x * texture_->width();
-    real_frame_size.y = frame_size_.y * texture_->height();
+    real_frame_size_.x = frame_size_.x * texture_->width();
+    real_frame_size_.y = frame_size_.y * texture_->height();
 }
 
-void FlexibleSpritesheet::Draw(int frame_number) {
+void FlexibleSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
 
     /*Frame bounds = VIDEO_MANAGER()->virtual_bounds();
@@ -52,8 +53,8 @@ void FlexibleSpritesheet::Draw(int frame_number) {
         target.y = 0.0f;
 	}
     
-    origin -= hotspot_;
-    target -= hotspot_;
+    origin -= hotspot_ + hotspot;
+    target -= hotspot_ + hotspot;
 
 	// Sets the color to tint the image with to the color the image has modified with the color given.
 	// Also sets the alpha.

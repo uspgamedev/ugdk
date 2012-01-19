@@ -19,7 +19,7 @@ void Sprite::Draw(float dt) {
 
     const Modifier *animation_mod = animation_manager_->get_current_modifier();
     if(animation_mod) VIDEO_MANAGER()->PushAndApplyModifier(animation_mod);
-    spritesheet_->Draw(frame_number);
+    spritesheet_->Draw(frame_number, hotspot_);
     if(animation_mod) VIDEO_MANAGER()->PopModifier();
 
     Update(dt);

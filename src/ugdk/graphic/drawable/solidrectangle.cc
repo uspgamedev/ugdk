@@ -26,6 +26,9 @@ void SolidRectangle::Draw(float dt) {
         target.y = 0.0f;
 	}
 
+    origin -= hotspot_;
+    target -= hotspot_;
+
     glColor4f(mod.color().r * color_.r, mod.color().g * color_.g, mod.color().b * color_.b, mod.alpha());
 
     glDisable(GL_TEXTURE_2D);

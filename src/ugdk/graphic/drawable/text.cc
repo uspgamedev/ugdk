@@ -36,6 +36,7 @@ Text::Text(const std::vector<std::wstring>& message, Font *font) : font_(font) {
 
         line_width_.push_back(line_size.x);
     }
+    message_ = message;
 }
 
 const Vector2D& Text::size() const {
@@ -65,11 +66,13 @@ void Text::Draw(float dt) {
     if (font_->IsFancy()) fancy_line_number = 2;
 
     glPushMatrix();
+    glTranslatef(-hotspot_.x, -hotspot_.y, 0.0f);
     for(; fancy_line_number >= 0; fancy_line_number--) {
         glTranslatef(-1.0f, -1.0f, 0);
         glPushMatrix();
         glColor3fv(FANCY_COLORS[fancy_line_number]);
         for(size_t i = 0; i < message_.size(); ++i) {
+            if(i != 0) glTranslatef( 0.0f, line_height_, 0.0f);
             if(message_[i].length() > 0) {
                 glPushMatrix();
                 switch(ident) {
@@ -89,7 +92,6 @@ void Text::Draw(float dt) {
                 #endif
                 glPopMatrix();
             }
-            glTranslatef( 0.0f, line_height_, 0.0f);
         }
         glPopMatrix();
     }

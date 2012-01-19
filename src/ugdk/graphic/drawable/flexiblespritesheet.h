@@ -18,7 +18,7 @@ class FlexibleSpritesheet : public Spritesheet {
     const Vector2D render_size() const;
 
     virtual const Vector2D& GetFrameSize(int frame_number) const {
-        return real_frame_size;
+        return real_frame_size_;
     }
 
     // Sets the frame_size to use with the texture.
@@ -33,11 +33,11 @@ class FlexibleSpritesheet : public Spritesheet {
 
     // Draws at position, a draw_size square with the given frame_number
     // modified by mirror and both the image and given color and alpha.
-    void Draw(int frame_number);
+    void Draw(int frame_number, const Vector2D& hotspot);
 
   private:
     Texture* texture_;
-    Vector2D frame_size_, hotspot_, real_frame_size;
+    Vector2D frame_size_, hotspot_, real_frame_size_;
 };
 
 }  // namespace framework

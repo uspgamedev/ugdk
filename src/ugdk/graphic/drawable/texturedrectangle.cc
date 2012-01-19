@@ -31,6 +31,9 @@ void TexturedRectangle::Draw(float dt) {
         target.y = 0.0f;
 	}
 
+    origin -= hotspot_;
+    target -= hotspot_;
+
     glColor4f(mod.color().r, mod.color().g, mod.color().b, mod.alpha());
 
     glEnable(GL_TEXTURE_2D);

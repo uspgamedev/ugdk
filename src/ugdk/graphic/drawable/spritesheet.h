@@ -9,7 +9,7 @@ class Spritesheet {
   public:
     virtual ~Spritesheet() {}
 
-    virtual void Draw(int frame_number) = 0;
+    virtual void Draw(int frame_number, const Vector2D& hotspot) = 0;
 	virtual int FrameCount() const = 0;
 
     virtual const Vector2D& GetFrameSize(int frame_number) const = 0;
