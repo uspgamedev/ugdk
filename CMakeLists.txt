@@ -3,7 +3,7 @@
 cmake_minimum_required (VERSION 2.6)
 
 # General definitions.
-project (ugdk CXX)
+project (ugdk CXX C)
 set (FRAMEWORK_NAME UGDK)
 set (FRAMEWORK_RELEASENAME ugdk)
 set (FRAMEWORK_DEBUGNAME ugdk_d)
@@ -80,7 +80,7 @@ endif (NOT FRAMEWORK_SRC)
 
 # Encontrando as bibliotecas necessarias:
 if (NOT MSVC)
-    find_package(OPENGL REQUIRED)
+    find_package(OpenGL REQUIRED)
     include_directories(${OPENGL_INCLUDE_DIR})
     
     find_package(SDL REQUIRED)
