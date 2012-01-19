@@ -257,9 +257,9 @@ bool AnimationProtocol::NewEntry_EffectMirror(const gdd::GDDArgs &args) {
     }
 
     if( fst_mirror_id == 'h' || snd_mirror_id == 'h' )
-        new_mirror ^= MIRROR_HFLIP;
+        new_mirror |= MIRROR_HFLIP;
     if( fst_mirror_id == 'v' || snd_mirror_id == 'v' )
-        new_mirror ^= MIRROR_VFLIP;
+        new_mirror |= MIRROR_VFLIP;
 
     current_effect_->set_mirror(new_mirror);
     return true;
@@ -389,9 +389,9 @@ bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
     }
 
     if( fst_mirror_id == 'h' || snd_mirror_id == 'h' )
-        new_mirror ^= MIRROR_HFLIP;
+        new_mirror |= MIRROR_HFLIP;
     if( fst_mirror_id == 'v' || snd_mirror_id == 'v' )
-        new_mirror ^= MIRROR_VFLIP;
+        new_mirror |= MIRROR_VFLIP;
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH

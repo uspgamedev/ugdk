@@ -5,19 +5,6 @@
 
 namespace ugdk {
 
-struct Color {
-    Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f)
-          : r(_r), g(_g), b(_b) {}
-
-    union {
-        struct { float r, g, b; };
-        struct { float val[3];  };
-    };
-};
-
-//static Color BLACK = {0.0f, 0.0f, 0.0f};
-static const Color WHITE(1.0f, 1.0f, 1.0f);
-
 typedef Uint8 uint8;
 typedef Uint16 uint16;
 typedef Uint32 uint32;
@@ -32,6 +19,23 @@ static const Mirror MIRROR_NONE   = 0;
 static const Mirror MIRROR_HFLIP  = 1;
 static const Mirror MIRROR_VFLIP  = 2;
 static const Mirror MIRROR_HVFLIP = 3;
+
+typedef struct Color {
+    explicit Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f)
+          : r(_r), g(_g), b(_b) {}
+    explicit Color(uint32 hex_val) :
+        r(((hex_val & 0xFF0000) >> 16) / 255.0f),
+        g(((hex_val & 0x00FF00) >>  8) / 255.0f),
+        b(((hex_val & 0x0000FF)      ) / 255.0f) {}
+    
+	union {
+        struct { float r, g, b; };
+        struct { float val[3];  };
+    };
+} Color;
+
+//static Color BLACK = {0.0f, 0.0f, 0.0f};
+static const Color WHITE(1.0f, 1.0f, 1.0f);
 
 }  // namespace framework
 

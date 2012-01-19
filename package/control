@@ -1,0 +1,8 @@
+Package: ugdk
+Version: 0.2.0
+Section: devel
+Priority: extra
+Depends: libsdl1.2-dev, libsdl-image1.2-dev, libsdl-mixer1.2-dev, libsdl-ttf2.0-dev 
+Installed-Size: 1024
+Maintainer: USPGameDev [admin@uspgamedev.org]
+Description: USP Game Development Kit, a framework for developing 2d games. 

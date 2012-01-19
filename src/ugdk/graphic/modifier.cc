@@ -50,9 +50,10 @@ Modifier* Modifier::Compose(const Modifier* mod1, const Modifier* mod2) {
 
 
 void Modifier::set_mirror(const Mirror mirror) {
-    if( mirror == MIRROR_HFLIP || mirror == MIRROR_VFLIP )
+    if( (mirror & MIRROR_HFLIP) || (mirror & MIRROR_VFLIP) )
         mirror_  = mirror;
-    else mirror_ = MIRROR_NONE;
+    else
+        mirror_ = MIRROR_NONE;
 }
 
 void Modifier::set_color(const Color& color) {
@@ -73,7 +74,7 @@ void Modifier::set_alpha(const float alpha) {
 
 
 void Modifier::ComposeMirror(const Mirror& mirror) {
-    if( mirror == MIRROR_HFLIP || mirror == MIRROR_VFLIP )
+    if( (mirror & MIRROR_HFLIP) || (mirror & MIRROR_VFLIP) )
         mirror_ ^= mirror;
 }
 

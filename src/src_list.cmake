@@ -62,7 +62,6 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/util/animationparser.h
     ${SRC_DIR}/ugdk/util/animationprotocol.cc
     ${SRC_DIR}/ugdk/util/animationprotocol.h
-    ${SRC_DIR}/ugdk/util/gdd.cc
     ${SRC_DIR}/ugdk/util/pathmanager.cc
     ${SRC_DIR}/ugdk/util/pathmanager.h
     ${SRC_DIR}/ugdk/util/gdd/abstractloader.h
