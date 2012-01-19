@@ -295,7 +295,6 @@ void VideoManager::InitializeLight() {
 void VideoManager::PushAndApplyModifier(const Modifier* apply) {
     Modifier top = (modifiers_.empty()) ? Modifier::IDENTITY : modifiers_.top();
 
-    top.ComposeAlpha(apply);
     if(apply->flags() & Modifier::HAS_COLOR) top.ComposeColor(apply);
     top.ComposeMirror(apply);
 

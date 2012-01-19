@@ -29,7 +29,9 @@ void SolidRectangle::Draw(float dt) {
     origin -= hotspot_;
     target -= hotspot_;
 
-    glColor4f(mod.color().r * color_.r, mod.color().g * color_.g, mod.color().b * color_.b, mod.alpha());
+    Color color(mod.color().r * color_.r, mod.color().g * color_.g, mod.color().b * color_.b, mod.color().a * color_.a);
+
+    glColor4fv(color.val);
 
     glDisable(GL_TEXTURE_2D);
 	glBegin( GL_QUADS ); { //Start quad

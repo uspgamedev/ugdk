@@ -19,7 +19,7 @@ class Modifier {
         TRUNCATES_WHEN_APPLIED = 16
     };
 
-    Modifier() : offset_(), scale_(1.0f, 1.0f), rotation_(0.0f), mirror_(MIRROR_NONE), color_(WHITE), alpha_(1.0f), flags_(NOTHING) {}
+    Modifier() : offset_(), scale_(1.0f, 1.0f), rotation_(0.0f), mirror_(MIRROR_NONE), color_(WHITE), flags_(NOTHING) {}
 
     ///Creates a new image Modifier object with the specified values. 
     /**
@@ -34,8 +34,8 @@ class Modifier {
      * @param alpha The alpha value for the image.
      */
     Modifier(const Vector2D offset, const Vector2D scale = Vector2D(1.0f,1.0f),
-             float rotation = 0.0f, Mirror mirror = MIRROR_NONE, const Color color = WHITE, float alpha = 1.0f) :
-        offset_(offset), scale_(scale), rotation_(rotation), mirror_(mirror), color_(color), alpha_(alpha), flags_(HAS_TRANSFORMATION | HAS_COLOR) {}
+             float rotation = 0.0f, Mirror mirror = MIRROR_NONE, const Color color = WHITE) :
+        offset_(offset), scale_(scale), rotation_(rotation), mirror_(mirror), color_(color), flags_(HAS_TRANSFORMATION | HAS_COLOR) {}
 
     /// Creates a copy of another modifier.
     Modifier(const Modifier& mod);
@@ -55,7 +55,7 @@ class Modifier {
     float           rotation() const { return rotation_; }
     const Mirror&   mirror()   const { return   mirror_; }
     const Color&    color()    const { return    color_; }
-    float           alpha()    const { return    alpha_; }
+    float           alpha()    const { return  color_.a; }
     int             flags()    const { return    flags_; }
 
     // Setters.
@@ -86,15 +86,12 @@ class Modifier {
     void ComposeMirror(const Mirror& mirror);
     /// Truncates each component to [0,1] and composes on the Modifier.
     void ComposeColor(const Color& color);
-    /// Truncates alpha to [0,1] and composes on the Modifier.
-    void ComposeAlpha(const float alpha);
-
-    void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeOffset(   mod2->offset_   ); }
+    /// Truncates alpha to [0,1] and composes on the Modifier.    void ComposeAlpha(const float alpha);
+	void ComposeAlpha(const float alpha);    void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeOffset(   mod2->offset_   ); }
     void ComposeScale(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeScale(    mod2->scale_    ); }
     void ComposeRotation( const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeRotation( mod2->rotation_ ); }
     void ComposeMirror(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeMirror(   mod2->mirror_   ); }
     void ComposeColor(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeColor(    mod2->color_    ); }
-    void ComposeAlpha(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeAlpha(    mod2->alpha_    ); }
 
     /// Global composer and copy from pointer function.
     void Compose(const Modifier* mod2);
@@ -117,7 +114,6 @@ class Modifier {
     float           rotation_;
     Mirror          mirror_;
     Color           color_; //TODO: Modifier's "color_" is actually a light filter.
-    float           alpha_;
     int             flags_;
 };
 

@@ -58,7 +58,7 @@ void FlexibleSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
 
 	// Sets the color to tint the image with to the color the image has modified with the color given.
 	// Also sets the alpha.
-    glColor4f(mod.color().r, mod.color().g, mod.color().b, mod.alpha());
+    glColor4fv(mod.color().val);
 
     int nx = (int)(ceil(1.0f / frame_size_.x));
     float xpos = frame_size_.x * (frame_number % nx);

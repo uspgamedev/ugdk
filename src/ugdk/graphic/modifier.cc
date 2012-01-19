@@ -15,16 +15,14 @@ Modifier::Modifier(const Modifier& mod) :
         scale_(mod.scale_),
         rotation_(mod.rotation_),
         mirror_(mod.mirror_),
-        color_(mod.color_),
-        alpha_(mod.alpha_) {}
+        color_(mod.color_) {}
 
 Modifier::Modifier(const Modifier* mod) :
         offset_(mod->offset_),
         scale_(mod->scale_),
         rotation_(mod->rotation_),
         mirror_(mod->mirror_),
-        color_(mod->color_),
-        alpha_(mod->alpha_) {}
+        color_(mod->color_) {}
 
 void Modifier::Compose(const Modifier* mod2) {
 
@@ -35,7 +33,6 @@ void Modifier::Compose(const Modifier* mod2) {
     this->ComposeRotation( mod2->rotation_ );
     this->ComposeMirror(   mod2->mirror_   );
     this->ComposeColor(    mod2->color_    );
-    this->ComposeAlpha(    mod2->alpha_    );
 }
 
 Modifier* Modifier::Compose(const Modifier* mod1, const Modifier* mod2) {
@@ -60,6 +57,7 @@ void Modifier::set_color(const Color& color) {
     color_.r = TO_UNIT_INTERVAL(color.r);
     color_.g = TO_UNIT_INTERVAL(color.g);
     color_.b = TO_UNIT_INTERVAL(color.b);
+    color_.a = TO_UNIT_INTERVAL(color.a);
     flags_ |= HAS_COLOR;
 }
 
@@ -69,7 +67,8 @@ void Modifier::set_rotation(const float rotation) {
 }
 
 void Modifier::set_alpha(const float alpha) {
-    alpha_ = TO_UNIT_INTERVAL(alpha);
+    color_.a = TO_UNIT_INTERVAL(alpha);
+    flags_ |= HAS_COLOR;
 }
 
 
@@ -82,6 +81,7 @@ void Modifier::ComposeColor(const Color& color) {
     color_.r *= TO_UNIT_INTERVAL(color.r);
     color_.g *= TO_UNIT_INTERVAL(color.g);
     color_.b *= TO_UNIT_INTERVAL(color.b);
+    color_.a *= TO_UNIT_INTERVAL(color.a);
     flags_ |= HAS_COLOR;
 }
 
@@ -91,7 +91,8 @@ void Modifier::ComposeRotation(const float rotation) {
 }
 
 void Modifier::ComposeAlpha(const float alpha) {
-    alpha_ *= TO_UNIT_INTERVAL(alpha);
+    color_.a *= TO_UNIT_INTERVAL(alpha);
+    flags_ |= HAS_COLOR;
 }
 
 } // namespace ugdk
