@@ -2,12 +2,11 @@
 #define UGDK_GRAPHIC_NODE_H_
 
 #include <vector>
-#include <ugdk/graphic/modifier.h>
-#include <ugdk/graphic/drawable.h>
-#include <ugdk/graphic/light.h>
+#include <ugdk/graphic.h>
 
 namespace ugdk {
 
+/// 
 class Node {
   public:
     typedef std::vector<Node*> NodeSet;
@@ -22,6 +21,7 @@ class Node {
 
     ~Node();
 
+    /// Pushes the modifier to the VideoManager, renders 
     void Render(float dt);
     void RenderLight();
 

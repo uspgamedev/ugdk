@@ -1,6 +1,8 @@
 #include <SDL/SDL_endian.h>
 
 #include <ugdk/graphic/texture.h>
+#include <cstdlib>
+#include <cstdio>
 
 namespace ugdk {
 

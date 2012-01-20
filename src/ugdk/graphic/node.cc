@@ -1,6 +1,9 @@
 #include <algorithm>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/drawable.h>
+#include <ugdk/graphic/light.h>
 #include "node.h"
 
 namespace ugdk {
@@ -11,6 +14,9 @@ bool Node::CompareByZIndex(const Node *a, const Node *b) {
 
 Node::~Node() {
     if(modifier_) delete modifier_;
+    if(drawable_) delete drawable_;
+    if(light_)    delete light_;
+
     if(parent_) parent_->RemoveChild(this);
 
     NodeSet::iterator it;
