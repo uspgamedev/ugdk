@@ -46,7 +46,7 @@ bool TextManager::Release() {
 				imgs_it->second[i]->Destroy();
 				delete imgs_it->second[i];
 			}
-        delete imgs_it->second;
+        delete[] imgs_it->second;
     }
     font_images_.clear();
 	return true;
@@ -97,7 +97,7 @@ void TextManager::AddFont(wstring name, wstring path, int size, char ident, bool
 	if(font_images_.count(path) == 0) {
 		// Given file not loaded, loading it.
 		font_image = new Image*[65535];
-		memset(font_image, 0, 4*65535);
+		memset(font_image, 0, sizeof(*font_image)*65535);
 		TTF_Font *ttf_font = TTF_OpenFont( PATH_MANAGER()->ResolvePath(path).c_str(), 100 );
         //TODO: revise this. Too noisy.
 		//fwprintf(stderr, L"-- Processing new font file: \"%s\"\n", path.c_str());
