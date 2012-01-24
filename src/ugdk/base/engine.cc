@@ -70,13 +70,11 @@ void Engine::Run() {
             (current_top_scene = CurrentScene())->Focus();
         }
         DeleteFinishedScenes();
-        if(current_top_scene != CurrentScene())
-            (current_top_scene = CurrentScene())->Focus();
 
-        // gerenciamento das cenas
-        if (scene_list_.size() == 0) {
+        if (CurrentScene() == NULL)
             quit();
-        }
+        else if(current_top_scene != CurrentScene())
+            (current_top_scene = CurrentScene())->Focus();
 
         // gerenciamento de tempo
         time_handler_->Update();
