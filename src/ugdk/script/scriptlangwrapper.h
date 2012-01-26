@@ -2,7 +2,7 @@
 #define SCRIPTLANGWRAPPER_H_
 
 #include <string>
-#include <stdio.h>
+#include <cstdio>
 
 namespace ugdk {
 namespace script {
@@ -10,14 +10,14 @@ namespace script {
 class VirtualObj;
 
 class ScriptLangWrapper {
-public:
+  public:
 	ScriptLangWrapper();
 	virtual ~ScriptLangWrapper();
 
 	virtual std::string script_file_extension();
 
 	bool CheckIfModuleExists(std::string filepath) {
-		FILE* file = fopen(filepath + script_file_extension(), "r");
+		FILE* file = fopen((filepath + script_file_extension()).c_str(), "r");
 		if (file) {
 			fclose(file);
 			return true;
