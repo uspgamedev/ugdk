@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cfloat>
+#include <cmath>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/modifier.h>
