@@ -9,7 +9,7 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/graphic/drawable/flexiblespritesheet.h>
+#include <ugdk/graphic/spritesheet/flexiblespritesheet.h>
 #include <ugdk/util/pathmanager.h>
 
 // VSync
@@ -109,6 +109,12 @@ bool VideoManager::Release() {
         delete it->second;
     }
     image_memory_.clear();
+
+    for(std::map<std::string, FlexibleSpritesheet*>::iterator it = spritesheet_memory_.begin();
+        it != spritesheet_memory_.end(); ++it) {
+            delete it->second;
+    }
+    spritesheet_memory_.clear();
     /*if(GLEW_ARB_framebuffer_object) {
         glDeleteFramebuffersEXT(1, &light_buffer_id_);
     }*/

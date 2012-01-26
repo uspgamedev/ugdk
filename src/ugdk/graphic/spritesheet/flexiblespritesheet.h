@@ -1,10 +1,10 @@
-#ifndef UGDK_GRAPHIC_DRAWABLE_FLEXIBLESPRITESHEET_H_
-#define UGDK_GRAPHIC_DRAWABLE_FLEXIBLESPRITESHEET_H_
+#ifndef UGDK_GRAPHIC_SPRITESHEET_FLEXIBLESPRITESHEET_H_
+#define UGDK_GRAPHIC_SPRITESHEET_FLEXIBLESPRITESHEET_H_
 
 #include <string>
 #include <ugdk/base/types.h>
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/drawable/spritesheet.h>
+#include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/videomanager.h>
 
 namespace ugdk {

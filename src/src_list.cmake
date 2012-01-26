@@ -1,4 +1,5 @@
 set (FRAMEWORK_SRC
+    ${SRC_DIR}/ugdk/action.h
     ${SRC_DIR}/ugdk/audio.h
     ${SRC_DIR}/ugdk/graphic.h
     ${SRC_DIR}/ugdk/action/animation.cc
@@ -18,7 +19,6 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/base/engine.cc
     ${SRC_DIR}/ugdk/base/engine.h
     ${SRC_DIR}/ugdk/base/types.h
-    ${SRC_DIR}/ugdk/config/config.h
     ${SRC_DIR}/ugdk/graphic/drawable.h
     ${SRC_DIR}/ugdk/graphic/font.cc
     ${SRC_DIR}/ugdk/graphic/font.h
@@ -28,6 +28,7 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/graphic/modifier.h
     ${SRC_DIR}/ugdk/graphic/node.cc
     ${SRC_DIR}/ugdk/graphic/node.h
+    ${SRC_DIR}/ugdk/graphic/spritesheet.h
     ${SRC_DIR}/ugdk/graphic/textmanager.cc
     ${SRC_DIR}/ugdk/graphic/textmanager.h
     ${SRC_DIR}/ugdk/graphic/texture.cc
@@ -35,18 +36,17 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/graphic/videomanager.cc
     ${SRC_DIR}/ugdk/graphic/videomanager.h
     ${SRC_DIR}/ugdk/graphic/wglext.h
-    ${SRC_DIR}/ugdk/graphic/drawable/flexiblespritesheet.cc
-    ${SRC_DIR}/ugdk/graphic/drawable/flexiblespritesheet.h
     ${SRC_DIR}/ugdk/graphic/drawable/shape.h
     ${SRC_DIR}/ugdk/graphic/drawable/solidrectangle.cc
     ${SRC_DIR}/ugdk/graphic/drawable/solidrectangle.h
     ${SRC_DIR}/ugdk/graphic/drawable/sprite.cc
     ${SRC_DIR}/ugdk/graphic/drawable/sprite.h
-    ${SRC_DIR}/ugdk/graphic/drawable/spritesheet.h
     ${SRC_DIR}/ugdk/graphic/drawable/text.cc
     ${SRC_DIR}/ugdk/graphic/drawable/text.h
     ${SRC_DIR}/ugdk/graphic/drawable/texturedrectangle.cc
     ${SRC_DIR}/ugdk/graphic/drawable/texturedrectangle.h
+    ${SRC_DIR}/ugdk/graphic/spritesheet/flexiblespritesheet.cc
+    ${SRC_DIR}/ugdk/graphic/spritesheet/flexiblespritesheet.h
     ${SRC_DIR}/ugdk/input/inputmanager.cc
     ${SRC_DIR}/ugdk/input/inputmanager.h
     ${SRC_DIR}/ugdk/input/keys.h

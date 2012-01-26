@@ -1,7 +1,7 @@
 #include <ugdk/graphic/drawable/sprite.h>
 
 #include <ugdk/base/engine.h>
-#include <ugdk/graphic/drawable/spritesheet.h>
+#include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/action/animation.h>
 
@@ -15,13 +15,14 @@ Sprite::~Sprite() {
 }
 
 void Sprite::Draw(float dt) {
-    int frame_number = animation_manager_->GetFrame();
+    if(spritesheet_) {
+        int frame_number = animation_manager_->GetFrame();
 
-    const Modifier *animation_mod = animation_manager_->get_current_modifier();
-    if(animation_mod) VIDEO_MANAGER()->PushAndApplyModifier(animation_mod);
-    spritesheet_->Draw(frame_number, hotspot_);
-    if(animation_mod) VIDEO_MANAGER()->PopModifier();
-
+        const Modifier *animation_mod = animation_manager_->get_current_modifier();
+        if(animation_mod) VIDEO_MANAGER()->PushAndApplyModifier(animation_mod);
+        spritesheet_->Draw(frame_number, hotspot_);
+        if(animation_mod) VIDEO_MANAGER()->PopModifier();
+    }
     Update(dt);
 }
 

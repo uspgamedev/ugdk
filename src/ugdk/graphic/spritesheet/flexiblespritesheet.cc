@@ -7,7 +7,7 @@
 #include <SDL/SDL_opengl.h>
 #include <ugdk/base/types.h>
 #include <ugdk/base/engine.h>
-#include <ugdk/graphic/drawable/flexiblespritesheet.h>
+#include <ugdk/graphic/spritesheet/flexiblespritesheet.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/videomanager.h>
 
