@@ -19,6 +19,7 @@ TexturedRectangle::~TexturedRectangle() {}
 
 void TexturedRectangle::Draw(float dt) {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
+    if(!mod.visible()) return;
 
     Vector2D origin, target(size_);
 

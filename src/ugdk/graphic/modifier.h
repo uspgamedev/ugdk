@@ -8,7 +8,6 @@
 namespace ugdk {
 
 class Modifier {
-
   public:
 
     enum Flags {
@@ -19,7 +18,8 @@ class Modifier {
         TRUNCATES_WHEN_APPLIED = 16
     };
 
-    Modifier() : offset_(), scale_(1.0f, 1.0f), rotation_(0.0f), mirror_(MIRROR_NONE), color_(WHITE), flags_(NOTHING) {}
+    Modifier() : offset_(), scale_(1.0f, 1.0f), rotation_(0.0f), 
+        mirror_(MIRROR_NONE), color_(WHITE), visible_(true), flags_(NOTHING) {}
 
     ///Creates a new image Modifier object with the specified values. 
     /**
@@ -34,8 +34,9 @@ class Modifier {
      * @param alpha The alpha value for the image.
      */
     Modifier(const Vector2D offset, const Vector2D scale = Vector2D(1.0f,1.0f),
-             float rotation = 0.0f, Mirror mirror = MIRROR_NONE, const Color color = WHITE) :
-        offset_(offset), scale_(scale), rotation_(rotation), mirror_(mirror), color_(color), flags_(HAS_TRANSFORMATION | HAS_COLOR) {}
+             float rotation = 0.0f, Mirror mirror = MIRROR_NONE, const Color color = WHITE, const bool visible = true) :
+        offset_(offset), scale_(scale), rotation_(rotation), mirror_(mirror), 
+            color_(color), visible_(visible), flags_(HAS_TRANSFORMATION | HAS_COLOR) {}
 
     /// Creates a copy of another modifier.
     Modifier(const Modifier& mod);
@@ -57,6 +58,7 @@ class Modifier {
     const Color&    color()    const { return    color_; }
     float           alpha()    const { return  color_.a; }
     int             flags()    const { return    flags_; }
+    bool            visible()  const { return  visible_; }
 
     // Setters.
     void set_offset(const Vector2D& offset) { offset_ = offset; flags_ |= HAS_TRANSFORMATION; }
@@ -69,6 +71,7 @@ class Modifier {
     void set_color(const Color& color);
     /// Truncates alpha to [0,1] and sets it to the Modifier.
     void set_alpha(const float alpha);
+    void set_visible(const bool visible) { visible_ = visible; }
     /**@}
      */
     /**@name Component composers.
@@ -87,11 +90,15 @@ class Modifier {
     /// Truncates each component to [0,1] and composes on the Modifier.
     void ComposeColor(const Color& color);
     /// Truncates alpha to [0,1] and composes on the Modifier.    void ComposeAlpha(const float alpha);
-	void ComposeAlpha(const float alpha);    void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeOffset(   mod2->offset_   ); }
+	void ComposeAlpha(const float alpha);
+    void ComposeVisible(const bool visible) { visible_ = !(!visible_ || !visible); }
+    
+    void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeOffset(   mod2->offset_   ); }
     void ComposeScale(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeScale(    mod2->scale_    ); }
     void ComposeRotation( const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeRotation( mod2->rotation_ ); }
     void ComposeMirror(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeMirror(   mod2->mirror_   ); }
     void ComposeColor(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeColor(    mod2->color_    ); }
+    void ComposeVisible(  const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeVisible(  mod2->visible_  ); }
 
     /// Global composer and copy from pointer function.
     void Compose(const Modifier* mod2);
@@ -114,6 +121,7 @@ class Modifier {
     float           rotation_;
     Mirror          mirror_;
     Color           color_; //TODO: Modifier's "color_" is actually a light filter.
+    bool            visible_;
     int             flags_;
 };
 

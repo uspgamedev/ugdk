@@ -16,7 +16,7 @@ class Node {
         :   modifier_(modifier), 
             drawable_(drawable),
             light_(NULL),
-            visible_(true),
+            active_(true),
             zindex_(0.0f),
             parent_(NULL) {}
 
@@ -28,7 +28,7 @@ class Node {
 
     void set_drawable(Drawable* drawable) { drawable_ = drawable; }
     void set_light(Light* light)          {    light_ =    light; }
-    void set_visible(const bool visible)  {  visible_ =  visible; }
+    void set_active(const bool active)    {   active_ =   active; }
     void set_zindex(const float zindex);
     
           Modifier* modifier() { return (modifier_ != NULL) ? modifier_ : (modifier_ = new Modifier); }
@@ -37,7 +37,7 @@ class Node {
     const Drawable* drawable() const { return drawable_; }
           Light* light()             { return    light_; }
     const Light* light()       const { return    light_; }
-          bool   visible()     const { return  visible_; }
+          bool   active()      const { return   active_; }
           float  zindex()      const { return   zindex_; }
 
     void AddChild(Node *child) {
@@ -54,7 +54,7 @@ class Node {
     Modifier* modifier_;
     Drawable* drawable_;
     Light* light_;
-    bool visible_;
+    bool active_;
     float zindex_;
 
     NodeSet childs_;

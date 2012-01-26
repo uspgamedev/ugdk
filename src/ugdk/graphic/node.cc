@@ -28,7 +28,7 @@ Node::~Node() {
 }
 
 void Node::Render(float dt) {
-    if(!visible_) return;
+    if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
     Modifier* modifier = modifier_;
@@ -45,7 +45,7 @@ void Node::Render(float dt) {
 }
 
 void Node::RenderLight() {
-    if(!visible_) return;
+    if(!active_) return;
     if(childs_.empty() && !light_) return; // optimization!
 
     Modifier* modifier = modifier_;

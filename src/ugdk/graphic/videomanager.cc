@@ -303,6 +303,7 @@ void VideoManager::PushAndApplyModifier(const Modifier* apply) {
 
     if(apply->flags() & Modifier::HAS_COLOR) top.ComposeColor(apply);
     top.ComposeMirror(apply);
+    top.ComposeVisible(apply);
 
     glPushMatrix();
 

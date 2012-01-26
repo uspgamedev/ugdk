@@ -44,6 +44,11 @@ const Vector2D& Text::size() const {
 }
 
 void Text::Draw(float dt) {
+    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
+    if(!mod.visible()) return;
+
+    // TODO: respect Mirror and Color
+
     // DOES NOTHING WITH TIME! TODO?
     Font::IdentType ident = font_->ident();
 

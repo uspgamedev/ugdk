@@ -35,8 +35,8 @@ void Scene::Update(float delta_t) {
         (*it)->Update(delta_t);
 }
 
-bool Scene::visible() const { return root_node_->visible(); }
-void Scene::set_visible(bool set) { root_node_->set_visible(set); }
+bool Scene::visible() const { return root_node_->modifier()->visible(); }
+void Scene::set_visible(bool set) { root_node_->modifier()->set_visible(set); }
 
 void Scene::End() {
     if(background_music_ != NULL)

@@ -15,14 +15,16 @@ Modifier::Modifier(const Modifier& mod) :
         scale_(mod.scale_),
         rotation_(mod.rotation_),
         mirror_(mod.mirror_),
-        color_(mod.color_) {}
+        color_(mod.color_),
+        visible_(mod.visible_) {}
 
 Modifier::Modifier(const Modifier* mod) :
         offset_(mod->offset_),
         scale_(mod->scale_),
         rotation_(mod->rotation_),
         mirror_(mod->mirror_),
-        color_(mod->color_) {}
+        color_(mod->color_),
+        visible_(mod->visible_) {}
 
 void Modifier::Compose(const Modifier* mod2) {
 

@@ -35,6 +35,7 @@ void FlexibleSpritesheet::set_frame_size(const Vector2D& size) {
 
 void FlexibleSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
+    if(!mod.visible()) return;
 
     /*Frame bounds = VIDEO_MANAGER()->virtual_bounds();
     if (target.x > bounds.right() || target.y > bounds.bottom() ||
