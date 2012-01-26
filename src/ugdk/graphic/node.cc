@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cfloat>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/modifier.h>
@@ -61,7 +62,7 @@ void Node::RenderLight() {
 }
 
 void Node::set_zindex(const float zindex) {
-    if(parent_ && (zindex - zindex_ > 1.0e-6)) parent_->must_sort_ = true;
+    if(parent_ && (fabs(zindex - zindex_) > FLT_EPSILON)) parent_->must_sort_ = true;
     zindex_ = zindex;
 }
 
@@ -74,9 +75,9 @@ void Node::RemoveChild(Node *child) {
 }
 
 void Node::SortChildren() {
+    // TODO: use a better sorting algorith? std::sort usually may be 
     std::sort(childs_.begin(), childs_.end(), Node::CompareByZIndex);
     must_sort_ = false;
-    //childs_.sort(Node::CompareByZIndex);
 }
     
 }  // namespace ugdk
