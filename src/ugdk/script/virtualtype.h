@@ -4,18 +4,28 @@
 
 namespace ugdk {
 
-class VirtualType {
-public:
-    ~VirtualType() {
-        // TODO Auto-generated destructor stub
-    }
+namespace script {
 
-protected:
+class VirtualType {
+
+  public:
+
+    ~VirtualType() {}
+
+  protected:
+
     VirtualType() {
         // TODO Auto-generated constructor stub
 
     }
+
+  private:
+
+
+
 };
+
+} /* namespace script */
 
 } /* namespace ugdk */
 

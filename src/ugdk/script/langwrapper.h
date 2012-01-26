@@ -4,6 +4,8 @@
 #include <string>
 #include <cstdio>
 
+#include <ugdk/script/defs.h>
+
 namespace ugdk {
 namespace script {
 
@@ -14,7 +16,7 @@ class LangWrapper {
 	LangWrapper();
 	virtual ~LangWrapper();
 
-	virtual std::string script_file_extension();
+	virtual std::string script_file_extension() = 0;
 
 	bool CheckIfModuleExists(std::string filepath) {
 		FILE* file = fopen((filepath + script_file_extension()).c_str(), "r");
@@ -24,7 +26,9 @@ class LangWrapper {
 		}
 		return false;
 	}
-	virtual VirtualObj* LoadModule(std::string name);
+
+	virtual VirtualObjPtr LoadModule(std::string name) = 0;
+
 };
 
 }
