@@ -1,23 +1,23 @@
-#ifndef VIRTUALOBJ_H_
-#define VIRTUALOBJ_H_
+#ifndef UGDK_SCRIPT_VIRTUALOBJ_H_
+#define UGDK_SCRIPT_VIRTUALOBJ_H_
 
 namespace ugdk {
 namespace script {
 
-class ScriptLangWrapper;
+class LangWrapper;
 
 class VirtualObj {
 public:
 	VirtualObj();
 	virtual ~VirtualObj();
 
-	ScriptLangWrapper* wrapper() { return wrapper_; }
+	LangWrapper* wrapper() { return wrapper_; }
 
 protected:
-	ScriptLangWrapper* wrapper_;
+	LangWrapper* wrapper_;
 };
 
 }
 }
 
-#endif /* VIRTUALOBJ_H_ */
+#endif /* UGDK_SCRIPT_VIRTUALOBJ_H_ */

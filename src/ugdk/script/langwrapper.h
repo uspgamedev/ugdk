@@ -1,5 +1,5 @@
-#ifndef SCRIPTLANGWRAPPER_H_
-#define SCRIPTLANGWRAPPER_H_
+#ifndef UGDK_SCRIPT_LANGWRAPPER_H_
+#define UGDK_SCRIPT_LANGWRAPPER_H_
 
 #include <string>
 #include <cstdio>
@@ -9,10 +9,10 @@ namespace script {
 
 class VirtualObj;
 
-class ScriptLangWrapper {
+class LangWrapper {
   public:
-	ScriptLangWrapper();
-	virtual ~ScriptLangWrapper();
+	LangWrapper();
+	virtual ~LangWrapper();
 
 	virtual std::string script_file_extension();
 
@@ -30,4 +30,4 @@ class ScriptLangWrapper {
 }
 }
 
-#endif /* SCRIPTLANGWRAPPER_H_ */
+#endif /* UGDK_SCRIPT_LANGWRAPPER_H_ */

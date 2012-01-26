@@ -1,5 +1,5 @@
-#ifndef SCRIPTMANAGER_H_
-#define SCRIPTMANAGER_H_
+#ifndef UGDK_SCRIPT_SCRIPTMANAGER_H_
+#define UGDK_SCRIPT_SCRIPTMANAGER_H_
 
 #include <string>
 #include <map>
@@ -8,7 +8,7 @@ namespace ugdk {
 
 namespace script {
 
-class ScriptLangWrapper;
+class LangWrapper;
 class VirtualObj;
 
 class ScriptManager {
@@ -18,8 +18,8 @@ public:
 
 	bool Initialize();
 
-	void Register(std::string name, ScriptLangWrapper* wrapper);
-	ScriptLangWrapper* GetWrapper(std::string name);
+	void Register(std::string name, LangWrapper* wrapper);
+	LangWrapper* GetWrapper(std::string name);
 
 	VirtualObj* LoadModule(std::string filepath);
 
@@ -27,11 +27,11 @@ private:
 	static ScriptManager* ref_;
 	ScriptManager();
 
-	typedef std::map<std::string, ScriptLangWrapper*> WrapperMap;
+	typedef std::map<std::string, LangWrapper*> WrapperMap;
 	WrapperMap wrappers_;
 };
 
 }
 }
 
-#endif /* SCRIPTMANAGER_H_ */
+#endif /* UGDK_SCRIPT_SCRIPTMANAGER_H_ */
