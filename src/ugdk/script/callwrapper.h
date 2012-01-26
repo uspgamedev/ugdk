@@ -22,7 +22,8 @@ class CallWrapper {
 
   protected:
 
-    CallWrapper(VirtualObjPtr func) {}
+    CallWrapper() {}
+
 };
 
 } /* namespace script */
