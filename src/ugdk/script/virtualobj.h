@@ -13,6 +13,9 @@ public:
 
 	LangWrapper* wrapper() { return wrapper_; }
 
+	virtual VirtualObjPtr operator() (/*WAT?!? ARGS!?!*/);
+	virtual VirtualObjPtr operator[] () /*TODO LOL*/
+	
 protected:
 	LangWrapper* wrapper_;
 };
