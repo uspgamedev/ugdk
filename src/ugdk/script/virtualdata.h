@@ -21,6 +21,8 @@ class VirtualData {
     /// Tries to wrap the given data with the given type into this object.
     void Wrap(void* data, const VirtualType& type) = 0;
 
+
+
   protected:
 
     VirtualData() {}
