@@ -17,7 +17,7 @@ class VirtualObj {
 	VirtualObj(LangWrapper* wrapper) :
 	    wrapper_(wrapper),
 	    data_(NULL) {}
-	virtual ~VirtualObj();
+	~VirtualObj();
 
 	template <class T>
 	T* get() {
@@ -28,8 +28,17 @@ class VirtualObj {
 
 	LangWrapper* wrapper() { return wrapper_; }
 
-	virtual VirtualObj operator() (std::vector<const VirtualObj&> args);
-	virtual VirtualObj& operator[] (const std::string attr_name);
+	VirtualObj operator() (std::vector<const VirtualObj&> args) {
+		VirtualObj ret = VirtualObj(wrapper_);
+		ret.data_ = data_->Execute(args);
+		return ret;
+	}
+
+	VirtualObj& operator[] (const std::string attr_name) {
+		VirtualObj attr = VirtualObj(wrapper_);
+		attr.data_ = data_->GetAttr(attr_name);
+		return attr;
+	}
 	
   private:
 
