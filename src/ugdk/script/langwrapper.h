@@ -35,7 +35,7 @@ class LangWrapper {
 	/// Finalizes the LangWrapper, finalizing any language specific stuff.
 	virtual void Finalize() = 0;
 
-	const LangID langID () { return LANG(Lua); }
+	virtual const LangID langID () = 0;
 
 };
 
