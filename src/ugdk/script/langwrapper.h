@@ -28,7 +28,7 @@ class LangWrapper {
 		return false;
 	}
 
-	virtual VirtualObjPtr LoadModule(std::string name) = 0;
+	virtual VirtualObj LoadModule(std::string name) = 0;
 
 	/// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
 	virtual bool Initialize() = 0;

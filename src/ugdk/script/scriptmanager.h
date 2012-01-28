@@ -22,7 +22,7 @@ public:
 	void Register(std::string name, LangWrapper* wrapper);
 	LangWrapper* GetWrapper(std::string name);
 
-	VirtualObj* LoadModule(std::string filepath);
+	VirtualObj LoadModule(std::string filepath);
 
 private:
 	static ScriptManager* ref_;
