@@ -14,13 +14,13 @@ class LangWrapper;
 
 class VirtualObj {
   public:
-	VirtualObj(LangWrapper* wrapper) :
+	VirtualObj(LangWrapper* wrapper, VirtualData::Ptr data = NULL) :
 	    wrapper_(wrapper),
-	    data_(NULL) {}
+	    data_(data) {}
 	~VirtualObj();
 
 	template <class T>
-	T* get() {
+	T* get() const {
 	    return static_cast <T*> (
 	        data_->Unwrap(TypeRegistry<T>::FromLang(wrapper_->langID()))
         );
@@ -34,7 +34,7 @@ class VirtualObj {
 		return ret;
 	}
 
-	VirtualObj& operator[] (const std::string attr_name) {
+	VirtualObj operator[] (const std::string attr_name) {
 		VirtualObj attr = VirtualObj(wrapper_);
 		attr.data_ = data_->GetAttr(attr_name);
 		return attr;
