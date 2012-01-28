@@ -32,7 +32,7 @@ void ScriptManager::Finalize() {
 	WrapperMap::iterator it = wrappers_.begin();
 	while (it != wrappers_.end()) {
 		LangWrapper* wrap = it->second;
-		wrap->Finalize()
+		wrap->Finalize();
 		++it;
 	}
 }
@@ -58,6 +58,8 @@ VirtualObj ScriptManager::LoadModule(string script) {
 		}
 		++it;
 	}
+
+	return VirtualObj();
 }
 
 }

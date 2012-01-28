@@ -14,35 +14,33 @@ class LangWrapper;
 
 class VirtualObj {
   public:
-	VirtualObj(LangWrapper* wrapper, VirtualData::Ptr data = NULL) :
-	    wrapper_(wrapper),
+	VirtualObj(VirtualData::Ptr data = NULL) :
 	    data_(data) {}
 	~VirtualObj();
 
 	template <class T>
 	T* get() const {
 	    return static_cast <T*> (
-	        data_->Unwrap(TypeRegistry<T>::FromLang(wrapper_->langID()))
+	        data_->Unwrap(TypeRegistry<T>::type())
         );
 	}
 
-	LangWrapper* wrapper() { return wrapper_; }
+	LangWrapper* wrapper() { return data_->wrapper(); }
 
 	VirtualObj operator() (std::vector<const VirtualObj&> args) {
-		VirtualObj ret = VirtualObj(wrapper_);
+		VirtualObj ret = VirtualObj();
 		ret.data_ = data_->Execute(args);
 		return ret;
 	}
 
 	VirtualObj operator[] (const std::string attr_name) {
-		VirtualObj attr = VirtualObj(wrapper_);
+		VirtualObj attr = VirtualObj();
 		attr.data_ = data_->GetAttr(attr_name);
 		return attr;
 	}
 	
   private:
 
-	LangWrapper* const wrapper_;
 	VirtualData::Ptr data_;
 };
 
