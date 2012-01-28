@@ -2,7 +2,8 @@
 #define UGDK_SCRIPT_VIRTUALOBJ_H_
 
 #include <memory>
-
+#include <vector>
+#include <string>
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/type.h>
 
@@ -27,8 +28,8 @@ class VirtualObj {
 
 	LangWrapper* wrapper() { return wrapper_; }
 
-	virtual VirtualObj operator() (/*WAT?!? ARGS!?!*/);
-	virtual VirtualObj& operator[] (); /*TODO LOL*/
+	virtual VirtualObj operator() (std::vector<const VirtualObj&> args);
+	virtual VirtualObj& operator[] (const std::string attr_name);
 	
   private:
 
