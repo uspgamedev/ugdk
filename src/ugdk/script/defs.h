@@ -2,8 +2,10 @@
 #ifndef UGDK_SCRIPT_DEFS_H_
 #define UGDK_SCRIPT_DEFS_H_
 
+/// Expands do the name of the constant containg name's LangID.
 #define LANG(name) name##Lang
 
+/// Defines a LangID for 'name'.
 #define DEFINE_LANG_ID(name,id) \
     const LangID LANG(name) = id;
 

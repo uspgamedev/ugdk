@@ -13,22 +13,29 @@ class LangWrapper;
 
 class VirtualObj {
   public:
-	VirtualObj();
+	VirtualObj(LangWrapper* wrapper) :
+	    wrapper_(wrapper),
+	    data_(NULL) {}
 	virtual ~VirtualObj();
 
 	template <class T>
 	T* get() {
-	    return data_->Unwrap(TypeRegistry<T>::FromLang(wrapper_->langID()));
+	    return static_cast <T*> (
+	        data_->Unwrap(TypeRegistry<T>::FromLang(wrapper_->langID()))
+        );
 	}
 
 	LangWrapper* wrapper() { return wrapper_; }
 
-	virtual VirtualObjPtr operator() (/*WAT?!? ARGS!?!*/);
-	virtual VirtualObjPtr operator[] (); /*TODO LOL*/
+	virtual VirtualObj operator() (/*WAT?!? ARGS!?!*/);
+	virtual VirtualObj& operator[] (); /*TODO LOL*/
 	
   private:
-	LangWrapper* wrapper_;
-	std::tr1::shared_ptr<VirtualData> data_;
+
+	typedef std::tr1::shared_ptr<VirtualData> VDataPtr
+
+	LangWrapper* const wrapper_;
+	VDataPtr data_;
 };
 
 }
