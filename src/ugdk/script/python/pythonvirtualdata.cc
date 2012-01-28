@@ -11,6 +11,9 @@ void* PythonVirtualData::Unwrap(const VirtualType& type) {
 void PythonVirtualData::Wrap(void* data, const VirtualType& type) {
 }
 
+LangWrapper* PythonVirtualData::wrapper () {
+}
+
 /// Tries to execute ourselves as a function in a script language,
 /// passing the given arguments and returning the result.
 Ptr PythonVirtualData::Execute(std::vector<const VirtualObj&> args) {

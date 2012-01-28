@@ -12,10 +12,8 @@ namespace python {
 
 class PythonLangWrapper : public LangWrapper {
   public:
-	PythonLangWrapper() : LangWrapper() {}
+	PythonLangWrapper() : LangWrapper(".py", LANG(Python)) {}
 	virtual ~PythonLangWrapper() {}
-
-	virtual std::string script_file_extension() { return ".py" };
 
 	virtual VirtualObj LoadModule(std::string name);
 
@@ -23,8 +21,6 @@ class PythonLangWrapper : public LangWrapper {
 	virtual bool Initialize();
 	/// Finalizes the LangWrapper, finalizing any language specific stuff.
 	virtual void Finalize();
-
-	const LangID langID () { return LANG(Python); }
 
 };
 

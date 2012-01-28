@@ -24,6 +24,8 @@ class PythonVirtualData : public VirtualData {
     /// Tries to wrap the given data with the given type into this object.
     virtual void Wrap(void* data, const VirtualType& type);
 
+	virtual LangWrapper* wrapper ();
+
 	/// Tries to execute ourselves as a function in a script language,
     /// passing the given arguments and returning the result.
 	virtual Ptr Execute(std::vector<const VirtualObj&> args);
