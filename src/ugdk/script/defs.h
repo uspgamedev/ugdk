@@ -1,35 +1,31 @@
+/// Here are the common definitions of the script system.
 
 #ifndef UGDK_SCRIPT_DEFS_H_
 #define UGDK_SCRIPT_DEFS_H_
 
-/// Expands do the name of the constant containg name's LangID.
+/// The ID, if defined, of the script language called 'name'.
 #define LANG(name) name##Lang
 
-/// Defines a LangID for 'name'.
+/// Defines an ID for the script language called 'name'.
 #define DEFINE_LANG_ID(name,id) \
     const LangID LANG(name) = id;
 
 extern "C" {
-
 /// Used with opaque pointers.
 struct swig_type_info;
 
 }
 
-#include <memory>
-
 namespace ugdk {
 
 namespace script {
 
+/// Type used for script languages' IDs.
 typedef size_t LangID;
 
+/// Script languages ID's definition list.
 DEFINE_LANG_ID(Lua,     0);
 DEFINE_LANG_ID(Python,  1);
-
-class VirtualObj;
-
-typedef std::tr1::shared_ptr<VirtualObj> VirtualObjPtr;
 
 }
 

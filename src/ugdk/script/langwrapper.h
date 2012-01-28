@@ -1,3 +1,4 @@
+
 #ifndef UGDK_SCRIPT_LANGWRAPPER_H_
 #define UGDK_SCRIPT_LANGWRAPPER_H_
 
@@ -13,29 +14,47 @@ namespace script {
 class VirtualObj;
 
 class LangWrapper {
+
   public:
-	LangWrapper();
-	virtual ~LangWrapper();
 
-	virtual std::string script_file_extension() = 0;
+    virtual ~LangWrapper();
 
-	bool CheckIfModuleExists(std::string filepath) {
-		FILE* file = fopen((filepath + script_file_extension()).c_str(), "r");
-		if (file) {
-			fclose(file);
-			return true;
-		}
-		return false;
-	}
+    const std::string& file_extension() { return file_extension_; }
 
-	virtual VirtualObj LoadModule(std::string name) = 0;
 
-	/// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
-	virtual bool Initialize() = 0;
-	/// Finalizes the LangWrapper, finalizing any language specific stuff.
-	virtual void Finalize() = 0;
+    /// Initializes the LangWrapper.
+    /** This is used to initialize the script language's API, if needed.
+     ** @return bool : informing whether the initialization was successful.
+     */
+    virtual bool Initialize() = 0;
 
-	const LangID langID () { return LANG(Lua); }
+    /// Finalizes the LangWrapper, finalizing any language specific stuff.
+    virtual void Finalize() = 0;
+
+    bool CheckIfModuleExists(std::string filepath) {
+        FILE* file = fopen((filepath + file_extension()).c_str(), "r");
+        if (file) {
+            fclose(file);
+            return true;
+        }
+        return false;
+    }
+
+    virtual VirtualObj LoadModule(std::string name) = 0;
+
+
+    const LangID id () { return id_; }
+
+  protected:
+
+    LangWrapper(const std::string& file_extension, const LangID id) :
+        file_extension_(file_extension),
+        id_(id) {}
+
+  private:
+
+    const std::string file_extension_;
+    const LangID      id_;
 
 };
 

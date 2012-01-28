@@ -58,6 +58,8 @@ VirtualObj ScriptManager::LoadModule(string script) {
 		}
 		++it;
 	}
+
+	return VirtualObj();
 }
 
 }
