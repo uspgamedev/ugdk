@@ -14,38 +14,45 @@ class VirtualType {
 
   public:
 
-    VirtualType() : info_(NULL) {}
+    VirtualType() : types_() {}
     ~VirtualType() {}
 
-    struct swig_type_info* info() const { return info_; }
+    struct swig_type_info* FromLang(LangID id) const {
+        return types_[id];
+    }
 
-    void set_info(struct swig_type_info* info) {
-        if (!info_) info_ = info;
+    void RegisterFromLang(struct swig_type_info* info, LangID id) {
+        if (!types_[id]) types_[id] = info;
     }
 
   private:
 
-    struct swig_type_info* info_;
+    typedef std::vector<struct swig_type_info*> TypeFromLang;
+
+    TypeFromLang types_;
 
 };
+
 
 template <class T>
 class TypeRegistry {
 
   public:
 
-    static TypeRegistry<T>& FromLang (LangID id) { return ref_[id]; }
+    static TypeRegistry<T>& type () {
+        return type_;
+    }
 
   private:
 
     TypeRegistry () {}
 
-    static std::vector<VirtualType> ref_;
+    static VirtualType type_;
 
 };
 
 template <class T>
-std::vector<VirtualType> TypeRegistry<T>::ref_;
+TypeRegistry<T> TypeRegistry<T>::type_;
 
 } /* namespace script */
 
