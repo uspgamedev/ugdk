@@ -16,7 +16,25 @@ ScriptManager::ScriptManager() {
 }
 
 bool ScriptManager::Initialize() {
+	bool is_ok = true;
 
+	WrapperMap::iterator it = wrappers_.begin();
+	while (it != wrappers_.end()) {
+		LangWrapper* wrap = it->second;
+		is_ok = is_ok && wrap->Initialize();
+		++it;
+	}
+
+	return is_ok;
+}
+
+void ScriptManager::Finalize() {
+	WrapperMap::iterator it = wrappers_.begin();
+	while (it != wrappers_.end()) {
+		LangWrapper* wrap = it->second;
+		wrap->Finalize()
+		++it;
+	}
 }
 
 void ScriptManager::Register(string name, LangWrapper* wrapper) {

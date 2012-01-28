@@ -30,6 +30,11 @@ class LangWrapper {
 
 	virtual VirtualObjPtr LoadModule(std::string name) = 0;
 
+	/// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
+	virtual bool Initialize() = 0;
+	/// Finalizes the LangWrapper, finalizing any language specific stuff.
+	virtual void Finalize() = 0;
+
 	const LangID langID () { return LANG(Lua); }
 
 };
