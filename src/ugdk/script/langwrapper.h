@@ -5,6 +5,7 @@
 #include <cstdio>
 
 #include <ugdk/script/defs.h>
+#include <ugdk/script/type.h>
 
 namespace ugdk {
 namespace script {
@@ -28,6 +29,8 @@ class LangWrapper {
 	}
 
 	virtual VirtualObjPtr LoadModule(std::string name) = 0;
+
+	const LangID langID () { return LANG(Lua); }
 
 };
 
