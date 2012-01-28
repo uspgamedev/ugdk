@@ -17,7 +17,6 @@ class VirtualData {
 
   public:
 
-
     typedef std::tr1::shared_ptr<VirtualData> Ptr;
 
     virtual ~VirtualData() {}
@@ -28,7 +27,8 @@ class VirtualData {
     /// Tries to wrap the given data with the given type into this object.
     virtual void Wrap(void* data, const VirtualType& type) = 0;
 
-	/// Tries to execute ourselves as a function in a script language, passing the given arguments and returning the result.
+	/// Tries to execute ourselves as a function in a script language,
+    /// passing the given arguments and returning the result.
 	virtual Ptr Execute(std::vector<const VirtualObj&> args);
 
 	/// Tries to get a attribute with the given name from this object.
