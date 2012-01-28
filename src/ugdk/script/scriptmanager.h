@@ -17,6 +17,7 @@ public:
 	~ScriptManager() { ref_ = NULL; }
 
 	bool Initialize();
+	void Finalize();
 
 	void Register(std::string name, LangWrapper* wrapper);
 	LangWrapper* GetWrapper(std::string name);
