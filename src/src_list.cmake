@@ -45,6 +45,8 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/graphic/drawable/text.h
     ${SRC_DIR}/ugdk/graphic/drawable/texturedrectangle.cc
     ${SRC_DIR}/ugdk/graphic/drawable/texturedrectangle.h
+    ${SRC_DIR}/ugdk/graphic/spritesheet/fixedspritesheet.cc
+    ${SRC_DIR}/ugdk/graphic/spritesheet/fixedspritesheet.h
     ${SRC_DIR}/ugdk/graphic/spritesheet/flexiblespritesheet.cc
     ${SRC_DIR}/ugdk/graphic/spritesheet/flexiblespritesheet.h
     ${SRC_DIR}/ugdk/input/inputmanager.cc
