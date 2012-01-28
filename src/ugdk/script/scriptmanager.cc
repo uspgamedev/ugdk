@@ -47,7 +47,7 @@ LangWrapper* ScriptManager::GetWrapper(string name) {
 	return wrappers_[name];
 }
 
-VirtualObj* ScriptManager::LoadModule(string script) {
+VirtualObj ScriptManager::LoadModule(string script) {
 	string filepath = PATH_MANAGER()->ResolvePath("scripts/" + script);
 
 	WrapperMap::iterator it = wrappers_.begin();
