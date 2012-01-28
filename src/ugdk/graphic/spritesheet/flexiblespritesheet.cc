@@ -43,7 +43,7 @@ void FlexibleSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
         return false;
     }*/
 
-    Vector2D origin, target = GetFrameSize(frame_number);
+    Vector2D origin, target = frame_size(frame_number);
 
     if(mod.mirror() & MIRROR_HFLIP) {
         origin.x = target.x;
@@ -52,13 +52,13 @@ void FlexibleSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     if(mod.mirror() & MIRROR_VFLIP) {
         origin.y = target.y;
         target.y = 0.0f;
-	}
+    }
     
     origin -= hotspot_ + hotspot;
     target -= hotspot_ + hotspot;
 
-	// Sets the color to tint the image with to the color the image has modified with the color given.
-	// Also sets the alpha.
+    // Sets the color to tint the image with to the color the image has modified with the color given.
+    // Also sets the alpha.
     glColor4fv(mod.color().val);
 
     int nx = (int)(ceil(1.0f / frame_size_.x));
@@ -75,7 +75,7 @@ void FlexibleSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     } else
         glDisable(GL_TEXTURE_2D);
 
-	glBegin( GL_QUADS ); //Start quad
+    glBegin( GL_QUADS ); //Start quad
         //Draw square
         glTexCoord2f(xpos, ypos);
         glVertex2f(  origin.x, origin.y );
@@ -92,9 +92,8 @@ void FlexibleSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
 }
 
 // devolve o numero de frames que esta imagem armazena
-int FlexibleSpritesheet::FrameCount() const {
-    Vector2D size = frame_size();
-    return static_cast<int>(std::max(1.0f / (size.x * size.y), 1.0f));
+int FlexibleSpritesheet::frame_count() const {
+    return static_cast<int>(std::max(1.0f / (frame_size_.x * frame_size_.y), 1.0f));
 }
 
 }  // namespace framework

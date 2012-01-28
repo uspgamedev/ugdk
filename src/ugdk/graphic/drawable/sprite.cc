@@ -31,7 +31,7 @@ void Sprite::Update(float delta_t) {
 }
 
 const Vector2D& Sprite::size() const {
-    return spritesheet_->GetFrameSize(animation_manager_->GetFrame()); // TODO: requires some info from the spritesheet
+    return spritesheet_->frame_size(animation_manager_->GetFrame()); // TODO: requires some info from the spritesheet
 }
 
 }
