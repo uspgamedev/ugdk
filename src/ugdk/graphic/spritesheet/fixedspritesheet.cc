@@ -31,17 +31,31 @@ FixedSpritesheetData::~FixedSpritesheetData() {
         SDL_FreeSurface(it->surface);
 }
 
-void FixedSpritesheetData::AddFrame(int topleft, int topright, int width, int height, const Vector2D& hotspot) {
+void FixedSpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot) {
     if(file_data_ == NULL) return;
-    SDL_Surface* surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, 0, 0, 0, 0);
+    
+    SDL_Surface *screen = SDL_GetVideoSurface();
+    SDL_Surface* surface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, width, height, 
+                                 screen->format->BitsPerPixel,
+                                 screen->format->Rmask, screen->format->Gmask,
+                                 screen->format->Bmask, screen->format->Amask);
 
-    SDL_Rect source_rect = { topleft, topright, width, height };
+    SDL_Rect source_rect = { topleft_x, topleft_y, width, height };
     int blit = SDL_BlitSurface(file_data_, &source_rect, surface, NULL);
     if(blit != 0) {
         // throw error msg
         fprintf(stderr, "FixedSpritesheetData - Failed to blit the frame %d\n", frames_.size());
     }
     frames_.push_back(SpritesheetFrame(surface, hotspot));
+}
+
+void FixedSpritesheetData::FillWithFramesize(int width, int height, const Vector2D& hotspot) {
+    if(file_data_ == NULL) return;
+    for(int y = 0; y + height <= file_data_->h; y += height) {
+        for(int x = 0; x + width <= file_data_->w; x += width) {
+            AddFrame(x, y, width, height, hotspot);
+        }
+    }
 }
 
 FixedSpritesheet::FixedSpritesheet(FixedSpritesheetData& data) {
@@ -55,6 +69,7 @@ FixedSpritesheet::FixedSpritesheet(FixedSpritesheetData& data) {
         Texture* texture = Texture::CreateFromSurface(it->surface);
         CreateList(id, texture, it->hotspot);
         frames_.push_back(texture);
+        frame_sizes_.push_back(Vector2D(static_cast<float>(texture->width()), static_cast<float>(texture->height())));
     }
 }
 
@@ -107,6 +122,7 @@ void FixedSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     if(mod.mirror() != MIRROR_NONE || hotspot.LengthSquared() > 1.0e-6) {
         glPushMatrix();
         // TODO: optimize mirroring, and combine the matrices
+        // TODO: fix bugs...
 
         // hotspot
         glTranslatef(-hotspot.x, -hotspot.y, 0.0f);

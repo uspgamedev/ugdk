@@ -29,7 +29,9 @@ class FixedSpritesheetData {
     ~FixedSpritesheetData();
     
     /// Adds a new frame to the frame list.
-    void AddFrame(int topleft, int topright, int width, int height, const Vector2D& hotspot);
+    void AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot);
+    
+    void FillWithFramesize(int width, int height, const Vector2D& hotspot);
 
     /// Getter for the frame data.
     const std::vector<SpritesheetFrame>& frames() const { return frames_; }

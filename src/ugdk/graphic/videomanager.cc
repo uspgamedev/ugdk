@@ -110,7 +110,7 @@ bool VideoManager::Release() {
     }
     image_memory_.clear();
 
-    for(std::map<std::string, FlexibleSpritesheet*>::iterator it = spritesheet_memory_.begin();
+    for(std::map<std::string, Spritesheet*>::iterator it = spritesheet_memory_.begin();
         it != spritesheet_memory_.end(); ++it) {
             delete it->second;
     }
@@ -227,17 +227,6 @@ Texture* VideoManager::LoadTexture(const string& filepath) {
         image_memory_[filepath] = tex;
     }
     return image_memory_[filepath];
-}
-
-FlexibleSpritesheet* VideoManager::LoadSpritesheet(const std::string& filepath) {
-    if(spritesheet_memory_.count(filepath) == 0) {
-        FlexibleSpritesheet* ss = NULL;
-        Texture* tex = LoadTexture(filepath);
-        if(tex != NULL)
-            ss = new FlexibleSpritesheet(tex);
-        spritesheet_memory_[filepath] = ss;
-    }
-    return spritesheet_memory_[filepath];
 }
 
 static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ellipse_coef) {

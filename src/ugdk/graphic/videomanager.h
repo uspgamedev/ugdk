@@ -38,7 +38,11 @@ class VideoManager {
     void Render(std::list<Scene*>&, std::list<Node*>&, float dt);
 
     Texture* LoadTexture(const std::string& filepath);
-    FlexibleSpritesheet* LoadSpritesheet(const std::string& filepath);
+
+    Spritesheet* GetSpritesheet(const std::string& tag) { return spritesheet_memory_[tag]; }
+    void AddSpritesheet(const std::string& tag, Spritesheet* spritesheet) {
+        spritesheet_memory_[tag] = spritesheet;
+    }
 
     Vector2D video_size() const { return video_size_; }
     bool fullscreen() const { return settings_.fullscreen; }
@@ -69,7 +73,7 @@ class VideoManager {
     } settings_;
 
     std::map<std::string, Texture*> image_memory_;
-    std::map<std::string, FlexibleSpritesheet*> spritesheet_memory_;
+    std::map<std::string, Spritesheet*> spritesheet_memory_;
     std::stack<Modifier> modifiers_;
 
     Texture* light_buffer_;
