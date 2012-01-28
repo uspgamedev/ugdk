@@ -32,10 +32,8 @@ class VirtualObj {
 	
   private:
 
-	typedef std::tr1::shared_ptr<VirtualData> VDataPtr
-
 	LangWrapper* const wrapper_;
-	VDataPtr data_;
+	VirtualData::Ptr data_;
 };
 
 }

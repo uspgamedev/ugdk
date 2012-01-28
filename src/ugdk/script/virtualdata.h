@@ -13,6 +13,9 @@ class VirtualData {
 
   public:
 
+
+    typedef std::tr1::shared_ptr<VirtualData> Ptr;
+
     virtual ~VirtualData() {}
 
     /// Tries to unwrap the data contained in this object using the given type.
