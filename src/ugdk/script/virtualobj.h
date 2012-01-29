@@ -1,9 +1,11 @@
+
 #ifndef UGDK_SCRIPT_VIRTUALOBJ_H_
 #define UGDK_SCRIPT_VIRTUALOBJ_H_
 
 #include <memory>
 #include <vector>
 #include <string>
+
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/type.h>
 
@@ -12,10 +14,19 @@ namespace script {
 
 class LangWrapper;
 
+/// A proxy class wich represents virtual objects from scripting languages.
+/** Designed for intuitive use.
+ **
+ ** TODO: explanations and examples.
+ */
 class VirtualObj {
 
   public:
 
+    /// Builds an <i>empty</i> virutal object.
+    /** Attempting to use any method other than <b>set</b> in a virtual object
+     ** created this way will result in a segmentation fault.
+     */
     VirtualObj() :
         data_() {}
 
