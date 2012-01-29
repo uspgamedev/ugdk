@@ -13,11 +13,15 @@ namespace script {
 class LangWrapper;
 
 class VirtualObj {
+
   public:
+
     VirtualObj() :
         data_() {}
-	VirtualObj(VirtualData::Ptr data) :
+
+	explicit VirtualObj(VirtualData::Ptr data) :
 	    data_(data) {}
+
 	~VirtualObj();
 
 	template <class T>
@@ -27,23 +31,30 @@ class VirtualObj {
         );
 	}
 
-	LangWrapper* wrapper() { return data_->wrapper(); }
+	template <class T>
+	void set(T* obj) {
+	    data_ = wrapper()->Wrap(
+            static_cast<void*>(obj),
+            TypeRegistry<T>::type()
+        );
+	}
 
-	VirtualObj operator() (std::vector<VirtualObj> args) {
-		VirtualObj ret = VirtualObj();
-		ret.data_ = data_->Execute(args);
+	LangWrapper* wrapper() const { return data_->wrapper(); }
+
+	VirtualObj operator() (std::vector<VirtualObj> args) const {
+		VirtualObj ret(data_->Execute(args));
 		return ret;
 	}
 
-	VirtualObj operator[] (const std::string attr_name) {
-		VirtualObj attr = VirtualObj();
-		attr.data_ = data_->GetAttr(attr_name);
+	VirtualObj operator[] (const std::string attr_name) const {
+		VirtualObj attr(data_->GetAttr(attr_name));
 		return attr;
 	}
 	
   private:
 
 	VirtualData::Ptr data_;
+
 };
 
 }

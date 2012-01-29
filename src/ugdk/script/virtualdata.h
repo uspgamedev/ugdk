@@ -26,7 +26,8 @@ class VirtualData {
     virtual void* Unwrap(const VirtualType& type) = 0;
 
     /// Tries to wrap the given data with the given type into this object.
-    virtual void Wrap(void* data, const VirtualType& type) = 0;
+    /// @deprecated
+    //virtual void Wrap(void* data, const VirtualType& type) = 0;
 
     virtual LangWrapper* wrapper () = 0;
 

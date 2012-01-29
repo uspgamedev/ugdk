@@ -40,6 +40,8 @@ class LangWrapper {
         return false;
     }
 
+    virtual VirtualData::Ptr Wrap(void* data, const VirtualType& type) = 0;
+
     virtual VirtualObj LoadModule(std::string name) = 0;
 
 
