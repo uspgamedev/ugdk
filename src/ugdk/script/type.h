@@ -39,7 +39,7 @@ class TypeRegistry {
 
   public:
 
-    static TypeRegistry<T>& type () {
+    static VirtualType& type () {
         return type_;
     }
 
@@ -52,7 +52,7 @@ class TypeRegistry {
 };
 
 template <class T>
-TypeRegistry<T> TypeRegistry<T>::type_;
+VirtualType TypeRegistry<T>::type_;
 
 } /* namespace script */
 

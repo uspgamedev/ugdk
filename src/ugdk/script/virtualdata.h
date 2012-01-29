@@ -32,7 +32,7 @@ class VirtualData {
 
 	/// Tries to execute ourselves as a function in a script language,
     /// passing the given arguments and returning the result.
-	virtual Ptr Execute(std::vector<const VirtualObj&> args) = 0;
+	virtual Ptr Execute(std::vector<VirtualObj> args) = 0;
 
 	/// Tries to get a attribute with the given name from this object.
 	virtual Ptr GetAttr(const std::string attr_name) = 0;

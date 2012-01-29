@@ -14,7 +14,9 @@ class LangWrapper;
 
 class VirtualObj {
   public:
-	VirtualObj(VirtualData::Ptr data = NULL) :
+    VirtualObj() :
+        data_() {}
+	VirtualObj(VirtualData::Ptr data) :
 	    data_(data) {}
 	~VirtualObj();
 
@@ -27,7 +29,7 @@ class VirtualObj {
 
 	LangWrapper* wrapper() { return data_->wrapper(); }
 
-	VirtualObj operator() (std::vector<const VirtualObj&> args) {
+	VirtualObj operator() (std::vector<VirtualObj> args) {
 		VirtualObj ret = VirtualObj();
 		ret.data_ = data_->Execute(args);
 		return ret;

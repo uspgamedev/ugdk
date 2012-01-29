@@ -94,6 +94,10 @@ if (NOT MSVC)
     
     find_package(SDL_image REQUIRED)
     include_directories(${SDLIMAGE_INCLUDE_DIR})
+
+    find_package(Boost 1.48.0 REQUIRED)
+    include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
+    include_directories(${Boost_INCLUDE_DIRS})
 endif(NOT MSVC)
 
 # pre-processor: #define's

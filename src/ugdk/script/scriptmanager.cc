@@ -1,3 +1,5 @@
+
+#include <ugdk/base/engine.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/langwrapper.h>
