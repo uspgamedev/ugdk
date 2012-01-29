@@ -33,7 +33,7 @@ class VirtualObj {
 
 	template <class T>
 	void set(T* obj) {
-	    data_ = wrapper()->Wrap(
+	    data_ = data_->Wrap(
             static_cast<void*>(obj),
             TypeRegistry<T>::type()
         );
