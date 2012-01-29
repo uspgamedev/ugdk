@@ -25,7 +25,16 @@ class VirtualData {
     /// Tries to unwrap the data contained in this object using the given type.
     virtual void* Unwrap(const VirtualType& type) = 0;
 
-    /// Tries to wrap the given data with the given type into this object.
+    /// Tries to wrap the given data with the given type.
+    /** Returns a new VirtualData::Ptr with the data wrapped upon success.
+     ** The VirtualData object used to call this method DOES NOT get updated
+     ** with the new wrapped data.
+     ** @param data - a void pointer to the data being wrapped.
+     ** @param type - a virtual type got from TypeRegistry<T>::type(), where
+     **               T is the original declarated type of the data.
+     ** @return A shared pointer to the wrapped data.
+     ** @see TypeRegistry
+     */
     virtual Ptr Wrap(void* data, const VirtualType& type) = 0;
 
     virtual LangWrapper* wrapper () = 0;
