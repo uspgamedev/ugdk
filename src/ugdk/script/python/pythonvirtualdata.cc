@@ -18,7 +18,15 @@ LangWrapper* PythonVirtualData::wrapper () {
 
 /// Tries to execute ourselves as a function in a script language,
 /// passing the given arguments and returning the result.
-Ptr PythonVirtualData::Execute(std::vector<const VirtualObj&> args) {
+Ptr PythonVirtualData::Execute(std::vector<Ptr> args) {
+	PyObject* arglist = PyTuple_New(args.size()); //new ref
+	//PyTuple_SetItem(tuple, index(int), object) -> sets the element of the given index within the given tuple as the object passed
+	// OBS ==> steals the reference to object
+	for (int i = 0; i < args.size(); i++) {
+		//check ref count of objects passed to Tuple_SetItem (since it steals)
+		//check appropriate type of args[i]
+		PyTuple_SetItem(arglist, i, args[i]->py_data_); //this is probably wrong...
+	}
 }
 
 /// Tries to get a attribute with the given name from this object.

@@ -62,7 +62,7 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 
 	/// Tries to execute ourselves as a function in a script language,
     /// passing the given arguments and returning the result.
-	virtual Ptr Execute(std::vector<VirtualObj> args) = 0;
+	virtual Ptr Execute(std::vector<Ptr> args) = 0;
 
 	/// Tries to get a attribute with the given name from this object.
 	virtual Ptr GetAttribute(const std::string attr_name) const = 0;
