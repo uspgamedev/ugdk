@@ -58,17 +58,17 @@ class VirtualObj {
 
 	LangWrapper* wrapper() const { return data_->wrapper(); }
 
-	VirtualObj operator() (std::vector<VirtualObj> args) const {
+	VirtualObj operator() (std::vector<VirtualObj> args) {
 		VirtualObj ret(data_->Execute(args));
 		return ret;
 	}
 
-	VirtualObj operator[] (const std::string attr_name) const {
-		VirtualObj attr(data_->GetAttribute(attr_name));
+	VirtualObj operator[] (const std::string& attr_name) const {
+		VirtualObj attr(safe_data()->GetAttribute(attr_name)->Copy());
 		return attr;
 	}
 	
-	VirtualObj operator[] (const std::string attr_name) {
+	VirtualObj operator[] (const std::string& attr_name) {
         VirtualObj attr(data_->GetAttribute(attr_name));
         return attr;
     }
@@ -81,6 +81,10 @@ class VirtualObj {
 	}
 
   private:
+
+	VirtualData::ConstPtr safe_data() const {
+	    return VirtualData::ConstPtr(data_);
+	}
 
 	VirtualData::Ptr data_;
 

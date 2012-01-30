@@ -15,14 +15,16 @@ namespace script {
 class VirtualObj;
 
 /// Abstract class representing virtual script data.
-class VirtualData : private std::tr1::enable_shared_from_this<VirtualData> {
+class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 
   public:
 
-    typedef std::tr1::shared_ptr<VirtualData> Ptr;
+    typedef std::tr1::shared_ptr<VirtualData>       Ptr;
+    typedef std::tr1::shared_ptr<const VirtualData> ConstPtr;
 
     virtual ~VirtualData() {}
 
+    virtual ConstPtr Copy() const { return shared_from_this(); }
     virtual Ptr Copy() { return shared_from_this(); }
 
     /// Tries to unwrap the data contained in this object using the given type.
@@ -56,14 +58,14 @@ class VirtualData : private std::tr1::enable_shared_from_this<VirtualData> {
      */
     virtual Ptr Wrap(void* data, const VirtualType& type) = 0;
 
-    virtual LangWrapper* wrapper () = 0;
+    virtual LangWrapper* wrapper () const = 0;
 
 	/// Tries to execute ourselves as a function in a script language,
     /// passing the given arguments and returning the result.
 	virtual Ptr Execute(std::vector<VirtualObj> args) = 0;
 
 	/// Tries to get a attribute with the given name from this object.
-	virtual Ptr GetAttribute(const std::string attr_name) = 0;
+	virtual Ptr GetAttribute(const std::string attr_name) const = 0;
 
   protected:
 
