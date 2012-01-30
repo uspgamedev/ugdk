@@ -8,22 +8,28 @@
 
 ###############
 Reuniao QuartaFeira dia 1/02:
-	discutir interface do sistema para registrar modulos e suas funcoes de init que o SWIG gera,
-	assim podemos nukar os .SO =D
+    discutir interface do sistema para registrar modulos e suas funcoes de init
+    que o SWIG gera, assim podemos nukar os .SO =D
+    [Wil] preciso lembrar de te explicar porquê fiz o método Copy no VData. Tem
+          a ver com possibilitar o "set" de atributos.
 ################
 Em Python (checar Python/C API, Utilities, Importing Modules):
-	Aparentemente tem um jeito, pela API, pra setar modulos de python em runtime, pelo codigo.
-	Isso pode ser util para nao ter que existir a lib separada (o .so) para python importar (pelo que lembro,
-	Lua tb nao precisa) pq ai podemos criar um modulo novo pelo nosso proprio codigo, soh precisamos
-	da funcao de inicializacao que o SWIG gera.
-
-	Problema eh, essa inicializacao do modulo precisa ser feita antes do Py_Initialize (inicializacao do
-	interpretador do python)... Entao ai sei la como resolveriamos isso...
-	Curioso é que a Boost.Python com aquelas macros malucas precisava que vc chamasse a funcao initModulo
-	antes do Py_Initialize tambem, acho que agora sei porque ahahahahaha
+    Aparentemente tem um jeito, pela API, pra setar modulos de python em
+    runtime, pelo codigo.
+    Isso pode ser util para nao ter que existir a lib separada (o .so) para
+    python importar (pelo que lembro, Lua tb nao precisa) pq ai podemos criar
+    um modulo novo pelo nosso proprio codigo, soh precisamos da funcao de
+    inicializacao que o SWIG gera.
+    
+    Problema eh, essa inicializacao do modulo precisa ser feita antes do
+    Py_Initialize (inicializacao do interpretador do python)... Entao ai sei la
+    como resolveriamos isso... Curioso é que a Boost.Python com aquelas macros
+    malucas precisava que vc chamasse a funcao initModulo antes do Py_Initialize
+    tambem, acho que agora sei porque ahahahahaha
 ################
 
 ################
 Python, traduzindo GetAttr/GetItem da API para o GetAttr da nossa interface:
-	tenta coisas como tipo, checar se objeto eh um dict, se sim usa GetItem, senao usa GetAttr.
+    tenta coisas como tipo, checar se objeto eh um dict, se sim usa GetItem,
+    senao usa GetAttr.
 ################

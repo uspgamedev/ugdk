@@ -61,7 +61,8 @@ class VirtualObj {
 	VirtualObj operator() (std::vector<VirtualObj> args) const {
 		std::vector arglist;
 		for (int i = 0; i < args.size(); i++) {
-			//Wrappers of executed VObj (we) and of the VObjs passed as arguments must be the same.
+			// Wrappers of executed VObj (we) and of the VObjs passed as
+		    // arguments must be the same.
 			if (wrapper() != args[i].data_->wrapper())
 				return VirtualObj();
 			arglist.push_back(args[i].data_);
