@@ -36,6 +36,11 @@ class VirtualObj {
 
 	~VirtualObj();
 
+	VirtualObj& operator =(const VirtualObj& rhs) {
+	    data_ = rhs.data_->Copy();
+	    return *this;
+	}
+
 	template <class T>
 	T* value() const {
 	    return static_cast <T*> (
