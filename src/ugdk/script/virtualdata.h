@@ -15,7 +15,7 @@ namespace script {
 class VirtualObj;
 
 /// Abstract class representing virtual script data.
-class VirtualData {
+class VirtualData : private std::tr1::enable_shared_from_this<VirtualData> {
 
   public:
 
@@ -23,8 +23,10 @@ class VirtualData {
 
     virtual ~VirtualData() {}
 
+    virtual Ptr Copy() { return shared_from_this(); }
+
     /// Tries to unwrap the data contained in this object using the given type.
-    virtual void* Unwrap(const VirtualType& type) = 0;
+    virtual void* Unwrap(const VirtualType& type) const = 0;
 
     /// Tries to wrap the given data with the given type.
     /** Returns a new VirtualData::Ptr with the data wrapped upon success.
