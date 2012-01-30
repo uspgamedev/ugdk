@@ -15,7 +15,8 @@ namespace script {
 class LangWrapper;
 
 /// A proxy class wich represents virtual objects from scripting languages.
-/** Designed for intuitive use.
+/**
+ ** Designed for intuitive use.
  **
  ** TODO: explanations and examples.
  */
@@ -24,8 +25,8 @@ class VirtualObj {
   public:
 
     /// Builds an <i>empty</i> virutal object.
-    /** Attempting to use any method other than <b>set</b> in a virtual object
-     ** created this way will result in a segmentation fault.
+    /** Attempting to use any method in a virtual object created this way will
+     ** result in a segmentation fault.
      */
     VirtualObj() :
         data_() {}
@@ -36,7 +37,7 @@ class VirtualObj {
 	~VirtualObj();
 
 	template <class T>
-	T* get() const {
+	T* value() const {
 	    return static_cast <T*> (
 	        data_->Unwrap(TypeRegistry<T>::type())
         );
@@ -58,10 +59,22 @@ class VirtualObj {
 	}
 
 	VirtualObj operator[] (const std::string attr_name) const {
-		VirtualObj attr(data_->GetAttr(attr_name));
+		VirtualObj attr(data_->GetAttribute(attr_name));
 		return attr;
 	}
 	
+	VirtualObj operator[] (const std::string attr_name) {
+        VirtualObj attr(data_->GetAttribute(attr_name));
+        return attr;
+    }
+
+	template <class T>
+	static VirtualObj Create (T* obj, LangWrapper* wrapper) {
+	    if (wrapper)
+	        return VirtualObj(wrapper->WrapData(obj, TypeRegistry<T>::type()));
+	    else return VirtualObj();
+	}
+
   private:
 
 	VirtualData::Ptr data_;

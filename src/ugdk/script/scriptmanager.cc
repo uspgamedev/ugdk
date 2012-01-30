@@ -35,8 +35,10 @@ void ScriptManager::Finalize() {
 	while (it != wrappers_.end()) {
 		LangWrapper* wrap = it->second;
 		wrap->Finalize();
+		delete wrap;
 		++it;
 	}
+	wrappers_.clear();
 }
 
 void ScriptManager::Register(string name, LangWrapper* wrapper) {

@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include <ugdk/script/type.h>
 
@@ -27,13 +28,29 @@ class VirtualData {
 
     /// Tries to wrap the given data with the given type.
     /** Returns a new VirtualData::Ptr with the data wrapped upon success.
-     ** The VirtualData object used to call this method DOES NOT get updated
-     ** with the new wrapped data.
+     **
+     ** The VirtualData object returned by this method is NOT NECESSARILY the
+     ** same as the one that called it. Thus a safe way to use this is like
+     ** this:
+     **
+     ** <code>
+     ** VirtualData::Ptr vdata;<br>
+     ** // ...<br>
+     ** vdata = vdata->Wrap(...);
+     ** </code>
+     **
+     ** Also, a call to this method IS NOT the same as:
+     **
+     ** <code>
+     ** vdata = vdata->wrapper->WrapData(...);
+     ** </code>
+     **
      ** @param data - a void pointer to the data being wrapped.
      ** @param type - a virtual type got from TypeRegistry<T>::type(), where
      **               T is the original declarated type of the data.
      ** @return A shared pointer to the wrapped data.
-     ** @see TypeRegistry
+     ** @see ugdk::script::LangWrapper
+     ** @see ugdk::script::TypeRegistry
      */
     virtual Ptr Wrap(void* data, const VirtualType& type) = 0;
 
@@ -44,7 +61,7 @@ class VirtualData {
 	virtual Ptr Execute(std::vector<VirtualObj> args) = 0;
 
 	/// Tries to get a attribute with the given name from this object.
-	virtual Ptr GetAttr(const std::string attr_name) = 0;
+	virtual Ptr GetAttribute(const std::string attr_name) = 0;
 
   protected:
 

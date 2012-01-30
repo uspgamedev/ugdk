@@ -7,6 +7,7 @@
 
 #include <ugdk/script/defs.h>
 #include <ugdk/script/type.h>
+#include <ugdk/script/virtualdata.h>
 
 namespace ugdk {
 namespace script {
@@ -39,6 +40,8 @@ class LangWrapper {
         }
         return false;
     }
+
+    virtual VirtualData::Ptr WrapData(void* data, const VirtualType& type) = 0;
 
     virtual VirtualObj LoadModule(std::string name) = 0;
 
