@@ -27,7 +27,7 @@ class PythonVirtualData : public VirtualData {
 	virtual LangWrapper* wrapper ();
 
 	/// Tries to execute ourselves as a function in a script language,
-    /// passing the given arguments and returning the result.
+    /// passing thee given arguments and returning the result.
 	virtual Ptr Execute(std::vector<const VirtualObj&> args);
 
 	/// Tries to get a attribute with the given name from this object.
