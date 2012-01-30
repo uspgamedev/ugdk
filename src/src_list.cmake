@@ -43,6 +43,13 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/math/frame.h
     ${SRC_DIR}/ugdk/math/vector2D.cc
     ${SRC_DIR}/ugdk/math/vector2D.h
+    ${SRC_DIR}/ugdk/script/defs.h
+    ${SRC_DIR}/ugdk/script/langwrapper.h
+    ${SRC_DIR}/ugdk/script/scriptmanager.cc
+    ${SRC_DIR}/ugdk/script/scriptmanager.h
+    ${SRC_DIR}/ugdk/script/type.h
+    ${SRC_DIR}/ugdk/script/virtualdata.h
+    ${SRC_DIR}/ugdk/script/virtualobj.h
     ${SRC_DIR}/ugdk/time/timeaccumulator.cc
     ${SRC_DIR}/ugdk/time/timeaccumulator.h
     ${SRC_DIR}/ugdk/time/timehandler.cc
