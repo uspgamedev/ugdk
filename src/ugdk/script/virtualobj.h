@@ -58,8 +58,15 @@ class VirtualObj {
 
 	LangWrapper* wrapper() const { return data_->wrapper(); }
 
-	VirtualObj operator() (std::vector<VirtualObj> args) {
-		VirtualObj ret(data_->Execute(args));
+	VirtualObj operator() (std::vector<VirtualObj> args) const {
+		std::vector<VirtualData::Ptr> arglist;
+		for (int i = 0; i < args.size(); i++) {
+			//Wrappers of executed VObj (we) and of the VObjs passed as arguments must be the same.
+			if (wrapper() != args[i].data_->wrapper())
+				return VirtualObj();
+			arglist.push_back(args[i].data_);
+		}
+		VirtualObj ret(data_->Execute(arglist));
 		return ret;
 	}
 
