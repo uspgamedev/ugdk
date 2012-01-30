@@ -31,7 +31,7 @@ class PythonVirtualData : public VirtualData {
 	virtual Ptr Execute(std::vector<const VirtualObj&> args);
 
 	/// Tries to get a attribute with the given name from this object.
-	virtual Ptr GetAttr(const std::string attr_name);
+	virtual Ptr GetAttribute(const std::string attr_name);
 
 };
 
