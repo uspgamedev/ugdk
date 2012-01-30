@@ -24,7 +24,7 @@ class VirtualObj {
 
   public:
 
-    /// Builds an <i>empty</i> virutal object.
+    /// Builds an <i>empty</i> virtual object.
     /** Attempting to use any method in a virtual object created this way will
      ** result in a segmentation fault.
      */
