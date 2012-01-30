@@ -9,9 +9,9 @@ namespace lua {
 
 void Gear::LoadLibs () {
     // luaL_checkversion(L.get());  // TODO-lua5.2: add this.
-    lua_.gc(Constant::GC::STOP(), 0);
+    lua_.gc(Constant::gc::STOP(), 0);
     lua_.aux().openlibs();
-    lua_.gc(Constant::GC::RESTART(), 0);
+    lua_.gc(Constant::gc::RESTART(), 0);
 }
 
 const Constant Gear::DoFile (const char* filename) {
@@ -37,7 +37,7 @@ const Constant Gear::Report (const Constant& c) {
     State::errormsg(msg);
     lua_.pop(1);
     /* force a complete garbage collection in case of errors */
-    lua_.gc(Constant::GC::COLLECT(), 0);
+    lua_.gc(Constant::gc::COLLECT(), 0);
   }
   return c;
 }

@@ -20,7 +20,7 @@ class State {
   public:
 
     State () :
-      L_(AuxLib::newstate(), lua_close) {
+      L_(AuxLib::newstate()) {
         if (L_.get() == NULL)
           State::errormsg("Could not create Lua state.");
     }
@@ -63,12 +63,13 @@ class State {
         return lua_gc(L_.get(), what.value(), data);
     }
 
-  private:
-
     // TODO: make-do for now.
     static void errormsg (std::string msg) {
       fprintf(stderr, "lua: %s\n", msg.c_str());
     }
+
+  private:
+
 
     StatePtr L_;
 

@@ -45,7 +45,6 @@ class LangWrapper {
 
     virtual VirtualObj LoadModule(std::string name) = 0;
 
-
     const LangID id () { return id_; }
 
   protected:

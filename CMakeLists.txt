@@ -78,6 +78,8 @@ if (NOT FRAMEWORK_SRC)
     message (FATAL_ERROR "Error: FRAMEWORK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT FRAMEWORK_SRC)
 
+include_directories ("src")
+
 # Encontrando as bibliotecas necessarias:
 if (NOT MSVC)
     find_package(OpenGL REQUIRED)
@@ -94,6 +96,9 @@ if (NOT MSVC)
     
     find_package(SDL_image REQUIRED)
     include_directories(${SDLIMAGE_INCLUDE_DIR})
+
+    find_package(Lua51 REQUIRED)
+    include_directories(${LUA_INCLUDE_DIR})
 
     find_package(Boost 1.48.0 REQUIRED)
     include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
@@ -118,7 +123,6 @@ if (${BUILD_TYPE} STREQUAL DEBUG)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
 endif (${BUILD_TYPE} STREQUAL DEBUG)
 
-include_directories ("src")
 include_directories ("externals/opengl")
 
 if (${LINK_TYPE} STREQUAL STATIC)
@@ -140,6 +144,7 @@ if (UNIX)
                            ${SDLTTF_LIBRARY}
                            ${SDLIMAGE_LIBRARY}
                            ${OPENGL_LIBRARIES}
+                           ${LUA_LIBRARIES}
                           )
 
 # Windows library
