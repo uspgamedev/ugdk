@@ -60,12 +60,13 @@ class VirtualObj {
 
 	VirtualObj operator() (std::vector<VirtualObj> args) const {
 		std::vector<VirtualData::Ptr> arglist;
-		for (int i = 0; i < args.size(); i++) {
+		std::vector<VirtualObj>::iterator it;
+		for (it = args.begin(); it != args.end(); ++it) {
 			// Wrappers of executed VObj (we) and of the VObjs passed as
 		    // arguments must be the same.
-			if (wrapper() != args[i].data_->wrapper())
+			if (wrapper() != it->wrapper())
 				return VirtualObj();
-			arglist.push_back(args[i].data_);
+			arglist.push_back(it->data_);
 		}
 		VirtualObj ret(data_->Execute(arglist));
 		return ret;

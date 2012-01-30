@@ -50,6 +50,12 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/script/type.h
     ${SRC_DIR}/ugdk/script/virtualdata.h
     ${SRC_DIR}/ugdk/script/virtualobj.h
+    ${SRC_DIR}/ugdk/script/lua/auxlib.h
+    ${SRC_DIR}/ugdk/script/lua/gear.cc
+    ${SRC_DIR}/ugdk/script/lua/gear.h
+    ${SRC_DIR}/ugdk/script/lua/header.h
+    ${SRC_DIR}/ugdk/script/lua/native.h
+    ${SRC_DIR}/ugdk/script/lua/state.h
     ${SRC_DIR}/ugdk/time/timeaccumulator.cc
     ${SRC_DIR}/ugdk/time/timeaccumulator.h
     ${SRC_DIR}/ugdk/time/timehandler.cc

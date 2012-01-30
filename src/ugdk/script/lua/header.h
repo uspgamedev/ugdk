@@ -43,7 +43,7 @@ class Constant {
 
     DECLARE_LUA_CONSTANT(,OK)
 
-    struct ERR {
+    struct err {
         DECLARE_LUA_CONSTANT(ERR,RUN)
         DECLARE_LUA_CONSTANT(ERR,MEM)
         DECLARE_LUA_CONSTANT(ERR,ERR)
@@ -51,7 +51,7 @@ class Constant {
         DECLARE_LUA_CONSTANT(ERR,FILE)
     };
 
-    struct GC {
+    struct gc {
         DECLARE_LUA_CONSTANT(GC,STOP)
         DECLARE_LUA_CONSTANT(GC,RESTART)
         DECLARE_LUA_CONSTANT(GC,COLLECT)

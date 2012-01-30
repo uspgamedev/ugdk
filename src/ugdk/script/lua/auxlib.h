@@ -19,7 +19,7 @@ class AuxLib {
     explicit AuxLib(const StatePtr& L) : L_(L) {}
 
     static StatePtr newstate() {
-        StatePtr L(luaL_newstate());
+        StatePtr L(luaL_newstate(), lua_close);
         return L;
     }
 
