@@ -1,4 +1,5 @@
 #include <ugdk/script/python/pythonvirtualdata.h>
+#include <ugdk/script/scriptmanager.h>
 
 namespace ugdk {
 namespace script {
@@ -12,6 +13,7 @@ void PythonVirtualData::Wrap(void* data, const VirtualType& type) {
 }
 
 LangWrapper* PythonVirtualData::wrapper () {
+	ScriptManager::ref()->GetWrapper("Python");
 }
 
 /// Tries to execute ourselves as a function in a script language,
@@ -20,7 +22,7 @@ Ptr PythonVirtualData::Execute(std::vector<const VirtualObj&> args) {
 }
 
 /// Tries to get a attribute with the given name from this object.
-Ptr PythonVirtualData::GetAttr(const std::string attr_name) {
+Ptr PythonVirtualData::GetAttribute(const std::string attr_name) {
 }
 
 }

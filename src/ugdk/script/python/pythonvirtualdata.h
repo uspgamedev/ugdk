@@ -1,6 +1,7 @@
 #ifndef UGDK_SCRIPT_PYTHON_VIRTUALDATA_H_
 #define UGDK_SCRIPT_PYTHON_VIRTUALDATA_H_
 
+#include <Python.h>
 #include <vector>
 #include <string>
 #include <ugdk/script/virtualdata.h>
@@ -15,8 +16,13 @@ namespace python {
 
 class PythonVirtualData : public VirtualData {
   public:
-	PythonVirtualData() : VirtualData() {}
-    virtual ~PythonVirtualData() {}
+	PythonVirtualData(PyObject* data_object, bool owns_ref) : VirtualData(), 
+		py_data_(data_object), own_ref_(owns_ref) {}
+		
+    virtual ~PythonVirtualData() {
+    	if (own_ref_)
+    		Py_XDECREF(py_data_);
+    }
 
     /// Tries to unwrap the data contained in this object using the given type.
     virtual void* Unwrap(const VirtualType& type);
@@ -33,6 +39,9 @@ class PythonVirtualData : public VirtualData {
 	/// Tries to get a attribute with the given name from this object.
 	virtual Ptr GetAttribute(const std::string attr_name);
 
+  protected:
+	bool own_ref_; //if true, we own a ref to our PyObject* (py_data_), so we need to DECREF it in due time.
+	PyObject* py_data_;
 };
 
 }
