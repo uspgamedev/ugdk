@@ -140,21 +140,18 @@ void FixedSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     if(mod.mirror() != MIRROR_NONE || hotspot.LengthSquared() > 1.0e-6) {
         glPushMatrix();
         // TODO: optimize mirroring, and combine the matrices
-        // TODO: fix bugs...
 
         // hotspot
         glTranslatef(-hotspot.x, -hotspot.y, 0.0f);
 
         // horizontal flip
         if(mod.mirror() & MIRROR_HFLIP) {
-            glTranslatef(frame_sizes_[frame_number].x, 0.0f, 0.0f);
-            glScalef(-1, 0.0f, 0.0f);
+            glScalef(-1.0f, 1.0f, 1.0f);
         }
 
         // vertical flip
         if(mod.mirror() & MIRROR_VFLIP) {
-            glTranslatef(0.0f, frame_sizes_[frame_number].y, 0.0f);
-            glScalef(0.0f, -1.0f, 0.0f);
+            glScalef(1.0f, -1.0f, 1.0f);
         }
         popmatrix = true;
     }
