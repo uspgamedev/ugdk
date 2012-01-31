@@ -49,7 +49,7 @@ class VirtualObj {
 	}
 
 	template <class T>
-	void set(T* obj) {
+	void set_value(T* obj) {
 	    data_ = data_->Wrap(
             static_cast<void*>(obj),
             TypeRegistry<T>::type()
@@ -73,7 +73,7 @@ class VirtualObj {
 	}
 
 	VirtualObj operator[] (const std::string& attr_name) const {
-		VirtualObj attr(safe_data()->GetAttribute(attr_name)->Copy());
+		VirtualObj attr(data_->GetAttribute(attr_name)->Copy());
 		return attr;
 	}
 	
@@ -90,10 +90,6 @@ class VirtualObj {
 	}
 
   private:
-
-	VirtualData::ConstPtr safe_data() const {
-	    return VirtualData::ConstPtr(data_);
-	}
 
 	VirtualData::Ptr data_;
 
