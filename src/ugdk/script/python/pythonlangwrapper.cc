@@ -8,6 +8,9 @@ namespace ugdk {
 namespace script {
 namespace python {
 
+VirtualData::Ptr WrapData(void* data, const VirtualType& type) {
+}
+
 VirtualObj PythonLangWrapper::LoadModule(std::string name) {
 	PyObject* module = PyImport_ImportModule(name.c_str()); //new ref
 	if (module == NULL && PyErr_Occured() != NULL) {

@@ -33,3 +33,12 @@ Python, traduzindo GetAttr/GetItem da API para o GetAttr da nossa interface:
     tenta coisas como tipo, checar se objeto eh um dict, se sim usa GetItem,
     senao usa GetAttr.
 ################
+
+
+################
+RANT MODE ON
+	O Wil, pq mudar o VO op() pra usar iterator? 
+	Vector é mais eficiente para acesso direto a uma posicao (v[i] - constante) e a iterar em QUALQUER ordem ( O(n) ), enquanto
+	List só é mais eficiente pra iterar de forma linear do começo ao fim ou vice-versa (dai se usa iterator) =P
+	Iterators are ugly, stop putting them everywhere =P  lol
+RANT MODE OFF

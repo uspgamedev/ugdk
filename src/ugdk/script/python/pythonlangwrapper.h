@@ -1,6 +1,7 @@
 #ifndef UGDK_SCRIPT_PYTHON_LANGWRAPPER_H_
 #define UGDK_SCRIPT_PYTHON_LANGWRAPPER_H_
 
+#include <ugdk/script/pythonvirtualdata.h>
 #include <ugdk/script/langwrapper.h>
 
 namespace ugdk {
@@ -14,6 +15,8 @@ class PythonLangWrapper : public LangWrapper {
   public:
 	PythonLangWrapper() : LangWrapper(".py", LANG(Python)) {}
 	virtual ~PythonLangWrapper() {}
+
+	virtual VirtualData::Ptr WrapData(void* data, const VirtualType& type);
 
 	virtual VirtualObj LoadModule(std::string name);
 
