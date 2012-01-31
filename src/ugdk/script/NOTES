@@ -27,7 +27,8 @@ Em Python (checar Python/C API, Utilities, Importing Modules):
     malucas precisava que vc chamasse a funcao initModulo antes do Py_Initialize
     tambem, acho que agora sei porque ahahahahaha
 ################
-Ver com o Wil sobre o método dele pra transformar args VData recebidos numa implementacao de VData em seu objeto (PyVData)
+Ver com o Wil sobre o método dele pra transformar args VData recebidos numa
+implementacao de VData em seu objeto (PyVData)
 ################
 Python, traduzindo GetAttr/GetItem da API para o GetAttr da nossa interface:
     tenta coisas como tipo, checar se objeto eh um dict, se sim usa GetItem,
@@ -39,6 +40,20 @@ Python, traduzindo GetAttr/GetItem da API para o GetAttr da nossa interface:
 RANT MODE ON
 	O Wil, pq mudar o VO op() pra usar iterator? 
 	Vector é mais eficiente para acesso direto a uma posicao (v[i] - constante) e a iterar em QUALQUER ordem ( O(n) ), enquanto
-	List só é mais eficiente pra iterar de forma linear do começo ao fim ou vice-versa (dai se usa iterator) =P
+	List só é mais eficiente pra iterar de forma linear do começo ao fim ou
+	vice-versa (dai se usa iterator) =P
 	Iterators are ugly, stop putting them everywhere =P  lol
 RANT MODE OFF
+ANSWER
+    Eu usei iterators de vector, que funcionam exatamente como índices. Cada
+    contêiner da STL (vector, list, map) tem uma implementação diferente de
+    iterator, cada um adequado à situação para ter a melhor eficiência. No caso
+    do op(), ele tava com um errinho de compilação (eu testei aqui) e já que ia
+    precisar mexer nele, mudei pra iterators que é um padrão mais aceito em C++.
+    Se te incomodar MTO eu mudo pra índices de volta, mas é sério, pra vector os
+    dois jeitos dão exatamente na mesma =P.
+    extra: os iterators foram projetados para "funcionarem" como ponteiros, e
+           todo contêiner STL tem EXATAMENTE a mesma interface de iterator,
+           apesar da implementação ser diferente. Isso significa que um código
+           que usa iterators pode ser reaproveitado para qualquer tipo de
+           contêiner STL.
