@@ -2,6 +2,7 @@
 #include <cstring>
 #include <cmath>
 #include <algorithm>
+#include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
 #include <SDL/SDL_opengl.h>
 
@@ -23,8 +24,9 @@ FixedSpritesheetData::FixedSpritesheetData(const std::string& filename) {
 }
 
 FixedSpritesheetData::~FixedSpritesheetData() {
-    if(file_data_ != NULL)
+    if(file_data_ != NULL) {
         SDL_FreeSurface(file_data_);
+    }
 
     for(std::vector<SpritesheetFrame>::iterator it = frames_.begin();
         it != frames_.end(); ++it)
@@ -34,18 +36,34 @@ FixedSpritesheetData::~FixedSpritesheetData() {
 void FixedSpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot) {
     if(file_data_ == NULL) return;
     
-    SDL_Surface *screen = SDL_GetVideoSurface();
-    SDL_Surface* surface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, width, height, 
-                                 screen->format->BitsPerPixel,
-                                 screen->format->Rmask, screen->format->Gmask,
-                                 screen->format->Bmask, screen->format->Amask);
+    SDL_Surface* surface = NULL;
+    Uint32 rmask, gmask, bmask, amask;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    rmask = 0xff000000;
+    gmask = 0x00ff0000;
+    bmask = 0x0000ff00;
+    amask = 0x000000ff;
+#else
+    rmask = 0x000000ff;
+    gmask = 0x0000ff00;
+    bmask = 0x00ff0000;
+    amask = 0xff000000;
+#endif
+    surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, rmask, gmask, bmask, amask);
 
-    SDL_Rect source_rect = { topleft_x, topleft_y, width, height };
-    int blit = SDL_BlitSurface(file_data_, &source_rect, surface, NULL);
-    if(blit != 0) {
-        // throw error msg
-        fprintf(stderr, "FixedSpritesheetData - Failed to blit the frame %d\n", frames_.size());
-    }
+    SDL_LockSurface(file_data_);
+    SDL_LockSurface(surface);
+
+    Uint32 *source_pixels = static_cast<Uint32*>(file_data_->pixels);
+    Uint32 *target_pixels = static_cast<Uint32*>(surface->pixels);
+    
+    for(int y = 0; y < height; ++y)
+        for(int x = 0; x < width; ++x)
+            target_pixels[y * width + x] = source_pixels[(y + topleft_y) * file_data_->w + (x + topleft_x)];
+    
+    SDL_UnlockSurface(surface);
+    SDL_UnlockSurface(file_data_);
+
     frames_.push_back(SpritesheetFrame(surface, hotspot));
 }
 
