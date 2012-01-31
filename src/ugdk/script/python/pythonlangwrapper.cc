@@ -10,6 +10,10 @@ namespace python {
 
 VirtualObj PythonLangWrapper::LoadModule(std::string name) {
 	PyObject* module = PyImport_ImportModule(name.c_str()); //new ref
+	if (module == NULL && PyErr_Occured() != NULL) {
+		PyErr_Print();
+		return VirtualObj();
+	}
 	VirtualData::Ptr vdata( new PythonVirtualData(module, true) ); //PyVirtualData takes care of the ref.
 	return VirtualObj(vdata);
 }
@@ -17,6 +21,7 @@ VirtualObj PythonLangWrapper::LoadModule(std::string name) {
 /// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
 bool PythonLangWrapper::Initialize() {
 	Py_Initialize();
+	//TODO: Fix sys.path with our paths...
 }
 
 /// Finalizes the LangWrapper, finalizing any language specific stuff.
