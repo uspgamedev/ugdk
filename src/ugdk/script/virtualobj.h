@@ -59,23 +59,25 @@ class VirtualObj {
 	LangWrapper* wrapper() const { return data_->wrapper(); }
 
 	VirtualObj operator() (std::vector<VirtualObj> args) const {
-		std::vector arglist;
-		for (int i = 0; i < args.size(); i++) {
-			//Wrappers of executed VObj (we) and of the VObjs passed as arguments must be the same.
-			if (wrapper() != args[i].data_->wrapper())
+		std::vector<VirtualData::Ptr> arglist;
+		std::vector<VirtualObj>::iterator it;
+		for (it = args.begin(); it != args.end(); ++it) {
+			// Wrappers of executed VObj (we) and of the VObjs passed as
+		    // arguments must be the same.
+			if (wrapper() != it->wrapper())
 				return VirtualObj();
-			arglist.push_back(args[i].data_);
+			arglist.push_back(it->data_);
 		}
 		VirtualObj ret(data_->Execute(arglist));
 		return ret;
 	}
 
-	VirtualObj operator[] (const std::string attr_name) const {
-		VirtualObj attr(data_->GetAttribute(attr_name));
+	VirtualObj operator[] (const std::string& attr_name) const {
+		VirtualObj attr(safe_data()->GetAttribute(attr_name)->Copy());
 		return attr;
 	}
 	
-	VirtualObj operator[] (const std::string attr_name) {
+	VirtualObj operator[] (const std::string& attr_name) {
         VirtualObj attr(data_->GetAttribute(attr_name));
         return attr;
     }
@@ -88,6 +90,10 @@ class VirtualObj {
 	}
 
   private:
+
+	VirtualData::ConstPtr safe_data() const {
+	    return VirtualData::ConstPtr(data_);
+	}
 
 	VirtualData::Ptr data_;
 
