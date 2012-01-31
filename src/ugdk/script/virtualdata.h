@@ -19,12 +19,10 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 
   public:
 
-    typedef std::tr1::shared_ptr<VirtualData>       Ptr;
-    typedef std::tr1::shared_ptr<const VirtualData> ConstPtr;
+    typedef std::tr1::shared_ptr<VirtualData> Ptr;
 
     virtual ~VirtualData() {}
 
-    virtual ConstPtr Copy() const { return shared_from_this(); }
     virtual Ptr Copy() { return shared_from_this(); }
 
     /// Tries to unwrap the data contained in this object using the given type.
