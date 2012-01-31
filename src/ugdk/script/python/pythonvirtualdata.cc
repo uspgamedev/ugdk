@@ -44,18 +44,45 @@ Ptr PythonVirtualData::Execute(std::vector<Ptr> args) {
 			//VData arg doesn't own its reference... We can't let PyTuple_SetItem steal a ref that isn't ours to begin with.
 			Py_INCREF(py_arg->py_data_);
 		}
-		PyTuple_SetItem(arglist, i, py_arg->py_data_); //this is probably wrong...
+		PyTuple_SetItem(arglist, i, py_arg->py_data_);
 	}
 
 	PyObject* result = PyObject_CallObject(py_data_, arglist); //return is new ref
 	/*If result = NULL, CallObject failed (somehow), and due to the way we treat VirtualData in the system, 
 	  this is the way to treat that.*/
 	VirtualData::Ptr vdata( new PythonVirtualData(result, true) ); //PyVirtualData takes care of the ref.
+	
+	//Before returning, kill the argument tuple we created.
+	Py_XDECREF(arglist);  //WARNING: in theory, this is correct. However in my testing (in the prototype) this cause some serious shit.
+	
 	return VirtualObj(vdata);
 }
 
 /// Tries to get a attribute with the given name from this object.
 Ptr PythonVirtualData::GetAttribute(const std::string attr_name) {
+	PyObject* attr;
+	
+	/*We give preference for getting a object's attributes. If it doesn't have a attribute
+	  with the given name, check if he has a item with key = attr_name */
+	if (PyObject_HasAttrString(py_data_, attr_name.c_str())) {
+		attr = PyObject_GetAttrString(py_data_, attr_name.c_str()); //return is new ref
+	}
+	else {
+		if (!PyMapping_Check(py_data_)) {
+			//Object doesn't have attribute with the given name and can't have items...
+			return VirtualData::Ptr();
+		}
+		if (!PyMapping_HasKeyString(py_data_, attr_name.c_str())) {
+			//Object doesn't have attribute or item with the given name...
+			return VirtualData::Ptr();
+		}
+		attr = PyMapping_GetItemString(py_data_, attr_name.c_str()); //return is new ref
+	}
+	/*If Py_GetAttrString or Py_GetItemString failed somehow, they will return null.
+	  */
+	
+	VirtualData::Ptr vdata( new PythonVirtualData(attr, true) );
+	return vdata;
 }
 
 }
