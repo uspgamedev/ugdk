@@ -9,6 +9,13 @@ namespace script {
 namespace python {
 
 VirtualData::Ptr WrapData(void* data, const VirtualType& type) {
+	/*
+	PyObject *obj;
+    swig_type_info* typeInfo = <PEGA DO VirtualType>;
+    obj = SWIG_NewInstanceObj(data, typeInfo, 1);
+
+    return obj;
+    */
 }
 
 VirtualObj PythonLangWrapper::LoadModule(std::string name) {
