@@ -46,11 +46,11 @@ class State {
     void insert (int index) { lua_insert(L_.get(), index); }
     void remove (int index) { lua_remove(L_.get(), index); }
 
-    bool isnil (int index) { return lua_isnil(L_.get(), index); }
-    bool istable (int index) { return lua_istable(L_.get(), index); }
+    bool isnil (int index) const { return lua_isnil(L_.get(), index); }
+    bool istable (int index) const { return lua_istable(L_.get(), index); }
 
-    const char* tostring(int n) { return lua_tostring(L_.get(), n); }
-    int type (int n) { return lua_type(L_.get(), n); }
+    const char* tostring(int n) const { return lua_tostring(L_.get(), n); }
+    int type (int n) const { return lua_type(L_.get(), n); }
     
     void call (int nargs, int nres) { lua_call(L_.get(), nargs, nres); }
     const Constant pcall (int nargs, int nres, int errfunc) {
