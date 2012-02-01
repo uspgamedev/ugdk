@@ -16,11 +16,13 @@ VirtualData::Ptr WrapData(void* data, const VirtualType& type) {
 
     return obj;
     */
+    return VirtualData::Ptr(); //TODO
 }
 
 VirtualObj PythonLangWrapper::LoadModule(std::string name) {
 	PyObject* module = PyImport_ImportModule(name.c_str()); //new ref
-	if (module == NULL && PyErr_Occured() != NULL) {
+	if (module == NULL && PyErr_Occurred() != NULL) {
+						
 		PyErr_Print();
 		return VirtualObj();
 	}
@@ -32,6 +34,7 @@ VirtualObj PythonLangWrapper::LoadModule(std::string name) {
 bool PythonLangWrapper::Initialize() {
 	Py_Initialize();
 	//TODO: Fix sys.path with our paths...
+	return true;
 }
 
 /// Finalizes the LangWrapper, finalizing any language specific stuff.

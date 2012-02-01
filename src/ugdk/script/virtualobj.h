@@ -8,11 +8,10 @@
 
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/type.h>
+#include <ugdk/script/langwrapper.h>
 
 namespace ugdk {
 namespace script {
-
-class LangWrapper;
 
 /// A proxy class wich represents virtual objects from scripting languages.
 /**

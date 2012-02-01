@@ -13,6 +13,7 @@ namespace ugdk {
 namespace script {
 
 class VirtualObj;
+class LangWrapper;
 
 /// Abstract class representing virtual script data.
 class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {

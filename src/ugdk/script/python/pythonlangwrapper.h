@@ -1,7 +1,7 @@
 #ifndef UGDK_SCRIPT_PYTHON_LANGWRAPPER_H_
 #define UGDK_SCRIPT_PYTHON_LANGWRAPPER_H_
 
-#include <ugdk/script/pythonvirtualdata.h>
+#include <ugdk/script/python/pythonvirtualdata.h>
 #include <ugdk/script/langwrapper.h>
 
 namespace ugdk {
