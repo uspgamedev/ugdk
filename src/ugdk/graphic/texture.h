@@ -1,6 +1,7 @@
 #ifndef UGDK_GRAPHIC_TEXTURE_H_
 #define UGDK_GRAPHIC_TEXTURE_H_
 
+#include <ugdk/config/config.h>
 #ifdef ISMAC
     #include "SDL_video.h"
     #include "SDL_opengl.h"

@@ -3,6 +3,7 @@
 #include <cmath>
 #include <algorithm>
 
+#include <ugdk/config/config.h>
 #ifdef ISMAC
     #include "SDL_image.h"
     #include "SDL_opengl.h"

@@ -2,14 +2,11 @@
 #include <cstring>
 #include <cmath>
 #include <algorithm>
+
 #ifdef ISMAC
     #include "SDL.h"
-    #include "SDL_image.h"
-    #include "SDL_opengl.h"
 #else
     #include <SDL/SDL.h>
-    #include <SDL/SDL_image.h>
-    #include <SDL/SDL_opengl.h>
 #endif
 
 #include <ugdk/base/types.h>

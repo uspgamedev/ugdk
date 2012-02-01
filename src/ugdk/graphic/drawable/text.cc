@@ -1,3 +1,4 @@
+#include <ugdk/config/config.h>
 #ifdef ISMAC
     #include "SDL_opengl.h"
 #else
