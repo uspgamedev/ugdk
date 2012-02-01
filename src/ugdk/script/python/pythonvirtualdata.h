@@ -17,7 +17,7 @@ namespace python {
 class PythonVirtualData : public VirtualData {
   public:
 	PythonVirtualData(PyObject* data_object, bool owns_ref) : VirtualData(), 
-		py_data_(data_object), own_ref_(owns_ref) {}
+		own_ref_(owns_ref), py_data_(data_object) {}
 		
     virtual ~PythonVirtualData() {
     	if (own_ref_)
@@ -25,19 +25,19 @@ class PythonVirtualData : public VirtualData {
     }
 
     /// Tries to unwrap the data contained in this object using the given type.
-    virtual void* Unwrap(const VirtualType& type);
+    virtual void* Unwrap(const VirtualType& type) const;
 
     /// Tries to wrap the given data with the given type into this object.
-    virtual void Wrap(void* data, const VirtualType& type);
+    virtual Ptr Wrap(void* data, const VirtualType& type);
 
-	virtual LangWrapper* wrapper ();
+	virtual LangWrapper* wrapper () const;
 
 	/// Tries to execute ourselves as a function in a script language,
     /// passing thee given arguments and returning the result.
 	virtual Ptr Execute(std::vector<Ptr> args);
 
 	/// Tries to get a attribute with the given name from this object.
-	virtual Ptr GetAttribute(const std::string attr_name);
+	virtual Ptr GetAttribute(const std::string attr_name) const;
 
   protected:
 	bool own_ref_; //if true, we own a ref to our PyObject* (py_data_), so we need to DECREF it in due time.

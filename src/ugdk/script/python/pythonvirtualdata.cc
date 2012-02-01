@@ -1,11 +1,13 @@
 #include <ugdk/script/python/pythonvirtualdata.h>
 #include <ugdk/script/scriptmanager.h>
+#include <ugdk/script/virtualobj.h>
+#include <ugdk/script/swig/swigpyrun.h>
 
 namespace ugdk {
 namespace script {
 namespace python {
 
-void* PythonVirtualData::Unwrap(const VirtualType& type) {
+void* PythonVirtualData::Unwrap(const VirtualType& type) const {
 	//Conversion Python -> C++
 	char thisStr[] = "this";
     //first we need to get the this attribute (SWIG adds this to wrapped objects) from the Python Object
@@ -22,16 +24,17 @@ void* PythonVirtualData::Unwrap(const VirtualType& type) {
 }
 
 /// Tries to wrap the given data with the given type into this object.
-void PythonVirtualData::Wrap(void* data, const VirtualType& type) {
+VirtualData::Ptr PythonVirtualData::Wrap(void* data, const VirtualType& type) {
+	return VirtualData::Ptr(); //TODO
 }
 
-LangWrapper* PythonVirtualData::wrapper () {
-	ScriptManager::ref()->GetWrapper("Python");
+LangWrapper* PythonVirtualData::wrapper () const {
+	return ScriptManager::ref()->GetWrapper("Python");
 }
 
 /// Tries to execute ourselves as a function in a script language,
 /// passing the given arguments and returning the result.
-Ptr PythonVirtualData::Execute(std::vector<Ptr> args) {
+VirtualData::Ptr PythonVirtualData::Execute(std::vector<Ptr> args) {
 	if (!PyCallable_Check(py_data_)) {
 		//The object we contain is not callable - cannot execute it.
 		return VirtualData::Ptr();
@@ -46,7 +49,7 @@ Ptr PythonVirtualData::Execute(std::vector<Ptr> args) {
 
 	//PyTuple_SetItem(tuple, index(int), object) -> sets the element of the given index within the given tuple as the object passed
 	// OBS.: steals the reference to object;  returns 0 on success
-	for (int i = 0; i < args.size(); i++) {
+	for (unsigned int i = 0; i < args.size(); i++) {
 		//check appropriate type of args[i]
 		PythonVirtualData* py_arg = static_cast<PythonVirtualData*>(args[i].get());
 		if (py_arg->own_ref_) {
@@ -68,11 +71,11 @@ Ptr PythonVirtualData::Execute(std::vector<Ptr> args) {
 	//Before returning, kill the argument tuple we created.
 	Py_XDECREF(arglist);  //WARNING: in theory, this is correct. However in my testing (in the prototype) this cause some serious shit.
 	
-	return VirtualObj(vdata);
+	return vdata;
 }
 
 /// Tries to get a attribute with the given name from this object.
-Ptr PythonVirtualData::GetAttribute(const std::string attr_name) {
+VirtualData::Ptr PythonVirtualData::GetAttribute(const std::string attr_name) const {
 	PyObject* attr;
 	
 	/*We give preference for getting a object's attributes. If it doesn't have a attribute
@@ -85,11 +88,11 @@ Ptr PythonVirtualData::GetAttribute(const std::string attr_name) {
 			//Object doesn't have attribute with the given name and can't have items...
 			return VirtualData::Ptr();
 		}
-		if (!PyMapping_HasKeyString(py_data_, attr_name.c_str())) {
+		if (!PyMapping_HasKeyString(py_data_, (char*)attr_name.c_str())) {
 			//Object doesn't have attribute or item with the given name...
 			return VirtualData::Ptr();
 		}
-		attr = PyMapping_GetItemString(py_data_, attr_name.c_str()); //return is new ref
+		attr = PyMapping_GetItemString(py_data_, (char*)attr_name.c_str()); //return is new ref
 	}
 	/*If Py_GetAttrString or Py_GetItemString failed somehow, they will return null.
 	  */
