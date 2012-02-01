@@ -61,7 +61,7 @@ class Vector2D {
     */
     float Angle() const;
 
-    /// Returns a new vector iqual to this vector normalized
+    /// Returns a new vector equal to this vector normalized
     /** The normalized vector (x,y) is (x,y) / Lenght(x,y)
     *  @return Normalized Vector
     *  @see Lenght()
@@ -83,7 +83,7 @@ class Vector2D {
 
     // Static methods
 
-    /// Static method that returns a vector iqual to the sum of two others
+    /// Static method that returns a vector equal to the sum of two others
     /** The sum of two vectors (x,y) (w,z) is igual to the vector (x+w, y+z)
     *  @return Sum Vector
     */
@@ -91,24 +91,24 @@ class Vector2D {
         return Vector2D(a.x + b.x, a.y + b.y);
     }
     
-    /// Static method that returns a vector iqual to the subtraction of two others
-    /** The subtraction of two vectors (x,y) (z,w) is iqual to the vector (x-z,y-w) in this order
+    /// Static method that returns a vector equal to the subtraction of two others
+    /** The subtraction of two vectors (x,y) (z,w) is equal to the vector (x-z,y-w) in this order
     *  @return Subtract Vector 
     */
     static Vector2D Subtract(const Vector2D &a, const Vector2D &b) {
         return Vector2D(a.x - b.x, a.y - b.y);
     }
     
-    /// Static method that returns a vector iqual to the a vector multiplied by a scalar
-    /** A vector (x,y) multiplied by a scalar a is iqual to the vector (x * scalar, y*scalar)
+    /// Static method that returns a vector equal to the a vector multiplied by a scalar
+    /** A vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y*scalar)
     *  @return Scalar Multiplied Vector
     */
     static Vector2D Multiply(const Vector2D &a, const float &scalar) {
         return Vector2D(a.x * scalar, a.y * scalar);
     }
     
-    /// Static method that returns a scalar iqual to the inner product of two vectors
-    /** By definition the inner product of two vectors (x,y) (w,z) is iqual to (x*w) + (y*z)
+    /// Static method that returns a scalar equal to the inner product of two vectors
+    /** By definition the inner product of two vectors (x,y) (w,z) is equal to (x*w) + (y*z)
     *  @return InnerProduct
     */
     static float InnerProduct(const Vector2D &a, const Vector2D &b) {
@@ -145,42 +145,52 @@ class Vector2D {
         return a.Rotate(angle);
     }
 
+    // TODO document and revise
     Vector2D operator+=(const Vector2D &other);
-
+    
+    // TODO document and revise
+    Vector2D operator-=(const Vector2D &other);
 };
 
-/// Method that returns a vector iqual to the sum of two others
+/// Method that returns a vector equal to the sum of two others
     /** The sum of two vectors (x,y) (w,z) is igual to the vector (x+w, y+z)
     *  @return Sum Vector
     */
 Vector2D operator+(const Vector2D &left, const Vector2D &right);
 
- /// Method that returns a vector iqual to the subtraction of two others
-    /** The subtraction of two vectors (x,y) (z,w) is iqual to the vector (x-z,y-w) in this order
+ /// Method that returns a vector equal to the oposite of another
+    /** The oposite of a vector (x,y) is equal to the vector (-x,-y) in this order
+    *  @return Oposite Vector 
+    */
+// TODO revise
+Vector2D operator-(const Vector2D &left);
+
+ /// Method that returns a vector equal to the subtraction of two others
+    /** The subtraction of two vectors (x,y) (z,w) is equal to the vector (x-z,y-w) in this order
     *  @return Subtract Vector 
     */
 Vector2D operator-(const Vector2D &left, const Vector2D &right);
 
- /// Method that returns a vector iqual to the a vector multiplied by a scalar
-    /** A vector (x,y) multiplied by a scalar a is iqual to the vector (x * scalar, y*scalar)
+ /// Method that returns a vector equal to the a vector multiplied by a scalar
+    /** A vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y*scalar)
     *  @return Scalar Multiplied Vector
     */
 Vector2D operator*(const float  &scalar, const Vector2D &right);
 
- /// Method that returns a vector iqual to the a vector multiplied by a scalar
-    /** A vector (x,y) multiplied by a scalar a is iqual to the vector (x * scalar, y*scalar)
+ /// Method that returns a vector equal to the a vector multiplied by a scalar
+    /** A vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y*scalar)
     *  @return Scalar Multiplied Vector
     */
 Vector2D operator*(const Vector2D &left, const float   &scalar);
 
- /// Method that returns a vector iqual to the a vector multiplied by the inverse of a scalar
-    /** A vector (x,y) multiplied by the inverse of a scalar is iqual to the vector (x * 1/scalar, y * 1/scalar)
+ /// Method that returns a vector equal to the a vector multiplied by the inverse of a scalar
+    /** A vector (x,y) multiplied by the inverse of a scalar is equal to the vector (x * 1/scalar, y * 1/scalar)
     *  @return Inverse Scalar Multiplied Vector
     */
 Vector2D operator/(const Vector2D &left, const float   &scalar);
 
-/// Method that returns a scalar iqual to the inner product of two vectors
-    /** By definition the inner product of two vectors (x,y) (w,z) is iqual to (x*w) + (y*z)
+/// Method that returns a scalar equal to the inner product of two vectors
+    /** By definition the inner product of two vectors (x,y) (w,z) is equal to (x*w) + (y*z)
     *  @return InnerProduct
     */
 float    operator*(const Vector2D &left, const Vector2D &right);

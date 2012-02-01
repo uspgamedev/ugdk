@@ -15,6 +15,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphic\drawable.cpp" />
     <ClCompile Include="src\math\vector2D.cc" />
     <ClCompile Include="src\util\animationprotocol.cc" />
   </ItemGroup>
@@ -168,7 +169,6 @@
       <Profile>true</Profile>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
-      <IgnoreSpecificDefaultLibraries>msvcrt.lib;msvcprt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
