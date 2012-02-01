@@ -8,19 +8,11 @@ namespace script {
 namespace python {
 
 void* PythonVirtualData::Unwrap(const VirtualType& type) const {
-	//Conversion Python -> C++
-	char thisStr[] = "this";
-    //first we need to get the this attribute (SWIG adds this to wrapped objects) from the Python Object
-    if (!PyObject_HasAttrString(py_data_, thisStr))
-        return NULL;
-
-    PyObject* thisAttr = PyObject_GetAttrString(py_data_, thisStr);
-    if (thisAttr == NULL)
-        return NULL;
-    //This Python Object is a SWIG Wrapper and contains our pointer
-    void* pointer = ((SwigPyObject*)thisAttr)->ptr;
-    Py_DECREF(thisAttr);
-    return pointer;
+	void* pointer;
+	int res = SWIG_ConvertPtrAndOwn(py_data_, &pointer, type.FromLang(LANG(Python)), 0, NULL);
+	if (SWIG_IsOK(res))
+	    return pointer;
+	return NULL;
 }
 
 /// Tries to wrap the given data with the given type into this object.

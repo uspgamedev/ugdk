@@ -9,14 +9,13 @@ namespace script {
 namespace python {
 
 VirtualData::Ptr WrapData(void* data, const VirtualType& type) {
-	/*
 	PyObject *obj;
-    swig_type_info* typeInfo = <PEGA DO VirtualType>;
-    obj = SWIG_NewInstanceObj(data, typeInfo, 1);
+    obj = SWIG_NewInstanceObj(data, type.FromLang(LANG(Python)), 1);
 
-    return obj;
-    */
-    return VirtualData::Ptr(); //TODO
+	/*Apparently, the PyObject return by the SWIG conversion function is a new reference.
+	  So our PyVData needs to handle it.*/
+	VirtualData::Ptr vdata( new PythonVirtualData(obj, true) ); 
+	return vdata;
 }
 
 VirtualObj PythonLangWrapper::LoadModule(std::string name) {
