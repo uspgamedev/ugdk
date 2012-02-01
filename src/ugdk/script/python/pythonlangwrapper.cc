@@ -2,11 +2,16 @@
 #include <ugdk/script/python/pythonlangwrapper.h>
 #include <ugdk/script/python/pythonvirtualdata.h>
 #include <ugdk/script/virtualobj.h>
+#include <ugdk/script/swig/swigpyrun.h>
 
+#include <memory>
+#include <cstdlib>
 
 namespace ugdk {
 namespace script {
 namespace python {
+
+using std::tr1::shared_ptr;
 
 VirtualData::Ptr WrapData(void* data, const VirtualType& type) {
 	PyObject *obj;
@@ -39,6 +44,11 @@ bool PythonLangWrapper::Initialize() {
 /// Finalizes the LangWrapper, finalizing any language specific stuff.
 void PythonLangWrapper::Finalize() {
 	Py_Finalize();
+}
+
+bool RegisterModule(std::string moduleName, void (*initFunction)(void) ) {
+    shared_ptr<char*> str(new char(*(moduleName.c_str())), free);
+    return PyImport_AppendInittab(str.get(), initFunction) == 0;
 }
 
 }

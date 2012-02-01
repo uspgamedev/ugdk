@@ -3,9 +3,14 @@
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/swig/swigpyrun.h>
 
+#include <memory>
+#include <cstdlib>
+
 namespace ugdk {
 namespace script {
 namespace python {
+
+using std::tr1::shared_ptr;
 
 void* PythonVirtualData::Unwrap(const VirtualType& type) const {
 	void* pointer;
@@ -80,11 +85,12 @@ VirtualData::Ptr PythonVirtualData::GetAttribute(const std::string attr_name) co
 			//Object doesn't have attribute with the given name and can't have items...
 			return VirtualData::Ptr();
 		}
-		if (!PyMapping_HasKeyString(py_data_, (char*)attr_name.c_str())) {
+		shared_ptr<char*> str(new char(*(attr_name.c_str())), free);
+		if (!PyMapping_HasKeyString(py_data_, str.get()) {
 			//Object doesn't have attribute or item with the given name...
 			return VirtualData::Ptr();
 		}
-		attr = PyMapping_GetItemString(py_data_, (char*)attr_name.c_str()); //return is new ref
+		attr = PyMapping_GetItemString(py_data_, str.get()); //return is new ref
 	}
 	/*If Py_GetAttrString or Py_GetItemString failed somehow, they will return null.
 	  */
