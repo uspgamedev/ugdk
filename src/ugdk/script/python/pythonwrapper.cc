@@ -34,6 +34,9 @@ VirtualObj PythonWrapper::LoadModule(std::string name) {
 bool PythonWrapper::Initialize() {
 	Py_Initialize();
 	//TODO: Fix sys.path with our paths...
+    PyRun_SimpleString("import sys");
+    string command = "sys.path.append(\"" + PATH_MANAGER()->ResolvePath("scripts/") + "\")";
+    PyRun_SimpleString(command.c_str());
 	return true;
 }
 
