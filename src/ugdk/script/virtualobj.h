@@ -2,7 +2,12 @@
 #ifndef UGDK_SCRIPT_VIRTUALOBJ_H_
 #define UGDK_SCRIPT_VIRTUALOBJ_H_
 
+#ifdef ECLIPSE_BOOST_WORKAROUND_INCLUDE
+#include <boost/tr1/memory.hpp>
+#else
 #include <memory>
+#endif
+
 #include <vector>
 #include <string>
 
@@ -23,33 +28,19 @@ class VirtualObj {
 
   public:
 
-    VirtualObj(const VirtualObj& copy) :
-        key_(NULL),
-        data_(copy.data_) {}
+    typedef std::pair<VirtualObj,VirtualObj> VirtualEntry;
 
     /// Builds an <i>empty</i> virtual object.
     /** Attempting to use any method in a virtual object created this way will
      ** result in a segmentation fault.
      */
     explicit VirtualObj() :
-        key_(NULL),
         data_() {}
 
 	explicit VirtualObj(VirtualData::Ptr data) :
-        key_(NULL),
 	    data_(data) {}
 
 	~VirtualObj() {}
-
-	VirtualObj& operator =(const VirtualObj& rhs) {
-	    if (key_.get() && data_->parent()) {
-            // TODO FIXME WATMAN!
-	    } else {
-            data_ = rhs.data_;
-            key_.reset(NULL);
-	    }
-	    return *this;
-	}
 
 	template <class T>
 	T* value() const {
@@ -64,8 +55,6 @@ class VirtualObj {
             static_cast<void*>(obj),
             TypeRegistry<T>::type()
         );
-	    if (key_.get() && data_->parent())
-	        data_->parent()->SetAttribute(key_->data_, data_);
         return *this;
 	}
 
@@ -85,18 +74,28 @@ class VirtualObj {
 		return ret;
 	}
 
-	VirtualObj operator[] (const std::string& attr_name) const {
-		VirtualObj attr(data_->GetAttribute(attr_name));
+	VirtualObj operator[] (const std::string& key) const {
+		VirtualObj attr(data_->GetAttribute(key));
 		return attr;
 	}
 	
-	VirtualObj operator[] (const std::string& attr_name) {
-        VirtualObj attr(
-            data_->GetAttribute(attr_name),
-            new VirtualObj(Create(attr_name, wrapper()))
+	VirtualObj set_attribute (const VirtualObj& key, const VirtualObj& value) {
+	    return VirtualObj(
+            data_->SetAttribute(key.data_, value.data_)
         );
-        return attr;
     }
+
+	VirtualObj set_attribute(const VirtualEntry& entry) {
+	    return set_attribute(entry.first, entry.second);
+	}
+
+	VirtualEntry operator,(const VirtualObj& rhs) {
+	    return VirtualEntry(*this, rhs);
+	}
+
+	VirtualObj operator<<(const VirtualEntry& entry) {
+	    return set_attribute(entry);
+	}
 
     template <class T>
     static VirtualObj Create (T obj, LangWrapper* wrapper) {
@@ -130,11 +129,6 @@ class VirtualObj {
 
   private:
 
-    explicit VirtualObj(VirtualData::Ptr data, const VirtualObj* key) :
-        key_(key),
-        data_(data) {}
-
-	std::auto_ptr<const VirtualObj> key_;
 	VirtualData::Ptr                data_;
 
 };

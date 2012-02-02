@@ -4,7 +4,12 @@
 
 #include <vector>
 #include <string>
+
+#ifdef ECLIPSE_BOOST_WORKAROUND_INCLUDE
+#include <boost/tr1/memory.hpp>
+#else
 #include <memory>
+#endif
 
 #include <ugdk/script/type.h>
 
@@ -26,14 +31,6 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 
     virtual ~VirtualData() {}
 
-    void Unparent() {
-        parent_ = WeakPtr();
-    }
-
-    Ptr parent() {
-        return Ptr(parent_);
-    }
-
     Ptr Copy() {
         return shared_from_this();
     }
@@ -54,17 +51,10 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
      ** vdata = vdata->Wrap(...);
      ** </code>
      **
-     ** Also, a call to this method IS NOT the same as:
-     **
-     ** <code>
-     ** vdata = vdata->wrapper->WrapData(...);
-     ** </code>
-     **
      ** @param data - a void pointer to the data being wrapped.
      ** @param type - a virtual type got from TypeRegistry<T>::type(), where
      **               T is the original declarated type of the data.
      ** @return A shared pointer to the wrapped data.
-     ** @see ugdk::script::LangWrapper
      ** @see ugdk::script::TypeRegistry
      ** @depracated
      */
@@ -86,15 +76,15 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 	 */
 	virtual Ptr GetAttribute(const std::string attr_name) = 0;
 
-	virtual void SetAttribute(ConstPtr attr_name, Ptr value) = 0;
+	virtual Ptr SetAttribute(Ptr key, Ptr value) = 0;
 
   protected:
 
-    VirtualData() : parent_() {}
+    VirtualData() {}
 
   private:
 
-    WeakPtr parent_;
+
 
 };
 

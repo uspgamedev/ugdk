@@ -60,8 +60,6 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/script/python/pythonlangwrapper.h
     ${SRC_DIR}/ugdk/script/python/pythonvirtualdata.cc
     ${SRC_DIR}/ugdk/script/python/pythonvirtualdata.h
-    ${SRC_DIR}/ugdk/script/swig/swigluarun.h
-    ${SRC_DIR}/ugdk/script/swig/swigpyrun.h
     ${SRC_DIR}/ugdk/time/timeaccumulator.cc
     ${SRC_DIR}/ugdk/time/timeaccumulator.h
     ${SRC_DIR}/ugdk/time/timehandler.cc
