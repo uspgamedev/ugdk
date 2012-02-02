@@ -34,7 +34,29 @@ Python, traduzindo GetAttr/GetItem da API para o GetAttr da nossa interface:
     tenta coisas como tipo, checar se objeto eh um dict, se sim usa GetItem,
     senao usa GetAttr.
 ################
+Omar! Parte I das coisas que fiz na interface. Tema de hoje, "Os Wrappers da
+Vida".
 
+Como havia dito na reunião, concentrei toda a implementação de função de wrap
+na classe VirtualData. Existem cinco versões diferentes, que acho que são
+suficientes para a grande maioria dos usos que faremos do sistema de script.
+
+Mas eu mudei o WrapData do LangWrapper. Na verdade, eu semi-nukei ele. Na
+verdade da verdade, eu movi ele para o VirtualObject sob o nome de "Create".
+Tem umas quatro versões dele, se você ver lá acho que vc vai entender. No
+LangWrapper criei um novo método abstrato "NewData" que deve devolver um novo
+VData::Ptr criado com o construtor padrão da classe filha. Você precisa
+implementar ele!
+
+Se quiser depois podemos discutir essas escolhas, mas eu acho que estou
+conseguindo simplificar as coiasas...
+
+Resumindo: implemente os métodos Wrap do VData e o NewData do seu Wrapper.
+
+################
+Possível otimização, falar com Omar -> lazyness na hora de ler um atributo.
+
+################
 
 ################
 RANT MODE ON
