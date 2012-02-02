@@ -16,6 +16,7 @@
 #include <ugdk/graphic/drawable/text.h>
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/texture.h>
+#include <ugdk/util/utf8.h>
 
 using namespace std;
 
@@ -77,13 +78,17 @@ Text* TextManager::GetText(wstring text, wstring fonttag, int width) {
 }
 Text* TextManager::GetTextFromFile(wstring path, wstring font, int width) {
     std::string fullpath = PATH_MANAGER()->ResolvePath(path);
-    FILE *txtFile = fopen(fullpath.c_str(), "r,ccs=UTF-8");
+    FILE *txtFile = fopen(fullpath.c_str(), "r");
     if(txtFile==NULL) return NULL;
+    char buffer_utf8[MAXLINE];
     wchar_t buffer[MAXLINE];
-    wstring line, output;
-    while(fgetws(buffer, 200, txtFile)!=NULL){
-        line=buffer;
-        output.append(line);
+    wstring output;
+    // Read from the UTF-8 encoded file.
+    while(fgets(buffer_utf8, MAXLINE, txtFile)!=NULL){
+        // Converting UTF-8 to wstring
+        size_t buffer_size = utf8_to_wchar(buffer_utf8, strlen(buffer_utf8), buffer, MAXLINE, 0);
+        buffer[buffer_size] = L'\0';
+        output.append(buffer);
     }
     return GetText(output, font, width);
 }
