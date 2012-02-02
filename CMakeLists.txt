@@ -101,7 +101,7 @@ if (NOT MSVC)
     include_directories(${LUA_INCLUDE_DIR})
     
     find_package(PythonLibs 2.7 REQUIRED)
-	include_directories (${PYTHON_INCLUDE_DIRS})
+    include_directories (${PYTHON_INCLUDE_DIRS})
 
     find_package(Boost 1.48.0 REQUIRED)
     include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
