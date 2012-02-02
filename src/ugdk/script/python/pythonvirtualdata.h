@@ -29,10 +29,10 @@ class PythonVirtualData : public VirtualData {
 
     /// Tries to wrap the given data with the given type into this object.
     virtual void Wrap(void* data, const VirtualType& type);
-    virtual void Wrap(const char* str) {}
-    virtual void Wrap(bool boolean) {}
-    virtual void Wrap(int number) {}
-    virtual void Wrap(double number) {}
+    virtual void Wrap(const char* str);
+    virtual void Wrap(bool boolean);
+    virtual void Wrap(int number);
+    virtual void Wrap(double number);
 
 	virtual LangWrapper* wrapper () const;
 
@@ -43,7 +43,7 @@ class PythonVirtualData : public VirtualData {
 	/// Tries to get a attribute with the given name from this object.
 	virtual Ptr GetAttribute(const std::string attr_name);
 
-    virtual void SetAttribute(Ptr attr_name, Ptr value) {}
+    virtual void SetAttribute(Ptr attr_name, Ptr value);
 
   protected:
 	bool own_ref_; //if true, we own a ref to our PyObject* (py_data_), so we need to DECREF it in due time.

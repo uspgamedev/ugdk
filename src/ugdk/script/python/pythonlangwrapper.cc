@@ -14,13 +14,8 @@ namespace python {
 
 using std::tr1::shared_ptr;
 
-VirtualData::Ptr PythonLangWrapper::WrapData(void* data, const VirtualType& type) {
-	PyObject *obj;
-    obj = SWIG_NewInstanceObj(data, type.FromLang(LANG(Python)), 1);
-
-	/*Apparently, the PyObject return by the SWIG conversion function is a new reference.
-	  So our PyVData needs to handle it.*/
-	VirtualData::Ptr vdata( new PythonVirtualData(obj, true) ); 
+VirtualData::Ptr PythonLangWrapper::NewData() {
+	VirtualData::Ptr vdata( new PythonVirtualData(NULL, false) ); 
 	return vdata;
 }
 
