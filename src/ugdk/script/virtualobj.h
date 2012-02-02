@@ -28,6 +28,8 @@ class VirtualObj {
 
   public:
 
+    typedef std::pair<VirtualObj,VirtualObj> VirtualEntry;
+
     /// Builds an <i>empty</i> virtual object.
     /** Attempting to use any method in a virtual object created this way will
      ** result in a segmentation fault.
@@ -77,9 +79,23 @@ class VirtualObj {
 		return attr;
 	}
 	
-	VirtualObj set_attribute (const std::string& key, const VirtualObj& value) {
-	    return data_->SetAttribute(Create(key, wrapper()).data_, value.data_);
+	VirtualObj set_attribute (const VirtualObj& key, const VirtualObj& value) {
+	    return VirtualObj(
+            data_->SetAttribute(key.data_, value.data_)
+        );
     }
+
+	VirtualObj set_attribute(const VirtualEntry& entry) {
+	    return set_attribute(entry.first, entry.second);
+	}
+
+	VirtualEntry operator,(const VirtualObj& rhs) {
+	    return VirtualEntry(*this, rhs);
+	}
+
+	VirtualObj operator<<(const VirtualEntry& entry) {
+	    return set_attribute(entry);
+	}
 
     template <class T>
     static VirtualObj Create (T obj, LangWrapper* wrapper) {
