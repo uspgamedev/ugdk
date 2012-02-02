@@ -1,5 +1,21 @@
 #!/bin/bash
 
+help(){
+    echo "Placeholder Help Message - Ask Wil"
+}
+
+if [ $# -lt 1 ] ; then
+    echo "Error: Missing argument!"
+    help
+    exit 1;
+fi
+
+if [ $1 == "-h" -o $1 == "--help" ]; then
+    help
+    exit 0
+fi
+
+
 cd src
 
 directories=`find . -type d`
@@ -19,6 +35,6 @@ done
 
 mkdir -p $1/lib
 
-cp lib/*.a lib/*.so $1/lib
+cp -v lib/*.a lib/*.so $1/lib
 
 
