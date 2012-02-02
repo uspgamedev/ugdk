@@ -72,9 +72,8 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 
 	/// Tries to get a attribute with the given name from this object.
 	/**
-	 ** Postcondition: result->parent().get() == this
 	 */
-	virtual Ptr GetAttribute(const std::string attr_name) = 0;
+	virtual Ptr GetAttribute(Ptr key) = 0;
 
 	virtual Ptr SetAttribute(Ptr key, Ptr value) = 0;
 
