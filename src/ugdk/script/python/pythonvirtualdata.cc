@@ -3,24 +3,21 @@
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/swig/swigpyrun.h>
 
+#include <memory>
+#include <cstdlib>
+
 namespace ugdk {
 namespace script {
 namespace python {
 
-void* PythonVirtualData::Unwrap(const VirtualType& type) const {
-	//Conversion Python -> C++
-	char thisStr[] = "this";
-    //first we need to get the this attribute (SWIG adds this to wrapped objects) from the Python Object
-    if (!PyObject_HasAttrString(py_data_, thisStr))
-        return NULL;
+using std::tr1::shared_ptr;
 
-    PyObject* thisAttr = PyObject_GetAttrString(py_data_, thisStr);
-    if (thisAttr == NULL)
-        return NULL;
-    //This Python Object is a SWIG Wrapper and contains our pointer
-    void* pointer = ((SwigPyObject*)thisAttr)->ptr;
-    Py_DECREF(thisAttr);
-    return pointer;
+void* PythonVirtualData::Unwrap(const VirtualType& type) const {
+	void* pointer;
+	int res = SWIG_ConvertPtrAndOwn(py_data_, &pointer, type.FromLang(LANG(Python)), 0, NULL);
+	if (SWIG_IsOK(res))
+	    return pointer;
+	return NULL;
 }
 
 /// Tries to wrap the given data with the given type into this object.
@@ -88,11 +85,12 @@ VirtualData::Ptr PythonVirtualData::GetAttribute(const std::string attr_name) co
 			//Object doesn't have attribute with the given name and can't have items...
 			return VirtualData::Ptr();
 		}
-		if (!PyMapping_HasKeyString(py_data_, (char*)attr_name.c_str())) {
+		shared_ptr<char*> str(new char(*(attr_name.c_str())), free);
+		if (!PyMapping_HasKeyString(py_data_, str.get()) {
 			//Object doesn't have attribute or item with the given name...
 			return VirtualData::Ptr();
 		}
-		attr = PyMapping_GetItemString(py_data_, (char*)attr_name.c_str()); //return is new ref
+		attr = PyMapping_GetItemString(py_data_, str.get()); //return is new ref
 	}
 	/*If Py_GetAttrString or Py_GetItemString failed somehow, they will return null.
 	  */

@@ -25,6 +25,7 @@ class PythonLangWrapper : public LangWrapper {
 	/// Finalizes the LangWrapper, finalizing any language specific stuff.
 	virtual void Finalize();
 
+    bool RegisterModule(std::string moduleName, void (*initFunction)(void) );
 };
 
 }
