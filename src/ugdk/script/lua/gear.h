@@ -15,6 +15,8 @@ class Gear {
     Gear() {}
     ~Gear() {}
 
+    bool ValidState();
+
     void LoadLibs ();
 
     // [-0,+1]
