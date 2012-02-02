@@ -22,7 +22,51 @@ void* PythonVirtualData::Unwrap(const VirtualType& type) const {
 
 /// Tries to wrap the given data with the given type into this object.
 void PythonVirtualData::Wrap(void* data, const VirtualType& type) {
-	//return VirtualData::Ptr(); //TODO
+    if (py_data_ != NULL && own_ref_) {
+        Py_DECREF(py_data_);
+        py_data_ = NULL;
+    }
+
+    py_data_ = SWIG_NewInstanceObj(data, type.FromLang(LANG(Python)), 1);
+    own_ref_ = true;
+	/*Apparently, the PyObject return by the SWIG conversion function is a new reference.
+	  So our PyVData needs to handle it.*/
+}
+
+void PythonVirtualData::Wrap(const char* str) {
+    if (str == NULL)    return;
+    if (py_data_ != NULL && own_ref_) {
+        Py_DECREF(py_data_);
+        py_data_ = NULL;
+    }
+
+    py_data_ = PyString_FromString(str);
+    own_ref_ = true;
+}
+
+void PythonVirtualData::Wrap(bool boolean) {
+    py_data_ = PyBool_FromLong(static_cast<long>(boolean));
+    own_ref_ = true;
+}
+
+void PythonVirtualData::Wrap(int number) {
+    if (py_data_ != NULL && own_ref_) {
+        Py_DECREF(py_data_);
+        py_data_ = NULL;
+    }
+    
+    py_data_ = PyInt_FromLong(static_cast<long>(number));
+    own_ref_ = true;
+}
+
+void PythonVirtualData::Wrap(double number) {
+    if (py_data_ != NULL && own_ref_) {
+        Py_DECREF(py_data_);
+        py_data_ = NULL;
+    }
+
+    py_data_ = PyFloat_FromDouble(number);
+    own_ref_ = true;
 }
 
 LangWrapper* PythonVirtualData::wrapper () const {
@@ -92,11 +136,28 @@ VirtualData::Ptr PythonVirtualData::GetAttribute(const std::string attr_name) {
 		}
 		attr = PyMapping_GetItemString(py_data_, str.get()); //return is new ref
 	}
-	/*If Py_GetAttrString or Py_GetItemString failed somehow, they will return null.
-	  */
+	/*If Py_GetAttrString or Py_GetItemString failed somehow, they will return null.*/
 	
 	VirtualData::Ptr vdata( new PythonVirtualData(attr, true) );
 	return vdata;
+}
+
+void PythonVirtualData::SetAttribute(Ptr attr_name, Ptr value) {
+    PythonVirtualData* key = static_cast<PythonVirtualData*>(attr_name.get());
+    PyObject* key_data = key->py_data_;
+    PythonVirtualData* object = static_cast<PythonVirtualData*>(value.get());
+    PyObject* object_data = object->py_data_;
+
+    /*First we try checking if our object has a attribute or string with the given
+      name to override it...*/
+    if (PyObject_HasAttr(py_data_, key_data)) {
+        PyObject_SetAttr(py_data_, key_data, object_data);
+        return;
+    }
+    else if (PyMapping_Check(py_data_) && PyMapping_HasKey(py_data_, key_data)) {
+        PyObject_SetItem(py_data_, key_data, object_data);
+        return;
+    }
 }
 
 }

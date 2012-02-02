@@ -16,7 +16,7 @@ class PythonLangWrapper : public LangWrapper {
 	PythonLangWrapper() : LangWrapper(".py", LANG(Python)) {}
 	virtual ~PythonLangWrapper() {}
 
-	virtual VirtualData::Ptr WrapData(void* data, const VirtualType& type);
+    virtual VirtualData::Ptr NewData();
 
 	virtual VirtualObj LoadModule(std::string name);
 
