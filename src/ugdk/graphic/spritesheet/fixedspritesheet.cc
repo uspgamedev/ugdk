@@ -158,6 +158,7 @@ void FixedSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
         }
         popmatrix = true;
     }
+    glColor4fv(mod.color().val);
 
     glCallList(lists_base_ + frame_number);
 
