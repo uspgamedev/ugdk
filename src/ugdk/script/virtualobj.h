@@ -42,8 +42,12 @@ class VirtualObj {
 	~VirtualObj() {}
 
 	VirtualObj& operator =(const VirtualObj& rhs) {
-	    data_ = rhs.data_;
-	    key_.reset(NULL);
+	    if (key_.get() && data_->parent()) {
+            // TODO FIXME WATMAN!
+	    } else {
+            data_ = rhs.data_;
+            key_.reset(NULL);
+	    }
 	    return *this;
 	}
 

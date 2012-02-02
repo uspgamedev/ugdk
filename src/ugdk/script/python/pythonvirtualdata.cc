@@ -21,8 +21,8 @@ void* PythonVirtualData::Unwrap(const VirtualType& type) const {
 }
 
 /// Tries to wrap the given data with the given type into this object.
-VirtualData::Ptr PythonVirtualData::Wrap(void* data, const VirtualType& type) {
-	return VirtualData::Ptr(); //TODO
+void PythonVirtualData::Wrap(void* data, const VirtualType& type) {
+	//return VirtualData::Ptr(); //TODO
 }
 
 LangWrapper* PythonVirtualData::wrapper () const {
@@ -72,7 +72,7 @@ VirtualData::Ptr PythonVirtualData::Execute(std::vector<Ptr> args) {
 }
 
 /// Tries to get a attribute with the given name from this object.
-VirtualData::Ptr PythonVirtualData::GetAttribute(const std::string attr_name) const {
+VirtualData::Ptr PythonVirtualData::GetAttribute(const std::string attr_name) {
 	PyObject* attr;
 	
 	/*We give preference for getting a object's attributes. If it doesn't have a attribute

@@ -1,3 +1,4 @@
+
 #include <Python.h>
 #include <ugdk/script/python/pythonlangwrapper.h>
 #include <ugdk/script/python/pythonvirtualdata.h>
@@ -13,7 +14,7 @@ namespace python {
 
 using std::tr1::shared_ptr;
 
-VirtualData::Ptr WrapData(void* data, const VirtualType& type) {
+VirtualData::Ptr PythonLangWrapper::WrapData(void* data, const VirtualType& type) {
 	PyObject *obj;
     obj = SWIG_NewInstanceObj(data, type.FromLang(LANG(Python)), 1);
 
