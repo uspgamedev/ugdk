@@ -61,8 +61,11 @@ void FixedSpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int
     Uint32 *target_pixels = static_cast<Uint32*>(surface->pixels);
     
     for(int y = 0; y < height; ++y)
-        for(int x = 0; x < width; ++x)
-            target_pixels[y * width + x] = source_pixels[(y + topleft_y) * file_data_->w + (x + topleft_x)];
+        for(int x = 0; x < width; ++x) {
+            Uint8 r, g, b, a;
+            SDL_GetRGBA(source_pixels[(y + topleft_y) * file_data_->w + (x + topleft_x)], file_data_->format, &r, &g, &b, &a);
+            target_pixels[y * width + x] = SDL_MapRGBA(surface->format, r, g, b, a);
+        }
     
     SDL_UnlockSurface(surface);
     SDL_UnlockSurface(file_data_);
