@@ -47,7 +47,7 @@ void PythonLangWrapper::Finalize() {
 }
 
 bool RegisterModule(std::string moduleName, void (*initFunction)(void) ) {
-    shared_ptr<char*> str(new char(*(moduleName.c_str())), free);
+    shared_ptr<char> str(new char(*(moduleName.c_str())), free);
     return PyImport_AppendInittab(str.get(), initFunction) == 0;
 }
 

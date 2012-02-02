@@ -85,8 +85,8 @@ VirtualData::Ptr PythonVirtualData::GetAttribute(const std::string attr_name) co
 			//Object doesn't have attribute with the given name and can't have items...
 			return VirtualData::Ptr();
 		}
-		shared_ptr<char*> str(new char(*(attr_name.c_str())), free);
-		if (!PyMapping_HasKeyString(py_data_, str.get()) {
+		shared_ptr<char> str(new char(*(attr_name.c_str())), free);
+		if (!PyMapping_HasKeyString(py_data_, str.get()) ) {
 			//Object doesn't have attribute or item with the given name...
 			return VirtualData::Ptr();
 		}
