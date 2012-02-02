@@ -15,8 +15,6 @@ class LuaData: public VirtualData {
     LuaData() {}
     ~LuaData() {}
 
-    bool Initialize();
-
 };
 
 } /* namespace lua */
