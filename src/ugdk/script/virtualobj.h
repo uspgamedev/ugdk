@@ -23,20 +23,27 @@ class VirtualObj {
 
   public:
 
+    VirtualObj(const VirtualObj& copy) :
+        key_(NULL),
+        data_(copy.data_) {}
+
     /// Builds an <i>empty</i> virtual object.
     /** Attempting to use any method in a virtual object created this way will
      ** result in a segmentation fault.
      */
-    VirtualObj() :
+    explicit VirtualObj() :
+        key_(NULL),
         data_() {}
 
 	explicit VirtualObj(VirtualData::Ptr data) :
+        key_(NULL),
 	    data_(data) {}
 
-	~VirtualObj();
+	~VirtualObj() {}
 
 	VirtualObj& operator =(const VirtualObj& rhs) {
-	    data_ = rhs.data_->Copy();
+	    data_ = rhs.data_;
+	    key_.reset(NULL);
 	    return *this;
 	}
 
@@ -48,11 +55,14 @@ class VirtualObj {
 	}
 
 	template <class T>
-	void set_value(T* obj) {
-	    data_ = data_->Wrap(
+	VirtualObj& operator=(T* obj) {
+	    data_->Wrap(
             static_cast<void*>(obj),
             TypeRegistry<T>::type()
         );
+	    if (key_.get() && data_->parent())
+	        data_->parent()->SetAttribute(key_->data_, data_);
+        return *this;
 	}
 
 	LangWrapper* wrapper() const { return data_->wrapper(); }
@@ -72,25 +82,56 @@ class VirtualObj {
 	}
 
 	VirtualObj operator[] (const std::string& attr_name) const {
-		VirtualObj attr(data_->GetAttribute(attr_name)->Copy());
+		VirtualObj attr(data_->GetAttribute(attr_name));
 		return attr;
 	}
 	
 	VirtualObj operator[] (const std::string& attr_name) {
-        VirtualObj attr(data_->GetAttribute(attr_name));
+        VirtualObj attr(
+            data_->GetAttribute(attr_name),
+            new VirtualObj(Create(attr_name, wrapper()))
+        );
         return attr;
+    }
+
+    template <class T>
+    static VirtualObj Create (T obj, LangWrapper* wrapper) {
+        if (!wrapper) return VirtualObj();
+        VirtualData::Ptr new_data = wrapper->NewData();
+        new_data->Wrap(obj);
+        return VirtualObj(new_data);
     }
 
 	template <class T>
 	static VirtualObj Create (T* obj, LangWrapper* wrapper) {
-	    if (wrapper)
-	        return VirtualObj(wrapper->WrapData(obj, TypeRegistry<T>::type()));
-	    else return VirtualObj();
+	    if (!wrapper) return VirtualObj();
+        VirtualData::Ptr new_data = wrapper->NewData();
+        new_data->Wrap(
+            static_cast<void*>(obj),
+            TypeRegistry<T>::type()
+        );
+        return VirtualObj(new_data);
 	}
+
+    static VirtualObj Create (const char* obj, LangWrapper* wrapper) {
+        if (!wrapper) return VirtualObj();
+        VirtualData::Ptr new_data = wrapper->NewData();
+        new_data->Wrap(obj);
+        return VirtualObj(new_data);
+    }
+
+    static VirtualObj Create (const std::string& str, LangWrapper* wrapper) {
+        return Create(str.c_str(), wrapper);
+    }
 
   private:
 
-	VirtualData::Ptr data_;
+    explicit VirtualObj(VirtualData::Ptr data, const VirtualObj* key) :
+        key_(key),
+        data_(data) {}
+
+	std::auto_ptr<const VirtualObj> key_;
+	VirtualData::Ptr                data_;
 
 };
 

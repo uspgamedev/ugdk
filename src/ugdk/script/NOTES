@@ -39,7 +39,8 @@ Python, traduzindo GetAttr/GetItem da API para o GetAttr da nossa interface:
 ################
 RANT MODE ON
 	O Wil, pq mudar o VO op() pra usar iterator? 
-	Vector é mais eficiente para acesso direto a uma posicao (v[i] - constante) e a iterar em QUALQUER ordem ( O(n) ), enquanto
+	Vector é mais eficiente para acesso direto a uma posicao (v[i] - constante)
+	e a iterar em QUALQUER ordem ( O(n) ), enquanto
 	List só é mais eficiente pra iterar de forma linear do começo ao fim ou
 	vice-versa (dai se usa iterator) =P
 	Iterators are ugly, stop putting them everywhere =P  lol
@@ -60,6 +61,7 @@ ANSWER
 REPLY
 	lol eu sei que não tem diferenca =P
 	Eh que não sei porque, me perturba ver codigo com iterator xD
-	Eh como se fosse um foreach mas escrito com muito mais coisa e mais feio ai fico "Y U NO FOREACH?!?"
+	Eh como se fosse um foreach mas escrito com muito mais coisa e mais feio ai
+	fico "Y U NO FOREACH?!?"
 	xD
 #################
