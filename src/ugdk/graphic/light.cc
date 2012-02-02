@@ -1,19 +1,47 @@
-#include <ugdk/graphic/image.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL_opengl.h"
+#else
+    #include <SDL/SDL_opengl.h>
+#endif
+
 #include <ugdk/graphic/light.h>
+
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/texture.h>
 
 namespace ugdk {
 
-Light::Light() : hotspot_(Vector2D(0.0f,0.0f)), color_() {
+Light::Light() : color_() {
 }
 
-void Light::Render(Vector2D &offset) {
-	Image* img = VIDEO_MANAGER()->light_image();
-	Vector2D size = VIDEO_MANAGER()->light_size() * 2.0f;
-    size.x *= dimension_.x / VIDEO_MANAGER()->light_size().x;
-    size.y *= dimension_.y / VIDEO_MANAGER()->light_size().y;
-	img->DrawTo(offset - hotspot_ - size * 0.5f, 0, 0, color_, 1, size);
+void Light::Draw() {
+	const Texture* light_texture = VIDEO_MANAGER()->light_texture();
+
+    glColor3f(color_.r, color_.g, color_.b);
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, light_texture->gltexture());
+
+    static float TEX_COORD_ONE[]   = { 0.0f, 0.0f },
+                 TEX_COORD_TWO[]   = { 1.0f, 0.0f },
+                 TEX_COORD_THREE[] = { 1.0f, 1.0f },
+                 TEX_COORD_FOUR[]  = { 0.0f, 1.0f };
+
+	glBegin( GL_QUADS ); { //Start quad
+        glTexCoord2fv(TEX_COORD_ONE);
+        glVertex2f( -dimension_.x, -dimension_.y );
+
+        glTexCoord2fv(TEX_COORD_TWO);
+        glVertex2f(  dimension_.x, -dimension_.y );
+
+        glTexCoord2fv(TEX_COORD_THREE);
+        glVertex2fv( dimension_.val );
+
+        glTexCoord2fv(TEX_COORD_FOUR);
+        glVertex2f( -dimension_.x,  dimension_.y );
+    } glEnd();
 }
 
 }  // namespace framework

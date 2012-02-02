@@ -18,6 +18,26 @@ GNU/Linux:
 Optionally, you can use CMake to generate files for your favorite IDE. Search
 for cmake -G options.
 
+=========
+Mac OS X:
+=========
+
+1) Install CMake 2.6 or a higher version
+
+2) Install the following libraries: 
+- SDL 1.2
+- SDL_Image 1.2
+- SDL_Mixer 1.2
+- SDL_TTF 2.0
+
+3) Open a terminal in the same folder of this file.
+
+4) $ cmake . (Do not forget the '.' at the end)
+   $ make
+
+Optionally, you can use CMake to generate files for your favorite IDE. Search
+for cmake -G options.
+
 =======
 Windows
 =======

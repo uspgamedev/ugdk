@@ -1,7 +1,12 @@
 #ifndef HORUSEYE_FRAMEWORK_INPUTMANAGER_H_
 #define HORUSEYE_FRAMEWORK_INPUTMANAGER_H_
 
-#include <SDL/SDL.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL.h"
+#else
+    #include <SDL/SDL.h>
+#endif
 #include <ugdk/math/vector2D.h>
 #include <ugdk/input/keys.h>
 

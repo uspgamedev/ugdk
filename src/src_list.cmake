@@ -1,15 +1,15 @@
 set (FRAMEWORK_SRC
+    ${SRC_DIR}/ugdk/action.h
+    ${SRC_DIR}/ugdk/audio.h
+    ${SRC_DIR}/ugdk/graphic.h
     ${SRC_DIR}/ugdk/action/animation.cc
     ${SRC_DIR}/ugdk/action/animation.h
     ${SRC_DIR}/ugdk/action/animationset.cc
     ${SRC_DIR}/ugdk/action/animationset.h
-    ${SRC_DIR}/ugdk/action/layer.cc
-    ${SRC_DIR}/ugdk/action/layer.h
+    ${SRC_DIR}/ugdk/action/entity.h
     ${SRC_DIR}/ugdk/action/observer.h
     ${SRC_DIR}/ugdk/action/scene.cc
     ${SRC_DIR}/ugdk/action/scene.h
-    ${SRC_DIR}/ugdk/action/sprite.cc
-    ${SRC_DIR}/ugdk/action/sprite.h
     ${SRC_DIR}/ugdk/audio/audiomanager.cc
     ${SRC_DIR}/ugdk/audio/audiomanager.h
     ${SRC_DIR}/ugdk/audio/music.cc
@@ -19,23 +19,36 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/base/engine.cc
     ${SRC_DIR}/ugdk/base/engine.h
     ${SRC_DIR}/ugdk/base/types.h
-    ${SRC_DIR}/ugdk/config/config.h
     ${SRC_DIR}/ugdk/graphic/drawable.h
     ${SRC_DIR}/ugdk/graphic/font.cc
     ${SRC_DIR}/ugdk/graphic/font.h
-    ${SRC_DIR}/ugdk/graphic/image.cc
-    ${SRC_DIR}/ugdk/graphic/image.h
     ${SRC_DIR}/ugdk/graphic/light.cc
     ${SRC_DIR}/ugdk/graphic/light.h
     ${SRC_DIR}/ugdk/graphic/modifier.cc
     ${SRC_DIR}/ugdk/graphic/modifier.h
-    ${SRC_DIR}/ugdk/graphic/text.cc
-    ${SRC_DIR}/ugdk/graphic/text.h
+    ${SRC_DIR}/ugdk/graphic/node.cc
+    ${SRC_DIR}/ugdk/graphic/node.h
+    ${SRC_DIR}/ugdk/graphic/spritesheet.h
     ${SRC_DIR}/ugdk/graphic/textmanager.cc
     ${SRC_DIR}/ugdk/graphic/textmanager.h
+    ${SRC_DIR}/ugdk/graphic/texture.cc
+    ${SRC_DIR}/ugdk/graphic/texture.h
     ${SRC_DIR}/ugdk/graphic/videomanager.cc
     ${SRC_DIR}/ugdk/graphic/videomanager.h
     ${SRC_DIR}/ugdk/graphic/wglext.h
+    ${SRC_DIR}/ugdk/graphic/drawable/shape.h
+    ${SRC_DIR}/ugdk/graphic/drawable/solidrectangle.cc
+    ${SRC_DIR}/ugdk/graphic/drawable/solidrectangle.h
+    ${SRC_DIR}/ugdk/graphic/drawable/sprite.cc
+    ${SRC_DIR}/ugdk/graphic/drawable/sprite.h
+    ${SRC_DIR}/ugdk/graphic/drawable/text.cc
+    ${SRC_DIR}/ugdk/graphic/drawable/text.h
+    ${SRC_DIR}/ugdk/graphic/drawable/texturedrectangle.cc
+    ${SRC_DIR}/ugdk/graphic/drawable/texturedrectangle.h
+    ${SRC_DIR}/ugdk/graphic/spritesheet/fixedspritesheet.cc
+    ${SRC_DIR}/ugdk/graphic/spritesheet/fixedspritesheet.h
+    ${SRC_DIR}/ugdk/graphic/spritesheet/flexiblespritesheet.cc
+    ${SRC_DIR}/ugdk/graphic/spritesheet/flexiblespritesheet.h
     ${SRC_DIR}/ugdk/input/inputmanager.cc
     ${SRC_DIR}/ugdk/input/inputmanager.h
     ${SRC_DIR}/ugdk/input/keys.h
@@ -58,6 +71,7 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/util/gdd/descriptionprotocol.h
     ${SRC_DIR}/ugdk/util/gdd/parser.h
     ${SRC_DIR}/ugdk/util/gdd/parserutility.h
+    ${SRC_DIR}/ugdk/util/gdd/reader.cc
     ${SRC_DIR}/ugdk/util/gdd/reader.h
     ${SRC_DIR}/ugdk/util/gdd/simpleloader.h
 )

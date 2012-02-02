@@ -2,38 +2,44 @@
 #define HORUSEYE_FRAMEWORK_DRAWABLE_H_
 
 #include <ugdk/math/vector2D.h>
-#include <ugdk/base/types.h>
-#include <ugdk/graphic/modifier.h>
 
 namespace ugdk {
 
 class Drawable {
   public:
-	virtual ~Drawable() {}
-	virtual bool DrawTo(const Vector2D& position, int frame_number, uint8 mirror, 
-		const Color& color, float alpha, const Vector2D& draw_size) {
-			return false;
-	}
-	virtual bool DrawTo(const Vector2D& position, int frame_number, Modifier *modifier,
-        const Vector2D& draw_size) {
-	    if (modifier != NULL)
-            return DrawTo(position + modifier->offset(), frame_number, modifier->mirror(),
-                      modifier->color(), modifier->alpha(),
-                      Vector2D(draw_size.x*modifier->scale().x, draw_size.y*modifier->scale().y));
-	    else
-	        return DrawTo(position, frame_number, MIRROR_NONE,
-                      WHITE, 1.0f, draw_size);
+    enum HookPoint {
+        TOP_LEFT,       TOP,        TOP_RIGHT,
+        LEFT,           CENTER,     RIGHT,
+        BOTTOM_LEFT,    BOTTOM,     BOTTOM_RIGHT
+    };
+    virtual ~Drawable() {};
+
+    virtual void Draw(float dt) = 0;
+    virtual const Vector2D& size() const = 0;
+
+    void set_hotspot(const Vector2D& hotspot) { hotspot_ = hotspot; }
+    void set_hotspot(const HookPoint& hook) {
+        switch(hook) {
+        case TOP_LEFT    : hotspot_ = Vector2D(           0.0f,            0.0f); break;
+        case TOP         : hotspot_ = Vector2D(size().x * 0.5f,            0.0f); break;
+        case TOP_RIGHT   : hotspot_ = Vector2D(       size().x,            0.0f); break;
+        case LEFT        : hotspot_ = Vector2D(           0.0f, size().y * 0.5f); break;
+        case CENTER      : hotspot_ = size() * 0.5f;                              break;
+        case RIGHT       : hotspot_ = Vector2D(       size().x, size().y * 0.5f); break;
+        case BOTTOM_LEFT : hotspot_ = Vector2D(           0.0f,        size().y); break;
+        case BOTTOM      : hotspot_ = Vector2D(size().x * 0.5f,        size().y); break;
+        case BOTTOM_RIGHT: hotspot_ = size();                                     break;
+        }
     }
 
-	virtual Vector2D render_size() const { return Vector2D(); }
-
-	// DEPRECATED DO NOT USE OR DIE LOLOL
-	virtual int width() const { return (int)(render_size().x); }
-	virtual int height() const { return (int)(render_size().y); }
-	virtual bool Destroy() { return false; }
+    const float       width() const { return size().x; }
+    const float      height() const { return size().y; }
+    const Vector2D& hotspot() const { return hotspot_; }
 
   protected:
-	Drawable() {}
+    Drawable() {}
+
+    ugdk::Vector2D hotspot_;
 };
 
 }  // namespace framework

@@ -1,7 +1,12 @@
 #ifndef HORUSEYE_FRAMEWORK_TYPES_H_
 #define HORUSEYE_FRAMEWORK_TYPES_H_
 
-#include <SDL/SDL.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL_stdinc.h"
+#else
+    #include <SDL/SDL_stdinc.h>
+#endif
 
 namespace ugdk {
 
@@ -21,15 +26,18 @@ static const Mirror MIRROR_VFLIP  = 2;
 static const Mirror MIRROR_HVFLIP = 3;
 
 typedef struct Color {
-    explicit Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f)
-          : r(_r), g(_g), b(_b) {}
-    explicit Color(uint32 hex_val) :
+    explicit Color(float _r = 1.0f, float _g = 1.0f, float _b = 1.0f, float _a = 1.0f)
+          : r(_r), g(_g), b(_b), a(_a) {}
+    explicit Color(uint32 hex_val, float _a = 1.0f) :
         r(((hex_val & 0xFF0000) >> 16) / 255.0f),
         g(((hex_val & 0x00FF00) >>  8) / 255.0f),
-        b(((hex_val & 0x0000FF)      ) / 255.0f) {}
-    float r;
-    float g;
-    float b;
+        b(((hex_val & 0x0000FF)      ) / 255.0f),
+        a(_a) {}
+    
+	union {
+        struct { float r, g, b, a; };
+        struct { float val[4];  };
+    };
 } Color;
 
 //static Color BLACK = {0.0f, 0.0f, 0.0f};

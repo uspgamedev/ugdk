@@ -1,5 +1,11 @@
-#include <SDL/SDL.h>
-#include <SDL/SDL_timer.h>
+#include <ugdk/config/config.h>
+#ifdef ISMAC
+    #include "SDL.h"
+    #include "SDL_timer.h"
+#else
+    #include <SDL/SDL.h>
+    #include <SDL/SDL_timer.h>
+#endif
 #include <ugdk/time/timehandler.h>
 #include <ugdk/time/timeaccumulator.h>
 #include <ugdk/base/engine.h>
