@@ -116,48 +116,48 @@ VirtualData::Ptr PythonVirtualData::Execute(std::vector<Ptr> args) {
 }
 
 /// Tries to get a attribute with the given name from this object.
-VirtualData::Ptr PythonVirtualData::GetAttribute(const std::string attr_name) {
+VirtualData::Ptr PythonVirtualData::GetAttribute(Ptr key) {
+    PythonVirtualData* vkey = static_cast<PythonVirtualData*>(key.get());
+    PyObject* key_data = vkey->py_data_;
 	PyObject* attr;
 	
 	/*We give preference for getting a object's attributes. If it doesn't have a attribute
 	  with the given name, check if he has a item with key = attr_name */
-	if (PyObject_HasAttrString(py_data_, attr_name.c_str())) {
-		attr = PyObject_GetAttrString(py_data_, attr_name.c_str()); //return is new ref
+	if (PyObject_HasAttr(py_data_, key_data)) {
+		attr = PyObject_GetAttr(py_data_, key_data); //return is new ref
 	}
 	else {
 		if (!PyMapping_Check(py_data_)) {
 			//Object doesn't have attribute with the given name and can't have items...
 			return VirtualData::Ptr();
 		}
-		shared_ptr<char> str(new char(*(attr_name.c_str())), free);
-		if (!PyMapping_HasKeyString(py_data_, str.get()) ) {
+		if (!PyMapping_HasKey(py_data_, key_data) ) {
 			//Object doesn't have attribute or item with the given name...
 			return VirtualData::Ptr();
 		}
-		attr = PyMapping_GetItemString(py_data_, str.get()); //return is new ref
+		attr = PyMapping_GetItem(py_data_, key_data); //return is new ref
 	}
-	/*If Py_GetAttrString or Py_GetItemString failed somehow, they will return null.*/
+	/*If Py_GetAttr or Py_GetItem failed somehow, they will return null.*/
 	
 	VirtualData::Ptr vdata( new PythonVirtualData(attr, true) );
 	return vdata;
 }
 
-void PythonVirtualData::SetAttribute(Ptr attr_name, Ptr value) {
-    PythonVirtualData* key = static_cast<PythonVirtualData*>(attr_name.get());
-    PyObject* key_data = key->py_data_;
+void PythonVirtualData::SetAttribute(Ptr key, Ptr value) {
+    PythonVirtualData* vkey = static_cast<PythonVirtualData*>(key.get());
+    PyObject* key_data = vkey->py_data_;
     PythonVirtualData* object = static_cast<PythonVirtualData*>(value.get());
     PyObject* object_data = object->py_data_;
 
     /*First we try checking if our object has a attribute or string with the given
       name to override it...*/
-    if (PyObject_HasAttr(py_data_, key_data)) {
+    if (PyObject_HasAttr(py_data_, key_data) || !PyMapping_Check(py_data_) ) {
         PyObject_SetAttr(py_data_, key_data, object_data);
-        return;
     }
-    else if (PyMapping_Check(py_data_) && PyMapping_HasKey(py_data_, key_data)) {
+    else { /*We do not have a attribute with given key and we are a mapping, so...*/
         PyObject_SetItem(py_data_, key_data, object_data);
-        return;
     }
+    return;
 }
 
 }
