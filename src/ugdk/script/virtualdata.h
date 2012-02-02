@@ -20,11 +20,23 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 
   public:
 
-    typedef std::tr1::shared_ptr<VirtualData> Ptr;
+    typedef std::tr1::shared_ptr<VirtualData>       Ptr;
+    typedef std::tr1::shared_ptr<const VirtualData> ConstPtr;
+    typedef std::tr1::weak_ptr<VirtualData>         WeakPtr;
 
     virtual ~VirtualData() {}
 
-    virtual Ptr Copy() { return shared_from_this(); }
+    void Unparent() {
+        parent_ = WeakPtr();
+    }
+
+    Ptr parent() {
+        return Ptr(parent_);
+    }
+
+    Ptr Copy() {
+        return shared_from_this();
+    }
 
     /// Tries to unwrap the data contained in this object using the given type.
     virtual void* Unwrap(const VirtualType& type) const = 0;
@@ -54,8 +66,13 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
      ** @return A shared pointer to the wrapped data.
      ** @see ugdk::script::LangWrapper
      ** @see ugdk::script::TypeRegistry
+     ** @depracated
      */
-    virtual Ptr Wrap(void* data, const VirtualType& type) = 0;
+    virtual void Wrap(void* data, const VirtualType& type) = 0;
+    virtual void Wrap(const char* str) = 0;
+    virtual void Wrap(bool boolean) = 0;
+    virtual void Wrap(int number) = 0;
+    virtual void Wrap(double number) = 0;
 
     virtual LangWrapper* wrapper () const = 0;
 
@@ -64,11 +81,20 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 	virtual Ptr Execute(std::vector<Ptr> args) = 0;
 
 	/// Tries to get a attribute with the given name from this object.
-	virtual Ptr GetAttribute(const std::string attr_name) const = 0;
+	/**
+	 ** Postcondition: result->parent().get() == this
+	 */
+	virtual Ptr GetAttribute(const std::string attr_name) = 0;
+
+	virtual void SetAttribute(ConstPtr attr_name, Ptr value) = 0;
 
   protected:
 
-    VirtualData() {}
+    VirtualData() : parent_() {}
+
+  private:
+
+    WeakPtr parent_;
 
 };
 

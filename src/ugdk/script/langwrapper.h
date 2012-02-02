@@ -2,8 +2,9 @@
 #ifndef UGDK_SCRIPT_LANGWRAPPER_H_
 #define UGDK_SCRIPT_LANGWRAPPER_H_
 
-#include <string>
 #include <cstdio>
+#include <string>
+#include <type_traits>
 
 #include <ugdk/script/defs.h>
 #include <ugdk/script/type.h>
@@ -65,9 +66,9 @@ class LangWrapper {
         return false;
     }
 
-    virtual VirtualData::Ptr WrapData(void* data, const VirtualType& type) = 0;
+    virtual VirtualData::Ptr NewData() = 0;
 
-    virtual VirtualObj LoadModule(std::string name) = 0;
+    virtual VirtualObj LoadModule(const std::string& name) = 0;
 
     const LangID id () { return id_; }
 
