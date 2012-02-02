@@ -43,7 +43,7 @@ class PythonVirtualData : public VirtualData {
 	/// Tries to get a attribute with the given name from this object.
 	virtual Ptr GetAttribute(const std::string attr_name);
 
-    virtual void SetAttribute(ConstPtr attr_name, Ptr value) {}
+    virtual void SetAttribute(Ptr attr_name, Ptr value) {}
 
   protected:
 	bool own_ref_; //if true, we own a ref to our PyObject* (py_data_), so we need to DECREF it in due time.
