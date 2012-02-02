@@ -74,9 +74,17 @@ class VirtualObj {
 		return ret;
 	}
 
+	VirtualObj attribute(const VirtualObj& key) const {
+        VirtualObj attr(data_->GetAttribute(key.data_));
+        return attr;
+	}
+
+    VirtualObj operator[] (const VirtualObj& key) const {
+        return attribute(key);
+    }
+
 	VirtualObj operator[] (const std::string& key) const {
-		VirtualObj attr(data_->GetAttribute(key));
-		return attr;
+		return attribute(Create(key, wrapper()));
 	}
 	
 	VirtualObj set_attribute (const VirtualObj& key, const VirtualObj& value) {
