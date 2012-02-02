@@ -1,5 +1,5 @@
-#ifndef UGDK_SCRIPT_PYTHON_VIRTUALDATA_H_
-#define UGDK_SCRIPT_PYTHON_VIRTUALDATA_H_
+#ifndef UGDK_SCRIPT_PYTHON_PYTHONDATA_H_
+#define UGDK_SCRIPT_PYTHON_PYTHONDATA_H_
 
 #include <Python.h>
 #include <vector>
@@ -14,12 +14,12 @@ class VirtualType;
 
 namespace python {
 
-class PythonVirtualData : public VirtualData {
+class PythonData : public VirtualData {
   public:
-	PythonVirtualData(PyObject* data_object, bool owns_ref) : VirtualData(), 
+	PythonData(PyObject* data_object, bool owns_ref) : VirtualData(), 
 		own_ref_(owns_ref), py_data_(data_object) {}
 		
-    virtual ~PythonVirtualData() {
+    virtual ~PythonData() {
     	if (own_ref_)
     		Py_XDECREF(py_data_);
     }
@@ -54,4 +54,4 @@ class PythonVirtualData : public VirtualData {
 } /* namespace script */
 } /* namespace ugdk */
 
-#endif /* UGDK_SCRIPT_PYTHON_VIRTUALDATA_H_ */
+#endif /* UGDK_SCRIPT_PYTHON_PYTHONDATA_H_ */

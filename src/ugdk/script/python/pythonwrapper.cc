@@ -1,7 +1,7 @@
 
 #include <Python.h>
-#include <ugdk/script/python/pythonlangwrapper.h>
-#include <ugdk/script/python/pythonvirtualdata.h>
+#include <ugdk/script/python/pythonwrapper.h>
+#include <ugdk/script/python/pythondata.h>
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/swig/swigpyrun.h>
 
@@ -14,35 +14,35 @@ namespace python {
 
 using std::tr1::shared_ptr;
 
-VirtualData::Ptr PythonLangWrapper::NewData() {
-	VirtualData::Ptr vdata( new PythonVirtualData(NULL, false) ); 
+VirtualData::Ptr PythonWrapper::NewData() {
+	VirtualData::Ptr vdata( new PythonData(NULL, false) ); 
 	return vdata;
 }
 
-VirtualObj PythonLangWrapper::LoadModule(std::string name) {
+VirtualObj PythonWrapper::LoadModule(std::string name) {
 	PyObject* module = PyImport_ImportModule(name.c_str()); //new ref
 	if (module == NULL && PyErr_Occurred() != NULL) {
 						
 		PyErr_Print();
 		return VirtualObj();
 	}
-	VirtualData::Ptr vdata( new PythonVirtualData(module, true) ); //PyVirtualData takes care of the ref.
+	VirtualData::Ptr vdata( new PythonData(module, true) ); //PythonData takes care of the ref.
 	return VirtualObj(vdata);
 }
 
 /// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
-bool PythonLangWrapper::Initialize() {
+bool PythonWrapper::Initialize() {
 	Py_Initialize();
 	//TODO: Fix sys.path with our paths...
 	return true;
 }
 
 /// Finalizes the LangWrapper, finalizing any language specific stuff.
-void PythonLangWrapper::Finalize() {
+void PythonWrapper::Finalize() {
 	Py_Finalize();
 }
 
-bool RegisterModule(std::string moduleName, void (*initFunction)(void) ) {
+bool PythonWrapper::RegisterModule(std::string moduleName, void (*initFunction)(void) ) {
     shared_ptr<char> str(new char(*(moduleName.c_str())), free);
     return PyImport_AppendInittab(str.get(), initFunction) == 0;
 }

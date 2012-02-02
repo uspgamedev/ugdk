@@ -1,7 +1,7 @@
-#ifndef UGDK_SCRIPT_PYTHON_LANGWRAPPER_H_
-#define UGDK_SCRIPT_PYTHON_LANGWRAPPER_H_
+#ifndef UGDK_SCRIPT_PYTHON_PYTHONWRAPPER_H_
+#define UGDK_SCRIPT_PYTHON_PYTHONWRAPPER_H_
 
-#include <ugdk/script/python/pythonvirtualdata.h>
+#include <ugdk/script/python/pythondata.h>
 #include <ugdk/script/langwrapper.h>
 
 namespace ugdk {
@@ -11,10 +11,10 @@ class VirtualObj;
 
 namespace python {
 
-class PythonLangWrapper : public LangWrapper {
+class PythonWrapper : public LangWrapper {
   public:
-	PythonLangWrapper() : LangWrapper(".py", LANG(Python)) {}
-	virtual ~PythonLangWrapper() {}
+	PythonWrapper() : LangWrapper(".py", LANG(Python)) {}
+	virtual ~PythonWrapper() {}
 
     virtual VirtualData::Ptr NewData();
 
@@ -32,4 +32,4 @@ class PythonLangWrapper : public LangWrapper {
 }
 }
 
-#endif /* UGDK_SCRIPT_PYTHON_LANGWRAPPER_H_ */
+#endif /* UGDK_SCRIPT_PYTHON_PYTHONWRAPPER_H_ */
