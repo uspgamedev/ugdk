@@ -56,10 +56,12 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/script/lua/header.h
     ${SRC_DIR}/ugdk/script/lua/native.h
     ${SRC_DIR}/ugdk/script/lua/state.h
-    ${SRC_DIR}/ugdk/script/python/pythonlangwrapper.cc
-    ${SRC_DIR}/ugdk/script/python/pythonlangwrapper.h
-    ${SRC_DIR}/ugdk/script/python/pythonvirtualdata.cc
-    ${SRC_DIR}/ugdk/script/python/pythonvirtualdata.h
+    ${SRC_DIR}/ugdk/script/python/pythondata.cc
+    ${SRC_DIR}/ugdk/script/python/pythondata.h
+    ${SRC_DIR}/ugdk/script/python/pythonwrapper.cc
+    ${SRC_DIR}/ugdk/script/python/pythonwrapper.h
+    ${SRC_DIR}/ugdk/script/swig/swigluarun.h
+    ${SRC_DIR}/ugdk/script/swig/swigpyrun.h
     ${SRC_DIR}/ugdk/time/timeaccumulator.cc
     ${SRC_DIR}/ugdk/time/timeaccumulator.h
     ${SRC_DIR}/ugdk/time/timehandler.cc
