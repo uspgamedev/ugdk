@@ -3,7 +3,6 @@
 
 #include <Python.h>
 #include <vector>
-#include <string>
 #include <ugdk/script/virtualdata.h>
 
 namespace ugdk {
