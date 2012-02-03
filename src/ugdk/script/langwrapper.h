@@ -43,7 +43,7 @@ class LangWrapper {
 
   public:
 
-    virtual ~LangWrapper();
+    virtual ~LangWrapper() {}
 
     const std::string& file_extension() { return file_extension_; }
 

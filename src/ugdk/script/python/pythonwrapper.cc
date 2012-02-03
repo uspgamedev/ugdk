@@ -21,7 +21,7 @@ VirtualData::Ptr PythonWrapper::NewData() {
 	return vdata;
 }
 
-VirtualObj PythonWrapper::LoadModule(std::string name) {
+VirtualObj PythonWrapper::LoadModule(const std::string& name) {
 	PyObject* module = PyImport_ImportModule(name.c_str()); //new ref
 	if (module == NULL && PyErr_Occurred() != NULL) {
 						
