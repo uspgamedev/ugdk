@@ -7,6 +7,17 @@
 ***************************************************************************/
 
 ###############
+BugFix:
+funcao LoadModule dos ScriptManager e LangWrappers esperam um caminho absoluto,
+para um arquivo real. Porem a implementacao python espera o caminho na notacao
+de import do python:  pacote.subpacote.modulo
+
+###############
+Novas ideias para a interface:
+	-Feature: funcao que recebe um string 'comando' e executa ele como
+		codigo de uma linguagem (no Wrapper)
+
+###############
 Reuniao QuartaFeira dia 1/02:
     discutir interface do sistema para registrar modulos e suas funcoes de init
     que o SWIG gera, assim podemos nukar os .SO =D
