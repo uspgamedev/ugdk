@@ -25,6 +25,8 @@ class State {
           State::errormsg("Could not create Lua state.");
     }
 
+    operator bool() const { return L_; }
+
     AuxLib aux() const { return AuxLib(L_); }
 
     int gettop() const { return lua_gettop(L_.get()); }
@@ -40,6 +42,8 @@ class State {
     void push (lua_CFunction func, int n = 0) {
         lua_pushcclosure(L_.get(), func, n);
     }
+
+    void gettable (int index) { lua_gettable(L_.get(), index); }
 
     void pop (int n) { lua_pop(L_.get(), n); }
 
@@ -69,7 +73,6 @@ class State {
     }
 
   private:
-
 
     StatePtr L_;
 

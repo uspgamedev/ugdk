@@ -3,6 +3,8 @@
 #include <ugdk/script/lua/auxlib.h>
 #include <ugdk/script/lua/native.h>
 
+#include <ugdk/script/swig/swigluarun.h>
+
 namespace ugdk {
 namespace script {
 namespace lua {
@@ -12,6 +14,19 @@ void Gear::LoadLibs () {
     lua_.gc(Constant::gc::STOP(), 0);
     lua_.aux().openlibs();
     lua_.gc(Constant::gc::RESTART(), 0);
+}
+
+bool Gear::PushData (DataID id) {
+    if (!PushDataTable()) return false;
+    // DataTable is at local index 1;
+    lua_.push(id);              // [1] = DT, [2] = id
+    lua_.gettable(Local(1));    // [1] = DT, [2] = DT.id
+    if (lua_.isnil(-1)) {
+        lua_.pop(2);            // <empty>
+        return false;
+    }
+    lua_.remove(Local(1));      // [1] = DT.id
+    return true;
 }
 
 const Constant Gear::DoFile (const char* filename) {
@@ -28,6 +43,18 @@ const Constant Gear::LoadModule (const char* name, lua_CFunction loader) {
   if (result != Constant::OK())
       lua_.pop(1);
   return result;
+}
+
+/// Private:
+
+bool Gear::PushDataTable() {
+    lua_.push(id());
+    lua_.gettable(Constant::REGISTRYINDEX());
+    if (lua_.isnil(-1)) {
+        lua_.pop(1);
+        return false;
+    }
+    return true;
 }
 
 const Constant Gear::Report (const Constant& c) {

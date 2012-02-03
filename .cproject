@@ -1,81 +1,895 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?fileVersion 4.0.0?>
 
-<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
-	<storageModule moduleId="org.eclipse.cdt.core.settings">
-		<cconfiguration id="cdt.managedbuild.toolchain.gnu.base.2119371475">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.base.2119371475" moduleId="org.eclipse.cdt.core.settings" name="Default">
-				<externalSettings/>
-				<extensions>
-					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
-					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
-				</extensions>
-			</storageModule>
-			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildProperties="" description="" id="cdt.managedbuild.toolchain.gnu.base.2119371475" name="Default" parent="org.eclipse.cdt.build.core.emptycfg">
-					<folderInfo id="cdt.managedbuild.toolchain.gnu.base.2119371475.1562130497" name="/" resourcePath="">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.base.983723330" name="cdt.managedbuild.toolchain.gnu.base" superClass="cdt.managedbuild.toolchain.gnu.base">
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base.627298052" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
-							<builder id="cdt.managedbuild.target.gnu.builder.base.997069274" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base">
-								<outputEntries>
-									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name=""/>
-								</outputEntries>
-							</builder>
-							<tool id="cdt.managedbuild.tool.gnu.archiver.base.426117247" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1254486027" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
-								<option id="gnu.cpp.compiler.option.include.paths.308822641" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/ugdk/src}&quot;"/>
-									<listOptionValue builtIn="false" value="/usr/include/lua5.1"/>
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_48_0/boost/tr1/tr1"/>
-									<listOptionValue builtIn="false" value="/usr/local/boost_1_48_0/"/>
-									<listOptionValue builtIn="false" value="/usr/include/python2.6"/>
-								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.435239118" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="ECLIPSE_BOOST_WORKAROUND_INCLUDE=1"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1694831918" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1162415504" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.727734618" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
-									<listOptionValue builtIn="false" value="ECLIPSE_TR1_WORKAROUND_INCLUDE=1"/>
-								</option>
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.404736104" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.1852525380" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
-							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.base.1946788337" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.base">
-								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1325415080" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
-									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
-									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
-								</inputType>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.assembler.base.2043553294" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.70943622" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-						</toolChain>
-					</folderInfo>
-				</configuration>
-			</storageModule>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
-		</cconfiguration>
-	</storageModule>
-	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="ugdk.null.1939383122" name="ugdk"/>
-	</storageModule>
-	<storageModule moduleId="refreshScope" versionNumber="1">
-		<resource resourceType="PROJECT" workspacePath="/ugdk"/>
-	</storageModule>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.2119371475;cdt.managedbuild.toolchain.gnu.base.2119371475.1562130497;cdt.managedbuild.tool.gnu.cpp.compiler.base.1254486027;cdt.managedbuild.tool.gnu.cpp.compiler.input.1694831918">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.2119371475;cdt.managedbuild.toolchain.gnu.base.2119371475.1562130497;cdt.managedbuild.tool.gnu.c.compiler.base.1162415504;cdt.managedbuild.tool.gnu.c.compiler.input.404736104">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-	</storageModule>
-	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+<cproject>
+<storageModule moduleId="org.eclipse.cdt.core.settings">
+<cconfiguration id="org.eclipse.cdt.core.default.config.1">
+<storageModule buildSystemId="org.eclipse.cdt.core.defaultConfigDataProvider" id="org.eclipse.cdt.core.default.config.1" moduleId="org.eclipse.cdt.core.settings" name="Configuration">
+<externalSettings/>
+<extensions>
+<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser">
+<attribute key="addr2line" value="addr2line"/>
+<attribute key="c++filt" value="c++filt"/>
+</extension>
+</extensions>
+</storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.language.mapping">
+<project-mappings/>
+</storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+<storageModule moduleId="org.eclipse.cdt.core.pathentry">
+<pathentry excluding="**/CMakeFiles/" kind="out" path=""/>
+<pathentry kind="mac" name="__STDC__" path="" value="1"/>
+<pathentry kind="mac" name="__STDC_HOSTED__" path="" value="1"/>
+<pathentry kind="mac" name="__GNUC__" path="" value="4"/>
+<pathentry kind="mac" name="__GNUC_MINOR__" path="" value="4"/>
+<pathentry kind="mac" name="__GNUC_PATCHLEVEL__" path="" value="5"/>
+<pathentry kind="mac" name="__SIZE_TYPE__" path="" value="long"/>
+<pathentry kind="mac" name="unsigned" path="" value="int"/>
+<pathentry kind="mac" name="__PTRDIFF_TYPE__" path="" value="long"/>
+<pathentry kind="mac" name="int" path="" value="__WCHAR_TYPE__"/>
+<pathentry kind="mac" name="__INTMAX_TYPE__" path="" value="long"/>
+<pathentry kind="mac" name="long" path="" value="unsigned"/>
+<pathentry kind="mac" name="short" path="" value="unsigned"/>
+<pathentry kind="mac" name="__GXX_ABI_VERSION" path="" value="1002"/>
+<pathentry kind="mac" name="__SCHAR_MAX__" path="" value="127"/>
+<pathentry kind="mac" name="__SHRT_MAX__" path="" value="32767"/>
+<pathentry kind="mac" name="__INT_MAX__" path="" value="2147483647"/>
+<pathentry kind="mac" name="__LONG_MAX__" path="" value="9223372036854775807L"/>
+<pathentry kind="mac" name="__LONG_LONG_MAX__" path="" value="9223372036854775807LL"/>
+<pathentry kind="mac" name="__WCHAR_MAX__" path="" value="2147483647"/>
+<pathentry kind="mac" name="__CHAR_BIT__" path="" value="8"/>
+<pathentry kind="mac" name="__INTMAX_MAX__" path="" value="9223372036854775807L"/>
+<pathentry kind="mac" name="__FLT_EVAL_METHOD__" path="" value="0"/>
+<pathentry kind="mac" name="__DEC_EVAL_METHOD__" path="" value="2"/>
+<pathentry kind="mac" name="__FLT_RADIX__" path="" value="2"/>
+<pathentry kind="mac" name="__FLT_MANT_DIG__" path="" value="24"/>
+<pathentry kind="mac" name="__FLT_DIG__" path="" value="6"/>
+<pathentry kind="mac" name="__FLT_MIN_EXP__" path="" value="(-125)"/>
+<pathentry kind="mac" name="__FLT_MIN_10_EXP__" path="" value="(-37)"/>
+<pathentry kind="mac" name="__FLT_MAX_EXP__" path="" value="128"/>
+<pathentry kind="mac" name="__FLT_MAX_10_EXP__" path="" value="38"/>
+<pathentry kind="mac" name="__FLT_MAX__" path="" value="3.40282347e+38F"/>
+<pathentry kind="mac" name="__FLT_MIN__" path="" value="1.17549435e-38F"/>
+<pathentry kind="mac" name="__FLT_EPSILON__" path="" value="1.19209290e-7F"/>
+<pathentry kind="mac" name="__FLT_DENORM_MIN__" path="" value="1.40129846e-45F"/>
+<pathentry kind="mac" name="__FLT_HAS_DENORM__" path="" value="1"/>
+<pathentry kind="mac" name="__FLT_HAS_INFINITY__" path="" value="1"/>
+<pathentry kind="mac" name="__FLT_HAS_QUIET_NAN__" path="" value="1"/>
+<pathentry kind="mac" name="__DBL_MANT_DIG__" path="" value="53"/>
+<pathentry kind="mac" name="__DBL_DIG__" path="" value="15"/>
+<pathentry kind="mac" name="__DBL_MIN_EXP__" path="" value="(-1021)"/>
+<pathentry kind="mac" name="__DBL_MIN_10_EXP__" path="" value="(-307)"/>
+<pathentry kind="mac" name="__DBL_MAX_EXP__" path="" value="1024"/>
+<pathentry kind="mac" name="__DBL_MAX_10_EXP__" path="" value="308"/>
+<pathentry kind="mac" name="__DBL_MAX__" path="" value="1.7976931348623157e+308"/>
+<pathentry kind="mac" name="__DBL_MIN__" path="" value="2.2250738585072014e-308"/>
+<pathentry kind="mac" name="__DBL_EPSILON__" path="" value="2.2204460492503131e-16"/>
+<pathentry kind="mac" name="__DBL_DENORM_MIN__" path="" value="4.9406564584124654e-324"/>
+<pathentry kind="mac" name="__DBL_HAS_DENORM__" path="" value="1"/>
+<pathentry kind="mac" name="__DBL_HAS_INFINITY__" path="" value="1"/>
+<pathentry kind="mac" name="__DBL_HAS_QUIET_NAN__" path="" value="1"/>
+<pathentry kind="mac" name="__LDBL_MANT_DIG__" path="" value="64"/>
+<pathentry kind="mac" name="__LDBL_DIG__" path="" value="18"/>
+<pathentry kind="mac" name="__LDBL_MIN_EXP__" path="" value="(-16381)"/>
+<pathentry kind="mac" name="__LDBL_MIN_10_EXP__" path="" value="(-4931)"/>
+<pathentry kind="mac" name="__LDBL_MAX_EXP__" path="" value="16384"/>
+<pathentry kind="mac" name="__LDBL_MAX_10_EXP__" path="" value="4932"/>
+<pathentry kind="mac" name="__DECIMAL_DIG__" path="" value="21"/>
+<pathentry kind="mac" name="__LDBL_MAX__" path="" value="1.18973149535723176502e+4932L"/>
+<pathentry kind="mac" name="__LDBL_MIN__" path="" value="3.36210314311209350626e-4932L"/>
+<pathentry kind="mac" name="__LDBL_EPSILON__" path="" value="1.08420217248550443401e-19L"/>
+<pathentry kind="mac" name="__LDBL_DENORM_MIN__" path="" value="3.64519953188247460253e-4951L"/>
+<pathentry kind="mac" name="__LDBL_HAS_DENORM__" path="" value="1"/>
+<pathentry kind="mac" name="__LDBL_HAS_INFINITY__" path="" value="1"/>
+<pathentry kind="mac" name="__LDBL_HAS_QUIET_NAN__" path="" value="1"/>
+<pathentry kind="mac" name="__DEC32_MANT_DIG__" path="" value="7"/>
+<pathentry kind="mac" name="__DEC32_MIN_EXP__" path="" value="(-94)"/>
+<pathentry kind="mac" name="__DEC32_MAX_EXP__" path="" value="97"/>
+<pathentry kind="mac" name="__DEC32_MIN__" path="" value="1E-95DF"/>
+<pathentry kind="mac" name="__DEC32_MAX__" path="" value="9.999999E96DF"/>
+<pathentry kind="mac" name="__DEC32_EPSILON__" path="" value="1E-6DF"/>
+<pathentry kind="mac" name="__DEC32_SUBNORMAL_MIN__" path="" value="0.000001E-95DF"/>
+<pathentry kind="mac" name="__DEC64_MANT_DIG__" path="" value="16"/>
+<pathentry kind="mac" name="__DEC64_MIN_EXP__" path="" value="(-382)"/>
+<pathentry kind="mac" name="__DEC64_MAX_EXP__" path="" value="385"/>
+<pathentry kind="mac" name="__DEC64_MIN__" path="" value="1E-383DD"/>
+<pathentry kind="mac" name="__DEC64_MAX__" path="" value="9.999999999999999E384DD"/>
+<pathentry kind="mac" name="__DEC64_EPSILON__" path="" value="1E-15DD"/>
+<pathentry kind="mac" name="__DEC64_SUBNORMAL_MIN__" path="" value="0.000000000000001E-383DD"/>
+<pathentry kind="mac" name="__DEC128_MANT_DIG__" path="" value="34"/>
+<pathentry kind="mac" name="__DEC128_MIN_EXP__" path="" value="(-6142)"/>
+<pathentry kind="mac" name="__DEC128_MAX_EXP__" path="" value="6145"/>
+<pathentry kind="mac" name="__DEC128_MIN__" path="" value="1E-6143DL"/>
+<pathentry kind="mac" name="__DEC128_MAX__" path="" value="9.999999999999999999999999999999999E6144DL"/>
+<pathentry kind="mac" name="__DEC128_EPSILON__" path="" value="1E-33DL"/>
+<pathentry kind="mac" name="__DEC128_SUBNORMAL_MIN__" path="" value="0.000000000000000000000000000000001E-6143DL"/>
+<pathentry kind="mac" name="__REGISTER_PREFIX__" path="" value=""/>
+<pathentry kind="mac" name="__USER_LABEL_PREFIX__" path="" value=""/>
+<pathentry kind="mac" name="__VERSION__" path="" value="&quot;4.4.5&quot;"/>
+<pathentry kind="mac" name="__GNUC_GNU_INLINE__" path="" value="1"/>
+<pathentry kind="mac" name="_LP64" path="" value="1"/>
+<pathentry kind="mac" name="__LP64__" path="" value="1"/>
+<pathentry kind="mac" name="__NO_INLINE__" path="" value="1"/>
+<pathentry kind="mac" name="__FINITE_MATH_ONLY__" path="" value="0"/>
+<pathentry kind="mac" name="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_1" path="" value="1"/>
+<pathentry kind="mac" name="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_2" path="" value="1"/>
+<pathentry kind="mac" name="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_4" path="" value="1"/>
+<pathentry kind="mac" name="__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8" path="" value="1"/>
+<pathentry kind="mac" name="__GCC_HAVE_DWARF2_CFI_ASM" path="" value="1"/>
+<pathentry kind="mac" name="__SSP__" path="" value="1"/>
+<pathentry kind="mac" name="__SIZEOF_INT__" path="" value="4"/>
+<pathentry kind="mac" name="__SIZEOF_LONG__" path="" value="8"/>
+<pathentry kind="mac" name="__SIZEOF_LONG_LONG__" path="" value="8"/>
+<pathentry kind="mac" name="__SIZEOF_SHORT__" path="" value="2"/>
+<pathentry kind="mac" name="__SIZEOF_FLOAT__" path="" value="4"/>
+<pathentry kind="mac" name="__SIZEOF_DOUBLE__" path="" value="8"/>
+<pathentry kind="mac" name="__SIZEOF_LONG_DOUBLE__" path="" value="16"/>
+<pathentry kind="mac" name="__SIZEOF_SIZE_T__" path="" value="8"/>
+<pathentry kind="mac" name="__SIZEOF_WCHAR_T__" path="" value="4"/>
+<pathentry kind="mac" name="__SIZEOF_WINT_T__" path="" value="4"/>
+<pathentry kind="mac" name="__SIZEOF_PTRDIFF_T__" path="" value="8"/>
+<pathentry kind="mac" name="__SIZEOF_POINTER__" path="" value="8"/>
+<pathentry kind="mac" name="__amd64" path="" value="1"/>
+<pathentry kind="mac" name="__amd64__" path="" value="1"/>
+<pathentry kind="mac" name="__x86_64" path="" value="1"/>
+<pathentry kind="mac" name="__x86_64__" path="" value="1"/>
+<pathentry kind="mac" name="__k8" path="" value="1"/>
+<pathentry kind="mac" name="__k8__" path="" value="1"/>
+<pathentry kind="mac" name="__MMX__" path="" value="1"/>
+<pathentry kind="mac" name="__SSE__" path="" value="1"/>
+<pathentry kind="mac" name="__SSE2__" path="" value="1"/>
+<pathentry kind="mac" name="__SSE_MATH__" path="" value="1"/>
+<pathentry kind="mac" name="__SSE2_MATH__" path="" value="1"/>
+<pathentry kind="mac" name="__gnu_linux__" path="" value="1"/>
+<pathentry kind="mac" name="__linux" path="" value="1"/>
+<pathentry kind="mac" name="__linux__" path="" value="1"/>
+<pathentry kind="mac" name="linux" path="" value="1"/>
+<pathentry kind="mac" name="__unix" path="" value="1"/>
+<pathentry kind="mac" name="__unix__" path="" value="1"/>
+<pathentry kind="mac" name="unix" path="" value="1"/>
+<pathentry kind="mac" name="__ELF__" path="" value="1"/>
+<pathentry kind="mac" name="__DECIMAL_BID_FORMAT__" path="" value="1"/>
+<pathentry kind="mac" name="__BIGGEST_ALIGNMENT__" path="" value="16"/>
+<pathentry kind="mac" name="_FORTIFY_SOURCE" path="" value="2"/>
+<pathentry kind="mac" name="__cplusplus" path="" value="1"/>
+<pathentry kind="mac" name="__GNUG__" path="" value="4"/>
+<pathentry kind="mac" name="__GXX_WEAK__" path="" value="1"/>
+<pathentry kind="mac" name="__DEPRECATED" path="" value="1"/>
+<pathentry kind="mac" name="__GXX_RTTI" path="" value="1"/>
+<pathentry kind="mac" name="__EXCEPTIONS" path="" value="1"/>
+<pathentry kind="mac" name="_GNU_SOURCE" path="" value="1"/>
+<pathentry include="/home/kazuo/Workspaces/uspgamedev/ugdk/src" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include/SDL" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include/lua5.1" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include/python2.6" kind="inc" path="" system="true"/>
+<pathentry include="/usr/local/boost_1_48_0/boost/tr1/tr1" kind="inc" path="" system="true"/>
+<pathentry include="/usr/local/boost_1_48_0" kind="inc" path="" system="true"/>
+<pathentry include="/usr/local/include" kind="inc" path="" system="true"/>
+<pathentry include="/usr/lib/gcc/x86_64-linux-gnu/4.4.5/include" kind="inc" path="" system="true"/>
+<pathentry include="/usr/lib/gcc/x86_64-linux-gnu/4.4.5/include-fixed" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include/c++/4.4" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include/c++/4.4/x86_64-linux-gnu" kind="inc" path="" system="true"/>
+<pathentry include="/usr/include/c++/4.4/backward" kind="inc" path="" system="true"/>
+</storageModule>
+<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+<buildTargets>
+<target name=": rebuild_cache" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>rebuild_cache</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[lib] ugdk_d" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>ugdk_d</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[lib] ugdk_d/fast" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>ugdk_d/fast</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name=": all" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>all</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name=": clean" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>clean</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/action/animation.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/animation.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/action/animation.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/animation.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/action/animation.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/animation.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/action/animationset.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/animationset.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/action/animationset.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/animationset.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/action/animationset.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/animationset.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/action/layer.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/layer.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/action/layer.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/layer.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/action/layer.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/layer.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/action/scene.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/scene.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/action/scene.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/scene.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/action/scene.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/scene.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/action/sprite.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/sprite.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/action/sprite.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/sprite.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/action/sprite.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/action/sprite.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/audio/audiomanager.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/audio/audiomanager.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/audio/audiomanager.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/audio/audiomanager.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/audio/audiomanager.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/audio/audiomanager.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/audio/music.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/audio/music.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/audio/music.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/audio/music.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/audio/music.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/audio/music.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/audio/sample.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/audio/sample.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/audio/sample.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/audio/sample.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/audio/sample.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/audio/sample.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/base/engine.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/base/engine.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/base/engine.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/base/engine.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/base/engine.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/base/engine.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/graphic/font.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/font.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/graphic/font.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/font.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/graphic/font.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/font.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/graphic/image.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/image.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/graphic/image.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/image.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/graphic/image.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/image.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/graphic/light.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/light.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/graphic/light.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/light.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/graphic/light.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/light.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/graphic/modifier.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/modifier.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/graphic/modifier.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/modifier.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/graphic/modifier.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/modifier.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/graphic/text.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/text.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/graphic/text.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/text.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/graphic/text.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/text.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/graphic/textmanager.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/textmanager.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/graphic/textmanager.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/textmanager.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/graphic/textmanager.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/textmanager.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/graphic/videomanager.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/videomanager.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/graphic/videomanager.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/videomanager.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/graphic/videomanager.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/graphic/videomanager.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/input/inputmanager.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/input/inputmanager.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/input/inputmanager.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/input/inputmanager.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/input/inputmanager.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/input/inputmanager.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/math/frame.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/math/frame.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/math/frame.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/math/frame.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/math/frame.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/math/frame.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/math/vector2D.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/math/vector2D.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/math/vector2D.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/math/vector2D.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/math/vector2D.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/math/vector2D.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/script/lua/gear.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/lua/gear.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/script/lua/gear.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/lua/gear.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/script/lua/gear.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/lua/gear.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/script/lua/luadata.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/lua/luadata.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/script/lua/luadata.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/lua/luadata.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/script/lua/luadata.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/lua/luadata.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/script/lua/luawrapper.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/lua/luawrapper.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/script/lua/luawrapper.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/lua/luawrapper.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/script/lua/luawrapper.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/lua/luawrapper.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/script/python/pythondata.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/python/pythondata.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/script/python/pythondata.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/python/pythondata.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/script/python/pythondata.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/python/pythondata.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/script/python/pythonwrapper.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/python/pythonwrapper.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/script/python/pythonwrapper.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/python/pythonwrapper.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/script/python/pythonwrapper.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/python/pythonwrapper.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/script/scriptmanager.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/scriptmanager.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/script/scriptmanager.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/scriptmanager.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/script/scriptmanager.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/scriptmanager.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/script/virtualobj.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/virtualobj.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/script/virtualobj.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/virtualobj.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/script/virtualobj.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/script/virtualobj.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/time/timeaccumulator.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/time/timeaccumulator.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/time/timeaccumulator.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/time/timeaccumulator.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/time/timeaccumulator.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/time/timeaccumulator.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/time/timehandler.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/time/timehandler.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/time/timehandler.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/time/timehandler.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/time/timehandler.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/time/timehandler.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/util/animationparser.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/util/animationparser.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/util/animationparser.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/util/animationparser.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/util/animationparser.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/util/animationparser.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/util/animationprotocol.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/util/animationprotocol.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/util/animationprotocol.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/util/animationprotocol.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/util/animationprotocol.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/util/animationprotocol.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[obj] src/ugdk/util/pathmanager.cc.o" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/util/pathmanager.cc.o</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[pre] src/ugdk/util/pathmanager.cc.i" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/util/pathmanager.cc.i</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+<target name="[to asm] src/ugdk/util/pathmanager.cc.s" path="" targetID="org.eclipse.cdt.make.MakeTargetBuilder">
+<buildCommand>/usr/bin/make</buildCommand>
+<buildArguments/>
+<buildTarget>src/ugdk/util/pathmanager.cc.s</buildTarget>
+<stopOnError>true</stopOnError>
+<useDefaultCommand>false</useDefaultCommand>
+</target>
+</buildTargets>
+</storageModule>
+<storageModule moduleId="scannerConfiguration">
+<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
+<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="specsFile">
+<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="/usr/bin/gcc" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+<buildOutputProvider>
+<openAction enabled="true" filePath=""/>
+<parser enabled="true"/>
+</buildOutputProvider>
+<scannerInfoProvider id="makefileGenerator">
+<runAction arguments="-f ${project_name}_scd.mk" command="/usr/bin/make" useDefault="true"/>
+<parser enabled="true"/>
+</scannerInfoProvider>
+</profile>
+</storageModule>
+</cconfiguration>
+</storageModule>
+<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+<project id="ugdk.null.1" name="ugdk"/>
+</storageModule>
 </cproject>
