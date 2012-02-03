@@ -9,6 +9,7 @@
 #include "node.h"
 
 namespace ugdk {
+namespace graphic {
 
 bool Node::CompareByZIndex(const Node *a, const Node *b) {
     return a->zindex() < b->zindex();
@@ -81,4 +82,5 @@ void Node::SortChildren() {
     must_sort_ = false;
 }
     
+}  // namespace graphic
 }  // namespace ugdk

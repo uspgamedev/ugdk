@@ -8,7 +8,7 @@
 #include <ugdk/base/types.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/frame.h>
-
+#include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/modifier.h>
 
@@ -18,8 +18,7 @@ using std::map;
 #define VIDEO_MANAGER() (ugdk::Engine::reference()->video_manager())
 
 namespace ugdk {
-
-class Scene;
+namespace graphic {
 
 class VideoManager {
   public:
@@ -88,6 +87,7 @@ class VideoManager {
 
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

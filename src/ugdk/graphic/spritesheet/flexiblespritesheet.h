@@ -5,6 +5,7 @@
 #include <ugdk/graphic/spritesheet.h>
 
 namespace ugdk {
+namespace graphic {
 
 // A spritesheet with a variable frame size.
 class FlexibleSpritesheet : public Spritesheet {
@@ -36,6 +37,7 @@ class FlexibleSpritesheet : public Spritesheet {
     Vector2D frame_size_, hotspot_, real_frame_size_;
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

@@ -6,6 +6,7 @@
 #include <ugdk/base/types.h>
 
 namespace ugdk {
+namespace graphic {
 
 class Modifier {
   public:
@@ -125,6 +126,7 @@ class Modifier {
     int             flags_;
 };
 
-}
+}  // namespace graphic
+}  // namespace ugdk
 
 #endif /* UGDK_GRAPHIC_MODIFIER_H_ */

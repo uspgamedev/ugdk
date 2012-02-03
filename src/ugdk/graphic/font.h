@@ -7,6 +7,7 @@
 
 
 namespace ugdk {
+namespace graphic {
 
 class Font {
   public:
@@ -31,6 +32,7 @@ class Font {
 };
 
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

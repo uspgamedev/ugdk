@@ -20,6 +20,7 @@
 #include <ugdk/graphic/videomanager.h>
 
 namespace ugdk {
+namespace graphic {
 
 /// Container for an unoptimized FixedSpritesheet data. May freely add new frames.
 class FixedSpritesheetData {
@@ -74,6 +75,7 @@ class FixedSpritesheet : public Spritesheet {
     std::vector<Vector2D> frame_sizes_;
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

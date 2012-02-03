@@ -13,6 +13,7 @@
 #include <ugdk/graphic/font.h>
 
 namespace ugdk {
+namespace graphic {
 
 static Vector2D GetStringSize(const std::wstring& string, Font* font) {
     float width = 0, height = font->GetLetterSize(L'\n').y;
@@ -108,4 +109,5 @@ void Text::Draw(float dt) {
     glPopMatrix();
 }
 
+}  // namespace graphic
 }  // namespace ugdk

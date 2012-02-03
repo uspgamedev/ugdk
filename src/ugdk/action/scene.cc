@@ -10,7 +10,7 @@ namespace ugdk {
 
 using namespace std;
 
-Scene::Scene() : finished_(false), background_music_(NULL), stops_previous_music_(true), root_node_(new Node) {}
+Scene::Scene() : finished_(false), background_music_(NULL), stops_previous_music_(true), root_node_(new graphic::Node) {}
 
 Scene::~Scene() {
     delete root_node_;

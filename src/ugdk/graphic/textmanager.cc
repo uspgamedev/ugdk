@@ -23,7 +23,8 @@ using namespace std;
 //Tamanho máximo de uma linha do arquivo de entrada
 #define MAXLINE 1024
 
-namespace ugdk{
+namespace ugdk {
+namespace graphic {
 
 bool TextManager::Initialize() {
     TTF_Init();
@@ -129,5 +130,5 @@ void TextManager::AddFont(wstring name, wstring path, int size, char ident, bool
     fonts_[name] = current_font_ = new Font(font_images_[path], size, ident, fancy);
 }
 
-
-} // namespace ugdk
+}  // namespace graphic
+}  // namespace ugdk

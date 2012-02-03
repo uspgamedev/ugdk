@@ -13,6 +13,7 @@
 #define MAX_UNICODE_CODE 18431
 
 namespace ugdk {
+namespace graphic {
 
 Font::Font(Texture** letters, int fontsize, char ident, bool fancy) 
 	: size_(fontsize), letters_(letters) {
@@ -77,4 +78,5 @@ Vector2D Font::GetLetterSize(wchar_t letter) {
     return Vector2D(letters_[letter]->width() * (size_ * 0.01f), letters_[letter]->height() * (size_ * 0.01f));
 }
 
+}  // namespace graphic
 }  // namespace ugdk

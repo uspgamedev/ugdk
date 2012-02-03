@@ -2,6 +2,7 @@
 #define UGDK_GRAPHIC_H_
 
 namespace ugdk {
+namespace graphic {
 
 // Drawables
 class Drawable;
@@ -28,6 +29,7 @@ class Texture;
 class TextManager;
 class VideoManager;
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

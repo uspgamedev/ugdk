@@ -12,6 +12,7 @@
 #include <ugdk/graphic/texture.h>
 
 namespace ugdk {
+namespace graphic {
 
 Light::Light() : color_() {
 }
@@ -44,4 +45,5 @@ void Light::Draw() {
     } glEnd();
 }
 
+}  // namespace graphic
 }  // namespace ugdk

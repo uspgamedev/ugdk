@@ -4,6 +4,7 @@
 #include <ugdk/graphic/drawable.h>
 
 namespace ugdk {
+namespace graphic {
 
 class Shape : public Drawable {
   public:
@@ -13,6 +14,7 @@ class Shape : public Drawable {
     Shape() {}
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

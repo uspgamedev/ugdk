@@ -5,6 +5,7 @@
 #include <ugdk/base/types.h>
 
 namespace ugdk {
+namespace graphic {
 
 class SolidRectangle : public Shape {
   public:
@@ -24,6 +25,7 @@ class SolidRectangle : public Shape {
     Color color_;
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

@@ -4,21 +4,19 @@
 #include <vector>
 #include <list>
 #include <string>
+#include <ugdk/action.h>
+#include <ugdk/audio.h>
+#include <ugdk/graphic.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/util/gdd/cachedloader.h>
 #include <ugdk/util/animationprotocol.h>
 
 namespace ugdk {
 
-class VideoManager;
 class InputManager;
 class TimeHandler;
-class AudioManager;
-class TextManager;
 class PathManager;
 class AnimationSet;
-class Scene;
-class Node;
 
 typedef gdd::CachedLoader<AnimationSet> AnimationLoader;
 
@@ -37,7 +35,7 @@ class Engine {
     /// Returns a reference to the Video Manager.
     /** @see VideoManager
      */
-    VideoManager *video_manager() { return video_manager_; }
+    graphic::VideoManager *video_manager() { return video_manager_; }
     /// Returns a reference to the Input Manager.
     /** @see InputManager
      */
@@ -53,7 +51,7 @@ class Engine {
     /// Returns a reference to the Text Manager.
     /** @see TextManager
      */
-    TextManager *text_manager() { return text_manager_; }
+    graphic::TextManager *text_manager() { return text_manager_; }
     /// Returns a reference to the Path Manager.
     /** @see PathManager
      */
@@ -104,9 +102,9 @@ class Engine {
     // TODO: SERIOUSLY FIX THIS. Big fat ugly code to allow some special 
     // layers to be unnafected by the light system. Meant for user interface.
     /// Pushes a layer unaffected by the light system. Meant for interfaces.
-    void PushInterface(Node* node);
+    void PushInterface(graphic::Node* node);
     /// Removes a layer pushed by the above function.
-    void RemoveInterface(Node* node);
+    void RemoveInterface(graphic::Node* node);
     /** @}
      */
     /// Returns the current running FPS.
@@ -121,17 +119,17 @@ class Engine {
 
   private:
     void DeleteFinishedScenes();
-    VideoManager *video_manager_;
+
+    graphic::VideoManager *video_manager_;
     InputManager *input_manager_;
     TimeHandler *time_handler_;
     AudioManager *audio_manager_;
-    TextManager *text_manager_;
+    graphic::TextManager *text_manager_;
 	PathManager *path_manager_;
 	AnimationLoader animation_loader_;
-    //Vector2D window_size_;
     bool quit_;
     std::list<Scene*> scene_list_;
-    std::list<Node*> interface_list_;
+    std::list<graphic::Node*> interface_list_;
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 
 	Engine() : video_manager_(NULL), input_manager_(NULL), time_handler_(NULL), 

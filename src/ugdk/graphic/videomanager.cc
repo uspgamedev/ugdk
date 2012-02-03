@@ -42,6 +42,7 @@ static void InitializeExtensions() {
 #define LN255 5.5412635451584261462455391880218
 
 namespace ugdk {
+namespace graphic {
 
 static Vector2D default_resolution(800.0f, 600.0f);
 
@@ -357,4 +358,5 @@ void VideoManager::ClearModiferStack() {
     while(PopModifier());
 }
 
+}  // namespace graphic
 }  // namespace ugdk

@@ -18,6 +18,7 @@
 #include <ugdk/graphic/videomanager.h>
 
 namespace ugdk {
+namespace graphic {
 
 FlexibleSpritesheet::FlexibleSpritesheet(Texture* texture) : 
     texture_(texture), frame_size_(1.0f, 1.0f) {}
@@ -102,4 +103,5 @@ int FlexibleSpritesheet::frame_count() const {
     return static_cast<int>(std::max(1.0f / (frame_size_.x * frame_size_.y), 1.0f));
 }
 
+}  // namespace graphic
 }  // namespace ugdk

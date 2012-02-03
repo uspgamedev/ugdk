@@ -17,12 +17,14 @@
 #include <ugdk/graphic/videomanager.h>
 
 namespace ugdk {
+namespace graphic {
 
 FixedSpritesheetData::FixedSpritesheetData(const std::string& filename) {
     std::string filepath = PATH_MANAGER()->ResolvePath(filename);
     file_data_ = IMG_Load(filepath.c_str());
 #ifdef DEBUG
-    fprintf(stderr, "FixedSpritesheetData - NULL receive when loading \"%s\"\n", filepath.c_str());
+    if(file_data_ == NULL)
+        fprintf(stderr, "FixedSpritesheetData - NULL received when loading \"%s\"\n", filepath.c_str());
 #endif
 }
 
@@ -168,4 +170,5 @@ void FixedSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     if(popmatrix) glPopMatrix();
 }
 
+}  // namespace graphic
 }  // namespace ugdk

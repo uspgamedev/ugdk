@@ -12,6 +12,7 @@
 #include <ugdk/graphic/modifier.h>
 
 namespace ugdk {
+namespace graphic {
 
 SolidRectangle::SolidRectangle(const Vector2D& size) : size_(size) {}
 
@@ -48,4 +49,5 @@ void SolidRectangle::Draw(float dt) {
     } glEnd();
 }
 
+}  // namespace graphic
 }  // namespace ugdk

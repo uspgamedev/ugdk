@@ -6,6 +6,7 @@
 #include <ugdk/graphic/drawable/shape.h>
 
 namespace ugdk {
+namespace graphic {
 
 class TexturedRectangle : public Shape {
   public:
@@ -23,6 +24,7 @@ class TexturedRectangle : public Shape {
     Texture* texture_;
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

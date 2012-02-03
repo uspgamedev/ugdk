@@ -4,6 +4,7 @@
 #include <ugdk/math/vector2D.h>
 
 namespace ugdk {
+namespace graphic {
 
 class Spritesheet {
   public:
@@ -18,6 +19,7 @@ class Spritesheet {
     Spritesheet() {}
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

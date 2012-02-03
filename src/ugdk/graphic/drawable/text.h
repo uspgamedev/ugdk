@@ -7,6 +7,7 @@
 #include <ugdk/graphic/drawable.h>
 
 namespace ugdk {
+namespace graphic {
 
 class Font;
 class Text : public Drawable {
@@ -28,6 +29,7 @@ class Text : public Drawable {
 	std::vector<float> line_width_;
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

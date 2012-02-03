@@ -4,6 +4,7 @@
 #include <ugdk/math/vector2D.h>
 
 namespace ugdk {
+namespace graphic {
 
 class Drawable {
   public:
@@ -42,6 +43,7 @@ class Drawable {
     ugdk::Vector2D hotspot_;
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

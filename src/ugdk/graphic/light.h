@@ -6,6 +6,7 @@
 #include <ugdk/graphic.h>
 
 namespace ugdk {
+namespace graphic {
 
 class Light {
   public:
@@ -25,6 +26,7 @@ class Light {
     Color color_;
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

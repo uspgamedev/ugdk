@@ -6,6 +6,7 @@
 #include <ugdk/graphic/modifier.h>
 
 namespace ugdk {
+namespace graphic {
 
 /// 
 class Node {
@@ -62,6 +63,7 @@ class Node {
     bool must_sort_;
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif // UGDK_GRAPHIC_NODE_H_

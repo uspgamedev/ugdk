@@ -8,6 +8,8 @@
 
 namespace ugdk {
 
+namespace graphic {
+
 const Modifier Modifier::IDENTITY;
 
 Modifier::Modifier(const Modifier& mod) :
@@ -97,4 +99,5 @@ void Modifier::ComposeAlpha(const float alpha) {
     flags_ |= HAS_COLOR;
 }
 
-} // namespace ugdk
+}  // namespace graphic
+}  // namespace ugdk

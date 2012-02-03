@@ -13,6 +13,7 @@
 #include <ugdk/graphic/texture.h>
 
 namespace ugdk {
+namespace graphic {
 
 TexturedRectangle::TexturedRectangle(Texture* texture) 
     : size_(static_cast<float>(texture->width()), static_cast<float>(texture->height())), texture_(texture) {}
@@ -65,4 +66,5 @@ void TexturedRectangle::Draw(float dt) {
     } glEnd();
 }
 
+}  // namespace graphic
 }  // namespace ugdk

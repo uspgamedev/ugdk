@@ -19,7 +19,7 @@
 using namespace std;
 
 namespace ugdk {
-
+using namespace graphic;
 
 Vector2D Engine::window_size() {
     return video_manager_->video_size();
@@ -170,10 +170,10 @@ void Engine::PopScene() {
     if(!scene_list_.empty()) scene_list_.pop_back();
 }
 
-void Engine::PushInterface(Node* node) {
+void Engine::PushInterface(graphic::Node* node) {
     interface_list_.push_back(node);
 }
-void Engine::RemoveInterface(Node* node) {
+void Engine::RemoveInterface(graphic::Node* node) {
     interface_list_.remove(node);
 }
 

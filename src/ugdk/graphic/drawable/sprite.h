@@ -2,14 +2,12 @@
 #define HORUSEYE_FRAMEWORK_SPRITE_H_
 
 #include <ugdk/math/vector2D.h>
+#include <ugdk/graphic.h>
 #include <ugdk/graphic/drawable.h>
-
 #include <ugdk/action/animation.h>
 
 namespace ugdk {
-
-class AnimationSet;
-class Spritesheet;
+namespace graphic {
 
 class Sprite : public Drawable {
   public:
@@ -79,6 +77,7 @@ class Sprite : public Drawable {
     void Update(float delta_t);
 };
 
-}
+}  // namespace graphic
+}  // namespace ugdk
 
 #endif //HORUSEYE_FRAMEWORK_SPRITE_H_

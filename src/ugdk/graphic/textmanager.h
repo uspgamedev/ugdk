@@ -14,6 +14,7 @@
 #define TEXT_MANAGER() ugdk::Engine::reference()->text_manager()
 
 namespace ugdk {
+namespace graphic {
 
 using std::wstring;
 class TextManager {
@@ -34,6 +35,7 @@ class TextManager {
 		std::map<wstring,Font*> fonts_;
 };
 
-} // namespace ugdk
+}  // namespace graphic
+}  // namespace ugdk
 
 #endif

@@ -12,6 +12,7 @@
 
 
 namespace ugdk {
+namespace graphic {
 
 class Texture {
   public:
@@ -30,6 +31,7 @@ class Texture {
     int texture_width_, texture_height_;
 };
 
+}  // namespace graphic
 }  // namespace ugdk
 
 #endif

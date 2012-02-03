@@ -6,6 +6,7 @@
 #include <ugdk/action/animation.h>
 
 namespace ugdk {
+namespace graphic {
 
 Sprite::Sprite(Spritesheet *spritesheet, AnimationSet *set) 
     : spritesheet_(spritesheet), animation_manager_(new AnimationManager(10, set)) {}/*TODO: MANO TEM UM 10 NO MEU CÓDIGO */
@@ -34,4 +35,5 @@ const Vector2D& Sprite::size() const {
     return spritesheet_->frame_size(animation_manager_->GetFrame()); // TODO: requires some info from the spritesheet
 }
 
-}
+}  // namespace graphic
+}  // namespace ugdk

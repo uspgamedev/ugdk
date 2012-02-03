@@ -10,6 +10,7 @@
 #include <cstdio>
 
 namespace ugdk {
+namespace graphic {
 
 Texture::~Texture() {
     glDeleteTextures(1, &gltexture_);
@@ -125,4 +126,5 @@ Texture* Texture::CreateRawTexture(int texture_width, int texture_height) {
 Texture::Texture(GLuint gltexture, int texture_width, int texture_height) 
     : gltexture_(gltexture), texture_width_(texture_width), texture_height_(texture_height) {}
 
+}  // namespace graphic
 }  // namespace ugdk
