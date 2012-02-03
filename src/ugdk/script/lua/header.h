@@ -24,6 +24,8 @@ namespace lua {
 
 typedef std::tr1::shared_ptr<lua_State> StatePtr;
 
+typedef void* DataID;
+
 #define DECLARE_LUA_CONSTANT(category,name) \
   static const Constant name () { return Constant(LUA_##category##name); }
 
@@ -44,6 +46,7 @@ class Constant {
     int value() { return value_; }
 
     DECLARE_LUA_CONSTANT(,OK)
+    DECLARE_LUA_CONSTANT(,REGISTRYINDEX)
 
     struct err {
         DECLARE_LUA_CONSTANT(ERR,RUN)
@@ -66,6 +69,7 @@ class Constant {
 
     bool operator == (const Constant& st) const { return value_ == st.value_; }
     bool operator != (const Constant& st) const { return value_ != st.value_; }
+    operator int() const { return value_; }
 
   private:
 
@@ -76,6 +80,12 @@ class Constant {
 };
 
 #undef DECLARE_LUA_CONSTANT
+
+class Identifiable {
+  protected:
+    Identifiable() {}
+    DataID id() { return static_cast<void*>(this); }
+};
 
 } /* namespace lua */
 } /* namespace script */

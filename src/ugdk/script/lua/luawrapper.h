@@ -19,6 +19,8 @@ class LuaWrapper: public LangWrapper {
     LuaWrapper() : LangWrapper("lua",LANG(Lua)) {}
     ~LuaWrapper() {}
 
+    /// Overwritten methods.
+
     bool RegisterModule(std::string name, lua_CFunction init_func);
 
     bool Initialize();
@@ -28,6 +30,10 @@ class LuaWrapper: public LangWrapper {
     VirtualData::Ptr NewData();
 
     VirtualObj LoadModule(const std::string& name);
+
+    /// Other methods.
+
+    void* Unwrap(DataID, const VirtualType& type) /*const*/;
 
   private:
 
