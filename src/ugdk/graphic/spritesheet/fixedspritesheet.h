@@ -74,6 +74,6 @@ class FixedSpritesheet : public Spritesheet {
     std::vector<Vector2D> frame_sizes_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

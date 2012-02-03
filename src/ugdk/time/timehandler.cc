@@ -47,4 +47,4 @@ bool TimeHandler::IsPaused() {
     return paused_;
 }
 
-}  // namespace framework
+}  // namespace ugdk

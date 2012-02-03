@@ -33,6 +33,6 @@ class TimeHandler {
     bool paused_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif  // HORUSEYE_FRAMEWORK_TIMEHANDLER_H_

@@ -43,4 +43,4 @@ float Sample::Volume() {
     return volume_;
 }
 
-}  // namespace framework
+}  // namespace ugdk

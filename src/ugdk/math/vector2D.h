@@ -195,6 +195,6 @@ Vector2D operator/(const Vector2D &left, const float   &scalar);
     */
 float    operator*(const Vector2D &left, const Vector2D &right);
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif  // HORUSEYE_FRAMEWORK_VECTOR2D_H_

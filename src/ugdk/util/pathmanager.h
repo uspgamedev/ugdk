@@ -19,6 +19,6 @@ class PathManager{
 
 };
 
-} // namespace framework
+} // namespace ugdk
 
 #endif

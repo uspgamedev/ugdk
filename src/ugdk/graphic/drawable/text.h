@@ -28,6 +28,6 @@ class Text : public Drawable {
 	std::vector<float> line_width_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

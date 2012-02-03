@@ -36,6 +36,6 @@ class FlexibleSpritesheet : public Spritesheet {
     Vector2D frame_size_, hotspot_, real_frame_size_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

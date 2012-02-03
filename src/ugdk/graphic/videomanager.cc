@@ -357,4 +357,4 @@ void VideoManager::ClearModiferStack() {
     while(PopModifier());
 }
 
-}  // namespace framework
+}  // namespace ugdk

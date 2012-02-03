@@ -168,4 +168,4 @@ void FixedSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     if(popmatrix) glPopMatrix();
 }
 
-}  // namespace framework
+}  // namespace ugdk

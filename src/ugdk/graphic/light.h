@@ -25,6 +25,6 @@ class Light {
     Color color_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

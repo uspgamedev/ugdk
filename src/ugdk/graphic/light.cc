@@ -44,4 +44,4 @@ void Light::Draw() {
     } glEnd();
 }
 
-}  // namespace framework
+}  // namespace ugdk

@@ -23,6 +23,6 @@ class TexturedRectangle : public Shape {
     Texture* texture_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

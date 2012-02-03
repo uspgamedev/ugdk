@@ -68,4 +68,4 @@ float operator*(const Vector2D &left, const Vector2D &right) {
     return Vector2D::InnerProduct(left, right);
 }
 
-}  // namespace framework
+}  // namespace ugdk

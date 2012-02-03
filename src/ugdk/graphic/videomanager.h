@@ -88,6 +88,6 @@ class VideoManager {
 
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

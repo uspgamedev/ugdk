@@ -18,6 +18,6 @@ class Spritesheet {
     Spritesheet() {}
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

@@ -37,6 +37,6 @@ class TimeAccumulator {
     uint32 initial_time_, time_paused_, when_paused_, duration_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif  // HORUSEYE_FRAMEWORK_TIMEACCUMULATOR_H_

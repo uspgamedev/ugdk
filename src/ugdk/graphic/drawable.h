@@ -42,6 +42,6 @@ class Drawable {
     ugdk::Vector2D hotspot_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

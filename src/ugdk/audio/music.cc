@@ -75,5 +75,5 @@ void Music::UpdateVolume(float vol) {
     Mix_VolumeMusic( int( vol * float(MIX_MAX_VOLUME) ) );
 }
 
-}  // namespace framework
+}  // namespace ugdk
 

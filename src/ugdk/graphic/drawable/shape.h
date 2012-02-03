@@ -13,6 +13,6 @@ class Shape : public Drawable {
     Shape() {}
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

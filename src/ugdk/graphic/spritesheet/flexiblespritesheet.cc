@@ -102,4 +102,4 @@ int FlexibleSpritesheet::frame_count() const {
     return static_cast<int>(std::max(1.0f / (frame_size_.x * frame_size_.y), 1.0f));
 }
 
-}  // namespace framework
+}  // namespace ugdk

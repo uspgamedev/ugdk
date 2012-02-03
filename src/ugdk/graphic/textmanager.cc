@@ -130,4 +130,4 @@ void TextManager::AddFont(wstring name, wstring path, int size, char ident, bool
 }
 
 
-} // namespace framework
+} // namespace ugdk

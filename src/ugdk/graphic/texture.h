@@ -30,6 +30,6 @@ class Texture {
     int texture_width_, texture_height_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

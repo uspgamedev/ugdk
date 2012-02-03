@@ -24,6 +24,6 @@ class SolidRectangle : public Shape {
     Color color_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

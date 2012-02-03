@@ -77,4 +77,4 @@ Vector2D Font::GetLetterSize(wchar_t letter) {
     return Vector2D(letters_[letter]->width() * (size_ * 0.01f), letters_[letter]->height() * (size_ * 0.01f));
 }
 
-}  // namespace framework
+}  // namespace ugdk

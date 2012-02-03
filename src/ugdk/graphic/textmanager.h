@@ -34,6 +34,6 @@ class TextManager {
 		std::map<wstring,Font*> fonts_;
 };
 
-} // namespace framework
+} // namespace ugdk
 
 #endif

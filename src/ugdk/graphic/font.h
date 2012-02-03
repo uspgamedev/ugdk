@@ -31,6 +31,6 @@ class Font {
 };
 
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

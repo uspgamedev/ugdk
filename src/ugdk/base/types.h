@@ -43,6 +43,6 @@ typedef struct Color {
 //static Color BLACK = {0.0f, 0.0f, 0.0f};
 static const Color WHITE(1.0f, 1.0f, 1.0f);
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif /* HORUSEYE_FRAMEWORK_TYPES_H_ */

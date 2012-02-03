@@ -108,4 +108,4 @@ void Text::Draw(float dt) {
     glPopMatrix();
 }
 
-}  // namespace framework
+}  // namespace ugdk
