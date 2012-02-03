@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 
+#include <ugdk/base/types.h>
 #include <ugdk/script/type.h>
 
 namespace ugdk {
