@@ -7,7 +7,6 @@
 #include FROM_TR1(memory)
 
 #include <vector>
-#include <string>
 
 #include <ugdk/base/types.h>
 #include <ugdk/script/type.h>

@@ -135,7 +135,7 @@ VirtualData::Ptr PythonData::GetAttribute(Ptr key) {
 			//Object doesn't have attribute or item with the given name...
 			return VirtualData::Ptr();
 		}
-		attr = PyMapping_GetItem(py_data_, key_data); //return is new ref
+		attr = PyObject_GetItem(py_data_, key_data); //return is new ref
 	}
 	/*If Py_GetAttr or Py_GetItem failed somehow, they will return null.*/
 	
@@ -143,7 +143,7 @@ VirtualData::Ptr PythonData::GetAttribute(Ptr key) {
 	return vdata;
 }
 
-void PythonData::SetAttribute(Ptr key, Ptr value) {
+VirtualData::Ptr PythonData::SetAttribute(Ptr key, Ptr value) {
     PythonData* vkey = static_cast<PythonData*>(key.get());
     PyObject* key_data = vkey->py_data_;
     PythonData* object = static_cast<PythonData*>(value.get());
@@ -157,7 +157,7 @@ void PythonData::SetAttribute(Ptr key, Ptr value) {
     else { /*We do not have a attribute with given key and we are a mapping, so...*/
         PyObject_SetItem(py_data_, key_data, object_data);
     }
-    return;
+    return value;
 }
 
 }

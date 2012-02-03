@@ -4,7 +4,9 @@
 #include <ugdk/script/python/pythondata.h>
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/swig/swigpyrun.h>
-
+#include <ugdk/util/pathmanager.h>   // Two includes just so that we can use the engine's PathManager in a
+#include <ugdk/base/engine.h>        // single line of code here. Not nice. =(
+#include <string>
 #include <memory>
 #include <cstdlib>
 
@@ -19,7 +21,7 @@ VirtualData::Ptr PythonWrapper::NewData() {
 	return vdata;
 }
 
-VirtualObj PythonWrapper::LoadModule(std::string name) {
+VirtualObj PythonWrapper::LoadModule(const std::string& name) {
 	PyObject* module = PyImport_ImportModule(name.c_str()); //new ref
 	if (module == NULL && PyErr_Occurred() != NULL) {
 						
@@ -35,7 +37,7 @@ bool PythonWrapper::Initialize() {
 	Py_Initialize();
 	//TODO: Fix sys.path with our paths...
     PyRun_SimpleString("import sys");
-    string command = "sys.path.append(\"" + PATH_MANAGER()->ResolvePath("scripts/") + "\")";
+    std::string command = "sys.path.append(\"" + PATH_MANAGER()->ResolvePath("scripts/") + "\")";
     PyRun_SimpleString(command.c_str());
 	return true;
 }
