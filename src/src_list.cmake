@@ -36,7 +36,6 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}//ugdk/graphic/texture.h
     ${SRC_DIR}//ugdk/graphic/videomanager.cc
     ${SRC_DIR}//ugdk/graphic/videomanager.h
-    ${SRC_DIR}//ugdk/graphic/wglext.h
     ${SRC_DIR}//ugdk/graphic/drawable/shape.h
     ${SRC_DIR}//ugdk/graphic/drawable/solidrectangle.cc
     ${SRC_DIR}//ugdk/graphic/drawable/solidrectangle.h

@@ -25,8 +25,18 @@
     #include <gl/GL.h>
     #include "wglext.h"
     typedef BOOL (APIENTRY *PFNWGLSWAPINTERVALFARPROC)( int );
-    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = 0;
+    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = NULL;
 #endif
+
+static void InitializeExtensions() {
+    static bool initialized = false;
+    if(initialized) return;
+    
+    initialized = true;
+#ifdef WIN32
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC) wglGetProcAddress( "wglSwapIntervalEXT" );
+#endif
+}
 
 
 #define LN255 5.5412635451584261462455391880218
@@ -46,10 +56,12 @@ bool VideoManager::Initialize(const string& title, const Vector2D& size, bool fu
 
     if(icon.length() > 0)
         SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
-
+        
     // Set window title.
     SDL_WM_SetCaption(title.c_str(), NULL);
     title_ = title;
+    
+    InitializeExtensions();
 
     /*GLenum err = glewInit();
     if (GLEW_OK != err) {
@@ -131,8 +143,7 @@ void VideoManager::SetVSync(const bool active) {
     settings_.vsync = active;
     //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
 #ifdef WIN32
-    if(wglSwapIntervalEXT == 0) wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress( "wglSwapIntervalEXT" );
-    if(wglSwapIntervalEXT != 0) wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
+    if(wglSwapIntervalEXT != NULL) wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
 #endif
 }
 

@@ -115,6 +115,7 @@ if (${BUILD_TYPE} STREQUAL DEBUG)
 endif (${BUILD_TYPE} STREQUAL DEBUG)
 
 include_directories ("src")
+include_directories ("externals/opengl")
 
 if (${LINK_TYPE} STREQUAL STATIC)
     add_library (${FRAMEWORK_BUILDNAME} STATIC ${FRAMEWORK_SRC})
