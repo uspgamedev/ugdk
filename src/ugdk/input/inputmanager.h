@@ -1,5 +1,5 @@
-#ifndef HORUSEYE_FRAMEWORK_INPUTMANAGER_H_
-#define HORUSEYE_FRAMEWORK_INPUTMANAGER_H_
+#ifndef UGDK_INPUT_INPUTMANAGER_H_
+#define UGDK_INPUT_INPUTMANAGER_H_
 
 #include <ugdk/config/config.h>
 #ifdef ISMAC
@@ -11,8 +11,10 @@
 #include <ugdk/input/keys.h>
 
 namespace ugdk {
+namespace input {
 
 #define BUFFER_SIZE 32
+#define INPUT_MANAGER() (ugdk::Engine::reference()->input_manager())
 
 class InputManager {
   public:
@@ -47,5 +49,7 @@ class InputManager {
     void UpdateDevices();
 };
 
-}
+}  // namespace input
+}  // namespace ugdk
+
 #endif

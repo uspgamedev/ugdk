@@ -7,13 +7,13 @@
 #include <ugdk/action.h>
 #include <ugdk/audio.h>
 #include <ugdk/graphic.h>
+#include <ugdk/input.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/util/gdd/cachedloader.h>
 #include <ugdk/util/animationprotocol.h>
 
 namespace ugdk {
 
-class InputManager;
 class TimeHandler;
 class PathManager;
 class AnimationSet;
@@ -26,32 +26,33 @@ typedef gdd::CachedLoader<AnimationSet> AnimationLoader;
  */
 class Engine {
   public:
-    // Engine e' um singleton. Use Engine::reference()
-    // para obter um ponteiro para o objeto desta classe.
     /// Returns a pointer to the current Engine. Creates an Engine if there isn't one.
     static Engine* reference() { static Engine *r = NULL;
                                  return r ? r : r = new Engine; }
+
+    /// Returns a reference to the Audio Manager.
+    /** @see AudioManager
+     */
+    AudioManager *audio_manager() { return audio_manager_; }
 
     /// Returns a reference to the Video Manager.
     /** @see VideoManager
      */
     graphic::VideoManager *video_manager() { return video_manager_; }
-    /// Returns a reference to the Input Manager.
-    /** @see InputManager
-     */
-    InputManager *input_manager() { return input_manager_; }
-    /// Returns a reference to the Time Handler.
-    /** @see TimeHandler
-     */
-    TimeHandler *time_handler() { return time_handler_; }
-    /// Returns a reference to the Audio Manager.
-    /** @see AudioManager
-     */
-    AudioManager *audio_manager() { return audio_manager_; }
+
     /// Returns a reference to the Text Manager.
     /** @see TextManager
      */
     graphic::TextManager *text_manager() { return text_manager_; }
+
+    /// Returns a reference to the Input Manager.
+    /** @see InputManager
+     */
+    input::InputManager *input_manager() { return input_manager_; }
+    /// Returns a reference to the Time Handler.
+    /** @see TimeHandler
+     */
+    TimeHandler *time_handler() { return time_handler_; }
     /// Returns a reference to the Path Manager.
     /** @see PathManager
      */
@@ -65,7 +66,6 @@ class Engine {
     /// Returns the window dimensions.
     Vector2D window_size();
 
-    // Gerenciamento do motor
     /**@name Engine Management
      * @{
      */
@@ -114,18 +114,18 @@ class Engine {
     /// Stops the engine and clears the scene list.
     void quit() { quit_ = true; }
 
-    // outros
     ~Engine() {}
 
   private:
     void DeleteFinishedScenes();
 
+             AudioManager *audio_manager_;
     graphic::VideoManager *video_manager_;
-    InputManager *input_manager_;
-    TimeHandler *time_handler_;
-    AudioManager *audio_manager_;
-    graphic::TextManager *text_manager_;
-	PathManager *path_manager_;
+    graphic:: TextManager * text_manager_;
+    input::  InputManager *input_manager_;
+              TimeHandler * time_handler_;
+	          PathManager * path_manager_;
+
 	AnimationLoader animation_loader_;
     bool quit_;
     std::list<Scene*> scene_list_;

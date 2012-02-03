@@ -20,6 +20,7 @@ using namespace std;
 
 namespace ugdk {
 using namespace graphic;
+using namespace input;
 
 Vector2D Engine::window_size() {
     return video_manager_->video_size();
