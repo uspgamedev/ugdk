@@ -2,6 +2,8 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}//ugdk/action.h
     ${SRC_DIR}//ugdk/audio.h
     ${SRC_DIR}//ugdk/graphic.h
+    ${SRC_DIR}//ugdk/input.h
+    ${SRC_DIR}//ugdk/time.h
     ${SRC_DIR}//ugdk/action/animation.cc
     ${SRC_DIR}//ugdk/action/animation.h
     ${SRC_DIR}//ugdk/action/animationset.cc
@@ -58,8 +60,8 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}//ugdk/math/vector2D.h
     ${SRC_DIR}//ugdk/time/timeaccumulator.cc
     ${SRC_DIR}//ugdk/time/timeaccumulator.h
-    ${SRC_DIR}//ugdk/time/timehandler.cc
-    ${SRC_DIR}//ugdk/time/timehandler.h
+    ${SRC_DIR}//ugdk/time/timemanager.cc
+    ${SRC_DIR}//ugdk/time/timemanager.h
     ${SRC_DIR}//ugdk/util/animationparser.cc
     ${SRC_DIR}//ugdk/util/animationparser.h
     ${SRC_DIR}//ugdk/util/animationprotocol.cc

@@ -11,7 +11,7 @@
 #include <ugdk/input/inputmanager.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/audio/audiomanager.h>
-#include <ugdk/time/timehandler.h>
+#include <ugdk/time/timemanager.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/animationparser.h>
@@ -33,7 +33,7 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
     SDL_Init(SDL_INIT_EVERYTHING);
     video_manager_->Initialize(windowTitle, windowSize, fullscreen, icon);
     input_manager_ = new InputManager();
-    time_handler_ = new TimeHandler();
+    time_handler_ = new time::TimeManager();
     audio_manager_ = new AudioManager();
     audio_manager_->Initialize();
     text_manager_ = new TextManager();

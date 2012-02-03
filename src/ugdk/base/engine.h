@@ -8,13 +8,13 @@
 #include <ugdk/audio.h>
 #include <ugdk/graphic.h>
 #include <ugdk/input.h>
+#include <ugdk/time.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/util/gdd/cachedloader.h>
 #include <ugdk/util/animationprotocol.h>
 
 namespace ugdk {
 
-class TimeHandler;
 class PathManager;
 class AnimationSet;
 
@@ -50,9 +50,9 @@ class Engine {
      */
     input::InputManager *input_manager() { return input_manager_; }
     /// Returns a reference to the Time Handler.
-    /** @see TimeHandler
+    /** @see TimeManager
      */
-    TimeHandler *time_handler() { return time_handler_; }
+    time::TimeManager *time_handler() { return time_handler_; }
     /// Returns a reference to the Path Manager.
     /** @see PathManager
      */
@@ -123,7 +123,7 @@ class Engine {
     graphic::VideoManager *video_manager_;
     graphic:: TextManager * text_manager_;
     input::  InputManager *input_manager_;
-              TimeHandler * time_handler_;
+    time::    TimeManager * time_handler_;
 	          PathManager * path_manager_;
 
 	AnimationLoader animation_loader_;

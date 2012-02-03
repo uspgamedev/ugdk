@@ -6,11 +6,12 @@
     #include <SDL/SDL.h>
     #include <SDL/SDL_timer.h>
 #endif
-#include <ugdk/time/timehandler.h>
+#include <ugdk/time/timemanager.h>
 #include <ugdk/time/timeaccumulator.h>
 #include <ugdk/base/engine.h>
 
 namespace ugdk {
+namespace time {
 
 TimeAccumulator::TimeAccumulator(int duration_miliseconds) {
     handler_ = Engine::reference()->time_handler();
@@ -53,5 +54,5 @@ bool TimeAccumulator::IsPaused() {
     return when_paused_ > 0;
 }
 
-}
-
+}  // namespace time
+}  // namespace ugdk
