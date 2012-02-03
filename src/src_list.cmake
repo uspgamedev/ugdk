@@ -43,25 +43,29 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/math/frame.h
     ${SRC_DIR}/ugdk/math/vector2D.cc
     ${SRC_DIR}/ugdk/math/vector2D.h
+    ${SRC_DIR}/ugdk/portable/tr1.h
     ${SRC_DIR}/ugdk/script/defs.h
     ${SRC_DIR}/ugdk/script/langwrapper.h
     ${SRC_DIR}/ugdk/script/scriptmanager.cc
     ${SRC_DIR}/ugdk/script/scriptmanager.h
     ${SRC_DIR}/ugdk/script/type.h
     ${SRC_DIR}/ugdk/script/virtualdata.h
+    ${SRC_DIR}/ugdk/script/virtualobj.cc
     ${SRC_DIR}/ugdk/script/virtualobj.h
     ${SRC_DIR}/ugdk/script/lua/auxlib.h
     ${SRC_DIR}/ugdk/script/lua/gear.cc
     ${SRC_DIR}/ugdk/script/lua/gear.h
     ${SRC_DIR}/ugdk/script/lua/header.h
+    ${SRC_DIR}/ugdk/script/lua/luadata.cc
+    ${SRC_DIR}/ugdk/script/lua/luadata.h
+    ${SRC_DIR}/ugdk/script/lua/luawrapper.cc
+    ${SRC_DIR}/ugdk/script/lua/luawrapper.h
     ${SRC_DIR}/ugdk/script/lua/native.h
     ${SRC_DIR}/ugdk/script/lua/state.h
     ${SRC_DIR}/ugdk/script/python/pythondata.cc
     ${SRC_DIR}/ugdk/script/python/pythondata.h
     ${SRC_DIR}/ugdk/script/python/pythonwrapper.cc
     ${SRC_DIR}/ugdk/script/python/pythonwrapper.h
-    ${SRC_DIR}/ugdk/script/swig/swigluarun.h
-    ${SRC_DIR}/ugdk/script/swig/swigpyrun.h
     ${SRC_DIR}/ugdk/time/timeaccumulator.cc
     ${SRC_DIR}/ugdk/time/timeaccumulator.h
     ${SRC_DIR}/ugdk/time/timehandler.cc
