@@ -20,7 +20,7 @@ VirtualObj VirtualObj::operator() (vector<VirtualObj> args) const {
     return ret;
 }
 
-static VirtualObj VirtualObj::Create (const char* obj, LangWrapper* wrapper) {
+VirtualObj VirtualObj::Create (const char* obj, LangWrapper* wrapper) {
     if (!wrapper) return VirtualObj();
     VirtualData::Ptr new_data = wrapper->NewData();
     new_data->Wrap(obj);

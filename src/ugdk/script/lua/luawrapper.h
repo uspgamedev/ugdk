@@ -16,7 +16,7 @@ class LuaWrapper: public LangWrapper {
 
   public:
 
-    LuaWrapper() {}
+    LuaWrapper() : LangWrapper("lua",LANG(Lua)) {}
     ~LuaWrapper() {}
 
     bool RegisterModule(std::string name, lua_CFunction init_func);

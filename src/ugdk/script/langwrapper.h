@@ -58,7 +58,7 @@ class LangWrapper {
     virtual void Finalize() = 0;
 
     bool CheckIfModuleExists(std::string filepath) {
-        FILE* file = fopen((filepath + file_extension()).c_str(), "r");
+        FILE* file = fopen((filepath + "." + file_extension()).c_str(), "r");
         if (file) {
             fclose(file);
             return true;
