@@ -2,14 +2,12 @@
 #ifndef UGDK_SCRIPT_VIRTUALDATA_H_
 #define UGDK_SCRIPT_VIRTUALDATA_H_
 
+#include <ugdk/portable/tr1.h>
+
+#include FROM_TR1(memory)
+
 #include <vector>
 #include <string>
-
-#ifdef ECLIPSE_BOOST_WORKAROUND_INCLUDE
-#include <boost/tr1/memory.hpp>
-#else
-#include <memory>
-#endif
 
 #include <ugdk/script/type.h>
 

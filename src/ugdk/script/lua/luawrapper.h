@@ -4,9 +4,9 @@
 
 #include <string>
 
-#include <ugdk/script/langwrapper.h>
 #include <ugdk/script/lua/header.h>
 #include <ugdk/script/lua/gear.h>
+#include <ugdk/script/langwrapper.h>
 
 namespace ugdk {
 namespace script {

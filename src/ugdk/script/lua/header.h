@@ -2,11 +2,9 @@
 #ifndef UGDK_SCRIPT_LUA_HEADER_H_
 #define UGDK_SCRIPT_LUA_HEADER_H_
 
-#ifdef ECLIPSE_BOOST_WORKAROUND_INCLUDE
-#include <boost/tr1/memory.hpp>
-#else
-#include <memory>
-#endif
+#include <ugdk/portable/tr1.h>
+
+#include FROM_TR1(memory)
 
 extern "C" {
 

@@ -2,15 +2,6 @@
 #ifndef UGDK_SCRIPT_VIRTUALOBJ_H_
 #define UGDK_SCRIPT_VIRTUALOBJ_H_
 
-#ifdef ECLIPSE_BOOST_WORKAROUND_INCLUDE
-#include <boost/tr1/memory.hpp>
-#else
-#include <memory>
-#endif
-
-#include <vector>
-#include <string>
-
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/type.h>
 #include <ugdk/script/langwrapper.h>
@@ -60,23 +51,10 @@ class VirtualObj {
 
 	LangWrapper* wrapper() const { return data_->wrapper(); }
 
-	VirtualObj operator() (std::vector<VirtualObj> args) const {
-		std::vector<VirtualData::Ptr> arglist;
-		std::vector<VirtualObj>::iterator it;
-		for (it = args.begin(); it != args.end(); ++it) {
-			// Wrappers of executed VObj (we) and of the VObjs passed as
-		    // arguments must be the same.
-			if (wrapper() != it->wrapper())
-				return VirtualObj();
-			arglist.push_back(it->data_);
-		}
-		VirtualObj ret(data_->Execute(arglist));
-		return ret;
-	}
+	VirtualObj operator() (std::vector<VirtualObj> args) const;
 
 	VirtualObj attribute(const VirtualObj& key) const {
-        VirtualObj attr(data_->GetAttribute(key.data_));
-        return attr;
+        return VirtualObj(data_->GetAttribute(key.data_));
 	}
 
     VirtualObj operator[] (const VirtualObj& key) const {
@@ -93,16 +71,12 @@ class VirtualObj {
         );
     }
 
-	VirtualObj set_attribute(const VirtualEntry& entry) {
-	    return set_attribute(entry.first, entry.second);
-	}
-
 	VirtualEntry operator,(const VirtualObj& rhs) {
 	    return VirtualEntry(*this, rhs);
 	}
 
 	VirtualObj operator<<(const VirtualEntry& entry) {
-	    return set_attribute(entry);
+	    return set_attribute(entry.first, entry.second);
 	}
 
     template <class T>
@@ -124,12 +98,7 @@ class VirtualObj {
         return VirtualObj(new_data);
 	}
 
-    static VirtualObj Create (const char* obj, LangWrapper* wrapper) {
-        if (!wrapper) return VirtualObj();
-        VirtualData::Ptr new_data = wrapper->NewData();
-        new_data->Wrap(obj);
-        return VirtualObj(new_data);
-    }
+    static VirtualObj Create (const char* obj, LangWrapper* wrapper);
 
     static VirtualObj Create (const std::string& str, LangWrapper* wrapper) {
         return Create(str.c_str(), wrapper);
@@ -137,7 +106,7 @@ class VirtualObj {
 
   private:
 
-	VirtualData::Ptr                data_;
+	VirtualData::Ptr data_;
 
 };
 
