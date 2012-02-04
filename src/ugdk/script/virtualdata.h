@@ -76,6 +76,7 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 	virtual Ptr SetAttribute(Ptr key, Ptr value) = 0;
 
     virtual void AddToBuffer() {}
+    virtual void RemoveFromBuffer() {}
 
   protected:
 

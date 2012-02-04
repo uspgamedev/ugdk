@@ -54,7 +54,9 @@ VirtualObj LuaWrapper::LoadModule(const string& name) {
         if(result != Constant::OK())
             return VirtualObj(VirtualData::Ptr()); // error
         LuaData* lua_data = new LuaData(this);
-        g.SetData(lua_data->id());
+        Share(&g);
+        lua_data->RemoveFromBuffer();
+        Share(NULL);
         VirtualData::Ptr data(lua_data);
         return VirtualObj(data);
     }
