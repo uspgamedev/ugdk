@@ -75,7 +75,7 @@ LangWrapper* PythonData::wrapper () const {
 
 /// Tries to execute ourselves as a function in a script language,
 /// passing the given arguments and returning the result.
-VirtualData::Ptr PythonData::Execute(std::vector<Ptr> args) {
+VirtualData::Ptr PythonData::Execute(const std::vector<Ptr>& args) {
 	if (!PyCallable_Check(py_data_)) {
 		//The object we contain is not callable - cannot execute it.
 		return VirtualData::Ptr();
