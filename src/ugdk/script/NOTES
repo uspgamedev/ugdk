@@ -7,6 +7,10 @@
 ***************************************************************************/
 
 ###############
+Omar, mudei a assinatura da função Execute para ela não ficar copiando de boba
+o vetor de argumentos. Então tive que ajustar a assinatura dela no PyData tb.
+
+###############
 BugFix:
 funcao LoadModule dos ScriptManager e LangWrappers esperam um caminho absoluto,
 para um arquivo real. Porem a implementacao python espera o caminho na notacao
