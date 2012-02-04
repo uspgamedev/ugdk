@@ -137,8 +137,8 @@ class Engine {
         audio_manager_(NULL),
 	    video_manager_(NULL),
         text_manager_(NULL),
-	    input_manager_(NULL),
-	    time_handler_(NULL),
+        input_manager_(NULL),
+        time_handler_(NULL),
 		path_manager_(NULL),
 		animation_loader_(new AnimationProtocol) {}
 };
