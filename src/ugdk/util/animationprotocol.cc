@@ -89,7 +89,7 @@ bool AnimationProtocol::NewDescription() {
 bool AnimationProtocol::NewData(const GDDString& data_name) {
     loader()->data()->Add(data_name, current_animation_ = new AnimationManager::Animation);
     if(current_effect_) delete current_effect_;
-    current_effect_ = new Modifier;
+    current_effect_ = new graphic::Modifier;
     //TODO: Verificar integridade da current_animation_ .
     return true;
 }
@@ -117,13 +117,13 @@ bool AnimationProtocol::NewRing(const GDDString& ring_typename) {
                 delete current_effect_;
                 current_effect_ = NULL;
             }
-            current_effect_ = new Modifier();
+            current_effect_ = new graphic::Modifier();
         }
         current_scope_ = EFFECT_RING;
     }
     else if(ring_typename == "frame") {
-        Modifier temp_modifier = *current_effect_;
-        current_animation_->push_back(new AnimationManager::AnimationFrame(DEFAULT_FRAME,new Modifier(temp_modifier)));
+        graphic::Modifier temp_modifier = *current_effect_;
+        current_animation_->push_back(new AnimationManager::AnimationFrame(DEFAULT_FRAME, new graphic::Modifier(temp_modifier)));
 
         current_scope_ = FRAME_RING;
     }

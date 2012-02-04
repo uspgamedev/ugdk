@@ -71,6 +71,6 @@ class Frame {
     float left_, top_, right_, bottom_;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif  // HORUSEYE_FRAMEWORK_FRAME_H_

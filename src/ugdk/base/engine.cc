@@ -11,7 +11,7 @@
 #include <ugdk/input/inputmanager.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/audio/audiomanager.h>
-#include <ugdk/time/timehandler.h>
+#include <ugdk/time/timemanager.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/animationparser.h>
@@ -19,7 +19,8 @@
 using namespace std;
 
 namespace ugdk {
-
+using namespace graphic;
+using namespace input;
 
 Vector2D Engine::window_size() {
     return video_manager_->video_size();
@@ -32,13 +33,14 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
     SDL_Init(SDL_INIT_EVERYTHING);
     video_manager_->Initialize(windowTitle, windowSize, fullscreen, icon);
     input_manager_ = new InputManager();
-    time_handler_ = new TimeHandler();
+    time_handler_ = new time::TimeManager();
     audio_manager_ = new AudioManager();
     audio_manager_->Initialize();
     text_manager_ = new TextManager();
     text_manager_->Initialize();
 	path_manager_ = new PathManager(base_path);
     scene_list_.clear();
+    interface_list_.clear();
 
     frames_since_reset_ = reported_fps_ = 0;
     if(time_handler_ != NULL)
@@ -48,18 +50,15 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
 }
 
 void Engine::DeleteFinishedScenes() {
-	bool deleted = true;
-	while(deleted){
-		deleted = false;
-		for(vector<Scene* >::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it) {
-			if ((*it)->finished()) {
-			    delete (*it);
-				scene_list_.erase(it);
-				deleted = true;
-				break;
-			}
-		}
-	}
+    std::list<Scene*> to_delete;
+    for(std::list<Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it)
+        if((*it)->finished())
+            to_delete.push_front(*it);
+
+    for(std::list<Scene*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it) {
+        delete (*it);
+        scene_list_.remove(*it);
+    }
 }
 
 
@@ -77,13 +76,11 @@ void Engine::Run() {
             (current_top_scene = CurrentScene())->Focus();
         }
         DeleteFinishedScenes();
-        if(current_top_scene != CurrentScene())
-            (current_top_scene = CurrentScene())->Focus();
 
-        // gerenciamento das cenas
-        if (scene_list_.size() == 0) {
+        if (CurrentScene() == NULL)
             quit();
-        }
+        else if(current_top_scene != CurrentScene())
+            (current_top_scene = CurrentScene())->Focus();
 
         // gerenciamento de tempo
         time_handler_->Update();
@@ -123,13 +120,10 @@ void Engine::Run() {
 
         if (!quit_) {
             CurrentScene()->Update(delta_t);
-            for (std::list<Layer*>::iterator it = interface_list_.begin(); 
-                it != interface_list_.end(); ++it)
-                (*it)->Update(delta_t);
 
             // Sends the scene list to the videomanager, who handles everything 
             // needed to draw
-            video_manager_->Render(scene_list_, interface_list_);
+            video_manager_->Render(scene_list_, interface_list_, delta_t);
 
             ++frames_since_reset_;
             total_fps += 1.0f/delta_t;
@@ -140,9 +134,9 @@ void Engine::Run() {
             }
         }
     }
-    for (int i = 0; i < static_cast<int>(scene_list_.size()); i++) {
-        scene_list_[i]->Finish();
-        delete scene_list_[i];
+    for(std::list<Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it) {
+        (*it)->Finish();
+        delete (*it);
     }
     scene_list_.clear();
 }
@@ -170,18 +164,18 @@ void Engine::PushScene(Scene* scene) {
 }
 
 Scene* Engine::CurrentScene() const {
-    return scene_list_[scene_list_.size() - 1];
+    return scene_list_.empty() ? NULL : scene_list_.back();
 }
 
 void Engine::PopScene() {
-    scene_list_.pop_back();
+    if(!scene_list_.empty()) scene_list_.pop_back();
 }
 
-void Engine::PushInterface(Layer* layer) {
-    interface_list_.push_back(layer);
+void Engine::PushInterface(graphic::Node* node) {
+    interface_list_.push_back(node);
 }
-void Engine::RemoveInterface(Layer *layer) {
-    interface_list_.remove(layer);
+void Engine::RemoveInterface(graphic::Node* node) {
+    interface_list_.remove(node);
 }
 
 }

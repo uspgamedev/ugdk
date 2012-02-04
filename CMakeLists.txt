@@ -126,6 +126,7 @@ if (${BUILD_TYPE} STREQUAL DEBUG)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
 endif (${BUILD_TYPE} STREQUAL DEBUG)
 
+include_directories ("externals/opengl")
 
 if (${LINK_TYPE} STREQUAL STATIC)
     add_library (${FRAMEWORK_BUILDNAME} STATIC ${FRAMEWORK_SRC})
@@ -147,6 +148,7 @@ if (UNIX)
                            ${SDLIMAGE_LIBRARY}
                            ${OPENGL_LIBRARIES}
                            ${LUA_LIBRARIES}
+                           ${PYTHON_LIBRARIES}
                           )
 
 # Windows library

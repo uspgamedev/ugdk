@@ -84,5 +84,5 @@ Music* AudioManager::CurrentMusic() const {
     return Music::playing_music_;
 }
 
-}  // namespace framework
+}  // namespace ugdk
 

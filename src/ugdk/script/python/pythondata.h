@@ -44,7 +44,6 @@ class PythonData : public VirtualData {
 
     virtual Ptr SetAttribute(Ptr key, Ptr value);
 
-
   protected:
 	bool own_ref_; //if true, we own a ref to our PyObject* (py_data_), so we need to DECREF it in due time.
 	PyObject* py_data_;
