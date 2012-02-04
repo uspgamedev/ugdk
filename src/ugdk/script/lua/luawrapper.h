@@ -3,6 +3,7 @@
 #define UGDK_SCRIPT_LUA_LUAWRAPPER_H_
 
 #include <string>
+#include <vector>
 
 #include <ugdk/script/lua/header.h>
 #include <ugdk/script/lua/gear.h>
@@ -12,16 +13,21 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
-class LuaWrapper: public LangWrapper {
+class LuaWrapper: public LangWrapper, public Identifiable {
 
   public:
 
-    LuaWrapper() : LangWrapper("lua",LANG(Lua)) {}
-    ~LuaWrapper() {}
+    LuaWrapper() :
+        LangWrapper("lua",LANG(Lua)),
+        L_(NULL),
+        persistent_gear_(NULL) {}
+    ~LuaWrapper() {
+        if (L_) Finalize();
+    }
 
     /// Overwritten methods.
 
-    bool RegisterModule(std::string name, lua_CFunction init_func);
+    bool RegisterModule(const std::string& name, lua_CFunction init_func);
 
     bool Initialize();
 
@@ -33,11 +39,21 @@ class LuaWrapper: public LangWrapper {
 
     /// Other methods.
 
-    void* Unwrap(DataID, const VirtualType& type) /*const*/;
+    Gear MakeGear() { return Gear(L_, id()); }
+
+    void Persist(Gear* gear) {
+        persistent_gear_ = gear;
+    }
+
+    Gear* persistent_gear() {
+        return persistent_gear_;
+    }
 
   private:
 
-    Gear gear_;
+    lua_State*          L_;
+    std::vector<Module> modules_;
+    Gear*               persistent_gear_;
 
 };
 

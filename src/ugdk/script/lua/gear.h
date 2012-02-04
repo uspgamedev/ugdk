@@ -2,6 +2,9 @@
 #ifndef UGDK_SCRIPT_LUA_GEAR_H_
 #define UGDK_SCRIPT_LUA_GEAR_H_
 
+#include <vector>
+
+#include <ugdk/script/type.h>
 #include <ugdk/script/lua/header.h>
 #include <ugdk/script/lua/state.h>
 
@@ -9,18 +12,34 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
-class Gear : public Identifiable {
+class Gear {
 
   public:
 
-    Gear() : base_index_(0) {}
-    ~Gear() {}
+    Gear(lua_State* L, DataID datatable_id) :
+        L_(L),
+        datatable_id_(datatable_id),
+        base_index_(lua_gettop(L)) {}
+    ~Gear() { L_.settop(base_index_); }
 
-    bool ValidState() { return lua_; }
+    State* operator->() { return &L_; }
 
     void LoadLibs ();
 
-    bool PushData (DataID id);
+    void PreloadModule(const std::vector<Module>& modules);
+
+    void CreateDatatable();
+
+    // [-0,+1]
+    bool GetData (DataID id);
+
+    // [-1,+0]
+    bool SetData (DataID id);
+
+    // [-1,+0]
+    void* UnwrapData (const VirtualType& type);
+
+    void WrapData(void *data, const VirtualType& type);
 
     // [-0,+1]
     const Constant DoFile (const char* filename);
@@ -30,7 +49,8 @@ class Gear : public Identifiable {
 
   private:
 
-    State   lua_;
+    State   L_;
+    DataID  datatable_id_;
     int     base_index_;
 
     int Local(int index) const { return (base_index_ + index); }

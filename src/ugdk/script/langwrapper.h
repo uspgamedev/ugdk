@@ -22,7 +22,7 @@ class VirtualObj;
  ** Besides this interface, derived classes should implement a method
  ** 
  ** <code>
- ** bool RegisterModule(string moduleName, T initFunction)
+ ** bool RegisterModule(const string& moduleName, T initFunction)
  ** </code>
  **
  ** where moduleName is the name of the module, as to be imported from the language;
@@ -70,18 +70,18 @@ class LangWrapper {
 
     virtual VirtualObj LoadModule(const std::string& name) = 0;
 
-    const LangID id () { return id_; }
+    const LangID lang_id () { return lang_id_; }
 
   protected:
 
     LangWrapper(const std::string& file_extension, const LangID id) :
         file_extension_(file_extension),
-        id_(id) {}
+        lang_id_(id) {}
 
   private:
 
     const std::string file_extension_;
-    const LangID      id_;
+    const LangID      lang_id_;
 
 };
 
