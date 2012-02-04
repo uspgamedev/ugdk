@@ -3,7 +3,7 @@
 CMake*
 !CMakeLists.txt
 Makefile
-cmake*
+cmake_install.cmake
 lib/*
 src/ugdk/config/config.h
 *.user
