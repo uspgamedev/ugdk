@@ -45,18 +45,24 @@ class State {
     template <class T>
     void push (T value) { push(value); }
 
+    void pop (int n) { lua_pop(L_, n); }
+
+    void insert (int index) { lua_insert(L_, index); }
+    void remove (int index) { lua_remove(L_, index); }
+
     void newtable () { lua_newtable(L_); }
 
     void getglobal (const char* name) { lua_getglobal(L_, name); }
     void getfield (int index, const char* k) { lua_getfield(L_, index, k); }
     void setfield (int index, const char* k) { lua_setfield(L_, index, k); }
+
     void gettable (int index) { lua_gettable(L_, index); }
     void settable (int index) { lua_settable(L_, index); }
 
-    void pop (int n) { lua_pop(L_, n); }
+    int setfenv(int index) { return lua_setfenv(L_, index); }
+    void getfenv(int index) { lua_getfenv(L_, index); }
 
-    void insert (int index) { lua_insert(L_, index); }
-    void remove (int index) { lua_remove(L_, index); }
+    int setmetatable(int index) { return lua_setmetatable(L_, index); }
 
     bool isnil (int index) const { return lua_isnil(L_, index); }
     bool istable (int index) const { return lua_istable(L_, index); }

@@ -73,9 +73,26 @@ void Gear::WrapData(void *data, const VirtualType& type) {
 }
 
 const Constant Gear::DoFile (const char* filename) {
-    const Constant result = L_.aux().loadfile(filename);
-    if (result != Constant::OK()) return Report(result);
-    return TracedCall(0, LUA_MULTRET);
+    {
+        const Constant result = L_.aux().loadfile(filename);
+        if (result != Constant::OK()) return Report(result);
+    }   // [file]
+    {
+        L_.newtable();  // temp env table
+        L_.newtable();  // temp env table's metatable
+        L_.pushvalue(LUA_ENVIRONINDEX);
+        L_.setfield(-2, "__index"); // mttab.__index = _ENV
+        L_.setmetatable(-2);        // setmetatable(temp, mttab)
+        L_.setfenv(-2);             // setfenv(file,temp)
+    }
+    L_.pushvalue(-1); // make copy of file
+    const Constant result = TracedCall(0, 0);
+    if (result == Constant::OK()) {
+        L_.pushnil();
+        L_.setmetatable(-2);        // setmetatable(file,nil)
+        L_.getfenv(-1);             // return getfenv(file)
+    }
+    return result;
 }
 
 const Constant Gear::LoadModule (const char* name, lua_CFunction loader) {
