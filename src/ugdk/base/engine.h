@@ -132,8 +132,13 @@ class Engine {
     std::list<graphic::Node*> interface_list_;
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 
-	Engine() : video_manager_(NULL), input_manager_(NULL), time_handler_(NULL), 
-		audio_manager_(NULL), text_manager_(NULL), path_manager_(NULL),
+	Engine() :
+        audio_manager_(NULL),
+	    video_manager_(NULL),
+        text_manager_(NULL),
+        input_manager_(NULL),
+        time_handler_(NULL),
+		path_manager_(NULL),
 		animation_loader_(new AnimationProtocol) {}
 };
 
