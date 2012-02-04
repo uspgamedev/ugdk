@@ -20,7 +20,7 @@ class LuaWrapper: public LangWrapper, public Identifiable {
     LuaWrapper() :
         LangWrapper("lua",LANG(Lua)),
         L_(NULL),
-        persistent_gear_(NULL) {}
+        shared_gear_(NULL) {}
     ~LuaWrapper() {
         if (L_) Finalize();
     }
@@ -41,19 +41,19 @@ class LuaWrapper: public LangWrapper, public Identifiable {
 
     Gear MakeGear() { return Gear(L_, id()); }
 
-    void Persist(Gear* gear) {
-        persistent_gear_ = gear;
+    void Share(Gear* gear) {
+        shared_gear_ = gear;
     }
 
-    Gear* persistent_gear() {
-        return persistent_gear_;
+    Gear* shared_gear() {
+        return shared_gear_;
     }
 
   private:
 
     lua_State*          L_;
     std::vector<Module> modules_;
-    Gear*               persistent_gear_;
+    Gear*               shared_gear_;
 
 };
 
