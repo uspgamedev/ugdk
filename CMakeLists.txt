@@ -148,6 +148,7 @@ if (UNIX)
                            ${SDLIMAGE_LIBRARY}
                            ${OPENGL_LIBRARIES}
                            ${LUA_LIBRARIES}
+                           ${PYTHON_LIBRARIES}
                           )
 
 # Windows library
