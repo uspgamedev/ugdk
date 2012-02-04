@@ -72,10 +72,12 @@ VirtualData::Ptr LuaData::SetAttribute(Ptr key, Ptr value) {
     return Ptr(stored_value);
 }
 
-/// Protected:
-
 void LuaData::AddToBuffer() {
     wrapper_->shared_gear()->GetData(id());
+}
+
+void LuaData::RemoveFromBuffer() {
+    wrapper_->shared_gear()->SetData(id());
 }
 
 } /* namespace lua */
