@@ -47,6 +47,7 @@ class Constant {
 
     DECLARE_LUA_CONSTANT(,OK)
     DECLARE_LUA_CONSTANT(,REGISTRYINDEX)
+    DECLARE_LUA_CONSTANT(,GLOBALSINDEX)
 
     struct err {
         DECLARE_LUA_CONSTANT(ERR,RUN)
@@ -84,7 +85,20 @@ class Constant {
 class Identifiable {
   protected:
     Identifiable() {}
-    DataID id() { return static_cast<void*>(this); }
+    DataID id()  { return static_cast<void*>(this); }
+    DataID id() const {
+        return static_cast<void*>(
+            const_cast<Identifiable*>(this)
+        );
+    }
+};
+
+struct Module {
+    Module(const std::string& name, lua_CFunction init_func) :
+        name_(name),
+        init_func_(init_func) {}
+    std::string     name_;
+    lua_CFunction   init_func_;
 };
 
 } /* namespace lua */

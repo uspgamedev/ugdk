@@ -9,72 +9,115 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
+using std::vector;
+
+/// Public:
+
 void Gear::LoadLibs () {
     // luaL_checkversion(L.get());  // TODO-lua5.2: add this.
-    lua_.gc(Constant::gc::STOP(), 0);
-    lua_.aux().openlibs();
-    lua_.gc(Constant::gc::RESTART(), 0);
+    L_.gc(Constant::gc::STOP(), 0);
+    L_.aux().openlibs();
+    L_.gc(Constant::gc::RESTART(), 0);
 }
 
-bool Gear::PushData (DataID id) {
+void Gear::PreloadModule(const vector<Module>& modules) {
+    L_.getglobal(LUA_LOADLIBNAME);             // [pack]
+    L_.getfield(-1, "preload");                // [pack,preload]
+    vector<Module>::const_iterator it = modules.begin();
+    for (; it != modules.end(); ++it) {
+        L_.push(it->init_func_);      // [pack,preload,init_func]
+        L_.setfield(-2, it->name_.c_str());    // [pack,preload]
+    }
+    L_.pop(2);                                 // []
+}
+
+void Gear::CreateDatatable() {
+    L_.push(datatable_id_);
+    L_.newtable();
+    L_.settable(Constant::REGISTRYINDEX());
+}
+
+bool Gear::GetData (DataID id) {
     if (!PushDataTable()) return false;
     // DataTable is at local index 1;
-    lua_.push(id);              // [1] = DT, [2] = id
-    lua_.gettable(Local(1));    // [1] = DT, [2] = DT.id
-    if (lua_.isnil(-1)) {
-        lua_.pop(2);            // <empty>
+    L_.push(id);   // [DT,id]
+    L_.gettable(-2);                       // [DT,DT.id]
+    if (L_.isnil(-1)) {
+        L_.pop(2);                         // []
         return false;
     }
-    lua_.remove(Local(1));      // [1] = DT.id
+    L_.remove(-2);                         // [DT.id]
     return true;
 }
 
+bool Gear::SetData (DataID id) {
+    // [data]
+    if (!PushDataTable()) return false;
+                        // [data,DT]
+    L_.push(id);        // [data,DT,id]
+    L_.pushvalue(-3);   // [data,DT,id,data]
+    L_.settable(-2);    // [data,DT]
+    L_.pop(2);          // []
+    return true;
+}
+
+void* Gear::UnwrapData (const VirtualType& type) {
+    void* data = NULL;
+    SWIG_ConvertPtr(L_, -1, &data, type.FromLang(LANG(Lua)), 0);
+    L_.pop(1);
+    return data;
+}
+
+void Gear::WrapData(void *data, const VirtualType& type) {
+    SWIG_NewPointerObj(L_, data, type.FromLang(LANG(Lua)), 0);
+}
+
 const Constant Gear::DoFile (const char* filename) {
-    const Constant result = lua_.aux().loadfile(filename);
+    const Constant result = L_.aux().loadfile(filename);
     if (result != Constant::OK()) return Report(result);
     return TracedCall(0, LUA_MULTRET);
 }
 
 const Constant Gear::LoadModule (const char* name, lua_CFunction loader) {
-  lua_.push(require);
-  lua_.push(name);
-  lua_.push(loader);
+  L_.push(require);
+  L_.push(name);
+  L_.push(loader);
   const Constant result = TracedCall(2,1);
   if (result != Constant::OK())
-      lua_.pop(1);
+      L_.pop(1);
   return result;
 }
 
 /// Private:
 
 bool Gear::PushDataTable() {
-    lua_.push(id());
-    lua_.gettable(Constant::REGISTRYINDEX());
-    if (lua_.isnil(-1)) {
-        lua_.pop(1);
+    L_.push(datatable_id_);
+    L_.gettable(Constant::REGISTRYINDEX());
+    if (L_.isnil(-1)) {
+        L_.pop(1);
         return false;
     }
     return true;
 }
 
 const Constant Gear::Report (const Constant& c) {
-  if (c != Constant::OK() && !lua_.isnil(-1)) {
-    const char *msg = lua_.tostring(-1);
+  if (c != Constant::OK() && !L_.isnil(-1)) {
+    const char *msg = L_.tostring(-1);
     if (msg == NULL) msg = "(error object is not a string)";
     State::errormsg(msg);
-    lua_.pop(1);
+    L_.pop(1);
     /* force a complete garbage collection in case of errors */
-    lua_.gc(Constant::gc::COLLECT(), 0);
+    L_.gc(Constant::gc::COLLECT(), 0);
   }
   return c;
 }
 
 const Constant Gear::TracedCall (int nargs, int nres) {
-  int base = lua_.gettop() - nargs;
-  lua_.push(traceback);
-  lua_.insert(base);
-  const Constant result = lua_.pcall(nargs, nres, base);
-  lua_.remove(base);
+  int base = L_.gettop() - nargs;
+  L_.push(traceback);
+  L_.insert(base);
+  const Constant result = L_.pcall(nargs, nres, base);
+  L_.remove(base);
   return Report(result);
 }
 

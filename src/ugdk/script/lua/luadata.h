@@ -22,24 +22,33 @@ class LuaData : public VirtualData, public Identifiable {
     void* Unwrap(const VirtualType& type) const;
 
     void Wrap(void* data, const VirtualType& type);
-    void Wrap(const char* str);
-    void Wrap(bool boolean);
-    void Wrap(int number);
-    void Wrap(double number);
+    void Wrap(const char* str) { GenericWrap(str); }
+    void Wrap(bool boolean) { GenericWrap(boolean); }
+    void Wrap(int number) { GenericWrap(number); }
+    void Wrap(double number) { GenericWrap(number); }
 
     LangWrapper* wrapper () const { return wrapper_; }
 
-    Ptr Execute(std::vector<Ptr> args);
+    Ptr Execute(const std::vector<Ptr>& args);
 
     Ptr GetAttribute(Ptr key);
 
     Ptr SetAttribute(Ptr key, Ptr value);
 
+  //protected:
+
+    void AddToBuffer();
+
   private:
 
     LuaWrapper* wrapper_;
 
-    //DataID id() { return static_cast<void*>(this); }
+    template <class T>
+    void GenericWrap(T data) {
+        Gear g(wrapper_->MakeGear());
+        g->push<T>(data); // TODO TEST THIS!
+        g.SetData(id());
+    }
 
 };
 

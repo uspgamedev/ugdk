@@ -11,24 +11,34 @@ namespace script {
 namespace lua {
 
 using std::string;
+using std::vector;
 
 /// Overwritten methods.
 
-bool LuaWrapper::RegisterModule(string name, lua_CFunction init_func) {
-    if (!gear_.ValidState())
+bool LuaWrapper::RegisterModule(const string& name, lua_CFunction init_func) {
+    if (name.empty())
         return false;
+    // TODO: check if name is valid.
+    modules_.push_back(Module(name, init_func));
     return true;
 }
 
 bool LuaWrapper::Initialize() {
-    if (!gear_.ValidState())
-        return false;
-    gear_.LoadLibs();
+    if (L_) return false;
+    L_ = luaL_newstate();
+    {
+        Gear g = MakeGear();
+        g.LoadLibs();
+        g.PreloadModule(modules_);
+        modules_.clear();
+        g.CreateDatatable();
+    }
     return true;
 }
 
 void LuaWrapper::Finalize() {
-
+    lua_close(L_);
+    L_ = NULL;
 }
 
 VirtualData::Ptr LuaWrapper::NewData() {
@@ -36,14 +46,7 @@ VirtualData::Ptr LuaWrapper::NewData() {
 }
 
 VirtualObj LuaWrapper::LoadModule(const std::string& name) {
-    return VirtualObj(NewData());
-}
-
-/// Other methods.
-
-void* LuaWrapper::Unwrap(DataID id, const VirtualType& type) /*const*/ {
-    gear_.PushData(id);
-    return false;
+    return VirtualObj(NewData()); // TODO
 }
 
 } /* namespace lua */

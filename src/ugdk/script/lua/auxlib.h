@@ -16,24 +16,24 @@ class AuxLib {
 
   public:
 
-    explicit AuxLib(const StatePtr& L) : L_(L) {}
+    explicit AuxLib(lua_State* L) : L_(L) {}
 
     static StatePtr newstate() {
         StatePtr L(luaL_newstate(), lua_close);
         return L;
     }
 
-    void openlibs() { luaL_openlibs(L_.get()); }
+    void openlibs() { luaL_openlibs(L_); }
 
     const Constant loadfile(const char* filename) {
         return Constant(
-            std::tr1::bind(luaL_loadfile, L_.get(), filename)
+            std::tr1::bind(luaL_loadfile, L_, filename)
         );
     }
 
   private:
 
-    StatePtr L_;
+    lua_State* const L_;
 
 };
 
