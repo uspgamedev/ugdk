@@ -1,9 +1,8 @@
 
 #include <cstdio>
 
-#include <ugdk/script/lua/gear.h>
+#include <ugdk/script/lua/datagear.h>
 #include <ugdk/script/lua/auxlib.h>
-#include <ugdk/script/lua/native.h>
 
 #include <ugdk/script/swig/swigluarun.h>
 
@@ -11,39 +10,26 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
-using std::vector;
-
 /// Public:
 
-void Gear::LoadLibs () {
-    // luaL_checkversion(L.get());  // TODO-lua5.2: add this.
-    L_.gc(Constant::gc::STOP(), 0);
-    L_.aux().openlibs();
-    L_.gc(Constant::gc::RESTART(), 0);
+int DataGear::GenerateID() {
+    if (!PushDataTable()) return LUA_NOREF;
+    DataID generated = L_.aux().ref(-1);
+    L_.pop(1);
+    return generated;
 }
 
-void Gear::PreloadModule(const vector<Module>& modules) {
-    L_.getglobal(LUA_LOADLIBNAME);             // [pack]
-    L_.getfield(-1, "preload");                // [pack,preload]
-    vector<Module>::const_iterator it = modules.begin();
-    for (; it != modules.end(); ++it) {
-        L_.push(it->init_func_);      // [pack,preload,init_func]
-        L_.setfield(-2, it->name_.c_str());    // [pack,preload]
-    }
-    L_.pop(2);                                 // []
+bool DataGear::DestroyID(DataID id) {
+    if (!PushDataTable()) return false;
+    L_.aux().unref(-1, id);
+    L_.pop(1);
+    return true;
 }
 
-void Gear::CreateDatatable() {
-    L_.push(datatable_id_);
-    L_.newtable();
-    L_.settable(Constant::REGISTRYINDEX());
-}
-
-bool Gear::GetData (DataID id) {
+bool DataGear::GetData (DataID id) {
     if (!PushDataTable()) return false;
     // DataTable is at local index 1;
-    L_.push(id);   // [DT,id]
-    L_.gettable(-2);                       // [DT,DT.id]
+    L_.rawgeti(-1, id);     // [DT, DT.id]
     if (L_.isnil(-1)) {
         L_.pop(2);                         // []
         return false;
@@ -52,35 +38,39 @@ bool Gear::GetData (DataID id) {
     return true;
 }
 
-bool Gear::SetData (DataID id) {
+bool DataGear::SetData (DataID id) {
     puts("\tSETP 6.1");
     // [data]
     if (!PushDataTable()) return false;
     puts("\tSETP 6.2");
                         // [data,DT]
+    L_.pushvalue(-2);   // [data,DT,data]
+    L_.rawseti(-2, id); // [data,DT]
+    /*
     L_.push(id);        // [data,DT,id]
     puts("\tSETP 6.3");
     L_.pushvalue(-3);   // [data,DT,id,data]
     puts("\tSETP 6.4");
     L_.settable(-3);    // [data,DT]
+    */
     puts("\tSETP 6.5");
     L_.pop(2);          // []
     puts("\tSETP 6.6");
     return true;
 }
 
-void* Gear::UnwrapData (const VirtualType& type) {
+void* DataGear::UnwrapData (const VirtualType& type) {
     void* data = NULL;
     SWIG_ConvertPtr(L_, -1, &data, type.FromLang(LANG(Lua)), 0);
     L_.pop(1);
     return data;
 }
 
-void Gear::WrapData(void *data, const VirtualType& type) {
+void DataGear::WrapData(void *data, const VirtualType& type) {
     SWIG_NewPointerObj(L_, data, type.FromLang(LANG(Lua)), 0);
 }
 
-const Constant Gear::DoFile (const char* filename) {
+const Constant DataGear::DoFile (const char* filename) {
     {
         const Constant result = L_.aux().loadfile(filename);
         if (result != Constant::OK()) return Report(result);
@@ -111,49 +101,20 @@ const Constant Gear::DoFile (const char* filename) {
     return result;
 }
 
-const Constant Gear::LoadModule (const char* name, lua_CFunction loader) {
-  L_.push(require);
-  L_.push(name);
-  L_.push(loader);
-  const Constant result = TracedCall(2,1);
-  if (result != Constant::OK())
-      L_.pop(1);
-  return result;
-}
-
 /// Private:
 
-bool Gear::PushDataTable() {
+bool DataGear::PushDataTable() {
+    L_.rawgeti(Constant::REGISTRYINDEX(), datatable_id_);
+    /*
     L_.push(datatable_id_);
     L_.gettable(Constant::REGISTRYINDEX());
+    */
     if (!L_.istable(-1)) {
         L_.pop(1);
         return false;
     }
     return true;
 }
-
-const Constant Gear::Report (const Constant& c) {
-  if (c != Constant::OK() && !L_.isnil(-1)) {
-    const char *msg = L_.tostring(-1);
-    if (msg == NULL) msg = "(error object is not a string)";
-    State::errormsg(msg);
-    L_.pop(1);
-    /* force a complete garbage collection in case of errors */
-    L_.gc(Constant::gc::COLLECT(), 0);
-  }
-  return c;
-}
-
-const Constant Gear::TracedCall (int nargs, int nres) {
-  int base = L_.gettop() - nargs;
-  L_.push(traceback);
-  L_.insert(base);
-  const Constant result = L_.pcall(nargs, nres, base);
-  L_.remove(base);
-  return Report(result);
-}
-
 } /* namespace lua */
 } /* namespace script */
 } /* namespace ugdk */

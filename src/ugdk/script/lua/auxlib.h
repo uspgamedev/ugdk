@@ -31,6 +31,10 @@ class AuxLib {
         );
     }
 
+    DataID ref(int index) { return luaL_ref(L_, index); }
+
+    void unref(int index, int n) { luaL_unref(L_, index, n); }
+
   private:
 
     lua_State* const L_;

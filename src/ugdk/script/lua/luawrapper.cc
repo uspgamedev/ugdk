@@ -28,36 +28,42 @@ bool LuaWrapper::Initialize() {
     if (L_) return false;
     L_ = luaL_newstate();
     {
-        Gear g = MakeGear();
-        g.LoadLibs();
-        g.PreloadModule(modules_);
+        BootstrapGear btgear(L_);
+        btgear.LoadLibs();
+        btgear.PreloadModule(modules_);
         modules_.clear();
-        g.CreateDatatable();
+        datatable_id_ = btgear.GenerateDatatable();
     }
     return true;
 }
 
 void LuaWrapper::Finalize() {
+    {
+        BootstrapGear btgear(L_);
+        btgear.DestroyDatatable(datatable_id_);
+    }
     lua_close(L_);
     L_ = NULL;
 }
 
 VirtualData::Ptr LuaWrapper::NewData() {
-    return VirtualData::Ptr(new LuaData(this));
+    return VirtualData::Ptr(
+            new LuaData(this, MakeDataGear().GenerateID())
+    );
 }
 
 VirtualObj LuaWrapper::LoadModule(const string& name) {
     string fullpath = name + "." + file_extension();
     {
-        Gear g(MakeGear());
-        const Constant result = g.DoFile(fullpath.c_str());
+        DataGear dtgear(MakeDataGear());
+        const Constant result = dtgear.DoFile(fullpath.c_str());
         puts("SETP 3");
         if(result != Constant::OK())
             return VirtualObj(VirtualData::Ptr()); // error
         puts("SETP 4");
-        LuaData* lua_data = new LuaData(this);
+        LuaData* lua_data = new LuaData(this, dtgear.GenerateID());
         puts("SETP 5");
-        Share(&g);
+        Share(&dtgear);
         puts("SETP 6");
         lua_data->RemoveFromBuffer();
         puts("SETP 7");

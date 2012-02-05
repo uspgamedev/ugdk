@@ -24,7 +24,7 @@ namespace lua {
 
 typedef std::tr1::shared_ptr<lua_State> StatePtr;
 
-typedef void* DataID;
+typedef int DataID;
 
 #define DECLARE_LUA_CONSTANT(category,name) \
   static const Constant name () { return Constant(LUA_##category##name); }
@@ -81,17 +81,6 @@ class Constant {
 };
 
 #undef DECLARE_LUA_CONSTANT
-
-class Identifiable {
-  protected:
-    Identifiable() {}
-    DataID id()  { return static_cast<void*>(this); }
-    DataID id() const {
-        return static_cast<void*>(
-            const_cast<Identifiable*>(this)
-        );
-    }
-};
 
 struct Module {
     Module(const std::string& name, lua_CFunction init_func) :

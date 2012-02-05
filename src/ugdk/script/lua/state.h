@@ -58,6 +58,8 @@ class State {
 
     void gettable (int index) { lua_gettable(L_, index); }
     void settable (int index) { lua_settable(L_, index); }
+    void rawgeti (int index, int n) { lua_rawgeti(L_, index, n); }
+    void rawseti (int index, int n) { lua_rawseti(L_, index, n); }
 
     int setfenv(int index) { return lua_setfenv(L_, index); }
     void getfenv(int index) { lua_getfenv(L_, index); }

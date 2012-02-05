@@ -4,20 +4,25 @@
 
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/lua/header.h>
-#include <ugdk/script/lua/gear.h>
+#include <ugdk/script/lua/datagear.h>
 #include <ugdk/script/lua/luawrapper.h>
 
 namespace ugdk {
 namespace script {
 namespace lua {
 
-class LuaData : public VirtualData, public Identifiable {
+class LuaData : public VirtualData {
 
   public:
 
-    LuaData(LuaWrapper* wrapper) : wrapper_(wrapper) {}
+    LuaData(LuaWrapper* wrapper, DataID id) :
+        wrapper_(wrapper),
+        id_(id) {}
 
-    ~LuaData() {}
+    ~LuaData() {
+        if (wrapper_)
+            wrapper_->MakeDataGear().DestroyID(id_);
+    }
 
     void* Unwrap(const VirtualType& type) const;
 
@@ -41,12 +46,13 @@ class LuaData : public VirtualData, public Identifiable {
   private:
 
     LuaWrapper* wrapper_;
+    DataID      id_;
 
     template <class T>
     void GenericWrap(T data) {
-        Gear g(wrapper_->MakeGear());
-        g->push<T>(data); // TODO TEST THIS!
-        g.SetData(id());
+        DataGear dtgear(wrapper_->MakeDataGear());
+        dtgear->push<T>(data); // TODO TEST THIS!
+        dtgear.SetData(id_);
     }
 
 };
