@@ -36,6 +36,7 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/script/python/pythonwrapper.h 
     ./src/ugdk/script/python/pythondata.cc 
     ./src/ugdk/script/swig/swigpyrun.h 
+    ./src/ugdk/script/swig/export.h 
     ./src/ugdk/script/swig/swigluarun.h 
     ./src/ugdk/script/langwrapper.h 
     ./src/ugdk/script/lua/native.h 
@@ -86,6 +87,7 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/base/engine.cc 
     ./src/ugdk/base/types.h 
     ./src/ugdk/base/engine.h 
+    ./src/ugdk/script.h 
     ./src/ugdk/time/timemanager.h 
     ./src/ugdk/time/timemanager.cc 
     ./src/ugdk/time/timeaccumulator.cc 

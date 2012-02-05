@@ -15,6 +15,7 @@
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/animationparser.h>
+#include <ugdk/script/scriptmanager.h>
 
 using namespace std;
 
@@ -27,7 +28,8 @@ Vector2D Engine::window_size() {
 }
 
 bool Engine::Initialize(string windowTitle, Vector2D windowSize, 
-						bool fullscreen, std::string base_path, std::string icon) {
+						bool fullscreen, std::string base_path,
+						std::string icon) {
     quit_ = false;
     video_manager_ = new VideoManager();
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -39,6 +41,7 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
     text_manager_ = new TextManager();
     text_manager_->Initialize();
 	path_manager_ = new PathManager(base_path);
+	SCRIPT_MANAGER()->Initialize();
     scene_list_.clear();
     interface_list_.clear();
 
@@ -153,6 +156,9 @@ void Engine::Release() {
 
     video_manager()->Release();
     delete video_manager_;
+
+    SCRIPT_MANAGER()->Finalize();
+    delete SCRIPT_MANAGER();
 
     animation_loader_.ClearCache();
 
