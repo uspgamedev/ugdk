@@ -10,14 +10,6 @@
 
 %}
 
-%ignore operator+(const Vector2D &left, const Vector2D &right);
-%ignore operator-(const Vector2D &left);
-%ignore operator-(const Vector2D &left, const Vector2D &right);
-%ignore operator*(const float  &scalar, const Vector2D &right);
-%ignore operator*(const Vector2D &left, const float   &scalar);
-%ignore operator/(const Vector2D &left, const float   &scalar);
-%ignore operator*(const Vector2D &left, const Vector2D &right);
-
 %include <ugdk/math/vector2D.h>
 %include <ugdk/math/frame.h>
 
