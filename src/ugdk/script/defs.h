@@ -10,7 +10,7 @@
 #define DEFINE_LANG_ID(name,id) \
     const LangID LANG(name) = id;
 
-#ifndef SWIG
+#ifndef SWIG_GENERATED
 extern "C" {
 /// Used with opaque pointers.
 struct swig_type_info;

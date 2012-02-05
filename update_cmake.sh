@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILES=`find ./src/ | grep "^.*\.\(h\|cc\)$"`
+FILES=`find ./src/ugdk/ | grep "^.*\.\(h\|cc\)$"`
 cd src/module
 MODULES=`find | grep -o "[^/]*\.\(i\)$"`
 cd ../..

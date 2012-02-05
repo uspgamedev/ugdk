@@ -1,13 +1,10 @@
 
-%module ugdk
 %{
 
-/// UGDK_INCLUDES
-#define SWIG
+#define SWIG_GENERATED
 #include <ugdk/script/defs.h>
-#undef SWIG
+#undef SWIG_GENERATED
 #include <ugdk/script/type.h>
-#include <ugdk/math/vector2D.h>
 
 %}
 
@@ -15,7 +12,6 @@
 %include "ugdk/script/type.h"
 
 %define export_class(T)
-
 %typemap(in) T* tp {
     /// Code to register type T.
     /// First get the T's virtual type.
@@ -31,7 +27,6 @@
 %typemap(in) T* tp;
 %template(GetNull_##T) ::GetNull<T>;
 %enddef
-%include "ugdk/math/vector2D.h"
 
 %luacode {
 for k,v in pairs(proto) do
@@ -41,4 +36,3 @@ for k,v in pairs(proto) do
   end
 end
 }
-

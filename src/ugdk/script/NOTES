@@ -7,6 +7,12 @@
 ***************************************************************************/
 
 ###############
+Omar, Omar, Omar.
+Ajustei o cmake pra detectar o SWIG e também já comecei a fazer um módulo para
+teste. Obviamente, começarei pelo módulo "ugdk.math".
+Qualquer problema para compilar me chame!
+
+###############
 Omar, mudei a assinatura da função Execute para ela não ficar copiando de boba
 o vetor de argumentos. Então tive que ajustar a assinatura dela no PyData tb.
 

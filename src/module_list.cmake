@@ -1,3 +1,3 @@
 SET(MODULE_SRC 
-    ugdk.i 
+    math.i 
 )

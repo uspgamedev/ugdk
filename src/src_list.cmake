@@ -1,5 +1,4 @@
 SET(FRAMEWORK_SRC 
-    ./src/generated/ugdkLUA_wrap.cc 
     ./src/ugdk/portable/tr1.h 
     ./src/ugdk/input.h 
     ./src/ugdk/audio/sample.h 
