@@ -1,4 +1,6 @@
 
+#include <cstdio>
+
 #include <ugdk/script/lua/gear.h>
 #include <ugdk/script/lua/auxlib.h>
 #include <ugdk/script/lua/native.h>
@@ -51,13 +53,19 @@ bool Gear::GetData (DataID id) {
 }
 
 bool Gear::SetData (DataID id) {
+    puts("\tSETP 6.1");
     // [data]
     if (!PushDataTable()) return false;
+    puts("\tSETP 6.2");
                         // [data,DT]
     L_.push(id);        // [data,DT,id]
+    puts("\tSETP 6.3");
     L_.pushvalue(-3);   // [data,DT,id,data]
-    L_.settable(-2);    // [data,DT]
+    puts("\tSETP 6.4");
+    L_.settable(-3);    // [data,DT]
+    puts("\tSETP 6.5");
     L_.pop(2);          // []
+    puts("\tSETP 6.6");
     return true;
 }
 
@@ -77,14 +85,18 @@ const Constant Gear::DoFile (const char* filename) {
         const Constant result = L_.aux().loadfile(filename);
         if (result != Constant::OK()) return Report(result);
     }   // [file]
+    puts("SETP 0");
     {
         L_.newtable();  // temp env table
         L_.newtable();  // temp env table's metatable
-        L_.pushvalue(LUA_ENVIRONINDEX);
+        puts("SETP 0.1");
+        L_.getfenv(-3);
         L_.setfield(-2, "__index"); // mttab.__index = _ENV
         L_.setmetatable(-2);        // setmetatable(temp, mttab)
         L_.setfenv(-2);             // setfenv(file,temp)
+        puts("SETP 0.2");
     }
+    puts("SETP 1");
     L_.pushvalue(-1); // make copy of file
     const Constant result = TracedCall(0, 0);
     if (result == Constant::OK()) {
@@ -92,6 +104,10 @@ const Constant Gear::DoFile (const char* filename) {
         L_.setmetatable(-2);        // setmetatable(file,nil)
         L_.getfenv(-1);             // return getfenv(file)
     }
+    if (L_.istable(-1))
+        puts("Environtment table successfully retrieved.");
+    else return Constant::err::ERR();
+    puts("SETP 2");
     return result;
 }
 
@@ -110,7 +126,7 @@ const Constant Gear::LoadModule (const char* name, lua_CFunction loader) {
 bool Gear::PushDataTable() {
     L_.push(datatable_id_);
     L_.gettable(Constant::REGISTRYINDEX());
-    if (L_.isnil(-1)) {
+    if (!L_.istable(-1)) {
         L_.pop(1);
         return false;
     }

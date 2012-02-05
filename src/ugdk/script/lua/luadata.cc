@@ -77,7 +77,8 @@ void LuaData::AddToBuffer() {
 }
 
 void LuaData::RemoveFromBuffer() {
-    wrapper_->shared_gear()->SetData(id());
+    if (!wrapper_->shared_gear()->SetData(id()))
+        puts("WARNING! Bad lua data badly generated!");
 }
 
 } /* namespace lua */

@@ -28,11 +28,16 @@
 %template(GetNull_##T) ::GetNull<T>;
 %enddef
 
+%define confirm_exports(modname)
 %luacode {
-for k,v in pairs(proto) do
+print "Hey there!"
+for k,v in pairs(modname) do
   m = string.match(k, "RegisterType_(.+)")
+  print(k,v)
   if m then
-    proto[k](proto["GetNull_"..m]())
+    print "Something may be registered."
+    modname[k](modname["GetNull_"..m]())
   end
 end
 }
+%enddef

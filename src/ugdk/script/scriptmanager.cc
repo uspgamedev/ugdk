@@ -1,4 +1,6 @@
 
+#include <cstdio>
+
 #include <ugdk/base/engine.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/script/scriptmanager.h>
@@ -54,6 +56,7 @@ LangWrapper* ScriptManager::GetWrapper(string name) {
 VirtualObj ScriptManager::LoadModule(string script) {
 	string filepath = PATH_MANAGER()->ResolvePath("scripts/" + script);
 
+	printf("Loading module \"%s\".\n", filepath.c_str());
 	WrapperMap::iterator it = wrappers_.begin();
 	while (it != wrappers_.end()) {
 		LangWrapper* wrap = it->second;

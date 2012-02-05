@@ -18,4 +18,5 @@ namespace ugdk {
     export_class(Frame)
 }
 
+confirm_exports(ugdk_math)
 

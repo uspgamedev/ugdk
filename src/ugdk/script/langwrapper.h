@@ -4,7 +4,6 @@
 
 #include <cstdio>
 #include <string>
-#include <type_traits>
 
 #include <ugdk/script/defs.h>
 #include <ugdk/script/type.h>

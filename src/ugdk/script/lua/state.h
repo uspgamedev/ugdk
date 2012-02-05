@@ -84,6 +84,7 @@ class State {
     // TODO: make-do for now.
     static void errormsg (std::string msg) {
       fprintf(stderr, "lua: %s\n", msg.c_str());
+      fprintf(stdout, "lua: %s\n", msg.c_str());
     }
 
   private:

@@ -14,7 +14,7 @@ class VirtualType {
 
   public:
 
-    VirtualType() : types_() {}
+    VirtualType() : types_(10, NULL) {}
     ~VirtualType() {}
 
     struct swig_type_info* FromLang(LangID id) const {
