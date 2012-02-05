@@ -58,6 +58,7 @@ set (GENERATED_DIR "${SRC_DIR}/generated")
 #set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
 
 include (${SRC_DIR}/src_list.cmake)
+include (${SRC_DIR}/module_list.cmake)
 
 # #define's que voce queira incluir na compilacao
 # separe por espacos
@@ -117,9 +118,10 @@ endif(NOT MSVC)
 find_package (SWIG REQUIRED)
 include (cmake/UseSWIG.cmake)
 
-set (MODULE_SRC
-  "ugdk.i"
-)
+# ${FRAMEWORK_SRC} esta' definido?
+if (NOT MODULE_SRC)
+    message (FATAL_ERROR "Error: MODULE_SRC not defined! Please do so in the file src/module_list.cmake!")
+endif (NOT MODULE_SRC)
 
 set_source_files_properties (${MODULE_SRC} PROPERTIES CPLUSPLUS ON)
 set_source_files_properties (${MODULE_SRC} PROPERTIES SWIG_FLAGS "")
