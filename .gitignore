@@ -30,3 +30,4 @@ src/ugdk/config/config.h
 *.sln
 *.vcxproj
 doc/doxy
+src/generated/*_wrap.cc

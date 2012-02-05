@@ -1,3 +1,4 @@
+
 #ifndef HORUSEYE_FRAMEWORK_VECTOR2D_H_
 #define HORUSEYE_FRAMEWORK_VECTOR2D_H_
 
@@ -151,6 +152,17 @@ class Vector2D {
     // TODO document and revise
     Vector2D operator-=(const Vector2D &other);
 };
+
+#ifdef SWIG
+export_class(Vector2D)
+%ignore operator+(const Vector2D &left, const Vector2D &right);
+%ignore operator-(const Vector2D &left);
+%ignore operator-(const Vector2D &left, const Vector2D &right);
+%ignore operator*(const float  &scalar, const Vector2D &right);
+%ignore operator*(const Vector2D &left, const float   &scalar);
+%ignore operator/(const Vector2D &left, const float   &scalar);
+%ignore operator*(const Vector2D &left, const Vector2D &right);
+#endif
 
 /// Method that returns a vector equal to the sum of two others
     /** The sum of two vectors (x,y) (w,z) is igual to the vector (x+w, y+z)

@@ -40,7 +40,7 @@
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1694831918" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1162415504" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.727734618" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols"/>
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.727734618" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.404736104" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.1852525380" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
@@ -55,6 +55,9 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -291,5 +294,10 @@
 		<pathentry include="/usr/include/c++/4.4" kind="inc" path="" system="true"/>
 		<pathentry include="/usr/include/c++/4.4/x86_64-linux-gnu" kind="inc" path="" system="true"/>
 		<pathentry include="/usr/include/c++/4.4/backward" kind="inc" path="" system="true"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.language.mapping">
+		<project-mappings>
+			<file-mapping configuration="cdt.managedbuild.toolchain.gnu.base.2119371475" language="org.eclipse.cdt.core.assembly" path="src/module/ugdk.i"/>
+		</project-mappings>
 	</storageModule>
 </cproject>

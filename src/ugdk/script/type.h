@@ -58,4 +58,12 @@ VirtualType TypeRegistry<T>::type_;
 
 } /* namespace ugdk */
 
+template <class T>
+static void RegisterType(T* tp) {
+    (void)tp;
+}
+
+template <typename T>
+T* GetNull () { return NULL; }
+
 #endif /* UGDK_SCRIPT_VIRTUALTYPE_H_ */
