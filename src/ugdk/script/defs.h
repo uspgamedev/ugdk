@@ -10,11 +10,13 @@
 #define DEFINE_LANG_ID(name,id) \
     const LangID LANG(name) = id;
 
+#ifndef SWIG_GENERATED
 extern "C" {
 /// Used with opaque pointers.
 struct swig_type_info;
 
 }
+#endif
 
 namespace ugdk {
 
@@ -30,6 +32,5 @@ DEFINE_LANG_ID(Python,  1);
 }
 
 }
-
 
 #endif /* UGDK_SCRIPT_DEFS_H_ */

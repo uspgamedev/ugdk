@@ -53,6 +53,6 @@ class AudioManager {
     void ReleaseMusics();
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

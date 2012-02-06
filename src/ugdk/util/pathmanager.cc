@@ -19,4 +19,4 @@ std::string PathManager::ResolvePath(const std::wstring& path) {
 	return ResolvePath(str);
 }
 
-} // namespace framework
+} // namespace ugdk

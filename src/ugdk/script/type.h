@@ -14,7 +14,7 @@ class VirtualType {
 
   public:
 
-    VirtualType() : types_() {}
+    VirtualType() : types_(10, NULL) {}
     ~VirtualType() {}
 
     struct swig_type_info* FromLang(LangID id) const {
@@ -57,5 +57,13 @@ VirtualType TypeRegistry<T>::type_;
 } /* namespace script */
 
 } /* namespace ugdk */
+
+template <class T>
+static void RegisterType(T* tp) {
+    (void)tp;
+}
+
+template <typename T>
+T* GetNull () { return NULL; }
 
 #endif /* UGDK_SCRIPT_VIRTUALTYPE_H_ */

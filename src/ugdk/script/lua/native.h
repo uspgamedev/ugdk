@@ -4,6 +4,8 @@
 
 #include <ugdk/script/lua/header.h>
 
+using ugdk::script::lua::Constant;
+
 extern "C" {
 
 static int traceback (lua_State *L) {
@@ -27,6 +29,7 @@ static const int sentinel_ = 0;
 #define sentinel ((void*)&sentinel_)
 
 static int require (lua_State *L) {
+
   // clean extra args
   lua_settop(L, 2);
   // get first arg
@@ -34,7 +37,7 @@ static int require (lua_State *L) {
   // get second arg
   luaL_checktype(L, 2, LUA_TFUNCTION);
   lua_CFunction loader = lua_tocfunction(L, 2);
-  lua_getfield(L, LUA_REGISTRYINDEX, "_LOADED");
+  lua_getfield(L, Constant::REGISTRYINDEX(), "_LOADED");
   // check if the module has already been loaded.
   lua_getfield(L, 3, name);
   if (lua_toboolean(L, -1)) {

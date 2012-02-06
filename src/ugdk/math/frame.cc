@@ -16,4 +16,4 @@ bool Frame::Collides(const Frame& frame) const {
     return false;
 }
 
-}  // namespace framework
+}  // namespace ugdk

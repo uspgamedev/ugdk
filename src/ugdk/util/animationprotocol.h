@@ -39,7 +39,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
 
     AnimationManager::Animation *current_animation_;
 
-    Modifier* current_effect_;
+    graphic::Modifier* current_effect_;
 
     ParsingScope current_scope_;
 

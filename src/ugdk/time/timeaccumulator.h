@@ -1,9 +1,10 @@
-#ifndef HORUSEYE_FRAMEWORK_TIMEACCUMULATOR_H_
-#define HORUSEYE_FRAMEWORK_TIMEACCUMULATOR_H_
+#ifndef UGDK_TIME_TIMEACCUMULATOR_H_
+#define UGDK_TIME_TIMEACCUMULATOR_H_
 
-#include <ugdk/time/timehandler.h>
+#include <ugdk/time/timemanager.h>
 
 namespace ugdk {
+namespace time {
 
 class TimeAccumulator {
   public:
@@ -33,10 +34,11 @@ class TimeAccumulator {
     bool IsPaused();
 
   private:
-    TimeHandler *handler_;
+    TimeManager *handler_;
     uint32 initial_time_, time_paused_, when_paused_, duration_;
 };
 
-}  // namespace framework
+}  // namespace time
+}  // namespace ugdk
 
 #endif  // HORUSEYE_FRAMEWORK_TIMEACCUMULATOR_H_

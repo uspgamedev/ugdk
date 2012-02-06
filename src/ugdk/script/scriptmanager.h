@@ -4,16 +4,19 @@
 #include <string>
 #include <map>
 
+#include <ugdk/script.h>
+
 namespace ugdk {
 
 namespace script {
 
-class LangWrapper;
-class VirtualObj;
+#define SCRIPT_MANAGER() (ugdk::script::ScriptManager::ref())
 
 class ScriptManager {
 public:
-	static ScriptManager* ref() { return ref_ ? ref_ : ref_ = new ScriptManager; }
+	static ScriptManager* ref() {
+	    return ref_ ? ref_ : ref_ = new ScriptManager;
+	}
 	~ScriptManager() { ref_ = NULL; }
 
 	bool Initialize();

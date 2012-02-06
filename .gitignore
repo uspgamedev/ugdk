@@ -3,12 +3,13 @@
 CMake*
 !CMakeLists.txt
 Makefile
-cmake*
+cmake_install.cmake
 lib/*
 src/ugdk/config/config.h
 *.user
 *.sdf
 /ugdk.dir
+/ipch
 /Win32
 /Release
 /lib
@@ -23,3 +24,10 @@ src/ugdk/config/config.h
 /test/lib/gtest_main.lib
 /test/tmp
 *.deb
+/test/tmp
+*.filters
+*.opensdf
+*.sln
+*.vcxproj
+doc/doxy
+src/generated/*_wrap.cc

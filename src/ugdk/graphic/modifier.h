@@ -1,17 +1,28 @@
-#ifndef HORUSEYE_FRAMEWORK_MODIFIER_H_
-#define HORUSEYE_FRAMEWORK_MODIFIER_H_
+#ifndef UGDK_GRAPHIC_MODIFIER_H_
+#define UGDK_GRAPHIC_MODIFIER_H_
 
 #include <vector>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/base/types.h>
 
 namespace ugdk {
+namespace graphic {
 
 class Modifier {
-
   public:
 
-     ///Creates a new image Modifier object with the specified values. 
+    enum Flags {
+        NOTHING = 0,
+        HAS_TRANSFORMATION = 1,
+        HAS_COLOR = 2,
+
+        TRUNCATES_WHEN_APPLIED = 16
+    };
+
+    Modifier() : offset_(), scale_(1.0f, 1.0f), rotation_(0.0f), 
+        mirror_(MIRROR_NONE), color_(WHITE), visible_(true), flags_(NOTHING) {}
+
+    ///Creates a new image Modifier object with the specified values. 
     /**
      * @param offset The offset of the image.
      * @param size The size modifiers for the image. X and Y values can be set
@@ -23,9 +34,10 @@ class Modifier {
      * @param color The color filter.
      * @param alpha The alpha value for the image.
      */
-    Modifier(Vector2D offset = Vector2D(), Vector2D scale = Vector2D(1.0f,1.0f),
-             float rotation = 0.0f, Mirror mirror = MIRROR_NONE, Color color = WHITE, float alpha = 1.0f) :
-        offset_(offset), scale_(scale), rotation_(rotation), mirror_(mirror), color_(color), alpha_(alpha) {}
+    Modifier(const Vector2D offset, const Vector2D scale = Vector2D(1.0f,1.0f),
+             float rotation = 0.0f, Mirror mirror = MIRROR_NONE, const Color color = WHITE, const bool visible = true) :
+        offset_(offset), scale_(scale), rotation_(rotation), mirror_(mirror), 
+            color_(color), visible_(visible), flags_(HAS_TRANSFORMATION | HAS_COLOR) {}
 
     /// Creates a copy of another modifier.
     Modifier(const Modifier& mod);
@@ -40,47 +52,54 @@ class Modifier {
     /**@name Getters and Setters
      *@{
      */
-    Vector2D offset()   const { return   offset_; }
-    Vector2D scale()    const { return    scale_; }
-    float    rotation() const { return rotation_; }
-    Mirror   mirror()   const { return   mirror_; }
-    Color    color()    const { return    color_; }
-    float    alpha()    const { return    alpha_; }
+    const Vector2D& offset()   const { return   offset_; }
+    const Vector2D& scale()    const { return    scale_; }
+    float           rotation() const { return rotation_; }
+    const Mirror&   mirror()   const { return   mirror_; }
+    const Color&    color()    const { return    color_; }
+    float           alpha()    const { return  color_.a; }
+    int             flags()    const { return    flags_; }
+    bool            visible()  const { return  visible_; }
 
     // Setters.
-    void set_offset(const Vector2D& offset) { offset_ = offset; }
-    void set_scale(const Vector2D& scale)   { scale_  = scale;  }
+    void set_offset(const Vector2D& offset) { offset_ = offset; flags_ |= HAS_TRANSFORMATION; }
+    void set_scale(const Vector2D& scale)   { scale_  = scale;  flags_ |= HAS_TRANSFORMATION; }
     /// Adjusts rotation to use the [0,2PI] space and sets it to the Modifier.
     void set_rotation(const float rotation);
     /// Assigns MIRROR_NONE in case of an invalid argument.
     void set_mirror(const Mirror mirror);
     /// Truncates each component to [0,1] and sets it to the Modifier.
-    void set_color(const Color color);
+    void set_color(const Color& color);
     /// Truncates alpha to [0,1] and sets it to the Modifier.
     void set_alpha(const float alpha);
+    void set_visible(const bool visible) { visible_ = visible; }
     /**@}
      */
     /**@name Component composers.
      *@{
      */
-    void ComposeOffset(const Vector2D& offset) { offset_  += offset;  }
+    void ComposeOffset(const Vector2D& offset) { offset_  += offset;  flags_ |= HAS_TRANSFORMATION;}
     void ComposeScale(const Vector2D& scale)   { scale_.x *= scale.x;
-                                                 scale_.y *= scale.y; }
+                                                 scale_.y *= scale.y; 
+                                                 flags_ |= HAS_TRANSFORMATION; }
+
+    void ToggleFlag(const Flags& flag) { flags_ ^= flag; }
     /// Adjusts rotation to use the [0,2PI] space and composes on the Modifier.
     void ComposeRotation(const float rotation);
     /// Does nothing if mirror == MIRROR_NONE or if mirror is invalid.
-    void ComposeMirror(const Mirror mirror);
+    void ComposeMirror(const Mirror& mirror);
     /// Truncates each component to [0,1] and composes on the Modifier.
     void ComposeColor(const Color& color);
-    /// Truncates alpha to [0,1] and composes on the Modifier.
-    void ComposeAlpha(const float alpha);
-
+    /// Truncates alpha to [0,1] and composes on the Modifier.    void ComposeAlpha(const float alpha);
+	void ComposeAlpha(const float alpha);
+    void ComposeVisible(const bool visible) { visible_ = !(!visible_ || !visible); }
+    
     void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeOffset(   mod2->offset_   ); }
     void ComposeScale(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeScale(    mod2->scale_    ); }
     void ComposeRotation( const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeRotation( mod2->rotation_ ); }
     void ComposeMirror(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeMirror(   mod2->mirror_   ); }
     void ComposeColor(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeColor(    mod2->color_    ); }
-    void ComposeAlpha(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeAlpha(    mod2->alpha_    ); }
+    void ComposeVisible(  const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeVisible(  mod2->visible_  ); }
 
     /// Global composer and copy from pointer function.
     void Compose(const Modifier* mod2);
@@ -90,6 +109,8 @@ class Modifier {
      */
     /// Remember to free your new Modifier created through this static function!
     static Modifier* Copy(const Modifier* mod2) { if(mod2 == NULL) return NULL; return new Modifier(mod2); }
+
+    static const Modifier IDENTITY;
 
   private:
     // Copy constructor from pointer:
@@ -101,11 +122,11 @@ class Modifier {
     float           rotation_;
     Mirror          mirror_;
     Color           color_; //TODO: Modifier's "color_" is actually a light filter.
-    float           alpha_;
-    //TODO: colocar spreadsheet number no modifier.
-
+    bool            visible_;
+    int             flags_;
 };
 
-}
+}  // namespace graphic
+}  // namespace ugdk
 
-#endif /* HORUSEYE_FRAMEWORK_MODIFIER_H_ */
+#endif /* UGDK_GRAPHIC_MODIFIER_H_ */

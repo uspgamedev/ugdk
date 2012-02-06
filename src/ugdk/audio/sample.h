@@ -58,6 +58,6 @@ class Sample {
   friend class AudioManager;
 };
 
-}  // namespace framework
+}  // namespace ugdk
 
 #endif

@@ -40,16 +40,16 @@ class AnimationManager {
        *            should be applied to the rendered sprite.
        */
       public:
-        AnimationFrame(int frame, Modifier *modifier = NULL)
+        AnimationFrame(int frame, graphic::Modifier *modifier = NULL)
             : frame_(frame), modifier_(modifier) {}
 
         int frame() const { return frame_; }
-        Modifier *modifier() const { return modifier_; }
+        graphic::Modifier *modifier() const { return modifier_; }
 
         void set_frame(const int frame) { frame_ = frame; }
       private:
         int frame_;
-        Modifier *modifier_;
+        graphic::Modifier *modifier_;
     };
 
     /*
@@ -92,7 +92,7 @@ class AnimationManager {
     void set_default_frame(int default_frame) {
         default_frame_ = default_frame;
     }
-    const Modifier* get_current_modifier() const {
+    const graphic::Modifier* get_current_modifier() const {
         return current_animation_
                 ? current_animation_->at(current_frame_)->modifier()
                 : NULL;

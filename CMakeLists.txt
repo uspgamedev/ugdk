@@ -51,8 +51,14 @@ SET (MACOSX_DEPLOYMENT_TARGET 10.5)
 # Important build locations.
 set (SRC_DIR src)
 set (LIB_DIR lib)
+set (MODULE_DIR "${SRC_DIR}/module")
+set (GENERATED_DIR "${SRC_DIR}/generated")
+
+#set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
+#set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
 
 include (${SRC_DIR}/src_list.cmake)
+include (${SRC_DIR}/module_list.cmake)
 
 # #define's que voce queira incluir na compilacao
 # separe por espacos
@@ -108,6 +114,25 @@ if (NOT MSVC)
     include_directories(${Boost_INCLUDE_DIRS})
 endif(NOT MSVC)
 
+# Does this work everywhere?
+find_package (SWIG REQUIRED)
+include (cmake/UseSWIG.cmake)
+
+# ${FRAMEWORK_SRC} esta' definido?
+if (NOT MODULE_SRC)
+    message (FATAL_ERROR "Error: MODULE_SRC not defined! Please do so in the file src/module_list.cmake!")
+endif (NOT MODULE_SRC)
+
+set_source_files_properties (${MODULE_SRC} PROPERTIES CPLUSPLUS ON)
+set_source_files_properties (${MODULE_SRC} PROPERTIES SWIG_FLAGS "")
+
+set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
+set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_DIR}")
+
+swig_add_module (ugdk lua ${MODULE_SRC} ${FRAMEWORK_SRC})
+#message ("SWIG generated sources: ${swig_generated_sources}")
+set (GENERATED_SRC ${swig_generated_sources})
+
 # pre-processor: #define's
 if (MSVC)
   foreach (d ${DEFS})
@@ -126,11 +151,12 @@ if (${BUILD_TYPE} STREQUAL DEBUG)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
 endif (${BUILD_TYPE} STREQUAL DEBUG)
 
+include_directories ("externals/opengl")
 
 if (${LINK_TYPE} STREQUAL STATIC)
-    add_library (${FRAMEWORK_BUILDNAME} STATIC ${FRAMEWORK_SRC})
+    add_library (${FRAMEWORK_BUILDNAME} STATIC ${FRAMEWORK_SRC} ${GENERATED_SRC})
 elseif (${LINK_TYPE} STREQUAL SHARED)
-    add_library (${FRAMEWORK_BUILDNAME} SHARED ${FRAMEWORK_SRC})
+    add_library (${FRAMEWORK_BUILDNAME} SHARED ${FRAMEWORK_SRC} ${swig_generated_sources})
 endif (${LINK_TYPE} STREQUAL STATIC)
 
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
@@ -147,6 +173,7 @@ if (UNIX)
                            ${SDLIMAGE_LIBRARY}
                            ${OPENGL_LIBRARIES}
                            ${LUA_LIBRARIES}
+                           ${PYTHON_LIBRARIES}
                           )
 
 # Windows library

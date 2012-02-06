@@ -1,13 +1,16 @@
-#ifndef HORUSEYE_FRAMEWORK_VIDEOMANAGER_H_
-#define HORUSEYE_FRAMEWORK_VIDEOMANAGER_H_
+#ifndef UGDK_GRAPHIC_VIDEOMANAGER_H_
+#define UGDK_GRAPHIC_VIDEOMANAGER_H_
 
 #include <string>
 #include <map>
-#include <vector>
 #include <list>
+#include <stack>
 #include <ugdk/base/types.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/frame.h>
+#include <ugdk/action.h>
+#include <ugdk/graphic.h>
+#include <ugdk/graphic/modifier.h>
 
 using std::string;
 using std::map;
@@ -15,57 +18,76 @@ using std::map;
 #define VIDEO_MANAGER() (ugdk::Engine::reference()->video_manager())
 
 namespace ugdk {
-class Image;
-class Scene;
-class Layer;
+namespace graphic {
 
 class VideoManager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : light_image_(NULL), fullscreen_(false), light_texture_(0) {}
+    VideoManager() : settings_(false, false, false), light_buffer_(NULL), light_texture_(NULL) {}
     ~VideoManager() {}
 
-	bool Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon);
+    bool Initialize(const std::string& title, const Vector2D& size, bool fullscreen, const std::string& icon);
     bool ChangeResolution(const Vector2D& size, bool fullscreen);
     bool Release();
-    void Render(std::vector<Scene*>, std::list<Layer*>);
+    
+    void SetVSync(const bool active);
+    void SetLightSystem(const bool active) { settings_.light_system = active; }
+    
+    void Render(std::list<Scene*>&, std::list<Node*>&, float dt);
 
-    Image* LoadImageFile(const string& filepath);
-    Image* LoadImage(const string& filepath) {
-        return LoadImageFile(filepath);
+    Texture* LoadTexture(const std::string& filepath);
+
+    Spritesheet* GetSpritesheet(const std::string& tag) { return spritesheet_memory_[tag]; }
+    void AddSpritesheet(const std::string& tag, Spritesheet* spritesheet) {
+        spritesheet_memory_[tag] = spritesheet;
     }
 
     Vector2D video_size() const { return video_size_; }
-    bool fullscreen() const { return fullscreen_; }
-    string title() const { return title_; }
-	Image* backbuffer() const { return NULL; }
-	Image* screen() const { return NULL; }
-    Image* blank_image() const { return blank_image_; }
-	Image* light_image() const { return light_image_; }
-	Vector2D light_size() const { return light_size_; }
-	Frame virtual_bounds() const { return virtual_bounds_; }
+    bool fullscreen() const { return settings_.fullscreen; }
 
-	void TranslateTo (Vector2D& offset);
+    const std::string& title() const { return title_; }
+    const Texture* light_texture() const { return light_texture_; }
+
+    Frame virtual_bounds() const { return virtual_bounds_; }
+
+    void PushAndApplyModifier(const Modifier*);
+    void PushAndApplyModifier(const Modifier& apply) { PushAndApplyModifier(&apply); }
+    bool PopModifier();
+    const Modifier& CurrentModifier() const {
+        return (modifiers_.empty()) ? Modifier::IDENTITY : modifiers_.top(); 
+    }
 
   private:
-    Image *blank_image_, *light_image_;
-    Vector2D video_size_, light_size_;
+    Vector2D video_size_;
     Frame virtual_bounds_;
-    bool fullscreen_;
-    string title_;
-    map<string, Image*> image_memory_;
+    std::string title_;
 
-    unsigned int light_texture_, light_buffer_id_;
+    struct Settings {
+        bool fullscreen;
+        bool vsync;
+        bool light_system;
 
-	void InitializeLight();
+        Settings(bool fs, bool vs, bool light) : fullscreen(fs), vsync(vs), light_system(light) {}
+    } settings_;
 
+    std::map<std::string, Texture*> image_memory_;
+    std::map<std::string, Spritesheet*> spritesheet_memory_;
+    std::stack<Modifier> modifiers_;
 
-    void MergeLights(std::vector<Scene*> scene_list);
+    Texture* light_buffer_;
+    Texture* light_texture_;
+
+    void InitializeLight();
+
+    void MergeLights(std::list<Scene*>& scene_list);
     void BlendLightIntoBuffer();
+
+    void ClearModiferStack();
 
 };
 
-}  // namespace framework
+}  // namespace graphic
+}  // namespace ugdk
 
 #endif

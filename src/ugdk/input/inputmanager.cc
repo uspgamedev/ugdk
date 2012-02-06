@@ -2,6 +2,7 @@
 #include <ugdk/input/inputmanager.h>
 
 namespace ugdk {
+namespace input {
 
 InputManager::InputManager() {
     SDL_GetKeyState(&kbsize_);
@@ -111,5 +112,7 @@ void InputManager::SimulateKeyPress(Key key) {
 	}
 }
 
-} //namespace framework
+}  // namespace input
+}  // namespace ugdk
+
 
