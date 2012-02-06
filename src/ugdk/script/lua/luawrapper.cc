@@ -25,16 +25,15 @@ bool LuaWrapper::RegisterModule(const string& name, lua_CFunction init_func) {
 }
 
 bool LuaWrapper::Initialize() {
-    if (L_) return false;
-    L_ = luaL_newstate();
+    if (L_) return true;
+    L_ = AuxLib::newstate();
     {
         BootstrapGear btgear(L_);
-        btgear.LoadLibs();
-        btgear.PreloadModule(modules_);
+        if (!btgear.Initialize(modules_)) return false;
         modules_.clear();
         datatable_id_ = btgear.GenerateDatatable();
     }
-    return true;
+    return datatable_id_ != LUA_NOREF;
 }
 
 void LuaWrapper::Finalize() {

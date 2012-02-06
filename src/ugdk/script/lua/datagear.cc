@@ -14,7 +14,8 @@ namespace lua {
 
 int DataGear::GenerateID() {
     if (!PushDataTable()) return LUA_NOREF;
-    DataID generated = L_.aux().ref(-1);
+    L_.push(NULL);
+    DataID generated = L_.aux().ref(-2);
     L_.pop(1);
     return generated;
 }

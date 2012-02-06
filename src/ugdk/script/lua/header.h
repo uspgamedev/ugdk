@@ -2,9 +2,7 @@
 #ifndef UGDK_SCRIPT_LUA_HEADER_H_
 #define UGDK_SCRIPT_LUA_HEADER_H_
 
-#include <ugdk/portable/tr1.h>
-
-#include FROM_TR1(memory)
+#include <string>
 
 extern "C" {
 
@@ -22,9 +20,16 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
-typedef std::tr1::shared_ptr<lua_State> StatePtr;
+typedef int     DataID;
+typedef void*   UData;
 
-typedef int DataID;
+template <class T>
+UData AsUData(T* p) { return static_cast<UData>(p); }
+
+template <class T>
+UData AsUData(const T* p) {
+    return AsUData(const_cast<T*>(p));
+}
 
 #define DECLARE_LUA_CONSTANT(category,name) \
   static const Constant name () { return Constant(LUA_##category##name); }

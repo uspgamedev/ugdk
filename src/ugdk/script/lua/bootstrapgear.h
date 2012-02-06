@@ -21,13 +21,19 @@ class BootstrapGear : public BaseGear {
 
     ~BootstrapGear() {}
 
-    void LoadLibs ();
-
-    void PreloadModule(const std::vector<Module>& modules);
+    bool Initialize(const std::vector<Module>& modules);
 
     DataID GenerateDatatable();
 
     void DestroyDatatable(DataID datable_id);
+
+  private:
+
+    static int SafeInitialize(lua_State* L);
+
+    void LoadLibs();
+
+    void PreloadModules(const std::vector<Module>& modules);
 
 };
 

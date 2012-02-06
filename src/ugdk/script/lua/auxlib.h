@@ -18,9 +18,8 @@ class AuxLib {
 
     explicit AuxLib(lua_State* L) : L_(L) {}
 
-    static StatePtr newstate() {
-        StatePtr L(luaL_newstate(), lua_close);
-        return L;
+    static lua_State* newstate() {
+        return luaL_newstate();
     }
 
     void openlibs() { luaL_openlibs(L_); }

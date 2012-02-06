@@ -41,7 +41,8 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
     text_manager_ = new TextManager();
     text_manager_->Initialize();
 	path_manager_ = new PathManager(base_path);
-	SCRIPT_MANAGER()->Initialize();
+	if (!SCRIPT_MANAGER()->Initialize())
+	    puts("Failed to initialize script manager.");
     scene_list_.clear();
     interface_list_.clear();
 

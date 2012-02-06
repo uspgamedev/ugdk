@@ -2,10 +2,11 @@
 #ifndef UGDK_SCRIPT_LUA_STATE_H_
 #define UGDK_SCRIPT_LUA_STATE_H_
 
+//#include <ugdk/portable/tr1.h>
+
 #include <cstdlib>
 #include <cstdio>
 
-#include <string>
 #include <functional>
 
 #include <ugdk/script/lua/header.h>
@@ -37,13 +38,15 @@ class State {
     void push (bool b) { lua_pushboolean(L_, b); }
     void push (lua_Integer integer) { lua_pushinteger(L_, integer); }
     void push (lua_Number number) { lua_pushnumber(L_, number); }
-    void push (void *ptr) { lua_pushlightuserdata(L_, ptr); }
+    void push (UData ptr) { lua_pushlightuserdata(L_, ptr); }
     void push (const char* str) { lua_pushstring(L_, str); }
     void push (lua_CFunction func, int n = 0) {
         lua_pushcclosure(L_, func, n);
     }
     template <class T>
     void push (T value) { push(value); }
+    template <class T>
+    void push (T* value) { push(AsUData(value)); }
 
     void pop (int n) { lua_pop(L_, n); }
 
@@ -70,6 +73,7 @@ class State {
     bool istable (int index) const { return lua_istable(L_, index); }
 
     const char* tostring(int n) const { return lua_tostring(L_, n); }
+    void* touserdata(int n) const { return lua_touserdata(L_, n); }
     int type (int n) const { return lua_type(L_, n); }
     
     void call (int nargs, int nres) { lua_call(L_, nargs, nres); }
@@ -84,9 +88,8 @@ class State {
     }
 
     // TODO: make-do for now.
-    static void errormsg (std::string msg) {
-      fprintf(stderr, "lua: %s\n", msg.c_str());
-      fprintf(stdout, "lua: %s\n", msg.c_str());
+    static void errormsg (const char* msg) {
+      fprintf(stdout, "lua:\n%s\n", msg);
     }
 
   private:
