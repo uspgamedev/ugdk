@@ -129,9 +129,12 @@ set_source_files_properties (${MODULE_SRC} PROPERTIES SWIG_FLAGS "")
 set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
 set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_DIR}")
 
+set (GENERATED_SRC "")
 swig_add_module (ugdk lua ${MODULE_SRC} ${FRAMEWORK_SRC})
+set (GENERATED_SRC ${GENERATED_SRC} ${swig_generated_sources})
+swig_add_module (ugdk python ${MODULE_SRC} ${FRAMEWORK_SRC})
 #message ("SWIG generated sources: ${swig_generated_sources}")
-set (GENERATED_SRC ${swig_generated_sources})
+set (GENERATED_SRC ${GENERATED_SRC} ${swig_generated_sources})
 
 # pre-processor: #define's
 if (MSVC)

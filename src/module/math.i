@@ -17,6 +17,6 @@ namespace ugdk {
     export_class(Vector2D)
     export_class(Frame)
 }
-
+ 
 confirm_exports(ugdk_math)
-
+ 

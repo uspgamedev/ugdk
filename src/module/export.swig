@@ -11,6 +11,14 @@
 %include "ugdk/script/defs.h"
 %include "ugdk/script/type.h"
 
+#ifdef SWIGPYTHON
+	#define CURRENT_LANG ugdk::script::LANG(Python)
+#elif SWIGLUA
+	#define CURRENT_LANG ugdk::script::LANG(Lua)
+/*Else not used on purpose, so that some shit happens when someone tries to use this
+  for any non-supported language.*/
+#endif
+
 %define export_class(T)
 %typemap(in) T* tp {
     /// Code to register type T.
@@ -19,7 +27,7 @@
     /// And then register it for the language Lua.
     t.RegisterFromLang(
         $1_descriptor,
-        ugdk::script::LANG(Lua)
+        CURRENT_LANG
     );
     $1 = NULL;
 }
@@ -28,7 +36,11 @@
 %template(GetNull_##T) ::GetNull<T>;
 %enddef
 
+/*confirm_exports should use the target language to somehow call the
+  RegisterType_* functions in the module passing the return value
+  from the GetNull_* functions as argument.*/
 %define confirm_exports(modname)
+#ifdef SWIGLUA
 %luacode {
 print "Hey there!"
 for k,v in pairs(modname) do
@@ -40,4 +52,15 @@ for k,v in pairs(modname) do
   end
 end
 }
+#elif SWIGPYTHON
+%pythoncode {
+print "Python confirm exports!"
+module = __import__(modname)
+for key,value in module.__dict__.items():
+	print key, "=", value
+	if key.startswith("RegisterType_"):
+		arg = module.__dict__["GetNull_"+key[13:] ]()
+		value(arg)
+}
+#endif
 %enddef
