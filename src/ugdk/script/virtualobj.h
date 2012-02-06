@@ -83,7 +83,7 @@ class VirtualObj {
     static VirtualObj Create (T obj, LangWrapper* wrapper) {
         if (!wrapper) return VirtualObj();
         VirtualData::Ptr new_data = wrapper->NewData();
-        new_data->Wrap(obj);
+        new_data->Wrap(obj); // FIXME
         return VirtualObj(new_data);
     }
 

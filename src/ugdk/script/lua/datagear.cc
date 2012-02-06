@@ -6,6 +6,10 @@
 
 #include <ugdk/script/swig/swigluarun.h>
 
+/*static int ll_SafeGenerateID(lua_State* L) {
+    return 0;
+}*/
+
 namespace ugdk {
 namespace script {
 namespace lua {
@@ -13,10 +17,14 @@ namespace lua {
 /// Public:
 
 int DataGear::GenerateID() {
-    if (!PushDataTable()) return LUA_NOREF;
-    L_.push(NULL);
-    DataID generated = L_.aux().ref(-2);
-    L_.pop(1);
+    L_.pushcfunction(SafeGenerateID);
+    L_.pushudata(this);
+
+    DataID generated = LUA_NOREF;
+    if (TracedCall(1,1) == Constant::OK()) {
+        generated = L_.tointeger(-1);
+        L_.pop(1);
+    }
     return generated;
 }
 
@@ -104,18 +112,34 @@ const Constant DataGear::DoFile (const char* filename) {
 
 /// Private:
 
+int DataGear::SafeGenerateID(lua_State* L) {
+    State L_(L);
+
+    L_.settop(1);
+    GETARG(L_, 1, DataGear, dtgear);
+    L_.settop(0);
+
+    if (!dtgear.PushDataTable())
+        L_.pushinteger(LUA_NOREF);
+    else {
+        L_.pushboolean(false);
+        DataID generated = L_.aux().ref(-2);
+        L_.settop(0);
+        L_.pushinteger(generated);
+    }
+
+    return 1;
+}
+
 bool DataGear::PushDataTable() {
     L_.rawgeti(Constant::REGISTRYINDEX(), datatable_id_);
-    /*
-    L_.push(datatable_id_);
-    L_.gettable(Constant::REGISTRYINDEX());
-    */
     if (!L_.istable(-1)) {
         L_.pop(1);
         return false;
     }
     return true;
 }
+
 } /* namespace lua */
 } /* namespace script */
 } /* namespace ugdk */

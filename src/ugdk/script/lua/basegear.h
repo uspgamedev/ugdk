@@ -34,11 +34,14 @@ class BaseGear {
     /** Behaves exactly like lua_pcall, with the usual traceback function from
      ** Lua.
      **
-     ** [-(nargs+1),+(nres|1),e]
+     ** [-(nargs+1),+(nres|0),e]
      */
     const Constant TracedCall (int nargs, int nres);
 
 };
+
+#define GETARG(L,i,T,name) \
+    T& name = *(static_cast<T*>((L).touserdata(i)))
 
 } /* namespace lua */
 } /* namespace script */

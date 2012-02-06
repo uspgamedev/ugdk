@@ -43,6 +43,8 @@ class DataGear : public BaseGear {
 
     DataID datatable_id_;
 
+    static int SafeGenerateID(lua_State* L);
+
     /// [-0,+(0|1),-]
     bool PushDataTable();
 

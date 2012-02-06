@@ -3,6 +3,7 @@
 #include <ugdk/script/python/pythonwrapper.h>
 #include <ugdk/script/python/pythondata.h>
 #include <ugdk/script/virtualobj.h>
+#include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/swig/swigpyrun.h>
 #include <ugdk/util/pathmanager.h>   // Two includes just so that we can use the engine's PathManager in a
 #include <ugdk/base/engine.h>        // single line of code here. Not nice. =(
@@ -22,7 +23,9 @@ VirtualData::Ptr PythonWrapper::NewData() {
 }
 
 VirtualObj PythonWrapper::LoadModule(const std::string& name) {
-	PyObject* module = PyImport_ImportModule(name.c_str()); //new ref
+    std::string dotted_name =
+        SCRIPT_MANAGER()->ConvertPathToDottedNotation(name);
+	PyObject* module = PyImport_ImportModule(dotted_name.c_str()); //new ref
 	if (module == NULL && PyErr_Occurred() != NULL) {
 						
 		PyErr_Print();

@@ -7,6 +7,12 @@
 #include <ugdk/script/lua/datagear.h>
 #include <ugdk/script/lua/luawrapper.h>
 
+#define GENERIC_WRAP(tname,arg) do { \
+        DataGear dtgear(wrapper_->MakeDataGear()); \
+        dtgear->push##tname(arg); \
+        dtgear.SetData(id_); \
+    } while(0)
+
 namespace ugdk {
 namespace script {
 namespace lua {
@@ -27,10 +33,10 @@ class LuaData : public VirtualData {
     void* Unwrap(const VirtualType& type) const;
 
     void Wrap(void* data, const VirtualType& type);
-    void Wrap(const char* str) { GenericWrap(str); }
-    void Wrap(bool boolean) { GenericWrap(boolean); }
-    void Wrap(int number) { GenericWrap(number); }
-    void Wrap(double number) { GenericWrap(number); }
+    void WrapString(const char* str) { GENERIC_WRAP(string,str); }
+    void WrapBoolean(bool boolean) { GENERIC_WRAP(boolean,boolean); }
+    void WrapInteger(int number) { GENERIC_WRAP(integer,number); }
+    void WrapNumber(double number) { GENERIC_WRAP(number,number); }
 
     LangWrapper* wrapper () const { return wrapper_; }
 
@@ -47,13 +53,6 @@ class LuaData : public VirtualData {
 
     LuaWrapper* wrapper_;
     DataID      id_;
-
-    template <class T>
-    void GenericWrap(T data) {
-        DataGear dtgear(wrapper_->MakeDataGear());
-        dtgear->push<T>(data); // TODO TEST THIS!
-        dtgear.SetData(id_);
-    }
 
 };
 

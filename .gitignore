@@ -31,3 +31,4 @@ src/ugdk/config/config.h
 *.vcxproj
 doc/doxy
 src/generated/*_wrap.cc
+src/generated/*.py

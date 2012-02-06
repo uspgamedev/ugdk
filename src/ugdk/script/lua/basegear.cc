@@ -26,7 +26,7 @@ const Constant BaseGear::Report (const Constant& c) {
 
 const Constant BaseGear::TracedCall (int nargs, int nres) {
   int base = L_.gettop() - nargs;
-  L_.push(traceback);
+  L_.pushcfunction(traceback);
   L_.insert(base);
   const Constant result = L_.pcall(nargs, nres, base);
   L_.remove(base);

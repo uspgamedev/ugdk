@@ -46,7 +46,6 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/script/lua/luawrapper.h 
     ./src/ugdk/script/lua/luadata.h 
     ./src/ugdk/script/lua/native/traceback.h 
-    ./src/ugdk/script/lua/native/bootstrap.h 
     ./src/ugdk/script/lua/header.h 
     ./src/ugdk/script/lua/datagear.cc 
     ./src/ugdk/script/lua/luadata.cc 

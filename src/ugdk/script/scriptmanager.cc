@@ -10,7 +10,7 @@
 namespace ugdk {
 namespace script {
 
-using namespace std;
+using std::string;
 
 ScriptManager* ScriptManager::ref_ = NULL;
 
@@ -61,7 +61,7 @@ VirtualObj ScriptManager::LoadModule(string script) {
 	while (it != wrappers_.end()) {
 		LangWrapper* wrap = it->second;
 		if ( CheckIfFileExists(filepath + "." + wrap->file_extension()) ) {
-			return wrap->LoadModule( ConvertPathToDottedNotation(filepath) );
+			return wrap->LoadModule( filepath );
 		}
 		++it;
 	}

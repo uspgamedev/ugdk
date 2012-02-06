@@ -33,7 +33,7 @@ void PythonData::Wrap(void* data, const VirtualType& type) {
 	  So our PyVData needs to handle it.*/
 }
 
-void PythonData::Wrap(const char* str) {
+void PythonData::WrapString(const char* str) {
     if (str == NULL)    return;
     if (py_data_ != NULL && own_ref_) {
         Py_DECREF(py_data_);
@@ -44,12 +44,12 @@ void PythonData::Wrap(const char* str) {
     own_ref_ = true;
 }
 
-void PythonData::Wrap(bool boolean) {
+void PythonData::WrapBoolean(bool boolean) {
     py_data_ = PyBool_FromLong(static_cast<long>(boolean));
     own_ref_ = true;
 }
 
-void PythonData::Wrap(int number) {
+void PythonData::WrapInteger(int number) {
     if (py_data_ != NULL && own_ref_) {
         Py_DECREF(py_data_);
         py_data_ = NULL;
@@ -59,7 +59,7 @@ void PythonData::Wrap(int number) {
     own_ref_ = true;
 }
 
-void PythonData::Wrap(double number) {
+void PythonData::WrapNumber(double number) {
     if (py_data_ != NULL && own_ref_) {
         Py_DECREF(py_data_);
         py_data_ = NULL;

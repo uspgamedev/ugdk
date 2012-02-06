@@ -42,6 +42,7 @@ VirtualData::Ptr LuaData::GetAttribute(Ptr key) {
     wrapper_->Share(NULL);
     dtgear->gettable(-2);
     if (dtgear->isnil(-1)) {
+        puts("Failed to retrieve attribute!");
         dtgear->pop(2);
         return Ptr();
     }

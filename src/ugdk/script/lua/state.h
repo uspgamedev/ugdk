@@ -34,19 +34,16 @@ class State {
 
     void pushvalue (int index) { lua_pushvalue(L_, index); }
     void pushnil () { lua_pushnil(L_); }
-
-    void push (bool b) { lua_pushboolean(L_, b); }
-    void push (lua_Integer integer) { lua_pushinteger(L_, integer); }
-    void push (lua_Number number) { lua_pushnumber(L_, number); }
-    void push (UData ptr) { lua_pushlightuserdata(L_, ptr); }
-    void push (const char* str) { lua_pushstring(L_, str); }
-    void push (lua_CFunction func, int n = 0) {
+    void pushboolean (bool b) { lua_pushboolean(L_, b); }
+    void pushinteger (lua_Integer integer) { lua_pushinteger(L_, integer); }
+    void pushnumber (lua_Number number) { lua_pushnumber(L_, number); }
+    void pushudata (UData ptr) { lua_pushlightuserdata(L_, ptr); }
+    void pushstring (const char* str) { lua_pushstring(L_, str); }
+    void pushcfunction (lua_CFunction func, int n = 0) {
         lua_pushcclosure(L_, func, n);
     }
     template <class T>
-    void push (T value) { push(value); }
-    template <class T>
-    void push (T* value) { push(AsUData(value)); }
+    void pushudata (T* value) { pushudata(AsUData(value)); }
 
     void pop (int n) { lua_pop(L_, n); }
 
@@ -72,8 +69,10 @@ class State {
     bool isnil (int index) const { return lua_isnil(L_, index); }
     bool istable (int index) const { return lua_istable(L_, index); }
 
+    lua_Integer tointeger(int n) const { return lua_tointeger(L_, n); }
     const char* tostring(int n) const { return lua_tostring(L_, n); }
     void* touserdata(int n) const { return lua_touserdata(L_, n); }
+
     int type (int n) const { return lua_type(L_, n); }
     
     void call (int nargs, int nres) { lua_call(L_, nargs, nres); }
@@ -89,7 +88,7 @@ class State {
 
     // TODO: make-do for now.
     static void errormsg (const char* msg) {
-      fprintf(stdout, "lua:\n%s\n", msg);
+      fprintf(stdout, "lua: %s\n", msg);
     }
 
   private:

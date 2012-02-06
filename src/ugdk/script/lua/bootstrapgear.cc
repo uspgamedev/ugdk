@@ -11,9 +11,9 @@ namespace lua {
 /// Public:
 
 bool BootstrapGear::Initialize(const std::vector<Module>& modules) {
-    L_.push(SafeInitialize);
-    L_.push(this);
-    L_.push(&modules);
+    L_.pushcfunction(SafeInitialize);
+    L_.pushudata(this);
+    L_.pushudata(&modules);
     return (TracedCall(2, 0) == Constant::OK());
 }
 
@@ -59,7 +59,7 @@ void BootstrapGear::PreloadModules (const std::vector<Module>& modules) {
     ModuleList::const_iterator it = modules.begin();
     for (; it != modules.end(); ++it) {
         printf("Preloading module \"%s\"\n", it->name_.c_str());
-        L_.push(it->init_func_);        // [pack,preload,init_func]
+        L_.pushcfunction(it->init_func_);        // [pack,preload,init_func]
         L_.setfield(-2, it->name_.c_str());     // [pack,preload]
     }
     L_.pop(2);
