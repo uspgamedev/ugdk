@@ -26,6 +26,13 @@ public:
 	LangWrapper* GetWrapper(std::string name);
 
 	VirtualObj LoadModule(std::string filepath);
+	
+    bool CheckIfFileExists(std::string filepath);
+    
+    /// Converts "folder/subfolder/file" (without extension) style paths to "folder.subfolder.file"
+    std::string ConvertPathToDottedNotation(const std::string& path);
+    /// Converts dotted notation strings ("folder.subfolder.file") to "folder/subfolder/file".
+    std::string ConvertDottedNotationToPath(const std::string& dotted);
 
 private:
 	static ScriptManager* ref_;

@@ -2,7 +2,6 @@
 #ifndef UGDK_SCRIPT_LANGWRAPPER_H_
 #define UGDK_SCRIPT_LANGWRAPPER_H_
 
-#include <cstdio>
 #include <string>
 
 #include <ugdk/script/defs.h>
@@ -55,15 +54,6 @@ class LangWrapper {
 
     /// Finalizes the LangWrapper, finalizing any language specific stuff.
     virtual void Finalize() = 0;
-
-    bool CheckIfModuleExists(std::string filepath) {
-        FILE* file = fopen((filepath + "." + file_extension()).c_str(), "r");
-        if (file) {
-            fclose(file);
-            return true;
-        }
-        return false;
-    }
 
     virtual VirtualData::Ptr NewData() = 0;
 

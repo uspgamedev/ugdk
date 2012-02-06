@@ -1,6 +1,6 @@
 
 #include <cstdio>
-
+#include <algorithm>
 #include <ugdk/base/engine.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/script/scriptmanager.h>
@@ -54,21 +54,44 @@ LangWrapper* ScriptManager::GetWrapper(string name) {
 }
 
 VirtualObj ScriptManager::LoadModule(string script) {
-	//string filepath = PATH_MANAGER()->ResolvePath("scripts/" + script);
-	string filepath = "./" + script;
+	string filepath = PATH_MANAGER()->ResolvePath("scripts/" + script);
 
 	printf("Loading module \"%s\".\n", filepath.c_str());
 	WrapperMap::iterator it = wrappers_.begin();
 	while (it != wrappers_.end()) {
 		LangWrapper* wrap = it->second;
-		if (wrap->CheckIfModuleExists(filepath)) {
-			return wrap->LoadModule(filepath);
+		if ( CheckIfFileExists(filepath + "." + wrap->file_extension()) ) {
+			return wrap->LoadModule( ConvertPathToDottedNotation(filepath) );
 		}
 		++it;
 	}
 
 	return VirtualObj();
 }
+
+bool ScriptManager::CheckIfFileExists(string filepath) {
+    FILE* file = fopen(filepath.c_str(), "r");
+    if (file) {
+        fclose(file);
+        return true;
+    }
+    return false;
+}
+
+/// Converts "folder/subfolder/file" (without extension) style paths to "folder.subfolder.file"
+std::string ScriptManager::ConvertPathToDottedNotation(const std::string& path) {
+	string dotted( path );
+	replace(dotted.begin(), dotted.end(), '/', '.');
+	return dotted;
+}
+
+/// Converts dotted notation strings ("folder.subfolder.file") to "folder/subfolder/file".
+std::string ScriptManager::ConvertDottedNotationToPath(const std::string& dotted) {
+	string path( dotted );
+	replace(path.begin(), path.end(), '.', '/');
+	return path;
+}
+
 
 }
 }

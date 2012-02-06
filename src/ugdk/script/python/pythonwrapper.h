@@ -13,7 +13,7 @@ namespace python {
 
 class PythonWrapper : public LangWrapper {
   public:
-	PythonWrapper() : LangWrapper(".py", LANG(Python)) {}
+	PythonWrapper() : LangWrapper("py", LANG(Python)) {}
 	virtual ~PythonWrapper() {}
 
     virtual VirtualData::Ptr NewData();
