@@ -38,6 +38,7 @@ bool PythonWrapper::Initialize() {
 	//TODO: Fix sys.path with our paths...
     PyRun_SimpleString("import sys");
     std::string command = "sys.path.append(\"" + PATH_MANAGER()->ResolvePath("scripts/") + "\")";
+    //std::string command = "sys.path.append(\"./\")";
     PyRun_SimpleString(command.c_str());
 	return true;
 }
