@@ -37,4 +37,4 @@ mkdir -p $1/lib
 
 cp -v lib/*.a lib/*.so lib/*.dylib $1/lib
 
-
+cp -v src/generated/*.py $1/data/scripts/ugdk
