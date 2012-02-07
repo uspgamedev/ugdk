@@ -31,6 +31,10 @@ class LuaData : public VirtualData {
     }
 
     void* Unwrap(const VirtualType& type) const;
+    const char* UnwrapString() const;
+    bool UnwrapBoolean() const;
+    int UnwrapInteger() const;
+    double UnwrapNumber() const;
 
     void Wrap(void* data, const VirtualType& type);
     void WrapString(const char* str) { GENERIC_WRAP(string,str); }

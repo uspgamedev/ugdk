@@ -25,7 +25,10 @@ class DataGear : public BaseGear {
 
     bool DestroyID(DataID id);
 
-    // [-1,+0]
+    // [-0,+0]
+    bool WrapData(DataID id, void *data, const VirtualType& type);
+
+    // [-0,+0]
     void* UnwrapData (DataID id, const VirtualType& type);
 
     // [-0,+1]
@@ -33,8 +36,6 @@ class DataGear : public BaseGear {
 
     // [-1,+0]
     bool SetData (DataID id);
-
-    void WrapData(void *data, const VirtualType& type);
 
     // [-0,+1]
     const Constant DoFile (const char* filename);
@@ -48,6 +49,9 @@ class DataGear : public BaseGear {
 
     /// Safely destroys a data ID. [-2,+0,-]
     static int SafeDestroyID(lua_State* L);
+
+    /// Safely wraps typed data to a data ID. [-4,+0,-]
+    static int SafeWrapData(lua_State* L);
 
     /// Safely unwraps typed data from a data ID. [-3,+1,-]
     static int SafeUnwrapData(lua_State* L);

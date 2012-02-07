@@ -12,9 +12,7 @@ void* LuaData::Unwrap(const VirtualType& type) const {
 }
 
 void LuaData::Wrap(void* data, const VirtualType& type) {
-    DataGear dtgear(wrapper_->MakeDataGear());
-    dtgear.WrapData(data, type);
-    if (!dtgear.SetData(id_))
+    if (!wrapper_->MakeDataGear().WrapData(id_, data, type))
         return; // TODO deal with error.
 }
 

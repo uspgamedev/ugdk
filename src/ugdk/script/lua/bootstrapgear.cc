@@ -11,6 +11,7 @@ namespace lua {
 /// Public:
 
 bool BootstrapGear::Initialize(const std::vector<Module>& modules) {
+    if (!L_) return false;
     L_.pushcfunction(SafeInitialize);
     L_.pushudata(this);
     L_.pushudata(&modules);

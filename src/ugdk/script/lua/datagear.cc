@@ -35,6 +35,15 @@ bool DataGear::DestroyID(DataID id) {
     return TracedCall(2,0) == Constant::OK();
 }
 
+bool DataGear::WrapData(DataID id, void *data, const VirtualType& type) {
+    L_.pushcfunction(SafeWrapData);
+    L_.pushudata(this);
+    L_.pushinteger(id);
+    L_.pushudata(data);
+    L_.pushudata(type.FromLang(LANG(Lua)));
+    return TracedCall(4,0) == Constant::OK();
+}
+
 void* DataGear::UnwrapData(DataID id, const VirtualType& type) {
     L_.pushcfunction(SafeUnwrapData);
     L_.pushudata(this);
@@ -79,10 +88,6 @@ bool DataGear::SetData (DataID id) {
     L_.pop(2);          // []
     puts("\tSETP 6.6");
     return true;
-}
-
-void DataGear::WrapData(void *data, const VirtualType& type) {
-    SWIG_NewPointerObj(L_, data, type.FromLang(LANG(Lua)), 0);
 }
 
 const Constant DataGear::DoFile (const char* filename) {
@@ -149,6 +154,23 @@ int DataGear::SafeDestroyID(lua_State* L) {
         L_.aux().unref(-1, id);
         L_.pop(1);
     }
+
+    return 0;
+}
+
+int DataGear::SafeWrapData(lua_State* L) {
+    State L_(L);
+
+    L_.settop(4);
+    GETARG(L_, 1, DataGear, dtgear);
+    DataID id = L_.aux().checkintteger(2);
+    UData data = L_.touserdata(3);
+    GETARGPTR(L_, 4, swig_type_info, type);
+    L_.settop(0);
+
+    SWIG_NewPointerObj(L_, data, type, 0);
+    if (!dtgear.SetData(id))
+        return luaL_error(L, "Could not set data with id #%d", id);
 
     return 0;
 }
