@@ -35,6 +35,10 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 
     /// Tries to unwrap the data contained in this object using the given type.
     virtual void* Unwrap(const VirtualType& type) const = 0;
+    virtual const char* UnwrapString() const = 0;
+    virtual bool UnwrapBoolean() const = 0;
+    virtual int UnwrapInteger() const = 0;
+    virtual double UnwrapNumber() const = 0;
 
     /// Tries to wrap the given data with the given type.
     /** Returns a new VirtualData::Ptr with the data wrapped upon success.

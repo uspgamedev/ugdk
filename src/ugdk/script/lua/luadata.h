@@ -8,7 +8,7 @@
 #include <ugdk/script/lua/luawrapper.h>
 
 #define GENERIC_WRAP(tname,arg) do { \
-        DataGear dtgear(wrapper_->MakeDataGear()); \
+        DataGear& dtgear(wrapper_->data_gear()); \
         dtgear->push##tname(arg); \
         dtgear.SetData(id_); \
     } while(0)
@@ -27,7 +27,7 @@ class LuaData : public VirtualData {
 
     ~LuaData() {
         if (wrapper_)
-            wrapper_->MakeDataGear().DestroyID(id_);
+            wrapper_->data_gear().DestroyID(id_);
     }
 
     void* Unwrap(const VirtualType& type) const;

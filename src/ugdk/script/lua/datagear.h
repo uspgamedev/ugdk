@@ -6,12 +6,13 @@
 #include <ugdk/script/lua/header.h>
 #include <ugdk/script/lua/state.h>
 #include <ugdk/script/lua/basegear.h>
+#include <ugdk/util/uncopyable.h>
 
 namespace ugdk {
 namespace script {
 namespace lua {
 
-class DataGear : public BaseGear {
+class DataGear : public BaseGear, private ugdk::util::Uncopyable {
 
   public:
 
@@ -19,7 +20,11 @@ class DataGear : public BaseGear {
       BaseGear(L),
       datatable_id_(datatable_id) {}
 
-    ~DataGear() {}
+    ~DataGear() {
+        L_.aux().unref(Constant::REGISTRYINDEX(), datatable_id_);
+        datatable_id_ = LUA_NOREF;
+        L_.close();
+    }
 
     DataID GenerateID();
 
@@ -43,6 +48,10 @@ class DataGear : public BaseGear {
   private:
 
     DataID datatable_id_;
+
+    DataGear& operator=(const DataGear& rhs) {
+        return *this;
+    }
 
     /// Safely generates a data ID. [-1,+1,-]
     static int SafeGenerateID(lua_State* L);

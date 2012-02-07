@@ -20,11 +20,9 @@ class LuaWrapper: public LangWrapper {
 
     LuaWrapper() :
         LangWrapper("lua",LANG(Lua)),
-        L_(NULL),
-        datatable_id_(LUA_NOREF),
-        shared_gear_(NULL) {}
+        data_gear_(NULL) {}
     ~LuaWrapper() {
-        if (L_) Finalize();
+        if (data_gear_) Finalize();
     }
 
     /// Overwritten methods.
@@ -41,22 +39,20 @@ class LuaWrapper: public LangWrapper {
 
     /// Other methods.
 
-    DataGear MakeDataGear() { return DataGear(L_, datatable_id_); }
+    DataGear& data_gear() { return *data_gear_; }
 
     void Share(DataGear* gear) {
-        shared_gear_ = gear;
+        data_gear_ = gear;
     }
 
     DataGear* shared_gear() {
-        return shared_gear_;
+        return data_gear_;
     }
 
   private:
 
-    lua_State*          L_;
     std::vector<Module> modules_;
-    DataID              datatable_id_;
-    DataGear*           shared_gear_;
+    DataGear*           data_gear_;
 
 };
 

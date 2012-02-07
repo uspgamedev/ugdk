@@ -19,6 +19,18 @@ void* PythonData::Unwrap(const VirtualType& type) const {
 	    return pointer;
 	return NULL;
 }
+const char* PythonData::UnwrapString() const {
+    return NULL;
+}
+bool PythonData::UnwrapBoolean() const {
+    return false;
+}
+int PythonData::UnwrapInteger() const {
+    return 0;
+}
+double PythonData::UnwrapNumber() const {
+    return 0.0;
+}
 
 /// Tries to wrap the given data with the given type into this object.
 void PythonData::Wrap(void* data, const VirtualType& type) {

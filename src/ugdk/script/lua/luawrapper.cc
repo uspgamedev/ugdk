@@ -7,6 +7,10 @@
 #include <ugdk/script/lua/header.h>
 #include <ugdk/script/lua/luadata.h>
 
+#include <ugdk/script/scriptmanager.h>
+#include <ugdk/util/pathmanager.h>
+#include <ugdk/base/engine.h>
+
 namespace ugdk {
 namespace script {
 namespace lua {
@@ -25,52 +29,49 @@ bool LuaWrapper::RegisterModule(const string& name, lua_CFunction init_func) {
 }
 
 bool LuaWrapper::Initialize() {
-    if (L_) return true;
-    L_ = AuxLib::newstate();
+    if (data_gear_) return true;
+    BootstrapGear btgear;
     do {
-        BootstrapGear btgear(L_);
         if (!btgear.Initialize(modules_)) break;
         modules_.clear();
-        datatable_id_ = btgear.GenerateDatatable();
-        if (datatable_id_ == LUA_NOREF) break;
+        data_gear_ = btgear.NextGear();
+        if (!data_gear_) break;
         return true;
     } while(0);
-    lua_close(L_);
-    L_ = NULL;
+    btgear.Abort();
     return false;
 }
 
 void LuaWrapper::Finalize() {
-    {
-        BootstrapGear btgear(L_);
-        btgear.DestroyDatatable(datatable_id_);
-    }
-    lua_close(L_);
-    L_ = NULL;
+    delete data_gear_;
+    data_gear_ = NULL;
 }
 
 VirtualData::Ptr LuaWrapper::NewData() {
     return VirtualData::Ptr(
-            new LuaData(this, MakeDataGear().GenerateID())
+            new LuaData(this, data_gear().GenerateID())
     );
 }
 
 VirtualObj LuaWrapper::LoadModule(const string& name) {
-    string fullpath = name + "." + file_extension();
+    string fullpath = PATH_MANAGER()->ResolvePath(
+        "scripts/" +
+        SCRIPT_MANAGER()->ConvertDottedNotationToPath(name) +
+        "." + file_extension()
+    );
     {
-        DataGear dtgear(MakeDataGear());
-        const Constant result = dtgear.DoFile(fullpath.c_str());
+        const Constant result = data_gear_->DoFile(fullpath.c_str());
         puts("SETP 3");
         if(result != Constant::OK())
             return VirtualObj(VirtualData::Ptr()); // error
         puts("SETP 4");
-        LuaData* lua_data = new LuaData(this, dtgear.GenerateID());
+        LuaData* lua_data = new LuaData(this, data_gear_->GenerateID());
         puts("SETP 5");
-        Share(&dtgear);
+        //Share(&dtgear);
         puts("SETP 6");
         lua_data->RemoveFromBuffer();
         puts("SETP 7");
-        Share(NULL);
+        //Share(NULL);
         puts("SETP 8");
         VirtualData::Ptr data(lua_data);
         puts("SETP 9");

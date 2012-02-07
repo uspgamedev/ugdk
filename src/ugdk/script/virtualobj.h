@@ -60,10 +60,14 @@ class VirtualObj {
     VirtualObj operator[] (const VirtualObj& key) const {
         return attribute(key);
     }
-
+/*
 	VirtualObj operator[] (const std::string& key) const {
 		return attribute(Create(key, wrapper()));
 	}
+*/
+    VirtualObj operator[] (const char* key) const {
+        return attribute(Create(key, wrapper()));
+    }
 	
 	VirtualObj set_attribute (const VirtualObj& key, const VirtualObj& value) {
 	    return VirtualObj(

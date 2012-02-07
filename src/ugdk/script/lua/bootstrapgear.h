@@ -12,20 +12,22 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
+class DataGear;
+
 class BootstrapGear : public BaseGear {
 
   public:
 
-    BootstrapGear(lua_State* L) :
-        BaseGear(L) {}
+    BootstrapGear() :
+        BaseGear(NULL) {}
 
     ~BootstrapGear() {}
 
     bool Initialize(const std::vector<Module>& modules);
 
-    DataID GenerateDatatable();
+    DataGear* NextGear();
 
-    void DestroyDatatable(DataID datable_id);
+    void Abort();
 
   private:
 

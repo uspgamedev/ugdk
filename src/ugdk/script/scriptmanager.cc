@@ -54,14 +54,16 @@ LangWrapper* ScriptManager::GetWrapper(string name) {
 }
 
 VirtualObj ScriptManager::LoadModule(string script) {
-	string filepath = PATH_MANAGER()->ResolvePath("scripts/" + script);
+	string filepath = PATH_MANAGER()->ResolvePath(
+        "scripts/" + ConvertDottedNotationToPath(script)
+    );
 
-	printf("Loading module \"%s\".\n", filepath.c_str());
+	printf("Loading module \"%s\".\n", script.c_str());
 	WrapperMap::iterator it = wrappers_.begin();
 	while (it != wrappers_.end()) {
 		LangWrapper* wrap = it->second;
 		if ( CheckIfFileExists(filepath + "." + wrap->file_extension()) ) {
-			return wrap->LoadModule( filepath );
+			return wrap->LoadModule( script );
 		}
 		++it;
 	}

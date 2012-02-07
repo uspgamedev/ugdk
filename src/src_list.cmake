@@ -18,6 +18,7 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/util/gdd/parserutility.h 
     ./src/ugdk/util/animationparser.cc 
     ./src/ugdk/util/utf8.cc 
+    ./src/ugdk/util/uncopyable.h 
     ./src/ugdk/util/animationparser.h 
     ./src/ugdk/util/pathmanager.cc 
     ./src/ugdk/util/animationprotocol.h 

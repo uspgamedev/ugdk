@@ -8,22 +8,35 @@ namespace lua {
 using std::vector;
 
 void* LuaData::Unwrap(const VirtualType& type) const {
-    return wrapper_->MakeDataGear().UnwrapData(id_, type);
+    return wrapper_->data_gear().UnwrapData(id_, type);
+}
+const char* LuaData::UnwrapString() const {
+    return NULL;
+}
+bool LuaData::UnwrapBoolean() const {
+    return false;
+}
+int LuaData::UnwrapInteger() const {
+    return 0;
+}
+double LuaData::UnwrapNumber() const {
+    return 0.0;
 }
 
+
 void LuaData::Wrap(void* data, const VirtualType& type) {
-    if (!wrapper_->MakeDataGear().WrapData(id_, data, type))
+    if (!wrapper_->data_gear().WrapData(id_, data, type))
         return; // TODO deal with error.
 }
 
 VirtualData::Ptr LuaData::Execute(const vector<Ptr>& args) {
-    DataGear dtgear(wrapper_->MakeDataGear());
+    DataGear& dtgear = wrapper_->data_gear();
     dtgear.GetData(id_);
     vector<Ptr>::const_iterator it = args.begin();
-    wrapper_->Share(&dtgear);
+    //wrapper_->Share(&dtgear);
     for(; it != args.end(); ++it)
         (*it)->AddToBuffer();
-    wrapper_->Share(NULL);
+    //wrapper_->Share(NULL);
     dtgear->call(args.size(), 1);
     LuaData* result = new LuaData(wrapper_, dtgear.GenerateID());
     dtgear.SetData(result->id_);
@@ -31,11 +44,11 @@ VirtualData::Ptr LuaData::Execute(const vector<Ptr>& args) {
 }
 
 VirtualData::Ptr LuaData::GetAttribute(Ptr key) {
-    DataGear dtgear(wrapper_->MakeDataGear());
+    DataGear& dtgear = wrapper_->data_gear();
     dtgear.GetData(id_);
-    wrapper_->Share(&dtgear);
+    //wrapper_->Share(&dtgear);
     key->AddToBuffer();
-    wrapper_->Share(NULL);
+    //wrapper_->Share(NULL);
     dtgear->gettable(-2);
     if (dtgear->isnil(-1)) {
         puts("Failed to retrieve attribute!");
@@ -49,15 +62,15 @@ VirtualData::Ptr LuaData::GetAttribute(Ptr key) {
 }
 
 VirtualData::Ptr LuaData::SetAttribute(Ptr key, Ptr value) {
-    DataGear dtgear(wrapper_->MakeDataGear());   // []
+    DataGear& dtgear = wrapper_->data_gear();   // []
     dtgear.GetData(id_);                // [data]
-    wrapper_->Share(&dtgear);
+    //wrapper_->Share(&dtgear);
     key->AddToBuffer();             // [data,key]
     value->AddToBuffer();           // [data,key,value]
     dtgear->settable(-3);                // [data]
     // now get the stored value to return it
     key->AddToBuffer();             // [data,key]
-    wrapper_->Share(NULL);
+    //wrapper_->Share(NULL);
     dtgear->gettable(-2);                // [data,data.key]
     if (dtgear->isnil(-1)) {
         dtgear->pop(2);                  // []

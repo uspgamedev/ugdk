@@ -27,6 +27,8 @@ class State {
 
     operator lua_State*() const { return L_; }
 
+    void close() { lua_close(L_); L_ = NULL; }
+
     AuxLib aux() const { return AuxLib(L_); }
 
     int gettop() const { return lua_gettop(L_); }
@@ -93,7 +95,7 @@ class State {
 
   private:
 
-    lua_State* const L_;
+    lua_State* L_;
 
 };
 

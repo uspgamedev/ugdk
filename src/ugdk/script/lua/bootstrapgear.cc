@@ -3,6 +3,7 @@
 
 #include <ugdk/script/lua/bootstrapgear.h>
 #include <ugdk/script/lua/auxlib.h>
+#include <ugdk/script/lua/datagear.h>
 
 namespace ugdk {
 namespace script {
@@ -11,6 +12,7 @@ namespace lua {
 /// Public:
 
 bool BootstrapGear::Initialize(const std::vector<Module>& modules) {
+    L_ = AuxLib::newstate();
     if (!L_) return false;
     L_.pushcfunction(SafeInitialize);
     L_.pushudata(this);
@@ -18,15 +20,16 @@ bool BootstrapGear::Initialize(const std::vector<Module>& modules) {
     return (TracedCall(2, 0) == Constant::OK());
 }
 
-int BootstrapGear::GenerateDatatable() {
+DataGear* BootstrapGear::NextGear() {
     // too small to call in protected mode.
     L_.newtable();
-    return L_.aux().ref(Constant::REGISTRYINDEX());
+    int datatable_id = L_.aux().ref(Constant::REGISTRYINDEX());
+    return datatable_id == LUA_NOREF ? NULL : new DataGear(L_, datatable_id);
 }
 
-void BootstrapGear::DestroyDatatable(DataID datatable_id) {
+void BootstrapGear::Abort() {
+    lua_close(L_);
     // too small too.
-    L_.aux().unref(Constant::REGISTRYINDEX(), datatable_id);
 }
 
 /// Private:
