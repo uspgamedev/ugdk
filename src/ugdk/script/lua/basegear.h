@@ -40,6 +40,9 @@ class BaseGear {
 
 };
 
+#define GETARGPTR(L,i,T,name) \
+    T* name = static_cast<T*>((L).touserdata(i))
+
 #define GETARG(L,i,T,name) \
     T& name = *(static_cast<T*>((L).touserdata(i)))
 

@@ -8,9 +8,7 @@ namespace lua {
 using std::vector;
 
 void* LuaData::Unwrap(const VirtualType& type) const {
-    DataGear dtgear(wrapper_->MakeDataGear());
-    if(!dtgear.GetData(id_)) return NULL;
-    return dtgear.UnwrapData(type);
+    return wrapper_->MakeDataGear().UnwrapData(id_, type);
 }
 
 void LuaData::Wrap(void* data, const VirtualType& type) {

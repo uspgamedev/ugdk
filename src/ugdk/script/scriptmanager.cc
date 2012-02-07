@@ -44,7 +44,7 @@ void ScriptManager::Finalize() {
 }
 
 void ScriptManager::Register(string name, LangWrapper* wrapper) {
-	if (wrappers_.count(name))	return;
+	if (wrappers_.count(name)) return;
 	wrappers_[name] = wrapper;
 }
 

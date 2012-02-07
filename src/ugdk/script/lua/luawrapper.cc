@@ -27,13 +27,17 @@ bool LuaWrapper::RegisterModule(const string& name, lua_CFunction init_func) {
 bool LuaWrapper::Initialize() {
     if (L_) return true;
     L_ = AuxLib::newstate();
-    {
+    do {
         BootstrapGear btgear(L_);
-        if (!btgear.Initialize(modules_)) return false;
+        if (!btgear.Initialize(modules_)) break;
         modules_.clear();
         datatable_id_ = btgear.GenerateDatatable();
-    }
-    return datatable_id_ != LUA_NOREF;
+        if (datatable_id_ == LUA_NOREF) break;
+        return true;
+    } while(0);
+    lua_close(L_);
+    L_ = NULL;
+    return false;
 }
 
 void LuaWrapper::Finalize() {

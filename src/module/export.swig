@@ -15,8 +15,8 @@
 	#define CURRENT_LANG ugdk::script::LANG(Python)
 #elif SWIGLUA
 	#define CURRENT_LANG ugdk::script::LANG(Lua)
-/*Else not used on purpose, so that some shit happens when someone tries to use this
-  for any non-supported language.*/
+/* Else not used on purpose, so that some shit happens when someone tries to use
+   this for any non-supported language.*/
 #endif
 
 %define export_class(T)
@@ -48,7 +48,7 @@ for k,v in pairs(modname) do
   print(k,v)
   if m then
     print "Something may be registered."
-    modname[k](modname["GetNull_"..m]())
+    v(modname["GetNull_"..m]())
   end
 end
 }

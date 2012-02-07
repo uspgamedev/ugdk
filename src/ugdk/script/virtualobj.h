@@ -78,7 +78,8 @@ class VirtualObj {
 	VirtualObj operator<<(const VirtualEntry& entry) {
 	    return set_attribute(entry.first, entry.second);
 	}
-
+/*
+    // Does not work anymore.
     template <class T>
     static VirtualObj Create (T obj, LangWrapper* wrapper) {
         if (!wrapper) return VirtualObj();
@@ -86,7 +87,7 @@ class VirtualObj {
         new_data->Wrap(obj); // FIXME
         return VirtualObj(new_data);
     }
-
+*/
 	template <class T>
 	static VirtualObj Create (T* obj, LangWrapper* wrapper) {
 	    if (!wrapper) return VirtualObj();

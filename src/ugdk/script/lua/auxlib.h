@@ -30,6 +30,8 @@ class AuxLib {
         );
     }
 
+    int checkintteger(int index) { return luaL_checkinteger(L_, index); }
+
     DataID ref(int index) { return luaL_ref(L_, index); }
 
     void unref(int index, int n) { luaL_unref(L_, index, n); }

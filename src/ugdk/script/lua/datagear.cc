@@ -16,7 +16,7 @@ namespace lua {
 
 /// Public:
 
-int DataGear::GenerateID() {
+DataID DataGear::GenerateID() {
     L_.pushcfunction(SafeGenerateID);
     L_.pushudata(this);
 
@@ -29,10 +29,23 @@ int DataGear::GenerateID() {
 }
 
 bool DataGear::DestroyID(DataID id) {
-    if (!PushDataTable()) return false;
-    L_.aux().unref(-1, id);
-    L_.pop(1);
-    return true;
+    L_.pushcfunction(SafeDestroyID);
+    L_.pushudata(this);
+    L_.pushinteger(id);
+    return TracedCall(2,0) == Constant::OK();
+}
+
+void* DataGear::UnwrapData(DataID id, const VirtualType& type) {
+    L_.pushcfunction(SafeUnwrapData);
+    L_.pushudata(this);
+    L_.pushinteger(id);
+    L_.pushudata(type.FromLang(LANG(Lua)));
+    void* data = NULL;
+    if (TracedCall(3,1) == Constant::OK()) {
+        data = L_.touserdata(-1);
+        L_.pop(1);
+    }
+    return data;
 }
 
 bool DataGear::GetData (DataID id) {
@@ -66,13 +79,6 @@ bool DataGear::SetData (DataID id) {
     L_.pop(2);          // []
     puts("\tSETP 6.6");
     return true;
-}
-
-void* DataGear::UnwrapData (const VirtualType& type) {
-    void* data = NULL;
-    SWIG_ConvertPtr(L_, -1, &data, type.FromLang(LANG(Lua)), 0);
-    L_.pop(1);
-    return data;
 }
 
 void DataGear::WrapData(void *data, const VirtualType& type) {
@@ -129,6 +135,43 @@ int DataGear::SafeGenerateID(lua_State* L) {
     }
 
     return 1;
+}
+
+int DataGear::SafeDestroyID(lua_State* L) {
+    State L_(L);
+
+    L_.settop(2);
+    GETARG(L_, 1, DataGear, dtgear);
+    DataID id = L_.aux().checkintteger(2);
+    L_.settop(0);
+
+    if (dtgear.PushDataTable()) {
+        L_.aux().unref(-1, id);
+        L_.pop(1);
+    }
+
+    return 0;
+}
+
+int DataGear::SafeUnwrapData(lua_State* L) {
+    State L_(L);
+
+    L_.settop(3);
+    GETARG(L_, 1, DataGear, dtgear);
+    DataID id = L_.aux().checkintteger(2);
+    GETARGPTR(L_, 3, swig_type_info, type);
+    L_.settop(0);
+
+    void *data = NULL;
+
+    if (dtgear.GetData(id)) {
+        SWIG_ConvertPtr(L, -1, &data, type, 0);
+        L_.pop(1);
+    }
+
+    L_.pushudata(data);
+    return 1;
+
 }
 
 bool DataGear::PushDataTable() {
