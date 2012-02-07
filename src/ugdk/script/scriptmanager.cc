@@ -63,11 +63,12 @@ VirtualObj ScriptManager::LoadModule(string script) {
 	while (it != wrappers_.end()) {
 		LangWrapper* wrap = it->second;
 		if ( CheckIfFileExists(filepath + "." + wrap->file_extension()) ) {
+            printf("Found module \"%s\".\n", (filepath+"."+wrap->file_extension()).c_str() );
 			return wrap->LoadModule( script );
 		}
 		++it;
 	}
-
+    printf("Uncapable of loading module (path notation) \"%s\".\n", filepath.c_str() );
 	return VirtualObj();
 }
 

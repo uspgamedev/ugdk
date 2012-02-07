@@ -26,11 +26,16 @@ VirtualObj PythonWrapper::LoadModule(const std::string& name) {
     std::string dotted_name =
         SCRIPT_MANAGER()->ConvertPathToDottedNotation(name);
 	PyObject* module = PyImport_ImportModule(dotted_name.c_str()); //new ref
-	if (module == NULL && PyErr_Occurred() != NULL) {
-						
+	if (PyErr_Occurred() != NULL) {
+	    printf("[Python] Erro loading module: \"%s\" (python exception details below)\n", dotted_name.c_str());
 		PyErr_Print();
 		return VirtualObj();
 	}
+    else if (module == NULL) {
+        printf("[Python] Error loading module: \"%s\"\n", dotted_name.c_str());
+        return VirtualObj();
+    }
+    printf("[Python] Loading module: %s\n", dotted_name.c_str());
 	VirtualData::Ptr vdata( new PythonData(module, true) ); //PythonData takes care of the ref.
 	return VirtualObj(vdata);
 }
@@ -53,7 +58,7 @@ void PythonWrapper::Finalize() {
 
 bool PythonWrapper::RegisterModule(std::string moduleName, void (*initFunction)(void) ) {
     shared_ptr<char> str(new char(*(moduleName.c_str())), free);
-    return PyImport_AppendInittab(str.get(), initFunction) == 0;
+    return PyImport_AppendInittab(str.get(), initFunction) != -1;
 }
 
 }
