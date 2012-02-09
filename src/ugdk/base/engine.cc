@@ -22,6 +22,8 @@ namespace ugdk {
 using namespace graphic;
 using namespace input;
 
+Engine* Engine::reference_ = NULL;
+
 Vector2D Engine::window_size() {
     return video_manager_->video_size();
 }
@@ -33,7 +35,7 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
     SDL_Init(SDL_INIT_EVERYTHING);
     video_manager_->Initialize(windowTitle, windowSize, fullscreen, icon);
     input_manager_ = new InputManager();
-    time_handler_ = new time::TimeManager();
+    time_manager_ = new time::TimeManager();
     audio_manager_ = new AudioManager();
     audio_manager_->Initialize();
     text_manager_ = new TextManager();
@@ -43,10 +45,10 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
     interface_list_.clear();
 
     frames_since_reset_ = reported_fps_ = 0;
-    if(time_handler_ != NULL)
-        last_fps_report_ = time_handler_->TimeElapsed();
+    if(time_manager_ != NULL)
+        last_fps_report_ = time_manager_->TimeElapsed();
 
-    return (time_handler_ != NULL);
+    return (time_manager_ != NULL);
 }
 
 void Engine::DeleteFinishedScenes() {
@@ -83,8 +85,8 @@ void Engine::Run() {
             (current_top_scene = CurrentScene())->Focus();
 
         // gerenciamento de tempo
-        time_handler_->Update();
-        delta_t = (time_handler_->TimeDifference())/1000.0f;
+        time_manager_->Update();
+        delta_t = (time_manager_->TimeDifference())/1000.0f;
 
         // Verifica se o FPS nao esta baixo demais.
         // Impede que os personagens atravessem paredes.
@@ -142,7 +144,7 @@ void Engine::Run() {
 }
 
 void Engine::Release() {
-    delete time_handler_;
+    delete time_manager_;
     delete input_manager_;
 
     audio_manager()->Release();
