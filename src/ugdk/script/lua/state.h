@@ -69,8 +69,10 @@ class State {
     int setmetatable(int index) { return lua_setmetatable(L_, index); }
 
     bool isnil (int index) const { return lua_isnil(L_, index); }
+    bool isstring (int index) const { return lua_isstring(L_, index); }
     bool istable (int index) const { return lua_istable(L_, index); }
 
+    bool toboolean(int n) const { return lua_toboolean(L_, n); }
     lua_Integer tointeger(int n) const { return lua_tointeger(L_, n); }
     const char* tostring(int n) const { return lua_tostring(L_, n); }
     void* touserdata(int n) const { return lua_touserdata(L_, n); }
@@ -97,6 +99,25 @@ class State {
 
     lua_State* L_;
 
+};
+
+template <class T>
+class To {};
+
+template <>
+class To<const char*> {
+  public:
+    static const char* Primitive(State& L, int index) {
+        return L.tostring(index);
+    }
+};
+
+template <>
+class To<bool> {
+  public:
+    static bool Primitive(State& L, int index) {
+        return L.toboolean(index);
+    }
 };
 
 } /* namespace lua */

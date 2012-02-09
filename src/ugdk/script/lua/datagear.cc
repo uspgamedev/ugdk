@@ -57,6 +57,34 @@ void* DataGear::UnwrapData(DataID id, const VirtualType& type) {
     return data;
 }
 
+typedef const char* native_string;
+
+const char* DataGear::UnwrapString (DataID id) {
+    L_.pushcfunction(SafeUnwrapString);
+    L_.pushudata(this);
+    L_.pushinteger(id);
+    return GetResultPtr<const char>();
+    /*const char* str = NULL;
+    if (TracedCall(2,1) == Constant::OK()) {
+        str = L_.tostring(-1);
+        L_.pop(1);
+    }
+    return str;*/
+}
+
+bool DataGear::UnwrapBoolean(DataID id) {
+    L_.pushcfunction(SafeUnwrapBoolean);
+    L_.pushudata(this);
+    L_.pushinteger(id);
+    return GetResult<bool, false>();
+    /*bool result = false;
+    if (TracedCall(2,1) == Constant::OK()) {
+        result = L_.toboolean(-1);
+        L_.pop(1);
+    }
+    return result;*/
+}
+
 bool DataGear::GetData (DataID id) {
     if (!PushDataTable()) return false;
     // DataTable is at local index 1;
@@ -77,13 +105,6 @@ bool DataGear::SetData (DataID id) {
                         // [data,DT]
     L_.pushvalue(-2);   // [data,DT,data]
     L_.rawseti(-2, id); // [data,DT]
-    /*
-    L_.push(id);        // [data,DT,id]
-    puts("\tSETP 6.3");
-    L_.pushvalue(-3);   // [data,DT,id,data]
-    puts("\tSETP 6.4");
-    L_.settable(-3);    // [data,DT]
-    */
     puts("\tSETP 6.5");
     L_.pop(2);          // []
     puts("\tSETP 6.6");
@@ -184,14 +205,48 @@ int DataGear::SafeUnwrapData(lua_State* L) {
     GETARGPTR(L_, 3, swig_type_info, type);
     L_.settop(0);
 
-    void *data = NULL;
+    void *data = NULL; // dummy
 
-    if (dtgear.GetData(id)) {
-        SWIG_ConvertPtr(L, -1, &data, type, 0);
-        L_.pop(1);
-    }
+    if (dtgear.GetData(id) &&
+        SWIG_IsOK(SWIG_ConvertPtr(L, -1, &data, type, 0))) {
+        L_.pushudata(data);
+    } else L_.pushnil();
 
-    L_.pushudata(data);
+    return 1;
+
+}
+
+int DataGear::SafeUnwrapString(lua_State* L) {
+    State L_(L);
+
+    L_.settop(2);
+    GETARG(L_, 1, DataGear, dtgear);
+    DataID id = L_.aux().checkintteger(2);
+    L_.settop(0);
+
+    if (!dtgear.GetData(id)) {
+        L_.pushnil();
+    } // else the string will already be on top
+
+    if (!L_.isstring(-1))
+        return luaL_error(L, "Could not unwrap string from id #%d", id);
+
+    return 1;
+
+}
+
+int DataGear::SafeUnwrapBoolean(lua_State* L) {
+    State L_(L);
+
+    L_.settop(2);
+    GETARG(L_, 1, DataGear, dtgear);
+    DataID id = L_.aux().checkintteger(2);
+    L_.settop(0);
+
+    if (!dtgear.GetData(id)) {
+        L_.pushnil();
+    } // else the value will already be on top
+
     return 1;
 
 }

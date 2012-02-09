@@ -36,6 +36,12 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     // [-0,+0]
     void* UnwrapData (DataID id, const VirtualType& type);
 
+    // [-0,+0]
+    const char* UnwrapString (DataID id);
+
+    // [-0,+0]
+    bool UnwrapBoolean (DataID id);
+
     // [-0,+1]
     bool GetData (DataID id);
 
@@ -64,6 +70,32 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
 
     /// Safely unwraps typed data from a data ID. [-3,+1,-]
     static int SafeUnwrapData(lua_State* L);
+
+    /// Safely unwraps a string from a data ID. [-2,+1,-]
+    static int SafeUnwrapString(lua_State* L);
+
+    /// Safely unwraps a boolean from a data ID. [-2,+1,-]
+    static int SafeUnwrapBoolean(lua_State* L);
+
+    template <class T, T default_value>
+    T GetResult() {
+        T result = default_value;
+        if (TracedCall(2,1) == Constant::OK()) {
+            result = To<T>::Primitive(L_, -1);
+            L_.pop(1);
+        }
+        return result;
+    }
+
+    template <class T>
+    T* GetResultPtr() {
+        T* result = NULL;
+        if (TracedCall(2,1) == Constant::OK()) {
+            result = To<T*>::Primitive(L_, -1);
+            L_.pop(1);
+        }
+        return result;
+    }
 
     /// [-0,+(0|1),-]
     bool PushDataTable();

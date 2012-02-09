@@ -10,15 +10,19 @@ using std::vector;
 void* LuaData::Unwrap(const VirtualType& type) const {
     return wrapper_->data_gear().UnwrapData(id_, type);
 }
+
 const char* LuaData::UnwrapString() const {
-    return NULL;
+    return wrapper_->data_gear().UnwrapString(id_);
 }
+
 bool LuaData::UnwrapBoolean() const {
-    return false;
+    return wrapper_->data_gear().UnwrapBoolean(id_);
 }
+
 int LuaData::UnwrapInteger() const {
     return 0;
 }
+
 double LuaData::UnwrapNumber() const {
     return 0.0;
 }
