@@ -20,16 +20,17 @@ void* PythonData::Unwrap(const VirtualType& type) const {
 	return NULL;
 }
 const char* PythonData::UnwrapString() const {
-    return NULL;
+    if (py_data_ == NULL)   return NULL;
+    return PyString_AsString(py_data_);
 }
 bool PythonData::UnwrapBoolean() const {
-    return false;
+    return !!PyObject_IsTrue(py_data_); //HEEEEL YEAAAAH!!
 }
 int PythonData::UnwrapInteger() const {
-    return 0;
+    return static_cast<int>( PyInt_AsLong(py_data_) );
 }
 double PythonData::UnwrapNumber() const {
-    return 0.0;
+    return static_cast<double>( PyFloat_AsDouble(py_data_) );
 }
 
 /// Tries to wrap the given data with the given type into this object.
