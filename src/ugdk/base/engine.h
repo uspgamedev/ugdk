@@ -27,8 +27,7 @@ typedef gdd::CachedLoader<AnimationSet> AnimationLoader;
 class Engine {
   public:
     /// Returns a pointer to the current Engine. Creates an Engine if there isn't one.
-    static Engine* reference() { static Engine *r = NULL;
-                                 return r ? r : r = new Engine; }
+    static Engine* reference() { return reference_ ? reference_ : reference_ = new Engine; }
 
     /// Returns a reference to the Audio Manager.
     /** @see AudioManager
@@ -52,7 +51,7 @@ class Engine {
     /// Returns a reference to the Time Handler.
     /** @see TimeManager
      */
-    time::TimeManager *time_handler() { return time_handler_; }
+    time::TimeManager *time_handler() { return time_manager_; }
     /// Returns a reference to the Path Manager.
     /** @see PathManager
      */
@@ -115,16 +114,17 @@ class Engine {
     /// Stops the engine and clears the scene list.
     void quit() { quit_ = true; }
 
-    ~Engine() {}
+    ~Engine() { reference_ = NULL; }
 
   private:
     void DeleteFinishedScenes();
+    static Engine         *    reference_;
 
              AudioManager *audio_manager_;
     graphic::VideoManager *video_manager_;
     graphic:: TextManager * text_manager_;
     input::  InputManager *input_manager_;
-    time::    TimeManager * time_handler_;
+    time::    TimeManager * time_manager_;
 	          PathManager * path_manager_;
 
 	AnimationLoader animation_loader_;
@@ -138,7 +138,7 @@ class Engine {
 	    video_manager_(NULL),
         text_manager_(NULL),
         input_manager_(NULL),
-        time_handler_(NULL),
+        time_manager_(NULL),
 		path_manager_(NULL),
 		animation_loader_(new AnimationProtocol) {}
 };
