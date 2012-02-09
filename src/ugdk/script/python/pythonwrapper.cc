@@ -18,7 +18,7 @@ namespace python {
 using std::tr1::shared_ptr;
 
 VirtualData::Ptr PythonWrapper::NewData() {
-	VirtualData::Ptr vdata( new PythonData(NULL, false) ); 
+	VirtualData::Ptr vdata( new PythonData(this, NULL, false) ); 
 	return vdata;
 }
 
@@ -26,17 +26,13 @@ VirtualObj PythonWrapper::LoadModule(const std::string& name) {
     std::string dotted_name =
         SCRIPT_MANAGER()->ConvertPathToDottedNotation(name);
 	PyObject* module = PyImport_ImportModule(dotted_name.c_str()); //new ref
-	if (PyErr_Occurred() != NULL) {
-	    printf("[Python] Erro loading module: \"%s\" (python exception details below)\n", dotted_name.c_str());
-		PyErr_Print();
-		return VirtualObj();
-	}
-    else if (module == NULL) {
-        printf("[Python] Error loading module: \"%s\"\n", dotted_name.c_str());
+    if (module == NULL) {
+        printf("[Python] Error loading module: \"%s\" (python exception details below)\n", dotted_name.c_str());
+        PrintPythonExceptionDetails();
         return VirtualObj();
     }
     printf("[Python] Loading module: %s\n", dotted_name.c_str());
-	VirtualData::Ptr vdata( new PythonData(module, true) ); //PythonData takes care of the ref.
+	VirtualData::Ptr vdata( new PythonData(this, module, true) ); //PythonData takes care of the ref.
 	return VirtualObj(vdata);
 }
 
@@ -48,6 +44,11 @@ bool PythonWrapper::Initialize() {
     std::string command = "sys.path.append(\"" + PATH_MANAGER()->ResolvePath("scripts/") + "\")";
     //std::string command = "sys.path.append(\"./\")";
     PyRun_SimpleString(command.c_str());
+
+    std::vector<Module>::iterator it;
+    for (it = modules_.begin(); it != modules_.end(); ++it) {
+        (*it->init_func_)();
+    }
 	return true;
 }
 
@@ -56,9 +57,84 @@ void PythonWrapper::Finalize() {
 	Py_Finalize();
 }
 
-bool PythonWrapper::RegisterModule(std::string moduleName, void (*initFunction)(void) ) {
-    shared_ptr<char> str(new char(*(moduleName.c_str())), free);
-    return PyImport_AppendInittab(str.get(), initFunction) != -1;
+bool PythonWrapper::RegisterModule(const std::string& moduleName, PyInitFunction init ) {
+    //shared_ptr<char> str(new char(*(moduleName.c_str())), free);
+    //return PyImport_AppendInittab(str.get(), init) != -1;
+
+    modules_.push_back( Module(moduleName, init) );
+    return true;
+}
+
+void PythonWrapper::PrintPythonExceptionDetails() {
+    PyObject *exc_type=NULL, *exc_value=NULL, *exc_tb=NULL, *arglist=NULL,
+             *traceback=NULL, *format=NULL, *errlist=NULL, *errstr=NULL;
+
+    do {
+        PyErr_Fetch(&exc_type, &exc_value, &exc_tb);
+        /*value and tb can be null (no exception) :: we own ref to all of them*/
+
+        PyObject* arglist = PyTuple_New(3); //new ref
+	    if (arglist == NULL) {
+            printf("[Python] Error 1... Can't print exception details... >_<\n");
+            break;
+        }
+        PyTuple_SetItem(arglist, 0, exc_type);
+        PyTuple_SetItem(arglist, 1, exc_value);
+        PyTuple_SetItem(arglist, 2, exc_tb);
+
+        /*It's kinda ugly to do this, but if we do not use traceback.format_exception
+          I would have a LOT of work to do here =P*/
+        traceback = PyImport_ImportModule("traceback");
+        if (traceback == NULL) {
+            printf("[Python] Error 2... Can't print exception details... >_<\n");
+            break;
+        }
+
+        format = PyObject_GetAttrString(traceback, "format_exception"); //return is new ref
+        if (format == NULL) {
+            printf("[Python] Error 3... Can't print exception details... >_<\n");
+            break;
+        }
+
+        errlist = PyObject_CallObject(format, arglist); //return is new ref
+        if (format == NULL) {
+            printf("[Python] Error 4... Can't print exception details... >_<\n");
+            break;
+        }
+
+        errstr = PyString_FromString("[Python] Exception Details:\n");
+        PyObject* errstr_part;
+        Py_ssize_t size = PyList_Size(errlist);
+        for (Py_ssize_t i=0; i<size; i++) {
+            errstr_part = PyList_GetItem(errlist, i); //borrowed reference
+            PyString_Concat(&errstr, errstr_part);
+        }
+
+        if (errstr == NULL) {
+            printf("[Python] Error 5... Can't print exception details... >_<\n");
+            break;
+        }
+
+        char* message = PyString_AsString(errstr);
+        printf("%s\n", message);
+
+    } while (0);
+
+    /*Py_XDECREF(exc_type);
+    Py_XDECREF(exc_value);
+    Py_XDECREF(exc_tb);*/
+    Py_XDECREF(arglist);
+    Py_XDECREF(traceback);
+    Py_XDECREF(format);
+    Py_XDECREF(errlist);
+    Py_XDECREF(errstr);
+    
+    /*///////////////////////////////////////
+    PyRun_SimpleString("import sys, traceback");
+    PyRun_SimpleString("exc = sys.exc_info()");
+    PyRun_SimpleString("print \"OhNoes:\", exc");
+    PyRun_SimpleString("tb = traceback.format_exception(exc[0], exc[1], exc[2])");
+    PyRun_SimpleString("for s in tb:    print s");*/
 }
 
 }
