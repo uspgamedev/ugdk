@@ -20,16 +20,17 @@ void* PythonData::Unwrap(const VirtualType& type) const {
 	return NULL;
 }
 const char* PythonData::UnwrapString() const {
-    return NULL;
+    if (py_data_ == NULL)   return NULL;
+    return PyString_AsString(py_data_);
 }
 bool PythonData::UnwrapBoolean() const {
-    return false;
+    return !!PyObject_IsTrue(py_data_); //HEEEEL YEAAAAH!!
 }
 int PythonData::UnwrapInteger() const {
-    return 0;
+    return static_cast<int>( PyInt_AsLong(py_data_) );
 }
 double PythonData::UnwrapNumber() const {
-    return 0.0;
+    return static_cast<double>( PyFloat_AsDouble(py_data_) );
 }
 
 /// Tries to wrap the given data with the given type into this object.
@@ -81,10 +82,6 @@ void PythonData::WrapNumber(double number) {
     own_ref_ = true;
 }
 
-LangWrapper* PythonData::wrapper () const {
-	return ScriptManager::ref()->GetWrapper("Python");
-}
-
 /// Tries to execute ourselves as a function in a script language,
 /// passing the given arguments and returning the result.
 VirtualData::Ptr PythonData::Execute(const std::vector<Ptr>& args) {
@@ -117,9 +114,15 @@ VirtualData::Ptr PythonData::Execute(const std::vector<Ptr>& args) {
 	}
 
 	PyObject* result = PyObject_CallObject(py_data_, arglist); //return is new ref
-	/*If result = NULL, CallObject failed (somehow), and due to the way we treat VirtualData in the system, 
-	  this is the way to treat that.*/
-	VirtualData::Ptr vdata( new PythonData(result, true) ); //PyVirtualData takes care of the ref.
+	/*If result = NULL, CallObject failed (somehow)*/
+    if (result == NULL) {
+        printf("[Python] Erro executing callable object (python exception details below)\n");
+        wrapper_->PrintPythonExceptionDetails();
+        return VirtualData::Ptr();
+    }
+
+    //WAAARPPER!!!
+	VirtualData::Ptr vdata( new PythonData(wrapper_, result, true) ); //PyVirtualData takes care of the ref.
 	
 	//Before returning, kill the argument tuple we created.
 	Py_XDECREF(arglist);  //WARNING: in theory, this is correct. However in my testing (in the prototype) this cause some serious shit.
@@ -151,7 +154,7 @@ VirtualData::Ptr PythonData::GetAttribute(Ptr key) {
 	}
 	/*If Py_GetAttr or Py_GetItem failed somehow, they will return null.*/
 	
-	VirtualData::Ptr vdata( new PythonData(attr, true) );
+	VirtualData::Ptr vdata( new PythonData(wrapper_, attr, true) );
 	return vdata;
 }
 

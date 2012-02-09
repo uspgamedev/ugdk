@@ -4,6 +4,7 @@
 #include <Python.h>
 #include <vector>
 #include <ugdk/script/virtualdata.h>
+#include <ugdk/script/python/pythonwrapper.h>
 
 namespace ugdk {
 namespace script {
@@ -15,8 +16,8 @@ namespace python {
 
 class PythonData : public VirtualData {
   public:
-	PythonData(PyObject* data_object, bool owns_ref) : VirtualData(), 
-		own_ref_(owns_ref), py_data_(data_object) {}
+	PythonData(PythonWrapper* wrapper, PyObject* data_object, bool owns_ref) : VirtualData(), 
+		wrapper_(wrapper), own_ref_(owns_ref), py_data_(data_object) {}
 		
     virtual ~PythonData() {
     	if (own_ref_)
@@ -37,7 +38,7 @@ class PythonData : public VirtualData {
     virtual void WrapInteger(int number);
     virtual void WrapNumber(double number);
 
-	virtual LangWrapper* wrapper () const;
+	virtual LangWrapper* wrapper () const { return wrapper_; }
 
 	/// Tries to execute ourselves as a function in a script language,
     /// passing thee given arguments and returning the result.
@@ -49,6 +50,7 @@ class PythonData : public VirtualData {
     virtual Ptr SetAttribute(Ptr key, Ptr value);
 
   protected:
+    PythonWrapper* wrapper_;
 	bool own_ref_; //if true, we own a ref to our PyObject* (py_data_), so we need to DECREF it in due time.
 	PyObject* py_data_;
 };
