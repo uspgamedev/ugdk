@@ -14,15 +14,17 @@ namespace base {
 
 template <class T>
 class ResourceContainer {
-  protected:
-    std::map<std::string, T> database_;
+  private:
+	typedef std::map<std::string, T>   DataMap;
+	typedef typename DataMap::iterator DataIterator;
+    DataMap database_;
 
   public:
     ResourceContainer() {}
     ~ResourceContainer() {}
 
     void Insert(const std::string& tag, T val) {
-        std::map<std::string, T>::iterator it = database_.find(tag);
+        DataIterator it = database_.find(tag);
         if(it == database_.end()) {
             database_[tag] = val;
         } else {
@@ -47,20 +49,22 @@ class ResourceContainer {
 
 template <class T>
 class ResourceContainer<T*> {
-  private:  
-    std::map<std::string, T*> database_;
+  private:
+	typedef std::map<std::string, T*>  DataMap;
+	typedef typename DataMap::iterator DataIterator;
+    DataMap database_;
 
   public:
     ResourceContainer() {}
     ~ResourceContainer() {
-        std::map<std::string, T*>::iterator it;
+		DataIterator it;
         for(it = database_.begin(); it != database_.end(); ++it) {
             delete it->second;
         }
     }
 
     void Insert(const std::string& tag, T* val) {
-        std::map<std::string, T*>::iterator it = database_.find(tag);
+        DataIterator it = database_.find(tag);
         if(it == database_.end() || it->second == NULL) {
             database_[tag] = val;
         } else {
@@ -71,7 +75,7 @@ class ResourceContainer<T*> {
     }
 
     void Replace(const std::string& tag, T* val) {
-        std::map<std::string, T*>::iterator it = database_.find(tag);
+        DataIterator it = database_.find(tag);
         if(it == database_.end() || it->second == NULL) {
             database_[tag] = val;
         } else {
