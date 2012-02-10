@@ -89,8 +89,13 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/graphic/textmanager.cc 
     ./src/ugdk/graphic/font.h 
     ./src/ugdk/graphic/node.h 
+    ./src/ugdk/base/texturecontainer.h 
+    ./src/ugdk/base/resourcemanager.cc 
     ./src/ugdk/base/engine.cc 
+    ./src/ugdk/base/resourcemanager.h 
     ./src/ugdk/base/types.h 
+    ./src/ugdk/base/texturecontainer.cc 
+    ./src/ugdk/base/resourcecontainer.h 
     ./src/ugdk/base/engine.h 
     ./src/ugdk/script.h 
     ./src/ugdk/time/timemanager.h 

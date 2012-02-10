@@ -123,17 +123,6 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
 // Termina o gerenciador de video, retornando true em
 // caso de sucesso.
 bool VideoManager::Release() {
-    for(std::map<string,Texture*>::iterator it = image_memory_.begin();
-            it != image_memory_.end(); ++it) {
-        delete it->second;
-    }
-    image_memory_.clear();
-
-    for(std::map<std::string, Spritesheet*>::iterator it = spritesheet_memory_.begin();
-        it != spritesheet_memory_.end(); ++it) {
-            delete it->second;
-    }
-    spritesheet_memory_.clear();
     /*if(GLEW_ARB_framebuffer_object) {
         glDeleteFramebuffersEXT(1, &light_buffer_id_);
     }*/
@@ -229,22 +218,6 @@ void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& inter
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapBuffers();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-}
-
-// Carrega imagem de um arquivo, fazendo o
-// gerenciamento de memoria. Retorna NULL
-// em caso de falha.
-Texture* VideoManager::LoadTexture(const string& filepath) {
-    if(image_memory_.count(filepath) == 0) {
-        std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
-        SDL_Surface* data = IMG_Load(fullpath.c_str());
-
-        Texture* tex = Texture::CreateFromSurface(data);
-        if(data != NULL) SDL_FreeSurface(data);
-
-        image_memory_[filepath] = tex;
-    }
-    return image_memory_[filepath];
 }
 
 static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ellipse_coef) {
