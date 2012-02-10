@@ -9,16 +9,15 @@
 #include <ugdk/graphic.h>
 #include <ugdk/input.h>
 #include <ugdk/time.h>
+#include <ugdk/base/types.h>
 #include <ugdk/math/vector2D.h>
-#include <ugdk/util/gdd/cachedloader.h>
-#include <ugdk/util/animationprotocol.h>
 
 namespace ugdk {
+namespace base {
+class ResourceManager;
+}
 
 class PathManager;
-class AnimationSet;
-
-typedef gdd::CachedLoader<AnimationSet> AnimationLoader;
 
 /// The game engine. Manages scenes, time, and the Audio, Video, Input and Text managers.
 /** Engine is a singleton. Use Engine::reference to get a pointer to an engine.
@@ -56,11 +55,10 @@ class Engine {
     /** @see PathManager
      */
     PathManager *path_manager() { return path_manager_; }
-
-    /// Returns a reference to the Animation Loader.
-    /** @see AnimationLoader
+    /// Returns a reference to the Resource Manager.
+    /** @see ResourceManager
      */
-    AnimationLoader& animation_loader() { return animation_loader_; }
+    base::ResourceManager *resource_manager() { return resource_manager_; }
 
     /// Returns the window dimensions.
     Vector2D window_size();
@@ -119,14 +117,14 @@ class Engine {
     void DeleteFinishedScenes();
     static Engine         *    reference_;
 
-             AudioManager *audio_manager_;
-    graphic::VideoManager *video_manager_;
-    graphic:: TextManager * text_manager_;
-    input::  InputManager *input_manager_;
-    time::    TimeManager * time_manager_;
-	          PathManager * path_manager_;
+             AudioManager *   audio_manager_;
+    graphic::VideoManager *   video_manager_;
+    graphic:: TextManager *    text_manager_;
+    input::  InputManager *   input_manager_;
+    time::    TimeManager *    time_manager_;
+	          PathManager *    path_manager_;
+    base::ResourceManager *resource_manager_;
 
-	AnimationLoader animation_loader_;
     bool quit_;
     std::list<Scene*> scene_list_;
     std::list<graphic::Node*> interface_list_;
@@ -138,8 +136,7 @@ class Engine {
         text_manager_(NULL),
         input_manager_(NULL),
         time_manager_(NULL),
-		path_manager_(NULL),
-		animation_loader_(new AnimationProtocol) {}
+		path_manager_(NULL) {}
 };
 
 } // namespace ugdk

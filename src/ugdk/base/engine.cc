@@ -6,19 +6,21 @@
 #else
     #include <SDL/SDL.h>
 #endif
-#include <ugdk/base/engine.h>
 #include <ugdk/action/scene.h>
-#include <ugdk/input/inputmanager.h>
-#include <ugdk/graphic/videomanager.h>
 #include <ugdk/audio/audiomanager.h>
-#include <ugdk/time/timemanager.h>
+#include <ugdk/base/engine.h>
+#include <ugdk/base/resourcemanager.h>
+#include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/textmanager.h>
+#include <ugdk/input/inputmanager.h>
+#include <ugdk/time/timemanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/animationparser.h>
 
 using namespace std;
 
 namespace ugdk {
+
 using namespace graphic;
 using namespace input;
 
@@ -41,8 +43,10 @@ bool Engine::Initialize(string windowTitle, Vector2D windowSize,
     text_manager_ = new TextManager();
     text_manager_->Initialize();
 	path_manager_ = new PathManager(base_path);
+    resource_manager_ = new base::ResourceManager;
     scene_list_.clear();
     interface_list_.clear();
+
 
     frames_since_reset_ = reported_fps_ = 0;
     if(time_manager_ != NULL)
@@ -156,7 +160,7 @@ void Engine::Release() {
     video_manager()->Release();
     delete video_manager_;
 
-    animation_loader_.ClearCache();
+    delete resource_manager_;
 
     SDL_Quit();
 }
