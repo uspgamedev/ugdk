@@ -32,7 +32,11 @@ Mac OS X:
 
 3) Open a terminal in the same folder of this file.
 
-4) $ cmake . (Do not forget the '.' at the end)
+4a) If you want to compile a Universal Binary for distribution:
+   $ cmake -DUNIVERSAL=y . (Do not forget the '.' at the end)
+   $ make
+4b) If you only want to run the library at your Mac:
+   $ cmake . (Do not forget the '.' at the end)
    $ make
 
 Optionally, you can use CMake to generate files for your favorite IDE. Search
