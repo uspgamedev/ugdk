@@ -25,6 +25,8 @@ public:
 	void Register(std::string name, LangWrapper* wrapper);
 	LangWrapper* GetWrapper(std::string name);
 
+	void ExecuteCode(std::string language, std::string code);
+
 	VirtualObj LoadModule(std::string filepath);
 	
     bool CheckIfFileExists(std::string filepath);

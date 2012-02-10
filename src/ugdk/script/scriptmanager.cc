@@ -53,6 +53,13 @@ LangWrapper* ScriptManager::GetWrapper(string name) {
 	return wrappers_[name];
 }
 
+void ScriptManager::ExecuteCode(string language, string code) {
+	if (!wrappers_.count(language)) return;
+	
+	wrappers_[language]->ExecuteCode(code);
+}
+
+
 VirtualObj ScriptManager::LoadModule(string script) {
 	string filepath = PATH_MANAGER()->ResolvePath(
         "scripts/" + ConvertDottedNotationToPath(script)

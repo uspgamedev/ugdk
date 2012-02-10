@@ -7,31 +7,10 @@
 ***************************************************************************/
 
 ###############
-Wil, agora é oficial:
-ScriptManager LoadModule() recebe strings "folder/subfolder/file" (sem extensao)
-eu tirei a funcao CheckIfModuleExists do LangWrapper (que não era virtual e tava
-inline) e coloquei no ScriptManager como CheckIfFileExists.
-
-LangWrapper LoadModule() recebe strings "folder.subfolder.file"
-
-Descobri que tem um negócio dos STL algorithms que faz a troca de chars, então
-é bem fácil e deve ser rápido.
-Então veja seu LuaWrapper e arrume se precisar.
-
-###############
-Omar, Omar, Omar.
-Ajustei o cmake pra detectar o SWIG e também já comecei a fazer um módulo para
-teste. Obviamente, começarei pelo módulo "ugdk.math".
-Qualquer problema para compilar me chame!
-
-###############
-Omar, mudei a assinatura da função Execute para ela não ficar copiando de boba
-o vetor de argumentos. Então tive que ajustar a assinatura dela no PyData tb.
-
-###############
-Novas ideias para a interface:
-	-Feature: funcao que recebe um string 'comando' e executa ele como
-		codigo de uma linguagem (no Wrapper)
+Wil, arrume o LuaWrapper, implementei a idéia da funcao pra executar
+codigo da lingaguem passado como string como conversamos. Veja o LangWrapper,
+soh precisa colocar um 
+virtual void ExecuteCode(string code)
 
 ################
 Ver com o Wil sobre o método dele pra transformar args VData recebidos numa

@@ -22,6 +22,10 @@ VirtualData::Ptr PythonWrapper::NewData() {
 	return vdata;
 }
 
+void PythonWrapper::ExecuteCode(const std::string& code) {
+	PyRun_SimpleString(code.c_str());
+}
+
 VirtualObj PythonWrapper::LoadModule(const std::string& name) {
     std::string dotted_name =
         SCRIPT_MANAGER()->ConvertPathToDottedNotation(name);
@@ -78,9 +82,9 @@ void PythonWrapper::PrintPythonExceptionDetails() {
             printf("[Python] Error 1... Can't print exception details... >_<\n");
             break;
         }
-        PyTuple_SetItem(arglist, 0, exc_type);
-        PyTuple_SetItem(arglist, 1, exc_value);
-        PyTuple_SetItem(arglist, 2, exc_tb);
+        PyTuple_SetItem(arglist, 0, exc_type);   // PyTuple_SetItem
+        PyTuple_SetItem(arglist, 1, exc_value);  // steals the reference
+        PyTuple_SetItem(arglist, 2, exc_tb);	 // to the given item
 
         /*It's kinda ugly to do this, but if we do not use traceback.format_exception
           I would have a LOT of work to do here =P*/
@@ -120,9 +124,6 @@ void PythonWrapper::PrintPythonExceptionDetails() {
 
     } while (0);
 
-    /*Py_XDECREF(exc_type);
-    Py_XDECREF(exc_value);
-    Py_XDECREF(exc_tb);*/
     Py_XDECREF(arglist);
     Py_XDECREF(traceback);
     Py_XDECREF(format);
@@ -132,7 +133,6 @@ void PythonWrapper::PrintPythonExceptionDetails() {
     /*///////////////////////////////////////
     PyRun_SimpleString("import sys, traceback");
     PyRun_SimpleString("exc = sys.exc_info()");
-    PyRun_SimpleString("print \"OhNoes:\", exc");
     PyRun_SimpleString("tb = traceback.format_exception(exc[0], exc[1], exc[2])");
     PyRun_SimpleString("for s in tb:    print s");*/
 }

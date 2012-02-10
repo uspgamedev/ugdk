@@ -57,6 +57,8 @@ class LangWrapper {
 
     virtual VirtualData::Ptr NewData() = 0;
 
+	virtual void ExecuteCode(const std::string& code) = 0;
+
     virtual VirtualObj LoadModule(const std::string& name) = 0;
 
     const LangID lang_id () { return lang_id_; }
