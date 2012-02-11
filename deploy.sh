@@ -30,11 +30,13 @@ done
 
 for header in $headers
 do
-    cp src/$header $1/include/$header
+    if ! `diff src/$header $1/include/$header 2>/dev/null >/dev/null` ; then
+        cp src/$header $1/include/$header
+    fi
 done
 
 mkdir -p $1/lib
 
-cp -v lib/*.a lib/*.so $1/lib
+cp -v lib/*.a lib/*.so lib/*.dylib $1/lib
 
 
