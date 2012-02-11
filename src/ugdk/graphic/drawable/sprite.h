@@ -14,7 +14,7 @@ class Sprite : public Drawable {
     Sprite(Spritesheet *spritesheet, AnimationSet *set = NULL);
     virtual ~Sprite();
 
-    void Draw(float dt);
+    void Draw(double dt);
     const Vector2D& size() const;
     
     /// Change the current animation to a new animation from the previously selected AnimationSet.
@@ -30,21 +30,21 @@ class Sprite : public Drawable {
 
     /// Change the SpeedupFactor of the animation
     /** Given a a factor, this function set the animation SpeedupFactor to this value
-    *  @param factor is a float 
+    *  @param factor is a double 
     */
-    void SetAnimationSpeedupFactor(float factor)  { animation_manager_->set_speedup_factor(factor);  }
+    void SetAnimationSpeedupFactor(double factor)  { animation_manager_->set_speedup_factor(factor);  }
 
     /// Change the SlowdownFactor of the animation
     /** Given a a factor, this function set the animation SlowdownFactor to this value
-    *  @param factor is a float 
+    *  @param factor is a double 
     */
-    void SetAnimationSlowdownFactor(float factor) { animation_manager_->set_slowdown_factor(factor); }
+    void SetAnimationSlowdownFactor(double factor) { animation_manager_->set_slowdown_factor(factor); }
 
     /// Return the animation FPS
     /** Return the animation FPS
-    *  @return	a float equivalente to the animation FPS
+    *  @return	a double equivalente to the animation FPS
     */
-    float GetAnimationFPS() const { return animation_manager_->fps(); }
+    double GetAnimationFPS() const { return animation_manager_->fps(); }
 
     /// Add a observer object to the animation
     /** Given an observer object, the function include this in the animation manager
@@ -74,7 +74,7 @@ class Sprite : public Drawable {
     /// Update the Sprite based on the time variation.
     /** One of the two main functions of the UGDK Engine. Most of the game logic 
         resides within the Update of child classes.*/
-    void Update(float delta_t);
+    void Update(double delta_t);
 };
 
 }  // namespace graphic

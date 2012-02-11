@@ -15,7 +15,7 @@ Sprite::~Sprite() {
     if (animation_manager_) delete animation_manager_;
 }
 
-void Sprite::Draw(float dt) {
+void Sprite::Draw(double dt) {
     if(spritesheet_) {
         int frame_number = animation_manager_->GetFrame();
 
@@ -27,7 +27,7 @@ void Sprite::Draw(float dt) {
     Update(dt);
 }
 
-void Sprite::Update(float delta_t) {
+void Sprite::Update(double delta_t) {
     animation_manager_->Update(delta_t);
 }
 

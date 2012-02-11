@@ -2,7 +2,7 @@
 #include <ugdk/audio/sample.h>
 namespace ugdk {
 
-Sample::Sample(const std::string& filepath) : data_(NULL), channel_(-1), volume_(1.0f) {
+Sample::Sample(const std::string& filepath) : data_(NULL), channel_(-1), volume_(1.0) {
     data_ = Mix_LoadWAV(filepath.c_str());
 }
 
@@ -33,13 +33,13 @@ void Sample::Stop() {
     }
 }
 
-void Sample::SetVolume(float vol) {
-    volume_ = std::min(1.0f, std::max(0.0f, vol));
+void Sample::SetVolume(double vol) {
+    volume_ = std::min(1.0, std::max(0.0, vol));
     if(data_)
-        Mix_VolumeChunk(data_, int( volume_ * float(MIX_MAX_VOLUME) ));
+        Mix_VolumeChunk(data_, int( volume_ * double(MIX_MAX_VOLUME) ));
 }
 
-float Sample::Volume() {
+double Sample::Volume() {
     return volume_;
 }
 

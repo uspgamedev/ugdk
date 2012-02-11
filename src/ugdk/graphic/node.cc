@@ -29,7 +29,7 @@ Node::~Node() {
     }
 }
 
-void Node::Render(float dt) {
+void Node::Render(double dt) {
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
@@ -63,7 +63,7 @@ void Node::RenderLight() {
     if(modifier) VIDEO_MANAGER()->PopModifier();
 }
 
-void Node::set_zindex(const float zindex) {
+void Node::set_zindex(const double zindex) {
     if(parent_ && (fabs(zindex - zindex_) > FLT_EPSILON)) parent_->must_sort_ = true;
     zindex_ = zindex;
 }

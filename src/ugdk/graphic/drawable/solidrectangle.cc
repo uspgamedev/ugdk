@@ -1,9 +1,5 @@
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL_opengl.h"
-#else
-    #include <SDL/SDL_opengl.h>
-#endif
+#include "SDL_opengl.h"
 
 #include <ugdk/graphic/drawable/solidrectangle.h>
 
@@ -18,7 +14,7 @@ SolidRectangle::SolidRectangle(const Vector2D& size) : size_(size) {}
 
 SolidRectangle::~SolidRectangle() {}
 
-void SolidRectangle::Draw(float dt) {
+void SolidRectangle::Draw(double dt) {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
     if(!mod.visible()) return;
 
@@ -26,11 +22,11 @@ void SolidRectangle::Draw(float dt) {
 
     if(mod.mirror() & MIRROR_HFLIP) { // Horizontal flip
         origin.x = target.x;
-        target.x = 0.0f;
+        target.x = 0.0;
     }
     if(mod.mirror() & MIRROR_VFLIP) { // Vertical flip
         origin.y = target.y;
-        target.y = 0.0f;
+        target.y = 0.0;
 	}
 
     origin -= hotspot_;
@@ -38,14 +34,14 @@ void SolidRectangle::Draw(float dt) {
 
     Color color(mod.color().r * color_.r, mod.color().g * color_.g, mod.color().b * color_.b, mod.color().a * color_.a);
 
-    glColor4fv(color.val);
+    glColor4dv(color.val);
 
     glDisable(GL_TEXTURE_2D);
 	glBegin( GL_QUADS ); { //Start quad
-        glVertex2fv( origin.val );
-        glVertex2f(  target.x, origin.y );
-        glVertex2fv( target.val );
-        glVertex2f(  origin.x, target.y );
+        glVertex2dv( origin.val );
+        glVertex2d(  target.x, origin.y );
+        glVertex2dv( target.val );
+        glVertex2d(  origin.x, target.y );
     } glEnd();
 }
 

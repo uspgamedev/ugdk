@@ -5,7 +5,7 @@ namespace ugdk {
 
 Music* Music::playing_music_(NULL);
 
-Music::Music(const std::string& filepath) : data_(NULL), volume_(1.0f) {
+Music::Music(const std::string& filepath) : data_(NULL), volume_(1.0) {
     data_ = Mix_LoadMUS(filepath.c_str());
     Mix_HookMusicFinished(MusicDone);
 }
@@ -57,13 +57,13 @@ bool Music::IsPaused() const {
     return IsPlaying() && (Mix_PausedMusic() == 1);
 }
 
-void Music::SetVolume(float vol) {
-    volume_ = std::min(1.0f, std::max(0.0f, vol));
+void Music::SetVolume(double vol) {
+    volume_ = std::min(1.0, std::max(0.0, vol));
     if(this->IsPlaying())
         UpdateVolume(volume_);
 }
 
-float Music::Volume() {
+double Music::Volume() {
     return volume_;
 }
 
@@ -71,8 +71,8 @@ void Music::MusicDone() {
     playing_music_ = NULL;
 }
 
-void Music::UpdateVolume(float vol) {
-    Mix_VolumeMusic( int( vol * float(MIX_MAX_VOLUME) ) );
+void Music::UpdateVolume(double vol) {
+    Mix_VolumeMusic( int( vol * double(MIX_MAX_VOLUME) ) );
 }
 
 }  // namespace ugdk

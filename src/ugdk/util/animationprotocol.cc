@@ -4,7 +4,7 @@
 #include <ugdk/util/animationprotocol.h>
 
 #define DEFAULT_FRAME 0
-#define DEG_TO_RAD_FACTOR 0.00872664626f
+#define DEG_TO_RAD_FACTOR 0.00872664626
 
 namespace ugdk {
 
@@ -102,7 +102,7 @@ bool AnimationProtocol::NewProperty(const GDDString& property_name, const GDDArg
             error(LoadError::INVALID_VALUE, msg);
             return false;
         }
-        current_animation_->set_fps((float)(value));
+        current_animation_->set_fps((double)(value));
     } else if (property_name == "compose" && property_args.size() == 0) {
         composing_ = true;
     } else return false;
@@ -191,14 +191,14 @@ bool AnimationProtocol::NewEntry_EffectNumber(const gdd::GDDArgs &args) {
 }
 bool AnimationProtocol::NewEntry_EffectAlpha(const gdd::GDDArgs &args) {
 
-    if( args.size() != 1 || arg_is_not_floating(args[0]) ) {
+    if( args.size() != 1 || arg_is_not_doubleing(args[0]) ) {
         string msg = "Invalid argument in an Entry of type Alpha,\n  in a Ring of type Effect.";
         error(LoadError::INVALID_VALUE, msg);
         return false;
     }
 
-    float new_alpha = (float)(atof(args[0].c_str()));
-    new_alpha = std::min( std::max(new_alpha,0.0f), 1.0f ); // new_alpha is of [0.0f,1.0f]
+    double new_alpha = (double)(atof(args[0].c_str()));
+    new_alpha = std::min( std::max(new_alpha,0.0), 1.0 ); // new_alpha is of [0.0,1.0]
 
     current_effect_->set_alpha(new_alpha);
     return true;
@@ -218,7 +218,7 @@ bool AnimationProtocol::NewEntry_EffectColor(const gdd::GDDArgs &args) {
         g = (new_color & 0x00FF00) >> 0x08  ,
         b =  new_color & 0x0000FF/*>> 0x00*/;
 
-    Color c = Color(r/255.0f, g/255.0f, b/255.0f);
+    Color c = Color(r/255.0, g/255.0, b/255.0);
 
     current_effect_->set_color(c);
     return true;
@@ -226,13 +226,13 @@ bool AnimationProtocol::NewEntry_EffectColor(const gdd::GDDArgs &args) {
 }
 bool AnimationProtocol::NewEntry_EffectPosition(const gdd::GDDArgs &args) {
 
-    if( args.size() != 2 || arg_is_not_floating(args[0]) || arg_is_not_floating(args[1]) ) {
+    if( args.size() != 2 || arg_is_not_doubleing(args[0]) || arg_is_not_doubleing(args[1]) ) {
         string msg = "Invalid argument in an Entry of type Position,\n  in a Ring of type Effect.";
         error(LoadError::INVALID_VALUE, msg);
         return false;
     }
 
-    Vector2D new_pos = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
+    Vector2D new_pos = Vector2D( (double)(atof(args[0].c_str())), (double)(atof(args[1].c_str())) );
 
     current_effect_->set_offset(new_pos);
     return true;
@@ -267,13 +267,13 @@ bool AnimationProtocol::NewEntry_EffectMirror(const gdd::GDDArgs &args) {
 }
 bool AnimationProtocol::NewEntry_EffectSize(const gdd::GDDArgs &args) {
 
-    if( args.size() != 2 || arg_is_not_floating(args[0]) || arg_is_not_floating(args[1]) ) {
+    if( args.size() != 2 || arg_is_not_doubleing(args[0]) || arg_is_not_doubleing(args[1]) ) {
         string msg = "Invalid argument in an Entry of type Size,\n  in a Ring of type Effect.";
         error(LoadError::INVALID_VALUE, msg);
         return false;
     }
 
-    Vector2D new_size = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
+    Vector2D new_size = Vector2D( (double)(atof(args[0].c_str())), (double)(atof(args[1].c_str())) );
 
     current_effect_->set_scale(new_size);
     return true;
@@ -281,13 +281,13 @@ bool AnimationProtocol::NewEntry_EffectSize(const gdd::GDDArgs &args) {
 }
 bool AnimationProtocol::NewEntry_EffectRotation(const gdd::GDDArgs &args) {
 
-    if( args.size() != 1 || arg_is_not_floating(args[0]) ) {
+    if( args.size() != 1 || arg_is_not_doubleing(args[0]) ) {
         string msg = "Invalid argument in an Entry of type Rotation,\n  in a Ring of type Effect.";
         error(LoadError::INVALID_VALUE, msg);
         return false;
     }
 
-    float new_rot  = (float)(atof(args[0].c_str()));
+    double new_rot  = (double)(atof(args[0].c_str()));
           new_rot *= DEG_TO_RAD_FACTOR;
 
     current_effect_->set_rotation(new_rot);
@@ -313,14 +313,14 @@ bool AnimationProtocol::NewEntry_FrameNumber(const gdd::GDDArgs &args) {
 }
 bool AnimationProtocol::NewEntry_FrameAlpha(const gdd::GDDArgs &args) {
 
-    if( args.size() != 1 || arg_is_not_floating(args[0]) ) {
+    if( args.size() != 1 || arg_is_not_doubleing(args[0]) ) {
         string msg = "Invalid argument in an Entry of type Alpha,\n  in a Ring of type Frame.";
         error(LoadError::INVALID_VALUE, msg);
         return false;
     }
 
-    float new_alpha = (float)(atof(args[0].c_str()));
-    new_alpha = std::min( std::max(new_alpha,0.0f), 1.0f ); // new_alpha is of [0.0f,1.0f]
+    double new_alpha = (double)(atof(args[0].c_str()));
+    new_alpha = std::min( std::max(new_alpha,0.0), 1.0 ); // new_alpha is of [0.0,1.0]
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
@@ -344,7 +344,7 @@ bool AnimationProtocol::NewEntry_FrameColor(const gdd::GDDArgs &args) {
         g = (new_color & 0x00FF00) >> 0x08  ,
         b =  new_color & 0x0000FF/*>> 0x00*/;
 
-    Color c = Color(r/255.0f, g/255.0f, b/255.0f);
+    Color c = Color(r/255.0, g/255.0, b/255.0);
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
@@ -355,13 +355,13 @@ bool AnimationProtocol::NewEntry_FrameColor(const gdd::GDDArgs &args) {
 }
 bool AnimationProtocol::NewEntry_FramePosition(const gdd::GDDArgs &args) {
 
-    if( args.size() != 2 || arg_is_not_floating(args[0]) || arg_is_not_floating(args[1]) ) {
+    if( args.size() != 2 || arg_is_not_doubleing(args[0]) || arg_is_not_doubleing(args[1]) ) {
         string msg = "Invalid argument in an Entry of type Position,\n  in a Ring of type Frame.";
         error(LoadError::INVALID_VALUE, msg);
         return false;
     }
 
-    Vector2D new_pos = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
+    Vector2D new_pos = Vector2D( (double)(atof(args[0].c_str())), (double)(atof(args[1].c_str())) );
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
@@ -402,13 +402,13 @@ bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
 }
 bool AnimationProtocol::NewEntry_FrameSize(const gdd::GDDArgs &args) {
 
-    if( args.size() != 2 || arg_is_not_floating(args[0]) || arg_is_not_floating(args[1]) ) {
+    if( args.size() != 2 || arg_is_not_doubleing(args[0]) || arg_is_not_doubleing(args[1]) ) {
         string msg = "Invalid argument in an Entry of type Size,\n  in a Ring of type Frame.";
         error(LoadError::INVALID_VALUE, msg);
         return false;
     }
 
-    Vector2D new_size = Vector2D( (float)(atof(args[0].c_str())), (float)(atof(args[1].c_str())) );
+    Vector2D new_size = Vector2D( (double)(atof(args[0].c_str())), (double)(atof(args[1].c_str())) );
 
     AnimationManager::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
@@ -419,13 +419,13 @@ bool AnimationProtocol::NewEntry_FrameSize(const gdd::GDDArgs &args) {
 }
 bool AnimationProtocol::NewEntry_FrameRotation(const gdd::GDDArgs &args) {
 
-    if( args.size() != 1 || arg_is_not_floating(args[0]) ) {
+    if( args.size() != 1 || arg_is_not_doubleing(args[0]) ) {
         string msg = "Invalid argument in an Entry of type Rotation,\n  in a Ring of type Frame.";
         error(LoadError::INVALID_VALUE, msg);
         return false;
     }
 
-    float new_rot = (float)(atof(args[0].c_str()));
+    double new_rot = (double)(atof(args[0].c_str()));
           new_rot *= DEG_TO_RAD_FACTOR;
 
     AnimationManager::AnimationFrame* cur_frame

@@ -37,29 +37,29 @@ class Frame {
      @param right The right margin
      @param bottom The lower margin
   */
-    Frame(float left, float top, float right, float bottom) :
+    Frame(double left, double top, double right, double bottom) :
         left_(left), top_(top), right_(right), bottom_(bottom) { }
     ~Frame() { }
 
     // Utilidades inline
     /// Returns the width of the frame.
-    float width() const { return right_ - left_; }
+    double width() const { return right_ - left_; }
     ///Returns the height of the frame.
-    float height() const { return bottom_ - top_; }
+    double height() const { return bottom_ - top_; }
 
     // Accessors e mutators
     /**@name Accessors and Mutators
     */
     /**@{
      */
-    float left() const { return left_; }
-    void set_left(float left) { left_ = left; }
-    float top() const { return top_; }
-    void set_top(float top) { top_ = top; }
-    float right() const { return right_; }
-    void set_right(float right) { right_ = right; }
-    float bottom() const { return bottom_; }
-    void set_bottom(float bottom) {bottom_ = bottom; }
+    double left() const { return left_; }
+    void set_left(double left) { left_ = left; }
+    double top() const { return top_; }
+    void set_top(double top) { top_ = top; }
+    double right() const { return right_; }
+    void set_right(double right) { right_ = right; }
+    double bottom() const { return bottom_; }
+    void set_bottom(double bottom) {bottom_ = bottom; }
     /** @}
      */
     // Devolve true se houver colisao entre
@@ -68,7 +68,7 @@ class Frame {
     bool Collides(const Frame& frame) const;
 
   private:
-    float left_, top_, right_, bottom_;
+    double left_, top_, right_, bottom_;
 };
 
 }  // namespace ugdk

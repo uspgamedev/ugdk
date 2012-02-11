@@ -12,7 +12,7 @@ class SolidRectangle : public Shape {
     SolidRectangle(const Vector2D& size);
     ~SolidRectangle();
 
-    void Draw(float dt);
+    void Draw(double dt);
 
     const Vector2D& size() const { return size_; }
     void set_size(const Vector2D& size) { size_ = size; }

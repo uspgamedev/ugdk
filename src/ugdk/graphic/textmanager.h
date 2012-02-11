@@ -4,11 +4,7 @@
 #include <vector>
 #include <map>
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL_ttf.h"
-#else
-    #include <SDL/SDL_ttf.h>
-#endif
+#include "SDL_ttf.h"
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic.h>
 

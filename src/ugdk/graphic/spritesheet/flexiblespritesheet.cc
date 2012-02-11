@@ -3,14 +3,8 @@
 #include <cmath>
 #include <algorithm>
 
-#include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL_image.h"
-    #include "SDL_opengl.h"
-#else
-    #include <SDL/SDL_image.h>
-    #include <SDL/SDL_opengl.h>
-#endif
+#include "SDL_image.h"
+#include "SDL_opengl.h"
 #include <ugdk/base/types.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/spritesheet/flexiblespritesheet.h>
@@ -21,12 +15,12 @@ namespace ugdk {
 namespace graphic {
 
 FlexibleSpritesheet::FlexibleSpritesheet(Texture* texture) : 
-    texture_(texture), frame_size_(1.0f, 1.0f) {}
+    texture_(texture), frame_size_(1.0, 1.0) {}
 
 FlexibleSpritesheet::~FlexibleSpritesheet() {}
 
 const Vector2D FlexibleSpritesheet::render_size() const { 
-    return Vector2D((float)texture_->width(), (float)texture_->height());
+    return Vector2D((double)texture_->width(), (double)texture_->height());
 }
 
 void FlexibleSpritesheet::set_frame_size(const Vector2D& size) {
@@ -54,11 +48,11 @@ void FlexibleSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
 
     if(mod.mirror() & MIRROR_HFLIP) {
         origin.x = target.x;
-        target.x = 0.0f;
+        target.x = 0.0;
     }
     if(mod.mirror() & MIRROR_VFLIP) {
         origin.y = target.y;
-        target.y = 0.0f;
+        target.y = 0.0;
     }
     
     origin -= hotspot_ + hotspot;
@@ -66,14 +60,14 @@ void FlexibleSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
 
     // Sets the color to tint the image with to the color the image has modified with the color given.
     // Also sets the alpha.
-    glColor4fv(mod.color().val);
+    glColor4dv(mod.color().val);
 
-    int nx = (int)(ceil(1.0f / frame_size_.x));
-    float xpos = frame_size_.x * (frame_number % nx);
-    float ypos = frame_size_.y * (frame_number / nx);
+    int nx = (int)(ceil(1.0 / frame_size_.x));
+    double xpos = frame_size_.x * (frame_number % nx);
+    double ypos = frame_size_.y * (frame_number / nx);
 
-    float xend = xpos + frame_size_.x;
-    float yend = ypos + frame_size_.y;
+    double xend = xpos + frame_size_.x;
+    double yend = ypos + frame_size_.y;
 
     GLuint texture = texture_->gltexture();
     if(texture != 0) {
@@ -84,23 +78,23 @@ void FlexibleSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
 
     glBegin( GL_QUADS ); //Start quad
         //Draw square
-        glTexCoord2f(xpos, ypos);
-        glVertex2f(  origin.x, origin.y );
+        glTexCoord2d(xpos, ypos);
+        glVertex2d(  origin.x, origin.y );
 
-        glTexCoord2f(xend, ypos);
-        glVertex2f(  target.x, origin.y );
+        glTexCoord2d(xend, ypos);
+        glVertex2d(  target.x, origin.y );
 
-        glTexCoord2f(xend, yend);
-        glVertex2f(  target.x, target.y );
+        glTexCoord2d(xend, yend);
+        glVertex2d(  target.x, target.y );
 
-        glTexCoord2f(xpos, yend);
-        glVertex2f(  origin.x, target.y );
+        glTexCoord2d(xpos, yend);
+        glVertex2d(  origin.x, target.y );
     glEnd();
 }
 
 // devolve o numero de frames que esta imagem armazena
 int FlexibleSpritesheet::frame_count() const {
-    return static_cast<int>(std::max(1.0f / (frame_size_.x * frame_size_.y), 1.0f));
+    return static_cast<int>(std::max(1.0 / (frame_size_.x * frame_size_.y), 1.0));
 }
 
 }  // namespace graphic

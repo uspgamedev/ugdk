@@ -34,7 +34,7 @@ class VideoManager {
     void SetVSync(const bool active);
     void SetLightSystem(const bool active) { settings_.light_system = active; }
     
-    void Render(std::list<Scene*>&, std::list<Node*>&, float dt);
+    void Render(std::list<Scene*>&, std::list<Node*>&, double dt);
 
     Vector2D video_size() const { return video_size_; }
     bool fullscreen() const { return settings_.fullscreen; }

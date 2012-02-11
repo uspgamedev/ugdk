@@ -81,22 +81,20 @@ if (NOT FRAMEWORK_SRC)
 endif (NOT FRAMEWORK_SRC)
 
 # Encontrando as bibliotecas necessarias:
-if (NOT MSVC)
-    find_package(OpenGL REQUIRED)
-    include_directories(${OPENGL_INCLUDE_DIR})
-    
-    find_package(SDL REQUIRED)
-    include_directories(${SDL_INCLUDE_DIR})
-    
-    find_package(SDL_mixer REQUIRED)
-    include_directories(${SDLMIXER_INCLUDE_DIR})
-    
-    find_package(SDL_ttf REQUIRED)
-    include_directories(${SDLTTF_INCLUDE_DIR})
-    
-    find_package(SDL_image REQUIRED)
-    include_directories(${SDLIMAGE_INCLUDE_DIR})
-endif(NOT MSVC)
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIR})
+
+find_package(SDL REQUIRED)
+include_directories(${SDL_INCLUDE_DIR})
+
+find_package(SDL_mixer REQUIRED)
+include_directories(${SDLMIXER_INCLUDE_DIR})
+
+find_package(SDL_ttf REQUIRED)
+include_directories(${SDLTTF_INCLUDE_DIR})
+
+find_package(SDL_image REQUIRED)
+include_directories(${SDLIMAGE_INCLUDE_DIR})
 
 # pre-processor: #define's
 if (MSVC)

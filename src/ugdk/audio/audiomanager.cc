@@ -1,11 +1,6 @@
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL.h"
-    #include "SDL_mixer.h"
-#else
-    #include <SDL/SDL.h>
-    #include <SDL/SDL_mixer.h>
-#endif
+#include "SDL.h"
+#include "SDL_mixer.h"
 #include <ugdk/audio/audiomanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/base/engine.h>

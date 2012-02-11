@@ -3,13 +3,8 @@
 
 #include <string>
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL.h"
-    #include "SDL_mixer.h"
-#else
-    #include <SDL/SDL.h>
-    #include <SDL/SDL_mixer.h>
-#endif
+#include "SDL.h"
+#include "SDL_mixer.h"
 
 namespace ugdk {
 
@@ -46,20 +41,20 @@ class Music {
     /// Return whether this can be unpaused.
     bool IsPaused() const;
 
-    /// Sets the volume. 0.0f is quiet, 1.0f is the full volume.
-    /** @param vol 0.0f (quiet) <= vol <= 1.0f (loud) */
-    void SetVolume(float vol);
+    /// Sets the volume. 0.0 is quiet, 1.0 is the full volume.
+    /** @param vol 0.0 (quiet) <= vol <= 1.0 (loud) */
+    void SetVolume(double vol);
 
-    /// Returns this music's current volume, between 0.0f and 1.0f.
-    float Volume();
+    /// Returns this music's current volume, between 0.0 and 1.0.
+    double Volume();
 
   private:
     Music(const std::string& filepath);
     ~Music();
     Mix_Music *data_;
-    float volume_;
+    double volume_;
 
-    static void UpdateVolume(float vol);
+    static void UpdateVolume(double vol);
     static void MusicDone();
     static Music *playing_music_;
 

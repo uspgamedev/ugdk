@@ -2,11 +2,7 @@
 #define UGDK_INPUT_INPUTMANAGER_H_
 
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL.h"
-#else
-    #include <SDL/SDL.h>
-#endif
+#include "SDL.h"
 #include <ugdk/math/vector2D.h>
 #include <ugdk/input/keys.h>
 
@@ -23,7 +19,7 @@ class InputManager {
     ~InputManager();
 
     // Member functions e
-    void Update(float);
+    void Update(double);
     Vector2D GetMousePosition(void);
     void ShowCursor(bool toggle);
     bool KeyPressed(Key key);

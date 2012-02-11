@@ -1,11 +1,6 @@
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL_opengl.h"
-	#include "SDL_image.h"
-#else
-    #include <SDL/SDL_opengl.h>
-	#include <SDL/SDL_image.h>
-#endif
+#include "SDL_opengl.h"
+#include "SDL_image.h"
 #include <cmath>
 
 #include <ugdk/graphic/videomanager.h>
@@ -44,7 +39,7 @@ static void InitializeExtensions() {
 namespace ugdk {
 namespace graphic {
 
-static Vector2D default_resolution(800.0f, 600.0f);
+static Vector2D default_resolution(800.0, 600.0);
 
 // Inicializa o gerenciador de video, definindo uma
 // resolucao para o programa. Retorna true em caso de
@@ -69,7 +64,7 @@ bool VideoManager::Initialize(const string& title, const Vector2D& size, bool fu
         // TODO: check errors with glew
     }*/
     
-    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+    glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
     /*if(GLEW_ARB_framebuffer_object) {
         glGenFramebuffersEXT(1, &light_buffer_id_);
@@ -174,24 +169,24 @@ void VideoManager::BlendLightIntoBuffer() {
     glBlendFunc(GL_ZERO, GL_SRC_COLOR);
 
     glBegin( GL_QUADS );
-        glTexCoord2f(         0.0f,          1.0f );
-        glVertex2f(           0.0f,          0.0f );
+        glTexCoord2d(         0.0,          1.0 );
+        glVertex2d(           0.0,          0.0 );
 
-        glTexCoord2f(         1.0f,          1.0f );
-        glVertex2f(  video_size_.x,          0.0f );
+        glTexCoord2d(         1.0,          1.0 );
+        glVertex2d(  video_size_.x,          0.0 );
 
-        glTexCoord2f(         1.0f,          0.0f );
-        glVertex2f(  video_size_.x, video_size_.y );
+        glTexCoord2d(         1.0,          0.0 );
+        glVertex2d(  video_size_.x, video_size_.y );
 
-        glTexCoord2f(         0.0f,          0.0f );
-        glVertex2f(           0.0f, video_size_.y );
+        glTexCoord2d(         0.0,          0.0 );
+        glVertex2d(           0.0, video_size_.y );
     glEnd();
 
     glPopMatrix();
 }
 
 // Desenha backbuffer na tela
-void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& interface_list, float dt) {
+void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& interface_list, double dt) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     if(settings_.light_system)
@@ -235,7 +230,7 @@ static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ell
     if(data == NULL)
         return false;
 
-    Vector2D origin = size * 0.5f;
+    Vector2D origin = size * 0.5;
 
     // Locks the surface so we can manage the pixel data.
     SDL_LockSurface(data);
@@ -245,10 +240,10 @@ static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ell
             Uint8 alpha = 0;
 
             // Formulae to detect if the point is inside the ellipse.
-            Vector2D dist = Vector2D(j + 0.0f, i + 0.0f) - origin;
+            Vector2D dist = Vector2D(j + 0.0, i + 0.0) - origin;
             dist.x /= ellipse_coef.x;
             dist.y /= ellipse_coef.y;
-            float distance = Vector2D::InnerProduct(dist, dist);
+            double distance = Vector2D::InnerProduct(dist, dist);
             if(distance <= 1)
                 alpha = static_cast<Uint8>(SDL_ALPHA_OPAQUE * exp(-distance * LN255));
             pixels[i * width + j] = SDL_MapRGBA(data->format, alpha, alpha, alpha, alpha);
@@ -259,10 +254,10 @@ static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ell
 }
 
 void VideoManager::InitializeLight() {
-    Vector2D light_size(32.0f, 32.0f);
+    Vector2D light_size(32.0, 32.0);
     if(light_texture_ != NULL) delete light_texture_;
 
-    SDL_Surface* light_surface = CreateLightSurface(light_size * 2.0f, light_size);
+    SDL_Surface* light_surface = CreateLightSurface(light_size * 2.0, light_size);
     light_texture_ = Texture::CreateFromSurface(light_surface);
     SDL_FreeSurface(light_surface);
 
@@ -289,7 +284,7 @@ void VideoManager::PushAndApplyModifier(const Modifier* apply) {
 
     if(apply->flags() & Modifier::HAS_TRANSFORMATION) {
         // Calculates the translation
-        float tx, ty;
+        double tx, ty;
         if(apply->flags() & Modifier::TRUNCATES_WHEN_APPLIED) {
             tx = std::floor(apply->offset().x);
             ty = std::floor(apply->offset().y);
@@ -299,22 +294,22 @@ void VideoManager::PushAndApplyModifier(const Modifier* apply) {
         }
 
         // Calculates the scale
-        float sx = apply->scale().x, sy = apply->scale().y;
+        double sx = apply->scale().x, sy = apply->scale().y;
 
         // Calculates the rotation
-        float s = sin(apply->rotation()), c = cos(apply->rotation());
+        double s = sin(apply->rotation()), c = cos(apply->rotation());
 
         // Builds the full transformation matrix all at once.
-        float M[16] = {  sx*c, sy*s, 0.0f, 0.0f, // First column
-                        -sx*s, sy*c, 0.0f, 0.0f,
-                         0.0f, 0.0f, 1.0f, 0.0f,
-                           tx,   ty, 0.0f, 1.0f };
+        double M[16] = {  sx*c, sy*s, 0.0, 0.0, // First column
+                        -sx*s, sy*c, 0.0, 0.0,
+                         0.0, 0.0, 1.0, 0.0,
+                           tx,   ty, 0.0, 1.0 };
 
-        //glTranslatef(apply->offset().x, apply->offset().y, 0.0f);
-        //glScalef(apply->scale().x, apply->scale().y, 0.0f);
-        //glRotatef(apply->rotation() * 57.2957795f, 0.0f, 0.0f, 1.0f);
+        //glTranslated(apply->offset().x, apply->offset().y, 0.0);
+        //glScalef(apply->scale().x, apply->scale().y, 0.0);
+        //glRotatef(apply->rotation() * 57.2957795, 0.0, 0.0, 1.0);
 
-        glMultMatrixf(M);
+        glMultMatrixd(M);
     }
 
     modifiers_.push(top);
