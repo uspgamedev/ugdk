@@ -39,14 +39,14 @@ void Node::Render(double dt) {
     if(drawable_) drawable_->Draw(dt);
 
     if(must_sort_) SortChildren();
-    NodeSet::iterator it;
+    NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
         (*it)->Render(dt);
     
     if(modifier) VIDEO_MANAGER()->PopModifier();
 }
 
-void Node::RenderLight() {
+void Node::RenderLight() const {
     if(!active_) return;
     if(childs_.empty() && !light_) return; // optimization!
 
@@ -56,7 +56,7 @@ void Node::RenderLight() {
     if(light_)
         light_->Draw();
 
-    NodeSet::iterator it;
+    NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
         (*it)->RenderLight();
     

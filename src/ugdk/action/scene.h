@@ -51,14 +51,13 @@ class Scene {
     */
     bool finished() const { return finished_; }
 
-    graphic::Node* root_node() { return root_node_; }
-    const graphic::Node* root_node() const { return root_node_; }
+          graphic::Node*   content_node()       { return   content_node_; }
+    const graphic::Node*   content_node() const { return   content_node_; }
+          graphic::Node* interface_node()       { return interface_node_; }
+    const graphic::Node* interface_node() const { return interface_node_; }
 
     Music* background_music() const { return background_music_; }
     void set_background_music(Music* music) { background_music_ = music; }
-    
-    bool visible() const;
-    void set_visible(bool set);
     /**@}
      */
 
@@ -78,7 +77,8 @@ class Scene {
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;
 
-    graphic::Node* root_node_;
+    graphic::Node*   content_node_;
+    graphic::Node* interface_node_;
 
     std::list<Entity*> entities_;
    

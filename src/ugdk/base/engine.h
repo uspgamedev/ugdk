@@ -25,6 +25,21 @@ class PathManager;
  */
 class Engine {
   public:
+    struct Configuration {
+        std::string     base_path;
+        std::string   window_icon;
+        std::string  window_title;
+        Vector2D      window_size;
+        bool           fullscreen;
+
+        Configuration() :
+            base_path("./"),
+            window_icon(""),
+            window_title("UGDK Game"),
+            window_size(800.0, 600.0),
+            fullscreen(false) {}
+    };
+
     /// Returns a pointer to the current Engine. Creates an Engine if there isn't one.
     static Engine* reference() { return reference_ ? reference_ : reference_ = new Engine; }
 
@@ -67,16 +82,20 @@ class Engine {
      * @{
      */
     /// Initializes the engine. Returns true if sucessful, false otherwise.
-    /** @param windowTitle The window title.
-     * @param windowSize The window's dimensions.
+    /** @param configuration A Engine::Configuration struct with the planned configuration.
      */
-	bool Initialize(std::string windowTitle, Vector2D windowSize, 
-		bool fullscreen,
-		std::string base_path = std::string("./"),
-		std::string icon = std::string());
+	bool Initialize(const Configuration& configuration);
+
+    /// Initializes the engine. Calls the other Initialize method with all default arguments.
+    bool Initialize() {
+        Configuration defaults;
+        return Initialize(defaults);
+    }
+
     /// Starts running the engine.
     void Run();
-    /// Stops and frees the engine.
+
+    /// Releases all the resouces allocated by the engine.
     void Release();
 
     /** @}
@@ -85,8 +104,6 @@ class Engine {
     /** @name Scene Management
      * @{
      */
-    // Gerenciamento de cenas
-
     /// Puts a scene onto the scene list, on top.
     /** @param scene The scene to be put.
      */
@@ -95,17 +112,11 @@ class Engine {
     Scene* CurrentScene() const;
     /// Removes the top scene.
     void PopScene();
-
-    // TODO: SERIOUSLY FIX THIS. Big fat ugly code to allow some special 
-    // layers to be unnafected by the light system. Meant for user interface.
-    /// Pushes a layer unaffected by the light system. Meant for interfaces.
-    void PushInterface(graphic::Node* node);
-    /// Removes a layer pushed by the above function.
-    void RemoveInterface(graphic::Node* node);
     /** @}
      */
+
     /// Returns the current running FPS.
-    uint32 current_fps() { return reported_fps_; }
+    uint32 current_fps() const { return reported_fps_; }
 
     // Saida do motor
     /// Stops the engine and clears the scene list.
@@ -127,7 +138,6 @@ class Engine {
 
     bool quit_;
     std::list<Scene*> scene_list_;
-    std::list<graphic::Node*> interface_list_;
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 
 	Engine() :

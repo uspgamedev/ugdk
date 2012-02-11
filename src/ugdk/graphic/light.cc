@@ -16,7 +16,7 @@ Light::Light() : color_() {
 void Light::Draw() {
 	const Texture* light_texture = VIDEO_MANAGER()->light_texture();
 
-    glColor3f(color_.r, color_.g, color_.b);
+    glColor3d(color_.r, color_.g, color_.b);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, light_texture->gltexture());

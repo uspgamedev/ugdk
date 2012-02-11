@@ -26,23 +26,23 @@ Vector2D Engine::window_size() {
     return video_manager_->video_size();
 }
 
-bool Engine::Initialize(string windowTitle, Vector2D windowSize, 
-						bool fullscreen, std::string base_path, std::string icon) {
+bool Engine::Initialize(const Configuration& configuration) {
     quit_ = false;
-    video_manager_ = new VideoManager();
     SDL_Init(SDL_INIT_EVERYTHING);
-    video_manager_->Initialize(windowTitle, windowSize, fullscreen, icon);
-    input_manager_ = new InputManager();
-    time_manager_ = new time::TimeManager();
-    audio_manager_ = new AudioManager();
-    audio_manager_->Initialize();
-    text_manager_ = new TextManager();
-    text_manager_->Initialize();
-	path_manager_ = new PathManager(base_path);
-    resource_manager_ = new base::ResourceManager;
-    scene_list_.clear();
-    interface_list_.clear();
 
+    video_manager_    = new graphic::VideoManager();
+    input_manager_    = new input::  InputManager();
+    time_manager_     = new time::    TimeManager();
+    audio_manager_    = new          AudioManager();
+    text_manager_     = new graphic:: TextManager();
+    path_manager_     = new           PathManager(configuration.base_path);
+    resource_manager_ = new base::ResourceManager();
+
+    video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, configuration.window_icon);
+    audio_manager_->Initialize();
+     text_manager_->Initialize();
+
+    scene_list_.clear();
 
     frames_since_reset_ = reported_fps_ = 0;
     if(time_manager_ != NULL)
@@ -125,7 +125,7 @@ void Engine::Run() {
 
             // Sends the scene list to the videomanager, who handles everything 
             // needed to draw
-            video_manager_->Render(scene_list_, interface_list_, delta_t);
+            video_manager_->Render(scene_list_, delta_t);
 
             ++frames_since_reset_;
             total_fps += 1.0/delta_t;
@@ -171,13 +171,6 @@ Scene* Engine::CurrentScene() const {
 
 void Engine::PopScene() {
     if(!scene_list_.empty()) scene_list_.pop_back();
-}
-
-void Engine::PushInterface(graphic::Node* node) {
-    interface_list_.push_back(node);
-}
-void Engine::RemoveInterface(graphic::Node* node) {
-    interface_list_.remove(node);
 }
 
 }
