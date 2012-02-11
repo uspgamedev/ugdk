@@ -30,7 +30,7 @@ void Scene::Focus() {
     }
 }
 
-void Scene::Update(float delta_t) {
+void Scene::Update(double delta_t) {
     for(std::list<Entity*>::iterator it = entities_.begin(); it != entities_.end(); ++it)
         (*it)->Update(delta_t);
 }

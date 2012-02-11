@@ -19,7 +19,7 @@ class InputManager {
     ~InputManager();
 
     // Member functions e
-    void Update(float);
+    void Update(double);
     Vector2D GetMousePosition(void);
     void ShowCursor(bool toggle);
     bool KeyPressed(Key key);

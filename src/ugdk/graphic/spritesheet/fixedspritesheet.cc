@@ -91,7 +91,7 @@ FixedSpritesheet::FixedSpritesheet(FixedSpritesheetData& data) {
         Texture* texture = Texture::CreateFromSurface(it->surface);
         CreateList(id, texture, it->hotspot);
         frames_.push_back(texture);
-        frame_sizes_.push_back(Vector2D(static_cast<float>(texture->width()), static_cast<float>(texture->height())));
+        frame_sizes_.push_back(Vector2D(static_cast<double>(texture->width()), static_cast<double>(texture->height())));
     }
 }
 
@@ -106,9 +106,9 @@ FixedSpritesheet::~FixedSpritesheet() {
 
 void FixedSpritesheet::CreateList(GLuint id, Texture* texture, const Vector2D& hotspot) {
     if(texture == NULL) return;
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glColor3f(1.0, 1.0, 1.0);
 
-    Vector2D origin, target(static_cast<float>(texture->width()), static_cast<float>(texture->height()));
+    Vector2D origin, target(static_cast<double>(texture->width()), static_cast<double>(texture->height()));
     origin -= hotspot;
     target -= hotspot;
 
@@ -120,17 +120,17 @@ void FixedSpritesheet::CreateList(GLuint id, Texture* texture, const Vector2D& h
 
         glBegin( GL_QUADS ); //Start quad
             //Draw square
-            glTexCoord2f(0.0f, 0.0f);
-            glVertex2f(  origin.x, origin.y );
+            glTexCoord2d(0.0, 0.0);
+            glVertex2d(  origin.x, origin.y );
 
-            glTexCoord2f(1.0f, 0.0f);
-            glVertex2f(  target.x, origin.y );
+            glTexCoord2d(1.0, 0.0);
+            glVertex2d(  target.x, origin.y );
 
-            glTexCoord2f(1.0f, 1.0f);
-            glVertex2f(  target.x, target.y );
+            glTexCoord2d(1.0, 1.0);
+            glVertex2d(  target.x, target.y );
 
-            glTexCoord2f(0.0f, 1.0f);
-            glVertex2f(  origin.x, target.y );
+            glTexCoord2d(0.0, 1.0);
+            glVertex2d(  origin.x, target.y );
         glEnd();
 
     } glEndList();
@@ -146,20 +146,20 @@ void FixedSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
         // TODO: optimize mirroring, and combine the matrices
 
         // hotspot
-        glTranslatef(-hotspot.x, -hotspot.y, 0.0f);
+        glTranslated(-hotspot.x, -hotspot.y, 0.0);
 
         // horizontal flip
         if(mod.mirror() & MIRROR_HFLIP) {
-            glScalef(-1.0f, 1.0f, 1.0f);
+            glScalef(-1.0, 1.0, 1.0);
         }
 
         // vertical flip
         if(mod.mirror() & MIRROR_VFLIP) {
-            glScalef(1.0f, -1.0f, 1.0f);
+            glScalef(1.0, -1.0, 1.0);
         }
         popmatrix = true;
     }
-    glColor4fv(mod.color().val);
+    glColor4dv(mod.color().val);
 
     glCallList(lists_base_ + frame_number);
 

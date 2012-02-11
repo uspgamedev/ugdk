@@ -65,7 +65,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
     bool NewEntry_FrameRotation( const gdd::GDDArgs& );
 
 
-    const bool arg_is_not_floating(const gdd::GDDString&) {
+    const bool arg_is_not_doubleing(const gdd::GDDString&) {
         //TODO: Implement this.
         return false;
     }

@@ -17,7 +17,7 @@ InputManager::InputManager() {
     std::fill(keystate_now_, keystate_now_+kbsize_, false);
     std::fill(keystate_last_, keystate_last_+kbsize_, false);
     
-    Update(1.3f);
+    Update(1.3);
 }
 
 InputManager::~InputManager() {
@@ -25,7 +25,7 @@ InputManager::~InputManager() {
     delete[] keystate_last_;
 }
 
-void InputManager::Update(float delta_t) {
+void InputManager::Update(double delta_t) {
     int i;
     
     // bufferiza teclado
@@ -43,7 +43,7 @@ void InputManager::Update(float delta_t) {
 Vector2D InputManager::GetMousePosition(void) {
     int x, y;
     SDL_GetMouseState(&x, &y);
-    return Vector2D((float) x, (float) y);
+    return Vector2D((double) x, (double) y);
 }
 
 void InputManager::ShowCursor(bool toggle) {

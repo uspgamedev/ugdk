@@ -16,7 +16,7 @@ class Text : public Drawable {
 	Text(const std::vector<std::wstring>& message, Font* font);
 	~Text() {}
 
-    void Draw(float dt);
+    void Draw(double dt);
 
 	virtual const Vector2D& size() const;
 
@@ -25,8 +25,8 @@ class Text : public Drawable {
 	std::vector<std::wstring> message_;
 
     Vector2D size_;
-    float line_height_;
-	std::vector<float> line_width_;
+    double line_height_;
+	std::vector<double> line_width_;
 };
 
 }  // namespace graphic

@@ -4,33 +4,33 @@
 
 namespace ugdk {
 
-// 2 dimension vectors, using floats.
+// 2 dimension vectors, using doubles.
 class Vector2D {
   public:
-    /// Initializes both fields with 0.0f
+    /// Initializes both fields with 0.0
     /** Create the vector (x,y) with x = 0 and y =0
     */
-    Vector2D() : x(0.0f), y(0.0f) {}
+    Vector2D() : x(0.0), y(0.0) {}
 
     /// Initializes both fields with val.
     /** Create the vector (x,y) with x = val and y = val being val a constant
     *  @param val is a constant
     */
-    explicit Vector2D(float val) : x(val), y(val) {}
+    explicit Vector2D(double val) : x(val), y(val) {}
 
     /// Initializes both fields with given values.
     /** Create the vector (x,y) with x = x-value and y = y-value
     *  @param x is the x-value argument
     *  @param y is the y-value argument
     */
-    Vector2D(float x, float y) : x(x), y(y) {}
+    Vector2D(double x, double y) : x(x), y(y) {}
 
     ~Vector2D() { }
 
     // Fields are accessible as x/y or val[0] and val[1].
     union {
-        struct { float x, y;   };
-        struct { float val[2]; };
+        struct { double x, y;   };
+        struct { double val[2]; };
     };
 
     /// Returns the norm-1 of this vector.
@@ -38,7 +38,7 @@ class Vector2D {
     *  @return Norm-1
     *  @see Length()
     */
-    float NormOne() const;
+    double NormOne() const;
 
     /// Returns the norm-2 of this vector
     /** The norm-2 of a vector (x,y) is sqrt( x^2 + y^2 )
@@ -46,7 +46,7 @@ class Vector2D {
     *  @see NormOne()
     *  @see LenghtSquared()
     */
-    float Length() const;
+    double Length() const;
     
     /// Returns the norm-2 squared
     /** The norm-2 squared of a vector (x,y) is (x^2 + y^2)
@@ -54,13 +54,13 @@ class Vector2D {
     *  @see NormOne()
     *  @see Lenght()
     */
-    float LengthSquared() const { return (x*x) + (y*y); }
+    double LengthSquared() const { return (x*x) + (y*y); }
 
     /// Returns the angle of this vector
     /** Return the angle associated to this vector
     *  @return Angle
     */
-    float Angle() const;
+    double Angle() const;
 
     /// Returns a new vector equal to this vector normalized
     /** The normalized vector (x,y) is (x,y) / Lenght(x,y)
@@ -74,7 +74,7 @@ class Vector2D {
     *  @return Rotated Vector
     *  @see Angle
     */
-    Vector2D Rotate(const float angle) const;
+    Vector2D Rotate(const double angle) const;
 
     /// Returns a new vector which is this vector scaled coordinate by coordinate with "scale".
     /** The resulting scaled vector is (this->x * scale.x, this->y * scale.y).
@@ -104,7 +104,7 @@ class Vector2D {
     /** A vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y*scalar)
     *  @return Scalar Multiplied Vector
     */
-    static Vector2D Multiply(const Vector2D &a, const float &scalar) {
+    static Vector2D Multiply(const Vector2D &a, const double &scalar) {
         return Vector2D(a.x * scalar, a.y * scalar);
     }
     
@@ -112,7 +112,7 @@ class Vector2D {
     /** By definition the inner product of two vectors (x,y) (w,z) is equal to (x*w) + (y*z)
     *  @return InnerProduct
     */
-    static float InnerProduct(const Vector2D &a, const Vector2D &b) {
+    static double InnerProduct(const Vector2D &a, const Vector2D &b) {
         return (a.x * b.x) + (a.y * b.y);
     }
 
@@ -121,14 +121,14 @@ class Vector2D {
     *  @return lenght
     *  @see Lenght()
     */
-    float length() const { return Length(); }
+    double length() const { return Length(); }
 	
 	/// Deprecated. Use the upper case method.
     /** Depprecated method that returns the angle associated to a vector (x,y). Use instead Angle()
     *  @return angle
     *  @see Angle()
     */
-	float angle() const { return Angle(); }
+	double angle() const { return Angle(); }
 
     /// Deprecated. Use the method function Normalize.
     /** Deprecated method that returns a normalized vector of a vector (x,y). Use instead Normalize
@@ -142,7 +142,7 @@ class Vector2D {
     *  @return rotated vector
     *  @see Rotate
     */
-    static Vector2D Rotate(Vector2D &a, float angle) {
+    static Vector2D Rotate(Vector2D &a, double angle) {
         return a.Rotate(angle);
     }
 
@@ -176,25 +176,25 @@ Vector2D operator-(const Vector2D &left, const Vector2D &right);
     /** A vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y*scalar)
     *  @return Scalar Multiplied Vector
     */
-Vector2D operator*(const float  &scalar, const Vector2D &right);
+Vector2D operator*(const double  &scalar, const Vector2D &right);
 
  /// Method that returns a vector equal to the a vector multiplied by a scalar
     /** A vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y*scalar)
     *  @return Scalar Multiplied Vector
     */
-Vector2D operator*(const Vector2D &left, const float   &scalar);
+Vector2D operator*(const Vector2D &left, const double   &scalar);
 
  /// Method that returns a vector equal to the a vector multiplied by the inverse of a scalar
     /** A vector (x,y) multiplied by the inverse of a scalar is equal to the vector (x * 1/scalar, y * 1/scalar)
     *  @return Inverse Scalar Multiplied Vector
     */
-Vector2D operator/(const Vector2D &left, const float   &scalar);
+Vector2D operator/(const Vector2D &left, const double   &scalar);
 
 /// Method that returns a scalar equal to the inner product of two vectors
     /** By definition the inner product of two vectors (x,y) (w,z) is equal to (x*w) + (y*z)
     *  @return InnerProduct
     */
-float    operator*(const Vector2D &left, const Vector2D &right);
+double    operator*(const Vector2D &left, const Vector2D &right);
 
 }  // namespace ugdk
 

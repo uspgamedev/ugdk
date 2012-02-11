@@ -19,7 +19,7 @@ class Modifier {
         TRUNCATES_WHEN_APPLIED = 16
     };
 
-    Modifier() : offset_(), scale_(1.0f, 1.0f), rotation_(0.0f), 
+    Modifier() : offset_(), scale_(1.0, 1.0), rotation_(0.0), 
         mirror_(MIRROR_NONE), color_(WHITE), visible_(true), flags_(NOTHING) {}
 
     ///Creates a new image Modifier object with the specified values. 
@@ -34,8 +34,8 @@ class Modifier {
      * @param color The color filter.
      * @param alpha The alpha value for the image.
      */
-    Modifier(const Vector2D offset, const Vector2D scale = Vector2D(1.0f,1.0f),
-             float rotation = 0.0f, Mirror mirror = MIRROR_NONE, const Color color = WHITE, const bool visible = true) :
+    Modifier(const Vector2D offset, const Vector2D scale = Vector2D(1.0,1.0),
+             double rotation = 0.0, Mirror mirror = MIRROR_NONE, const Color color = WHITE, const bool visible = true) :
         offset_(offset), scale_(scale), rotation_(rotation), mirror_(mirror), 
             color_(color), visible_(visible), flags_(HAS_TRANSFORMATION | HAS_COLOR) {}
 
@@ -54,10 +54,10 @@ class Modifier {
      */
     const Vector2D& offset()   const { return   offset_; }
     const Vector2D& scale()    const { return    scale_; }
-    float           rotation() const { return rotation_; }
+    double           rotation() const { return rotation_; }
     const Mirror&   mirror()   const { return   mirror_; }
     const Color&    color()    const { return    color_; }
-    float           alpha()    const { return  color_.a; }
+    double           alpha()    const { return  color_.a; }
     int             flags()    const { return    flags_; }
     bool            visible()  const { return  visible_; }
 
@@ -65,13 +65,13 @@ class Modifier {
     void set_offset(const Vector2D& offset) { offset_ = offset; flags_ |= HAS_TRANSFORMATION; }
     void set_scale(const Vector2D& scale)   { scale_  = scale;  flags_ |= HAS_TRANSFORMATION; }
     /// Adjusts rotation to use the [0,2PI] space and sets it to the Modifier.
-    void set_rotation(const float rotation);
+    void set_rotation(const double rotation);
     /// Assigns MIRROR_NONE in case of an invalid argument.
     void set_mirror(const Mirror mirror);
     /// Truncates each component to [0,1] and sets it to the Modifier.
     void set_color(const Color& color);
     /// Truncates alpha to [0,1] and sets it to the Modifier.
-    void set_alpha(const float alpha);
+    void set_alpha(const double alpha);
     void set_visible(const bool visible) { visible_ = visible; }
     /**@}
      */
@@ -85,13 +85,13 @@ class Modifier {
 
     void ToggleFlag(const Flags& flag) { flags_ ^= flag; }
     /// Adjusts rotation to use the [0,2PI] space and composes on the Modifier.
-    void ComposeRotation(const float rotation);
+    void ComposeRotation(const double rotation);
     /// Does nothing if mirror == MIRROR_NONE or if mirror is invalid.
     void ComposeMirror(const Mirror& mirror);
     /// Truncates each component to [0,1] and composes on the Modifier.
     void ComposeColor(const Color& color);
-    /// Truncates alpha to [0,1] and composes on the Modifier.    void ComposeAlpha(const float alpha);
-	void ComposeAlpha(const float alpha);
+    /// Truncates alpha to [0,1] and composes on the Modifier.    void ComposeAlpha(const double alpha);
+	void ComposeAlpha(const double alpha);
     void ComposeVisible(const bool visible) { visible_ = !(!visible_ || !visible); }
     
     void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeOffset(   mod2->offset_   ); }
@@ -119,7 +119,7 @@ class Modifier {
     // Attributes
     Vector2D        offset_,
                     scale_;
-    float           rotation_;
+    double           rotation_;
     Mirror          mirror_;
     Color           color_; //TODO: Modifier's "color_" is actually a light filter.
     bool            visible_;
