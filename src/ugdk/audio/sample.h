@@ -39,16 +39,16 @@ class Sample {
     ///Sets the volume.
     /**Sets the volume between 0 and 1. 0 is silent, 1 is the max volume.
      */
-    void SetVolume(float vol); // 0.0f (quiet) <= vol <= 1.0f (loud)
+    void SetVolume(double vol); // 0.0 (quiet) <= vol <= 1.0 (loud)
     ///Returns the sound's volume.
-    float Volume(); // obtem o volume, 0.0f <= volume <= 1.0f
+    double Volume(); // obtem o volume, 0.0 <= volume <= 1.0
 
   private:
     Sample(const std::string& filepath);
     ~Sample();
     Mix_Chunk *data_;
     int channel_;
-    float volume_;
+    double volume_;
 
   friend class AudioManager;
 };

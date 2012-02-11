@@ -12,7 +12,7 @@ namespace ugdk {
 namespace graphic {
 
 static Vector2D GetStringSize(const std::wstring& string, Font* font) {
-    float width = 0, height = font->GetLetterSize(L'\n').y;
+    double width = 0, height = font->GetLetterSize(L'\n').y;
     for(size_t i = 0; i < string.length(); i++) {
         const Vector2D letter_size = font->GetLetterSize(string[i]);
         width += letter_size.x;
@@ -45,7 +45,7 @@ const Vector2D& Text::size() const {
     return size_;
 }
 
-void Text::Draw(float dt) {
+void Text::Draw(double dt) {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
     if(!mod.visible()) return;
 
@@ -63,31 +63,31 @@ void Text::Draw(float dt) {
         return true;
     }*/
     
-    static float FANCY_COLORS[3][3] = {
-        {1.000000f, 1.000000f, 1.000000f}, // 255, 255, 255
-        {0.831372f, 0.666666f, 0.000000f}, // 212, 170,   0
-        {0.333333f, 0.266666f, 0.000000f}};//  85,  68,   0
+    static double FANCY_COLORS[3][3] = {
+        {1.000000, 1.000000, 1.000000}, // 255, 255, 255
+        {0.831372, 0.666666, 0.000000}, // 212, 170,   0
+        {0.333333, 0.266666, 0.000000}};//  85,  68,   0
 
 
     int fancy_line_number = 0;
     if (font_->IsFancy()) fancy_line_number = 2;
 
     glPushMatrix();
-    glTranslatef(-hotspot_.x, -hotspot_.y, 0.0f);
+    glTranslated(-hotspot_.x, -hotspot_.y, 0.0);
     for(; fancy_line_number >= 0; fancy_line_number--) {
-        glTranslatef(-1.0f, -1.0f, 0);
+        glTranslated(-1.0, -1.0, 0);
         glPushMatrix();
-        glColor3fv(FANCY_COLORS[fancy_line_number]);
+        glColor3dv(FANCY_COLORS[fancy_line_number]);
         for(size_t i = 0; i < message_.size(); ++i) {
-            if(i != 0) glTranslatef( 0.0f, line_height_, 0.0f);
+            if(i != 0) glTranslated( 0.0, line_height_, 0.0);
             if(message_[i].length() > 0) {
                 glPushMatrix();
                 switch(ident) {
                     case Font::CENTER:
-                        glTranslatef((size_.x - this->line_width_[i])*0.5f, 0.0f, 0.0f);
+                        glTranslated((size_.x - this->line_width_[i])*0.5, 0.0, 0.0);
                         break;
                     case Font::RIGHT:
-                        glTranslatef((size_.x - this->line_width_[i])*1.0f, 0.0f, 0.0f);
+                        glTranslated((size_.x - this->line_width_[i])*1.0, 0.0, 0.0);
                         break;
                     default:
                         break;

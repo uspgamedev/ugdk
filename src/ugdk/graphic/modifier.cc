@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <cmath>
 
-#define TWO_PI 6.28318530f
-#define TO_UNIT_INTERVAL(FLOAT) ( std::min(std::max((FLOAT), 0.0f), 1.0f) )
+#define TWO_PI 6.28318530
+#define TO_UNIT_INTERVAL(double) ( std::min(std::max((double), 0.0), 1.0) )
 
 namespace ugdk {
 
@@ -65,12 +65,12 @@ void Modifier::set_color(const Color& color) {
     flags_ |= HAS_COLOR;
 }
 
-void Modifier::set_rotation(const float rotation) {
+void Modifier::set_rotation(const double rotation) {
     rotation_ = fmod(rotation,TWO_PI);
     flags_ |= HAS_TRANSFORMATION;
 }
 
-void Modifier::set_alpha(const float alpha) {
+void Modifier::set_alpha(const double alpha) {
     color_.a = TO_UNIT_INTERVAL(alpha);
     flags_ |= HAS_COLOR;
 }
@@ -89,12 +89,12 @@ void Modifier::ComposeColor(const Color& color) {
     flags_ |= HAS_COLOR;
 }
 
-void Modifier::ComposeRotation(const float rotation) {
+void Modifier::ComposeRotation(const double rotation) {
     rotation_ *= fmod(rotation,TWO_PI);
     flags_ |= HAS_TRANSFORMATION;
 }
 
-void Modifier::ComposeAlpha(const float alpha) {
+void Modifier::ComposeAlpha(const double alpha) {
     color_.a *= TO_UNIT_INTERVAL(alpha);
     flags_ |= HAS_COLOR;
 }

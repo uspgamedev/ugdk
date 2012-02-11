@@ -6,8 +6,8 @@ namespace ugdk {
 
 #define ANIMATION_BUFFER_SIZE 256
 
-AnimationManager::AnimationManager(float fps, AnimationSet *set)
-    : period_scaling_factor_(1.0f), current_animation_(NULL), animation_set_(set),
+AnimationManager::AnimationManager(double fps, AnimationSet *set)
+    : period_scaling_factor_(1.0), current_animation_(NULL), animation_set_(set),
       current_frame_(0), default_frame_(0) {}
 
 
@@ -45,7 +45,7 @@ void AnimationManager::Select(int index) {
     }
 }
 
-void AnimationManager::Update(float delta_t) {
+void AnimationManager::Update(double delta_t) {
     if (!current_animation_) return;
     elapsed_time_ += delta_t;
     if (elapsed_time_ >= current_animation_->period()) {

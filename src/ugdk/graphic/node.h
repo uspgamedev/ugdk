@@ -18,19 +18,19 @@ class Node {
             drawable_(drawable),
             light_(NULL),
             active_(true),
-            zindex_(0.0f),
+            zindex_(0.0),
             parent_(NULL) {}
 
     ~Node();
 
     /// Pushes the modifier to the VideoManager, renders 
-    void Render(float dt);
+    void Render(double dt);
     void RenderLight();
 
     void set_drawable(Drawable* drawable) { drawable_ = drawable; }
     void set_light(Light* light)          {    light_ =    light; }
     void set_active(const bool active)    {   active_ =   active; }
-    void set_zindex(const float zindex);
+    void set_zindex(const double zindex);
     
           Modifier* modifier() { return (modifier_ != NULL) ? modifier_ : (modifier_ = new Modifier); }
     const Modifier* modifier() const { return modifier_; }
@@ -39,7 +39,7 @@ class Node {
           Light* light()             { return    light_; }
     const Light* light()       const { return    light_; }
           bool   active()      const { return   active_; }
-          float  zindex()      const { return   zindex_; }
+          double  zindex()      const { return   zindex_; }
 
     void AddChild(Node *child) {
         childs_.push_back(child);
@@ -56,7 +56,7 @@ class Node {
     Drawable* drawable_;
     Light* light_;
     bool active_;
-    float zindex_;
+    double zindex_;
 
     NodeSet childs_;
     Node* parent_;

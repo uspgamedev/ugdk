@@ -68,7 +68,7 @@ void Engine::DeleteFinishedScenes() {
 void Engine::Run() {
     Key key;
     SDL_Event event;
-    float delta_t, total_fps = 0;
+    double delta_t, total_fps = 0;
     Scene* current_top_scene = NULL;
 
     quit_ = false;
@@ -86,11 +86,11 @@ void Engine::Run() {
 
         // gerenciamento de tempo
         time_manager_->Update();
-        delta_t = (time_manager_->TimeDifference())/1000.0f;
+        delta_t = (time_manager_->TimeDifference())/1000.0;
 
         // Verifica se o FPS nao esta baixo demais.
         // Impede que os personagens atravessem paredes.
-        delta_t = min(delta_t, 0.1f);
+        delta_t = min(delta_t, 0.1);
 
         // gerenciador de input
         input_manager()->Update(delta_t);
@@ -128,9 +128,9 @@ void Engine::Run() {
             video_manager_->Render(scene_list_, interface_list_, delta_t);
 
             ++frames_since_reset_;
-            total_fps += 1.0f/delta_t;
+            total_fps += 1.0/delta_t;
             if(frames_since_reset_ == 10) {
-                reported_fps_ = static_cast<int>(total_fps/10.0f);
+                reported_fps_ = static_cast<int>(total_fps/10.0);
                 frames_since_reset_ = 0;
                 total_fps = 0;
             }
