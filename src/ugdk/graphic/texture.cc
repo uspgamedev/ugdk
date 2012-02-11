@@ -1,13 +1,17 @@
 #include <ugdk/config/config.h>
 #ifdef ISMAC
     #include "SDL_endian.h"
+    #include "SDL_image.h"
 #else
     #include <SDL/SDL_endian.h>
+    #include <SDL/SDL_image.h>
 #endif
 
-#include <ugdk/graphic/texture.h>
 #include <cstdlib>
 #include <cstdio>
+#include <ugdk/graphic/texture.h>
+#include <ugdk/base/engine.h>
+#include <ugdk/util/pathmanager.h>
 
 namespace ugdk {
 namespace graphic {
@@ -103,9 +107,24 @@ static bool ConvertSurfaceToTexture(SDL_Surface* data, GLuint* texture_, int* te
     return true;
 }
 
+Texture* Texture::CreateFromFile(const std::string& filepath) {
+    std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
+    SDL_Surface* data = IMG_Load(fullpath.c_str());
+
+    if(data == NULL) {
+        fprintf(stderr, "UGDK::Texture::CreateFromFile Error - No data loaded from file.\n");
+        return NULL;
+
+    } else {
+        Texture* tex = CreateFromSurface(data);
+        if(data != NULL) SDL_FreeSurface(data);
+        return tex;
+    }
+}
+
 Texture* Texture::CreateFromSurface(SDL_Surface* data) {
     if(data == NULL) {
-        fprintf(stderr, "Error: CreateFromSurface - No Data\n");
+        fprintf(stderr, "UGDK::Texture::CreateFromSurface Error - No Data\n");
         return NULL; // Safeguard from NULL
     }
 

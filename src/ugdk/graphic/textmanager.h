@@ -2,6 +2,7 @@
 #define HORUSEYE_FRAMEWORK_TEXTMANAGER_H_
 
 #include <vector>
+#include <map>
 #include <ugdk/config/config.h>
 #ifdef ISMAC
     #include "SDL_ttf.h"
