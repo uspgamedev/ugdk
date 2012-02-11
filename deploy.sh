@@ -30,7 +30,7 @@ done
 
 for header in $headers
 do
-    if ! `diff src/$header $1/include/$header >/dev/null` ; then
+    if ! `diff src/$header $1/include/$header 2>/dev/null >/dev/null` ; then
         cp src/$header $1/include/$header
     fi
 done
