@@ -102,7 +102,7 @@ if (MSVC)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
   endforeach (d)
   
-  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS")
+  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS /arch:SSE2 /fp:fast")
   
 else (MSVC)
   foreach (d ${DEFS})
