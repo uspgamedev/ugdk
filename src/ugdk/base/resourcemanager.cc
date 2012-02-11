@@ -13,7 +13,7 @@ ResourceManager::ResourceManager()
     : animation_loader_(new AnimationLoader(new AnimationProtocol)) {}
 
 ResourceManager::~ResourceManager() {
-    animation_loader_->ClearCache();
+    delete animation_loader_;
 }
 
 } // namespace base

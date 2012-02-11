@@ -33,6 +33,7 @@
 									<listOptionValue builtIn="false" value="/usr/local/boost_1_48_0/boost/tr1/tr1"/>
 									<listOptionValue builtIn="false" value="/usr/local/boost_1_48_0/"/>
 									<listOptionValue builtIn="false" value="/usr/include/python2.6"/>
+									<listOptionValue builtIn="false" value="/usr/include/SDL"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.435239118" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="ECLIPSE_BOOST_WORKAROUND_INCLUDE=1"/>

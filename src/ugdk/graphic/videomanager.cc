@@ -142,7 +142,7 @@ void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
 
     for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-           (*it)->root_node()->RenderLight();
+            (*it)->content_node()->RenderLight();
 
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
@@ -186,7 +186,7 @@ void VideoManager::BlendLightIntoBuffer() {
 }
 
 // Desenha backbuffer na tela
-void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& interface_list, double dt) {
+void VideoManager::Render(std::list<Scene*>& scene_list, double dt) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     if(settings_.light_system)
@@ -198,7 +198,7 @@ void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& inter
     // Draw all the sprites from all scenes.
     for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->root_node()->Render(dt);
+            (*it)->content_node()->Render(dt);
 
     // Using the light texture, merge it into the screen.
     if(settings_.light_system)
@@ -206,8 +206,9 @@ void VideoManager::Render(std::list<Scene*>& scene_list, std::list<Node*>& inter
 
     // Draw all interface layers, with the usual RGBA blend.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    for (std::list<Node*>::iterator it = interface_list.begin(); it != interface_list.end(); ++it)
-        (*it)->Render(dt);
+    for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+        if (!(*it)->finished())
+            (*it)->interface_node()->Render(dt);
 
 
     // Swap the buffers to show the backbuffer to the user.

@@ -28,22 +28,22 @@ class VideoManager {
     ~VideoManager() {}
 
     bool Initialize(const std::string& title, const Vector2D& size, bool fullscreen, const std::string& icon);
-    bool ChangeResolution(const Vector2D& size, bool fullscreen);
     bool Release();
-    
+    void Render(std::list<Scene*>&, double dt);
+
+    // Configuration
+    bool ChangeResolution(const Vector2D& size, bool fullscreen);
     void SetVSync(const bool active);
     void SetLightSystem(const bool active) { settings_.light_system = active; }
-    
-    void Render(std::list<Scene*>&, std::list<Node*>&, double dt);
 
+    // Getters
     Vector2D video_size() const { return video_size_; }
     bool fullscreen() const { return settings_.fullscreen; }
-
     const std::string& title() const { return title_; }
     const Texture* light_texture() const { return light_texture_; }
-
     Frame virtual_bounds() const { return virtual_bounds_; }
 
+    // Modifier stack
     void PushAndApplyModifier(const Modifier*);
     void PushAndApplyModifier(const Modifier& apply) { PushAndApplyModifier(&apply); }
     bool PopModifier();
