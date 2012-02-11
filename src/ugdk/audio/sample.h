@@ -11,13 +11,8 @@
 
 #include <string>
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL.h"
-    #include "SDL_mixer.h"
-#else
-    #include <SDL/SDL.h>
-    #include <SDL/SDL_mixer.h>
-#endif
+#include "SDL.h"
+#include "SDL_mixer.h"
 
 namespace ugdk {
 

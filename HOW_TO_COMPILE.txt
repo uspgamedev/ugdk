@@ -44,12 +44,13 @@ Windows
 
 1) Get CMake 2.6 or a higher version
 
-2) Using CMake, generate the project files for the IDE you wish to use. Make sure this
-IDE has the following headers and libraries installed:
+2) Set the CMAKE_PREFIX_PATH variable to a folder that contains a include and a lib directories,
+containing the following libraries:
 - SDL 1.2
 - SDL_Image 1.2
 - SDL_Mixer 1.2
 - SDL_TTF 2.0
 
-3) Build using the generated project.
+2) Using CMake, generate the project files for the IDE you wish to use.
 
+3) Build using the generated project.

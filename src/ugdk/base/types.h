@@ -2,11 +2,7 @@
 #define HORUSEYE_FRAMEWORK_TYPES_H_
 
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL_stdinc.h"
-#else
-    #include <SDL/SDL_stdinc.h>
-#endif
+#include "SDL_stdinc.h"
 
 namespace ugdk {
 

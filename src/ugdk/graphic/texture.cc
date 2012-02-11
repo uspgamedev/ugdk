@@ -1,11 +1,6 @@
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL_endian.h"
-    #include "SDL_image.h"
-#else
-    #include <SDL/SDL_endian.h>
-    #include <SDL/SDL_image.h>
-#endif
+#include "SDL_endian.h"
+#include "SDL_image.h"
 
 #include <cstdlib>
 #include <cstdio>

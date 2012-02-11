@@ -1,9 +1,5 @@
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL_timer.h"
-#else
-    #include <SDL/SDL_timer.h>
-#endif
+#include "SDL_timer.h"
 #include <ugdk/time/timemanager.h>
 
 namespace ugdk {
