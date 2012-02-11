@@ -3,11 +3,7 @@
 #include <cmath>
 #include <algorithm>
 
-#ifdef ISMAC
-    #include "SDL.h"
-#else
-    #include <SDL/SDL.h>
-#endif
+#include "SDL.h"
 
 #include <ugdk/base/types.h>
 #include <ugdk/base/engine.h>

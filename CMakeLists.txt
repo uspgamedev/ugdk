@@ -89,32 +89,30 @@ endif (NOT FRAMEWORK_SRC)
 include_directories ("src")
 
 # Encontrando as bibliotecas necessarias:
-if (NOT MSVC)
-    find_package(OpenGL REQUIRED)
-    include_directories(${OPENGL_INCLUDE_DIR})
-    
-    find_package(SDL REQUIRED)
-    include_directories(${SDL_INCLUDE_DIR})
-    
-    find_package(SDL_mixer REQUIRED)
-    include_directories(${SDLMIXER_INCLUDE_DIR})
-    
-    find_package(SDL_ttf REQUIRED)
-    include_directories(${SDLTTF_INCLUDE_DIR})
-    
-    find_package(SDL_image REQUIRED)
-    include_directories(${SDLIMAGE_INCLUDE_DIR})
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIR})
 
-    find_package(Lua51 REQUIRED)
-    include_directories(${LUA_INCLUDE_DIR})
-    
-    find_package(PythonLibs 2.7 REQUIRED)
-    include_directories (${PYTHON_INCLUDE_DIRS})
+find_package(SDL REQUIRED)
+include_directories(${SDL_INCLUDE_DIR})
 
-    find_package(Boost 1.48.0 REQUIRED)
-    include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
-    include_directories(${Boost_INCLUDE_DIRS})
-endif(NOT MSVC)
+find_package(SDL_mixer REQUIRED)
+include_directories(${SDLMIXER_INCLUDE_DIR})
+
+find_package(SDL_ttf REQUIRED)
+include_directories(${SDLTTF_INCLUDE_DIR})
+
+find_package(SDL_image REQUIRED)
+include_directories(${SDLIMAGE_INCLUDE_DIR})
+
+find_package(Lua51 REQUIRED)
+include_directories(${LUA_INCLUDE_DIR})
+    
+find_package(PythonLibs 2.7 REQUIRED)
+include_directories (${PYTHON_INCLUDE_DIRS})
+
+find_package(Boost 1.48.0 REQUIRED)
+include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
+include_directories(${Boost_INCLUDE_DIRS})
 
 # Does this work everywhere?
 find_package (SWIG REQUIRED)

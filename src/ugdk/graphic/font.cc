@@ -1,11 +1,6 @@
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL_opengl.h"
-    #include "SDL_ttf.h"
-#else
-    #include <SDL/SDL_opengl.h>
-    #include <SDL/SDL_ttf.h>
-#endif
+#include "SDL_opengl.h"
+#include "SDL_ttf.h"
 #include <ugdk/base/types.h>
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/texture.h>

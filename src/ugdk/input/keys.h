@@ -2,11 +2,7 @@
 #define UGDK_INPUT_KEYS_H_
 
 #include <ugdk/config/config.h>
-#ifdef ISMAC
-    #include "SDL.h"
-#else
-    #include <SDL/SDL.h>
-#endif
+#include "SDL.h"
 namespace ugdk {
 namespace input {
 
