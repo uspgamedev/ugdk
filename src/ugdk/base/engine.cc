@@ -43,11 +43,9 @@ bool Engine::Initialize(const Configuration& configuration) {
     audio_manager_->Initialize();
 
     text_manager_->Initialize();
-	path_manager_ = new PathManager(base_path);
 	if (!SCRIPT_MANAGER()->Initialize())
 	    puts("Failed to initialize script manager.");
     resource_manager_ = new base::ResourceManager;
-    scene_list_.clear();
     interface_list_.clear();
     scene_list_.clear();
 
@@ -163,14 +161,10 @@ void Engine::Release() {
     video_manager()->Release();
     delete video_manager_;
 
-<<<<<<< HEAD
     SCRIPT_MANAGER()->Finalize();
     delete SCRIPT_MANAGER();
 
-    animation_loader_.ClearCache();
-=======
     delete resource_manager_;
->>>>>>> Added the ResourceManager.
 
     SDL_Quit();
 }
