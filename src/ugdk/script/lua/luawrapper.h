@@ -14,12 +14,14 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
-class LuaWrapper: public LangWrapper {
+typedef ugdk::script::InheritableLangWrapper<lua_CFunction> LuaWrapperBase;
+
+class LuaWrapper: public LuaWrapperBase {
 
   public:
 
     LuaWrapper() :
-        LangWrapper("lua",LANG(Lua)),
+        LuaWrapperBase("lua",LANG(Lua)),
         data_gear_(NULL) {}
     ~LuaWrapper() {
         if (data_gear_) Finalize();
@@ -27,7 +29,7 @@ class LuaWrapper: public LangWrapper {
 
     /// Overwritten methods.
 
-    bool RegisterModule(const std::string& name, lua_CFunction init_func);
+    //bool RegisterModule(const std::string& name, lua_CFunction init_func);
 
     bool Initialize();
 
@@ -53,7 +55,6 @@ class LuaWrapper: public LangWrapper {
 
   private:
 
-    std::vector<Module> modules_;
     DataGear*           data_gear_;
 
 };

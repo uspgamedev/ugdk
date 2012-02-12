@@ -11,7 +11,7 @@ namespace lua {
 
 /// Public:
 
-bool BootstrapGear::Initialize(const std::vector<Module>& modules) {
+bool BootstrapGear::Initialize(const ModuleList& modules) {
     L_ = AuxLib::newstate();
     if (!L_) return false;
     L_.pushcfunction(SafeInitialize);
@@ -34,8 +34,6 @@ void BootstrapGear::Abort() {
 
 /// Private:
 
-typedef const std::vector<Module> ModuleList;
-
 int BootstrapGear::SafeInitialize (lua_State* L) {
     State L_(L);
 
@@ -57,7 +55,7 @@ void BootstrapGear::LoadLibs () {
     L_.gc(Constant::gc::RESTART(), 0);
 }
 
-void BootstrapGear::PreloadModules (const std::vector<Module>& modules) {
+void BootstrapGear::PreloadModules (const ModuleList& modules) {
     L_.getglobal(LUA_LOADLIBNAME);      // [pack]
     L_.getfield(-1, "preload");         // [pack,preload]
     ModuleList::const_iterator it = modules.begin();

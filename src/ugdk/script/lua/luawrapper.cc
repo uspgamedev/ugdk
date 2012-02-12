@@ -20,13 +20,13 @@ using std::vector;
 
 /// Overwritten methods.
 
-bool LuaWrapper::RegisterModule(const string& name, lua_CFunction init_func) {
+/*bool LuaWrapper::RegisterModule(const string& name, lua_CFunction init_func) {
     if (name.empty())
         return false;
     // TODO: check if name is valid.
     modules_.push_back(Module(name, init_func));
     return true;
-}
+}*/
 
 bool LuaWrapper::Initialize() {
     if (data_gear_) return true;

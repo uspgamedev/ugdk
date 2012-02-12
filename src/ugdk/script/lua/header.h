@@ -87,14 +87,6 @@ class Constant {
 
 #undef DECLARE_LUA_CONSTANT
 
-struct Module {
-    Module(const std::string& name, lua_CFunction init_func) :
-        name_(name),
-        init_func_(init_func) {}
-    std::string     name_;
-    lua_CFunction   init_func_;
-};
-
 inline void LuaMsg (const char *format, ...) {
     printf("[Lua] ");
     va_list list;

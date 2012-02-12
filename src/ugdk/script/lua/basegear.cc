@@ -10,6 +10,8 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
+static int traceback (lua_State *L);
+
 /// Protected:
 
 const Constant BaseGear::Report (const Constant& c) {
@@ -31,6 +33,23 @@ const Constant BaseGear::TracedCall (int nargs, int nres) {
   const Constant result = L_.pcall(nargs, nres, base);
   L_.remove(base);
   return Report(result);
+}
+
+static int traceback (lua_State *L) {
+  lua_getglobal(L, "debug");
+  if (!lua_istable(L, -1)) {
+    lua_pop(L, 1);
+    return 1;
+  }
+  lua_getfield(L, -1, "traceback");
+  if (!lua_isfunction(L, -1)) {
+    lua_pop(L, 2);
+    return 1;
+  }
+  lua_pushvalue(L, 1);  /* pass error message */
+  lua_pushinteger(L, 2);  /* skip this function and traceback */
+  lua_call(L, 2, 1);  /* call debug.traceback */
+  return 1;
 }
 
 } /* namespace lua */

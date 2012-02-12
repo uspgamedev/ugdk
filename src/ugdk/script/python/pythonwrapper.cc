@@ -49,7 +49,7 @@ bool PythonWrapper::Initialize() {
     //std::string command = "sys.path.append(\"./\")";
     PyRun_SimpleString(command.c_str());
 
-    std::vector<Module>::iterator it;
+    std::vector<PythonModule>::iterator it;
     for (it = modules_.begin(); it != modules_.end(); ++it) {
         (*it->init_func_)();
     }
@@ -61,13 +61,13 @@ void PythonWrapper::Finalize() {
 	Py_Finalize();
 }
 
-bool PythonWrapper::RegisterModule(const std::string& moduleName, PyInitFunction init ) {
+/*bool PythonWrapper::RegisterModule(const std::string& moduleName, PyInitFunction init ) {
     //shared_ptr<char> str(new char(*(moduleName.c_str())), free);
     //return PyImport_AppendInittab(str.get(), init) != -1;
 
-    modules_.push_back( Module(moduleName, init) );
+    modules_.push_back( PythonModule(moduleName, init) );
     return true;
-}
+}*/
 
 void PythonWrapper::PrintPythonExceptionDetails() {
     PyObject *exc_type=NULL, *exc_value=NULL, *exc_tb=NULL, *arglist=NULL,

@@ -12,6 +12,58 @@ namespace ugdk {
 namespace script {
 
 class VirtualObj;
+template <class loader_t> class InheritableLangWrapper;
+
+class LangWrapper {
+
+  public:
+
+    virtual ~LangWrapper() {}
+
+    const std::string& file_extension() { return file_extension_; }
+
+
+    /// Initializes the LangWrapper.
+    /** This is used to initialize the script language's API, if needed.
+     ** @return bool : informing whether the initialization was successful.
+     */
+    virtual bool Initialize() = 0;
+
+    /// Finalizes the LangWrapper, finalizing any language specific stuff.
+    virtual void Finalize() = 0;
+
+    virtual VirtualData::Ptr NewData() = 0;
+
+    virtual void ExecuteCode(const std::string& code) = 0;
+
+    virtual VirtualObj LoadModule(const std::string& name) = 0;
+
+    const LangID lang_id () { return lang_id_; }
+
+  protected:
+
+  private:
+
+    template <class loader_t>
+    friend class InheritableLangWrapper;
+
+    const std::string file_extension_;
+    const LangID      lang_id_;
+
+    LangWrapper(const std::string& file_extension, const LangID id) :
+        file_extension_(file_extension),
+        lang_id_(id) {}
+
+};
+
+template <class loader_t>
+struct Module {
+    Module(const std::string& name, loader_t init_func) :
+        name_(name),
+        init_func_(init_func) {}
+    std::string     name_;
+    loader_t        init_func_;
+};
 
 /// Wraps a scripting language.
 /** Classes derived from this should implement it's methods to wrap a given
@@ -37,42 +89,25 @@ class VirtualObj;
  ** registering your specific wrapper in the ScriptManager and the
  ** wrapper modules you want in your LangWrapper.
  */
-class LangWrapper {
+template <class loader_t>
+class InheritableLangWrapper : public LangWrapper {
 
   public:
 
-    virtual ~LangWrapper() {}
-
-    const std::string& file_extension() { return file_extension_; }
-
-
-    /// Initializes the LangWrapper.
-    /** This is used to initialize the script language's API, if needed.
-     ** @return bool : informing whether the initialization was successful.
-     */
-    virtual bool Initialize() = 0;
-
-    /// Finalizes the LangWrapper, finalizing any language specific stuff.
-    virtual void Finalize() = 0;
-
-    virtual VirtualData::Ptr NewData() = 0;
-
-	virtual void ExecuteCode(const std::string& code) = 0;
-
-    virtual VirtualObj LoadModule(const std::string& name) = 0;
-
-    const LangID lang_id () { return lang_id_; }
+    bool RegisterModule(const std::string& module_name, loader_t init_func) {
+        if (module_name.empty())
+            return false;
+        // TODO: check if name is valid.
+        modules_.push_back(Module<loader_t>(module_name, init_func));
+        return true;
+    }
 
   protected:
 
-    LangWrapper(const std::string& file_extension, const LangID id) :
-        file_extension_(file_extension),
-        lang_id_(id) {}
+    std::vector< Module<loader_t> > modules_;
 
-  private:
-
-    const std::string file_extension_;
-    const LangID      lang_id_;
+    InheritableLangWrapper(const std::string& file_extension, const LangID id) :
+        LangWrapper(file_extension, id) {}
 
 };
 

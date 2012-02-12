@@ -17,20 +17,42 @@ namespace script {
 namespace lua {
 
 template <class T>
+class lua_push { private: lua_push() {} };
+
+#define DECLARE_LUA_PUSHPRIMITIVE(type, name) \
+    template <> \
+    class lua_push<type> { \
+      public: \
+        static void primitive(lua_State* L, type val) { \
+            lua_push##name(L, val); \
+        } \
+      private: \
+        lua_push() {} \
+    }
+
+DECLARE_LUA_PUSHPRIMITIVE(const char*, string);
+DECLARE_LUA_PUSHPRIMITIVE(bool, boolean);
+DECLARE_LUA_PUSHPRIMITIVE(lua_Integer, integer);
+DECLARE_LUA_PUSHPRIMITIVE(lua_Number, number);
+
+template <class T>
 class lua_to { private: lua_to() {} };
 
-#define DECLARE_LUA_TOPRIMITIVE(type, name) \
+#define DECLARE_LUA_STACKGETTER(type, call) \
     template <> \
     class lua_to<type> { \
       public: \
         static type primitive(lua_State* L, int index) { \
-            return lua_to##name(L, index); \
+            return call; \
         } \
       private: \
         lua_to() {} \
     }
 
-DECLARE_LUA_TOPRIMITIVE(const char*, string);
+#define DECLARE_LUA_TOPRIMITIVE(type, name) \
+        DECLARE_LUA_STACKGETTER(type, lua_to##name(L, index))
+
+DECLARE_LUA_STACKGETTER(const char*, lua_tolstring(L, index, NULL));
 DECLARE_LUA_TOPRIMITIVE(bool, boolean);
 DECLARE_LUA_TOPRIMITIVE(int, integer);
 DECLARE_LUA_TOPRIMITIVE(double, number);

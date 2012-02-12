@@ -4,15 +4,20 @@
 
 #include <vector>
 
-#include <ugdk/script/lua/basegear.h>
 #include <ugdk/script/lua/header.h>
+#include <ugdk/script/lua/basegear.h>
 #include <ugdk/script/lua/state.h>
+
+#include <ugdk/script/langwrapper.h>
 
 namespace ugdk {
 namespace script {
 namespace lua {
 
 class DataGear;
+
+typedef ugdk::script::Module<lua_CFunction> LuaModule;
+typedef const std::vector<LuaModule> ModuleList;
 
 class BootstrapGear : public BaseGear {
 
@@ -23,7 +28,7 @@ class BootstrapGear : public BaseGear {
 
     ~BootstrapGear() {}
 
-    bool Initialize(const std::vector<Module>& modules);
+    bool Initialize(const ModuleList& modules);
 
     DataGear* NextGear();
 
@@ -35,7 +40,7 @@ class BootstrapGear : public BaseGear {
 
     void LoadLibs();
 
-    void PreloadModules(const std::vector<Module>& modules);
+    void PreloadModules(const ModuleList& modules);
 
 };
 
