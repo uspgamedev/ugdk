@@ -61,20 +61,13 @@ VirtualObj LuaWrapper::LoadModule(const string& name) {
     );
     {
         const Constant result = data_gear_->DoFile(fullpath.c_str());
-        puts("SETP 3");
         if(result != Constant::OK())
             return VirtualObj(VirtualData::Ptr()); // error
-        puts("SETP 4");
         LuaData* lua_data = new LuaData(this, data_gear_->GenerateID());
-        puts("SETP 5");
         //Share(&dtgear);
-        puts("SETP 6");
         lua_data->RemoveFromBuffer();
-        puts("SETP 7");
         //Share(NULL);
-        puts("SETP 8");
         VirtualData::Ptr data(lua_data);
-        puts("SETP 9");
         return VirtualObj(data);
     }
 }

@@ -95,6 +95,14 @@ struct Module {
     lua_CFunction   init_func_;
 };
 
+inline void LuaMsg (const char *format, ...) {
+    printf("[Lua] ");
+    va_list list;
+    va_start(list,format);
+    vprintf(format, list);
+    va_end(list);
+}
+
 } /* namespace lua */
 } /* namespace script */
 } /* namespace ugdk */

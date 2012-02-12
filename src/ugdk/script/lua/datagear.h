@@ -77,26 +77,6 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     /// Safely unwraps a boolean from a data ID. [-2,+1,-]
     static int SafeUnwrapBoolean(lua_State* L);
 
-    template <class T, T default_value>
-    T GetResult() {
-        T result = default_value;
-        if (TracedCall(2,1) == Constant::OK()) {
-            result = To<T>::Primitive(L_, -1);
-            L_.pop(1);
-        }
-        return result;
-    }
-
-    template <class T>
-    T* GetResultPtr() {
-        T* result = NULL;
-        if (TracedCall(2,1) == Constant::OK()) {
-            result = To<T*>::Primitive(L_, -1);
-            L_.pop(1);
-        }
-        return result;
-    }
-
     /// [-0,+(0|1),-]
     bool PushDataTable();
 

@@ -17,6 +17,14 @@ class BaseGear {
 
     State* operator->() { return &L_; }
 
+    /// Makes a traced call to a function.
+    /** Behaves exactly like lua_pcall, with the usual traceback function from
+     ** Lua.
+     **
+     ** [-(nargs+1),+(nres|0),e]
+     */
+    const Constant TracedCall (int nargs, int nres);
+
   protected:
 
     State L_;
@@ -29,14 +37,6 @@ class BaseGear {
     State& L() { return L_; }
 
     const Constant Report (const Constant& c);
-
-    /// Makes a traced call to a function.
-    /** Behaves exactly like lua_pcall, with the usual traceback function from
-     ** Lua.
-     **
-     ** [-(nargs+1),+(nres|0),e]
-     */
-    const Constant TracedCall (int nargs, int nres);
 
 };
 

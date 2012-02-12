@@ -57,32 +57,31 @@ void* DataGear::UnwrapData(DataID id, const VirtualType& type) {
     return data;
 }
 
-typedef const char* native_string;
+template <class T>
+class Result {
+  public:
+    static T Get(DataGear& gear, lua_CFunction safe_unwrapper, DataID id,
+                 T default_value) {
+        gear->pushcfunction(safe_unwrapper);
+        gear->pushudata(&gear);
+        gear->pushinteger(id);
+        T result = default_value;
+        if (gear.TracedCall(2,1) == Constant::OK()) {
+            result = gear->toprimitive<T>(-1);
+            gear->pop(1);
+        }
+        return result;
+    }
+  private:
+    Result() {}
+};
 
 const char* DataGear::UnwrapString (DataID id) {
-    L_.pushcfunction(SafeUnwrapString);
-    L_.pushudata(this);
-    L_.pushinteger(id);
-    return GetResultPtr<const char>();
-    /*const char* str = NULL;
-    if (TracedCall(2,1) == Constant::OK()) {
-        str = L_.tostring(-1);
-        L_.pop(1);
-    }
-    return str;*/
+    return Result<const char*>::Get(*this, SafeUnwrapString, id, NULL);
 }
 
 bool DataGear::UnwrapBoolean(DataID id) {
-    L_.pushcfunction(SafeUnwrapBoolean);
-    L_.pushudata(this);
-    L_.pushinteger(id);
-    return GetResult<bool, false>();
-    /*bool result = false;
-    if (TracedCall(2,1) == Constant::OK()) {
-        result = L_.toboolean(-1);
-        L_.pop(1);
-    }
-    return result;*/
+    return Result<bool>::Get(*this, SafeUnwrapBoolean, id, false);
 }
 
 bool DataGear::GetData (DataID id) {
@@ -98,16 +97,12 @@ bool DataGear::GetData (DataID id) {
 }
 
 bool DataGear::SetData (DataID id) {
-    puts("\tSETP 6.1");
     // [data]
     if (!PushDataTable()) return false;
-    puts("\tSETP 6.2");
                         // [data,DT]
     L_.pushvalue(-2);   // [data,DT,data]
     L_.rawseti(-2, id); // [data,DT]
-    puts("\tSETP 6.5");
     L_.pop(2);          // []
-    puts("\tSETP 6.6");
     return true;
 }
 
@@ -116,18 +111,14 @@ const Constant DataGear::DoFile (const char* filename) {
         const Constant result = L_.aux().loadfile(filename);
         if (result != Constant::OK()) return Report(result);
     }   // [file]
-    puts("SETP 0");
     {
         L_.newtable();  // temp env table
         L_.newtable();  // temp env table's metatable
-        puts("SETP 0.1");
         L_.getfenv(-3);
         L_.setfield(-2, "__index"); // mttab.__index = _ENV
         L_.setmetatable(-2);        // setmetatable(temp, mttab)
         L_.setfenv(-2);             // setfenv(file,temp)
-        puts("SETP 0.2");
     }
-    puts("SETP 1");
     L_.pushvalue(-1); // make copy of file
     const Constant result = TracedCall(0, 0);
     if (result == Constant::OK()) {
@@ -136,9 +127,8 @@ const Constant DataGear::DoFile (const char* filename) {
         L_.getfenv(-1);             // return getfenv(file)
     }
     if (L_.istable(-1))
-        puts("Environtment table successfully retrieved.");
+        LuaMsg("Environtment table successfully retrieved.\n");
     else return Constant::err::ERR();
-    puts("SETP 2");
     return result;
 }
 

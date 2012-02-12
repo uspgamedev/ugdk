@@ -16,7 +16,7 @@ const Constant BaseGear::Report (const Constant& c) {
   if (c != Constant::OK() && !L_.isnil(-1)) {
     const char *msg = L_.tostring(-1);
     if (msg == NULL) msg = "(error object is not a string)";
-    State::errormsg(msg);
+    LuaMsg(msg);
     L_.pop(1);
     /* force a complete garbage collection in case of errors */
     L_.gc(Constant::gc::COLLECT(), 0);

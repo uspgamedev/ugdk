@@ -16,6 +16,25 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
+template <class T>
+class lua_to { private: lua_to() {} };
+
+#define DECLARE_LUA_TOPRIMITIVE(type, name) \
+    template <> \
+    class lua_to<type> { \
+      public: \
+        static type primitive(lua_State* L, int index) { \
+            return lua_to##name(L, index); \
+        } \
+      private: \
+        lua_to() {} \
+    }
+
+DECLARE_LUA_TOPRIMITIVE(const char*, string);
+DECLARE_LUA_TOPRIMITIVE(bool, boolean);
+DECLARE_LUA_TOPRIMITIVE(int, integer);
+DECLARE_LUA_TOPRIMITIVE(double, number);
+
 class State {
 
   public:
@@ -72,6 +91,8 @@ class State {
     bool isstring (int index) const { return lua_isstring(L_, index); }
     bool istable (int index) const { return lua_istable(L_, index); }
 
+    template <class T>
+    T toprimitive(int n) const { return lua_to<T>::primitive(L_, n); }
     bool toboolean(int n) const { return lua_toboolean(L_, n); }
     lua_Integer tointeger(int n) const { return lua_tointeger(L_, n); }
     const char* tostring(int n) const { return lua_tostring(L_, n); }
@@ -90,34 +111,10 @@ class State {
         return lua_gc(L_, what.value(), data);
     }
 
-    // TODO: make-do for now.
-    static void errormsg (const char* msg) {
-      fprintf(stdout, "lua: %s\n", msg);
-    }
-
   private:
 
     lua_State* L_;
 
-};
-
-template <class T>
-class To {};
-
-template <>
-class To<const char*> {
-  public:
-    static const char* Primitive(State& L, int index) {
-        return L.tostring(index);
-    }
-};
-
-template <>
-class To<bool> {
-  public:
-    static bool Primitive(State& L, int index) {
-        return L.toboolean(index);
-    }
 };
 
 } /* namespace lua */

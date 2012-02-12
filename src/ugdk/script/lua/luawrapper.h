@@ -35,6 +35,8 @@ class LuaWrapper: public LangWrapper {
 
     VirtualData::Ptr NewData();
 
+    void ExecuteCode(const std::string& code) {}
+
     VirtualObj LoadModule(const std::string& name);
 
     /// Other methods.
