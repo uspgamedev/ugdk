@@ -46,7 +46,6 @@ bool Engine::Initialize(const Configuration& configuration) {
 	if (!SCRIPT_MANAGER()->Initialize())
 	    puts("Failed to initialize script manager.");
     resource_manager_ = new base::ResourceManager;
-    interface_list_.clear();
     scene_list_.clear();
 
     frames_since_reset_ = reported_fps_ = 0;
