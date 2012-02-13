@@ -16,32 +16,6 @@ namespace lua {
 
 /// Public:
 
-DataID DataGear::GenerateID() {
-    return SafeCall(SafeGenerateID)
-        .GetResult<DataID>(LUA_NOREF);
-}
-
-bool DataGear::DestroyID(DataID id) {
-    return SafeCall(SafeDestroyID)
-        .Arg(id)
-        .NoResult();
-}
-
-bool DataGear::WrapData(DataID id, void *data, const VirtualType& type) {
-    return SafeCall(SafeWrapData)
-        .Arg(id)
-        .Arg(data)
-        .Arg(type.FromLang(LANG(Lua)))
-        .NoResult();
-}
-
-void* DataGear::UnwrapData(DataID id, const VirtualType& type) {
-    return SafeCall(SafeUnwrapData)
-        .Arg(id)
-        .Arg(type.FromLang(LANG(Lua)))
-        .GetResult<void*>(NULL);
-}
-
 template <class T>
 class Result {
   public:
@@ -61,8 +35,8 @@ class Result {
     Result() {}
 };
 
-const char* DataGear::UnwrapString (DataID id) {
-    return Result<const char*>::Get(*this, SafeUnwrapString, id, NULL);
+const char* DataGear::UnwrapString_old (DataID id) {
+    return Result<const char*>::Get(*this, UnwrapString, id, NULL);
 }
 
 bool DataGear::UnwrapBoolean(DataID id) {
@@ -119,7 +93,7 @@ const Constant DataGear::DoFile (const char* filename) {
 
 /// Private:
 
-int DataGear::SafeGenerateID(lua_State* L) {
+int DataGear::GenerateID(lua_State* L) {
     State L_(L);
 
     L_.settop(1);
@@ -138,7 +112,7 @@ int DataGear::SafeGenerateID(lua_State* L) {
     return 1;
 }
 
-int DataGear::SafeDestroyID(lua_State* L) {
+int DataGear::DestroyID(lua_State* L) {
     State L_(L);
 
     L_.settop(2);
@@ -154,7 +128,7 @@ int DataGear::SafeDestroyID(lua_State* L) {
     return 0;
 }
 
-int DataGear::SafeWrapData(lua_State* L) {
+int DataGear::WrapData(lua_State* L) {
     State L_(L);
 
     L_.settop(4);
@@ -171,7 +145,7 @@ int DataGear::SafeWrapData(lua_State* L) {
     return 0;
 }
 
-int DataGear::SafeUnwrapData(lua_State* L) {
+int DataGear::UnwrapData(lua_State* L) {
     State L_(L);
 
     L_.settop(3);
@@ -191,7 +165,7 @@ int DataGear::SafeUnwrapData(lua_State* L) {
 
 }
 
-int DataGear::SafeUnwrapString(lua_State* L) {
+int DataGear::UnwrapString(lua_State* L) {
     State L_(L);
 
     L_.settop(2);

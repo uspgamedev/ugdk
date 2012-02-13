@@ -18,41 +18,9 @@ class BaseGear {
 
   public:
 
-    State* operator->() { return &L_; }
-
-    /// Makes a traced call to a function.
-    /** Behaves exactly like lua_pcall, with the usual traceback function from
-     ** Lua.
-     **
-     ** [-(nargs+1),+(nres|0),e]
-     */
-    const Constant TracedCall (int nargs, int nres);
-
-  protected:
-
-    State L_;
-
-    BaseGear(lua_State* L) :
-        L_(L) {}
-
-    ~BaseGear() {}
-
-    State& L() { return L_; }
-
-    const Constant Report (const Constant& c);
-
-    friend class InternalSafeCall;
     class InternalSafeCall {
 
       public:
-
-        InternalSafeCall(BaseGear& gear, lua_CFunction func) :
-            gear_(gear),
-            old_top_(gear->gettop()),
-            arg_num_(1) {
-            gear_->pushcfunction(func);
-            gear_->pushudata(&gear_);
-        }
 
         ~InternalSafeCall() { gear_->settop(old_top_); }
 
@@ -78,6 +46,16 @@ class BaseGear {
 
       private:
 
+        friend class BaseGear;
+
+        InternalSafeCall(BaseGear& gear, lua_CFunction func) :
+            gear_(gear),
+            old_top_(gear->gettop()),
+            arg_num_(1) {
+            gear_->pushcfunction(func);
+            gear_->pushudata(&gear_);
+        }
+
         BaseGear&   gear_;
         int         old_top_;
         size_t      arg_num_;
@@ -88,6 +66,30 @@ class BaseGear {
         return InternalSafeCall(*this, func);
     }
 
+    State* operator->() { return &L_; }
+
+    /// Makes a traced call to a function.
+    /** Behaves exactly like lua_pcall, with the usual traceback function from
+     ** Lua.
+     **
+     ** [-(nargs+1),+(nres|0),e]
+     */
+    const Constant TracedCall (int nargs, int nres);
+
+  protected:
+
+    friend class InternalSafeCall;
+
+    State L_;
+
+    BaseGear(lua_State* L) :
+        L_(L) {}
+
+    ~BaseGear() {}
+
+    State& L() { return L_; }
+
+    const Constant Report (const Constant& c);
 };
 
 #define GETARGPTR(L,i,T,name) \

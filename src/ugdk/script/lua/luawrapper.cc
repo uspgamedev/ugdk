@@ -48,8 +48,15 @@ void LuaWrapper::Finalize() {
 }
 
 VirtualData::Ptr LuaWrapper::NewData() {
-    return VirtualData::Ptr(
-            new LuaData(this, data_gear().GenerateID())
+    return VirtualData::Ptr(NewLuaData());
+}
+
+LuaData* LuaWrapper::NewLuaData() {
+    return new LuaData(
+        this,
+        data_gear()
+            .SafeCall(DataGear::GenerateID)
+            .GetResult<DataID>(LUA_NOREF)
     );
 }
 
@@ -63,7 +70,7 @@ VirtualObj LuaWrapper::LoadModule(const string& name) {
         const Constant result = data_gear_->DoFile(fullpath.c_str());
         if(result != Constant::OK())
             return VirtualObj(VirtualData::Ptr()); // error
-        LuaData* lua_data = new LuaData(this, data_gear_->GenerateID());
+        LuaData* lua_data = NewLuaData();
         //Share(&dtgear);
         lua_data->RemoveFromBuffer();
         //Share(NULL);

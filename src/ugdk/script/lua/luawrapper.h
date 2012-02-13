@@ -14,6 +14,7 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
+class LuaData;
 typedef ugdk::script::InheritableLangWrapper<lua_CFunction> LuaWrapperBase;
 
 class LuaWrapper: public LuaWrapperBase {
@@ -36,6 +37,8 @@ class LuaWrapper: public LuaWrapperBase {
     void Finalize();
 
     VirtualData::Ptr NewData();
+
+    LuaData* NewLuaData();
 
     void ExecuteCode(const std::string& code) {}
 

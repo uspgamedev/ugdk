@@ -8,11 +8,15 @@ namespace lua {
 using std::vector;
 
 void* LuaData::Unwrap(const VirtualType& type) const {
-    return wrapper_->data_gear().UnwrapData(id_, type);
+    return wrapper_->data_gear()
+        .SafeCall(DataGear::UnwrapData)
+        .Arg(id_)
+        .Arg(type.FromLang(LANG(Lua)))
+        .GetResult<UData>(NULL);
 }
 
 const char* LuaData::UnwrapString() const {
-    return wrapper_->data_gear().UnwrapString(id_);
+    return wrapper_->data_gear().UnwrapString_old(id_);
 }
 
 bool LuaData::UnwrapBoolean() const {
@@ -29,7 +33,12 @@ double LuaData::UnwrapNumber() const {
 
 
 void LuaData::Wrap(void* data, const VirtualType& type) {
-    if (!wrapper_->data_gear().WrapData(id_, data, type))
+    if (!wrapper_->data_gear()
+            .SafeCall(DataGear::WrapData)
+            .Arg(id_)
+            .Arg(data)
+            .Arg(type.FromLang(LANG(Lua)))
+            .NoResult())
         return; // TODO deal with error.
 }
 
@@ -42,7 +51,7 @@ VirtualData::Ptr LuaData::Execute(const vector<Ptr>& args) {
         (*it)->AddToBuffer();
     //wrapper_->Share(NULL);
     dtgear->call(args.size(), 1);
-    LuaData* result = new LuaData(wrapper_, dtgear.GenerateID());
+    LuaData* result = wrapper_->NewLuaData();
     dtgear.SetData(result->id_);
     return Ptr(result);
 }
@@ -59,7 +68,7 @@ VirtualData::Ptr LuaData::GetAttribute(Ptr key) {
         dtgear->pop(2);
         return Ptr();
     }
-    LuaData* value = new LuaData(wrapper_, dtgear.GenerateID());
+    LuaData* value = wrapper_->NewLuaData();
     dtgear.SetData(value->id_);
     dtgear->pop(1);
     return Ptr(value);
@@ -80,7 +89,7 @@ VirtualData::Ptr LuaData::SetAttribute(Ptr key, Ptr value) {
         dtgear->pop(2);                  // []
         return Ptr();
     }
-    LuaData* stored_value = new LuaData(wrapper_, dtgear.GenerateID());
+    LuaData* stored_value = wrapper_->NewLuaData();
     dtgear.SetData(stored_value->id_);  // [data]
     dtgear->pop(1);                      // []
     return Ptr(stored_value);

@@ -27,7 +27,10 @@ class LuaData : public VirtualData {
 
     ~LuaData() {
         if (wrapper_)
-            wrapper_->data_gear().DestroyID(id_);
+            wrapper_->data_gear()//.DestroyID_old(id_);
+                .SafeCall(DataGear::DestroyID)
+                .Arg(id_)
+                .NoResult();
     }
 
     void* Unwrap(const VirtualType& type) const;
