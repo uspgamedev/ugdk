@@ -61,14 +61,6 @@ void PythonWrapper::Finalize() {
 	Py_Finalize();
 }
 
-/*bool PythonWrapper::RegisterModule(const std::string& moduleName, PyInitFunction init ) {
-    //shared_ptr<char> str(new char(*(moduleName.c_str())), free);
-    //return PyImport_AppendInittab(str.get(), init) != -1;
-
-    modules_.push_back( PythonModule(moduleName, init) );
-    return true;
-}*/
-
 void PythonWrapper::PrintPythonExceptionDetails() {
     PyObject *exc_type=NULL, *exc_value=NULL, *exc_tb=NULL, *arglist=NULL,
              *traceback=NULL, *format=NULL, *errlist=NULL, *errstr=NULL;
@@ -131,6 +123,7 @@ void PythonWrapper::PrintPythonExceptionDetails() {
     Py_XDECREF(errstr);
     
     /*///////////////////////////////////////
+    // what we do above in C++ is basically the following in Python:
     PyRun_SimpleString("import sys, traceback");
     PyRun_SimpleString("exc = sys.exc_info()");
     PyRun_SimpleString("tb = traceback.format_exception(exc[0], exc[1], exc[2])");
