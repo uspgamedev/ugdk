@@ -10,6 +10,8 @@
 
 %}
 
+%ignore ugdk::Vector2D::Rotate(Vector2D &a, double angle);
+
 %include <ugdk/math/vector2D.h>
 %include <ugdk/math/frame.h>
 

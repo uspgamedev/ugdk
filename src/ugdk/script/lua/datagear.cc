@@ -17,44 +17,29 @@ namespace lua {
 /// Public:
 
 DataID DataGear::GenerateID() {
-    L_.pushcfunction(SafeGenerateID);
-    L_.pushudata(this);
-
-    DataID generated = LUA_NOREF;
-    if (TracedCall(1,1) == Constant::OK()) {
-        generated = L_.tointeger(-1);
-        L_.pop(1);
-    }
-    return generated;
+    return SafeCall(SafeGenerateID)
+        .GetResult<DataID>(LUA_NOREF);
 }
 
 bool DataGear::DestroyID(DataID id) {
-    L_.pushcfunction(SafeDestroyID);
-    L_.pushudata(this);
-    L_.pushinteger(id);
-    return TracedCall(2,0) == Constant::OK();
+    return SafeCall(SafeDestroyID)
+        .Arg(id)
+        .NoResult();
 }
 
 bool DataGear::WrapData(DataID id, void *data, const VirtualType& type) {
-    L_.pushcfunction(SafeWrapData);
-    L_.pushudata(this);
-    L_.pushinteger(id);
-    L_.pushudata(data);
-    L_.pushudata(type.FromLang(LANG(Lua)));
-    return TracedCall(4,0) == Constant::OK();
+    return SafeCall(SafeWrapData)
+        .Arg(id)
+        .Arg(data)
+        .Arg(type.FromLang(LANG(Lua)))
+        .NoResult();
 }
 
 void* DataGear::UnwrapData(DataID id, const VirtualType& type) {
-    L_.pushcfunction(SafeUnwrapData);
-    L_.pushudata(this);
-    L_.pushinteger(id);
-    L_.pushudata(type.FromLang(LANG(Lua)));
-    void* data = NULL;
-    if (TracedCall(3,1) == Constant::OK()) {
-        data = L_.touserdata(-1);
-        L_.pop(1);
-    }
-    return data;
+    return SafeCall(SafeUnwrapData)
+        .Arg(id)
+        .Arg(type.FromLang(LANG(Lua)))
+        .GetResult<void*>(NULL);
 }
 
 template <class T>

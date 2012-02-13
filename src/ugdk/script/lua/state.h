@@ -17,28 +17,39 @@ namespace script {
 namespace lua {
 
 template <class T>
-class lua_push { private: lua_push() {} };
+class lua_push { private: lua_push() {}; void primitive(); };
 
-#define DECLARE_LUA_PUSHPRIMITIVE(type, name) \
-    template <> \
+#define DEFINE_LUA_PUSHER(partial_type, type, call) \
+    template <partial_type> \
     class lua_push<type> { \
       public: \
         static void primitive(lua_State* L, type val) { \
-            lua_push##name(L, val); \
+            call; \
         } \
       private: \
         lua_push() {} \
     }
 
-DECLARE_LUA_PUSHPRIMITIVE(const char*, string);
-DECLARE_LUA_PUSHPRIMITIVE(bool, boolean);
-DECLARE_LUA_PUSHPRIMITIVE(lua_Integer, integer);
-DECLARE_LUA_PUSHPRIMITIVE(lua_Number, number);
+#define DEFINE_LUA_SIMPLEPUSHER(type, call) \
+    DEFINE_LUA_PUSHER(, type, call)
+
+#define DEFINE_LUA_PUSHPRIMITIVE(type, name) \
+        DEFINE_LUA_SIMPLEPUSHER(type, lua_push##name(L, val))
+
+
+DEFINE_LUA_PUSHER(class T, T*, lua_pushlightuserdata(L, AsUData<T>(val)));
+DEFINE_LUA_SIMPLEPUSHER(lua_CFunction, lua_pushcclosure(L, val, 0));
+DEFINE_LUA_PUSHPRIMITIVE(const char*, string);
+DEFINE_LUA_PUSHPRIMITIVE(bool, boolean);
+DEFINE_LUA_PUSHPRIMITIVE(lua_Integer, integer);
+DEFINE_LUA_PUSHPRIMITIVE(int, integer);
+DEFINE_LUA_PUSHPRIMITIVE(lua_Number, number);
+DEFINE_LUA_PUSHPRIMITIVE(UData, lightuserdata);
 
 template <class T>
-class lua_to { private: lua_to() {} };
+class lua_to { private: lua_to() {}; void primitive(); };
 
-#define DECLARE_LUA_STACKGETTER(type, call) \
+#define DEFINE_LUA_GETTER(type, call) \
     template <> \
     class lua_to<type> { \
       public: \
@@ -49,13 +60,21 @@ class lua_to { private: lua_to() {} };
         lua_to() {} \
     }
 
-#define DECLARE_LUA_TOPRIMITIVE(type, name) \
-        DECLARE_LUA_STACKGETTER(type, lua_to##name(L, index))
+#define DEFINE_LUA_TOPRIMITIVE(type, name) \
+        DEFINE_LUA_GETTER(type, lua_to##name(L, index))
 
-DECLARE_LUA_STACKGETTER(const char*, lua_tolstring(L, index, NULL));
-DECLARE_LUA_TOPRIMITIVE(bool, boolean);
-DECLARE_LUA_TOPRIMITIVE(int, integer);
-DECLARE_LUA_TOPRIMITIVE(double, number);
+DEFINE_LUA_GETTER(const char*, lua_tolstring(L, index, NULL));
+DEFINE_LUA_TOPRIMITIVE(bool, boolean);
+DEFINE_LUA_TOPRIMITIVE(lua_Integer, integer);
+DEFINE_LUA_TOPRIMITIVE(int, integer);
+DEFINE_LUA_TOPRIMITIVE(lua_Number, number);
+DEFINE_LUA_TOPRIMITIVE(UData, userdata);
+
+#undef DEFINE_LUA_PUSHER
+#undef DEFINE_LUA_SIMPLEPUSHER
+#undef DEFINE_LUA_PUSHPRIMITIVE
+#undef DEFINE_LUA_GETTER
+#undef DEFINE_LUA_TOPRIMITIVE
 
 class State {
 
@@ -87,6 +106,8 @@ class State {
     }
     template <class T>
     void pushudata (T* value) { pushudata(AsUData(value)); }
+    template <class T>
+    void pushprimitive(T value) { lua_push<T>::primitive(L_, value); }
 
     void pop (int n) { lua_pop(L_, n); }
 
