@@ -33,8 +33,16 @@ class VirtualObj {
 
 	~VirtualObj() {}
 
-	template <class T>
-	T value() const;
+	/*template <class T>
+	T value() const;*/
+
+	const char* stringvalue() const {
+	    return data_->UnwrapString();
+	}
+
+	bool booleanvalue() const {
+	    return data_->UnwrapBoolean();
+	}
 
 	template <class T>
 	T* value() const {
@@ -122,22 +130,22 @@ class VirtualObj {
 /*template <>
 const char* VirtualObj::value<>() const {
     return data_->UnwrapString();
-}*/
+}
 
 template <>
-bool VirtualObj::value<>() const {
+inline bool VirtualObj::value<bool>() const {
     return data_->UnwrapBoolean();
 }
 
 template <>
-int VirtualObj::value<>() const {
+inline int VirtualObj::value<int>() const {
 	return data_->UnwrapInteger();
 }
 
 template <>
-double VirtualObj::value<>() const {
+inline double VirtualObj::value<double>() const {
 	return data_->UnwrapNumber();
-}
+}*/
 
 }
 }
