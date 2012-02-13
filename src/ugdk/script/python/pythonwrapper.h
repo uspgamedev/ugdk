@@ -15,13 +15,6 @@ typedef void (*PyInitFunction)(void);
 typedef ugdk::script::Module<PyInitFunction> PythonModule;
 typedef ugdk::script::InheritableLangWrapper<PyInitFunction> PythonWrapperBase;
 
-/*struct Module {
-    Module(const std::string& name, PyInitFunction init_func) :
-        name_(name),
-        init_func_(init_func) {}
-    std::string     name_;
-    PyInitFunction   init_func_;
-};*/
 
 class PythonWrapper : public PythonWrapperBase {
   public:
@@ -38,8 +31,6 @@ class PythonWrapper : public PythonWrapperBase {
 	virtual bool Initialize();
 	/// Finalizes the LangWrapper, finalizing any language specific stuff.
 	virtual void Finalize();
-
-    //bool RegisterModule(const std::string& moduleName, PyInitFunction init );
 
     void PrintPythonExceptionDetails();
 

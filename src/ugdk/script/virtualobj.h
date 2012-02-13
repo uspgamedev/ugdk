@@ -34,19 +34,14 @@ class VirtualObj {
 	~VirtualObj() {}
 
 	template <class T>
+	T value() const;
+
+	template <class T>
 	T* value() const {
-	    return static_cast <T*> (
-	        data_->Unwrap(TypeRegistry<T>::type())
-        );
+		return static_cast <T*> (
+		    data_->Unwrap(TypeRegistry<T>::type())
+		);
 	}
-
-	const char* stringvalue() const {
-	    return data_->UnwrapString();
-	}
-
-    bool booleanvalue() const {
-        return data_->UnwrapBoolean();
-    }
 
 	template <class T>
 	VirtualObj& operator=(T* obj) {
@@ -122,6 +117,27 @@ class VirtualObj {
 	VirtualData::Ptr data_;
 
 };
+
+	
+/*template <>
+const char* VirtualObj::value<>() const {
+    return data_->UnwrapString();
+}*/
+
+template <>
+bool VirtualObj::value<>() const {
+    return data_->UnwrapBoolean();
+}
+
+template <>
+int VirtualObj::value<>() const {
+	return data_->UnwrapInteger();
+}
+
+template <>
+double VirtualObj::value<>() const {
+	return data_->UnwrapNumber();
+}
 
 }
 }
