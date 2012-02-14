@@ -35,6 +35,10 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     /// Safely wraps typed data to a data ID. [-4,+0,-]
     static int WrapData(lua_State* L);
 
+    /// Safely wraps primitive data to a data ID. [-3,+0,-]
+    template <class T>
+    static int WrapPrimitive(lua_State* L);
+
     /// Safely unwraps typed data from a data ID. [-3,+1,-]
     static int UnwrapData(lua_State* L);
 
@@ -91,9 +95,31 @@ int DataGear::UnwrapPrimitive(lua_State* L) {
     } // else the string will already be on top
 
     if (!L_.isprimitive<T>(-1))
-        return luaL_error(L, "Could not unwrap string from id #%d", id);
+        return luaL_error(L, "Could not unwrap primitive from id #%d", id);
 
     return 1;
+}
+
+template <class T>
+int DataGear::WrapPrimitive(lua_State* L) {
+    State L_(L);
+
+    L_.settop(3);
+    GETARG(L_, 1, DataGear, dtgear);
+    DataID id = L_.aux().checkintteger(2);
+    //T value = L_.aux().checkprimitive<T>(3);
+    //UData data = L_.touserdata(3);
+    //GETARGPTR(L_, 4, swig_type_info, type);
+    //L_.settop(0);
+
+    if (!L_.isprimitive<T>(3) || !dtgear.SetData(id))
+        return luaL_error(L, "Could not wrap primitive with id #%d", id);
+
+    //SWIG_NewPointerObj(L_, data, type, 0);
+    //if (!dtgear.SetData(id))
+    //    return luaL_error(L, "Could not wrap primitive with id #%d", id);
+
+    return 0;
 }
 
 } /* namespace lua */

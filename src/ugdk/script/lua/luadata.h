@@ -48,7 +48,7 @@ class LuaData : public VirtualData {
     }
 
     void Wrap(void* data, const VirtualType& type);
-    void WrapString(const char* str) { GENERIC_WRAP(string,str); }
+    void WrapString(const char* str) { WrapPrimitive(str); }
     void WrapBoolean(bool boolean) { GENERIC_WRAP(boolean,boolean); }
     void WrapInteger(int number) { GENERIC_WRAP(integer,number); }
     void WrapNumber(double number) { GENERIC_WRAP(number,number); }
@@ -69,6 +69,9 @@ class LuaData : public VirtualData {
     template <class T>
     T UnwrapPrimitive(const T default_value) const;
 
+    template <class T>
+    void WrapPrimitive(T value);
+
     LuaWrapper* wrapper_;
     DataID      id_;
 
@@ -80,6 +83,15 @@ T LuaData::UnwrapPrimitive(const T default_value) const {
         .SafeCall(DataGear::UnwrapPrimitive<T>)
         .Arg(id_)
         .GetResult(default_value);
+}
+
+template <class T>
+void LuaData::WrapPrimitive(T value) {
+    wrapper_->data_gear()
+        .SafeCall(DataGear::WrapPrimitive<T>)
+        .Arg(id_)
+        .Arg(value)
+        .NoResult();
 }
 
 } /* namespace lua */
