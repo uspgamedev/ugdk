@@ -15,23 +15,6 @@ void* LuaData::Unwrap(const VirtualType& type) const {
         .GetResult<UData>(NULL);
 }
 
-const char* LuaData::UnwrapString() const {
-    return wrapper_->data_gear().UnwrapString_old(id_);
-}
-
-bool LuaData::UnwrapBoolean() const {
-    return wrapper_->data_gear().UnwrapBoolean(id_);
-}
-
-int LuaData::UnwrapInteger() const {
-    return 0;
-}
-
-double LuaData::UnwrapNumber() const {
-    return 0.0;
-}
-
-
 void LuaData::Wrap(void* data, const VirtualType& type) {
     if (!wrapper_->data_gear()
             .SafeCall(DataGear::WrapData)

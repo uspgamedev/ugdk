@@ -10,71 +10,12 @@
 #include <functional>
 
 #include <ugdk/script/lua/header.h>
+#include <ugdk/script/lua/primitive.h>
 #include <ugdk/script/lua/auxlib.h>
 
 namespace ugdk {
 namespace script {
 namespace lua {
-
-template <class T>
-class lua_push { private: lua_push() {}; void primitive(); };
-
-#define DEFINE_LUA_PUSHER(partial_type, type, call) \
-    template <partial_type> \
-    class lua_push<type> { \
-      public: \
-        static void primitive(lua_State* L, type val) { \
-            call; \
-        } \
-      private: \
-        lua_push() {} \
-    }
-
-#define DEFINE_LUA_SIMPLEPUSHER(type, call) \
-    DEFINE_LUA_PUSHER(, type, call)
-
-#define DEFINE_LUA_PUSHPRIMITIVE(type, name) \
-        DEFINE_LUA_SIMPLEPUSHER(type, lua_push##name(L, val))
-
-
-DEFINE_LUA_PUSHER(class T, T*, lua_pushlightuserdata(L, AsUData<T>(val)));
-DEFINE_LUA_SIMPLEPUSHER(lua_CFunction, lua_pushcclosure(L, val, 0));
-DEFINE_LUA_PUSHPRIMITIVE(const char*, string);
-DEFINE_LUA_PUSHPRIMITIVE(bool, boolean);
-DEFINE_LUA_PUSHPRIMITIVE(lua_Integer, integer);
-DEFINE_LUA_PUSHPRIMITIVE(int, integer);
-DEFINE_LUA_PUSHPRIMITIVE(lua_Number, number);
-DEFINE_LUA_PUSHPRIMITIVE(UData, lightuserdata);
-
-template <class T>
-class lua_to { private: lua_to() {}; void primitive(); };
-
-#define DEFINE_LUA_GETTER(type, call) \
-    template <> \
-    class lua_to<type> { \
-      public: \
-        static type primitive(lua_State* L, int index) { \
-            return call; \
-        } \
-      private: \
-        lua_to() {} \
-    }
-
-#define DEFINE_LUA_TOPRIMITIVE(type, name) \
-        DEFINE_LUA_GETTER(type, lua_to##name(L, index))
-
-DEFINE_LUA_GETTER(const char*, lua_tolstring(L, index, NULL));
-DEFINE_LUA_TOPRIMITIVE(bool, boolean);
-DEFINE_LUA_TOPRIMITIVE(lua_Integer, integer);
-DEFINE_LUA_TOPRIMITIVE(int, integer);
-DEFINE_LUA_TOPRIMITIVE(lua_Number, number);
-DEFINE_LUA_TOPRIMITIVE(UData, userdata);
-
-#undef DEFINE_LUA_PUSHER
-#undef DEFINE_LUA_SIMPLEPUSHER
-#undef DEFINE_LUA_PUSHPRIMITIVE
-#undef DEFINE_LUA_GETTER
-#undef DEFINE_LUA_TOPRIMITIVE
 
 class State {
 
@@ -130,9 +71,14 @@ class State {
 
     int setmetatable(int index) { return lua_setmetatable(L_, index); }
 
+    template <class T>
+    bool isprimitive(int index) const {
+        return lua_is<T>::primitive(L_, index);
+    }
     bool isnil (int index) const { return lua_isnil(L_, index); }
     bool isstring (int index) const { return lua_isstring(L_, index); }
     bool istable (int index) const { return lua_istable(L_, index); }
+
 
     template <class T>
     T toprimitive(int n) const { return lua_to<T>::primitive(L_, n); }

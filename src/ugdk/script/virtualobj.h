@@ -44,6 +44,14 @@ class VirtualObj {
 	    return data_->UnwrapBoolean();
 	}
 
+    int integervalue() const {
+        return data_->UnwrapInteger();
+    }
+
+    double numbervalue() const {
+        return data_->UnwrapNumber();
+    }
+
 	template <class T>
 	T* value() const {
 		return static_cast <T*> (
