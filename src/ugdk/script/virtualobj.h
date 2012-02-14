@@ -14,34 +14,44 @@ class VirtualPrimitive { private: VirtualPrimitive() {} };
 
 template <class T>
 class VirtualPrimitive<T*> {
-  private:
-    friend class VirtualObj;
-    VirtualPrimitive() {}
+  public:
     static T* value(const VirtualData::Ptr data) {
         return static_cast <T*> (
             data->Unwrap(TypeRegistry<T>::type())
         );
     }
+    static void set_value(const VirtualData::Ptr data, T* value) {
+        data->Wrap(value, TypeRegistry<T>::type());
+    }
+  private:
+    VirtualPrimitive() {}
 };
 
-#define DEFINE_SCRIPT_PRIMITIVE_VALUE(type) \
+#define DEFINE_SCRIPT_PRIMITIVE_VALUE(type, name, arg) \
     template <> \
     class VirtualPrimitive<type> { \
+      public: \
+        static type value(const VirtualData::Ptr data) { \
+            return data->Unwrap##name(); \
+        } \
+        static void set_value(const VirtualData::Ptr data, type value) { \
+            data->Wrap##name(arg);  \
+        } \
       private: \
-        friend class VirtualObj; \
         VirtualPrimitive() {} \
-        static type value(const VirtualData::Ptr data); \
-    }; \
-    inline type VirtualPrimitive<type>::value(const VirtualData::Ptr data)
+    }
 
-DEFINE_SCRIPT_PRIMITIVE_VALUE(const char*) { return data->UnwrapString(); }
-DEFINE_SCRIPT_PRIMITIVE_VALUE(std::string) { return data->UnwrapString(); }
-DEFINE_SCRIPT_PRIMITIVE_VALUE(bool) { return data->UnwrapBoolean(); }
-DEFINE_SCRIPT_PRIMITIVE_VALUE(int) { return data->UnwrapInteger(); }
-DEFINE_SCRIPT_PRIMITIVE_VALUE(long) { return data->UnwrapInteger(); }
-DEFINE_SCRIPT_PRIMITIVE_VALUE(short) { return data->UnwrapInteger(); }
-DEFINE_SCRIPT_PRIMITIVE_VALUE(float) { return data->UnwrapNumber(); }
-DEFINE_SCRIPT_PRIMITIVE_VALUE(double) { return data->UnwrapNumber(); }
+#define DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(type, name) \
+    DEFINE_SCRIPT_PRIMITIVE_VALUE(type, name, value)
+
+DEFINE_SCRIPT_PRIMITIVE_VALUE(std::string, String, value.c_str());
+DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(const char*, String);
+DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(bool, Boolean);
+DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(int, Integer);
+DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(long, Integer);
+DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(short, Integer);
+DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(float, Number);
+DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(double, Number);
 
 /// A proxy class wich represents virtual objects from scripting languages.
 /**
@@ -65,11 +75,19 @@ class VirtualObj {
 	explicit VirtualObj(VirtualData::Ptr data) :
 	    data_(data) {}
 
+    explicit VirtualObj(LangWrapper* wrapper) :
+        data_(wrapper->NewData()) {}
+
 	~VirtualObj() {}
 
 	template <class T>
 	T value() const {
 	    return VirtualPrimitive<T>::value(data_);
+	}
+
+	template <class T>
+	void set_value(T val) {
+	    VirtualPrimitive<T>::set_value(data_, val);
 	}
 
 	template <class T>
