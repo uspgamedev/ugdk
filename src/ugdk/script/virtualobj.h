@@ -9,6 +9,40 @@
 namespace ugdk {
 namespace script {
 
+template <class T>
+class VirtualPrimitive { private: VirtualPrimitive() {} };
+
+template <class T>
+class VirtualPrimitive<T*> {
+  private:
+    friend class VirtualObj;
+    VirtualPrimitive() {}
+    static T* value(const VirtualData::Ptr data) {
+        return static_cast <T*> (
+            data->Unwrap(TypeRegistry<T>::type())
+        );
+    }
+};
+
+#define DEFINE_SCRIPT_PRIMITIVE_VALUE(type) \
+    template <> \
+    class VirtualPrimitive<type> { \
+      private: \
+        friend class VirtualObj; \
+        VirtualPrimitive() {} \
+        static type value(const VirtualData::Ptr data); \
+    }; \
+    inline type VirtualPrimitive<type>::value(const VirtualData::Ptr data)
+
+DEFINE_SCRIPT_PRIMITIVE_VALUE(const char*) { return data->UnwrapString(); }
+DEFINE_SCRIPT_PRIMITIVE_VALUE(std::string) { return data->UnwrapString(); }
+DEFINE_SCRIPT_PRIMITIVE_VALUE(bool) { return data->UnwrapBoolean(); }
+DEFINE_SCRIPT_PRIMITIVE_VALUE(int) { return data->UnwrapInteger(); }
+DEFINE_SCRIPT_PRIMITIVE_VALUE(long) { return data->UnwrapInteger(); }
+DEFINE_SCRIPT_PRIMITIVE_VALUE(short) { return data->UnwrapInteger(); }
+DEFINE_SCRIPT_PRIMITIVE_VALUE(float) { return data->UnwrapNumber(); }
+DEFINE_SCRIPT_PRIMITIVE_VALUE(double) { return data->UnwrapNumber(); }
+
 /// A proxy class wich represents virtual objects from scripting languages.
 /**
  ** Designed for intuitive use.
@@ -33,30 +67,9 @@ class VirtualObj {
 
 	~VirtualObj() {}
 
-	/*template <class T>
-	T value() const;*/
-
-	const char* stringvalue() const {
-	    return data_->UnwrapString();
-	}
-
-	bool booleanvalue() const {
-	    return data_->UnwrapBoolean();
-	}
-
-    int integervalue() const {
-        return data_->UnwrapInteger();
-    }
-
-    double numbervalue() const {
-        return data_->UnwrapNumber();
-    }
-
 	template <class T>
-	T* value() const {
-		return static_cast <T*> (
-		    data_->Unwrap(TypeRegistry<T>::type())
-		);
+	T value() const {
+	    return VirtualPrimitive<T>::value(data_);
 	}
 
 	template <class T>
@@ -69,6 +82,8 @@ class VirtualObj {
 	}
 
 	LangWrapper* wrapper() const { return data_->wrapper(); }
+
+	operator bool() const { return static_cast<bool>(data_); }
 
 	VirtualObj operator() (std::vector<VirtualObj> args) const;
 
@@ -134,28 +149,7 @@ class VirtualObj {
 
 };
 
-	
-/*template <>
-const char* VirtualObj::value<>() const {
-    return data_->UnwrapString();
-}
-
-template <>
-inline bool VirtualObj::value<bool>() const {
-    return data_->UnwrapBoolean();
-}
-
-template <>
-inline int VirtualObj::value<int>() const {
-	return data_->UnwrapInteger();
-}
-
-template <>
-inline double VirtualObj::value<double>() const {
-	return data_->UnwrapNumber();
-}*/
-
-}
-}
+} /* namespace script */
+} /* namespace ugdk */
 
 #endif /* UGDK_SCRIPT_VIRTUALOBJ_H_ */
