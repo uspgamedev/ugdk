@@ -3,6 +3,7 @@
 #define UGDK_SCRIPT_LUA_LUAWRAPPER_H_
 
 #include <string>
+#include <list>
 #include <vector>
 
 #include <ugdk/script/lua/header.h>
@@ -56,9 +57,24 @@ class LuaWrapper: public LuaWrapperBase {
         return data_gear_;
     }
 
+    void AddToBuffer(DataID id) {
+        buffer_.push_back(id);
+    }
+
+    DataID GetFromBuffer() {
+        DataID id = buffer_.front();
+        buffer_.pop_front();
+        return id;
+    }
+
+    void CleanBuffer() {
+        buffer_.clear();
+    }
+
   private:
 
     DataGear*           data_gear_;
+    std::list<DataID>   buffer_;
 
 };
 
