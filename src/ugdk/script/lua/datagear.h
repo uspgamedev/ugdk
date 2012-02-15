@@ -42,18 +42,12 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     /// Safely unwraps typed data from a data ID. [-3,+1,-]
     static int UnwrapData(lua_State* L);
 
-    /// Safely unwraps a priitive value from a data ID. [-2,+1,-]
+    /// Safely unwraps a primitive value from a data ID. [-2,+1,-]
     template <class T>
     static int UnwrapPrimitive(lua_State* L);
 
-    /// Safely unwraps a string from a data ID. [-2,+1,-]
-    static int UnwrapString(lua_State* L);
-
-    // [-0,+0]
-    const char* UnwrapString_old (DataID id);
-
-    // [-0,+0]
-    bool UnwrapBoolean (DataID id);
+    /// Safely executes the object mapped by a data ID> [-3,+1,-]
+    static int Execute(lua_State* L);
 
     // [-0,+1]
     bool GetData (DataID id);
@@ -72,12 +66,13 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
         return *this;
     }
 
-    /// Safely unwraps a boolean from a data ID. [-2,+1,-]
-    static int SafeUnwrapBoolean(lua_State* L);
-
     /// [-0,+(0|1),-]
     bool PushDataTable();
 
+    /// [-0,+1,-]
+    void PushData (int table_index, DataID id) {
+        L_.rawgeti(table_index, id);
+    }
 
 };
 

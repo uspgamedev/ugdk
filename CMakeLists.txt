@@ -75,7 +75,7 @@ set (CFLAGS "" CACHE STRING "flags enviadas ao compilador")
 set (LDFLAGS "" CACHE STRING "flags enviadas ao linker")
 if (UNIX OR MINGW)
     # se for o g++ para *nix ou o MinGW para Windows:
-    set (CFLAGS "${CFLAGS} -Wall -ansi -O3 -U_FORTIFY_SOURCE")
+    set (CFLAGS "${CFLAGS} -Wall -ansi -O3 -U_FORTIFY_SOURCE -msse2")
     if (${BUILD_TYPE} STREQUAL DEBUG)
         set (CFLAGS "${CFLAGS} -g")
     endif (${BUILD_TYPE} STREQUAL DEBUG)

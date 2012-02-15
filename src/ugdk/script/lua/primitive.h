@@ -8,6 +8,8 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
+#define CHECK_LUA_TYPE(name, type) (defined name) && (name == type)
+
 /// Generates a Lua operation name.
 #define LUA_OPNAME(name) lua_##name
 
@@ -59,8 +61,19 @@ DEFINE_LUA_FULL_PUSH(lua_CFunction, lua_pushcclosure(L, val, 0));
 DEFINE_LUA_SIMPLE_PUSH(const char*, string);
 DEFINE_LUA_SIMPLE_PUSH(bool, boolean);
 DEFINE_LUA_SIMPLE_PUSH(lua_Integer, integer);
+#define int 1
+#if LUA_INTEGER != int
+# undef int
 DEFINE_LUA_SIMPLE_PUSH(int, integer);
+#endif
+#undef int
 DEFINE_LUA_SIMPLE_PUSH(lua_Number, number);
+#define double 1
+#if LUA_NUMBER != double
+# undef double
+DEFINE_LUA_SIMPLE_PUSH(double, number);
+#endif
+#undef double
 DEFINE_LUA_SIMPLE_PUSH(UData, lightuserdata);
 
 #undef DEFINE_LUA_PARTIAL_PUSH
@@ -85,8 +98,19 @@ DEFINE_LUA_PRIMITIVE_OP(to);
 DEFINE_LUA_TO(const char*, lua_tolstring(L, index, NULL));
 DEFINE_LUA_SIMPLE_TO(bool, boolean);
 DEFINE_LUA_SIMPLE_TO(lua_Integer, integer);
+#define int 1
+#if LUA_INTEGER != int
+# undef int
 DEFINE_LUA_SIMPLE_TO(int, integer);
+#endif
+#undef int
 DEFINE_LUA_SIMPLE_TO(lua_Number, number);
+#define double 1
+#if LUA_NUMBER != double
+# undef double
+DEFINE_LUA_SIMPLE_TO(double, number);
+#endif
+#undef double
 DEFINE_LUA_SIMPLE_TO(UData, userdata);
 
 #undef DEFINE_LUA_TO
@@ -110,8 +134,19 @@ DEFINE_LUA_PRIMITIVE_OP(is);
 DEFINE_LUA_SIMPLE_IS(const char*, string);
 DEFINE_LUA_IS(bool, !lua_isnone(L, index));
 DEFINE_LUA_SIMPLE_IS(lua_Integer, number);
+#define int 1
+#if LUA_INTEGER != int
+# undef int
 DEFINE_LUA_SIMPLE_IS(int, number);
+#endif
+#undef int
 DEFINE_LUA_SIMPLE_IS(lua_Number, number);
+#define double 1
+#if LUA_NUMBER != double
+# undef double
+DEFINE_LUA_SIMPLE_IS(double, number);
+#endif
+#undef double
 
 #undef DEFINE_LUA_IS
 #undef DEFINE_LUA_SIMPLE_IS

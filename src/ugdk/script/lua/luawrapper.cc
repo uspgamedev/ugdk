@@ -69,7 +69,7 @@ VirtualObj LuaWrapper::LoadModule(const string& name) {
     {
         const Constant result = data_gear_->DoFile(fullpath.c_str());
         if(result != Constant::OK())
-            return VirtualObj(VirtualData::Ptr()); // error
+            return VirtualObj(); // error
         LuaData* lua_data = NewLuaData();
         //Share(&dtgear);
         lua_data->RemoveFromBuffer();

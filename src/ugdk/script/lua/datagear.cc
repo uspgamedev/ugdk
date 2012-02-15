@@ -16,83 +16,6 @@ namespace lua {
 
 /// Public:
 
-template <class T>
-class Result {
-  public:
-    static T Get(DataGear& gear, lua_CFunction safe_unwrapper, DataID id,
-                 T default_value) {
-        gear->pushcfunction(safe_unwrapper);
-        gear->pushudata(&gear);
-        gear->pushinteger(id);
-        T result = default_value;
-        if (gear.TracedCall(2,1) == Constant::OK()) {
-            result = gear->toprimitive<T>(-1);
-            gear->pop(1);
-        }
-        return result;
-    }
-  private:
-    Result() {}
-};
-
-const char* DataGear::UnwrapString_old (DataID id) {
-    return Result<const char*>::Get(*this, UnwrapString, id, NULL);
-}
-
-bool DataGear::UnwrapBoolean(DataID id) {
-    return Result<bool>::Get(*this, SafeUnwrapBoolean, id, false);
-}
-
-bool DataGear::GetData (DataID id) {
-    if (!PushDataTable()) return false;
-    // DataTable is at local index 1;
-    L_.rawgeti(-1, id);     // [DT, DT.id]
-    if (L_.isnil(-1)) {
-        L_.pop(2);                         // []
-        return false;
-    }
-    L_.remove(-2);                         // [DT.id]
-    return true;
-}
-
-bool DataGear::SetData (DataID id) {
-    // [data]
-    if (!PushDataTable()) return false;
-                        // [data,DT]
-    L_.pushvalue(-2);   // [data,DT,data]
-    L_.rawseti(-2, id); // [data,DT]
-    L_.pop(2);          // []
-    return true;
-}
-
-const Constant DataGear::DoFile (const char* filename) {
-    {
-        const Constant result = L_.aux().loadfile(filename);
-        if (result != Constant::OK()) return Report(result);
-    }   // [file]
-    {
-        L_.newtable();  // temp env table
-        L_.newtable();  // temp env table's metatable
-        L_.getfenv(-3);
-        L_.setfield(-2, "__index"); // mttab.__index = _ENV
-        L_.setmetatable(-2);        // setmetatable(temp, mttab)
-        L_.setfenv(-2);             // setfenv(file,temp)
-    }
-    L_.pushvalue(-1); // make copy of file
-    const Constant result = TracedCall(0, 0);
-    if (result == Constant::OK()) {
-        L_.pushnil();
-        L_.setmetatable(-2);        // setmetatable(file,nil)
-        L_.getfenv(-1);             // return getfenv(file)
-    }
-    if (L_.istable(-1))
-        LuaMsg("Environtment table successfully retrieved.\n");
-    else return Constant::err::ERR();
-    return result;
-}
-
-/// Private:
-
 int DataGear::GenerateID(lua_State* L) {
     State L_(L);
 
@@ -165,40 +88,75 @@ int DataGear::UnwrapData(lua_State* L) {
 
 }
 
-int DataGear::UnwrapString(lua_State* L) {
+int DataGear::Execute(lua_State* L) {
     State L_(L);
 
-    L_.settop(2);
+    L_.settop(3);
     GETARG(L_, 1, DataGear, dtgear);
     DataID id = L_.aux().checkintteger(2);
+    GETARG(L_, 3, DataBuffer, buffer);
     L_.settop(0);
 
-    if (!dtgear.GetData(id)) {
-        L_.pushnil();
-    } // else the string will already be on top
+    if (!dtgear.PushDataTable())
+        return 0;
 
-    if (!L_.isstring(-1))
-        return luaL_error(L, "Could not unwrap string from id #%d", id);
-
-    return 1;
-
-}
-
-int DataGear::SafeUnwrapBoolean(lua_State* L) {
-    State L_(L);
-
-    L_.settop(2);
-    GETARG(L_, 1, DataGear, dtgear);
-    DataID id = L_.aux().checkintteger(2);
-    L_.settop(0);
-
-    if (!dtgear.GetData(id)) {
-        L_.pushnil();
-    } // else the value will already be on top
+    dtgear.PushData(1, id);
+    for (DataBuffer::iterator it = buffer.begin(); it != buffer.end(); ++it)
+        dtgear.PushData(1, *it);
+    L_.call(static_cast<int>(buffer.size()), 1);
 
     return 1;
-
 }
+
+bool DataGear::GetData (DataID id) {
+    if (!PushDataTable()) return false;
+    // DataTable is at local index 1;
+    L_.rawgeti(-1, id);     // [DT, DT.id]
+    if (L_.isnil(-1)) {
+        L_.pop(2);                         // []
+        return false;
+    }
+    L_.remove(-2);                         // [DT.id]
+    return true;
+}
+
+bool DataGear::SetData (DataID id) {
+    // [data]
+    if (!PushDataTable()) return false;
+                        // [data,DT]
+    L_.pushvalue(-2);   // [data,DT,data]
+    L_.rawseti(-2, id); // [data,DT]
+    L_.pop(2);          // []
+    return true;
+}
+
+const Constant DataGear::DoFile (const char* filename) {
+    {
+        const Constant result = L_.aux().loadfile(filename);
+        if (result != Constant::OK()) return Report(result);
+    }   // [file]
+    {
+        L_.newtable();  // temp env table
+        L_.newtable();  // temp env table's metatable
+        L_.getfenv(-3);
+        L_.setfield(-2, "__index"); // mttab.__index = _ENV
+        L_.setmetatable(-2);        // setmetatable(temp, mttab)
+        L_.setfenv(-2);             // setfenv(file,temp)
+    }
+    L_.pushvalue(-1); // make copy of file
+    const Constant result = TracedCall(0, 0);
+    if (result == Constant::OK()) {
+        L_.pushnil();
+        L_.setmetatable(-2);        // setmetatable(file,nil)
+        L_.getfenv(-1);             // return getfenv(file)
+    }
+    if (L_.istable(-1))
+        LuaMsg("Environtment table successfully retrieved.\n");
+    else return Constant::err::ERR();
+    return result;
+}
+
+/// Private:
 
 bool DataGear::PushDataTable() {
     L_.rawgeti(Constant::REGISTRYINDEX(), datatable_id_);

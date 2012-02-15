@@ -73,8 +73,8 @@ class LuaWrapper: public LuaWrapperBase {
 
   private:
 
-    DataGear*           data_gear_;
-    std::list<DataID>   buffer_;
+    DataGear*   data_gear_;
+    DataBuffer  buffer_;
 
 };
 
