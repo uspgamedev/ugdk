@@ -1522,7 +1522,7 @@ DOT_FONTSIZE           = 10
 # different font using DOT_FONTNAME you can set the path where dot 
 # can find it using this tag.
 
-DOT_FONTPATH           = 
+DOT_FONTPATH           = /usr/share/fonts/
 
 # If the CLASS_GRAPH and HAVE_DOT tags are set to YES then doxygen 
 # will generate a graph for each documented class showing the direct and 
