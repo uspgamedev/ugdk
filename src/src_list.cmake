@@ -22,10 +22,10 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/base/engine.cc
     ${SRC_DIR}/ugdk/base/engine.h
     ${SRC_DIR}/ugdk/base/resourcecontainer.h
-    ${SRC_DIR}/ugdk/base/resourcemanager.h
     ${SRC_DIR}/ugdk/base/resourcemanager.cc
-    ${SRC_DIR}/ugdk/base/texturecontainer.h
+    ${SRC_DIR}/ugdk/base/resourcemanager.h
     ${SRC_DIR}/ugdk/base/texturecontainer.cc
+    ${SRC_DIR}/ugdk/base/texturecontainer.h
     ${SRC_DIR}/ugdk/base/types.h
     ${SRC_DIR}/ugdk/config/config.h
     ${SRC_DIR}/ugdk/graphic/drawable.h
@@ -72,13 +72,13 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/util/animationparser.h
     ${SRC_DIR}/ugdk/util/animationprotocol.cc
     ${SRC_DIR}/ugdk/util/animationprotocol.h
-    ${SRC_DIR}/ugdk/util/pathmanager.cc
-    ${SRC_DIR}/ugdk/util/pathmanager.h
     ${SRC_DIR}/ugdk/util/language.cc
     ${SRC_DIR}/ugdk/util/language.h
     ${SRC_DIR}/ugdk/util/languagemanager.cc
     ${SRC_DIR}/ugdk/util/languagemanager.h
     ${SRC_DIR}/ugdk/util/languageword.h
+    ${SRC_DIR}/ugdk/util/pathmanager.cc
+    ${SRC_DIR}/ugdk/util/pathmanager.h
     ${SRC_DIR}/ugdk/util/utf8.cc
     ${SRC_DIR}/ugdk/util/utf8.h
     ${SRC_DIR}/ugdk/util/gdd/abstractloader.h
