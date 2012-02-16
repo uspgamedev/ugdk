@@ -12,7 +12,6 @@ class PathManager {
     ~PathManager() {}
 
 	std::string ResolvePath(const std::string& path);
-	std::string ResolvePath(const std::wstring& path);
 
   private:
 	std::string base_path_;
