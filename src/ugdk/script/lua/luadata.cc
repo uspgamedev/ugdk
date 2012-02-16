@@ -79,7 +79,8 @@ VirtualData::Ptr LuaData::SetAttribute(Ptr key, Ptr value) {
 }
 
 void LuaData::AddToBuffer() {
-    wrapper_->shared_gear()->GetData(id_);
+    //wrapper_->shared_gear()->GetData(id_);
+    wrapper_->AddToBuffer(id_);
 }
 
 void LuaData::RemoveFromBuffer() {

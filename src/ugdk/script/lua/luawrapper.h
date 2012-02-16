@@ -61,12 +61,6 @@ class LuaWrapper: public LuaWrapperBase {
         buffer_.push_back(id);
     }
 
-    DataID GetFromBuffer() {
-        DataID id = buffer_.front();
-        buffer_.pop_front();
-        return id;
-    }
-
     void CleanBuffer() {
         buffer_.clear();
     }

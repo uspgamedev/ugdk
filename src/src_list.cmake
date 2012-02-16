@@ -47,6 +47,7 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/script/lua/luawrapper.h 
     ./src/ugdk/script/lua/luadata.h 
     ./src/ugdk/script/lua/native/traceback.h 
+    ./src/ugdk/script/lua/primitive.h 
     ./src/ugdk/script/lua/header.h 
     ./src/ugdk/script/lua/datagear.cc 
     ./src/ugdk/script/lua/luadata.cc 
@@ -57,6 +58,7 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/script/type.h 
     ./src/ugdk/script/scriptmanager.h 
     ./src/ugdk/script/scriptmanager.cc 
+    ./src/ugdk/script/virtualprimitive.h 
     ./src/ugdk/script/defs.h 
     ./src/ugdk/script/virtualobj.h 
     ./src/ugdk/script/virtualdata.h 
@@ -112,6 +114,7 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/action/animation.h 
     ./src/ugdk/action/animationset.h 
     ./src/ugdk/action/scene.h 
+    ./src/ugdk/action/animationframe.h 
     ./src/ugdk/action/animationset.cc 
     ./src/ugdk/action/animation.cc 
     ./src/ugdk/action/entity.h 
