@@ -4,6 +4,7 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/graphic.h
     ${SRC_DIR}/ugdk/input.h
     ${SRC_DIR}/ugdk/time.h
+    ${SRC_DIR}/ugdk/util.h
     ${SRC_DIR}/ugdk/action/animation.cc
     ${SRC_DIR}/ugdk/action/animation.h
     ${SRC_DIR}/ugdk/action/animationset.cc
@@ -73,6 +74,11 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/util/animationprotocol.h
     ${SRC_DIR}/ugdk/util/pathmanager.cc
     ${SRC_DIR}/ugdk/util/pathmanager.h
+    ${SRC_DIR}/ugdk/util/language.cc
+    ${SRC_DIR}/ugdk/util/language.h
+    ${SRC_DIR}/ugdk/util/languagemanager.cc
+    ${SRC_DIR}/ugdk/util/languagemanager.h
+    ${SRC_DIR}/ugdk/util/languageword.h
     ${SRC_DIR}/ugdk/util/utf8.cc
     ${SRC_DIR}/ugdk/util/utf8.h
     ${SRC_DIR}/ugdk/util/gdd/abstractloader.h

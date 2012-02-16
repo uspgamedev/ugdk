@@ -33,12 +33,12 @@ TextManager::~TextManager() {
 }
 
 bool TextManager::Release() {
-    map<wstring,Font*>::iterator font_it;
+    map<std::string,Font*>::iterator font_it;
     for(font_it = fonts_.begin(); font_it != fonts_.end(); ++font_it)
         delete font_it->second;
     fonts_.clear();
 
-    map<wstring,Texture**>::iterator imgs_it;
+    map<std::string,Texture**>::iterator imgs_it;
     for(imgs_it = font_images_.begin(); imgs_it != font_images_.end(); ++imgs_it) {
         for(int i = 0; i < 65535; i++)
             if(imgs_it->second[i] != NULL) {
@@ -50,7 +50,7 @@ bool TextManager::Release() {
     return true;
 }
 
-Text* TextManager::GetText(wstring text, wstring fonttag, int width) {
+Text* TextManager::GetText(const std::wstring& text, const std::string& fonttag, int width) {
     wstring subString;
     vector<wstring> lines;
     Font *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
@@ -73,10 +73,16 @@ Text* TextManager::GetText(wstring text, wstring fonttag, int width) {
     }
     return new Text(lines, font);
 }
-Text* TextManager::GetTextFromFile(wstring path, wstring font, int width) {
+
+Text* TextManager::GetText(const std::wstring& text) {
+    std::string blank_font;
+    return GetText(text, blank_font);
+}
+
+Text* TextManager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
     std::string fullpath = PATH_MANAGER()->ResolvePath(path);
     FILE *txtFile = fopen(fullpath.c_str(), "r");
-    if(txtFile==NULL) return NULL;
+    if(txtFile == NULL) return NULL;
     char buffer_utf8[MAXLINE];
     wchar_t buffer[MAXLINE];
     wstring output;
@@ -88,6 +94,11 @@ Text* TextManager::GetTextFromFile(wstring path, wstring font, int width) {
         output.append(buffer);
     }
     return GetText(output, font, width);
+}
+
+Text* TextManager::GetTextFromFile(const std::string& path) {
+    std::string blank_font;
+    return GetTextFromFile(path, blank_font);
 }
 
 static Texture** LoadFontTexturesFromFile(const std::string& path) {
@@ -114,11 +125,17 @@ static Texture** LoadFontTexturesFromFile(const std::string& path) {
     return font_image;
 }
 
-void TextManager::AddFont(wstring name, wstring path, int size, char ident, bool fancy) {
-    if(fonts_.count(name) > 0) return;
-#ifdef DEBUG
-    fwprintf(stderr, L"Loading new font tag: \"%s\"\n", name.c_str());
-#endif
+void TextManager::AddFont(const std::string& name, const std::string& path, int size, char ident, bool fancy) {
+    if(fonts_.count(name) > 0) {
+        delete fonts_[name];
+    #ifdef DEBUG
+        fprintf(stderr, "Replacing a font tag: \"%s\"\n", name.c_str());
+    #endif
+    } else {
+    #ifdef DEBUG
+        fprintf(stderr, "Loading new font tag: \"%s\"\n", name.c_str());
+    #endif
+    }
 
     if(font_images_.count(path) == 0) // Given file not loaded, loading it.
         font_images_[path] = LoadFontTexturesFromFile(PATH_MANAGER()->ResolvePath(path));
