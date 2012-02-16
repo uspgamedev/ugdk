@@ -93,17 +93,25 @@ int DataGear::Execute(lua_State* L) {
 
     L_.settop(3);
     GETARG(L_, 1, DataGear, dtgear);
-    DataID id = L_.aux().checkintteger(2);
+    DataID func_id = L_.aux().checkintteger(2);
     GETARG(L_, 3, DataBuffer, buffer);
+    DataID result_id = L_.aux().checkintteger(4);
     L_.settop(0);
 
+    // Push the data table. It will be on index 1.
     if (!dtgear.PushDataTable())
         return 0;
 
-    dtgear.PushData(1, id);
+    // Push the function.
+    dtgear.PushData(1, func_id);
+    // Push the arguments.
     for (DataBuffer::iterator it = buffer.begin(); it != buffer.end(); ++it)
         dtgear.PushData(1, *it);
+    // Call the function. The result will be on index 2, the new stack top.
     L_.call(static_cast<int>(buffer.size()), 1);
+
+    // Pop the result into the data table.
+    dtgear.PopData(1,result_id);
 
     return 1;
 }

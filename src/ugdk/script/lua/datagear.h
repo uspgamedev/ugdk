@@ -46,8 +46,20 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     template <class T>
     static int UnwrapPrimitive(lua_State* L);
 
-    /// Safely executes the object mapped by a data ID> [-3,+1,-]
+    /// Safely executes the object mapped by a data ID. [-4,+1,-]
+    /**
+     ** Lua arguments:
+     **     [1] DataGear* - Data gear holding the data table.
+     **     [2] DataID - ID of the lua function object.
+     **     [3]
+     */
     static int Execute(lua_State* L);
+
+    /// Safely gets the field of an object mapped by a data ID> [-3,+1,-]
+    static int GetField(lua_State* L);
+
+    /// Safely sets the field of an object mapped by a data ID> [-3,+1,-]
+    static int SetField(lua_State* L);
 
     // [-0,+1]
     bool GetData (DataID id);
@@ -72,6 +84,11 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     /// [-0,+1,-]
     void PushData (int table_index, DataID id) {
         L_.rawgeti(table_index, id);
+    }
+
+    /// [-1,+0,-]
+    void PopData (int table_index, DataID id) {
+        L_.rawseti(table_index, id);
     }
 
 };
