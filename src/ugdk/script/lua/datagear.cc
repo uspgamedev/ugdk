@@ -91,29 +91,57 @@ int DataGear::UnwrapData(lua_State* L) {
 int DataGear::Execute(lua_State* L) {
     State L_(L);
 
-    L_.settop(3);
+    L_.settop(4);
     GETARG(L_, 1, DataGear, dtgear);
     DataID func_id = L_.aux().checkintteger(2);
     GETARG(L_, 3, DataBuffer, buffer);
     DataID result_id = L_.aux().checkintteger(4);
     L_.settop(0);
 
-    // Push the data table. It will be on index 1.
+    // Pushes the data table. It will be on index 1.
     if (!dtgear.PushDataTable())
         return 0;
 
-    // Push the function.
+    // Pushes the function.
     dtgear.PushData(1, func_id);
-    // Push the arguments.
+    // Pushes the arguments.
     for (DataBuffer::iterator it = buffer.begin(); it != buffer.end(); ++it)
         dtgear.PushData(1, *it);
-    // Call the function. The result will be on index 2, the new stack top.
+    // Calls the function. The result will be on index 2, the new stack top.
     L_.call(static_cast<int>(buffer.size()), 1);
 
-    // Pop the result into the data table.
+    // Pops the result into the data table.
     dtgear.PopData(1,result_id);
 
-    return 1;
+    return 0;
+}
+
+int DataGear::GetField(lua_State* L) {
+    State L_(L);
+
+    L_.settop(4);
+    GETARG(L_, 1, DataGear, dtgear);
+    DataID container_id = L_.aux().checkintteger(2);
+    DataID key_id = L_.aux().checkintteger(3);
+    DataID value_id = L_.aux().checkintteger(4);
+    L_.settop(0);
+
+    // Pushes the data table. It will be on index 1.
+    if (!dtgear.PushDataTable())
+        return 0;
+
+    // Pushes the container at index 2.
+    dtgear.PushData(1, container_id);
+    // Pushes the key at index 3.
+    dtgear.PushData(1, key_id);
+    // Gets the field value in the container using the key. The key is poped and
+    // the field value is pushed, becoming the new stack top at index 3.
+    L_.gettable(2);
+
+    // Pops the field into the data table.
+    dtgear.PopData(1,value_id);
+
+    return 0;
 }
 
 bool DataGear::GetData (DataID id) {
