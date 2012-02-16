@@ -7,6 +7,7 @@
 #include <utility>
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/action/animation.h>
+#include <ugdk/action/animationframe.h>
 
 namespace ugdk {
 
@@ -22,15 +23,15 @@ class AnimationSet {
     void Release();
 
     // Returns the animation indexed by index, or NULL if it is not there.
-    AnimationManager::Animation* Get(size_t index);
+    Animation* Get(size_t index);
 
     // Adds a modifier sequence to the set, naming it for later requests.
-    void Add(std::string name, AnimationManager::Animation *sequence);
+    void Add(std::string name, Animation *sequence);
     void Add(std::string name, ...);
 
     // Searches for the animation using the given name.
     // Returns it if it is found or NULL if else.
-    AnimationManager::Animation* Search(std::string name);
+    Animation* Search(std::string name);
 
     // Optimizes access to the animations identified by the given name.
     // The caller should be conscious of the returned indexes for later use
@@ -42,8 +43,8 @@ class AnimationSet {
 
   private:
 
-    typedef std::map<std::string,AnimationManager::Animation*> SequenceMap;
-    typedef std::vector<AnimationManager::Animation*> IndexArray;
+    typedef std::map<std::string,Animation*> SequenceMap;
+    typedef std::vector<Animation*> IndexArray;
 
     SequenceMap sequences_;
     IndexArray indexed_sequences_;

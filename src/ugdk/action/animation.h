@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <ugdk/graphic/modifier.h>
+#include <ugdk/action/animationframe.h>
 
 #define DEFAULT_PERIOD 0.1
 
