@@ -1,4 +1,7 @@
 
+#include <algorithm>
+#include <functional>
+
 #include <ugdk/script/lua/luadata.h>
 
 namespace ugdk {
@@ -26,7 +29,14 @@ void LuaData::Wrap(void* data, const VirtualType& type) {
 }
 
 VirtualData::Ptr LuaData::Execute(const vector<Ptr>& args) {
-    DataGear& dtgear = wrapper_->data_gear();
+    std::for_each(
+        args.begin(),
+        args.end(),
+        std::tr1::mem_fn(&VirtualData::AddToBuffer)
+    );
+    return wrapper_->Execute(id_);
+
+    /*DataGear& dtgear = wrapper_->data_gear();
     dtgear.GetData(id_);
     vector<Ptr>::const_iterator it = args.begin();
     //wrapper_->Share(&dtgear);
@@ -36,7 +46,7 @@ VirtualData::Ptr LuaData::Execute(const vector<Ptr>& args) {
     dtgear->call(args.size(), 1);
     LuaData* result = wrapper_->NewLuaData();
     dtgear.SetData(result->id_);
-    return Ptr(result);
+    return Ptr(result);*/
 }
 
 VirtualData::Ptr LuaData::GetAttribute(Ptr key) {

@@ -51,12 +51,12 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
      ** Lua arguments:
      **     [1] DataGear* - Data gear holding the data table.
      **     [2] DataID - ID of the lua function object.
-     **     [3] vector<DataID>* - Vector of the arguments' IDs.
+     **     [3] DataBuffer* - Buffer of the arguments' IDs.
      **     [4] DataID - ID of a lua object to store the result.
      */
     static int Execute(lua_State* L);
 
-    /// Safely gets the field of an object mapped by a data ID> [-4,+0,?]
+    /// Safely gets the field of an object mapped by a data ID. [-4,+0,?]
     /**
      ** Lua arguments:
      **     [1] DataGear* - Data gear holding the data table.

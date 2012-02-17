@@ -43,6 +43,8 @@ class LuaWrapper: public LuaWrapperBase {
 
     void ExecuteCode(const std::string& code) {}
 
+    VirtualData::Ptr Execute(const DataID func_id);
+
     VirtualObj LoadModule(const std::string& name);
 
     /// Other methods.
@@ -66,6 +68,19 @@ class LuaWrapper: public LuaWrapperBase {
     }
 
   private:
+
+    DataID NewDataID() {
+        return data_gear()
+            .SafeCall(DataGear::GenerateID)
+            .GetResult<DataID>(LUA_NOREF);
+    }
+
+    void DeleteDataID(DataID id) {
+        data_gear()
+            .SafeCall(DataGear::DestroyID)
+            .Arg(id)
+            .NoResult();
+    }
 
     DataGear*   data_gear_;
     DataBuffer  buffer_;

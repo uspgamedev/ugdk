@@ -54,10 +54,24 @@ VirtualData::Ptr LuaWrapper::NewData() {
 LuaData* LuaWrapper::NewLuaData() {
     return new LuaData(
         this,
-        data_gear()
-            .SafeCall(DataGear::GenerateID)
-            .GetResult<DataID>(LUA_NOREF)
+        NewDataID()
     );
+}
+
+VirtualData::Ptr LuaWrapper::Execute(const DataID func_id) {
+    DataID result_id = NewDataID();
+    bool success = data_gear()
+        .SafeCall(DataGear::GetField)
+        .Arg(func_id)
+        .Arg(&buffer_)
+        .Arg(result_id)
+        .NoResult();
+    buffer_.clear();
+    if (!success) {
+        DeleteDataID(result_id);
+        return VirtualData::Ptr();
+    }
+    return VirtualData::Ptr(new LuaData(this, result_id));
 }
 
 VirtualObj LuaWrapper::LoadModule(const string& name) {
