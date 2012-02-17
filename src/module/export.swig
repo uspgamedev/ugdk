@@ -54,7 +54,7 @@ end
 }
 #elif SWIGPYTHON
 %pythoncode {
-print "Python confirm exports!"
+print "Python modname confirm exports!"
 module = __import__(__name__)
 for key,value in module.__dict__.items():
 	if key.startswith("RegisterType_"):
