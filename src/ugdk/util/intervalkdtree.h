@@ -21,8 +21,8 @@ template <class T, int DIMENSIONS>
 class Item;
 
 typedef double Coordinate;
-#define COORD_NEG_INFINITY INT_MIN
-#define COORD_INFINITY INT_MAX 
+#define COORD_NEG_INFINITY -10
+#define COORD_INFINITY 1000
 
 template <class T, int DIMENSIONS>
 class IntervalKDTree {
@@ -35,6 +35,9 @@ class IntervalKDTree {
         void Update (const Box<DIMENSIONS>& new_bounding_box, T element);
         std::vector<T>* getIntersectingItems (const Box<DIMENSIONS>& boundary) const;
         unsigned int max_elements_per_leaf ();
+#ifdef DEBUG
+        unsigned int max_height_;
+#endif
     private:
         unsigned int max_elements_per_leaf_;
         std::map<T,Item<T, DIMENSIONS>* > container_items_;
@@ -118,6 +121,9 @@ IntervalKDTree<T, DIMENSIONS>::IntervalKDTree (
     }
     root_ = new Node<T,DIMENSIONS>(this, NULL, 0,
             min_coordinates, max_coordinates);
+#ifdef DEBUG
+    max_height_ = 0;
+#endif
 }
 
 template <class T, int DIMENSIONS>
@@ -304,6 +310,11 @@ Node<T, DIMENSIONS>::~Node () {
 
 template <class T, int DIMENSIONS>
 void Node<T, DIMENSIONS>::InsertItem (Item<T, DIMENSIONS> *item) {
+#ifdef DEBUG
+    if (static_cast<unsigned int>(depth_) > tree_->max_height_) {
+        tree_->max_height_ = depth_;
+    }
+#endif
     if (has_children_) {
         if (item->IsBelow (depth_, division_boundary_)) {
             assert (low_child_);
