@@ -10,6 +10,13 @@ class Language;
 class LanguageManager;
 class LanguageWord;
 class PathManager;
+    
+namespace ikdtree {
+    template <class T, int DIMENSIONS>
+    class IntervalKDTree;
+    template <int DIMENSIONS>
+    class Box;
+}
 
 //}  // namespace util
 }  // namespace ugdk
