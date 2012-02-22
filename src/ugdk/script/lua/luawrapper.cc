@@ -58,6 +58,10 @@ LuaData* LuaWrapper::NewLuaData() {
     );
 }
 
+void LuaWrapper::ExecuteCode(const std::string& code) {
+
+}
+
 VirtualData::Ptr LuaWrapper::OperateBuffer(const DataID operand_id,
                                            lua_CFunction op) {
     DataID result_id = NewDataID();
@@ -81,17 +85,17 @@ VirtualObj LuaWrapper::LoadModule(const string& name) {
         SCRIPT_MANAGER()->ConvertDottedNotationToPath(name) +
         "." + file_extension()
     );
-    {
-        const Constant result = data_gear_->DoFile(fullpath.c_str());
-        if(result != Constant::OK())
-            return VirtualObj(); // error
-        LuaData* lua_data = NewLuaData();
-        //Share(&dtgear);
-        lua_data->RemoveFromBuffer();
-        //Share(NULL);
-        VirtualData::Ptr data(lua_data);
-        return VirtualObj(data);
+    DataID result_id = NewDataID();
+    bool success = data_gear()
+        .SafeCall(DataGear::DoFile)
+        .Arg(fullpath.c_str())
+        .Arg(result_id)
+        .NoResult();
+    if (!success) {
+        DeleteDataID(result_id);
+        return VirtualObj();
     }
+    return VirtualObj(VirtualData::Ptr(new LuaData(this, result_id)));
 }
 
 } /* namespace lua */

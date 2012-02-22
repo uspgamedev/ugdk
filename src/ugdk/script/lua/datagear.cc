@@ -6,10 +6,6 @@
 
 #include <ugdk/script/swig/swigluarun.h>
 
-/*static int ll_SafeGenerateID(lua_State* L) {
-    return 0;
-}*/
-
 namespace ugdk {
 namespace script {
 namespace lua {
@@ -199,6 +195,46 @@ int DataGear::SetField(lua_State* L) {
     return 0;
 }
 
+int DataGear::DoFile(lua_State* L) {
+    State L_(L);
+
+    L_.settop(3);
+    GETARG(L_, 1, DataGear, dtgear);
+    const char* filename = L_.aux().checkstring(2);
+    DataID result_id = L_.aux().checkintteger(3);
+    L_.settop(0);
+
+    // Pushes the data table. It will be on index 1.
+    if (!dtgear.PushDataTable())
+        return luaL_error(
+            L,
+            "At operation dofile: could not acquire data table."
+        );
+
+    const Constant result = L_.aux().loadfile(filename);
+    if (result != Constant::OK()) {
+        dtgear.Report(result);
+        return 0;
+    }
+
+    L_.newtable();  // temp env table
+    L_.newtable();  // temp env table's metatable
+    L_.getfenv(-3);
+    L_.setfield(-2, "__index"); // mttab.__index = _ENV
+    L_.setmetatable(-2);        // setmetatable(temp, mttab)
+    L_.setfenv(-2);             // setfenv(file,temp)
+
+    L_.pushvalue(-1); // make copy of file
+    L_.call(0, 0);
+    L_.getfenv(-1);   // getfenv(file)
+
+    LuaMsg("Environtment table successfully retrieved.\n");
+    dtgear.PopData(1, result_id);
+
+    return 0;
+}
+
+
 bool DataGear::GetData (DataID id) {
     if (!PushDataTable()) return false;
     // DataTable is at local index 1;
@@ -219,32 +255,6 @@ bool DataGear::SetData (DataID id) {
     L_.rawseti(-2, id); // [data,DT]
     L_.pop(2);          // []
     return true;
-}
-
-const Constant DataGear::DoFile (const char* filename) {
-    {
-        const Constant result = L_.aux().loadfile(filename);
-        if (result != Constant::OK()) return Report(result);
-    }   // [file]
-    {
-        L_.newtable();  // temp env table
-        L_.newtable();  // temp env table's metatable
-        L_.getfenv(-3);
-        L_.setfield(-2, "__index"); // mttab.__index = _ENV
-        L_.setmetatable(-2);        // setmetatable(temp, mttab)
-        L_.setfenv(-2);             // setfenv(file,temp)
-    }
-    L_.pushvalue(-1); // make copy of file
-    const Constant result = TracedCall(0, 0);
-    if (result == Constant::OK()) {
-        L_.pushnil();
-        L_.setmetatable(-2);        // setmetatable(file,nil)
-        L_.getfenv(-1);             // return getfenv(file)
-    }
-    if (L_.istable(-1))
-        LuaMsg("Environtment table successfully retrieved.\n");
-    else return Constant::err::ERR();
-    return result;
 }
 
 /// Private:

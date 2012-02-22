@@ -46,7 +46,7 @@ VirtualData::Ptr LuaData::SetAttribute(Ptr key, Ptr value) {
     key->AddToBuffer();
     value->AddToBuffer();
     return wrapper_->OperateBuffer(id_, DataGear::SetField);
-
+/*
     DataGear& dtgear = wrapper_->data_gear();   // []
     dtgear.GetData(id_);                // [data]
     //wrapper_->Share(&dtgear);
@@ -64,7 +64,7 @@ VirtualData::Ptr LuaData::SetAttribute(Ptr key, Ptr value) {
     LuaData* stored_value = wrapper_->NewLuaData();
     dtgear.SetData(stored_value->id_);  // [data]
     dtgear->pop(1);                      // []
-    return Ptr(stored_value);
+    return Ptr(stored_value);*/
 }
 
 void LuaData::AddToBuffer() {

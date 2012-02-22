@@ -77,14 +77,13 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
      */
     static int SetField(lua_State* L);
 
+    static int DoFile(lua_State* L);
+
     // [-0,+1]
     bool GetData (DataID id);
 
     // [-1,+0]
     bool SetData (DataID id);
-
-    // [-0,+1]
-    const Constant DoFile (const char* filename);
 
   private:
 

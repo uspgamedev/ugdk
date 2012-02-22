@@ -76,6 +76,8 @@ class BaseGear {
      */
     const Constant TracedCall (int nargs, int nres);
 
+    const Constant Report (const Constant& c);
+
   protected:
 
     friend class InternalSafeCall;
@@ -88,8 +90,6 @@ class BaseGear {
     ~BaseGear() {}
 
     State& L() { return L_; }
-
-    const Constant Report (const Constant& c);
 };
 
 #define GETARGPTR(L,i,T,name) \

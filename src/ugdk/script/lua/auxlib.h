@@ -31,7 +31,14 @@ class AuxLib {
         );
     }
 
+    const Constant loadstring(const char* str) {
+        return Constant(
+            std::tr1::bind(luaL_loadstring, L_, str)
+        );
+    }
+
     int checkintteger(int index) { return luaL_checkinteger(L_, index); }
+    const char* checkstring(int index) { return luaL_checkstring(L_, index); }
 
     DataID ref(int index) { return luaL_ref(L_, index); }
 
