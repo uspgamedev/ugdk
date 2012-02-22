@@ -127,7 +127,10 @@ int DataGear::GetField(lua_State* L) {
     L_.settop(0);
 
     if (!buffer.size())
-        return luaL_error(L, "attempt to get field without a key.");
+        return luaL_error(
+            L,
+            "At operation __index: attempt to get field without a key."
+        );
 
     DataID key_id = buffer.front();
 
@@ -145,6 +148,53 @@ int DataGear::GetField(lua_State* L) {
 
     // Pops the field into the data table.
     dtgear.PopData(1,value_id);
+
+    return 0;
+}
+
+int DataGear::SetField(lua_State* L) {
+    State L_(L);
+
+    L_.settop(4);
+    GETARG(L_, 1, DataGear, dtgear);
+    DataID container_id = L_.aux().checkintteger(2);
+    GETARG(L_, 3, DataBuffer, buffer);
+    DataID finalvalue_id = L_.aux().checkintteger(4);
+    L_.settop(0);
+
+    if (buffer.size() < 2)
+        return luaL_error(
+            L,
+            "At operation __newindex: attempt to set field without a key or "
+            "value."
+        );
+
+    DataID key_id = buffer.front(),
+           newvalue_id = *(++buffer.begin());
+
+    // Pushes the data table. It will be on index 1.
+    if (!dtgear.PushDataTable())
+        return 0;
+
+    // Pushes the container at index 2.
+    dtgear.PushData(1, container_id);
+    // Pushes the key at index 3.
+    dtgear.PushData(1, key_id);
+    // Pushes the new value at index 4.
+    dtgear.PushData(1, newvalue_id);
+    // Sets the field value in the container using the key and the new value.
+    // Both are poped and nothing is pushed, so the new stack top is 2.
+    L_.settable(2);
+
+    // Now we get the field again to return it.
+    // Pushes the key at index 3.
+    dtgear.PushData(1, key_id);
+    // Gets the field value in the container using the key. The key is poped and
+    // the field value is pushed, becoming the new stack top at index 3.
+    L_.gettable(2);
+
+    // Pops the field into the data table.
+    dtgear.PopData(1,finalvalue_id);
 
     return 0;
 }

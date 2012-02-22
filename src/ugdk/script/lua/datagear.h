@@ -61,12 +61,20 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
      ** Lua arguments:
      **     [1] DataGear* - Data gear holding the data table.
      **     [2] DataID - ID of the lua container object.
-     **     [3] DataID - ID of the lua object key.
+     **     [3] DataBuffer* - buffer with the ID of the field's key.
      **     [4] DataID - ID of a lua object to store the field value.
      */
     static int GetField(lua_State* L);
 
-    /// Safely sets the field of an object mapped by a data ID> [-3,+1,-]
+    /// Safely sets the field of an object mapped by a data ID> [-4,+1,-]
+    /**
+     ** Lua arguments:
+     **     [1] DataGear* - Data gear holding the data table.
+     **     [2] DataID - ID of the lua container object.
+     **     [3] DataBuffer* - buffer with the ID of the filed's key followed by
+     **                       the ID of its new value.
+     **     [4] DataID - ID of a lua object to store the final field value.
+     */
     static int SetField(lua_State* L);
 
     // [-0,+1]
