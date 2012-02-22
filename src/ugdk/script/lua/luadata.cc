@@ -34,37 +34,12 @@ VirtualData::Ptr LuaData::Execute(const vector<Ptr>& args) {
         args.end(),
         std::tr1::mem_fn(&VirtualData::AddToBuffer)
     );
-    return wrapper_->Execute(id_);
-
-    /*DataGear& dtgear = wrapper_->data_gear();
-    dtgear.GetData(id_);
-    vector<Ptr>::const_iterator it = args.begin();
-    //wrapper_->Share(&dtgear);
-    for(; it != args.end(); ++it)
-        (*it)->AddToBuffer();
-    //wrapper_->Share(NULL);
-    dtgear->call(args.size(), 1);
-    LuaData* result = wrapper_->NewLuaData();
-    dtgear.SetData(result->id_);
-    return Ptr(result);*/
+    return wrapper_->OperateBuffer(id_, DataGear::Execute);
 }
 
 VirtualData::Ptr LuaData::GetAttribute(Ptr key) {
-    DataGear& dtgear = wrapper_->data_gear();
-    dtgear.GetData(id_);
-    //wrapper_->Share(&dtgear);
     key->AddToBuffer();
-    //wrapper_->Share(NULL);
-    dtgear->gettable(-2);
-    if (dtgear->isnil(-1)) {
-        puts("Failed to retrieve attribute!");
-        dtgear->pop(2);
-        return Ptr();
-    }
-    LuaData* value = wrapper_->NewLuaData();
-    dtgear.SetData(value->id_);
-    dtgear->pop(1);
-    return Ptr(value);
+    return wrapper_->OperateBuffer(id_, DataGear::GetField);
 }
 
 VirtualData::Ptr LuaData::SetAttribute(Ptr key, Ptr value) {

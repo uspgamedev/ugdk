@@ -43,7 +43,7 @@ class LuaWrapper: public LuaWrapperBase {
 
     void ExecuteCode(const std::string& code) {}
 
-    VirtualData::Ptr Execute(const DataID func_id);
+    VirtualData::Ptr OperateBuffer(const DataID operand_id, lua_CFunction op);
 
     VirtualObj LoadModule(const std::string& name);
 

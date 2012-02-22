@@ -58,11 +58,12 @@ LuaData* LuaWrapper::NewLuaData() {
     );
 }
 
-VirtualData::Ptr LuaWrapper::Execute(const DataID func_id) {
+VirtualData::Ptr LuaWrapper::OperateBuffer(const DataID operand_id,
+                                           lua_CFunction op) {
     DataID result_id = NewDataID();
     bool success = data_gear()
-        .SafeCall(DataGear::GetField)
-        .Arg(func_id)
+        .SafeCall(op)
+        .Arg(operand_id)
         .Arg(&buffer_)
         .Arg(result_id)
         .NoResult();

@@ -122,9 +122,14 @@ int DataGear::GetField(lua_State* L) {
     L_.settop(4);
     GETARG(L_, 1, DataGear, dtgear);
     DataID container_id = L_.aux().checkintteger(2);
-    DataID key_id = L_.aux().checkintteger(3);
+    GETARG(L_, 3, DataBuffer, buffer);
     DataID value_id = L_.aux().checkintteger(4);
     L_.settop(0);
+
+    if (!buffer.size())
+        return luaL_error(L, "attempt to get field without a key.");
+
+    DataID key_id = buffer.front();
 
     // Pushes the data table. It will be on index 1.
     if (!dtgear.PushDataTable())
