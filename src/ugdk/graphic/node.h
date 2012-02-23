@@ -2,6 +2,7 @@
 #define UGDK_GRAPHIC_NODE_H_
 
 #include <vector>
+#include <ugdk/graphic.h>
 #include <ugdk/graphic/modifier.h>
 
 namespace ugdk {
