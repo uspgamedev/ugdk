@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Update Python script modules.
+cp -v src/generated/*.py test/data/scripts/ugdk/
+
+# Run tests.
+cd test/
+./script_customtest
+cd ..
+
