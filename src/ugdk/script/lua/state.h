@@ -69,6 +69,7 @@ class State {
     int setfenv(int index) { return lua_setfenv(L_, index); }
     void getfenv(int index) { lua_getfenv(L_, index); }
 
+    int getmetatable(int index) { return lua_getmetatable(L_, index); }
     int setmetatable(int index) { return lua_setmetatable(L_, index); }
 
     template <class T>

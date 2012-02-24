@@ -8,6 +8,15 @@
 namespace ugdk {
 namespace script {
 
+#define TYPENAME_MAP(definition) \
+    definition(const char*, String); \
+    definition(bool, Boolean); \
+    definition(int, Integer); \
+    definition(long, Integer); \
+    definition(short, Integer); \
+    definition(float, Number); \
+    definition(double, Number);
+
 template <class T>
 class VirtualPrimitive { private: VirtualPrimitive() {} };
 
@@ -44,13 +53,10 @@ class VirtualPrimitive<T*> {
     DEFINE_SCRIPT_PRIMITIVE_VALUE(type, name, value)
 
 DEFINE_SCRIPT_PRIMITIVE_VALUE(std::string, String, value.c_str());
-DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(const char*, String);
-DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(bool, Boolean);
-DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(int, Integer);
-DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(long, Integer);
-DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(short, Integer);
-DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(float, Number);
-DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(double, Number);
+// Because I can!
+TYPENAME_MAP(DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE)
+
+#undef TYPENAME_MAP
 
 } /* namespace script */
 } /* namespace ugdk */

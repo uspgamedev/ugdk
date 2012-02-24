@@ -49,9 +49,9 @@ class LuaData : public VirtualData {
 
     void Wrap(void* data, const VirtualType& type);
     void WrapString(const char* str) { WrapPrimitive(str); }
-    void WrapBoolean(bool boolean) { GENERIC_WRAP(boolean,boolean); }
-    void WrapInteger(int number) { GENERIC_WRAP(integer,number); }
-    void WrapNumber(double number) { GENERIC_WRAP(number,number); }
+    void WrapBoolean(bool boolean) { WrapPrimitive(boolean); }
+    void WrapInteger(int number) { WrapPrimitive(number); }
+    void WrapNumber(double number) { WrapPrimitive(number); }
 
     LangWrapper* wrapper () const { return wrapper_; }
 
@@ -62,7 +62,7 @@ class LuaData : public VirtualData {
     Ptr SetAttribute(Ptr key, Ptr value);
 
     void AddToBuffer();
-    void RemoveFromBuffer();
+    void RemoveFromBuffer() {}
 
   private:
 

@@ -46,17 +46,46 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     template <class T>
     static int UnwrapPrimitive(lua_State* L);
 
-    /// Safely executes the object mapped by a data ID> [-3,+1,-]
+    /// Safely executes the object mapped by a data ID. [-4,+0,?]
+    /**
+     ** Lua arguments:
+     **     [1] DataGear* - Data gear holding the data table.
+     **     [2] DataID - ID of the lua function object.
+     **     [3] DataBuffer* - Buffer of the arguments' IDs.
+     **     [4] DataID - ID of a lua object to store the result.
+     */
     static int Execute(lua_State* L);
+
+    /// Safely gets the field of an object mapped by a data ID. [-4,+0,?]
+    /**
+     ** Lua arguments:
+     **     [1] DataGear* - Data gear holding the data table.
+     **     [2] DataID - ID of the lua container object.
+     **     [3] DataBuffer* - buffer with the ID of the field's key.
+     **     [4] DataID - ID of a lua object to store the field value.
+     */
+    static int GetField(lua_State* L);
+
+    /// Safely sets the field of an object mapped by a data ID> [-4,+1,-]
+    /**
+     ** Lua arguments:
+     **     [1] DataGear* - Data gear holding the data table.
+     **     [2] DataID - ID of the lua container object.
+     **     [3] DataBuffer* - buffer with the ID of the filed's key followed by
+     **                       the ID of its new value.
+     **     [4] DataID - ID of a lua object to store the final field value.
+     */
+    static int SetField(lua_State* L);
+
+    static int DoFile(lua_State* L);
+
+    static int DoString(lua_State* L);
 
     // [-0,+1]
     bool GetData (DataID id);
 
     // [-1,+0]
     bool SetData (DataID id);
-
-    // [-0,+1]
-    const Constant DoFile (const char* filename);
 
   private:
 
@@ -72,6 +101,11 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     /// [-0,+1,-]
     void PushData (int table_index, DataID id) {
         L_.rawgeti(table_index, id);
+    }
+
+    /// [-1,+0,-]
+    void PopData (int table_index, DataID id) {
+        L_.rawseti(table_index, id);
     }
 
 };
