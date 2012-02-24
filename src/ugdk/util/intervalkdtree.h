@@ -96,6 +96,7 @@ class Node : public Box<DIMENSIONS> {
         void RemoveItem (Item<T, DIMENSIONS> *item);
         void getIntersectingItems (const Box<DIMENSIONS>& boundary,
                 std::vector<T> *items) const;
+        void Clear ();
         int depth_;
         Coordinate division_boundary_;
         bool has_children_;
@@ -138,12 +139,14 @@ IntervalKDTree<T, DIMENSIONS>::IntervalKDTree (
 
 template <class T, int DIMENSIONS>
 IntervalKDTree<T, DIMENSIONS>::~IntervalKDTree () {
+    root_->Clear ();
     delete root_;
 }
 
 template <class T, int DIMENSIONS>
 void IntervalKDTree<T, DIMENSIONS>::Clear () {
     container_items_.clear ();
+    root_->Clear ();
     delete root_;
     Coordinate min_coordinates[DIMENSIONS], max_coordinates[DIMENSIONS];
     for (int k = 0; k < DIMENSIONS; ++k) {
@@ -450,6 +453,22 @@ void Node<T, DIMENSIONS>::Merge () {
         has_children_ = false;
         if (parent_)
             parent_->Merge();
+    }
+}
+
+template <class T, int DIMENSIONS>
+void Node<T, DIMENSIONS>::Clear () {
+    if (has_children_) {
+        low_child_->Clear ();
+        high_child_->Clear ();
+        delete low_child_;
+        low_child_ = NULL;
+        delete high_child_;
+        high_child_ = NULL;
+    }
+    for (typename std::list<Item<T, DIMENSIONS> *>::iterator it
+                = items_.begin(); it != items_.end(); ++it) {
+        delete *it;
     }
 }
 
