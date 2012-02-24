@@ -6,6 +6,9 @@
 #include <list>
 #include <vector>
 #include <climits>
+#ifdef DEBUG
+#include <iostream>
+#endif
 
 namespace ugdk {
 
@@ -21,8 +24,8 @@ template <class T, int DIMENSIONS>
 class Item;
 
 typedef double Coordinate;
-#define COORD_NEG_INFINITY -10
-#define COORD_INFINITY 1000
+#define COORD_NEG_INFINITY -11
+#define COORD_INFINITY 11
 
 template <class T, int DIMENSIONS>
 class IntervalKDTree {
@@ -37,6 +40,7 @@ class IntervalKDTree {
         unsigned int max_elements_per_leaf ();
 #ifdef DEBUG
         unsigned int max_height_;
+        void PrintTree ();
 #endif
     private:
         unsigned int max_elements_per_leaf_;
@@ -73,6 +77,9 @@ class Item : public Box<DIMENSIONS> {
         T element ();
         void set_container_node (Node<T, DIMENSIONS> *container_node);
         Node<T, DIMENSIONS> *container_node ();
+#ifdef DEBUG
+        void Print ();
+#endif
     private:
         typedef Box<DIMENSIONS> super;
         T element_;
@@ -92,6 +99,9 @@ class Node : public Box<DIMENSIONS> {
         int depth_;
         Coordinate division_boundary_;
         bool has_children_;
+#ifdef DEBUG
+        void PrintTreeRootedAtThisNode ();
+#endif
     private:
         typedef Box<DIMENSIONS> super;
         IntervalKDTree<T, DIMENSIONS> *tree_;
@@ -147,7 +157,7 @@ void IntervalKDTree<T, DIMENSIONS>::Clear () {
 template <class T, int DIMENSIONS>
 void IntervalKDTree<T, DIMENSIONS>::Insert (Box<DIMENSIONS> bounding_box, T element) {
     // Shouldn't insert an element twice!
-    assert (!container_items_.count(element));
+    assert (!container_items_.count (element));
     Item<T, DIMENSIONS> * item = new Item<T, DIMENSIONS> (bounding_box, element);
     root_->InsertItem (item);
     container_items_[element] = item;
@@ -155,7 +165,14 @@ void IntervalKDTree<T, DIMENSIONS>::Insert (Box<DIMENSIONS> bounding_box, T elem
 
 template <class T, int DIMENSIONS>
 void IntervalKDTree<T, DIMENSIONS>::Remove (T element) {
-    container_items_.erase (element);
+    assert (container_items_.count (element));
+    if (container_items_.count (element)) {
+        Item<T, DIMENSIONS> *item = container_items_[element];
+        Node<T, DIMENSIONS> *node = item->container_node();
+        node->RemoveItem (item);
+        container_items_.erase (element);
+        delete item;
+    }
 }
 
 template <class T, int DIMENSIONS>
@@ -197,6 +214,13 @@ template <class T, int DIMENSIONS>
 unsigned int IntervalKDTree<T, DIMENSIONS>::max_elements_per_leaf () {
     return max_elements_per_leaf_;
 }
+
+#ifdef DEBUG
+template <class T, int DIMENSIONS>
+void IntervalKDTree<T, DIMENSIONS>::PrintTree () {
+    root_->PrintTreeRootedAtThisNode ();
+}
+#endif
 
 // Box implementation
 
@@ -287,6 +311,13 @@ T Item<T, DIMENSIONS>::element () {
     return element_;
 }
 
+#ifdef DEBUG
+template <class T, int DIMENSIONS>
+void Item<T, DIMENSIONS>::Print () {
+    std::cout << element_;
+}
+#endif
+
 // Node Implementation
 
 template <class T, int DIMENSIONS>
@@ -302,10 +333,6 @@ Node<T, DIMENSIONS>::~Node () {
         delete low_child_;
     if (high_child_)
         delete high_child_;
-    for (typename std::list<Item<T, DIMENSIONS> *>::iterator it = items_.begin();
-            it != items_.end(); ++it) {
-        delete *it;
-    }
 }
 
 template <class T, int DIMENSIONS>
@@ -337,7 +364,7 @@ template <class T, int DIMENSIONS>
 void Node<T, DIMENSIONS>::RemoveItem (Item<T, DIMENSIONS> *item) {
     items_.remove (item);
     if (parent_)
-        Merge ();
+        parent_->Merge ();
 }
 
 template <class T, int DIMENSIONS>
@@ -397,13 +424,13 @@ void Node<T, DIMENSIONS>::Divide () {
 
 template <class T, int DIMENSIONS>
 void Node<T, DIMENSIONS>::Merge () {
-    assert (parent_);
-    if (   !parent_->low_child_->has_children_
-        && !parent_->high_child_->has_children_
-         && (parent_->items_.size ()
-             + parent_->low_child_->items_.size ()
-             + parent_->high_child_->items_.size ()
-               > tree_->max_elements_per_leaf () )) {
+    assert (has_children_);
+    if (   !low_child_->has_children_
+        && !high_child_->has_children_
+         && (items_.size ()
+             + low_child_->items_.size ()
+             + high_child_->items_.size ()
+               < tree_->max_elements_per_leaf () )) {
         for (typename std::list<Item<T, DIMENSIONS> *>::iterator it
                 = low_child_->items_.begin(); it != low_child_->items_.end();
                 ++it) {
@@ -417,12 +444,37 @@ void Node<T, DIMENSIONS>::Merge () {
             (*it)->set_container_node (this);
         }
         delete low_child_;
+        low_child_ = NULL;
         delete high_child_;
+        high_child_ = NULL;
         has_children_ = false;
         if (parent_)
             parent_->Merge();
     }
 }
+
+#ifdef DEBUG
+template <class T, int DIMENSIONS>
+void Node<T, DIMENSIONS>::PrintTreeRootedAtThisNode () {
+    if (has_children_) {
+        high_child_->PrintTreeRootedAtThisNode ();
+    }
+    for (int i = 0; i < depth_; ++i) {
+        std::cout << "\t";
+    }
+    int i = 0;
+    for (typename std::list<Item<T, DIMENSIONS> *>::iterator it
+            = items_.begin(); it != items_.end(); ++it, ++i) {
+        std::cout << "[" << i << "] = ";
+        (*it)->Print ();
+        std::cout << "; ";
+    }
+    std::cout << std::endl;
+    if (has_children_) {
+        low_child_->PrintTreeRootedAtThisNode ();
+    }
+}
+#endif
 
 } // namespace ikdtree
 
