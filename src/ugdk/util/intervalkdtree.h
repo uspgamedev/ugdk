@@ -24,8 +24,8 @@ template <class T, int DIMENSIONS>
 class Item;
 
 typedef double Coordinate;
-#define COORD_NEG_INFINITY -11
-#define COORD_INFINITY 11
+#define COORD_NEG_INFINITY -10
+#define COORD_INFINITY 1000
 
 template <class T, int DIMENSIONS>
 class IntervalKDTree {
