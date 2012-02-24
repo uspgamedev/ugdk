@@ -1,7 +1,9 @@
 SET(MODULE_SRC 
     input.i 
     base.i 
+    util.i 
     time.i 
+    gdd.i 
     audio.i 
     action.i 
     math.i 

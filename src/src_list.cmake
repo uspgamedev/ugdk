@@ -116,6 +116,7 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/base/resourcemanager.h 
     ./src/ugdk/base/types.h 
     ./src/ugdk/base/texturecontainer.h 
+    ./src/ugdk/base/configuration.h 
     ./src/ugdk/base/resourcemanager.cc 
     ./src/ugdk/base/engine.h 
 )

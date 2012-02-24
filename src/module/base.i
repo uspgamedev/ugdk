@@ -2,7 +2,6 @@
 
 %include <module/export.swig>
 %include "std_string.i"
-%include "std_list.i"
 
 %{
 
