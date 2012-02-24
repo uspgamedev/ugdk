@@ -79,6 +79,8 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
 
     static int DoFile(lua_State* L);
 
+    static int DoString(lua_State* L);
+
     // [-0,+1]
     bool GetData (DataID id);
 

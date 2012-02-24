@@ -234,6 +234,31 @@ int DataGear::DoFile(lua_State* L) {
     return 0;
 }
 
+int DataGear::DoString(lua_State* L) {
+    State L_(L);
+
+    L_.settop(3);
+    GETARG(L_, 1, DataGear, dtgear);
+    const char* chunk = L_.aux().checkstring(2);
+    L_.settop(0);
+
+    // Pushes the data table. It will be on index 1.
+    if (!dtgear.PushDataTable())
+        return luaL_error(
+            L,
+            "At operation dostring: could not acquire data table."
+        );
+
+    const Constant result = L_.aux().loadstring(chunk);
+    if (result != Constant::OK()) {
+        dtgear.Report(result);
+        return 0;
+    }
+
+    L_.call(0, 0);
+
+    return 0;
+}
 
 bool DataGear::GetData (DataID id) {
     if (!PushDataTable()) return false;

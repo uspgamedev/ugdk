@@ -31,8 +31,6 @@ class LuaWrapper: public LuaWrapperBase {
 
     /// Overwritten methods.
 
-    //bool RegisterModule(const std::string& name, lua_CFunction init_func);
-
     bool Initialize();
 
     void Finalize();
@@ -41,13 +39,15 @@ class LuaWrapper: public LuaWrapperBase {
 
     LuaData* NewLuaData();
 
-    void ExecuteCode(const std::string& code);
-
-    VirtualData::Ptr OperateBuffer(const DataID operand_id, lua_CFunction op);
+    void ExecuteCode(const std::string& code) {
+        LoadChunk(code, DataGear::DoString);
+    }
 
     VirtualObj LoadModule(const std::string& name);
 
     /// Other methods.
+
+    VirtualData::Ptr OperateBuffer(const DataID operand_id, lua_CFunction op);
 
     DataGear& data_gear() { return *data_gear_; }
 
@@ -69,6 +69,9 @@ class LuaWrapper: public LuaWrapperBase {
 
   private:
 
+    DataGear*   data_gear_;
+    DataBuffer  buffer_;
+
     DataID NewDataID() {
         return data_gear()
             .SafeCall(DataGear::GenerateID)
@@ -82,8 +85,7 @@ class LuaWrapper: public LuaWrapperBase {
             .NoResult();
     }
 
-    DataGear*   data_gear_;
-    DataBuffer  buffer_;
+    VirtualData::Ptr LoadChunk(const std::string& chunk, lua_CFunction loader);
 
 };
 

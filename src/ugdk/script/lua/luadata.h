@@ -62,7 +62,7 @@ class LuaData : public VirtualData {
     Ptr SetAttribute(Ptr key, Ptr value);
 
     void AddToBuffer();
-    void RemoveFromBuffer();
+    void RemoveFromBuffer() {}
 
   private:
 
