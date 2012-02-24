@@ -4,6 +4,7 @@
 #include <string>
 
 #include <ugdk/base/engine.h>
+#include <ugdk/base/configuration.h>
 
 #include <ugdk/math/vector2D.h>
 
@@ -19,7 +20,6 @@ extern int luaopen_ugdk_math(lua_State* L);
 extern void init_ugdk_math(void);
 }
 
-using ugdk::Engine;
 using ugdk::Vector2D;
 
 static ugdk::Engine* engine() {
@@ -50,7 +50,7 @@ static void RunTests() {
 
 int main(int argc, char *argv[]) {
 
-    ugdk::Engine::Configuration engine_config;
+    ugdk::Configuration engine_config;
     engine_config.window_title = "Script System Custom Tests";
     engine_config.window_size  = Vector2D(800.0, 600.0);
     engine_config.fullscreen   = false;
