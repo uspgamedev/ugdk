@@ -24,13 +24,12 @@ template <class T, int DIMENSIONS>
 class Item;
 
 typedef double Coordinate;
-#define COORD_NEG_INFINITY -10
-#define COORD_INFINITY 1000
 
 template <class T, int DIMENSIONS>
 class IntervalKDTree {
     public:
-        IntervalKDTree (unsigned int max_elements_per_leaf);
+        IntervalKDTree (const Box<DIMENSIONS>& tree_bounding_box,
+                        unsigned int max_elements_per_leaf);
         ~IntervalKDTree ();
         void Clear ();
         void Insert (Box<DIMENSIONS> bounding_box, T element);
@@ -44,6 +43,7 @@ class IntervalKDTree {
 #endif
     private:
         unsigned int max_elements_per_leaf_;
+        Box<DIMENSIONS> tree_bounding_box_;
         std::map<T,Item<T, DIMENSIONS>* > container_items_;
         Node<T, DIMENSIONS> * root_;
         void UpdateItem (Item<T, DIMENSIONS> * item);
@@ -91,6 +91,8 @@ class Node : public Box<DIMENSIONS> {
     public:
         Node (IntervalKDTree<T, DIMENSIONS> * const tree, Node *parent, int depth,
                 Coordinate *min_coordinates, Coordinate *max_coordinates);
+        Node (IntervalKDTree<T, DIMENSIONS> * const tree, Node *parent, int depth,
+                const Box<DIMENSIONS>& coordinates);
         ~Node ();
         void InsertItem (Item<T, DIMENSIONS> *item);
         void RemoveItem (Item<T, DIMENSIONS> *item);
@@ -123,15 +125,11 @@ class Node : public Box<DIMENSIONS> {
 
 template <class T, int DIMENSIONS>
 IntervalKDTree<T, DIMENSIONS>::IntervalKDTree (
-                                        unsigned int max_elements_per_leaf) :
-    max_elements_per_leaf_(max_elements_per_leaf), container_items_() {
-    Coordinate min_coordinates[DIMENSIONS], max_coordinates[DIMENSIONS];
-    for (int k = 0; k < DIMENSIONS; ++k) {
-        min_coordinates[k] = COORD_NEG_INFINITY;
-        max_coordinates[k] = COORD_INFINITY;
-    }
-    root_ = new Node<T,DIMENSIONS>(this, NULL, 0,
-            min_coordinates, max_coordinates);
+                                    const Box<DIMENSIONS>& tree_bounding_box,
+                                    unsigned int max_elements_per_leaf) :
+    max_elements_per_leaf_(max_elements_per_leaf), 
+    tree_bounding_box_(tree_bounding_box), container_items_(),
+    root_(new Node<T, DIMENSIONS> (this, NULL, 0, tree_bounding_box)) {
 #ifdef DEBUG
     max_height_ = 0;
 #endif
@@ -148,13 +146,7 @@ void IntervalKDTree<T, DIMENSIONS>::Clear () {
     container_items_.clear ();
     root_->Clear ();
     delete root_;
-    Coordinate min_coordinates[DIMENSIONS], max_coordinates[DIMENSIONS];
-    for (int k = 0; k < DIMENSIONS; ++k) {
-        min_coordinates[k] = COORD_NEG_INFINITY;
-        max_coordinates[k] = COORD_INFINITY;
-    }
-    root_ = new Node<T,DIMENSIONS>(this, NULL, 0,
-            min_coordinates, max_coordinates);
+    root_ = new Node<T,DIMENSIONS> (this, NULL, 0, tree_bounding_box_);
 }
 
 template <class T, int DIMENSIONS>
@@ -328,6 +320,12 @@ Node<T, DIMENSIONS>::Node (IntervalKDTree<T, DIMENSIONS> * const tree,
     Node *parent, int depth,
     Coordinate *min_coordinates, Coordinate *max_coordinates) :
     super (min_coordinates, max_coordinates), depth_(depth), has_children_(false), 
+    tree_(tree), parent_(parent), low_child_(NULL), high_child_(NULL) {}
+
+template <class T, int DIMENSIONS>
+Node<T, DIMENSIONS>::Node (IntervalKDTree<T, DIMENSIONS> * const tree,
+    Node *parent, int depth, const Box<DIMENSIONS>& coordinates) :
+    super (coordinates), depth_(depth), has_children_(false), 
     tree_(tree), parent_(parent), low_child_(NULL), high_child_(NULL) {}
 
 template <class T, int DIMENSIONS>
