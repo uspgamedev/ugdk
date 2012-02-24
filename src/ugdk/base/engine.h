@@ -10,6 +10,7 @@
 #include <ugdk/input.h>
 #include <ugdk/time.h>
 #include <ugdk/base/types.h>
+#include <ugdk/base/configuration.h>
 #include <ugdk/math/vector2D.h>
 
 namespace ugdk {
@@ -25,21 +26,6 @@ class PathManager;
  */
 class Engine {
   public:
-    struct Configuration {
-        std::string     base_path;
-        std::string   window_icon;
-        std::string  window_title;
-        Vector2D      window_size;
-        bool           fullscreen;
-
-        Configuration() :
-            base_path("./"),
-            window_icon(""),
-            window_title("UGDK Game"),
-            window_size(800.0, 600.0),
-            fullscreen(false) {}
-    };
-
     /// Returns a pointer to the current Engine. Creates an Engine if there isn't one.
     static Engine* reference() { return reference_ ? reference_ : reference_ = new Engine; }
 

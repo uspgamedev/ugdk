@@ -3,5 +3,8 @@ SET(MODULE_SRC
     math.i 
     action.i 
     input.i 
+    gdd.i 
+    util.i 
+    base.i 
     audio.i 
 )

@@ -19,7 +19,7 @@
 
 %import <ugdk/base/types.h>
 %import <ugdk/graphic.h>
-%import <ugdk/audio.h>
+%import <module/audio.i>
 
 %include <ugdk/action/animationframe.h>
 %include <ugdk/action/animation.h>
