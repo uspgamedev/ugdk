@@ -51,7 +51,7 @@ bool PythonWrapper::Initialize() {
 
     std::vector<PythonModule>::iterator it;
     for (it = modules_.begin(); it != modules_.end(); ++it) {
-        (*it->init_func_)();
+        (*it->init_func())();
     }
 	return true;
 }

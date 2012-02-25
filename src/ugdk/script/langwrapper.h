@@ -7,6 +7,7 @@
 #include <ugdk/script/defs.h>
 #include <ugdk/script/type.h>
 #include <ugdk/script/virtualdata.h>
+#include <ugdk/script/module.h>
 
 namespace ugdk {
 namespace script {
@@ -56,15 +57,6 @@ class LangWrapper {
 
 };
 
-template <class loader_t>
-struct Module {
-    Module(const std::string& name, loader_t init_func) :
-        name_(name),
-        init_func_(init_func) {}
-    std::string     name_;
-    loader_t        init_func_;
-};
-
 /// Wraps a scripting language.
 /** Classes derived from this should implement it's methods to wrap a given
  ** language in the system. 
@@ -111,7 +103,7 @@ class InheritableLangWrapper : public LangWrapper {
 
 };
 
-}
-}
+} /* namespace script */
+} /* namespace ugdk */
 
 #endif /* UGDK_SCRIPT_LANGWRAPPER_H_ */

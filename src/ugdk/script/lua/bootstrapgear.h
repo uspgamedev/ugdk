@@ -9,6 +9,7 @@
 #include <ugdk/script/lua/state.h>
 
 #include <ugdk/script/langwrapper.h>
+#include <ugdk/script/module.h>
 
 namespace ugdk {
 namespace script {
