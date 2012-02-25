@@ -131,6 +131,8 @@ MACRO(SWIG_ADD_SOURCE_TO_MODULE name outfiles infile)
   ELSE(CMAKE_SWIG_OUTDIR)
     SET(swig_outdir ${CMAKE_CURRENT_BINARY_DIR})
   ENDIF(CMAKE_SWIG_OUTDIR)
+  ## FIX!
+  set (swig_extra_generated_files "")
   SWIG_GET_EXTRA_OUTPUT_FILES(${SWIG_MODULE_${name}_LANGUAGE}
     swig_extra_generated_files
     "${swig_outdir}"
@@ -168,7 +170,8 @@ MACRO(SWIG_ADD_SOURCE_TO_MODULE name outfiles infile)
     SET(swig_extra_flags ${swig_extra_flags} ${SWIG_MODULE_${name}_EXTRA_FLAGS})
   ENDIF(SWIG_MODULE_${name}_EXTRA_FLAGS)
   ADD_CUSTOM_COMMAND(
-    OUTPUT "${swig_generated_file_fullname}" ${swig_extra_generated_files}
+    ## NOTE: Excluding extra generated files (aka *.py) to avoid double build.
+    OUTPUT "${swig_generated_file_fullname}" #${swig_extra_generated_files}
     COMMAND "${SWIG_EXECUTABLE}"
     ARGS "-${SWIG_MODULE_${name}_SWIG_LANGUAGE_FLAG}"
     ${swig_source_file_flags}
