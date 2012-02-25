@@ -60,7 +60,6 @@ void BootstrapGear::PreloadModules (const ModuleList& modules) {
     L_.getfield(-1, "preload");         // [pack,preload]
     ModuleList::const_iterator it = modules.begin();
     for (; it != modules.end(); ++it) {
-        LuaMsg("Preloading module \"%s\"\n.", it->name().c_str());
         L_.pushcfunction(it->init_func());        // [pack,preload,init_func]
         L_.setfield(-2, it->name().c_str());     // [pack,preload]
     }

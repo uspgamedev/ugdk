@@ -26,6 +26,7 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/util/animationprotocol.cc 
     ./src/ugdk/audio.h 
     ./src/ugdk/graphic.h 
+    ./src/ugdk/modules.h 
     ./src/ugdk/config/config.h 
     ./src/ugdk/math/frame.h 
     ./src/ugdk/math/vector2D.cc 
@@ -55,6 +56,7 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/script/lua/datagear.h 
     ./src/ugdk/script/lua/bootstrapgear.h 
     ./src/ugdk/script/lua/basegear.cc 
+    ./src/ugdk/script/module.h 
     ./src/ugdk/script/type.h 
     ./src/ugdk/script/scriptmanager.h 
     ./src/ugdk/script/scriptmanager.cc 
@@ -91,6 +93,7 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/graphic/textmanager.cc 
     ./src/ugdk/graphic/font.h 
     ./src/ugdk/graphic/node.h 
+    ./src/ugdk/modules.cc 
     ./src/ugdk/base/texturecontainer.h 
     ./src/ugdk/base/resourcemanager.cc 
     ./src/ugdk/base/engine.cc 

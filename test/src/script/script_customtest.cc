@@ -11,6 +11,8 @@
 
 #include <ugdk/math/vector2D.h>
 
+#include <ugdk/modules.h>
+
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/langwrapper.h>
 #include <ugdk/script/virtualobj.h>
@@ -19,7 +21,6 @@
 #include <ugdk/script/python/pythonwrapper.h>
 
 extern "C" {
-extern int luaopen_ugdk_math(lua_State* L);
 extern void init_ugdk_math(void);
 }
 
@@ -37,13 +38,12 @@ static void InitScripts() {
 
     //inicializando lua
     LuaWrapper* lua_wrapper = new LuaWrapper();
-    lua_wrapper->RegisterModule("ugdk.math", luaopen_ugdk_math);
+    ugdk::RegisterLuaModules(lua_wrapper);
     SCRIPT_MANAGER()->Register("Lua", lua_wrapper);
 
     //inicializando python
     PythonWrapper* py_wrapper = new PythonWrapper();
-    printf("Registered Python Module: %d\n",
-           (int)py_wrapper->RegisterModule("_ugdk_math", init_ugdk_math));
+    ugdk::RegisterPythonModules(py_wrapper);
     SCRIPT_MANAGER()->Register("Python", py_wrapper);
 }
 

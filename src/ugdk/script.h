@@ -13,6 +13,26 @@ class VirtualObj;
 // Managers
 class ScriptManager;
 
+namespace lua {
+
+// Public Lua classes
+class LuaData;
+
+// Lua Managers
+class LuaWrapper;
+
+} /* namespace lua */
+
+namespace python {
+
+// Public Python classes
+class PythonData;
+
+// Python Managers
+class PythonWrapper;
+
+} /* namespace python */
+
 }  // namespace script
 }  // namespace ugdk
 

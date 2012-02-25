@@ -86,11 +86,15 @@ class InheritableLangWrapper : public LangWrapper {
 
   public:
 
-    bool RegisterModule(const std::string& module_name, loader_t init_func) {
-        if (module_name.empty())
+    /*bool RegisterModule(const std::string& module_name, loader_t init_func) {
+        return RegisterModule(Module<loader_t>(module_name, init_func));
+    }*/
+
+    bool RegisterModule(const Module<loader_t>& module) {
+        if (module.name().empty())
             return false;
         // TODO: check if name is valid.
-        modules_.push_back(Module<loader_t>(module_name, init_func));
+        modules_.push_back(module);
         return true;
     }
 
