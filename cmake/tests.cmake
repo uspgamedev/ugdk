@@ -7,6 +7,6 @@ set_target_properties (script_customtest PROPERTIES RUNTIME_OUTPUT_DIRECTORY tes
 set_target_properties (script_customtest PROPERTIES COMPILE_FLAGS ${UGDK_TEST_CFLAGS})
 
 # FIXME
-target_link_libraries (script_customtest ugdk_d)
+target_link_libraries (script_customtest ${FRAMEWORK_BUILDNAME})
 
 
