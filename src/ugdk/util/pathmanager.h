@@ -6,13 +6,12 @@
 
 namespace ugdk {
 
-class PathManager{
+class PathManager {
   public:
 	PathManager(const std::string& base_path) : base_path_(base_path) {}
     ~PathManager() {}
 
 	std::string ResolvePath(const std::string& path);
-	std::string ResolvePath(const std::wstring& path);
 
   private:
 	std::string base_path_;

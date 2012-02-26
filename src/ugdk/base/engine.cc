@@ -12,6 +12,7 @@
 #include <ugdk/time/timemanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/animationparser.h>
+#include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
 
 using namespace std;
@@ -38,14 +39,15 @@ bool Engine::Initialize(const Configuration& configuration) {
     text_manager_     = new graphic:: TextManager();
     path_manager_     = new           PathManager(configuration.base_path);
     resource_manager_ = new base::ResourceManager();
+    language_manager_ = new       LanguageManager(configuration.default_language);
 
     video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, configuration.window_icon);
     audio_manager_->Initialize();
+     text_manager_->Initialize();
 
-    text_manager_->Initialize();
 	if (!SCRIPT_MANAGER()->Initialize())
 	    puts("Failed to initialize script manager.");
-    resource_manager_ = new base::ResourceManager;
+
     scene_list_.clear();
 
     frames_since_reset_ = reported_fps_ = 0;

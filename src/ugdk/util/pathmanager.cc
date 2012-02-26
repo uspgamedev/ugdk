@@ -13,10 +13,4 @@ std::string PathManager::ResolvePath(const std::string& path) {
 	return stm.str();
 }
 
-std::string PathManager::ResolvePath(const std::wstring& path) {
-	std::string str(path.begin(), path.end());
-	str.assign(path.begin(), path.end());
-	return ResolvePath(str);
-}
-
 } // namespace ugdk

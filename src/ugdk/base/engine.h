@@ -9,6 +9,7 @@
 #include <ugdk/graphic.h>
 #include <ugdk/input.h>
 #include <ugdk/time.h>
+#include <ugdk/util.h>
 #include <ugdk/base/types.h>
 #include <ugdk/base/configuration.h>
 #include <ugdk/math/vector2D.h>
@@ -26,6 +27,7 @@ class PathManager;
  */
 class Engine {
   public:
+
     /// Returns a pointer to the current Engine. Creates an Engine if there isn't one.
     static Engine* reference() { return reference_ ? reference_ : reference_ = new Engine; }
 
@@ -60,6 +62,11 @@ class Engine {
     /** @see ResourceManager
      */
     base::ResourceManager *resource_manager() { return resource_manager_; }
+
+    /// Returns a reference to the Language Manager.
+    /** @see LanguageManager
+     */
+    LanguageManager* language_manager() { return language_manager_; }
 
     /// Returns the window dimensions.
     Vector2D window_size();
@@ -123,6 +130,7 @@ class Engine {
     time::    TimeManager *    time_manager_;
 	          PathManager *    path_manager_;
     base::ResourceManager *resource_manager_;
+          LanguageManager *language_manager_;
 
     bool quit_;
     std::list<Scene*> scene_list_;
@@ -134,7 +142,9 @@ class Engine {
         text_manager_(NULL),
         input_manager_(NULL),
         time_manager_(NULL),
-		path_manager_(NULL) {}
+		path_manager_(NULL),
+        resource_manager_(NULL), 
+        language_manager_(NULL) {}
 };
 
 } // namespace ugdk

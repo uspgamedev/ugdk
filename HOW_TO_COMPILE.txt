@@ -46,7 +46,11 @@ for cmake -G options.
 Windows
 =======
 
-1) Get CMake 2.6 or a higher version
+1) Have the following software installed:
+- CMake 2.6 or higher
+- Python 2.7 (must have registry entry)
+- Lua 5.1 (must have LUA_DIR set)
+- SWIG 2.0.4 (must be on PATH)
 
 2) Set the CMAKE_PREFIX_PATH variable to a folder that contains a include and a lib directories,
 containing the following libraries:
@@ -55,6 +59,10 @@ containing the following libraries:
 - SDL_Mixer 1.2
 - SDL_TTF 2.0
 
-2) Using CMake, generate the project files for the IDE you wish to use.
+3) Set the BOOST_ROOT variable to the root folder of where the Boost library is installed.
+Note: Boost version must be at least 1.48.0
 
-3) Build using the generated project.
+4) Using CMake, generate the project files for the IDE you wish to use.
+
+5) Build using the generated project.
+

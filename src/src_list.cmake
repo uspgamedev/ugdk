@@ -7,7 +7,11 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/audio/sample.cc 
     ./src/ugdk/audio/audiomanager.cc 
     ./src/ugdk/audio/music.h 
+    ./src/ugdk/util.h 
     ./src/ugdk/util/utf8.h 
+    ./src/ugdk/util/languagemanager.cc 
+    ./src/ugdk/util/language.h 
+    ./src/ugdk/util/language.cc 
     ./src/ugdk/util/gdd/reader.cc 
     ./src/ugdk/util/gdd/simpleloader.h 
     ./src/ugdk/util/gdd/cachedloader.h 
@@ -21,8 +25,11 @@ SET(FRAMEWORK_SRC
     ./src/ugdk/util/uncopyable.h 
     ./src/ugdk/util/animationparser.h 
     ./src/ugdk/util/pathmanager.cc 
+    ./src/ugdk/util/languageword.h 
     ./src/ugdk/util/animationprotocol.h 
     ./src/ugdk/util/pathmanager.h 
+    ./src/ugdk/util/intervalkdtree.h 
+    ./src/ugdk/util/languagemanager.h 
     ./src/ugdk/util/animationprotocol.cc 
     ./src/ugdk/audio.h 
     ./src/ugdk/graphic.h 

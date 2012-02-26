@@ -54,6 +54,7 @@ Vector2D Vector2D::operator-(const Vector2D &right) const {
 Vector2D Vector2D::operator-() const {
     return Vector2D(-this->x, -this->y);
 }
+
 Vector2D Vector2D::operator*(const double   &scalar) const {
     return Vector2D::Multiply(*this, scalar);
 }
