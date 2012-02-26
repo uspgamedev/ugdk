@@ -40,7 +40,7 @@ class VirtualPrimitive<T*> {
     class VirtualPrimitive<type> { \
       public: \
         static type value(const VirtualData::Ptr data) { \
-            return data->Unwrap##name(); \
+            return static_cast<type>(data->Unwrap##name()); \
         } \
         static void set_value(const VirtualData::Ptr data, type value) { \
             data->Wrap##name(arg);  \

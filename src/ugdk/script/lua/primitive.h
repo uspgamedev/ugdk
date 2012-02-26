@@ -81,10 +81,10 @@ DEFINE_LUA_PRIMITIVE_OP(to);
     DEFINE_LUA_PRIMITIVE_OPCASE(to, , type, type, int index, return (call))
 
 #define DEFINE_LUA_SIMPLE_TO(type, name) \
-    DEFINE_LUA_TO(type, lua_to##name(L, index))
+    DEFINE_LUA_TO(type, static_cast<type>(lua_to##name(L, index)))
 
 DEFINE_LUA_TO(const char*, lua_tolstring(L, index, NULL));
-DEFINE_LUA_SIMPLE_TO(bool, boolean);
+DEFINE_LUA_TO(bool, !!(lua_toboolean(L, index)));
 DEFINE_LUA_SIMPLE_TO(int, integer);
 DEFINE_LUA_SIMPLE_TO(double, number);
 DEFINE_LUA_SIMPLE_TO(UData, userdata);
@@ -102,7 +102,7 @@ DEFINE_LUA_SIMPLE_TO(UData, userdata);
 DEFINE_LUA_PRIMITIVE_OP(is);
 
 #define DEFINE_LUA_IS(type, check) \
-    DEFINE_LUA_PRIMITIVE_OPCASE(is, , type, int, int index, return (check))
+    DEFINE_LUA_PRIMITIVE_OPCASE(is, , type, bool, int index, return !!(check))
 
 #define DEFINE_LUA_SIMPLE_IS(type, name) \
     DEFINE_LUA_IS(type, lua_is##name(L, index))

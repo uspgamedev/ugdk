@@ -46,7 +46,7 @@ class AuxLib {
 
   private:
 
-    lua_State* const L_;
+    lua_State* L_;
 
 };
 

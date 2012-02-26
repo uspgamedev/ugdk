@@ -1,15 +1,18 @@
 @echo off
 :: mkdir deploy > nul
-IF EXIST deploy rmdir /s /q deploy > nul
+:: IF EXIST deploy rmdir /s /q deploy > nul
 :: mkdir deploy\lib > nul
 :: mkdir deploy\include > nul
-REM LOL
 
 echo Copying static library files...
 
 xcopy lib\Release\ugdk.lib deploy\lib\ /q /k /y > nul
 xcopy lib\Debug\ugdk_d.lib deploy\lib\ /q /k /y > nul
 xcopy lib\Debug\ugdk_d.pdb deploy\lib\ /q /k /y > nul
+
+echo Copying generated py files...
+
+xcopy src\generated\*.py deploy\data\scripts\ugdk\ /q /k /y > nul
 
 echo Copying header files...
 

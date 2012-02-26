@@ -22,15 +22,16 @@ class State {
   public:
 
     State (lua_State* L) :
-      L_(L) {}
+      L_(L),
+      auxlib_(L) {}
 
-    operator bool() const { return L_; }
+    operator bool() const { return !!(L_); }
 
     operator lua_State*() const { return L_; }
 
     void close() { lua_close(L_); L_ = NULL; }
 
-    AuxLib aux() const { return AuxLib(L_); }
+    AuxLib& aux() { return auxlib_; }
 
     int gettop() const { return lua_gettop(L_); }
     void settop(int index) { lua_settop(L_, index); }
@@ -76,14 +77,14 @@ class State {
     bool isprimitive(int index) const {
         return lua_is<T>::primitive(L_, index);
     }
-    bool isnil (int index) const { return lua_isnil(L_, index); }
-    bool isstring (int index) const { return lua_isstring(L_, index); }
-    bool istable (int index) const { return lua_istable(L_, index); }
+    bool isnil (int index) const { return !!(lua_isnil(L_, index)); }
+    bool isstring (int index) const { return !!(lua_isstring(L_, index)); }
+    bool istable (int index) const { return !!(lua_istable(L_, index)); }
 
 
     template <class T>
     T toprimitive(int n) const { return lua_to<T>::primitive(L_, n); }
-    bool toboolean(int n) const { return lua_toboolean(L_, n); }
+    bool toboolean(int n) const { return !!(lua_toboolean(L_, n)); }
     lua_Integer tointeger(int n) const { return lua_tointeger(L_, n); }
     const char* tostring(int n) const { return lua_tostring(L_, n); }
     void* touserdata(int n) const { return lua_touserdata(L_, n); }
@@ -103,7 +104,8 @@ class State {
 
   private:
 
-    lua_State* L_;
+    lua_State*  L_;
+    AuxLib      auxlib_;
 
 };
 
