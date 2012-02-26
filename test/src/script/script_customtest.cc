@@ -8,9 +8,9 @@
 #include <ugdk/base/configuration.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/textmanager.h>
-
 #include <ugdk/math/vector2D.h>
-
+#include <ugdk/action/entity.h>
+#include <ugdk/action/scene.h>
 #include <ugdk/modules.h>
 
 #include <ugdk/script/scriptmanager.h>
@@ -20,11 +20,25 @@
 #include <ugdk/script/lua/header.h>
 #include <ugdk/script/python/pythonwrapper.h>
 
-extern "C" {
-extern void init_ugdk_math(void);
-}
-
 using ugdk::Vector2D;
+using ugdk::script::VirtualObj;
+
+class ScriptEntity : public ugdk::Entity {
+  public:
+    virtual ~ScriptEntity() {}
+    ScriptEntity(const VirtualObj& proxy) :
+        proxy_(proxy) {}
+    void Update(double dt) {
+        VirtualObj vdt = VirtualObj(proxy_.wrapper());
+        vdt.set_value(dt);
+        std::vector<VirtualObj> args;
+        args.push_back(proxy_);
+        args.push_back(vdt);
+        proxy_["Update"](args);
+    }
+  private:
+    VirtualObj proxy_;
+};
 
 static ugdk::Engine* engine() {
     return ugdk::Engine::reference();
@@ -48,7 +62,7 @@ static void InitScripts() {
 }
 
 static void RunTests() {
-    using ugdk::script::VirtualObj;
+
 
     // testando lua
     {
@@ -126,6 +140,14 @@ int main(int argc, char *argv[]) {
 
     RunTests();
 
+    ugdk::Scene* scene = new ugdk::Scene();
+    ScriptEntity *entity = NULL;
+    {
+        VirtualObj temp = SCRIPT_MANAGER()->LoadModule("entity");
+        entity = new ScriptEntity(temp["entity"]);
+    }
+    scene->AddEntity(entity);
+    engine()->PushScene(scene);
     // Transfers control to the framework.
     engine()->Run();
 

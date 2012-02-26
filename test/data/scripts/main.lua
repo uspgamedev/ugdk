@@ -17,7 +17,5 @@ bool = true
 integer = 42
 number = math.pi
 
---ls(ugdk_math)
-
 print "============ BYE FROM LUA"
 
