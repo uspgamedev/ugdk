@@ -148,7 +148,7 @@ if (MSVC)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
   endforeach (d)
   
-  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /DBOOST_ALL_NO_LIB /D_CRT_SECURE_NO_WARNINGS /arch:SSE2 /fp:fast")
+  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /arch:SSE2 /fp:fast")
   
 else (MSVC)
   foreach (d ${DEFS})
@@ -191,7 +191,16 @@ if (UNIX)
 elseif (WIN32)
 	set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
     if (MSVC)
-        target_link_libraries (${FRAMEWORK_BUILDNAME} SDLmain SDL SDL_image SDL_mixer SDL_ttf OpenGL32 glu32)
+		target_link_libraries (${FRAMEWORK_BUILDNAME}
+							   ${SDL_LIBRARY}
+							   ${SDLMIXER_LIBRARY}
+							   ${SDLTTF_LIBRARY}
+							   ${SDLIMAGE_LIBRARY}
+							   ${OPENGL_LIBRARIES}
+							   Ws2_32
+							   ${LUA_LIBRARIES}
+							   ${PYTHON_LIBRARIES}
+							  )
     else (MSVC)
         target_link_libraries (${FRAMEWORK_BUILDNAME} m mingw32 SDLmain SDL SDL_image SDL_mixer SDL_ttf OpenGL32 glu32)
     endif (MSVC)
