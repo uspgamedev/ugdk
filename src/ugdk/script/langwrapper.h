@@ -55,6 +55,8 @@ class LangWrapper {
         file_extension_(file_extension),
         lang_id_(id) {}
 
+    LangWrapper& operator=(const LangWrapper& rhs);
+
 };
 
 /// Wraps a scripting language.

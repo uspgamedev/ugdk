@@ -24,7 +24,7 @@ class State {
     State (lua_State* L) :
       L_(L) {}
 
-    operator bool() const { return L_; }
+    operator bool() const { return static_cast<bool>(L_); }
 
     operator lua_State*() const { return L_; }
 
@@ -76,9 +76,15 @@ class State {
     bool isprimitive(int index) const {
         return lua_is<T>::primitive(L_, index);
     }
-    bool isnil (int index) const { return lua_isnil(L_, index); }
-    bool isstring (int index) const { return lua_isstring(L_, index); }
-    bool istable (int index) const { return lua_istable(L_, index); }
+    bool isnil (int index) const {
+        return static_cast<bool>(lua_isnil(L_, index));
+    }
+    bool isstring (int index) const {
+        return static_cast<bool>(lua_isstring(L_, index));
+    }
+    bool istable (int index) const {
+        return static_cast<bool>(lua_istable(L_, index));
+    }
 
 
     template <class T>
