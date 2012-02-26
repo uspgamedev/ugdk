@@ -66,7 +66,7 @@ include (${SRC_DIR}/module_list.cmake)
 # separe por espacos
 set (DEFS "" CACHE STRING "#define's que voce queira incluir na compilacao; separe por espacos")
 if (WIN32)
-    set (DEFS "${DEFS} WIN32")
+    set (DEFS "${DEFS} WIN32 BOOST_ALL_NO_LIB")
 endif (WIN32)
 
 # CFLAGS: flags que voce queira enviar ao compilador
