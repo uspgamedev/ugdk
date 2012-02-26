@@ -56,6 +56,8 @@ class BaseGear {
             gear_->pushudata(&gear_);
         }
 
+        InternalSafeCall& operator=(const InternalSafeCall& rhs);
+
         BaseGear&   gear_;
         int         old_top_;
         size_t      arg_num_;

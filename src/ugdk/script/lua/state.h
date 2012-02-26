@@ -22,7 +22,8 @@ class State {
   public:
 
     State (lua_State* L) :
-      L_(L) {}
+      L_(L),
+      auxlib_(L) {}
 
     operator bool() const { return static_cast<bool>(L_); }
 
@@ -30,7 +31,7 @@ class State {
 
     void close() { lua_close(L_); L_ = NULL; }
 
-    AuxLib aux() const { return AuxLib(L_); }
+    AuxLib& aux() { return auxlib_; }
 
     int gettop() const { return lua_gettop(L_); }
     void settop(int index) { lua_settop(L_, index); }
@@ -76,15 +77,9 @@ class State {
     bool isprimitive(int index) const {
         return lua_is<T>::primitive(L_, index);
     }
-    bool isnil (int index) const {
-        return static_cast<bool>(lua_isnil(L_, index));
-    }
-    bool isstring (int index) const {
-        return static_cast<bool>(lua_isstring(L_, index));
-    }
-    bool istable (int index) const {
-        return static_cast<bool>(lua_istable(L_, index));
-    }
+    bool isnil (int index) const { return !!(lua_isnil(L_, index)); }
+    bool isstring (int index) const { return !!(lua_isstring(L_, index)); }
+    bool istable (int index) const { return !!(lua_istable(L_, index)); }
 
 
     template <class T>
@@ -109,7 +104,8 @@ class State {
 
   private:
 
-    lua_State* L_;
+    lua_State*  L_;
+    AuxLib      auxlib_;
 
 };
 
