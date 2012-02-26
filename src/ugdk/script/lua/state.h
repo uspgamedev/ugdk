@@ -25,7 +25,7 @@ class State {
       L_(L),
       auxlib_(L) {}
 
-    operator bool() const { return static_cast<bool>(L_); }
+    operator bool() const { return !!(L_); }
 
     operator lua_State*() const { return L_; }
 
