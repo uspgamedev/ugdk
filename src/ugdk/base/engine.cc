@@ -162,12 +162,9 @@ void Engine::Release() {
     video_manager()->Release();
     delete video_manager_;
 
-<<<<<<< HEAD
-=======
     SCRIPT_MANAGER()->Finalize();
     delete SCRIPT_MANAGER();
 
->>>>>>> script_system
     delete resource_manager_;
 
     SDL_Quit();

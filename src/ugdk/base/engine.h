@@ -27,22 +27,6 @@ class PathManager;
  */
 class Engine {
   public:
-    struct Configuration {
-        std::string        base_path;
-        std::string      window_icon;
-        std::string     window_title;
-        Vector2D         window_size;
-        bool              fullscreen;
-        std::string default_language;
-
-        Configuration() :
-            base_path("./"),
-            window_icon(""),
-            window_title("UGDK Game"),
-            window_size(800.0, 600.0),
-            fullscreen(false),
-            default_language("en_US") {}
-    };
 
     /// Returns a pointer to the current Engine. Creates an Engine if there isn't one.
     static Engine* reference() { return reference_ ? reference_ : reference_ = new Engine; }

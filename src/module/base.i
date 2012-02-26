@@ -14,6 +14,8 @@
 
 #include <ugdk/graphic/texture.h>
 
+#include <ugdk/util/languagemanager.h>
+
 %}
 
 
@@ -23,6 +25,7 @@
 %import <module/audio.i>
 %import <module/action.i>
 %import <ugdk/graphic.h>
+%import <ugdk/util.h>
 
 //%ignore ugdk::operator*(const double  &scalar, const Vector2D &right);
 
