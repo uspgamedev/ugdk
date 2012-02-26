@@ -84,7 +84,7 @@ class State {
 
     template <class T>
     T toprimitive(int n) const { return lua_to<T>::primitive(L_, n); }
-    bool toboolean(int n) const { return lua_toboolean(L_, n); }
+    bool toboolean(int n) const { return !!(lua_toboolean(L_, n)); }
     lua_Integer tointeger(int n) const { return lua_tointeger(L_, n); }
     const char* tostring(int n) const { return lua_tostring(L_, n); }
     void* touserdata(int n) const { return lua_touserdata(L_, n); }
