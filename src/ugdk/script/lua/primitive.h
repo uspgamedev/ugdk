@@ -102,7 +102,8 @@ DEFINE_LUA_SIMPLE_TO(UData, userdata);
 DEFINE_LUA_PRIMITIVE_OP(is);
 
 #define DEFINE_LUA_IS(type, check) \
-    DEFINE_LUA_PRIMITIVE_OPCASE(is, , type, int, int index, return (check))
+    DEFINE_LUA_PRIMITIVE_OPCASE(is, , type, bool, int index, \
+                                return static_cast<bool>(check))
 
 #define DEFINE_LUA_SIMPLE_IS(type, name) \
     DEFINE_LUA_IS(type, lua_is##name(L, index))
