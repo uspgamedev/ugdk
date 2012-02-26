@@ -31,6 +31,7 @@ if (${BUILD_TYPE} STREQUAL RELEASE)
     set (FRAMEWORK_BUILDNAME ${FRAMEWORK_RELEASENAME})
 elseif (${BUILD_TYPE} STREQUAL DEBUG)
     set (FRAMEWORK_BUILDNAME ${FRAMEWORK_DEBUGNAME})
+	set (FRAMEWORK_NAME "${FRAMEWORK_NAME} (DEBUG)")
 else ()
     message (FATAL_ERROR ">>> Unknown build type ${BUILD_TYPE}.")
 endif ()
@@ -80,6 +81,10 @@ if (UNIX OR MINGW)
         set (CFLAGS "${CFLAGS} -g")
     endif (${BUILD_TYPE} STREQUAL DEBUG)
 endif (UNIX OR MINGW)
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+	set (LDFLAGS "${LDFLAGS} -mmacosx-version-min=10.5")
+endif ()
 
 # ${FRAMEWORK_SRC} esta' definido?
 if (NOT FRAMEWORK_SRC)
@@ -156,8 +161,14 @@ else (MSVC)
   endforeach (d)
 endif  (MSVC)
 
+set (PYTHON_FINAL_LIB ${PYTHON_LIBRARIES})
 if (${BUILD_TYPE} STREQUAL DEBUG)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
+	
+	# Check if we have the debug library to link with on debug. If not, we'll just use the nondebug one.
+	if (PYTHON_DEBUG_LIBRARY)
+		set (PYTHON_FINAL_LIB ${PYTHON_DEBUG_LIBRARY})
+	endif()
 endif (${BUILD_TYPE} STREQUAL DEBUG)
 
 include_directories ("externals/opengl")
@@ -170,54 +181,35 @@ endif (${LINK_TYPE} STREQUAL STATIC)
 
 include (cmake/tests.cmake)
 
+if (CMAKE_COMPILER_IS_GNUCXX)
+	set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
+endif (CMAKE_COMPILER_IS_GNUCXX)
+if (MINGW)
+	set (EXTRA_LIBRARIES mingw32 ${EXTRA_LIBRARIES})
+endif (MINGW)
+if (WIN32)
+	set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
+endif (WIN32)
+
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
-
-
-# *nix library
-if (UNIX)
-    target_link_libraries (${FRAMEWORK_BUILDNAME}
-                           m
-                           ${SDL_LIBRARY}
-                           ${SDLMIXER_LIBRARY}
-                           ${SDLTTF_LIBRARY}
-                           ${SDLIMAGE_LIBRARY}
-                           ${OPENGL_LIBRARIES}
-                           ${LUA_LIBRARIES}
-                           ${PYTHON_LIBRARIES}
-                          )
-
-# Windows library
-elseif (WIN32)
+if (WIN32)
 	set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
-    if (MSVC)
-		target_link_libraries (${FRAMEWORK_BUILDNAME}
-							   ${SDL_LIBRARY}
-							   ${SDLMIXER_LIBRARY}
-							   ${SDLTTF_LIBRARY}
-							   ${SDLIMAGE_LIBRARY}
-							   ${OPENGL_LIBRARIES}
-							   Ws2_32
-							   ${LUA_LIBRARIES}
-							   ${PYTHON_LIBRARIES}
-							  )
-    else (MSVC)
-        target_link_libraries (${FRAMEWORK_BUILDNAME} m mingw32 SDLmain SDL SDL_image SDL_mixer SDL_ttf OpenGL32 glu32)
-    endif (MSVC)
-endif  (UNIX)
+endif (WIN32)
 
-if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS} -mmacosx-version-min=10.5")
-else ()
-    set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS}")
-endif ()
+target_link_libraries (${FRAMEWORK_BUILDNAME}
+					   ${EXTRA_LIBRARIES}
+					   ${SDL_LIBRARY}
+					   ${SDLMIXER_LIBRARY}
+					   ${SDLTTF_LIBRARY}
+					   ${SDLIMAGE_LIBRARY}
+					   ${OPENGL_LIBRARIES}
+					   ${LUA_LIBRARIES}
+					   ${PYTHON_FINAL_LIB})
 
+set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA}")
-if (${BUILD_TYPE} STREQUAL RELEASE)
-    set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
-elseif (${BUILD_TYPE} STREQUAL DEBUG)
-    set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME} (DEBUG)")
-endif ()
+set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
 
 # Installing on *nix
 #if (UNIX)
