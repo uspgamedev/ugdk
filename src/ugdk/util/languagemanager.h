@@ -12,7 +12,7 @@ namespace ugdk {
 class LanguageManager {
   public:
     LanguageManager(const std::string& default_language_code) : default_language_(default_language_code) {}
-    ~LanguageManager();
+    ~LanguageManager() {}
 
     const std::string& default_language() const { return default_language_; }
 
