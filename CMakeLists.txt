@@ -66,7 +66,7 @@ include (${SRC_DIR}/module_list.cmake)
 # separe por espacos
 set (DEFS "" CACHE STRING "#define's que voce queira incluir na compilacao; separe por espacos")
 if (WIN32)
-    set (DEFS "${DEFS} WIN32 BOOST_ALL_NO_LIB")
+    set (DEFS "${DEFS} WIN32")
 endif (WIN32)
 
 # CFLAGS: flags que voce queira enviar ao compilador
@@ -148,7 +148,7 @@ if (MSVC)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
   endforeach (d)
   
-  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS /arch:SSE2 /fp:fast")
+  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /DBOOST_ALL_NO_LIB /D_CRT_SECURE_NO_WARNINGS /arch:SSE2 /fp:fast")
   
 else (MSVC)
   foreach (d ${DEFS})
