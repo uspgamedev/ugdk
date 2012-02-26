@@ -13,6 +13,7 @@
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/animationparser.h>
 #include <ugdk/util/languagemanager.h>
+#include <ugdk/script/scriptmanager.h>
 
 using namespace std;
 
@@ -43,6 +44,9 @@ bool Engine::Initialize(const Configuration& configuration) {
     video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, configuration.window_icon);
     audio_manager_->Initialize();
      text_manager_->Initialize();
+
+	if (!SCRIPT_MANAGER()->Initialize())
+	    puts("Failed to initialize script manager.");
 
     scene_list_.clear();
 
@@ -158,6 +162,12 @@ void Engine::Release() {
     video_manager()->Release();
     delete video_manager_;
 
+<<<<<<< HEAD
+=======
+    SCRIPT_MANAGER()->Finalize();
+    delete SCRIPT_MANAGER();
+
+>>>>>>> script_system
     delete resource_manager_;
 
     SDL_Quit();

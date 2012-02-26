@@ -33,39 +33,42 @@ Vector2D Vector2D::Scale(const Vector2D &scale) const {
     return Vector2D(x * scale.x, y * scale.y);
 }
 
-Vector2D Vector2D::operator+=(const Vector2D &other) {
+Vector2D& Vector2D::operator+=(const Vector2D &other) {
     x += other.x;  
     y += other.y;
     return *this;
 }
 
-Vector2D Vector2D::operator-=(const Vector2D &other) {
+Vector2D& Vector2D::operator-=(const Vector2D &other) {
     x -= other.x;
     y -= other.y;
     return *this;
 }
 
-Vector2D operator+(const Vector2D &left, const Vector2D &right) {
-    return Vector2D::Add(left, right);
+Vector2D Vector2D::operator+(const Vector2D &right) const {
+    return Vector2D::Add(*this, right);
 }
-Vector2D operator-(const Vector2D &left, const Vector2D &right) {
-    return Vector2D::Subtract(left, right);
+Vector2D Vector2D::operator-(const Vector2D &right) const {
+    return Vector2D::Subtract(*this, right);
 }
-Vector2D operator-(const Vector2D &left) {
-    return Vector2D(-left.x, -left.y);
-}
-Vector2D operator*(const double  &scalar, const Vector2D &right) {
-    return Vector2D::Multiply(right, scalar);
-}
-Vector2D operator*(const Vector2D &left, const double   &scalar) {
-    return Vector2D::Multiply(left, scalar);
-}
-Vector2D operator/(const Vector2D &left, const double   &scalar) {
-    return Vector2D::Multiply(left, 1.0 / scalar);
+Vector2D Vector2D::operator-() const {
+    return Vector2D(-this->x, -this->y);
 }
 
-double operator*(const Vector2D &left, const Vector2D &right) {
-    return Vector2D::InnerProduct(left, right);
+Vector2D Vector2D::operator*(const double   &scalar) const {
+    return Vector2D::Multiply(*this, scalar);
+}
+Vector2D Vector2D::operator/(const double   &scalar) const {
+    return Vector2D::Multiply(*this, 1.0 / scalar);
+}
+double Vector2D::operator*(const Vector2D &right) const {
+    return Vector2D::InnerProduct(*this, right);
+}
+
+///
+
+Vector2D operator*(const double  &scalar, const Vector2D &right) {
+    return Vector2D::Multiply(right, scalar);
 }
 
 }  // namespace ugdk

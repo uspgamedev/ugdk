@@ -1,0 +1,22 @@
+﻿/***************************************************************************
+     Ei Wil (ou sabe-se la' que fantasma do repositorio ta' lendo isso) 
+
+	Criei esse arquivo para irmos adicionando notas/TODOs gerais sobre o 
+	sistema (e as implementacoes das linguagens) e sobre o SWIG
+	para nao esquecermos =P
+***************************************************************************/
+
+###############
+Wil, arrume o LuaWrapper, implementei a idéia da funcao pra executar
+codigo da lingaguem passado como string como conversamos. Veja o LangWrapper,
+soh precisa colocar um 
+virtual void ExecuteCode(string code)
+
+################
+Ver com o Wil sobre o método dele pra transformar args VData recebidos numa
+implementacao de VData em seu objeto (PyVData)
+
+################
+Possível otimização, falar com Omar -> lazyness na hora de ler um atributo.
+
+################

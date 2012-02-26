@@ -53,8 +53,14 @@ ENDIF ()
 # Important build locations.
 set (SRC_DIR src)
 set (LIB_DIR lib)
+set (MODULE_DIR "${SRC_DIR}/module")
+set (GENERATED_DIR "${SRC_DIR}/generated")
+
+#set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
+#set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
 
 include (${SRC_DIR}/src_list.cmake)
+include (${SRC_DIR}/module_list.cmake)
 
 # #define's que voce queira incluir na compilacao
 # separe por espacos
@@ -69,7 +75,7 @@ set (CFLAGS "" CACHE STRING "flags enviadas ao compilador")
 set (LDFLAGS "" CACHE STRING "flags enviadas ao linker")
 if (UNIX OR MINGW)
     # se for o g++ para *nix ou o MinGW para Windows:
-    set (CFLAGS "${CFLAGS} -Wall -ansi -O3 -U_FORTIFY_SOURCE")
+    set (CFLAGS "${CFLAGS} -Wall -ansi -O3 -U_FORTIFY_SOURCE -msse2")
     if (${BUILD_TYPE} STREQUAL DEBUG)
         set (CFLAGS "${CFLAGS} -g")
     endif (${BUILD_TYPE} STREQUAL DEBUG)
@@ -79,6 +85,8 @@ endif (UNIX OR MINGW)
 if (NOT FRAMEWORK_SRC)
     message (FATAL_ERROR "Error: FRAMEWORK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT FRAMEWORK_SRC)
+
+include_directories ("src")
 
 # Encontrando as bibliotecas necessarias:
 find_package(OpenGL REQUIRED)
@@ -96,13 +104,51 @@ include_directories(${SDLTTF_INCLUDE_DIR})
 find_package(SDL_image REQUIRED)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
+find_package(Lua51 REQUIRED)
+include_directories(${LUA_INCLUDE_DIR})
+    
+find_package(PythonLibs 2.7 REQUIRED)
+include_directories (${PYTHON_INCLUDE_DIRS})
+
+find_package(Boost 1.48.0 REQUIRED)
+include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
+include_directories(${Boost_INCLUDE_DIRS})
+
+# Does this work everywhere?
+find_package (SWIG REQUIRED)
+include (cmake/UseSWIG.cmake)
+
+# ${FRAMEWORK_SRC} esta' definido?
+if (NOT MODULE_SRC)
+    message (FATAL_ERROR "Error: MODULE_SRC not defined! Please do so in the file src/module_list.cmake!")
+endif (NOT MODULE_SRC)
+
+set_source_files_properties (${MODULE_SRC} PROPERTIES CPLUSPLUS ON)
+set_source_files_properties (${MODULE_SRC} PROPERTIES SWIG_FLAGS "")
+
+set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
+set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_DIR}")
+
+set (GENERATED_SRC "")
+swig_add_module (ugdk_lua lua ${MODULE_SRC} ${FRAMEWORK_SRC})
+set (GENERATED_SRC ${GENERATED_SRC} ${swig_generated_sources})
+swig_add_module (ugdk_python python ${MODULE_SRC} ${FRAMEWORK_SRC})
+set (TEMP_ONLY_CXX)
+foreach (it ${swig_generated_sources})
+  if (${it} MATCHES ".cc$")
+    set (TEMP_ONLY_CXX ${TEMP_ONLY_CXX} ${it})
+  endif ()
+endforeach (it)
+set (GENERATED_SRC ${GENERATED_SRC} ${TEMP_ONLY_CXX})
+unset (TEMP_ONLY_CXX)
+
 # pre-processor: #define's
 if (MSVC)
   foreach (d ${DEFS})
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
   endforeach (d)
   
-  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS /arch:SSE2 /fp:fast")
+  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /arch:SSE2 /fp:fast")
   
 else (MSVC)
   foreach (d ${DEFS})
@@ -114,14 +160,15 @@ if (${BUILD_TYPE} STREQUAL DEBUG)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
 endif (${BUILD_TYPE} STREQUAL DEBUG)
 
-include_directories ("src")
 include_directories ("externals/opengl")
 
 if (${LINK_TYPE} STREQUAL STATIC)
-    add_library (${FRAMEWORK_BUILDNAME} STATIC ${FRAMEWORK_SRC})
+    add_library (${FRAMEWORK_BUILDNAME} STATIC ${FRAMEWORK_SRC} ${GENERATED_SRC})
 elseif (${LINK_TYPE} STREQUAL SHARED)
-    add_library (${FRAMEWORK_BUILDNAME} SHARED ${FRAMEWORK_SRC})
+    add_library (${FRAMEWORK_BUILDNAME} SHARED ${FRAMEWORK_SRC} ${GENERATED_SRC})
 endif (${LINK_TYPE} STREQUAL STATIC)
+
+include (cmake/tests.cmake)
 
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
@@ -136,13 +183,24 @@ if (UNIX)
                            ${SDLTTF_LIBRARY}
                            ${SDLIMAGE_LIBRARY}
                            ${OPENGL_LIBRARIES}
+                           ${LUA_LIBRARIES}
+                           ${PYTHON_LIBRARIES}
                           )
 
 # Windows library
 elseif (WIN32)
 	set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
     if (MSVC)
-        target_link_libraries (${FRAMEWORK_BUILDNAME} SDLmain SDL SDL_image SDL_mixer SDL_ttf OpenGL32 glu32)
+		target_link_libraries (${FRAMEWORK_BUILDNAME}
+							   ${SDL_LIBRARY}
+							   ${SDLMIXER_LIBRARY}
+							   ${SDLTTF_LIBRARY}
+							   ${SDLIMAGE_LIBRARY}
+							   ${OPENGL_LIBRARIES}
+							   Ws2_32
+							   ${LUA_LIBRARIES}
+							   ${PYTHON_LIBRARIES}
+							  )
     else (MSVC)
         target_link_libraries (${FRAMEWORK_BUILDNAME} m mingw32 SDLmain SDL SDL_image SDL_mixer SDL_ttf OpenGL32 glu32)
     endif (MSVC)

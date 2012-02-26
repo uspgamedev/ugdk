@@ -1,0 +1,13 @@
+SET(MODULE_SRC 
+    time.i 
+    graphic.i 
+    math.i 
+    action.i 
+    input.i 
+    gdd.i 
+    spritesheet.i 
+    util.i 
+    base.i 
+    audio.i 
+    drawable.i 
+)

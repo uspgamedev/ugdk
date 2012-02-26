@@ -26,7 +26,7 @@ AnimationParser* AnimationParser::reference() {
 }
 
 bool parseLine(char buffer[], AnimationSet *set) {
-    static AnimationManager::Animation *seq = NULL;
+    static Animation *seq = NULL;
     static char animation_name[256];
     char *token = buffer;
     size_t len = strlen(buffer);
@@ -36,14 +36,14 @@ bool parseLine(char buffer[], AnimationSet *set) {
         case '$':
         	sscanf(token+1, "%s", animation_name);
         	//printf("New animation: %s\n", animation_name);
-            set->Add(animation_name, seq = new AnimationManager::Animation);
+            set->Add(animation_name, seq = new Animation);
             return true;
         case '%':
             if (seq) {
                 int frame = 0, step = 0;
                 token++;
                 while (sscanf(token, "%d%*[ \t]%n", &frame, &step) > 0) {
-                    seq->push_back(new AnimationManager::AnimationFrame(frame));
+                    seq->push_back(new AnimationFrame(frame));
                     token += step;
                 }
                 if (*token != '\0') {

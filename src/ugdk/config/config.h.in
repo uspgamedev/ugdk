@@ -1,1 +1,9 @@
+
+#ifndef UGDK_CONFIG_CONFIG_H_
+#define UGDK_CONFIG_CONFIG_H_
+
+///
 @CHECKMAC@
+///
+
+#endif // UGDK_CONFIG_CONFIG_H_

@@ -3,7 +3,7 @@
 CMake*
 !CMakeLists.txt
 Makefile
-cmake*
+cmake_install.cmake
 lib/*
 src/ugdk/config/config.h
 *.user
@@ -22,6 +22,8 @@ src/ugdk/config/config.h
 /test/lib/ugdk.lib
 /test/lib/gtest.lib
 /test/lib/gtest_main.lib
+/test/*.dll
+/test/*.exe
 /test/tmp
 *.deb
 /test/tmp
@@ -30,3 +32,7 @@ src/ugdk/config/config.h
 *.sln
 *.vcxproj
 doc/doxy
+src/generated/*_wrap.cc
+src/generated/*.py
+src/generated/*.rule
+/script_customtest.dir
