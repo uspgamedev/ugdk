@@ -2,16 +2,11 @@
 #ifndef UGDK_SCRIPT_LUA_LUADATA_H_
 #define UGDK_SCRIPT_LUA_LUADATA_H_
 
+#include <ugdk/script/type.h>
 #include <ugdk/script/virtualdata.h>
-#include <ugdk/script/lua/header.h>
-#include <ugdk/script/lua/datagear.h>
-#include <ugdk/script/lua/luawrapper.h>
 
-#define GENERIC_WRAP(tname,arg) do { \
-        DataGear& dtgear(wrapper_->data_gear()); \
-        dtgear->push##tname(arg); \
-        dtgear.SetData(id_); \
-    } while(0)
+#include <ugdk/script/lua/defs.h>
+#include <ugdk/script/lua/luawrapper.h>
 
 namespace ugdk {
 namespace script {
@@ -25,33 +20,19 @@ class LuaData : public VirtualData {
         wrapper_(wrapper),
         id_(id) {}
 
-    ~LuaData() {
-        if (wrapper_)
-            wrapper_->data_gear()//.DestroyID_old(id_);
-                .SafeCall(DataGear::DestroyID)
-                .Arg(id_)
-                .NoResult();
-    }
+    ~LuaData();
 
     void* Unwrap(const VirtualType& type) const;
-    const char* UnwrapString() const {
-        return UnwrapPrimitive<const char*>(NULL);
-    }
-    bool UnwrapBoolean() const {
-        return UnwrapPrimitive<bool>(false);
-    }
-    int UnwrapInteger() const {
-        return UnwrapPrimitive<int>(0);
-    }
-    double UnwrapNumber() const {
-        return UnwrapPrimitive<double>(0.0);
-    }
+    const char* UnwrapString() const;
+    bool UnwrapBoolean() const;
+    int UnwrapInteger() const;
+    double UnwrapNumber() const;
 
     void Wrap(void* data, const VirtualType& type);
-    void WrapString(const char* str) { WrapPrimitive(str); }
-    void WrapBoolean(bool boolean) { WrapPrimitive(boolean); }
-    void WrapInteger(int number) { WrapPrimitive(number); }
-    void WrapNumber(double number) { WrapPrimitive(number); }
+    void WrapString(const char* str);
+    void WrapBoolean(bool boolean);
+    void WrapInteger(int number);
+    void WrapNumber(double number);
 
     LangWrapper* wrapper () const { return wrapper_; }
 
@@ -66,33 +47,10 @@ class LuaData : public VirtualData {
 
   private:
 
-    template <class T>
-    T UnwrapPrimitive(const T default_value) const;
-
-    template <class T>
-    void WrapPrimitive(T value);
-
     LuaWrapper* wrapper_;
     DataID      id_;
 
 };
-
-template <class T>
-T LuaData::UnwrapPrimitive(const T default_value) const {
-    return wrapper_->data_gear()
-        .SafeCall(DataGear::UnwrapPrimitive<T>)
-        .Arg(id_)
-        .GetResult(default_value);
-}
-
-template <class T>
-void LuaData::WrapPrimitive(T value) {
-    wrapper_->data_gear()
-        .SafeCall(DataGear::WrapPrimitive<T>)
-        .Arg(id_)
-        .Arg(value)
-        .NoResult();
-}
 
 } /* namespace lua */
 } /* namespace script */

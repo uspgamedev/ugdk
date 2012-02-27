@@ -5,6 +5,8 @@
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/lua/luadata.h>
+#include <ugdk/script/lua/bootstrapgear.h>
+#include <ugdk/script/lua/datagear.h>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/util/pathmanager.h>
@@ -42,6 +44,10 @@ VirtualData::Ptr LuaWrapper::NewData() {
     return VirtualData::Ptr(NewLuaData());
 }
 
+void LuaWrapper::ExecuteCode(const std::string& code) {
+    LoadChunk(code, DataGear::DoString);
+}
+
 VirtualObj LuaWrapper::LoadModule(const string& name) {
     string fullpath = PATH_MANAGER()->ResolvePath(
         "scripts/" +
@@ -74,6 +80,19 @@ VirtualData::Ptr LuaWrapper::OperateBuffer(const DataID operand_id,
         return VirtualData::Ptr();
     }
     return VirtualData::Ptr(new LuaData(this, result_id));
+}
+
+DataID LuaWrapper::NewDataID() {
+    return data_gear()
+        .SafeCall(DataGear::GenerateID)
+        .GetResult<DataID>(LUA_NOREF);
+}
+
+void LuaWrapper::DeleteDataID(DataID id) {
+   data_gear()
+       .SafeCall(DataGear::DestroyID)
+       .Arg(id)
+       .NoResult();
 }
 
 VirtualData::Ptr LuaWrapper::LoadChunk(const string& chunk,

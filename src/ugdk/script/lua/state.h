@@ -10,6 +10,7 @@
 #include <functional>
 
 #include <ugdk/script/lua/header.h>
+#include <ugdk/script/lua/defs.h>
 #include <ugdk/script/lua/primitive.h>
 #include <ugdk/script/lua/auxlib.h>
 
