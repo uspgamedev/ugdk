@@ -19,7 +19,8 @@ class Node {
             light_(NULL),
             active_(true),
             zindex_(0.0),
-            parent_(NULL) {}
+            parent_(NULL),
+            must_sort_(false) {}
 
     ~Node();
 
@@ -44,6 +45,7 @@ class Node {
     void AddChild(Node *child) {
         childs_.push_back(child);
         child->parent_ = this;
+        must_sort_ = true;
     }
     void RemoveChild(Node *child);
 
