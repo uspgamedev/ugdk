@@ -1,13 +1,13 @@
 SET(MODULE_SRC 
-    time.i 
-    graphic.i 
-    math.i 
-    action.i 
     input.i 
-    gdd.i 
-    spritesheet.i 
-    util.i 
     base.i 
+    util.i 
+    time.i 
+    gdd.i 
     audio.i 
     drawable.i 
+    spritesheet.i 
+    action.i 
+    graphic.i 
+    math.i 
 )

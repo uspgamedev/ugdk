@@ -17,8 +17,8 @@
 
 %template(AnimationFrameVector) std::vector<ugdk::AnimationFrame*>;
 
-%import <ugdk/base/types.h>
-%import <ugdk/graphic.h>
+%import <module/base.i>
+%import <module/graphic.i>
 %import <module/audio.i>
 
 %include <ugdk/action/animationframe.h>

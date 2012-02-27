@@ -2,7 +2,6 @@
 #define UGDK_UTIL_LANGUAGE_H_
 
 #include <string>
-#include <ugdk/base/resourcecontainer.h>
 #include <ugdk/util.h>
 
 namespace ugdk {
