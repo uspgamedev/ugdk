@@ -1,0 +1,111 @@
+#######################################################################
+#
+#  C++  -  C PLUS PLUS
+#
+#######################################################################
+main -> cria e roda a Engine (pretty much like Horus Eye)
+
+MapScene:
+	- Game Scene (much like Horus Eye's 'World' class), keeps record of 
+      entities and so on and on.
+    - Contains a MapGenerator object
+	- When game starts, uses the MapGen to populate the game.
+	- When game ends, WHAT???
+
+
+#######################################################################
+#
+#  SCRIPT
+#
+#######################################################################
+
+MapGenerator:
+	- Could receive some parameters that relate to the difficulty of the
+	  generated "map"
+	- Method to return a list of "entity" objects, these objects should
+	  be randomly placed 1 Ship, N Asteroids of varying sizes, and a few
+	  Planets.
+	  Asteroids should receive a random velocity.
+	
+========================================================================
+Radio:
+	- Partially externally controlled object (not actual entity).
+	- Receives commands from whoever "has a radio".
+	- PLAYS MUSIC!
+	- has a list of musics (the playlist) and perpetually loops it.
+	- can receive PLAY/PAUSE/STOP/NEXT/PREVIOUS commands to control
+	  the playback of the musics in the playlist.
+	
+========================================================================
+Ship:
+	- Player controlled entity.
+	- has LIFE, does not regenerate, when 0  U DIE! BUM HEADSHOT GAMEOVER!
+	- has ENERGY which steadily regenerates.
+	- upon command, shoots Projectiles, spending ENERGY.
+	- possibility of charging ENERGY to shoot a more powerful/damaging
+	   Projectile, spending more ENERGY.
+	- has a RADIO! (problem? xD) passing commands to it.
+
+========================================================================
+Projectile:
+	- variable damage (settable on creation).
+	- do damage on Asteroid on collision, transfers a % of its velocity
+	  to the asteroid.
+	- do damage on Ship on collision (yay friendly fire), transfers a
+	  % of its velocity to the Ship.
+	- cancel each other upon collision with another projectile.
+	- is destructed and does nothing when colliding with Planet.
+	
+	PLUS:
+	- Different levels of power in the projectile (the projectile damage, based
+	  on ENERGY used to fire it) could be shown visually via different sizes
+	  and colors, or light.
+	  Bigger/brighter = more powerful.
+	  
+========================================================================
+Asteroid:
+	- has LIFE, non-regenerating. 
+	- has N different sizes
+	- when life is over, splits in X smaller pieces, with less LIFE each,
+	  total amount of LIFE of the pieces should be LESS than original LIFE.
+	  If asteroid is of the smallest size, it doesn't split and is just 
+	   destructed.
+	  (original object should probably be destroyed afterwards lol)
+	- No self movement, only drifts with the velocity it has.
+	- Upon collision with Ship, is destructed causing X damage to the Ship,
+	  where X should be a % of the asteroid current LIFE. Also transfers a %
+	  of its velocity to the Ship.
+	- Upon collision with Asteroid, each one should suffer damage based on
+	  a % of LIFE of the other asteroid, and "mirror" their velocity (bounce
+	  on each other)
+	- Upon collision with Planet, does a % of its current LIFE to the planet
+	  and is destructed.
+	  
+	PLUS:
+	- Sizes can be made non-discreet... Asteroids can have a Real number size,
+	  then split (like I said before), and finally when a asteroid is smaller
+	  than a given size, it doesnt split anymore.
+	  However this 'size' should affect the visual representation of the 
+	  asteroid, scaling the sprite.
+
+========================================================================
+Planet:
+	- has LIFE, non-regenerating.
+	- when life reaches 0, it is destructed, generating a few asteroids in its
+	  location (with small velocity), and a shockwave that blasts any 
+	  entity nearby away (affects their velocity in a anti-gravity way)
+	  shockwave force should be base on Planet MASS
+	- Is immovable.
+	- has MASS:
+		-can be a regular numeric attribute, and thus affect the size of the
+		 planet.
+		-can be based on other attributes (size and density), then the SIZE
+		 will be the actual size of the planet.
+	- APPLIES GRAVITY!!!
+		-In a 'spherical' area with the planet in the center, pulls all entities 
+		 to it (except other planets).
+		-Gravity force IS based on MASS.
+		-Gravity force has no limit distance, one should be elaborated (when force
+		 applied is reasonably weak)
+	
+	
