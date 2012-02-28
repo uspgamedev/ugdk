@@ -2,6 +2,10 @@
 #ifndef HORUSEYE_FRAMEWORK_VECTOR2D_H_
 #define HORUSEYE_FRAMEWORK_VECTOR2D_H_
 
+#ifdef SWIG
+#pragma SWIG nowarn=312
+#endif
+
 namespace ugdk {
 
 // 2 dimension vectors, using doubles.
