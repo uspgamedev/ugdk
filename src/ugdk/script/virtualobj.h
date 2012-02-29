@@ -58,7 +58,9 @@ class VirtualObj {
 
 	LangWrapper* wrapper() const { return data_->wrapper(); }
 
-	operator bool() const { return static_cast<bool>(data_); }
+	bool valid() const { return static_cast<bool>(data_); }
+
+	operator bool() const { return valid(); }
 
 	VirtualObj operator() (std::vector<VirtualObj> args) const;
 
