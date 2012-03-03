@@ -93,7 +93,7 @@ void PythonWrapper::PrintPythonExceptionDetails() {
         }
 
         errlist = PyObject_CallObject(format, arglist); //return is new ref
-        if (format == NULL) {
+        if (errlist == NULL) {
             printf("[Python] Error 4... Can't print exception details... >_<\n");
             break;
         }

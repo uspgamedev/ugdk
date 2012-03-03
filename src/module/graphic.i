@@ -21,8 +21,6 @@
 %}
 
 %import <module/math.i>
-%import <module/base.i>
-%import <module/action.i>
 
 %ignore ugdk::graphic::Texture::CreateFromSurface(SDL_Surface* data);
 %ignore ugdk::graphic::VideoManager::PushAndApplyModifier(const Modifier& apply);
@@ -48,6 +46,8 @@ check SWIG %delobject directive
 
 %include <ugdk/graphic/drawable.h>
 
+%import <module/base.i>
+%import <module/action.i>
 %import <module/drawable.i> //this needs to go after the include drawable.h
 
 %include <ugdk/graphic/texture.h>
