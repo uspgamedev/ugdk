@@ -1,0 +1,328 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{5413D333-2DCE-4220-AD38-7D6C7E38EC8F}</ProjectGUID>
+    <SccProjectName />
+    <SccLocalPath />
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>asteroids</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\examples\asteroids-script\Debug\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">asteroids.dir\Debug\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">asteroids</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\examples\asteroids-script\Release\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">asteroids.dir\Release\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">asteroids</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\examples\asteroids-script\MinSizeRel\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">asteroids.dir\MinSizeRel\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">asteroids</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\examples\asteroids-script\RelWithDebInfo\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">asteroids.dir\RelWithDebInfo\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">asteroids</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
+      <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
+      <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>Debug</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/examples/asteroids-script/Debug/asteroids.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 /debug %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;lib\Debug\ugdk.lib;C:\Programming\Lua\5.1\lib64\lua51.lib;C:\Programming\Python27\x86\libs\python27.lib;Ws2_32.lib;C:\Programming\SDL\lib\SDLmain.lib;C:\Programming\SDL\lib\SDL.lib;C:\Programming\SDL\lib\SDL_mixer.lib;C:\Programming\SDL\lib\SDL_ttf.lib;C:\Programming\SDL\lib\SDL_image.lib;glu32.lib;opengl32.lib;C:\Programming\Lua\5.1\lib64\lua51.lib;C:\Programming\Python27\x86\libs\python27.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/Debug/asteroids.lib</ImportLibrary>
+      <LinkIncremental>true</LinkIncremental>
+      <ProgramDataBaseFileName>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/examples/asteroids-script/Debug/asteroids.pdb</ProgramDataBaseFileName>
+      <StackReserveSize>10000000</StackReserveSize>
+      <SubSystem>Console</SubSystem>
+      <Version></Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat></DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>Release</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/examples/asteroids-script/Release/asteroids.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;lib\Release\ugdk.lib;C:\Programming\Lua\5.1\lib64\lua51.lib;C:\Programming\Python27\x86\libs\python27.lib;Ws2_32.lib;C:\Programming\SDL\lib\SDLmain.lib;C:\Programming\SDL\lib\SDL.lib;C:\Programming\SDL\lib\SDL_mixer.lib;C:\Programming\SDL\lib\SDL_ttf.lib;C:\Programming\SDL\lib\SDL_image.lib;glu32.lib;opengl32.lib;C:\Programming\Lua\5.1\lib64\lua51.lib;C:\Programming\Python27\x86\libs\python27.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <ImportLibrary>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/Release/asteroids.lib</ImportLibrary>
+      <ProgramDataBaseFileName>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/examples/asteroids-script/Release/asteroids.pdb</ProgramDataBaseFileName>
+      <StackReserveSize>10000000</StackReserveSize>
+      <SubSystem>Console</SubSystem>
+      <Version></Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat></DebugInformationFormat>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>MinSizeRel</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/examples/asteroids-script/MinSizeRel/asteroids.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;lib\MinSizeRel\ugdk.lib;C:\Programming\Lua\5.1\lib64\lua51.lib;C:\Programming\Python27\x86\libs\python27.lib;Ws2_32.lib;C:\Programming\SDL\lib\SDLmain.lib;C:\Programming\SDL\lib\SDL.lib;C:\Programming\SDL\lib\SDL_mixer.lib;C:\Programming\SDL\lib\SDL_ttf.lib;C:\Programming\SDL\lib\SDL_image.lib;glu32.lib;opengl32.lib;C:\Programming\Lua\5.1\lib64\lua51.lib;C:\Programming\Python27\x86\libs\python27.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <ImportLibrary>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/MinSizeRel/asteroids.lib</ImportLibrary>
+      <ProgramDataBaseFileName>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/examples/asteroids-script/MinSizeRel/asteroids.pdb</ProgramDataBaseFileName>
+      <StackReserveSize>10000000</StackReserveSize>
+      <SubSystem>Console</SubSystem>
+      <Version></Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AssemblerListingLocation>RelWithDebInfo</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ProgramDataBaseFileName>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/examples/asteroids-script/RelWithDebInfo/asteroids.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/src;C:/Programming/SDL/include;C:/Programming/Lua/5.1/include;C:/Programming/Python27/x86/include;C:/Programming/Boost/boost_1_49_0/boost/tr1/tr1;C:/Programming/Boost/boost_1_49_0;C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/externals/opengl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Link>
+      <AdditionalOptions> /machine:X86 /debug %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;lib\RelWithDebInfo\ugdk.lib;C:\Programming\Lua\5.1\lib64\lua51.lib;C:\Programming\Python27\x86\libs\python27.lib;Ws2_32.lib;C:\Programming\SDL\lib\SDLmain.lib;C:\Programming\SDL\lib\SDL.lib;C:\Programming\SDL\lib\SDL_mixer.lib;C:\Programming\SDL\lib\SDL_ttf.lib;C:\Programming\SDL\lib\SDL_image.lib;glu32.lib;opengl32.lib;C:\Programming\Lua\5.1\lib64\lua51.lib;C:\Programming\Python27\x86\libs\python27.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ImportLibrary>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/RelWithDebInfo/asteroids.lib</ImportLibrary>
+      <LinkIncremental>true</LinkIncremental>
+      <ProgramDataBaseFileName>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/examples/asteroids-script/RelWithDebInfo/asteroids.pdb</ProgramDataBaseFileName>
+      <StackReserveSize>10000000</StackReserveSize>
+      <SubSystem>Console</SubSystem>
+      <Version></Version>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Programming\CMake 2.8\bin\cmake.exe" "-HC:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk" "-BC:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk" --check-stamp-file "C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/CMakeLists.txt;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeLists.txt;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeSystem.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXCompiler.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCCompiler.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCPlatform.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXPlatform.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeRCCompiler.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCPlatform.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXPlatform.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\cl.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\src_list.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\module_list.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindThreads.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CheckIncludeFiles.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CheckLibraryExists.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_mixer.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_ttf.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_image.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindLua51.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPythonLibs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeFindFrameworks.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindBoost.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSWIG.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\cmake\UseSWIG.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\cmake\asteroids.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\ugdk\config\config.h.in;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\generate.stamp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Programming\CMake 2.8\bin\cmake.exe" "-HC:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk" "-BC:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk" --check-stamp-file "C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/CMakeLists.txt;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeLists.txt;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeSystem.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXCompiler.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCCompiler.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCPlatform.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXPlatform.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeRCCompiler.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCPlatform.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXPlatform.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\cl.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\src_list.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\module_list.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindThreads.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CheckIncludeFiles.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CheckLibraryExists.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_mixer.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_ttf.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_image.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindLua51.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPythonLibs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeFindFrameworks.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindBoost.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSWIG.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\cmake\UseSWIG.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\cmake\asteroids.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\ugdk\config\config.h.in;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\generate.stamp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Programming\CMake 2.8\bin\cmake.exe" "-HC:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk" "-BC:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk" --check-stamp-file "C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/CMakeLists.txt;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeLists.txt;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeSystem.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXCompiler.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCCompiler.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCPlatform.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXPlatform.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeRCCompiler.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCPlatform.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXPlatform.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\cl.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\src_list.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\module_list.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindThreads.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CheckIncludeFiles.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CheckLibraryExists.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_mixer.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_ttf.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_image.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindLua51.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPythonLibs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeFindFrameworks.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindBoost.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSWIG.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\cmake\UseSWIG.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\cmake\asteroids.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\ugdk\config\config.h.in;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\generate.stamp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Programming\CMake 2.8\bin\cmake.exe" "-HC:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk" "-BC:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk" --check-stamp-file "C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/CMakeLists.txt;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeLists.txt;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeSystem.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXCompiler.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCCompiler.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeSystemSpecificInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeGenericSystem.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\WindowsPaths.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCXXInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCPlatform.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXPlatform.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeRCCompiler.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeRCInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCInformation.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\Windows-cl.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCPlatform.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\CMakeCXXPlatform.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\Platform\cl.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeCommonLanguageInclude.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\src_list.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\module_list.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindOpenGL.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindThreads.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CheckIncludeFiles.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CheckLibraryExists.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_mixer.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_ttf.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSDL_image.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindLua51.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPythonLibs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeFindFrameworks.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindBoost.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindSWIG.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageHandleStandardArgs.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\FindPackageMessage.cmake;C:\Programming\CMake 2.8\share\cmake-2.8\Modules\CMakeParseArguments.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\cmake\UseSWIG.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\cmake\asteroids.cmake;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\src\ugdk\config\config.h.in;C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\CMakeFiles\generate.stamp;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\examples\asteroids-script\src\asteroids.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/ZERO_CHECK.vcxproj">
+      <Project>BF880A82-3E65-46AF-A6FE-7E2B58285EC2</Project>
+    </ProjectReference>
+    <ProjectReference Include="C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/ugdk.vcxproj">
+      <Project>F0F571DE-111E-4260-A623-A82FC210FADD</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

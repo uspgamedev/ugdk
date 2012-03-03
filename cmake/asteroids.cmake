@@ -11,6 +11,7 @@ else ()
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
 # FIXME
-target_link_libraries (asteroids ${FRAMEWORK_BUILDNAME})
-
-
+target_link_libraries (asteroids 
+                                           ${FRAMEWORK_BUILDNAME}
+					   ${LUA_LIBRARIES}
+					   ${PYTHON_FINAL_LIB})
