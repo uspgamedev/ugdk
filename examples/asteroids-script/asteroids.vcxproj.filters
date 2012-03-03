@@ -6,6 +6,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\scripts\MapGenerator.py" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
@@ -16,7 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{5AFC931D-07EF-4DF9-B811-1382B09FEDA2}</UniqueIdentifier>
+      <UniqueIdentifier>{B0A7D4D1-058F-4D9A-8A1D-146B91B23A9A}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

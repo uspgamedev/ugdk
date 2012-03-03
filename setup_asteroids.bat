@@ -1,10 +1,5 @@
 call "build.bat"
 
-echo Copying generated Asteroids VS project...
-
-xcopy asteroids.vcxproj examples\asteroids-script\ /q /k /y > nul
-xcopy asteroids.vcxproj.filters examples\asteroids-script\ /q /k /y > nul
-
 echo Copying static library files...
 
 xcopy lib\Release\ugdk.lib examples\asteroids-script\lib\Release\ /q /k /y > nul

@@ -11,6 +11,7 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/action/entity.h>
 #include <ugdk/action/scene.h>
+#include <ugdk/graphic/node.h>
 #include <ugdk/modules.h>
 
 #include <ugdk/script/scriptmanager.h>
@@ -24,7 +25,7 @@ using ugdk::Vector2D;
 using ugdk::script::VirtualObj;
 
 class ScriptEntity : public ugdk::Entity {
-  public:
+public:
     virtual ~ScriptEntity() {}
     ScriptEntity(const VirtualObj& proxy) :
         proxy_(proxy) {}
@@ -36,13 +37,54 @@ class ScriptEntity : public ugdk::Entity {
         args.push_back(vdt);
         proxy_["Update"](args);
     }
-  private:
+
+	ugdk::graphic::Node* get_node() {
+		return proxy_["Node"].value<ugdk::graphic::Node*>();
+	}
+private:
     VirtualObj proxy_;
 };
 
-static ugdk::Engine* engine() {
-    return ugdk::Engine::reference();
-}
+class ScriptEntityStack {
+public:
+	virtual ~ScriptEntityStack() {}
+	ScriptEntityStack(const VirtualObj& proxy) :
+		proxy_(proxy) {}
+
+	int size() {
+		std::vector<VirtualObj> args;
+		return proxy_["__len__"](args).value<int>();
+	}
+
+	ScriptEntity* pop() {
+		std::vector<VirtualObj> args;
+		return new ScriptEntity(proxy_["pop"](args));
+	}
+private:
+    VirtualObj proxy_;
+};
+
+class ScriptScene : public ugdk::Scene {
+public:
+	ScriptScene() : ugdk::Scene() {
+		map_generator_ = SCRIPT_MANAGER()->LoadModule("MapGenerator");
+	}
+
+	void GenerateMap() {
+		std::vector<VirtualObj> args;
+		ScriptEntityStack objects = ScriptEntityStack( map_generator_["Generate"](args) );
+
+		ScriptEntity* ent;
+		while ( objects.size() > 0 ) {
+			ent = objects.pop();
+			this->AddEntity(ent);
+			this->content_node()->AddChild(ent->get_node());
+		}
+	}
+
+private:
+	VirtualObj map_generator_;
+};
 
 static void InitScripts() {
 
@@ -61,66 +103,12 @@ static void InitScripts() {
     SCRIPT_MANAGER()->Register("Python", py_wrapper);
 }
 
-static void RunTests() {
 
-
-    // testando lua
-    {
-        VirtualObj obj = SCRIPT_MANAGER()->LoadModule("main");
-
-        puts("Checking results...");
-        ugdk::Vector2D* vec = obj["v"].value<ugdk::Vector2D*>();
-        if (!vec) puts("FAILED.");
-        else {
-            printf("Result 1: ( %f , %f )\n", vec->x, vec->y);
-        }
-
-        string text = obj["str"].value<string>();
-        if (!text.size()) puts("FAILED TEXT.");
-        else printf("Result 2: %s\n", text.c_str());
-
-        bool boolean = obj["bool"].value<bool>();
-        if (!boolean) puts("FAILED BOOLEAN.");
-        else printf("Result 3: %d\n", boolean);
-
-        int integer = obj["integer"].value<int>();
-        if (!integer) puts("FAILED INTEGER.");
-        else printf("Result 4: %d\n", integer);
-
-        double number = obj["number"].value<double>();
-        if (!number) puts("FAILED NUMBER.");
-        else printf("Result 5: %f\n", number);
-
-        obj["ls"](std::vector<VirtualObj>(1,obj));
-
-        VirtualObj obj2(obj.wrapper());
-
-        obj2.set_value("hahahahaha");
-        obj["print"](std::vector<VirtualObj>(1,obj2));
-
-        puts("=== Lua tests are finished. ===");
-
-    }
-
-    //testando python
-    printf("Python test starting...\n");
-    VirtualObj wassup = SCRIPT_MANAGER()->LoadModule("wassup");
-    printf("MARK got wassup\n");
-    VirtualObj pyVecx = wassup["vecx"];
-    printf("MARK got python vecx\n");
-    ugdk::Vector2D* vecx = pyVecx.value<ugdk::Vector2D*>();
-    printf("MARK converted vecx to C++ Vector2D object\n");
-    printf("X: ( %f , %f )\n", vecx->x, vecx->y);
-
-    wassup["supimpa"](std::vector<VirtualObj>(1,pyVecx));
-
-    printf("Python test finished. \n");
-}
 
 int main(int argc, char *argv[]) {
 
     ugdk::Configuration engine_config;
-    engine_config.window_title = "Script System Custom Tests";
+    engine_config.window_title = "Asteroids";
     engine_config.window_size  = Vector2D(800.0, 600.0);
     engine_config.fullscreen   = false;
 
@@ -136,26 +124,20 @@ int main(int argc, char *argv[]) {
 
     InitScripts();
 
-    engine()->Initialize(engine_config);
+    ugdk::Engine::reference()->Initialize(engine_config);
 
-    RunTests();
+    ScriptScene* scene = new ScriptScene();
+    scene->GenerateMap();
 
-    ugdk::Scene* scene = new ugdk::Scene();
-    ScriptEntity *entity = NULL;
-    {
-        VirtualObj temp = SCRIPT_MANAGER()->LoadModule("entity");
-        entity = new ScriptEntity(temp["entity"]);
-    }
-    scene->AddEntity(entity);
-    engine()->PushScene(scene);
+    ugdk::Engine::reference()->PushScene(scene);
     // Transfers control to the framework.
-    engine()->Run();
+    ugdk::Engine::reference()->Run();
 
     // Releases all loaded textures, to avoid issues when changing resolution.
-    engine()->video_manager()->Release();
-    engine()->text_manager()->Release();
+    ugdk::Engine::reference()->video_manager()->Release();
+    ugdk::Engine::reference()->text_manager()->Release();
 
-    engine()->Release();
+    ugdk::Engine::reference()->Release();
 
     return 0;
 }

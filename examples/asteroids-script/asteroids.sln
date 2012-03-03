@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asteroids", "asteroids.vcxproj", "{5413D333-2DCE-4220-AD38-7D6C7E38EC8F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "asteroids", "asteroids.vcxproj", "{B49A55AC-78B3-4B04-880D-C52DF242BEBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,12 +10,12 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5413D333-2DCE-4220-AD38-7D6C7E38EC8F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5413D333-2DCE-4220-AD38-7D6C7E38EC8F}.Debug|Win32.Build.0 = Debug|Win32
-		{5413D333-2DCE-4220-AD38-7D6C7E38EC8F}.DebugFast|Win32.ActiveCfg = DebugFast|Win32
-		{5413D333-2DCE-4220-AD38-7D6C7E38EC8F}.DebugFast|Win32.Build.0 = DebugFast|Win32
-		{5413D333-2DCE-4220-AD38-7D6C7E38EC8F}.Release|Win32.ActiveCfg = Release|Win32
-		{5413D333-2DCE-4220-AD38-7D6C7E38EC8F}.Release|Win32.Build.0 = Release|Win32
+		{B49A55AC-78B3-4B04-880D-C52DF242BEBE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B49A55AC-78B3-4B04-880D-C52DF242BEBE}.Debug|Win32.Build.0 = Debug|Win32
+		{B49A55AC-78B3-4B04-880D-C52DF242BEBE}.DebugFast|Win32.ActiveCfg = DebugFast|Win32
+		{B49A55AC-78B3-4B04-880D-C52DF242BEBE}.DebugFast|Win32.Build.0 = DebugFast|Win32
+		{B49A55AC-78B3-4B04-880D-C52DF242BEBE}.Release|Win32.ActiveCfg = Release|Win32
+		{B49A55AC-78B3-4B04-880D-C52DF242BEBE}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
