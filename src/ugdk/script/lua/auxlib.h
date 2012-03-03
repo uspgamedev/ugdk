@@ -37,7 +37,7 @@ class AuxLib {
         );
     }
 
-    int checkintteger(int index) { return luaL_checkinteger(L_, index); }
+    int checkintteger(int index) { return static_cast<int>(luaL_checkinteger(L_, index)); }
     const char* checkstring(int index) { return luaL_checkstring(L_, index); }
 
     DataID ref(int index) { return luaL_ref(L_, index); }

@@ -58,9 +58,9 @@ class BaseGear {
 
         InternalSafeCall& operator=(const InternalSafeCall& rhs);
 
-        BaseGear&   gear_;
-        int         old_top_;
-        size_t      arg_num_;
+        BaseGear&    gear_;
+        int          old_top_;
+        unsigned int arg_num_;
 
     };
 

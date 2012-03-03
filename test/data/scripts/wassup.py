@@ -18,6 +18,6 @@ print "[Python] Created 'vecx' instance"
 
 def supimpa(p):
     print "supimpa"
-    print "[Python] Supimpa = (%s, %s)[%s]" % (p.x, p.y, p)
+    print "[Python] Supimpa = (%s, %s)[%s]" % (p.get_x(), p.get_y(), p)
 
 print "Finished wassup - defined supimpa"

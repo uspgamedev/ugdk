@@ -16,11 +16,6 @@
 
 %}
 
-//%template(DescriptionProtocol_AnimationSet) ugdk::gdd::DescriptionProtocol<AnimationSet>;
-
-//%ignore ugdk::operator*(const double  &scalar, const Vector2D &right);
-//%newobject ugdk::base::TextureContainet::Load(const std::string& filepath);
-
 %include <ugdk/util/gdd/reader.h>
 %include <ugdk/util/gdd/abstractloader.h>
 %include <ugdk/util/gdd/descriptionprotocol.h>

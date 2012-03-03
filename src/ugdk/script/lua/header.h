@@ -2,9 +2,6 @@
 #ifndef UGDK_SCRIPT_LUA_HEADER_H_
 #define UGDK_SCRIPT_LUA_HEADER_H_
 
-#include <string>
-#include <list>
-
 extern "C" {
 
 #include <lua.h>
@@ -20,18 +17,6 @@ extern "C" {
 namespace ugdk {
 namespace script {
 namespace lua {
-
-typedef int                 DataID;
-typedef std::list<DataID>   DataBuffer;
-typedef void*               UData;
-
-template <class T>
-UData AsUData(T* p) { return static_cast<UData>(p); }
-
-template <class T>
-UData AsUData(const T* p) {
-    return AsUData(const_cast<T*>(p));
-}
 
 #define DECLARE_LUA_CONSTANT(category,name) \
   static const Constant name () { return Constant(LUA_##category##name); }

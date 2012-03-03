@@ -4,6 +4,10 @@
 #include <ugdk/config/config.h>
 #include "SDL_stdinc.h"
 
+#ifdef SWIG
+#pragma SWIG nowarn=312
+#endif
+
 namespace ugdk {
 
 typedef Uint8 uint8;

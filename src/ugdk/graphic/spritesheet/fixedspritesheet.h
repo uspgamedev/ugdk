@@ -14,6 +14,10 @@
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/videomanager.h>
 
+#ifdef SWIG
+#pragma SWIG nowarn=312
+#endif
+
 namespace ugdk {
 namespace graphic {
 

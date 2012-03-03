@@ -9,7 +9,7 @@
 
 %}
 
-%import <ugdk/base/types.h>
+%import <module/base.i>
 %import <module/math.i>
 
 %newobject ugdk::input::InputManager::GetMousePosition();

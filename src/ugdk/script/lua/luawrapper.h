@@ -6,15 +6,14 @@
 #include <list>
 #include <vector>
 
-#include <ugdk/script/lua/header.h>
-#include <ugdk/script/lua/bootstrapgear.h>
-#include <ugdk/script/lua/datagear.h>
+#include <ugdk/script/lua/defs.h>
 #include <ugdk/script/langwrapper.h>
 
 namespace ugdk {
 namespace script {
 namespace lua {
 
+class DataGear;
 class LuaData;
 typedef ugdk::script::InheritableLangWrapper<lua_CFunction> LuaWrapperBase;
 
@@ -39,9 +38,7 @@ class LuaWrapper: public LuaWrapperBase {
 
     LuaData* NewLuaData();
 
-    void ExecuteCode(const std::string& code) {
-        LoadChunk(code, DataGear::DoString);
-    }
+    void ExecuteCode(const std::string& code);
 
     VirtualObj LoadModule(const std::string& name);
 
@@ -72,18 +69,9 @@ class LuaWrapper: public LuaWrapperBase {
     DataGear*   data_gear_;
     DataBuffer  buffer_;
 
-    DataID NewDataID() {
-        return data_gear()
-            .SafeCall(DataGear::GenerateID)
-            .GetResult<DataID>(LUA_NOREF);
-    }
+    DataID NewDataID();
 
-    void DeleteDataID(DataID id) {
-        data_gear()
-            .SafeCall(DataGear::DestroyID)
-            .Arg(id)
-            .NoResult();
-    }
+    void DeleteDataID(DataID id);
 
     VirtualData::Ptr LoadChunk(const std::string& chunk, lua_CFunction loader);
 
