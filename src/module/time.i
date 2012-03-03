@@ -9,7 +9,7 @@
 
 %}
 
-%import <module/base.i>
+%import(module="ugdk_base") <ugdk/base/types.h>
 
 %include <ugdk/time/timeaccumulator.h>
 %include <ugdk/time/timemanager.h>

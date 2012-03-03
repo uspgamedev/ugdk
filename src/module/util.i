@@ -17,9 +17,10 @@
 
 %}
 
-%import <module/action.i>
-%import <module/gdd.i>
-%import <module/graphic.i>
+%import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_gdd") <ugdk/util/gdd/descriptionprotocol.h>
+%import(module="ugdk_gdd") <ugdk/util/gdd/abstractloader.h>
+%import(module="ugdk_graphic") <ugdk/graphic.h>
 
 %template(DescriptionProtocol_AnimationSet) ugdk::gdd::DescriptionProtocol<ugdk::AnimationSet>;
 
