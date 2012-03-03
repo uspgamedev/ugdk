@@ -33,7 +33,6 @@ public:
         VirtualObj vdt = VirtualObj(proxy_.wrapper());
         vdt.set_value(dt);
         std::vector<VirtualObj> args;
-        args.push_back(proxy_);
         args.push_back(vdt);
         proxy_["Update"](args);
     }
