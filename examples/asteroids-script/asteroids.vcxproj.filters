@@ -7,6 +7,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data\scripts\MapGenerator.py" />
+    <None Include="data\scripts\Ship.py" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

@@ -27,8 +27,8 @@
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_util") <ugdk/util.h>
 
-%newobject ugdk::base::TextureContainer::Load(const std::string& filepath, const std::string& tag);
-%newobject ugdk::base::TextureContainer::Load(const std::string& filepath);
+//%newobject ugdk::base::TextureContainer::Load(const std::string& filepath, const std::string& tag);
+//%newobject ugdk::base::TextureContainer::Load(const std::string& filepath);
 
 %include <ugdk/base/types.h>
 %include <ugdk/base/configuration.h>

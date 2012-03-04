@@ -14,6 +14,12 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/modules.h>
 
+#include <ugdk/graphic/drawable.h>
+#include <ugdk/graphic/drawable/texturedrectangle.h>
+#include <ugdk/graphic/texture.h>
+#include <ugdk/base/texturecontainer.h>
+#include <ugdk/base/resourcemanager.h>
+
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/langwrapper.h>
 #include <ugdk/script/virtualobj.h>
