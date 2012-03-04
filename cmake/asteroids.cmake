@@ -1,5 +1,8 @@
 
-add_executable (asteroids EXCLUDE_FROM_ALL examples/asteroids-script/src/asteroids.cc)
+add_executable (asteroids EXCLUDE_FROM_ALL examples/asteroids-script/src/asteroids.cc
+					   examples/asteroids-script/src/scriptscene.cc
+					   examples/asteroids-script/src/scriptentity.cc
+					   examples/asteroids-script/src/scriptentitystack.cc)
 
 set_target_properties (asteroids PROPERTIES RUNTIME_OUTPUT_DIRECTORY examples/asteroids-script/)
 
