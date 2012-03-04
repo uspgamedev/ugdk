@@ -19,16 +19,16 @@
 %include <ugdk/base/resourcecontainer.h> //class template
 %template(ResourceContainer_Texture) ugdk::base::ResourceContainer<ugdk::graphic::Texture*>;
 
-%import <module/math.i>
-%import <module/input.i>
-%import <module/time.i>
-%import <module/audio.i>
-%import <module/action.i>
-%import <module/graphic.i>
-%import <module/util.i>
+%import(module="ugdk_math") <ugdk/math/vector2D.h>
+%import(module="ugdk_input") <ugdk/input.h>
+%import(module="ugdk_time") <ugdk/time.h>
+%import(module="ugdk_audio") <ugdk/audio.h>
+%import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_graphic") <ugdk/graphic.h>
+%import(module="ugdk_util") <ugdk/util.h>
 
-%newobject ugdk::base::TextureContainer::Load(const std::string& filepath, const std::string& tag);
-%newobject ugdk::base::TextureContainer::Load(const std::string& filepath);
+//%newobject ugdk::base::TextureContainer::Load(const std::string& filepath, const std::string& tag);
+//%newobject ugdk::base::TextureContainer::Load(const std::string& filepath);
 
 %include <ugdk/base/types.h>
 %include <ugdk/base/configuration.h>

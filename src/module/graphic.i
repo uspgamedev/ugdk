@@ -20,9 +20,8 @@
 
 %}
 
-%import <module/math.i>
-%import <module/base.i>
-%import <module/action.i>
+%import(module="ugdk_math") <ugdk/math/vector2D.h>
+%import(module="ugdk_math") <ugdk/math/frame.h>
 
 %ignore ugdk::graphic::Texture::CreateFromSurface(SDL_Surface* data);
 %ignore ugdk::graphic::VideoManager::PushAndApplyModifier(const Modifier& apply);
@@ -48,7 +47,9 @@ check SWIG %delobject directive
 
 %include <ugdk/graphic/drawable.h>
 
-%import <module/drawable.i> //this needs to go after the include drawable.h
+%import(module="ugdk_base") <ugdk/base/types.h>
+%import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_drawable") <ugdk/graphic/drawable/text.h> //this needs to go after the include drawable.h
 
 %include <ugdk/graphic/texture.h>
 %include <ugdk/graphic/font.h>

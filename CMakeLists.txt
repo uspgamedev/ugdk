@@ -179,7 +179,7 @@ elseif (${LINK_TYPE} STREQUAL SHARED)
     add_library (${FRAMEWORK_BUILDNAME} SHARED ${FRAMEWORK_SRC} ${GENERATED_SRC})
 endif (${LINK_TYPE} STREQUAL STATIC)
 
-include (cmake/tests.cmake)
+include (cmake/asteroids.cmake)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})

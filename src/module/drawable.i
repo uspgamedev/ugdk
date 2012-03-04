@@ -15,10 +15,12 @@
 
 %}
 
-%import <module/math.i>
-%import <module/base.i>
-%import <module/action.i>
-%import <module/graphic.i>
+%import(module="ugdk_math") <ugdk/math/vector2D.h>
+%import(module="ugdk_base") <ugdk/base/types.h>
+%import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_graphic") <ugdk/graphic/drawable.h>
+%import(module="ugdk_graphic") <ugdk/graphic/spritesheet.h>
+%import(module="ugdk_graphic") <ugdk/graphic/texture.h>
 
 %include <ugdk/graphic/drawable/shape.h>
 %include <ugdk/graphic/drawable/solidrectangle.h>

@@ -8,6 +8,8 @@
 
 %}
 
+%ignore ugdk::script::VirtualType;
+
 %include "ugdk/script/defs.h"
 %include "ugdk/script/type.h"
 

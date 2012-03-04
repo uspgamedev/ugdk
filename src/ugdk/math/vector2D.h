@@ -66,8 +66,8 @@ class Vector2D {
     */
     double LengthSquared() const { return (x*x) + (y*y); }
 
-    /// Returns the angle of this vector
-    /** Return the angle associated to this vector
+    /// Returns the angle (in radians) of this vector
+    /** Return the angle (in radians) associated to this vector
     *  @return Angle
     */
     double Angle() const;
@@ -79,8 +79,8 @@ class Vector2D {
     */
     Vector2D Normalize() const;
 
-    /// Returns a new vector equal to this vector rotated by "angle" counter-clockwise.
-    /** The vector rotated of a vector (x,y) is (x * cos(angle) - y * sin(angle) , x * sin(angle) + y * cos(angle))
+    /// Returns a new vector equal to this vector rotated by "angle" (in radians) counter-clockwise.
+    /** The vector rotated of a vector (x,y) is (x * cos(angle) - y * sin(angle) , x * sin(angle) + y * cos(angle));  angle in radians
     *  @return Rotated Vector
     *  @see Angle
     */

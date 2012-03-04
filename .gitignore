@@ -27,10 +27,10 @@ src/ugdk/config/config.h
 /test/tmp
 *.deb
 /test/tmp
-*.filters
+/*.filters
 *.opensdf
-*.sln
-*.vcxproj
+/*.sln
+/*.vcxproj
 doc/doxy
 src/generated/*_wrap.cc
 src/generated/*.py
