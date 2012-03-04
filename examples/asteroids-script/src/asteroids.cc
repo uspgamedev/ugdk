@@ -38,7 +38,7 @@ public:
     }
 
 	ugdk::graphic::Node* get_node() {
-		return proxy_["Node"].value<ugdk::graphic::Node*>();
+		return proxy_["node"].value<ugdk::graphic::Node*>();
 	}
 private:
     VirtualObj proxy_;

@@ -80,7 +80,7 @@
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Programming\Python27\x86\libs;$(LibraryPath)</LibraryPath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Programming\Python27\Debug Build\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -114,7 +114,7 @@
     </Midl>
     <Link>
       <AdditionalOptions> /machine:X86 /debug %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;lib\Debug\ugdk_d.lib;C:\Programming\Lua\5.1\lib\lua51.lib;C:\Programming\Python27\x86\libs\python27.lib;Ws2_32.lib;C:\Programming\SDL\lib\SDLmain.lib;C:\Programming\SDL\lib\SDL.lib;C:\Programming\SDL\lib\SDL_mixer.lib;C:\Programming\SDL\lib\SDL_ttf.lib;C:\Programming\SDL\lib\SDL_image.lib;glu32.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;lib\Debug\ugdk_d.lib;C:\Programming\Lua\5.1\lib\lua51.lib;C:\Programming\Python27\Debug Build\x86\python27_d.lib;Ws2_32.lib;C:\Programming\SDL\lib\SDLmain.lib;C:\Programming\SDL\lib\SDL.lib;C:\Programming\SDL\lib\SDL_mixer.lib;C:\Programming\SDL\lib\SDL_ttf.lib;C:\Programming\SDL\lib\SDL_image.lib;glu32.lib;opengl32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ImportLibrary>C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/Debug/asteroids.lib</ImportLibrary>
