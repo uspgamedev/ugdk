@@ -1,6 +1,5 @@
 from ugdk.ugdk_math import Vector2D
 from BasicEntity import BasicEntity
-from math import pi
 
 class Projectile (BasicEntity):
     def __init__(self, x, y, velocity, power):

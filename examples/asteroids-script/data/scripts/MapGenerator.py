@@ -14,9 +14,14 @@ def GetCellCenter(i, j):
     x = j * MAX_ENTITY_SIZE + (MAX_ENTITY_SIZE/2.0)
     y = i * MAX_ENTITY_SIZE + (MAX_ENTITY_SIZE/2.0)
     return (x, y)
+    
+def GetRandomAsteroidSizeFactor():
+	# returns random float in [0.5, 1.5[
+	return random.random() + 0.5
 
 def Generate():
     screenSize = Engine_reference().video_manager().video_size()
+    print "Screen Size = (%s, %s)" % (screenSize.get_x(), screenSize.get_y())
     
     entities = []
     # for the purpose of generating random map objects, we create a imaginary table henceforth known as the "MAP"
@@ -44,6 +49,7 @@ def Generate():
     random.shuffle(possibleCells)
 
     def pickAPlace():
+    	if len(possibleCells) == 0: return (0.0, 0.0)
         i, j = possibleCells.pop()
         map[i][j] = True
         return GetCellCenter(i, j)
@@ -55,7 +61,7 @@ def Generate():
 
     for i in range(n):
         loc = pickAPlace()
-        ast = Asteroid(loc[0], loc[1], random.random() + 0.5)
+        ast = Asteroid(loc[0], loc[1], GetRandomAsteroidSizeFactor())
         v = Vector2D(random.random(), random.random())
         v = v.Normalize()
         v = v * (random.randint(ASTEROID_STARTING_SPEED_RANGE[0], ASTEROID_STARTING_SPEED_RANGE[1]))

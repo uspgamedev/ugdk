@@ -64,3 +64,5 @@ class Ship (BasicEntity):
         if target.type == "Projectile.Projectile":
             #leave this for Projectile to handle
             pass
+      	elif target.type == "Asteroid.Asteroid":
+      		pass

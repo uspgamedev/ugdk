@@ -72,6 +72,9 @@ int main(int argc, char *argv[]) {
 
     ugdk::Engine::reference()->Initialize(engine_config);
 
+	printf("Size in c++ = (%f, %f)\n", ugdk::Engine::reference()->video_manager()->video_size().x,
+										ugdk::Engine::reference()->video_manager()->video_size().y);
+
     asteroids::ScriptScene* scene = new asteroids::ScriptScene();
     scene->GenerateMap();
 
