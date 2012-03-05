@@ -4,8 +4,10 @@
 #include <string>
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/action/entity.h>
+#include <ugdk/util.h>
 
 namespace ugdk {
+	class Vector2D;
 namespace graphic {
 	class Node;
 }
@@ -22,17 +24,27 @@ public:
 
 	bool is_destroyed();
 
-	ugdk::graphic::Node* get_node();
+	ugdk::graphic::Node* node() const;
 
 	bool has_new_objects();
 
-	ugdk::script::VirtualObj get_new_objects();
+	ugdk::script::VirtualObj new_objects();
 
-	std::string name() const { return name_; }
+	std::string type() const { return type_; }
+
+	ugdk::Vector2D pos() const;
+
+	double radius() const;
+
+	ugdk::ikdtree::Box<2> GetBoundingBox();
+
+	bool IsColliding(ScriptEntity* obj) const;
+
+	void HandleCollision(ScriptEntity* target);
 
 private:
     ugdk::script::VirtualObj proxy_;
-	std::string name_;
+	std::string type_;
 };
 
 }

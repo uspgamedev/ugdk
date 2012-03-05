@@ -13,6 +13,8 @@
     <None Include="data\scripts\Ship.py" />
     <None Include="data\scripts\Radio.py" />
     <None Include="data\scripts\Projectile.py" />
+    <None Include="data\scripts\BasicEntity.py" />
+    <None Include="data\scripts\Asteroid.py" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\scriptentity.h" />

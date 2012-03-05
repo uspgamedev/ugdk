@@ -1,61 +1,28 @@
-from ugdk.ugdk_graphic import Node, Modifier, Drawable
-from ugdk.ugdk_drawable import TexturedRectangle
 from ugdk.ugdk_math import Vector2D
-from ugdk.ugdk_base import Color, Engine_reference
+from ugdk.ugdk_base import Engine_reference
 from ugdk.ugdk_input import InputManager, K_w, K_a, K_s, K_d, M_BUTTON_LEFT
+from BasicEntity import BasicEntity
 from Radio import Radio
 from Projectile import Projectile
 from math import pi
 
-def window_size():
-    return Engine_reference().video_manager().video_size()
-
-class Ship:
+class Ship (BasicEntity):
     def __init__(self, x, y):
-        self.size = Vector2D(50.0, 50.0)
-        ship_texture = Engine_reference().resource_manager().texture_container().Load("ship.png")
-        self.shape = TexturedRectangle( ship_texture, self.size )
-        self.shape.set_hotspot(Drawable.CENTER)
-        self.shape.thisown = 0
-        self.node = Node( self.shape )
-        self.node.modifier().set_offset( Vector2D(x,y) )
-        self.node.thisown = 0
-        self.new_objects = []
-        self.is_destroyed = False
-        self.name = "Player"
+        BasicEntity.__init__(self, x, y, "ship.png", 20.0, 100.0)
         self.radio = Radio()
-        self.velocity = Vector2D(0.0, 0.0)
         self.acceleration = Vector2D(0.0, 0.0)
-        ##### ATTRIBUTES
         self.speed = 50.0                   # |acceleration| in a given frame
         self.max_speed = 100.0              # max |velocity| ship can attain.
-        self.projectile_speed = 120         # gotta be >1.0, otherwise when firing, ship will be faster than projectile
+        self.projectile_speed = 120         #
 
     def Update(self, dt):
         self.CheckCommands()
         self.radio.CheckCommands()
-        self.UpdatePosition(dt)
 
-    def UpdatePosition(self, dt):
-        pos = self.node.modifier().offset()
         self.velocity = self.velocity + (self.acceleration * dt)
         if (self.velocity.Length() > self.max_speed):
             self.velocity = self.velocity * (self.max_speed/self.velocity.Length())
-        newpos = pos + (self.velocity * dt)
-
-        max = window_size()
-        # checking for horizontal map boundaries
-        if newpos.get_x() < 0.0:
-            newpos.set_x( max.get_x() + newpos.get_x() )
-        if newpos.get_x() > max.get_x():
-            newpos.set_x( newpos.get_x() - max.get_x() )
-        # checking for vertical map boundaries
-        if newpos.get_y() < 0.0:
-            newpos.set_y( max.get_y() + newpos.get_y() )
-        if newpos.get_y() > max.get_y():
-            newpos.set_y( newpos.get_y() - max.get_y() )
-
-        self.node.modifier().set_offset(newpos)
+        self.UpdatePosition(dt)
 
     def CheckCommands(self):
         input = Engine_reference().input_manager()
@@ -92,3 +59,8 @@ class Ship:
         proj = Projectile(pos.get_x(), pos.get_y(), vel, 1.0)
         self.new_objects.append(proj)
         self.radio.PlaySound("fire.wav")
+
+    def HandleCollision(self, target):
+        if target.type == "Projectile.Projectile":
+            #leave this for Projectile to handle
+            pass

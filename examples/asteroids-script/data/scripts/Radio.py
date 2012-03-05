@@ -2,10 +2,12 @@ from ugdk.ugdk_audio import AudioManager, Music
 from ugdk.ugdk_base import Engine_reference
 from ugdk.ugdk_input import InputManager, K_UP, K_DOWN, K_LEFT, K_RIGHT
 
+SOUND_PATH = "sounds/"
+
 class Radio:
     def __init__(self):
         self.path = "musics/"
-        self.sound_path = "sounds/"
+        self.sound_path = SOUND_PATH
         self.playlist = ["action_game_theme.ogg", "Arabesque.ogg", "running_from_something.ogg", "Teacher.ogg", "War.ogg"]
         self.current = self.GetMusicByIndex(0)
         self.index = 0
