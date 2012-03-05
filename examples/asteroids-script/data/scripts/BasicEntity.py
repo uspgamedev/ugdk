@@ -13,6 +13,7 @@ def window_size():
 #   C++ ScriptEntity interface
 
 class BasicEntity:
+    nextID = 1
     def __init__(self, x, y, texture_name, radius, life):
         self.radius = radius  ###
         self.size = Vector2D(self.radius*2, self.radius*2)
@@ -28,15 +29,17 @@ class BasicEntity:
         self.type = str(self.__class__)  ###
         self.velocity = Vector2D(0.0, 0.0)
         self.last_velocity = None
-        self.last_dt = 0.0
+        self.last_dt = 0.000001
         self.life = life
         self.max_life = life
         self.hit_sounds = ["hit1.wav", "hit2.wav", "hit3.wav", "hit4.wav"]
+        self.id = BasicEntity.nextID
+        BasicEntity.nextID += 1
 
-	def GetPos(self):
-		return self.node.modifier().offset()
+    def GetPos(self):
+        return self.node.modifier().offset()
 		
-	def HandleMapBoundaries(self, pos):
+    def HandleMapBoundaries(self, pos):
         max = window_size()
         # checking for horizontal map boundaries
         if pos.get_x() < 0.0:
@@ -57,7 +60,7 @@ class BasicEntity:
         pos = pos + (self.velocity * dt)
         self.last_velocity = self.velocity
         self.last_dt = dt
-		self.HandleMapBoundaries(pos)
+        self.HandleMapBoundaries(pos)
         self.node.modifier().set_offset(pos)
 
     def GetDamage(self, obj_type):
@@ -74,6 +77,7 @@ class BasicEntity:
             self.life = self.max_life
         if self.life <= 0:
             self.is_destroyed = True
+        print self, "took %s damage, current life = %s" % (damage, self.life)
 
     def ApplyVelocity(self, v):
         self.velocity = self.velocity + v
@@ -84,10 +88,13 @@ class BasicEntity:
     def ApplyCollisionRollback(self):
         pos = self.GetPos()
         pos = pos + (self.last_velocity * -self.last_dt)
-		self.HandleMapBoundaries(pos)
-		pos = pos + (self.velocity * self.last_dt)
-		self.HandleMapBoundaries(pos)
-		self.node.modifier().set_offset(pos)
-		self.last_velocity = self.velocity
-		
-
+        self.HandleMapBoundaries(pos)
+        pos = pos + (self.velocity * self.last_dt)
+        self.HandleMapBoundaries(pos)
+        self.node.modifier().set_offset(pos)
+        self.last_velocity = self.velocity
+        
+    def __repr__(self):
+        return "<%s #%s>" % (self.type, self.id)
+        
+    def __str__(self): return self.__repr__()

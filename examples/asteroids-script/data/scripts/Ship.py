@@ -61,8 +61,9 @@ class Ship (BasicEntity):
         self.radio.PlaySound("fire.wav")
 
     def HandleCollision(self, target):
-        if target.type == "Projectile.Projectile":
-            #leave this for Projectile to handle
-            pass
-      	elif target.type == "Asteroid.Asteroid":
+      	if target.type == "Planet.Planet":
       		pass
+      		
+  		#No handler for projectile since that is strictly
+  		#"do it only one time", and Projectile will handle it
+  		#    same goes for collision with Asteroid
