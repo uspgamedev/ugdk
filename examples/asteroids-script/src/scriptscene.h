@@ -19,7 +19,7 @@ typedef std::list<ScriptEntity*> ScriptEntityVector;
 class ScriptScene : public ugdk::Scene {
 public:
 	ScriptScene();
-	virtual ~ScriptScene() { delete objects_tree_; }
+	virtual ~ScriptScene();
 
 	void GenerateMap();
 

@@ -29,6 +29,8 @@ ScriptScene::ScriptScene() : ugdk::Scene() {
     objects_tree_ = new ugdk::ikdtree::IntervalKDTree<ScriptEntity*, 2>(tree_bounding_box, 5);
 }
 
+ScriptScene::~ScriptScene() { delete objects_tree_; }
+
 void ScriptScene::GenerateMap() {
 	std::vector<VirtualObj> args;
 	ScriptEntityStack objects = ScriptEntityStack( map_generator_["Generate"](args) );
