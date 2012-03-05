@@ -60,7 +60,7 @@ class BasicEntity:
     def TakeDamage(self, damage):
         self.life -= damage
         if damage > 0:
-            sound_name = self.hit_sounds[ randint(0, len(self.hit_sounds)) ]
+            sound_name = self.hit_sounds[ randint(0, len(self.hit_sounds)-1) ]
             sound = Engine_reference().audio_manager().LoadSample(SOUND_PATH + sound_name)
             sound.Play()
         if self.life > self.max_life:

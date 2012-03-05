@@ -13,7 +13,7 @@ class Ship (BasicEntity):
         self.acceleration = Vector2D(0.0, 0.0)
         self.speed = 50.0                   # |acceleration| in a given frame
         self.max_speed = 100.0              # max |velocity| ship can attain.
-        self.projectile_speed = 120         # gotta be >1.0, otherwise when firing, ship will be faster than projectile
+        self.projectile_speed = 120         #
 
     def Update(self, dt):
         self.CheckCommands()
