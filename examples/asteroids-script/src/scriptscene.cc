@@ -66,26 +66,27 @@ void ScriptScene::Update(double delta_t) {
 	ScriptEntityVector::iterator it = script_entities_.begin();
 	for (it = script_entities_.begin(); it != script_entities_.end(); ++it) {
 		ScriptEntity* ent = *it;
-
+		
+		if (ent->has_new_objects()) {
+			ScriptEntityStack objects = ScriptEntityStack( ent->new_objects() );
+			ScriptEntity* newent;
+			while ( objects.size() > 0 ) {
+				newent = objects.pop();
+				this->AddEntity(newent);
+				script_entities_.push_back(newent);
+				this->content_node()->AddChild(newent->node());
+				objects_tree_->Insert(newent->GetBoundingBox(), newent);
+			}
+		}
+		
 		if (ent->is_destroyed()) { 
 			printf("ScriptEntity %s is destroyed...\n", ent->type().c_str());
 			this->RemoveEntity(ent);
 			to_delete.push_back(ent);
 			continue;
 		}
-		else {
+		else { 
 			objects_tree_->Update(ent->GetBoundingBox(), ent);
-			if (ent->has_new_objects()) {
-				ScriptEntityStack objects = ScriptEntityStack( ent->new_objects() );
-				ScriptEntity* ent;
-				while ( objects.size() > 0 ) {
-					ent = objects.pop();
-					this->AddEntity(ent);
-					script_entities_.push_back(ent);
-					this->content_node()->AddChild(ent->node());
-					objects_tree_->Insert(ent->GetBoundingBox(), ent);
-				}
-			}
 		}
 	}
 

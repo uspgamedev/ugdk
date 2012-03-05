@@ -6,11 +6,6 @@
 	para nao esquecermos =P
 ***************************************************************************/
 
-###############
-Wil, arrume o LuaWrapper, implementei a idéia da funcao pra executar
-codigo da lingaguem passado como string como conversamos. Veja o LangWrapper,
-soh precisa colocar um 
-virtual void ExecuteCode(string code)
 
 ################
 Ver com o Wil sobre o método dele pra transformar args VData recebidos numa
