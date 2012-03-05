@@ -4,6 +4,7 @@
 #include <list>
 #include <ugdk/action/scene.h>
 #include "scriptentity.h"
+#include <ugdk/util.h>
 
 namespace ugdk {
 namespace script {
@@ -13,18 +14,24 @@ namespace script {
 
 namespace asteroids {
 
+typedef std::list<ScriptEntity*> ScriptEntityVector;
+
 class ScriptScene : public ugdk::Scene {
 public:
 	ScriptScene();
+	virtual ~ScriptScene() { delete objects_tree_; }
 
 	void GenerateMap();
+
+	ScriptEntityVector FindCollidingObjects(ScriptEntity* target) const;
 
 	void Update(double delta_t);
 
 private:
 	ugdk::script::VirtualObj map_generator_;
-	typedef std::list<ScriptEntity*> ScriptEntityVector;
 	ScriptEntityVector script_entities_;
+
+	ugdk::ikdtree::IntervalKDTree<ScriptEntity*, 2>* objects_tree_;
 };
 
 }

@@ -3,6 +3,8 @@ from ugdk.ugdk_base import Engine_reference
 from Ship import Ship
 import random
 
+MAX_ENTITY_SIZE = 100.0  #in pixels
+
 def Generate():
     screenSize = Engine_reference().video_manager().video_size()
     

@@ -102,14 +102,16 @@ VirtualData::Ptr PythonData::Execute(const std::vector<Ptr>& args) {
 	for (unsigned int i = 0; i < args.size(); i++) {
 		//check appropriate type of args[i]
 		PythonData* py_arg = static_cast<PythonData*>(args[i].get());
-		if (py_arg->own_ref_) {
-			//this VData arg owns the ref to the Object it's pointing at. And since PyTuple_SetItem steals that reference...
-			py_arg->own_ref_ = false;
-		}
-		else {
-			//VData arg doesn't own its reference... We can't let PyTuple_SetItem steal a ref that isn't ours to begin with.
-			Py_INCREF(py_arg->py_data_);
-		}
+		
+		/* We INCREF the refcount of all args passed since PyTuple_SetItem steals the ref, and when it is
+		   deleted when this method finishes, it will DECREF this ref.
+		   Since VObjs use shared_ptr to hold VDatas, the system only has 1 VData with a unique py_data_, and the others
+		   are refs to it. Therefore what we have here are not copies, we can't let the ref of the args' py_data_ go away!
+		   =P
+		   (in other words, if we do not do this, the py_data_ passed as arg may have a bad refcount and be deleted
+		    and so if we try to use it after this some shit will happen)*/
+		Py_INCREF(py_arg->py_data_);
+		
 		PyTuple_SetItem(arglist, i, py_arg->py_data_);
 	}
 
