@@ -29,7 +29,7 @@ class Asteroid (BasicEntity):
         #        v = v * (randint(int(speed*0.60), int(speed*1.40)))
         #        ast.ApplyVelocity(v)
         #        self.new_objects.append(ast)
-		
+
     def GetDamage(self, obj_type):
         if obj_type == self.type:
             return self.life * 0.2

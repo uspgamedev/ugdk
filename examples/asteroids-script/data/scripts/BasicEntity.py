@@ -3,6 +3,7 @@ from ugdk.ugdk_drawable import TexturedRectangle
 from ugdk.ugdk_math import Vector2D
 from ugdk.ugdk_base import Color, Engine_reference
 from Radio import SOUND_PATH
+from BarUI import BarUI
 from random import randint
 
 
@@ -35,10 +36,11 @@ class BasicEntity:
         self.hit_sounds = ["hit1.wav", "hit2.wav", "hit3.wav", "hit4.wav"]
         self.id = BasicEntity.nextID
         BasicEntity.nextID += 1
+        self.life_hud = BarUI(self, "life", Color(1.0,0.0,0.0,1.0), Vector2D(0.0, self.radius))
 
     def GetPos(self):
         return self.node.modifier().offset()
-		
+
     def HandleMapBoundaries(self, pos):
         max = window_size()
         # checking for horizontal map boundaries
@@ -54,6 +56,7 @@ class BasicEntity:
             
     def Update(self, dt): ###
         self.UpdatePosition(dt)
+        self.life_hud.Update()
 
     def UpdatePosition(self, dt):
         pos = self.GetPos()

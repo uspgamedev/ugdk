@@ -2,13 +2,19 @@ from ugdk.ugdk_math import Vector2D
 from BasicEntity import BasicEntity
 
 class Projectile (BasicEntity):
+    base_radius = 5.0
+    @staticmethod
+    def GetActualRadius(power):
+        return Projectile.base_radius * power
+
     def __init__(self, x, y, velocity, power):
         self.power = power
-        r = 5.0 * power
+        r = Projectile.GetActualRadius(power)
         BasicEntity.__init__(self, x, y, "projectile.png", r, 1)
         self.velocity = velocity
         self.damage = 20.0 * power
         self.lifetime = 10.0 * power
+        self.life_hud.node.set_active(False)
 
     def Update(self, dt):
         self.UpdatePosition(dt)

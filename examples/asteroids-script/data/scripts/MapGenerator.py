@@ -35,7 +35,7 @@ def Generate():
     rows = int( screenSize.get_y() / MAX_ENTITY_SIZE )
     columns = int( screenSize.get_x() / MAX_ENTITY_SIZE )
 
-	# WHAT SORCERY IS THIS?!?
+    # WHAT SORCERY IS THIS?!?
     map_row = [False] * columns
     map = [map_row] * rows
 
@@ -50,10 +50,10 @@ def Generate():
     random.shuffle(possibleCells)
     # I had so many awesome ideas using awesome python features to this 
     # (generate a list of all possible cell (x, y) locations
-	# But in the end, frak it, let's go with the easy version...
+    # But in the end, frak it, let's go with the easy version...
 
     def pickAPlace():
-    	if len(possibleCells) == 0: return (0.0, 0.0)
+        if len(possibleCells) == 0: return (0.0, 0.0)
         i, j = possibleCells.pop()
         map[i][j] = True
         return GetCellCenter(i, j)

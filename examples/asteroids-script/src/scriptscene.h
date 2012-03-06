@@ -4,6 +4,7 @@
 #include <list>
 #include <ugdk/action/scene.h>
 #include "scriptentity.h"
+#include "scriptentitystack.h"
 #include <ugdk/util.h>
 
 namespace ugdk {
@@ -26,6 +27,9 @@ public:
 	ScriptEntityVector FindCollidingObjects(ScriptEntity* target) const;
 
 	void Update(double delta_t);
+
+	void AddNewObjects(ScriptEntityStack& objects);
+	void AddNewHUDObjects(ScriptEntityStack& objects);
 
 private:
 	ugdk::script::VirtualObj map_generator_;

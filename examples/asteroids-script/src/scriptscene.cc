@@ -33,14 +33,7 @@ void ScriptScene::GenerateMap() {
 	std::vector<VirtualObj> args;
 	ScriptEntityStack objects = ScriptEntityStack( map_generator_["Generate"](args) );
 
-	ScriptEntity* ent;
-	while ( objects.size() > 0 ) {
-		ent = objects.pop();
-		this->AddEntity(ent);
-		script_entities_.push_back(ent);
-		this->content_node()->AddChild(ent->node());
-		objects_tree_->Insert(ent->GetBoundingBox(), ent);
-	}
+	this->AddNewObjects(objects);
 }
 
 ScriptEntityVector ScriptScene::FindCollidingObjects(ScriptEntity* target) const {
@@ -67,14 +60,7 @@ void ScriptScene::Update(double delta_t) {
 		
 		if (ent->has_new_objects()) {
 			ScriptEntityStack objects = ScriptEntityStack( ent->new_objects() );
-			ScriptEntity* newent;
-			while ( objects.size() > 0 ) {
-				newent = objects.pop();
-				this->AddEntity(newent);
-				script_entities_.push_back(newent);
-				this->content_node()->AddChild(newent->node());
-				objects_tree_->Insert(newent->GetBoundingBox(), newent);
-			}
+			this->AddNewObjects(objects);
 		}
 		
 		if (ent->is_destroyed()) { 
@@ -94,6 +80,9 @@ void ScriptScene::Update(double delta_t) {
 		script_entities_.remove(ent);
 		objects_tree_->Remove(ent);
 		delete ent->node();
+		delete ent->life_hud();
+		if (ent->energy_hud())
+			delete ent->energy_hud();
 		delete ent;
 	}
 
@@ -111,6 +100,24 @@ void ScriptScene::Update(double delta_t) {
 	}
 
 	Scene::Update(delta_t);	
+}
+
+void ScriptScene::AddNewObjects(ScriptEntityStack& objects) {
+	ScriptEntity* ent;
+	while ( objects.size() > 0 ) {
+		ent = objects.pop();
+		this->AddEntity(ent);
+		script_entities_.push_back(ent);
+		this->content_node()->AddChild(ent->node());
+		this->interface_node()->AddChild(ent->life_hud());
+		if (ent->energy_hud())
+			this->interface_node()->AddChild(ent->energy_hud());
+		objects_tree_->Insert(ent->GetBoundingBox(), ent);
+	}
+}
+
+void ScriptScene::AddNewHUDObjects(ScriptEntityStack& objects) {
+
 }
 
 }
