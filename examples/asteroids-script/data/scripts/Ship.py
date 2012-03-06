@@ -1,6 +1,6 @@
 from ugdk.ugdk_math import Vector2D
 from ugdk.ugdk_base import Color, Engine_reference
-from ugdk.ugdk_input import InputManager, K_w, K_a, K_s, K_d, M_BUTTON_LEFT
+from ugdk.ugdk_input import InputManager, K_w, K_a, K_s, K_d, M_BUTTON_LEFT, K_ESCAPE
 from BasicEntity import BasicEntity
 from Radio import Radio
 from Projectile import Projectile
@@ -38,6 +38,11 @@ class Ship (BasicEntity):
 
     def CheckCommands(self, dt):
         input = Engine_reference().input_manager()
+
+        if input.KeyDown(K_ESCAPE):
+            Engine_reference().CurrentScene().Finish()
+            return
+
         mouse_dir = input.GetMousePosition() - self.node.modifier().offset()
         mouse_dir = mouse_dir.Normalize()
         self.node.modifier().set_rotation( mouse_dir.Angle() - 3*pi/2.0 )

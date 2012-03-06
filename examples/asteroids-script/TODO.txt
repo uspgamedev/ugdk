@@ -9,6 +9,4 @@
 
 - Config module (pra setar as config da engine, tipo resolucao e tal)
 
-- QUIT button =P
-
 - GameOver/Reset quando player morre?
