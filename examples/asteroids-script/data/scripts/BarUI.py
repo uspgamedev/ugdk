@@ -3,7 +3,7 @@ from ugdk.ugdk_drawable import SolidRectangle
 from ugdk.ugdk_math import Vector2D
 from ugdk.ugdk_base import Color, Engine_reference
 
-BAR_HEIGHT = 7.5
+BAR_HEIGHT = 4.0
 
 class BarUI:
     def __init__(self, entity, attr_name, color, offset):

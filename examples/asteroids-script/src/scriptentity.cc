@@ -34,7 +34,10 @@ ugdk::graphic::Node* ScriptEntity::node() const {
 }
 
 ugdk::graphic::Node* ScriptEntity::life_hud() const {
-	return proxy_["life_hud"]["node"].value<ugdk::graphic::Node*>();
+	VirtualObj life_hud = proxy_["life_hud"];
+	if (life_hud)
+		return life_hud["node"].value<ugdk::graphic::Node*>();
+	return NULL;
 }
 
 ugdk::graphic::Node* ScriptEntity::energy_hud() const {

@@ -15,7 +15,7 @@ class Ship (BasicEntity):
         self.acceleration = Vector2D(0.0, 0.0)
         self.max_energy = 100.0
         self.energy = self.max_energy
-        self.energy_regen_rate = 15.0       # energy per second
+        self.energy_regen_rate = 10.0       # energy per second
         self.shot_cost = 5.0                # energy required to shoot the weakest projectile
         self.max_charge_time = 5.0          # max time that you can charge a shot in seconds
         self.charge_time = 0                # used internally for counting, in seconds
@@ -38,10 +38,6 @@ class Ship (BasicEntity):
 
     def CheckCommands(self, dt):
         input = Engine_reference().input_manager()
-
-        if input.KeyDown(K_ESCAPE):
-            Engine_reference().CurrentScene().Finish()
-            return
 
         mouse_dir = input.GetMousePosition() - self.node.modifier().offset()
         mouse_dir = mouse_dir.Normalize()

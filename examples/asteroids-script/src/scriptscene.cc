@@ -7,6 +7,8 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/util/intervalkdtree.h>
+#include <ugdk/input/inputmanager.h>
+#include <ugdk/input/keys.h>
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/scriptmanager.h>
 
@@ -80,7 +82,8 @@ void ScriptScene::Update(double delta_t) {
 		script_entities_.remove(ent);
 		objects_tree_->Remove(ent);
 		delete ent->node();
-		delete ent->life_hud();
+		if (ent->life_hud())
+    		delete ent->life_hud();
 		if (ent->energy_hud())
 			delete ent->energy_hud();
 		delete ent;
@@ -98,8 +101,22 @@ void ScriptScene::Update(double delta_t) {
 			ent->HandleCollision(target);
 		}
 	}
+	
+	CheckCommands();
 
 	Scene::Update(delta_t);	
+}
+
+void ScriptScene::CheckCommands() {
+    if (INPUT_MANAGER()->KeyPressed(ugdk::input::K_ESCAPE)) {
+        this->Finish();
+    }
+    else if (INPUT_MANAGER()->KeyPressed(ugdk::input::K_HOME)) {
+        this->Finish();
+        ScriptScene* scene = new ScriptScene();
+        scene->GenerateMap();
+        ugdk::Engine::reference()->PushScene(scene);
+    }
 }
 
 void ScriptScene::AddNewObjects(ScriptEntityStack& objects) {
@@ -109,15 +126,12 @@ void ScriptScene::AddNewObjects(ScriptEntityStack& objects) {
 		this->AddEntity(ent);
 		script_entities_.push_back(ent);
 		this->content_node()->AddChild(ent->node());
-		this->interface_node()->AddChild(ent->life_hud());
+	    if (ent->life_hud())
+		    this->interface_node()->AddChild(ent->life_hud());
 		if (ent->energy_hud())
 			this->interface_node()->AddChild(ent->energy_hud());
 		objects_tree_->Insert(ent->GetBoundingBox(), ent);
 	}
-}
-
-void ScriptScene::AddNewHUDObjects(ScriptEntityStack& objects) {
-
 }
 
 }

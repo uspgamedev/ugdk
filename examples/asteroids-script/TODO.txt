@@ -1,7 +1,13 @@
 
-- PLANETAS!  everything about them
+- testar planetas
+
+- implementar gravitywell
+
+- implementar shockwave
 
 - Split de asteroid (arrumar)
+
+- melhorar transferencia de velocidade do impacto de projeteis (ta indo mto em qualquer coisa)
 
 - colocar fundo (do mapa)
 
@@ -10,3 +16,6 @@
 - Config module (pra setar as config da engine, tipo resolucao e tal)
 
 - GameOver/Reset quando player morre?
+
+- Check if ScriptScene correctly deletes it's ScriptEntities when destroyed/finishes (might have
+  something todo with ScriptEntity as well =P)

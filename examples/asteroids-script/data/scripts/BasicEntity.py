@@ -13,30 +13,18 @@ def window_size():
 #   Functions or attributes marked with ### means they're part of the 
 #   C++ ScriptEntity interface
 
-class BasicEntity:
+class EntityInterface:
     nextID = 1
-    def __init__(self, x, y, texture_name, radius, life):
+    def __init__(self, x, y, radius):
         self.radius = radius  ###
-        self.size = Vector2D(self.radius*2, self.radius*2)
-        texture_obj = Engine_reference().resource_manager().texture_container().Load(texture_name)
-        self.shape = TexturedRectangle( texture_obj, self.size )
-        self.shape.set_hotspot(Drawable.CENTER)
-        self.shape.thisown = 0
-        self.node = Node( self.shape )   ###
+        self.node = Node()   ###
         self.node.modifier().set_offset( Vector2D(x,y) )
         self.node.thisown = 0
         self.new_objects = []  ###
         self.is_destroyed = False ###
         self.type = str(self.__class__)  ###
-        self.velocity = Vector2D(0.0, 0.0)
-        self.last_velocity = None
-        self.last_dt = 0.000001
-        self.life = life
-        self.max_life = life
-        self.hit_sounds = ["hit1.wav", "hit2.wav", "hit3.wav", "hit4.wav"]
-        self.id = BasicEntity.nextID
-        BasicEntity.nextID += 1
-        self.life_hud = BarUI(self, "life", Color(1.0,0.0,0.0,1.0), Vector2D(0.0, self.radius))
+        self.id = EntityInterface.nextID
+        EntityInterface.nextID += 1
 
     def GetPos(self):
         return self.node.modifier().offset()
@@ -55,6 +43,36 @@ class BasicEntity:
             pos.set_y( pos.get_y() - max.get_y() )
             
     def Update(self, dt): ###
+        pass
+
+    def HandleCollision(self, target): ###
+        print self.type, " HandleCollision NOT IMPLEMENTED"
+        
+    def __repr__(self):
+        return "<%s #%s>" % (self.type, self.id)
+        
+    def __str__(self): return self.__repr__()
+    
+    
+class BasicEntity (EntityInterface):
+    nextID = 1
+    def __init__(self, x, y, texture_name, radius, life):
+        EntityInterface.__init__(self, x, y, radius)
+        self.size = Vector2D(self.radius*2, self.radius*2)
+        texture_obj = Engine_reference().resource_manager().texture_container().Load(texture_name)
+        self.shape = TexturedRectangle( texture_obj, self.size )
+        self.shape.set_hotspot(Drawable.CENTER)
+        self.shape.thisown = 0
+        self.node.set_drawable(self.shape)
+        self.velocity = Vector2D(0.0, 0.0)
+        self.last_velocity = None
+        self.last_dt = 0.000001
+        self.life = life
+        self.max_life = life
+        self.hit_sounds = ["hit1.wav", "hit2.wav", "hit3.wav", "hit4.wav"]
+        self.life_hud = BarUI(self, "life", Color(1.0,0.0,0.0,1.0), Vector2D(0.0, self.radius))
+
+    def Update(self, dt): ###
         self.UpdatePosition(dt)
         self.life_hud.Update()
 
@@ -71,33 +89,34 @@ class BasicEntity:
         print self.type, " GetDamage NOT IMPLEMENTED"
 
     def TakeDamage(self, damage):
+        if damage < 0:  return
         self.life -= damage
         if damage > 0:
             sound_name = self.hit_sounds[ randint(0, len(self.hit_sounds)-1) ]
             sound = Engine_reference().audio_manager().LoadSample(SOUND_PATH + sound_name)
             sound.Play()
-        if self.life > self.max_life:
-            self.life = self.max_life
         if self.life <= 0:
             self.is_destroyed = True
         print self, "took %s damage, current life = %s" % (damage, self.life)
 
+    def Heal(self, amount):
+        if amount < 0:  return
+        self.life += amount
+        if self.life > self.max_life:
+            self.life = self.max_life
+        print self, "has recovered %s life, current life = %s" % (amount, self.life)
+        
     def ApplyVelocity(self, v):
         self.velocity = self.velocity + v
 
-    def HandleCollision(self, target): ###
-        print self.type, " HandleCollision NOT IMPLEMENTED"
-        
     def ApplyCollisionRollback(self):
         pos = self.GetPos()
-        pos = pos + (self.last_velocity * -self.last_dt)
+        v = self.last_velocity
+        if v == None:   v = self.velocity
+        pos = pos + (v * -self.last_dt)
         self.HandleMapBoundaries(pos)
         pos = pos + (self.velocity * self.last_dt)
         self.HandleMapBoundaries(pos)
         self.node.modifier().set_offset(pos)
         self.last_velocity = self.velocity
-        
-    def __repr__(self):
-        return "<%s #%s>" % (self.type, self.id)
-        
-    def __str__(self): return self.__repr__()
+    

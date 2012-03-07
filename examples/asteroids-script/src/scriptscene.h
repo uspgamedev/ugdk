@@ -28,8 +28,9 @@ public:
 
 	void Update(double delta_t);
 
+    void CheckCommands();
+
 	void AddNewObjects(ScriptEntityStack& objects);
-	void AddNewHUDObjects(ScriptEntityStack& objects);
 
 private:
 	ugdk::script::VirtualObj map_generator_;

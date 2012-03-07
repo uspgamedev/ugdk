@@ -2,6 +2,7 @@ from ugdk.ugdk_math import Vector2D
 from ugdk.ugdk_base import Engine_reference
 from Ship import Ship
 from Asteroid import Asteroid
+from Planet import Planet
 import random
 
 MAX_ENTITY_SIZE = 100.0  #in pixels
@@ -9,6 +10,8 @@ MAX_ENTITY_SIZE = 100.0  #in pixels
 PERCENT_OF_ENTITIES_IN_MAP_GRID = 0.075
 
 ASTEROID_STARTING_SPEED_RANGE = [20, 90]
+
+PLANET_COUNT_RANGE = [0, 2]
 
 def GetCellCenter(i, j):
     x = j * MAX_ENTITY_SIZE + (MAX_ENTITY_SIZE/2.0)
@@ -18,6 +21,10 @@ def GetCellCenter(i, j):
 def GetRandomAsteroidSizeFactor():
 	# returns random float in [0.5, 1.5[
 	return random.random() + 0.5
+	
+def GetRandomPlanetSizeFactor():
+	# returns random float in [0.7, 1.3[
+	return random.random() * 0.6  + 0.7
 
 def Generate():
     screenSize = Engine_reference().video_manager().video_size()
@@ -53,7 +60,7 @@ def Generate():
     # But in the end, frak it, let's go with the easy version...
 
     def pickAPlace():
-        if len(possibleCells) == 0: return (0.0, 0.0)
+        if len(possibleCells) == 0: return (random.random()*600, random.random()*400)
         i, j = possibleCells.pop()
         map[i][j] = True
         return GetCellCenter(i, j)
@@ -62,6 +69,11 @@ def Generate():
     loc = pickAPlace()
     ship = Ship(loc[0], loc[1])
     entities.append(ship)
+
+    for i in range( random.randint(PLANET_COUNT_RANGE[0], PLANET_COUNT_RANGE[1]) ):
+        loc = pickAPlace()
+        planet = Planet(loc[0], loc[1], GetRandomPlanetSizeFactor())
+        entities.append(planet)
 
     for i in range(n):
         loc = pickAPlace()

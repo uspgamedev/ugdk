@@ -24,6 +24,8 @@ class Projectile (BasicEntity):
             self.is_destroyed = True
 
     def GetDamage(self, obj_type):
+        if obj_type == "Planet.Planet":
+            return self.damage * 0.05
         return self.damage
 
     def HandleCollision(self, target):
@@ -38,5 +40,6 @@ class Projectile (BasicEntity):
             self.is_destroyed = True
             print "Projectile damaging ", target.type
         elif target.type == "Planet.Planet":
-            self.TakeDamage(666)
+            target.TakeDamage(self.GetDamage(target.type))
+            self.is_destroyed = True
             print "Projectile impacted planet"
