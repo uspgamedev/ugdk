@@ -33,6 +33,20 @@ ugdk::graphic::Node* ScriptEntity::node() const {
 	return proxy_["node"].value<ugdk::graphic::Node*>();
 }
 
+ugdk::graphic::Node* ScriptEntity::life_hud() const {
+	VirtualObj life_hud = proxy_["life_hud"];
+	if (life_hud)
+		return life_hud["node"].value<ugdk::graphic::Node*>();
+	return NULL;
+}
+
+ugdk::graphic::Node* ScriptEntity::energy_hud() const {
+	VirtualObj energy_hud = proxy_["energy_hud"];
+	if (energy_hud)
+		return energy_hud["node"].value<ugdk::graphic::Node*>();
+	return NULL;
+}
+
 bool ScriptEntity::has_new_objects() {
 	std::vector<VirtualObj> args;
 	return proxy_["new_objects"]["__len__"](args).value<int>() > 0;

@@ -26,6 +26,9 @@ public:
 
 	ugdk::graphic::Node* node() const;
 
+	ugdk::graphic::Node* life_hud() const;
+	ugdk::graphic::Node* energy_hud() const;
+
 	bool has_new_objects();
 
 	ugdk::script::VirtualObj new_objects();
