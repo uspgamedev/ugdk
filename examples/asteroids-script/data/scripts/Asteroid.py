@@ -6,7 +6,7 @@ from math import pi
 class Asteroid (BasicEntity):
     @staticmethod
     def GetActualRadius(size_factor):
-        return 55.0 * size_factor
+        return 30.0 * size_factor
 
     def __init__(self, x, y, size_factor):
         self.size_factor = size_factor
@@ -19,14 +19,14 @@ class Asteroid (BasicEntity):
     def TakeDamage(self, damage):
         BasicEntity.TakeDamage(self, damage)
         # if we're big enough, split asteroid when we are destroyed.
-        if self.is_destroyed and self.size_factor > 0.6 and not self.has_splitted:
+        if self.is_destroyed and self.size_factor > 0.4 and not self.has_splitted:
             self.has_splitted = True
             angles = [0.0, -pi/4.0, -pi/2.0, -3*pi/2.0, pi, 3*pi/2.0, pi/2.0, pi/4.0]
             shuffle(angles)
             direction = self.velocity.Normalize()
-            factor = self.size_factor / 1.25
+            factor = self.size_factor / 1.5
             print self, "is splitting, into factor", factor
-            for i in range(randint(2,5)):
+            for i in range(randint(2,4)):
                 v = direction.Rotate(angles.pop())
                 v = v * ((self.radius+Asteroid.GetActualRadius(factor))*1.15)
                 pos = self.GetPos() + v

@@ -7,7 +7,7 @@ from math import pi
 # Factor to which multiply the gravity force.
 # just a configurational value to fine tune the gravity, in case you want
 # it stronger or weaker.
-GRAVITY_FACTOR = 10.0
+GRAVITY_FACTOR = 50.0
 
 
 ####################################
@@ -23,6 +23,10 @@ class GravityWell (EntityInterface):
         EntityInterface.__init__(self, x, y, r)
         self.is_antigrav = False
         
+    def SetRadius(self, r):
+        self.radius = r
+        self.mass = GetMassByRadius(r)
+
     def HandleCollision(self, target):
         if target.type == self.type or target.type == "Planet.Planet":
             return #we don't affect planets (neither their wells)
@@ -35,6 +39,7 @@ class GravityWell (EntityInterface):
         grav_vec = grav_vec.Normalize()
         if self.is_antigrav:
             grav_vec = grav_vec * -1
+
         grav_vec = grav_vec * GravForce
 
         target.ApplyVelocity(grav_vec)

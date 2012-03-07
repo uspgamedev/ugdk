@@ -7,7 +7,7 @@ import random
 
 MAX_ENTITY_SIZE = 100.0  #in pixels
 
-PERCENT_OF_ENTITIES_IN_MAP_GRID = 0.075
+PERCENT_OF_ENTITIES_IN_MAP_GRID = 0.1
 
 ASTEROID_STARTING_SPEED_RANGE = [20, 90]
 
@@ -19,8 +19,8 @@ def GetCellCenter(i, j):
     return (x, y)
     
 def GetRandomAsteroidSizeFactor():
-	# returns random float in [0.5, 1.5[
-	return random.random() + 0.5
+	# returns random float in [0.5, 1.2[
+	return random.random() * 0.7 + 0.5
 	
 def GetRandomPlanetSizeFactor():
 	# returns random float in [0.7, 1.3[

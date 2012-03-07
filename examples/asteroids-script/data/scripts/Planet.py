@@ -10,12 +10,16 @@ class Planet (BasicEntity):
     def __init__(self, x, y, size_factor):
         self.size_factor = size_factor
         r = 75.0 * size_factor
-        hp = 200 * size_factor
+        hp = 600 * size_factor
         BasicEntity.__init__(self, x, y, "planet.png", r, hp)
         self.has_splitted = False
         self.well = GravityWell(x, y, r)
         self.new_objects.append(self.well)
         
+    def Update(self, dt):
+        BasicEntity.Update(self,dt)
+        self.well.node.modifier().set_offset( self.GetPos() )
+
     def TakeDamage(self, damage):
         BasicEntity.TakeDamage(self, damage)
         # if we're big enough, split planet into asteroids when we are destroyed.
@@ -45,6 +49,11 @@ class Planet (BasicEntity):
     def HandleCollision(self, target):
         if target.type == self.type:
             print "WTF dude, u tripping? Planets colliding with planets? Ya frakking nuts?"
+            aux = self.velocity
+            self.velocity = target.velocity
+            target.velocity = aux
+            self.ApplyCollisionRollback()
+            target.ApplyCollisionRollback()
         elif target.type == "Ship.Ship":
             target.TakeDamage(self.GetDamage(target.type))
             print target.type, "crash landed on Planet... No survivors.     Boo-hoo."

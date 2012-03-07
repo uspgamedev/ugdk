@@ -55,22 +55,25 @@ int main(int argc, char *argv[]) {
 
     ugdk::Configuration engine_config;
     engine_config.window_title = "Asteroids";
-    engine_config.window_size  = Vector2D(800.0, 600.0);
+    engine_config.window_size  = Vector2D(640.0, 480.0);
     engine_config.fullscreen   = false;
-
     engine_config.base_path = "./data/";
-
     struct stat st;
     // Removing the trailing slash.
     int s = stat(engine_config.base_path.substr(0, engine_config.base_path.size() - 1).c_str(), &st);
     if(s < 0 && errno == ENOENT)
         engine_config.base_path = "./";
-
     engine_config.window_icon = "";
 
     InitScripts();
-
     ugdk::Engine::reference()->Initialize(engine_config);
+
+    VirtualObj config = SCRIPT_MANAGER()->LoadModule("Config");
+
+    Vector2D* resolution = config["resolution"].value<Vector2D*>();
+
+    VIDEO_MANAGER()->ChangeResolution(*resolution, config["fullscreen"].value<bool>());
+    
 
 	printf("Size in c++ = (%f, %f)\n", ugdk::Engine::reference()->video_manager()->video_size().x,
 										ugdk::Engine::reference()->video_manager()->video_size().y);

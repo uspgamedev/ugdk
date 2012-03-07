@@ -1,8 +1,6 @@
 
 - testar planetas
 
-- implementar gravitywell
-
 - implementar shockwave
 
 - Split de asteroid (arrumar)

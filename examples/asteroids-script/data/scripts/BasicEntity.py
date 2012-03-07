@@ -75,6 +75,8 @@ class BasicEntity (EntityInterface):
     def Update(self, dt): ###
         self.UpdatePosition(dt)
         self.life_hud.Update()
+        if self.velocity.Length() > 5000:
+            self.velocity = self.velocity * (5000.0 / self.velocity.Length())
 
     def UpdatePosition(self, dt):
         pos = self.GetPos()
