@@ -3,6 +3,7 @@
 
 #include <ugdk/config/config.h>
 #include "SDL_keysym.h"
+#include "SDL_mouse.h"
 
 namespace ugdk {
 namespace input {
