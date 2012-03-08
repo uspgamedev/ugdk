@@ -8,12 +8,13 @@
 #include <typeinfo>
 #define TOSTRING(X) typeid(X).name()
 #endif
+#include <ugdk/base/simplecontainer.h>
 
 namespace ugdk {
 namespace base {
 
 template <class T>
-class ResourceContainer {
+class ResourceContainer : public virtual SimpleContainer<T> {
   private:
 	typedef std::map<std::string, T>   DataMap;
 	typedef typename DataMap::iterator DataIterator;
@@ -21,7 +22,7 @@ class ResourceContainer {
 
   public:
     ResourceContainer() {}
-    ~ResourceContainer() {}
+    virtual ~ResourceContainer() {}
 
     void Insert(const std::string& tag, T val) {
         DataIterator it = database_.find(tag);
@@ -48,7 +49,7 @@ class ResourceContainer {
 };
 
 template <class T>
-class ResourceContainer<T*> {
+class ResourceContainer<T*> : public virtual SimpleContainer<T*> {
   private:
 	typedef std::map<std::string, T*>  DataMap;
 	typedef typename DataMap::iterator DataIterator;
@@ -56,7 +57,7 @@ class ResourceContainer<T*> {
 
   public:
     ResourceContainer() {}
-    ~ResourceContainer() {
+    virtual ~ResourceContainer() {
 		DataIterator it;
         for(it = database_.begin(); it != database_.end(); ++it) {
             delete it->second;

@@ -1,4 +1,5 @@
 
+#include <ugdk/base/texturecontainer.h>
 #include <ugdk/base/resourcemanager.h>
 
 #include <ugdk/action/animationset.h>
@@ -12,10 +13,17 @@ namespace ugdk {
 namespace base {
 
 ResourceManager::ResourceManager() 
-    : animation_loader_(new AnimationLoader(new AnimationProtocol)) {}
+    : 
+    texture_container_(new TextureContainer),
+    spritesheet_container_(new ResourceContainer<graphic::Spritesheet*>),
+    animation_loader_(new AnimationLoader(new AnimationProtocol)),
+    word_container_(new ResourceContainer<LanguageWord*>) {}
 
 ResourceManager::~ResourceManager() {
+    delete texture_container_;
+    delete spritesheet_container_;
     delete animation_loader_;
+    delete word_container_;
 }
 
 graphic::Texture*     ResourceManager::GetTextureFromTag        (const std::string& tag) {

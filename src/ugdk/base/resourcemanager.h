@@ -2,8 +2,8 @@
 #define UGDK_BASE_RESOURCEMANAGER_H_
 
 #include <ugdk/action.h>
-#include <ugdk/base/resourcecontainer.h>
-#include <ugdk/base/texturecontainer.h>
+#include <ugdk/base/simplecontainer.h>
+#include <ugdk/base/loadcontainer.h>
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
 #include <ugdk/util/gdd/cachedloader.h>
@@ -21,10 +21,10 @@ class ResourceManager {
     ~ResourceManager();
     
     // Non-const
-    TextureContainer&                         texture_container()     { return texture_container_;     }
-    ResourceContainer<graphic::Spritesheet*>& spritesheet_container() { return spritesheet_container_; }
-    AnimationLoader&                          animation_loader()      { return *animation_loader_;     }
-    ResourceContainer<LanguageWord*>&         word_container()        { return word_container_;        }
+    LoadContainer<graphic::Texture*>&       texture_container()     { return *texture_container_;    }
+    SimpleContainer<graphic::Spritesheet*>& spritesheet_container() { return *spritesheet_container_;}
+    AnimationLoader&                        animation_loader()      { return *animation_loader_;     }
+    SimpleContainer<LanguageWord*>&         word_container()        { return *word_container_;       }
 
 
     static graphic::Texture*     GetTextureFromTag        (const std::string& tag);
@@ -32,10 +32,10 @@ class ResourceManager {
     static graphic::Text*        CreateTextFromLanguageTag(const std::string& tag);
     
   private:
-    TextureContainer                         texture_container_;
-    ResourceContainer<graphic::Spritesheet*> spritesheet_container_;
+    LoadContainer<graphic::Texture*>*        texture_container_;
+    SimpleContainer<graphic::Spritesheet*>*  spritesheet_container_;
     AnimationLoader*                         animation_loader_;
-    ResourceContainer<LanguageWord*>         word_container_;
+    SimpleContainer<LanguageWord*>*          word_container_;
 };
 
 } // namespace base
