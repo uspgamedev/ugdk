@@ -10,8 +10,6 @@
 // memoria para voce)
 
 #include <string>
-#include <ugdk/config/config.h>
-#include "SDL.h"
 #include "SDL_mixer.h"
 
 namespace ugdk {

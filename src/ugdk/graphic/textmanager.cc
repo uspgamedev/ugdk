@@ -5,6 +5,7 @@
 #include <cwchar>
 #include <ugdk/config/config.h>
 #include "SDL_opengl.h"
+#include "SDL_ttf.h"
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/util/pathmanager.h>

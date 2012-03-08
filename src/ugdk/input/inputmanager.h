@@ -1,8 +1,6 @@
 #ifndef UGDK_INPUT_INPUTMANAGER_H_
 #define UGDK_INPUT_INPUTMANAGER_H_
 
-#include <ugdk/config/config.h>
-#include "SDL.h"
 #include <ugdk/math/vector2D.h>
 #include <ugdk/input/keys.h>
 

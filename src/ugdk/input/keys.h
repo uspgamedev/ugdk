@@ -2,7 +2,8 @@
 #define UGDK_INPUT_KEYS_H_
 
 #include <ugdk/config/config.h>
-#include "SDL.h"
+#include "SDL_keysym.h"
+
 namespace ugdk {
 namespace input {
 

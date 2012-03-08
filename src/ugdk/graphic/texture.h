@@ -2,9 +2,8 @@
 #define UGDK_GRAPHIC_TEXTURE_H_
 
 #include <string>
-#include <ugdk/config/config.h>
-#include "SDL_video.h"
 #include "SDL_opengl.h"
+#include "SDL_video.h"
 
 namespace ugdk {
 namespace graphic {

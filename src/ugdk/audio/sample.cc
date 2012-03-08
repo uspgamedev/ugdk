@@ -1,5 +1,7 @@
 #include <algorithm>
+#include "SDL.h"
 #include <ugdk/audio/sample.h>
+
 namespace ugdk {
 
 Sample::Sample(const std::string& filepath) : data_(NULL), channel_(-1), volume_(1.0) {

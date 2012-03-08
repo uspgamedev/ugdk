@@ -3,8 +3,6 @@
 
 #include <vector>
 #include <map>
-#include <ugdk/config/config.h>
-#include "SDL_ttf.h"
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic.h>
 

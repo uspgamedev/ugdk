@@ -1,21 +1,20 @@
 #ifndef HORUSEYE_FRAMEWORK_TYPES_H_
 #define HORUSEYE_FRAMEWORK_TYPES_H_
 
-#include <ugdk/config/config.h>
-#include "SDL_stdinc.h"
+#include <cstdint>
 
 namespace ugdk {
 
-typedef Uint8 uint8;
-typedef Uint16 uint16;
-typedef Uint32 uint32;
-typedef Uint64 uint64;
-typedef Sint8 int8;
-typedef Sint16 int16;
-typedef Sint32 int32;
-typedef Sint64 int64;
+typedef uint8_t uint8;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef uint64_t uint64;
+typedef int8_t int8;
+typedef int16_t int16;
+typedef int32_t int32;
+typedef int64_t int64;
 
-typedef Uint8 Mirror;
+typedef uint8 Mirror;
 static const Mirror MIRROR_NONE   = 0;
 static const Mirror MIRROR_HFLIP  = 1;
 static const Mirror MIRROR_VFLIP  = 2;

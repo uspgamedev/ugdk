@@ -1,4 +1,4 @@
-
+#include <cstdarg>
 #include <ugdk/action/animationset.h>
 
 #define ANIMATION_BUFFER_SIZE 256

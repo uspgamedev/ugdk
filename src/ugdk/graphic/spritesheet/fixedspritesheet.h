@@ -5,7 +5,6 @@
 #include <vector>
 #include <utility>
 
-#include <ugdk/config/config.h>
 #include "SDL_image.h"
 #include "SDL_opengl.h"
 

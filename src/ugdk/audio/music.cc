@@ -1,4 +1,5 @@
 #include <algorithm>
+#include "SDL.h"
 #include <ugdk/audio/music.h>
 
 namespace ugdk {
