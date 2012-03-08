@@ -2,6 +2,7 @@
 #define UGDK_GRAPHIC_MODIFIER_H_
 
 #include <vector>
+#include <cstddef>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/base/types.h>
 

@@ -2,6 +2,7 @@
 #define UGDK_UTIL_INTERVALKDTREE_H_
 
 #include <cassert>
+#include <cstddef>
 #include <map>
 #include <list>
 #include <vector>

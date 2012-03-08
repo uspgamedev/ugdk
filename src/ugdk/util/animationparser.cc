@@ -1,5 +1,5 @@
-
 #include <cstdio>
+#include <cstring>
 #include <ugdk/util/animationparser.h>
 #include <ugdk/action/animation.h>
 #include <ugdk/action/animationset.h>

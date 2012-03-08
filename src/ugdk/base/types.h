@@ -1,7 +1,7 @@
 #ifndef HORUSEYE_FRAMEWORK_TYPES_H_
 #define HORUSEYE_FRAMEWORK_TYPES_H_
 
-#include <cstdint>
+#include <stdint.h>
 
 namespace ugdk {
 

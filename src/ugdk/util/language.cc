@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <cstring>
 #include <utility>
 #include "language.h"
 #include <ugdk/graphic/textmanager.h>
