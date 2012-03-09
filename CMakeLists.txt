@@ -54,8 +54,6 @@ ENDIF ()
 # Important build locations.
 set (SRC_DIR src)
 set (LIB_DIR lib)
-set (MODULE_DIR "${SRC_DIR}/module")
-set (GENERATED_DIR "${SRC_DIR}/generated")
 
 #set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
 #set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
@@ -92,6 +90,7 @@ if (NOT FRAMEWORK_SRC)
 endif (NOT FRAMEWORK_SRC)
 
 include_directories ("src")
+include (cmake/ugdk.cmake)
 
 # Encontrando as bibliotecas necessarias:
 find_package(OpenGL REQUIRED)
@@ -109,43 +108,19 @@ include_directories(${SDLTTF_INCLUDE_DIR})
 find_package(SDL_image REQUIRED)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
-find_package(Lua51 REQUIRED)
-include_directories(${LUA_INCLUDE_DIR})
-    
-find_package(PythonLibs 2.7 REQUIRED)
-include_directories (${PYTHON_INCLUDE_DIRS})
-
 find_package(Boost 1.48.0 REQUIRED)
 include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
 include_directories(${Boost_INCLUDE_DIRS})
 
-# Does this work everywhere?
-find_package (SWIG REQUIRED)
-include (cmake/UseSWIG.cmake)
+ugdk_setup_package (SWIG)
+if (SWIG_FOUND)
+  ugdk_setup_package (Lua51)
+  ugdk_setup_package (PythonLibs)
+endif (SWIG_FOUND)
 
-# ${FRAMEWORK_SRC} esta' definido?
-if (NOT MODULE_SRC)
-    message (FATAL_ERROR "Error: MODULE_SRC not defined! Please do so in the file src/module_list.cmake!")
-endif (NOT MODULE_SRC)
-
-set_source_files_properties (${MODULE_SRC} PROPERTIES CPLUSPLUS ON)
-set_source_files_properties (${MODULE_SRC} PROPERTIES SWIG_FLAGS "")
-
-set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
-set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_DIR}")
-
-set (GENERATED_SRC "")
-swig_add_module (ugdk_lua lua ${MODULE_SRC} ${FRAMEWORK_SRC})
-set (GENERATED_SRC ${GENERATED_SRC} ${swig_generated_sources})
-swig_add_module (ugdk_python python ${MODULE_SRC} ${FRAMEWORK_SRC})
-set (TEMP_ONLY_CXX)
-foreach (it ${swig_generated_sources})
-  if (${it} MATCHES ".cc$")
-    set (TEMP_ONLY_CXX ${TEMP_ONLY_CXX} ${it})
-  endif ()
-endforeach (it)
-set (GENERATED_SRC ${GENERATED_SRC} ${TEMP_ONLY_CXX})
-unset (TEMP_ONLY_CXX)
+if (${BUILD_TYPE} STREQUAL DEBUG)
+  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
+endif (${BUILD_TYPE} STREQUAL DEBUG)
 
 # pre-processor: #define's
 if (MSVC)
@@ -160,16 +135,6 @@ else (MSVC)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -D${d}")
   endforeach (d)
 endif  (MSVC)
-
-set (PYTHON_FINAL_LIB ${PYTHON_LIBRARIES})
-if (${BUILD_TYPE} STREQUAL DEBUG)
-    set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
-	
-	# Check if we have the debug library to link with on debug. If not, we'll just use the nondebug one.
-	if (PYTHON_DEBUG_LIBRARY)
-		set (PYTHON_FINAL_LIB ${PYTHON_DEBUG_LIBRARY})
-	endif()
-endif (${BUILD_TYPE} STREQUAL DEBUG)
 
 include_directories ("externals/opengl")
 
@@ -204,7 +169,8 @@ target_link_libraries (${FRAMEWORK_BUILDNAME}
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
 					   ${OPENGL_LIBRARIES}
-					   ${LUA_LIBRARIES}
+             ${UGDK_LIBRARIES}
+             #${LUA_LIBRARIES}
 					   ${PYTHON_FINAL_LIB})
 
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS}")
