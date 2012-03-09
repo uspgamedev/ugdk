@@ -1,8 +1,12 @@
 
+IF (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    SET(GAME_SRCS ${GAME_SRCS} src/mac/SDLMain.h src/mac/SDLMain.m)
+ENDIF ()
 add_executable (asteroids EXCLUDE_FROM_ALL examples/asteroids-script/src/asteroids.cc
 					   examples/asteroids-script/src/scriptscene.cc
 					   examples/asteroids-script/src/scriptentity.cc
-					   examples/asteroids-script/src/scriptentitystack.cc)
+					   examples/asteroids-script/src/scriptentitystack.cc
+                       ${GAME_SRCS})
 
 set_target_properties (asteroids PROPERTIES RUNTIME_OUTPUT_DIRECTORY examples/asteroids-script/)
 
