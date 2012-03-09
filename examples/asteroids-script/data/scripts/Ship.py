@@ -23,7 +23,7 @@ class Ship (BasicEntity):
         self.power_range = [0.5, 3.0]       # range in which the shot can be
         self.speed = 75.0                   # |acceleration| in a given frame
         self.max_speed = 150.0              # max |velocity| ship can attain.
-        self.projectile_speed = 120         # 
+        self.projectile_speed = 170         # 
         self.energy_hud = BarUI(self, "energy", Color(0.0,0.0,1.0,1.0), Vector2D(0.0, self.radius+BAR_HEIGHT))
 
     def Update(self, dt):

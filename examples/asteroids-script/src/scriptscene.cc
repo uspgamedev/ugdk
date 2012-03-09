@@ -5,6 +5,7 @@
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic/node.h>
+#include <ugdk/graphic/drawable/texturedrectangle.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/util/intervalkdtree.h>
 #include <ugdk/input/inputmanager.h>
@@ -35,6 +36,13 @@ ScriptScene::~ScriptScene() { delete objects_tree_; }
 
 void ScriptScene::GenerateMap() {
 	std::vector<VirtualObj> args;
+
+    /* First we set the background */
+    using ugdk::graphic::TexturedRectangle;
+    TexturedRectangle* background = map_generator_["GetBackgroundDrawable"](args).value<TexturedRectangle*>();
+    this->content_node()->set_drawable(background);
+
+    /* then create the entities */
 	ScriptEntityStack objects = ScriptEntityStack( map_generator_["Generate"](args) );
 
 	this->AddNewObjects(objects);

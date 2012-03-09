@@ -99,7 +99,7 @@ class BasicEntity (EntityInterface):
             sound.Play()
         if self.life <= 0:
             self.is_destroyed = True
-        print self, "took %s damage, current life = %s" % (damage, self.life)
+        #print self, "took %s damage, current life = %s" % (damage, self.life)
 
     def Heal(self, amount):
         if amount < 0:  return

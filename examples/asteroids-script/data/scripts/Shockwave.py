@@ -42,6 +42,7 @@ class Shockwave (GravityWell):
         ignore_types = ["Gravity.GravityWell", "Planet.Planet", "Shockwave.Shockwave"]
         if target.type in ignore_types or target.id in self.ignore_ids:
             return 
+        
         #print self, "is affecting", target
         grav_vec = self.GetPos() - target.GetPos()
         dist = grav_vec.Length()

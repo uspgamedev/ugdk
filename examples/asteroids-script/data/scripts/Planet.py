@@ -11,7 +11,7 @@ class Planet (BasicEntity):
     def __init__(self, x, y, size_factor):
         self.size_factor = size_factor
         r = 75.0 * size_factor
-        hp = 6 * size_factor
+        hp = 600 * size_factor
         BasicEntity.__init__(self, x, y, "planet.png", r, hp)
         self.has_splitted = False
         self.well = GravityWell(x, y, r)

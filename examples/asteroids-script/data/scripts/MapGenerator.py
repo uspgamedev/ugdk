@@ -1,5 +1,6 @@
 from ugdk.ugdk_math import Vector2D
 from ugdk.ugdk_base import Engine_reference
+from ugdk.ugdk_drawable import TexturedRectangle
 from Ship import Ship
 from Asteroid import Asteroid
 from Planet import Planet
@@ -85,3 +86,13 @@ def Generate():
         entities.append(ast)
 
     return entities
+
+
+def GetBackgroundDrawable():
+    screenSize = Engine_reference().video_manager().video_size()
+    texture_obj = Engine_reference().resource_manager().texture_container().Load("background%s.jpg" % (random.randint(1,3)) )
+    background = TexturedRectangle( texture_obj, screenSize )
+    #background.set_hotspot(Drawable.CENTER)
+    background.thisown = 0
+    return background
+    
