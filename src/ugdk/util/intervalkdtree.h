@@ -129,8 +129,9 @@ IntervalKDTree<T, DIMENSIONS>::IntervalKDTree (
                                     const Box<DIMENSIONS>& tree_bounding_box,
                                     unsigned int max_elements_per_leaf) :
     max_elements_per_leaf_(max_elements_per_leaf), 
-    tree_bounding_box_(tree_bounding_box), container_items_(),
-    root_(new Node<T, DIMENSIONS> (this, NULL, 0, tree_bounding_box)) {
+    tree_bounding_box_(tree_bounding_box), 
+    container_items_() {
+        root_ = new Node<T, DIMENSIONS>(this, NULL, 0, tree_bounding_box);
 #ifdef DEBUG
     max_height_ = 0;
 #endif
