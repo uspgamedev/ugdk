@@ -118,20 +118,10 @@ find_package(Boost 1.48.0 REQUIRED)
 include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
 include_directories(${Boost_INCLUDE_DIRS})
 
-ugdk_setup_package (SWIG)
+set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
+set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_DIR}")
 
-set (GENERATED_SRC "")
-swig_add_module (ugdk_lua lua ${MODULE_SRC} ${FRAMEWORK_SRC})
-set (GENERATED_SRC ${GENERATED_SRC} ${swig_generated_sources})
-swig_add_module (ugdk_python python ${MODULE_SRC} ${FRAMEWORK_SRC})
-set (TEMP_ONLY_CXX)
-foreach (it ${swig_generated_sources})
-  if (${it} MATCHES ".cc$")
-    set (TEMP_ONLY_CXX ${TEMP_ONLY_CXX} ${it})
-  endif ()
-endforeach (it)
-set (GENERATED_SRC ${GENERATED_SRC} ${TEMP_ONLY_CXX})
-unset (TEMP_ONLY_CXX)
+ugdk_setup_package (SWIG)
 
 # pre-processor: #define's
 if (MSVC)
