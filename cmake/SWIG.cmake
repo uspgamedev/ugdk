@@ -4,7 +4,7 @@ set (GENERATED_DIR "${SRC_DIR}/generated")
 set (GENERATED_SRC "")
 
 # Does this work everywhere?
-find_package (SWIG REQUIRED)
+find_package (SWIG)
 
 if (SWIG_FOUND)
 
