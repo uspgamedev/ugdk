@@ -138,6 +138,7 @@ else (MSVC)
   endforeach (d)
 endif  (MSVC)
 
+include_directories ("src/kits")
 include_directories ("externals/opengl")
 
 if (${LINK_TYPE} STREQUAL STATIC)
