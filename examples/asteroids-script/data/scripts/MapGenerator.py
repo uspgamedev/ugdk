@@ -5,9 +5,9 @@ from Asteroid import Asteroid
 from Planet import Planet
 import random
 
-MAX_ENTITY_SIZE = 100.0  #in pixels
+MAX_ENTITY_SIZE = 200.0  #in pixels
 
-PERCENT_OF_ENTITIES_IN_MAP_GRID = 0.1
+PERCENT_OF_ENTITIES_IN_MAP_GRID = 0.3
 
 ASTEROID_STARTING_SPEED_RANGE = [20, 90]
 
@@ -50,14 +50,14 @@ def Generate():
 
     print "Generating a %sx%s map with %s entities..." % (rows, columns, n)
 
-    possibleCells = []
-    for i in range(rows):
-        for j in range(columns):
-            possibleCells.append( (i,j) )
+    #possibleCells = []
+    #for i in range(rows):
+    #    for j in range(columns):
+    #        possibleCells.append( (i,j) )
+    possibleCells = [(i,j) for i in range(rows) for j in range(columns)]
     random.shuffle(possibleCells)
-    # I had so many awesome ideas using awesome python features to this 
-    # (generate a list of all possible cell (x, y) locations
-    # But in the end, frak it, let's go with the easy version...
+    # I had so many awesome ideas using awesome python features to do this 
+    # (generate a list of all possible cell (x, y) locations)
 
     def pickAPlace():
         if len(possibleCells) == 0: return (random.random()*600, random.random()*400)

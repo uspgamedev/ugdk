@@ -122,3 +122,24 @@ class BasicEntity (EntityInterface):
         self.node.modifier().set_offset(pos)
         self.last_velocity = self.velocity
     
+    
+#################################################
+# utility functions
+#################################################
+
+# GetEquivalentValueInRange()
+###
+# given origin_value, which should be a value in the range origin_range ( [origin_range[0], origin_range[1]] )
+# and the destination_range, this function returns the equivalent value of origin_value in the destination_range,
+# based on the ranges.
+###
+# if origin_value = X, origin_range = [A, B], destination_range = [C, D], then this function returns V so that:
+# (V-C)/(D-C) = (X-A)/(B-A)
+#   <=>
+# V = C + (D-C)(X-A)/(B-A)
+def GetEquivalentValueInRange(origin_value, origin_range, destination_range):
+    xa = origin_value - origin_range[0]                 # xa = X - A
+    ba = origin_range[1] - origin_range[0]              # ba = B - A
+    dc = destination_range[1] - destination_range[0]    # dc = D - C
+    r = dc * xa / ba                                    # r = (D-C)(X-A)/(B-A)
+    return destination_range[0] + r       # return C + r

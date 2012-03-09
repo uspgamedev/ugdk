@@ -2,6 +2,7 @@ from ugdk.ugdk_math import Vector2D
 from BasicEntity import BasicEntity
 from Asteroid import Asteroid
 from Gravity import GravityWell
+from Shockwave import Shockwave
 from random import random, randint, shuffle
 from math import pi
 
@@ -10,10 +11,11 @@ class Planet (BasicEntity):
     def __init__(self, x, y, size_factor):
         self.size_factor = size_factor
         r = 75.0 * size_factor
-        hp = 600 * size_factor
+        hp = 6 * size_factor
         BasicEntity.__init__(self, x, y, "planet.png", r, hp)
         self.has_splitted = False
         self.well = GravityWell(x, y, r)
+        self.well.AddIDToIgnoreList(self.id)
         self.new_objects.append(self.well)
         
     def Update(self, dt):
@@ -26,6 +28,13 @@ class Planet (BasicEntity):
         if self.is_destroyed and not self.has_splitted:
             self.has_splitted = True
             self.well.is_destroyed = True #to assure our gravity well will be deleted with us
+            # produce our shockwave before the asteroids since the C++ part pop()'s the objects
+            # out of the list, so last objects in self.new_objects are created first.
+            pos = self.GetPos()
+            wave = Shockwave(pos.get_x(), pos.get_y(), 5.0, [self.radius, self.well.radius])
+            wave.AddIDToIgnoreList(self.id)
+            self.new_objects.append(wave)
+            # and create our 'asteroid parts'
             angles = [0.0, -pi/4.0, -pi/2.0, -3*pi/2.0, pi, 3*pi/2.0, pi/2.0, pi/4.0]
             shuffle(angles)
             direction = Vector2D(random(), random())
@@ -35,7 +44,7 @@ class Planet (BasicEntity):
             for i in range(randint(2,5)):
                 v = direction.Rotate(angles.pop())
                 v = v * ((self.radius+Asteroid.GetActualRadius(factor))*1.15)
-                pos = self.GetPos() + v
+                pos = pos + v
                 ast = Asteroid(pos.get_x(), pos.get_y(), factor)
                 v = v.Normalize()
                 speed = 20.0

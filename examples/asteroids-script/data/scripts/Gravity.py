@@ -22,13 +22,23 @@ class GravityWell (EntityInterface):
         r = GetMaxGravForceDist(self.mass)
         EntityInterface.__init__(self, x, y, r)
         self.is_antigrav = False
+        self.ignore_ids = []
         
     def SetRadius(self, r):
         self.radius = r
         self.mass = GetMassByRadius(r)
+        
+    def AddIDToIgnoreList(self, ID):
+        if ID not in self.ignore_ids:
+            self.ignore_ids.append(ID)
+            
+    def RemoveIDFromIgnoreList(self, ID):
+        if ID in self.ignore_ids:
+            self.ignore_ids.remove(ID)
 
     def HandleCollision(self, target):
-        if target.type == self.type or target.type == "Planet.Planet":
+        ignore_types = [self.type, "Planet.Planet", "Shockwave.Shockwave"]
+        if target.type in ignore_types or target.id in self.ignore_ids:
             return #we don't affect planets (neither their wells)
         
         grav_vec = self.GetPos() - target.GetPos()

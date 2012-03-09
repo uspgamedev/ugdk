@@ -12,7 +12,7 @@ class Projectile (BasicEntity):
         r = Projectile.GetActualRadius(power)
         BasicEntity.__init__(self, x, y, "projectile.png", r, 1)
         self.velocity = velocity
-        self.damage = 20.0 * power
+        self.damage = 25.0 * power
         self.lifetime = 10.0 * power
         self.life_hud.node.set_active(False)
 
