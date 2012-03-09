@@ -1,5 +1,7 @@
 
-function (ugdk_setup_package package_name)
+macro (ugdk_setup_package package_name)
   include (cmake/${package_name}.cmake)
-endfunction (ugdk_setup_package package_name)
+endmacro (ugdk_setup_package package_name)
+
+set (UGDK_LIBRARIES "")
 

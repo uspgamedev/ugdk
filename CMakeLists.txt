@@ -108,20 +108,19 @@ include_directories(${SDLTTF_INCLUDE_DIR})
 find_package(SDL_image REQUIRED)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
-find_package(Lua51 REQUIRED)
-include_directories(${LUA_INCLUDE_DIR})
-    
-find_package(PythonLibs 2.7 REQUIRED)
-include_directories (${PYTHON_INCLUDE_DIRS})
-
 find_package(Boost 1.48.0 REQUIRED)
 include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
 include_directories(${Boost_INCLUDE_DIRS})
 
-set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
-set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_DIR}")
-
 ugdk_setup_package (SWIG)
+if (SWIG_FOUND)
+  ugdk_setup_package (Lua51)
+  ugdk_setup_package (PythonLibs)
+endif (SWIG_FOUND)
+
+if (${BUILD_TYPE} STREQUAL DEBUG)
+  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
+endif (${BUILD_TYPE} STREQUAL DEBUG)
 
 # pre-processor: #define's
 if (MSVC)
@@ -136,16 +135,6 @@ else (MSVC)
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -D${d}")
   endforeach (d)
 endif  (MSVC)
-
-set (PYTHON_FINAL_LIB ${PYTHON_LIBRARIES})
-if (${BUILD_TYPE} STREQUAL DEBUG)
-    set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
-	
-	# Check if we have the debug library to link with on debug. If not, we'll just use the nondebug one.
-	if (PYTHON_DEBUG_LIBRARY)
-		set (PYTHON_FINAL_LIB ${PYTHON_DEBUG_LIBRARY})
-	endif()
-endif (${BUILD_TYPE} STREQUAL DEBUG)
 
 include_directories ("externals/opengl")
 
@@ -180,7 +169,8 @@ target_link_libraries (${FRAMEWORK_BUILDNAME}
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
 					   ${OPENGL_LIBRARIES}
-					   ${LUA_LIBRARIES}
+             ${UGDK_LIBRARIES}
+             #${LUA_LIBRARIES}
 					   ${PYTHON_FINAL_LIB})
 
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS}")
