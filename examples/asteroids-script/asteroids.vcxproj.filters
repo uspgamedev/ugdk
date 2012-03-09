@@ -17,6 +17,10 @@
     <None Include="data\scripts\Asteroid.py" />
     <None Include="data\scripts\EntityUI.py" />
     <None Include="data\scripts\BarUI.py" />
+    <None Include="data\scripts\Shockwave.py" />
+    <None Include="data\scripts\Planet.py" />
+    <None Include="data\scripts\Gravity.py" />
+    <None Include="data\scripts\Config.py" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\scriptentity.h" />

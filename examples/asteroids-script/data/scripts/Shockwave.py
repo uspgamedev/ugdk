@@ -4,7 +4,7 @@ from math import pi
 
 
 class Shockwave (GravityWell):
-    def __init__(self, x, y, lifetime, radius_range)
+    def __init__(self, x, y, lifetime, radius_range):
         self.lifetime = lifetime
         GravityWell.__init__(self, x, y, r)
 
