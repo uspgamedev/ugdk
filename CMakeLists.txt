@@ -54,8 +54,6 @@ ENDIF ()
 # Important build locations.
 set (SRC_DIR src)
 set (LIB_DIR lib)
-set (MODULE_DIR "${SRC_DIR}/module")
-set (GENERATED_DIR "${SRC_DIR}/generated")
 
 #set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
 #set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
@@ -92,6 +90,7 @@ if (NOT FRAMEWORK_SRC)
 endif (NOT FRAMEWORK_SRC)
 
 include_directories ("src")
+include (cmake/ugdk.cmake)
 
 # Encontrando as bibliotecas necessarias:
 find_package(OpenGL REQUIRED)
@@ -119,20 +118,7 @@ find_package(Boost 1.48.0 REQUIRED)
 include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
 include_directories(${Boost_INCLUDE_DIRS})
 
-# Does this work everywhere?
-find_package (SWIG REQUIRED)
-include (cmake/UseSWIG.cmake)
-
-# ${FRAMEWORK_SRC} esta' definido?
-if (NOT MODULE_SRC)
-    message (FATAL_ERROR "Error: MODULE_SRC not defined! Please do so in the file src/module_list.cmake!")
-endif (NOT MODULE_SRC)
-
-set_source_files_properties (${MODULE_SRC} PROPERTIES CPLUSPLUS ON)
-set_source_files_properties (${MODULE_SRC} PROPERTIES SWIG_FLAGS "")
-
-set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
-set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_DIR}")
+ugdk_setup_package (SWIG)
 
 set (GENERATED_SRC "")
 swig_add_module (ugdk_lua lua ${MODULE_SRC} ${FRAMEWORK_SRC})
