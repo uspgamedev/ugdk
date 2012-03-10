@@ -3,7 +3,7 @@
 
 #include <string>
 #include <map>
-#include <ugdk/util.h>
+#include <ugdk/util/intervalkdtree.h>
 #include <pyramidworks/collision.h>
 
 namespace pyramidworks {
