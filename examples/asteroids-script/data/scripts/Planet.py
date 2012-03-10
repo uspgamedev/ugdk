@@ -12,7 +12,7 @@ class Planet (BasicEntity):
         self.size_factor = size_factor
         r = 75.0 * size_factor
         hp = 600 * size_factor
-        BasicEntity.__init__(self, x, y, "planet.png", r, hp)
+        BasicEntity.__init__(self, x, y, "planet%s.png" % (randint(1,5)), r, hp)
         self.has_splitted = False
         self.well = GravityWell(x, y, r)
         self.well.AddIDToIgnoreList(self.id)
