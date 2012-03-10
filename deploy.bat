@@ -12,9 +12,9 @@ xcopy lib\Debug\ugdk_d.pdb deploy\lib\ /q /k /y > nul
 
 echo Copying header files...
 
-xcopy "src\ugdk\*.h" "deploy\include\ugdk\" /e /c /q /k /y > nul
-xcopy "src\ugdk\*.th" "deploy\include\ugdk\" /e /c /q /k /y > nul
-xcopy "src\ugdk\*.tcc" "deploy\include\ugdk\" /e /c /q /k /y > nul
+xcopy "src\*.h" "deploy\include\" /e /c /q /k /y > nul
+xcopy "src\*.th" "deploy\include\" /e /c /q /k /y > nul
+xcopy "src\*.tcc" "deploy\include\" /e /c /q /k /y > nul
 
 echo Copying generated Python scripts...
 

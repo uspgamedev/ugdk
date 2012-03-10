@@ -1,18 +1,18 @@
 set (FRAMEWORK_SRC
-    ${SRC_DIR}/kits/pyramidworks/collision.h
-    ${SRC_DIR}/kits/pyramidworks/geometry.h
-    ${SRC_DIR}/kits/pyramidworks/collision/collisionclass.cc
-    ${SRC_DIR}/kits/pyramidworks/collision/collisionclass.h
-    ${SRC_DIR}/kits/pyramidworks/collision/collisionlogic.h
-    ${SRC_DIR}/kits/pyramidworks/collision/collisionmanager.cc
-    ${SRC_DIR}/kits/pyramidworks/collision/collisionmanager.h
-    ${SRC_DIR}/kits/pyramidworks/collision/collisionobject.cc
-    ${SRC_DIR}/kits/pyramidworks/collision/collisionobject.h
-    ${SRC_DIR}/kits/pyramidworks/geometry/circle.cc
-    ${SRC_DIR}/kits/pyramidworks/geometry/circle.h
-    ${SRC_DIR}/kits/pyramidworks/geometry/geometricshape.h
-    ${SRC_DIR}/kits/pyramidworks/geometry/rect.cc
-    ${SRC_DIR}/kits/pyramidworks/geometry/rect.h
+    ${SRC_DIR}/pyramidworks/collision.h
+    ${SRC_DIR}/pyramidworks/geometry.h
+    ${SRC_DIR}/pyramidworks/collision/collisionclass.cc
+    ${SRC_DIR}/pyramidworks/collision/collisionclass.h
+    ${SRC_DIR}/pyramidworks/collision/collisionlogic.h
+    ${SRC_DIR}/pyramidworks/collision/collisionmanager.cc
+    ${SRC_DIR}/pyramidworks/collision/collisionmanager.h
+    ${SRC_DIR}/pyramidworks/collision/collisionobject.cc
+    ${SRC_DIR}/pyramidworks/collision/collisionobject.h
+    ${SRC_DIR}/pyramidworks/geometry/circle.cc
+    ${SRC_DIR}/pyramidworks/geometry/circle.h
+    ${SRC_DIR}/pyramidworks/geometry/geometricshape.h
+    ${SRC_DIR}/pyramidworks/geometry/rect.cc
+    ${SRC_DIR}/pyramidworks/geometry/rect.h
     ${SRC_DIR}/ugdk/action.h
     ${SRC_DIR}/ugdk/audio.h
     ${SRC_DIR}/ugdk/graphic.h
