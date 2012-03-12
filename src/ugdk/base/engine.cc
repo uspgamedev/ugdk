@@ -39,8 +39,10 @@ bool Engine::Initialize(const Configuration& configuration) {
     path_manager_     = new           PathManager(configuration.base_path);
     resource_manager_ = new base::ResourceManager();
     language_manager_ = new       LanguageManager(configuration.default_language);
+	
+	std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";
 
-    video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, configuration.window_icon);
+    video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, icon_path);
     audio_manager_->Initialize();
      text_manager_->Initialize();
 
