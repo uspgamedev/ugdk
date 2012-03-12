@@ -46,16 +46,16 @@ static Vector2D default_resolution(800.0, 600.0);
 // sucesso.
 bool VideoManager::Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon) {
     modifiers_.empty();
-
-    if(ChangeResolution(size, fullscreen) == false)
-        ChangeResolution(default_resolution, false);
-
+    title_ = title;
+	
+    // Set window title.
+    SDL_WM_SetCaption(title.c_str(), (icon.length() > 0) ? icon.c_str() : NULL );
+	
     if(icon.length() > 0)
         SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
-        
-    // Set window title.
-    SDL_WM_SetCaption(title.c_str(), NULL);
-    title_ = title;
+	
+    if(ChangeResolution(size, fullscreen) == false)
+        ChangeResolution(default_resolution, false);
     
     InitializeExtensions();
 
