@@ -52,16 +52,16 @@ class Asteroid (BasicEntity):
             target.ApplyCollisionRollback()
             self.TakeDamage(target.GetDamage(self.type))
             target.TakeDamage(self.GetDamage(target.type))
-            print "Asteroid collided with asteroid"
+            #print "Asteroid collided with asteroid"
         elif target.type == "Ship.Ship":
             target.TakeDamage(self.GetDamage(target.type))
             target.ApplyVelocity(self.velocity * 0.5)
             self.TakeDamage(self.life + 10) #just to make sure we die and split LOL
-            print "Asteroid damaging ", target.type
+            #print "Asteroid damaging ", target.type
         elif target.type == "Planet.Planet":
             target.TakeDamage(self.GetDamage(target.type))
             self.is_destroyed = self.has_splitted = True # WE CANNOT SPLIT when colliding with a planet =P
-            print "Asteroid damaging ", target.type
+            #print "Asteroid damaging ", target.type
 
         #No handler for projectile since that is strictly
         #"do it only one time", and Projectile will handle it

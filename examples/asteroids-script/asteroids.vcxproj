@@ -346,6 +346,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <None Include="data\scripts\Radio.py" />
     <None Include="data\scripts\Ship.py" />
     <None Include="data\scripts\Shockwave.py" />
+    <None Include="ScriptSystem_Notes.txt" />
+    <None Include="TODO.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\scriptentity.h" />

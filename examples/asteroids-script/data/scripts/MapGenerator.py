@@ -5,6 +5,7 @@ from Ship import Ship
 from Asteroid import Asteroid
 from Planet import Planet
 import random
+from math import pi
 
 MAX_ENTITY_SIZE = 200.0  #in pixels
 
@@ -79,7 +80,7 @@ def Generate():
     for i in range(n):
         loc = pickAPlace()
         ast = Asteroid(loc[0], loc[1], GetRandomAsteroidSizeFactor())
-        v = Vector2D(random.random(), random.random())
+        v = Vector2D(1,0).Rotate( random.random() * 2 * pi )
         v = v.Normalize()
         v = v * (random.randint(ASTEROID_STARTING_SPEED_RANGE[0], ASTEROID_STARTING_SPEED_RANGE[1]))
         ast.ApplyVelocity(v)

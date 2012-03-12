@@ -1,17 +1,19 @@
 from ugdk.ugdk_math import Vector2D
-from BasicEntity import BasicEntity
+from BasicEntity import BasicEntity, window_size
 from Asteroid import Asteroid
 from Gravity import GravityWell
 from Shockwave import Shockwave
 from random import random, randint, shuffle
 from math import pi
 
+from Projectile import Projectile
+
 # yes, Planet is pretty similar to Asteroid... But, whatever =P
 class Planet (BasicEntity):
     def __init__(self, x, y, size_factor):
         self.size_factor = size_factor
         r = 75.0 * size_factor
-        hp = 600 * size_factor
+        hp = 6 * size_factor
         BasicEntity.__init__(self, x, y, "planet%s.png" % (randint(1,5)), r, hp)
         self.has_splitted = False
         self.well = GravityWell(x, y, r)
@@ -31,13 +33,15 @@ class Planet (BasicEntity):
             # produce our shockwave before the asteroids since the C++ part pop()'s the objects
             # out of the list, so last objects in self.new_objects are created first.
             pos = self.GetPos()
-            wave = Shockwave(pos.get_x(), pos.get_y(), 5.0, [self.radius, self.well.radius])
+            print "Planet cracking down..."
+            wave = Shockwave(pos.get_x(), pos.get_y(), 4.0, [self.radius, window_size().Length() * 0.35])
             wave.AddIDToIgnoreList(self.id)
             self.new_objects.append(wave)
+            print "Shockwave created"
             # and create our 'asteroid parts'
             angles = [0.0, -pi/4.0, -pi/2.0, -3*pi/2.0, pi, 3*pi/2.0, pi/2.0, pi/4.0]
             shuffle(angles)
-            direction = Vector2D(random(), random())
+            direction = Vector2D(1,0).Rotate(random()*2*pi)
             direction = direction.Normalize()
             factor = 0.75
             print self, "is breaking, into factor", factor
@@ -65,6 +69,6 @@ class Planet (BasicEntity):
             target.ApplyCollisionRollback()
         elif target.type == "Ship.Ship":
             target.TakeDamage(self.GetDamage(target.type))
-            print target.type, "crash landed on Planet... No survivors.     Boo-hoo."
+            #print target.type, "crash landed on Planet... No survivors.     Boo-hoo."
         # Projectiles and Asteroids take care of collising with Planets.
 
