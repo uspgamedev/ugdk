@@ -21,6 +21,13 @@ Melhorar suporte do VObj a listas/iteradores (relacionado com
 problema acima)
 
 ##############################################################
+CMake no Windows gera projetos de VS bugados...
+O da UGDK compila normal, mas o do Asteroids tem N erros de
+link diferentes em Release/Debug
+Isso me previne de deixar o asteroids facilmente compilável
+em outros windows fora o meu =/
+
+##############################################################
 Operadores aritmeticos no VObj (que chamam ops do objeto do
 script) podem ser uteis
 

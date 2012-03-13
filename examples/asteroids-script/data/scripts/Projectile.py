@@ -33,13 +33,13 @@ class Projectile (BasicEntity):
             # collision between projectiles, destroy both
             target.TakeDamage(666)
             self.is_destroyed = True
-            print "Projectiles exploding..."
+            #print "Projectiles exploding..."
         elif target.type == "Ship.Ship" or target.type == "Asteroid.Asteroid":
             target.TakeDamage(self.GetDamage(target.type))
             target.ApplyVelocity(self.velocity * (0.15*self.power))
             self.is_destroyed = True
-            print "Projectile damaging ", target.type
+            #print "Projectile damaging ", target.type
         elif target.type == "Planet.Planet":
             target.TakeDamage(self.GetDamage(target.type))
             self.is_destroyed = True
-            print "Projectile impacted planet"
+            #print "Projectile impacted planet"

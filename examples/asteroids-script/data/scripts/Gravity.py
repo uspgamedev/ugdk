@@ -24,10 +24,6 @@ class GravityWell (EntityInterface):
         self.is_antigrav = False
         self.ignore_ids = []
         
-    def SetRadius(self, r):
-        self.radius = r
-        self.mass = GetMassByRadius(r)
-        
     def AddIDToIgnoreList(self, ID):
         if ID not in self.ignore_ids:
             self.ignore_ids.append(ID)

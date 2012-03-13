@@ -76,7 +76,7 @@ void ScriptScene::Update(double delta_t) {
 		}
 		
 		if (ent->is_destroyed()) { 
-			//printf("ScriptEntity %s is destroyed...\n", ent->type().c_str());
+			printf("ScriptEntity %s is destroyed...\n", ent->type().c_str());
 			this->RemoveEntity(ent);
 			to_delete.push_back(ent);
 			continue;

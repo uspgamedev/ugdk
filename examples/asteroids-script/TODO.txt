@@ -1,17 +1,15 @@
 
-- testar planetas
-
-- implementar shockwave
-
-- Split de asteroid (arrumar)
+- arrumar shockwave (e possivelmente seu gráfico)
 
 - melhorar transferencia de velocidade do impacto de projeteis (ta indo mto em qualquer coisa)
 
-- colocar fundo (do mapa)
+- arrumar radius de planetas (com novas imagens)
 
-- melhorar imagens XD
+- Split de asteroid (arrumar)
 
-- Config module (pra setar as config da engine, tipo resolucao e tal)
+- melhorar imagens (projeteis)
+
+- Colocar outros valores no Config.py (?)
 
 - GameOver/Reset quando player morre?
 

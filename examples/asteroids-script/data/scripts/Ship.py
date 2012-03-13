@@ -21,7 +21,7 @@ class Ship (BasicEntity):
         self.max_charge_time = 5.0          # max time that you can charge a shot in seconds
         self.charge_time = 0                # used internally for counting, in seconds
         self.power_range = [0.5, 3.0]       # range in which the shot can be
-        self.speed = 75.0                   # |acceleration| in a given frame
+        self.speed = 100.0                  # |acceleration| in a given frame
         self.max_speed = 150.0              # max |velocity| ship can attain.
         self.projectile_speed = 170         # 
         self.energy_hud = BarUI(self, "energy", Color(0.0,0.0,1.0,1.0), Vector2D(0.0, self.radius+BAR_HEIGHT))
@@ -72,9 +72,6 @@ class Ship (BasicEntity):
                 self.energy += self.energy_regen_rate * dt
 
         if input.MouseUp(M_BUTTON_LEFT) and self.charge_time > 0:
-            # power to shoot should be a reason of three:
-            # time charging [0, maxtime[ --> [power_range]
-            # energy spent = power * charge_time
             power = GetEquivalentValueInRange(self.charge_time, [0, self.max_charge_time], self.power_range)
             cost = self.shot_cost * (1 + (power * self.charge_time))
             self.Shoot(mouse_dir, power, cost)
@@ -82,7 +79,7 @@ class Ship (BasicEntity):
             
         if input.MousePressed(M_BUTTON_RIGHT):
             pos = self.GetPos()
-            wave = Shockwave(pos.get_x(), pos.get_y(), 4.0, [self.radius, self.radius*4])
+            wave = Shockwave(pos.get_x(), pos.get_y(), 4.0, [self.radius, self.radius*5])
             wave.AddIDToIgnoreList(self.id)
             self.new_objects.append(wave)
 
