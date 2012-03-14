@@ -144,7 +144,6 @@ elseif (${LINK_TYPE} STREQUAL SHARED)
     add_library (${FRAMEWORK_BUILDNAME} SHARED ${FRAMEWORK_SRC} ${GENERATED_SRC})
 endif (${LINK_TYPE} STREQUAL STATIC)
 
-include (cmake/asteroids.cmake)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
@@ -162,6 +161,10 @@ if (WIN32)
 	set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
 endif (WIN32)
 
+if (PYTHONLIBS_FOUND)
+  include (cmake/asteroids.cmake)
+endif (PYTHONLIBS_FOUND)
+
 target_link_libraries (${FRAMEWORK_BUILDNAME}
 					   ${EXTRA_LIBRARIES}
 					   ${SDL_LIBRARY}
@@ -169,9 +172,9 @@ target_link_libraries (${FRAMEWORK_BUILDNAME}
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
 					   ${OPENGL_LIBRARIES}
-             ${UGDK_LIBRARIES}
+             ${UGDK_LIBRARIES})
              #${LUA_LIBRARIES}
-					   ${PYTHON_FINAL_LIB})
+             #${PYTHON_FINAL_LIB})
 
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA}")
