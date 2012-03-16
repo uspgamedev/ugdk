@@ -27,6 +27,9 @@ class LuaData : public VirtualData {
     bool UnwrapBoolean() const;
     int UnwrapInteger() const;
     double UnwrapNumber() const;
+    Vector UnwrapVector() const;
+    List UnwrapList() const;
+    Map UnwrapMap() const;
 
     void Wrap(void* data, const VirtualType& type);
     void WrapString(const char* str);

@@ -51,6 +51,18 @@ double LuaData::UnwrapNumber() const {
     return UnwrapPrimitive<double>(wrapper_, id_, 0.0);
 }
 
+LuaData::Vector LuaData::UnwrapVector() const {
+    return Vector();
+}
+
+LuaData::List LuaData::UnwrapList() const {
+    return List();
+}
+
+LuaData::Map LuaData::UnwrapMap() const {
+    return Map();
+}
+
 void LuaData::Wrap(void* data, const VirtualType& type) {
     if (!wrapper_->data_gear()
             .SafeCall(DataGear::WrapData)
