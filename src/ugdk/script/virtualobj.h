@@ -62,7 +62,7 @@ class VirtualObj {
 
 	operator bool() const { return valid(); }
 
-	VirtualObj operator() (std::vector<VirtualObj> args) const;
+	VirtualObj operator() (const std::vector<VirtualObj>& args) const;
 
 	VirtualObj attribute(const VirtualObj& key) const {
         return VirtualObj(data_->GetAttribute(key.data_));

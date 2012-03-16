@@ -6,9 +6,9 @@ namespace script {
 
 using std::vector;
 
-VirtualObj VirtualObj::operator() (vector<VirtualObj> args) const {
+VirtualObj VirtualObj::operator() (const vector<VirtualObj>& args) const {
     vector<VirtualData::Ptr> arglist;
-    vector<VirtualObj>::iterator it;
+    vector<VirtualObj>::const_iterator it;
     for (it = args.begin(); it != args.end(); ++it) {
         // Wrappers of executed VObj (we) and of the VObjs passed as
         // arguments must be the same.
