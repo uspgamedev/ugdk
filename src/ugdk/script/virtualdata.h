@@ -7,6 +7,8 @@
 #include FROM_TR1(memory)
 
 #include <vector>
+#include <list>
+#include <map>
 
 #include <ugdk/base/types.h>
 #include <ugdk/script/type.h>
@@ -26,6 +28,9 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
     typedef std::tr1::shared_ptr<VirtualData>       Ptr;
     typedef std::tr1::shared_ptr<const VirtualData> ConstPtr;
     typedef std::tr1::weak_ptr<VirtualData>         WeakPtr;
+    typedef std::vector<Ptr>                        Vector;
+    typedef std::list<Ptr>                          List;
+    typedef std::map<Ptr, Ptr>                      Map;
 
     virtual ~VirtualData() {}
 
@@ -39,6 +44,9 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
     virtual bool UnwrapBoolean() const = 0;
     virtual int UnwrapInteger() const = 0;
     virtual double UnwrapNumber() const = 0;
+    virtual Vector UnwrapVector() const = 0;
+    virtual List UnwrapList() const = 0;
+    virtual Map UnwrapMap() const = 0;
 
     /// Tries to wrap the given data with the given type.
     /** Returns a new VirtualData::Ptr with the data wrapped upon success.
