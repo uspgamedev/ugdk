@@ -33,6 +33,59 @@ double PythonData::UnwrapNumber() const {
     return static_cast<double>( PyFloat_AsDouble(py_data_) );
 }
 
+/*************/
+template <class T>
+static T UnwrapSequence(PyObject* py_data_, LangWrapper* wrapper_) {
+    T seq = T;
+    if (py_data_ == NULL)   return seq;
+    if (!PySequence_Check(py_data_)) return seq;
+
+    Py_ssize_t size = PySequence_Length(py_data_);
+    PyObject* obj;
+    PythonData* data;
+    for (Py_ssize_t i = 0; i < size; i++) {
+        obj = PySequence_GetItem(py_data_, i); //returns new ref, NULL on failure
+        data = new PythonData(wrapper_, obj, true); //PythonData takes care of the new ref
+        seq.push_back(  VirtualData::Ptr(data)  );
+    }
+	return seq;
+}
+/*************/
+
+Vector PythonData::UnwrapVector() const {
+    UnwrapSequence<Vector>(py_data_, wrapper_);
+}
+List PythonData::UnwrapList() const {
+    UnwrapSequence<List>(py_data_, wrapper_);
+}
+Map PythonData::UnwrapMap() const {
+    Map d = Map;
+    if (py_data_ == NULL)   return d;
+    if (!PyMapping_Check(py_data_)) return d;
+
+    PyObject* items = PyMapping_Items(py_data_); //items is new ref
+    if (items == NULL)   return d;    
+
+    Py_ssize_t size = PySequence_Length(items);
+    PyObject *item, *key, *value;
+    PythonData *key_data, *value_data;
+    for (Py_ssize_t i = 0; i < size; i++) {
+        item = PySequence_GetItem(items, i); //returns new ref, NULL on failure
+
+        key = WAT;
+        value = WAT;
+
+        key_data = new PythonData(wrapper_, key, true); //PythonData takes care of the new ref
+        value_data = new PythonData(wrapper_, value, true); //PythonData takes care of the new ref
+
+        d[ VirtualData::Ptr(key_data) ] = VirtualData::Ptr(value_data);
+    }
+    
+    return d;
+}
+
+
+
 /// Tries to wrap the given data with the given type into this object.
 void PythonData::Wrap(void* data, const VirtualType& type) {
     if (py_data_ != NULL && own_ref_) {
@@ -142,6 +195,14 @@ VirtualData::Ptr PythonData::GetAttribute(Ptr key) {
 	  with the given name, check if he has a item with key = attr_name */
 	if (PyObject_HasAttr(py_data_, key_data)) {
 		attr = PyObject_GetAttr(py_data_, key_data); //return is new ref
+
+        if (PyCallable_Check(attr) && PyObject_HasAttrString(attr, "__func__") ) {
+            /*return attr.__func__, so that we always return a function or unbinded method (without self)*/
+            PyObject* original = attr;
+            
+            attr = PyObject_GetAttrString(original, "__func__"); //another new ref
+            Py_XDECREF(original);
+        }
 	}
 	else {
 		if (!PyMapping_Check(py_data_)) {
