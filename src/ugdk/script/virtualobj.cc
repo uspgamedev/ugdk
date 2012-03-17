@@ -10,8 +10,7 @@ using std::vector;
 using std::list;
 
 VirtualObj Bind::operator() (list<VirtualObj>& args) const {
-    args.push_front(obj_);
-    return obj_[method_name_](args);
+    return obj_[method_name_](obj_ >> args);
 }
 
 VirtualObj VirtualObj::operator() (const list<VirtualObj>& args) const {

@@ -155,6 +155,11 @@ VirtualObj::List& operator << (VirtualObj::List& lhs, const VirtualObj& rhs) {
     return lhs;
 }
 
+VirtualObj::List& operator >> (const VirtualObj& lhs, VirtualObj::List& rhs) {
+    rhs.push_front(lhs);
+    return rhs;
+}
+
 } /* namespace script */
 } /* namespace ugdk */
 
