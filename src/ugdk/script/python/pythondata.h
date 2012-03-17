@@ -30,6 +30,9 @@ class PythonData : public VirtualData {
     bool UnwrapBoolean() const;
     int UnwrapInteger() const;
     double UnwrapNumber() const;
+    Vector UnwrapVector() const;
+    List UnwrapList() const;
+    Map UnwrapMap() const;
 
     /// Tries to wrap the given data with the given type into this object.
     virtual void Wrap(void* data, const VirtualType& type);
