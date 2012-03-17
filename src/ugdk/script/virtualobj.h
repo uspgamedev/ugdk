@@ -150,12 +150,12 @@ inline Bind VirtualObj::operator|(const std::string& method_name) {
     return Bind(*this, method_name);
 }
 
-VirtualObj::List& operator << (VirtualObj::List& lhs, const VirtualObj& rhs) {
+inline VirtualObj::List& operator << (VirtualObj::List& lhs, const VirtualObj& rhs) {
     lhs.push_back(rhs);
     return lhs;
 }
 
-VirtualObj::List& operator >> (const VirtualObj& lhs, VirtualObj::List& rhs) {
+inline VirtualObj::List& operator >> (const VirtualObj& lhs, VirtualObj::List& rhs) {
     rhs.push_front(lhs);
     return rhs;
 }

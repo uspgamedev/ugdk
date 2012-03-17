@@ -35,7 +35,7 @@ ScriptScene::ScriptScene() : ugdk::Scene() {
 ScriptScene::~ScriptScene() { delete objects_tree_; }
 
 void ScriptScene::GenerateMap() {
-	std::vector<VirtualObj> args;
+	std::list<VirtualObj> args;
 
     /* First we set the background */
     using ugdk::graphic::TexturedRectangle;

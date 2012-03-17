@@ -11,12 +11,12 @@ ScriptEntityStack::ScriptEntityStack(const VirtualObj& proxy) :
 	proxy_(proxy) {}
 
 int ScriptEntityStack::size() {
-	std::vector<VirtualObj> args;
-	return proxy_["__len__"](args).value<int>();
+	std::list<VirtualObj> args;
+    return (proxy_|"__len__")(args).value<int>();
 }
 
 ScriptEntity* ScriptEntityStack::pop() {
-	std::vector<VirtualObj> args;
-	return new ScriptEntity(proxy_["pop"](args));
+	std::list<VirtualObj> args;
+	return new ScriptEntity( (proxy_|"pop")(args) );
 }
 }
