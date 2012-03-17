@@ -1,14 +1,22 @@
 
 #include <ugdk/script/virtualobj.h>
 
+#include <algorithm>
+
 namespace ugdk {
 namespace script {
 
 using std::vector;
+using std::list;
 
-VirtualObj VirtualObj::operator() (const vector<VirtualObj>& args) const {
+VirtualObj Bind::operator() (list<VirtualObj>& args) const {
+    args.push_front(obj_);
+    return obj_[method_name_](args);
+}
+
+VirtualObj VirtualObj::operator() (const list<VirtualObj>& args) const {
     vector<VirtualData::Ptr> arglist;
-    vector<VirtualObj>::const_iterator it;
+    list<VirtualObj>::const_iterator it;
     for (it = args.begin(); it != args.end(); ++it) {
         // Wrappers of executed VObj (we) and of the VObjs passed as
         // arguments must be the same.

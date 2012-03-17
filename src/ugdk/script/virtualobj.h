@@ -7,8 +7,12 @@
 #include <ugdk/script/langwrapper.h>
 #include <ugdk/script/virtualprimitive.h>
 
+#include <list>
+
 namespace ugdk {
 namespace script {
+
+class Bind;
 
 /// A proxy class wich represents virtual objects from scripting languages.
 /**
@@ -20,7 +24,8 @@ class VirtualObj {
 
   public:
 
-    typedef std::pair<VirtualObj,VirtualObj> VirtualEntry;
+    typedef std::pair<VirtualObj,VirtualObj>    VirtualEntry;
+    typedef std::list<VirtualObj>               List;
 
     /// Builds an <i>empty</i> virtual object.
     /** Attempting to use any method in a virtual object created this way will
@@ -62,7 +67,7 @@ class VirtualObj {
 
 	operator bool() const { return valid(); }
 
-	VirtualObj operator() (const std::vector<VirtualObj>& args) const;
+	VirtualObj operator() (const std::list<VirtualObj>& args) const;
 
 	VirtualObj attribute(const VirtualObj& key) const {
         return VirtualObj(data_->GetAttribute(key.data_));
@@ -89,6 +94,8 @@ class VirtualObj {
 	VirtualEntry operator,(const VirtualObj& rhs) {
 	    return VirtualEntry(*this, rhs);
 	}
+
+	Bind operator|(const std::string& method_name);
 
 	VirtualObj operator<<(const VirtualEntry& entry) {
 	    return set_attribute(entry.first, entry.second);
@@ -125,6 +132,28 @@ class VirtualObj {
 	VirtualData::Ptr data_;
 
 };
+
+class Bind {
+  public:
+    Bind(VirtualObj& obj, const std::string& method_name) :
+        obj_(obj),
+        method_name_(obj.wrapper()) {
+        method_name_.set_value(method_name);
+    }
+    VirtualObj operator() (std::list<VirtualObj>& args) const;
+  private:
+    VirtualObj&   obj_;
+    VirtualObj    method_name_;
+};
+
+inline Bind VirtualObj::operator|(const std::string& method_name) {
+    return Bind(*this, method_name);
+}
+
+VirtualObj::List& operator << (VirtualObj::List& lhs, const VirtualObj& rhs) {
+    lhs.push_back(rhs);
+    return lhs;
+}
 
 } /* namespace script */
 } /* namespace ugdk */
