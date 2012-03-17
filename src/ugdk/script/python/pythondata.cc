@@ -35,8 +35,8 @@ double PythonData::UnwrapNumber() const {
 
 /*************/
 template <class T>
-static T UnwrapSequence(PyObject* py_data_, LangWrapper* wrapper_) {
-    T seq = T;
+static T UnwrapSequence(PyObject* py_data_, PythonWrapper* wrapper_) {
+    T seq = T();
     if (py_data_ == NULL)   return seq;
     if (!PySequence_Check(py_data_)) return seq;
 
@@ -52,18 +52,22 @@ static T UnwrapSequence(PyObject* py_data_, LangWrapper* wrapper_) {
 }
 /*************/
 
-Vector PythonData::UnwrapVector() const {
-    UnwrapSequence<Vector>(py_data_, wrapper_);
+VirtualData::Vector PythonData::UnwrapVector() const {
+    return UnwrapSequence<Vector>(py_data_, wrapper_);
 }
-List PythonData::UnwrapList() const {
-    UnwrapSequence<List>(py_data_, wrapper_);
+VirtualData::List PythonData::UnwrapList() const {
+    return UnwrapSequence<List>(py_data_, wrapper_);
 }
-Map PythonData::UnwrapMap() const {
-    Map d = Map;
+VirtualData::Map PythonData::UnwrapMap() const {
+    Map d = Map();
     if (py_data_ == NULL)   return d;
     if (!PyMapping_Check(py_data_)) return d;
 
-    PyObject* items = PyMapping_Items(py_data_); //items is new ref
+    PyObject* items_func = PyObject_GetAttrString(py_data_, "items"); //new ref
+    if (items_func == NULL) return d;
+    PyObject* items = PyObject_CallObject(items_func, NULL);  //new ref
+    Py_XDECREF(items_func);
+    //PyObject* items = PyMapping_Items(py_data_); //items is new ref
     if (items == NULL)   return d;    
 
     Py_ssize_t size = PySequence_Length(items);
@@ -71,15 +75,19 @@ Map PythonData::UnwrapMap() const {
     PythonData *key_data, *value_data;
     for (Py_ssize_t i = 0; i < size; i++) {
         item = PySequence_GetItem(items, i); //returns new ref, NULL on failure
+        if (item == NULL)   continue;
 
-        key = WAT;
-        value = WAT;
+        key = PySequence_GetItem(item, 0);  //key -> new ref
+        value = PySequence_GetItem(item, 1);  //value -> new ref
 
         key_data = new PythonData(wrapper_, key, true); //PythonData takes care of the new ref
         value_data = new PythonData(wrapper_, value, true); //PythonData takes care of the new ref
 
         d[ VirtualData::Ptr(key_data) ] = VirtualData::Ptr(value_data);
+        
+        Py_XDECREF(item);
     }
+    Py_XDECREF(items);
     
     return d;
 }
