@@ -20,9 +20,10 @@ void ScriptEntity::Update(double dt) {
 		if (is_destroyed()) { return; }
         VirtualObj vdt = VirtualObj(proxy_.wrapper());
         vdt.set_value(dt);
-        std::vector<VirtualObj> args;
+        std::list<VirtualObj> args;
         args.push_back(vdt);
-        proxy_["Update"](args);
+        //proxy_["Update"](args);
+        (proxy_ | "Update")(args);
 }
 
 bool ScriptEntity::is_destroyed() {
@@ -48,8 +49,9 @@ ugdk::graphic::Node* ScriptEntity::energy_hud() const {
 }
 
 bool ScriptEntity::has_new_objects() {
-	std::vector<VirtualObj> args;
-	return proxy_["new_objects"]["__len__"](args).value<int>() > 0;
+	std::list<VirtualObj> args;
+	//return proxy_["new_objects"]["__len__"](args).value<int>() > 0;
+	return (proxy_["new_objects"] | "__len__")(args).value<int>() > 0;
 }
 
 VirtualObj ScriptEntity::new_objects() {
@@ -79,12 +81,10 @@ bool ScriptEntity::IsColliding(ScriptEntity* obj) const {
 }
 
 void ScriptEntity::HandleCollision(ScriptEntity* target) {
-	std::vector<VirtualObj> args;
+	std::list<VirtualObj> args;
 	args.push_back( VirtualObj(target->proxy_) );
-	/*VirtualObj a = VirtualObj(proxy_.wrapper());
-	a.set_value<int>(42);
-	args.push_back(a);*/
-	proxy_["HandleCollision"](args);
+	//proxy_["HandleCollision"](args);
+    (proxy_ | "HandleCollision")(args);
 }
 
 
