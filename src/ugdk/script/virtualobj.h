@@ -146,6 +146,18 @@ class Bind {
     VirtualObj    method_name_;
 };
 
+class TempList {
+  public:
+    TempList(const VirtualObj& first, const VirtualObj& second) :
+        l_() {
+        l_.push_back(first);
+        l_.push_back(second);
+    }
+    operator VirtualObj::List&() { return l_; }
+  private:
+    VirtualObj::List l_;
+};
+
 inline Bind VirtualObj::operator|(const std::string& method_name) {
     return Bind(*this, method_name);
 }
