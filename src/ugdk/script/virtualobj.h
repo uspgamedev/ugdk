@@ -8,6 +8,8 @@
 #include <ugdk/script/virtualprimitive.h>
 
 #include <list>
+#include <vector>
+#include <map>
 
 namespace ugdk {
 namespace script {
@@ -27,6 +29,8 @@ class VirtualObj {
 
     typedef std::pair<VirtualObj,VirtualObj>    VirtualEntry;
     typedef std::list<VirtualObj>               List;
+    typedef std::vector<VirtualObj>             Vector;
+    typedef std::map<VirtualObj,VirtualObj>     Map;
 
     /// Builds an <i>empty</i> virtual object.
     /** Attempting to use any method in a virtual object created this way will
@@ -47,6 +51,21 @@ class VirtualObj {
 	T value() const {
 	    return VirtualPrimitive<T>::value(data_);
 	}
+
+	template <>
+    List value<List>() const {
+        return data_->UnwrapList();
+    }
+
+    template <>
+    Vector value<Vector>() const {
+        return data_->UnwrapVector();
+    }
+
+    template <>
+    Map value<Map>() const {
+        return data_->UnwrapMap();
+    }
 
 	template <class T>
 	void set_value(T val) {
