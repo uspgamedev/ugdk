@@ -26,6 +26,9 @@ class EntityInterface:
         self.id = EntityInterface.nextID
         EntityInterface.nextID += 1
 
+    def ClearNewObjects(self): ###
+        self.new_objects = []
+
     def GetPos(self):
         return self.node.modifier().offset()
 
