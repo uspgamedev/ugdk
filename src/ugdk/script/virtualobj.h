@@ -13,6 +13,7 @@ namespace ugdk {
 namespace script {
 
 class Bind;
+class TempList;
 
 /// A proxy class wich represents virtual objects from scripting languages.
 /**
@@ -91,25 +92,20 @@ class VirtualObj {
         );
     }
 
-	VirtualEntry operator,(const VirtualObj& rhs) {
-	    return VirtualEntry(*this, rhs);
-	}
+	TempList operator,(const VirtualObj& rhs) const;
+
+    List& operator,(List& rhs) const {
+        rhs.push_front(*this);
+        return rhs;
+    }
 
 	Bind operator|(const std::string& method_name);
 
-	VirtualObj operator<<(const VirtualEntry& entry) {
-	    return set_attribute(entry.first, entry.second);
+	VirtualObj operator<<(const List& entry) {
+	    List::const_iterator it = entry.begin();
+	    return set_attribute(*(it), *(++it));
 	}
-/*
-    // Does not work anymore.
-    template <class T>
-    static VirtualObj Create (T obj, LangWrapper* wrapper) {
-        if (!wrapper) return VirtualObj();
-        VirtualData::Ptr new_data = wrapper->NewData();
-        new_data->Wrap(obj); // FIXME
-        return VirtualObj(new_data);
-    }
-*/
+
 	template <class T>
 	static VirtualObj Create (T* obj, LangWrapper* wrapper) {
 	    if (!wrapper) return VirtualObj();
@@ -140,7 +136,9 @@ class Bind {
         method_name_(obj.wrapper()) {
         method_name_.set_value(method_name);
     }
-    VirtualObj operator() (std::list<VirtualObj>& args) const;
+    VirtualObj operator() (std::list<VirtualObj>& args) const {
+        return obj_[method_name_]((obj_, args));
+    }
   private:
     VirtualObj&   obj_;
     VirtualObj    method_name_;
@@ -148,28 +146,27 @@ class Bind {
 
 class TempList {
   public:
+    operator VirtualObj::List&() { return l_; }
+    TempList& operator,(const VirtualObj& rhs) {
+        l_.push_back(rhs);
+        return *this;
+    }
+  private:
+    friend class VirtualObj;
     TempList(const VirtualObj& first, const VirtualObj& second) :
         l_() {
         l_.push_back(first);
         l_.push_back(second);
     }
-    operator VirtualObj::List&() { return l_; }
-  private:
     VirtualObj::List l_;
 };
 
+inline TempList VirtualObj::operator,(const VirtualObj& rhs) const {
+    return TempList(*this, rhs);
+}
+
 inline Bind VirtualObj::operator|(const std::string& method_name) {
     return Bind(*this, method_name);
-}
-
-inline VirtualObj::List& operator << (VirtualObj::List& lhs, const VirtualObj& rhs) {
-    lhs.push_back(rhs);
-    return lhs;
-}
-
-inline VirtualObj::List& operator >> (const VirtualObj& lhs, VirtualObj::List& rhs) {
-    rhs.push_front(lhs);
-    return rhs;
 }
 
 } /* namespace script */

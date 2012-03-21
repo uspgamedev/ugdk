@@ -9,10 +9,6 @@ namespace script {
 using std::vector;
 using std::list;
 
-VirtualObj Bind::operator() (list<VirtualObj>& args) const {
-    return obj_[method_name_](obj_ >> args);
-}
-
 VirtualObj VirtualObj::operator() (const list<VirtualObj>& args) const {
     vector<VirtualData::Ptr> arglist;
     list<VirtualObj>::const_iterator it;
