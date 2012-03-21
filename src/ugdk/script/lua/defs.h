@@ -11,14 +11,16 @@ typedef int (*lua_CFunction)(lua_State*);
 #endif
 
 #include <list>
+#include <map>
 
 namespace ugdk {
 namespace script {
 namespace lua {
 
-typedef int                 DataID;
-typedef std::list<DataID>   DataBuffer;
-typedef void*               UData;
+typedef int                     DataID;
+typedef std::list<DataID>       DataBuffer;
+typedef std::map<DataID,DataID> DataMap;
+typedef void*                   UData;
 
 template <class T>
 UData AsUData(T* p) { return static_cast<UData>(p); }

@@ -46,6 +46,10 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     template <class T>
     static int UnwrapPrimitive(lua_State* L);
 
+    static int UnwrapList(lua_State* L);
+    static int UnwrapVector(lua_State* L);
+    static int UnwrapMap(lua_State* L);
+
     /// Safely executes the object mapped by a data ID. [-4,+0,?]
     /**
      ** Lua arguments:
@@ -121,7 +125,7 @@ int DataGear::UnwrapPrimitive(lua_State* L) {
 
     if (!dtgear.GetData(id)) {
         L_.pushnil();
-    } // else the string will already be on top
+    } // else the data will already be on top
 
     if (!L_.isprimitive<T>(-1))
         return luaL_error(L, "Could not unwrap primitive from id #%d", id);

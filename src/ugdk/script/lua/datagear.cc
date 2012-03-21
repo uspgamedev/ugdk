@@ -84,6 +84,58 @@ int DataGear::UnwrapData(lua_State* L) {
 
 }
 
+int DataGear::UnwrapList(lua_State* L) {
+/*
+    State L_(L);
+
+    L_.settop(3);
+    GETARG(L_, 1, DataGear, dtgear);
+    DataID table_id = L_.aux().checkintteger(2);
+    GETARG(L_, 3, DataBuffer, data_list);
+    L_.settop(0);
+
+    // Pushes the data table. It will be on index 1.
+    if (!dtgear.PushDataTable())
+        return 0;
+
+    // Pushes the unwrapping table. It will be on index 2.
+    if (!dtgear.PushData(1, table_id))
+        return 0;
+
+    if (!L_.istable(2))
+        return luaL_error(L, "Could not unwrap table from id #%d", table_id);
+
+    int i = 1;
+    while (1) {
+        // Pushes the i-th element. It will be on index 3.
+        L_.rawgeti(2, i);
+        if (L_.isnil(3)) break;
+        DataID id;
+        {
+            L_.pushcfunction(DataGear::GenerateID);
+            L_.pushudata(&dtgear);
+            L_.call(1,1);
+            id = L_.tointeger(-1);
+            L_.pop(1);
+        }
+        // Pops the i-th element, storing it in the datatable.
+        dtgear.PopData(1, id);
+        data_list.push_back(id);
+        ++i;
+    }
+*/
+
+    return 0;
+}
+
+int DataGear::UnwrapVector(lua_State* L) {
+    return 0;
+}
+
+int DataGear::UnwrapMap(lua_State* L) {
+    return 0;
+}
+
 int DataGear::Execute(lua_State* L) {
     State L_(L);
 
