@@ -207,7 +207,7 @@ VirtualData::Ptr PythonData::GetAttribute(Ptr key) {
         if (PyCallable_Check(attr) && PyObject_HasAttrString(attr, "__func__") ) {
             /*return attr.__func__, so that we always return a function or unbinded method (without self)*/
             PyObject* original = attr;
-            
+
             attr = PyObject_GetAttrString(original, "__func__"); //another new ref
             Py_XDECREF(original);
         }

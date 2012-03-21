@@ -2,6 +2,7 @@
 #define ASTEROIDS_SCRIPTENTITYSTACK_H
 
 #include <ugdk/script/virtualobj.h>
+#include <list>
 
 namespace asteroids {
 	class ScriptEntity;
@@ -19,6 +20,7 @@ public:
 	ScriptEntity* pop();
 private:
     ugdk::script::VirtualObj proxy_;
+    std::list<ugdk::script::VirtualObj> objects_;
 };
 
 }

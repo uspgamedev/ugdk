@@ -49,13 +49,18 @@ ugdk::graphic::Node* ScriptEntity::energy_hud() const {
 }
 
 bool ScriptEntity::has_new_objects() {
-	std::list<VirtualObj> args;
-	//return proxy_["new_objects"]["__len__"](args).value<int>() > 0;
-	return (proxy_["new_objects"] | "__len__")(args).value<int>() > 0;
+//	std::list<VirtualObj> args;
+//    args.push_back(proxy_);
+//	return proxy_["new_objects"]["__len__"](args).value<int>() > 0;
+	//return (proxy_["new_objects"] | "__len__")(args).value<int>() > 0;
+    return proxy_["new_objects"].value< std::list<VirtualObj> >().size();
 }
 
 VirtualObj ScriptEntity::new_objects() {
-	return proxy_["new_objects"];
+    VirtualObj objs = proxy_["new_objects"];
+    std::list<VirtualObj> args;
+    (proxy_|"ClearNewObjects")(args);
+	return objs;
 }
 
 Vector2D ScriptEntity::pos() const {
