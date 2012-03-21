@@ -52,21 +52,6 @@ class VirtualObj {
 	    return VirtualPrimitive<T>::value(data_);
 	}
 
-	template <>
-    List value<List>() const {
-        return data_->UnwrapList();
-    }
-
-    template <>
-    Vector value<Vector>() const {
-        return data_->UnwrapVector();
-    }
-
-    template <>
-    Map value<Map>() const {
-        return data_->UnwrapMap();
-    }
-
 	template <class T>
 	void set_value(T val) {
 	    VirtualPrimitive<T>::set_value(data_, val);
@@ -147,6 +132,42 @@ class VirtualObj {
 	VirtualData::Ptr data_;
 
 };
+
+template <class T, class U>
+T ConvertSequence (const U& data_seq) {
+    T obj_seq;
+    typename U::const_iterator it;
+    for (it = data_seq.begin(); it != data_seq.end(); ++it)
+        obj_seq.push_back(VirtualObj(*it));
+    return obj_seq;
+}
+
+template <class T, class U>
+T ConvertTable (const U& data_seq) {
+    T obj_seq;
+    typename U::const_iterator it;
+    for (it = data_seq.begin(); it != data_seq.end(); ++it)
+        obj_seq.insert(std::pair<VirtualObj, VirtualObj>(
+            VirtualObj(it->first),
+            VirtualObj(it->second)
+        ));
+    return obj_seq;
+}
+
+template <>
+inline VirtualObj::List VirtualObj::value<VirtualObj::List>() const {
+    return ConvertSequence<List>(data_->UnwrapList());
+}
+
+template <>
+inline VirtualObj::Vector VirtualObj::value<VirtualObj::Vector>() const {
+    return ConvertSequence<Vector>(data_->UnwrapVector());
+}
+
+template <>
+inline VirtualObj::Map VirtualObj::value<VirtualObj::Map>() const {
+    return ConvertTable<Map>(data_->UnwrapMap());
+}
 
 class Bind {
   public:
