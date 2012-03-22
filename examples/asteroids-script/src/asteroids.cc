@@ -50,6 +50,52 @@ static void InitScripts() {
     SCRIPT_MANAGER()->Register("Python", py_wrapper);
 }
 
+static void SurpriseLuaTest() {
+
+    puts("=== START Surprise Lua tests! ===");
+    VirtualObj obj = SCRIPT_MANAGER()->LoadModule("main");
+
+    puts("Checking results...");
+    ugdk::Vector2D* vec = obj["v"].value<ugdk::Vector2D*>();
+    if (!vec) puts("FAILED.");
+    else {
+        printf("Result 1: ( %f , %f )\n", vec->x, vec->y);
+    }
+
+    string text = obj["str"].value<string>();
+    if (!text.size()) puts("FAILED TEXT.");
+    else printf("Result 2: %s\n", text.c_str());
+
+    bool boolean = obj["bool"].value<bool>();
+    if (!boolean) puts("FAILED BOOLEAN.");
+    else printf("Result 3: %d\n", boolean);
+
+    int integer = obj["integer"].value<int>();
+    if (!integer) puts("FAILED INTEGER.");
+    else printf("Result 4: %d\n", integer);
+
+    double number = obj["number"].value<double>();
+    if (!number) puts("FAILED NUMBER.");
+    else printf("Result 5: %f\n", number);
+
+    obj["ls"](VirtualObj::List(1,obj));
+
+    puts("Printing list...");
+    VirtualObj::List objlist = obj["list"].value<VirtualObj::List>();
+    if (!objlist.size()) puts("FAILED List.");
+    else for (VirtualObj::List::iterator it = objlist.begin();
+              it != objlist.end();
+              ++it)
+        obj["print"](VirtualObj::List(1,*it));
+
+    VirtualObj obj2(obj.wrapper());
+
+    obj2.set_value("hahahahaha");
+    obj["print"](VirtualObj::List(1,obj2));
+
+    puts("=== Lua tests are finished. ===");
+}
+
 
 int main(int argc, char *argv[]) {
 
@@ -67,6 +113,8 @@ int main(int argc, char *argv[]) {
 
     InitScripts();
     ugdk::Engine::reference()->Initialize(engine_config);
+
+    SurpriseLuaTest();
 
     VirtualObj config = SCRIPT_MANAGER()->LoadModule("Config");
 

@@ -51,23 +51,29 @@ double LuaData::UnwrapNumber() const {
     return UnwrapPrimitive<double>(wrapper_, id_, 0.0);
 }
 
+template <class T>
+static T UnwrapSequence(LuaWrapper* wrapper,
+                        DataID seq_id) {
+    DataBuffer id_list;
+    if (!wrapper->data_gear()
+        .SafeCall(DataGear::UnwrapList)
+        .Arg(seq_id)
+        .Arg(&id_list)
+        .NoResult())
+        return T();
+    T data_seq;
+    DataBuffer::iterator it;
+    for (it = id_list.begin(); it != id_list.end(); ++it)
+        data_seq.push_back(VirtualData::Ptr(new LuaData(wrapper, *it)));
+    return data_seq;
+}
+
 LuaData::Vector LuaData::UnwrapVector() const {
-    return Vector();
+    return UnwrapSequence<Vector>(wrapper_, id_);
 }
 
 LuaData::List LuaData::UnwrapList() const {
-    DataBuffer id_list;
-    if (!wrapper_->data_gear()
-        .SafeCall(DataGear::WrapData)
-        .Arg(id_)
-        .Arg(&id_list)
-        .NoResult())
-        return List();
-    List data_list;
-    DataBuffer::iterator it;
-    for (it = id_list.begin(); it != id_list.end(); ++it)
-        data_list.push_back(Ptr(new LuaData(wrapper_, *it)));
-    return data_list;
+    return UnwrapSequence<List>(wrapper_, id_);
 }
 
 LuaData::Map LuaData::UnwrapMap() const {
