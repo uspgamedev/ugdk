@@ -56,7 +56,18 @@ LuaData::Vector LuaData::UnwrapVector() const {
 }
 
 LuaData::List LuaData::UnwrapList() const {
-    return List();
+    DataBuffer id_list;
+    if (!wrapper_->data_gear()
+        .SafeCall(DataGear::WrapData)
+        .Arg(id_)
+        .Arg(&id_list)
+        .NoResult())
+        return List();
+    List data_list;
+    DataBuffer::iterator it;
+    for (it = id_list.begin(); it != id_list.end(); ++it)
+        data_list.push_back(Ptr(new LuaData(wrapper_, *it)));
+    return data_list;
 }
 
 LuaData::Map LuaData::UnwrapMap() const {
@@ -65,11 +76,11 @@ LuaData::Map LuaData::UnwrapMap() const {
 
 void LuaData::Wrap(void* data, const VirtualType& type) {
     if (!wrapper_->data_gear()
-            .SafeCall(DataGear::WrapData)
-            .Arg(id_)
-            .Arg(data)
-            .Arg(type.FromLang(LANG(Lua)))
-            .NoResult())
+        .SafeCall(DataGear::WrapData)
+        .Arg(id_)
+        .Arg(data)
+        .Arg(type.FromLang(LANG(Lua)))
+        .NoResult())
         return; // TODO deal with error.
 }
 

@@ -47,8 +47,7 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     static int UnwrapPrimitive(lua_State* L);
 
     static int UnwrapList(lua_State* L);
-    static int UnwrapVector(lua_State* L);
-    static int UnwrapMap(lua_State* L);
+    static int UnwrapTable(lua_State* L);
 
     /// Safely executes the object mapped by a data ID. [-4,+0,?]
     /**

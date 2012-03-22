@@ -84,55 +84,50 @@ int DataGear::UnwrapData(lua_State* L) {
 
 }
 
+static DataID MakeID(DataGear& dtgear) {
+    dtgear->pushcfunction(DataGear::GenerateID);
+    dtgear->pushudata(&dtgear);
+    dtgear->call(1,1);
+    DataID id = dtgear->tointeger(-1);
+    dtgear->pop(1);
+    return id;
+}
+
 int DataGear::UnwrapList(lua_State* L) {
-/*
     State L_(L);
 
     L_.settop(3);
     GETARG(L_, 1, DataGear, dtgear);
-    DataID table_id = L_.aux().checkintteger(2);
+    DataID list_id = L_.aux().checkintteger(2);
     GETARG(L_, 3, DataBuffer, data_list);
     L_.settop(0);
 
     // Pushes the data table. It will be on index 1.
     if (!dtgear.PushDataTable())
-        return 0;
+        return luaL_error(L, "Data table unavailable.");
 
     // Pushes the unwrapping table. It will be on index 2.
-    if (!dtgear.PushData(1, table_id))
-        return 0;
+    dtgear.PushData(1, list_id);
 
     if (!L_.istable(2))
-        return luaL_error(L, "Could not unwrap table from id #%d", table_id);
+        return luaL_error(L, "Could not unwrap table from id #%d", list_id);
 
     int i = 1;
     while (1) {
         // Pushes the i-th element. It will be on index 3.
         L_.rawgeti(2, i);
         if (L_.isnil(3)) break;
-        DataID id;
-        {
-            L_.pushcfunction(DataGear::GenerateID);
-            L_.pushudata(&dtgear);
-            L_.call(1,1);
-            id = L_.tointeger(-1);
-            L_.pop(1);
-        }
-        // Pops the i-th element, storing it in the datatable.
+        DataID id = MakeID(dtgear);
+        // Pops the i-th element, storing it into the datatable.
         dtgear.PopData(1, id);
         data_list.push_back(id);
         ++i;
     }
-*/
 
     return 0;
 }
 
-int DataGear::UnwrapVector(lua_State* L) {
-    return 0;
-}
-
-int DataGear::UnwrapMap(lua_State* L) {
+int DataGear::UnwrapTable(lua_State* L) {
     return 0;
 }
 
