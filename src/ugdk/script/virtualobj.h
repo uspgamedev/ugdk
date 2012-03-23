@@ -14,6 +14,7 @@
 namespace ugdk {
 namespace script {
 
+class VirtualObj;
 class Bind;
 class TempList;
 
@@ -71,6 +72,10 @@ class VirtualObj {
 	bool valid() const { return static_cast<bool>(data_); }
 
 	operator bool() const { return valid(); }
+
+	bool operator<(const VirtualObj& rhs) const {
+	    return data_.get() < rhs.data_.get();
+	}
 
 	VirtualObj operator() (const std::list<VirtualObj>& args) const;
 
@@ -142,16 +147,20 @@ T ConvertSequence (const U& data_seq) {
     return obj_seq;
 }
 
+/*static bool VObjLess (const VirtualObj& lhs, const VirtualObj& rhs) {
+    return lhs<rhs;
+}*/
+
 template <class T, class U>
-T ConvertTable (const U& data_seq) {
-    T obj_seq;
+T ConvertTable (const U& data_map) {
+    T obj_map;
     typename U::const_iterator it;
-    for (it = data_seq.begin(); it != data_seq.end(); ++it)
-        obj_seq.insert(std::pair<VirtualObj, VirtualObj>(
+    for (it = data_map.begin(); it != data_map.end(); ++it) {
+        obj_map.insert(std::pair<VirtualObj, VirtualObj>(
             VirtualObj(it->first),
-            VirtualObj(it->second)
-        ));
-    return obj_seq;
+            VirtualObj(it->second)));
+    }
+    return obj_map;
 }
 
 template <>

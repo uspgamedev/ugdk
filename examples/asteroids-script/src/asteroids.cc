@@ -88,6 +88,14 @@ static void SurpriseLuaTest() {
               ++it)
         obj["print"](VirtualObj::List(1,*it));
 
+    puts("Printing table...");
+    VirtualObj::Map objmap = obj["map"].value<VirtualObj::Map>();
+    if (!objmap.size()) puts("FAILED Map.");
+    else for (VirtualObj::Map::iterator it = objmap.begin();
+              it != objmap.end();
+              ++it)
+        obj["print"]((it->first, it->second));
+
     VirtualObj obj2(obj.wrapper());
 
     obj2.set_value("hahahahaha");
