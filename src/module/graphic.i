@@ -2,6 +2,7 @@
 %module ugdk_graphic
 
 %include <module/export.swig>
+%include <module/ownership.swig>
 %include "std_string.i"
 %include "std_vector.i"
 %include "std_map.i"
@@ -36,6 +37,12 @@
 %newobject ugdk::graphic::TextManager::GetTextFromFile(const std:: string& path, const std::string& font, int width = -1);
 %newobject ugdk::graphic::Texture::CreateFromFile(const std::string& filepath);
 %newobject ugdk::graphic::Texture::CreateRawTexture(int texture_width, int texture_height);
+
+/*
+enable_disown(Drawable*, drawable)
+ugdk::graphic::Node::set_drawable(Drawable* drawable);
+disable_disown(Drawable*, drawable)
+*/
 
 %rename(ComposeNew) ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);;
 
