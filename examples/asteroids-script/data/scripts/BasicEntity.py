@@ -65,7 +65,7 @@ class BasicEntity (EntityInterface):
         texture_obj = Engine_reference().resource_manager().texture_container().Load(texture_name)
         self.shape = TexturedRectangle( texture_obj, self.size )
         self.shape.set_hotspot(Drawable.CENTER)
-        self.shape.thisown = 0
+        #self.shape.thisown = 0
         self.node.set_drawable(self.shape)
         self.velocity = Vector2D(0.0, 0.0)
         self.last_velocity = None

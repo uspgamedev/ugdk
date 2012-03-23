@@ -38,12 +38,6 @@
 %newobject ugdk::graphic::Texture::CreateFromFile(const std::string& filepath);
 %newobject ugdk::graphic::Texture::CreateRawTexture(int texture_width, int texture_height);
 
-/*
-enable_disown(Drawable*, drawable)
-ugdk::graphic::Node::set_drawable(Drawable* drawable);
-disable_disown(Drawable*, drawable)
-*/
-
 %rename(ComposeNew) ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);;
 
 /*
@@ -62,7 +56,9 @@ check SWIG %delobject directive
 %include <ugdk/graphic/font.h>
 %include <ugdk/graphic/light.h>
 %include <ugdk/graphic/modifier.h>
+enable_disown(ugdk::graphic::Drawable* drawable)
 %include <ugdk/graphic/node.h>
+disable_disown(ugdk::graphic::Drawable* drawable)
 %include <ugdk/graphic/spritesheet.h>
 %include <ugdk/graphic/textmanager.h>
 %include <ugdk/graphic/videomanager.h>
