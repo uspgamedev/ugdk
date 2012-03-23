@@ -1,24 +1,16 @@
 
 ##############################################################
+interface no C++ para retornar a representacao em string
+de um VirtualObj
+
+##############################################################
 REALMENTE precisamos cuidar do problema de ownership steal
 de algumas coisas da ugdk (mostly do Node)
 
-##############################################################
-Problema em chamar um método de um objeto de script pelo C++
-Pois no Python não precisa passar o self, enquanto no Lua
-precisa
 
 ##############################################################
-Problemas em, no C++, receber uma lista vinda dos scripts,
-contendo alguns objetos.
-Se os modulos tenham feito o %template dessa lista/tipoObjeto
-ai eh capaz de não ter problema, mas para por exemplo receber
-uma lista de VObjs que serao usados como tal, nao ha nada
-para ajudar com isso...
-
-##############################################################
-Melhorar suporte do VObj a listas/iteradores (relacionado com
-problema acima)
+Implementar metodo para passar listas/maps para os scripts
+(WrapList, WrapMap e tal, os contrarios existem...)
 
 ##############################################################
 CMake no Windows gera projetos de VS bugados...

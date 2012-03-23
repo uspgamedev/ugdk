@@ -21,6 +21,7 @@ class Shockwave (GravityWell):
         self.shape.set_hotspot(Drawable.CENTER)
         self.shape.thisown = 0
         self.node.set_drawable(self.shape)
+        self.node.modifier().set_alpha(0.5)
         self.scale_range = [1.0, radius_range[1]/radius_range[0]]
         self.affected_targets = []
         self.shock_damage = 30.0    # done once when shockwave hits a target
