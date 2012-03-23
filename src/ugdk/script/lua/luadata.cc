@@ -77,7 +77,22 @@ LuaData::List LuaData::UnwrapList() const {
 }
 
 LuaData::Map LuaData::UnwrapMap() const {
-    return Map();
+    DataMap id_table;
+    if (!wrapper_->data_gear()
+        .SafeCall(DataGear::UnwrapTable)
+        .Arg(id_)
+        .Arg(&id_table)
+        .NoResult())
+        return Map();
+    Map data_table;
+    DataMap::iterator it;
+    for (it = id_table.begin(); it != id_table.end(); ++it) {
+        data_table.insert(std::pair<VirtualData::Ptr, VirtualData::Ptr>(
+            Ptr(new LuaData(wrapper_, it->first)),
+            Ptr(new LuaData(wrapper_, it->second))
+        ));
+    }
+    return data_table;
 }
 
 void LuaData::Wrap(void* data, const VirtualType& type) {

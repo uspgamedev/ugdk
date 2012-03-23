@@ -19,5 +19,16 @@ bool = true
 integer = 42
 number = math.pi
 list = { 1, 2, "hey", "wat" }
+map = { first = 42, second = 73, [list] = false}
+
+print "<+>meta<+>"
+ls(getmetatable(v))
+print "<+>meta.fn<+>"
+ls(getmetatable(v)[".fn"])
+print "<+>meta.get<+>"
+ls(getmetatable(v)[".get"])
+print "<+>meta.set<+>"
+ls(getmetatable(v)[".set"])
+
 print "============ BYE FROM LUA"
 

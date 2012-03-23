@@ -128,6 +128,40 @@ int DataGear::UnwrapList(lua_State* L) {
 }
 
 int DataGear::UnwrapTable(lua_State* L) {
+    State L_(L);
+
+    L_.settop(3);
+    GETARG(L_, 1, DataGear, dtgear);
+    DataID table_id = L_.aux().checkintteger(2);
+    GETARG(L_, 3, DataMap, data_list);
+    L_.settop(0);
+
+    // Pushes the data table. It will be on index 1.
+    if (!dtgear.PushDataTable())
+        return luaL_error(L, "Data table unavailable.");
+
+    // Pushes the unwrapping table. It will be on index 2.
+    dtgear.PushData(1, table_id);
+
+    if (!L_.istable(2))
+        return luaL_error(L, "Could not unwrap table from id #%d", table_id);
+
+    L_.pushnil(); // at index 3, but is soon removed.
+    while (lua_next(L, 2)) {
+        // Here we have the key at index 3 and the value at index 4.
+        // Make indexes for both of them.
+        DataID  key_id = MakeID(dtgear),
+                value_id = MakeID(dtgear);
+        // Pops the current value, storing it into the datatable.
+        dtgear.PopData(1, value_id);
+        // Copies the key. This leaves the key at the end, allowinf lua_next to
+        // continue.
+        L_.pushvalue(3);
+        // Pops the current key's value, storing it into the datatable.
+        dtgear.PopData(1, key_id);
+        data_list[key_id] = value_id;
+    }
+
     return 0;
 }
 

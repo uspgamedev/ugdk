@@ -9,9 +9,31 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <functional>
 
 #include <ugdk/base/types.h>
 #include <ugdk/script/type.h>
+
+/*namespace ugdk {
+namespace script {
+class VirtualData;
+}
+}
+
+namespace std {
+
+template <>
+struct less<std::tr1::shared_ptr<ugdk::script::VirtualData> > :
+binary_function <std::tr1::shared_ptr<ugdk::script::VirtualData>,
+                 std::tr1::shared_ptr<ugdk::script::VirtualData>,
+                 bool> {
+    bool operator() (const std::tr1::shared_ptr<ugdk::script::VirtualData>& x,
+                     const std::tr1::shared_ptr<ugdk::script::VirtualData>& y)
+        const
+        {return x.get()<y.get();}
+};
+
+}*/
 
 namespace ugdk {
 
@@ -78,7 +100,7 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
 
 	/// Tries to execute ourselves as a function in a script language,
     /// passing the given arguments and returning the result.
-	virtual Ptr Execute(const std::vector<Ptr>& args) = 0;
+	virtual Ptr Execute(const Vector& args) = 0;
 
 	/// Tries to get a attribute with the given name from this object.
 	/**
