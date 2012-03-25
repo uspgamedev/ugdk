@@ -8,6 +8,7 @@
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/animationprotocol.h>
 #include <ugdk/util/languageword.h>
+#include <ugdk/util/gdd/cachedloader.h>
 
 #ifdef DEBUG
 #include <cstdio>
@@ -25,6 +26,8 @@ static T* NullLoad(const std::string& filepath) {
 
 namespace ugdk {
 namespace base {
+
+typedef gdd::CachedLoader<AnimationSet> AnimationLoader;
 
 ResourceManager::ResourceManager() 
     : 
@@ -50,6 +53,10 @@ graphic::Texture*     ResourceManager::GetTextureFromFile       (const std::stri
 
 graphic::Spritesheet* ResourceManager::GetSpritesheetFromTag    (const std::string& tag) {
     return RESOURCE_MANAGER()->spritesheet_container().Find(tag);
+}
+
+AnimationSet*         ResourceManager::GetAnimationSetFromFile  (const std::string& file) {
+    return RESOURCE_MANAGER()->animation_loader().Load(file, file);
 }
 
 graphic::Text*        ResourceManager::CreateTextFromLanguageTag(const std::string& tag) {
