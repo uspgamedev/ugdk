@@ -9,8 +9,19 @@
 #include <ugdk/util/animationprotocol.h>
 #include <ugdk/util/languageword.h>
 
+#ifdef DEBUG
+#include <cstdio>
+#include <typeinfo>
+#define TOSTRING(X) typeid(X).name()
+#endif
+
 template <class T>
-static T* NullLoad(const std::string& filepath) { return NULL; }
+static T* NullLoad(const std::string& filepath) { 
+#ifdef DEBUG
+    fprintf(stderr, "Warning: NullLoad<%s> called with path '%s'.", TOSTRING(T), filepath.c_str());
+#endif
+    return NULL;
+}
 
 namespace ugdk {
 namespace base {
