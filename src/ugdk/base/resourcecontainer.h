@@ -2,96 +2,34 @@
 #define UGDK_BASE_RESOURCECONTAINER_H_
 
 #include <string>
-#include <map>
-#ifdef DEBUG
-#include <cstdio>
-#include <typeinfo>
-#define TOSTRING(X) typeid(X).name()
-#endif
-#include <ugdk/base/simplecontainer.h>
 
 namespace ugdk {
 namespace base {
 
 template <class T>
-class ResourceContainer : public virtual SimpleContainer<T> {
-  private:
-	typedef std::map<std::string, T>   DataMap;
-	typedef typename DataMap::iterator DataIterator;
-    DataMap database_;
-
+class ResourceContainer {
+  protected: ResourceContainer() {}
   public:
-    ResourceContainer() {}
     virtual ~ResourceContainer() {}
 
-    void Insert(const std::string& tag, T val) {
-        DataIterator it = database_.find(tag);
-        if(it == database_.end()) {
-            database_[tag] = val;
-        } else {
-            #ifdef DEBUG
-                fprintf(stderr, "UGDK::ResourceContainer<%s> Error - Tag '%s' already exists.\n", TOSTRING(T), tag.c_str());
-            #endif
-        }
-    }
-
-    void Replace(const std::string& tag, T val) {
-        database_[tag] = val;
-    }
-
-    bool Exists(const std::string& tag) const {
-        return database_.count(tag) > 0;
-    }
-
-    T& Find(const std::string& tag) {
-        return database_[tag];
-    }
+    virtual void Insert( const std::string& tag, T val) = 0;
+    virtual void Replace(const std::string& tag, T val) = 0;
+    virtual bool Exists( const std::string& tag) const = 0;
+    virtual T&   Find(   const std::string& tag) = 0;
+    virtual T&   Load(   const std::string& filepath, const std::string& tag) = 0;
 };
 
 template <class T>
-class ResourceContainer<T*> : public virtual SimpleContainer<T*> {
-  private:
-	typedef std::map<std::string, T*>  DataMap;
-	typedef typename DataMap::iterator DataIterator;
-    DataMap database_;
-
+class ResourceContainer<T*> {
+  protected: ResourceContainer() {}
   public:
-    ResourceContainer() {}
-    virtual ~ResourceContainer() {
-		DataIterator it;
-        for(it = database_.begin(); it != database_.end(); ++it) {
-            delete it->second;
-        }
-    }
+    virtual ~ResourceContainer() {}
 
-    void Insert(const std::string& tag, T* val) {
-        DataIterator it = database_.find(tag);
-        if(it == database_.end() || it->second == NULL) {
-            database_[tag] = val;
-        } else {
-            #ifdef DEBUG
-                fprintf(stderr, "UGDK::ResourceContainer<%s> Error - Tag '%s' already exists.\n", TOSTRING(T), tag.c_str());
-            #endif
-        }
-    }
-
-    void Replace(const std::string& tag, T* val) {
-        DataIterator it = database_.find(tag);
-        if(it == database_.end() || it->second == NULL) {
-            database_[tag] = val;
-        } else {
-            delete it->second;
-            it->second = val;
-        }
-    }
-    
-    bool Exists(const std::string& tag) const {
-        return database_.count(tag) > 0;
-    }
-
-    T* Find(const std::string& tag) {
-        return database_[tag];
-    }
+    virtual void Insert( const std::string& tag, T* val) = 0;
+    virtual void Replace(const std::string& tag, T* val) = 0;
+    virtual bool Exists( const std::string& tag) const = 0;
+    virtual T*   Find(   const std::string& tag) = 0;
+    virtual T*   Load(   const std::string& filepath, const std::string& tag) = 0;
 };
 
 } // namespace base

@@ -35,11 +35,10 @@ set (FRAMEWORK_SRC
     ${SRC_DIR}/ugdk/audio/sample.h
     ${SRC_DIR}/ugdk/base/engine.cc
     ${SRC_DIR}/ugdk/base/engine.h
+    ${SRC_DIR}/ugdk/base/genericcontainer.h
     ${SRC_DIR}/ugdk/base/resourcecontainer.h
     ${SRC_DIR}/ugdk/base/resourcemanager.cc
     ${SRC_DIR}/ugdk/base/resourcemanager.h
-    ${SRC_DIR}/ugdk/base/texturecontainer.cc
-    ${SRC_DIR}/ugdk/base/texturecontainer.h
     ${SRC_DIR}/ugdk/base/types.h
     ${SRC_DIR}/ugdk/config/config.h
     ${SRC_DIR}/ugdk/graphic/drawable.h

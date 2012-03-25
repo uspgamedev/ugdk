@@ -1,23 +1,26 @@
 
-#include <ugdk/base/texturecontainer.h>
 #include <ugdk/base/resourcemanager.h>
 
 #include <ugdk/action/animationset.h>
 #include <ugdk/base/engine.h>
+#include <ugdk/base/genericcontainer.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/animationprotocol.h>
 #include <ugdk/util/languageword.h>
+
+template <class T>
+static T* NullLoad(const std::string& filepath) { return NULL; }
 
 namespace ugdk {
 namespace base {
 
 ResourceManager::ResourceManager() 
     : 
-    texture_container_(new TextureContainer),
-    spritesheet_container_(new ResourceContainer<graphic::Spritesheet*>),
+    texture_container_(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile)),
+    spritesheet_container_(new GenericContainer<graphic::Spritesheet*>(NullLoad<graphic::Spritesheet>)),
     animation_loader_(new AnimationLoader(new AnimationProtocol)),
-    word_container_(new ResourceContainer<LanguageWord*>) {}
+    word_container_(new GenericContainer<LanguageWord*>(NullLoad<LanguageWord>)) {}
 
 ResourceManager::~ResourceManager() {
     delete texture_container_;
@@ -28,6 +31,10 @@ ResourceManager::~ResourceManager() {
 
 graphic::Texture*     ResourceManager::GetTextureFromTag        (const std::string& tag) {
     return RESOURCE_MANAGER()->texture_container().Find(tag);
+}
+
+graphic::Texture*     ResourceManager::GetTextureFromFile       (const std::string& file) {
+    return RESOURCE_MANAGER()->texture_container().Load(file, file);
 }
 
 graphic::Spritesheet* ResourceManager::GetSpritesheetFromTag    (const std::string& tag) {
