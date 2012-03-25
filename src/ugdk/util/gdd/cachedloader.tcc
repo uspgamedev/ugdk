@@ -15,7 +15,7 @@ CachedLoader<T>::~CachedLoader() {
 }
 
 template <class T>
-T* CachedLoader<T>::Load(string gddfile_path) {
+T* CachedLoader<T>::Load(const string& gddfile_path) {
     T* cached_data = loadFromCache(gddfile_path);
     if (cached_data) return cached_data;
     return loadNewData(gddfile_path);
@@ -32,21 +32,21 @@ void CachedLoader<T>::ClearCache() {
 }
 
 template <class T>
-T* CachedLoader<T>::loadFromCache(string& gddfile_path) {
+T* CachedLoader<T>::loadFromCache(const string& gddfile_path) {
     DataIterator it = cache_.find(gddfile_path);
     if (it == cache_.end()) return NULL;
     else return it->second;
 }
 
 template <class T>
-T* CachedLoader<T>::loadNewData(string& gddfile_path) {
+T* CachedLoader<T>::loadNewData(const string& gddfile_path) {
     T* new_data = SimpleLoader<T>::Load(gddfile_path);
     if (new_data) addToCache(gddfile_path, new_data);
     return new_data;
 }
 
 template <class T>
-void CachedLoader<T>::addToCache(string& gddfile_path, T*& new_data) {
+void CachedLoader<T>::addToCache(const string& gddfile_path, T*& new_data) {
     cache_[gddfile_path] = new_data;
 }
 

@@ -16,7 +16,7 @@ class AbstractLoader {
 
     virtual ~AbstractLoader() { delete protocol_; }
 
-    virtual T* Load(std::string gddfile_path) = 0;
+    virtual T* Load(const std::string& gddfile_path) = 0;
 
     virtual void newData(T* new_data) = 0;
 

@@ -3,6 +3,7 @@
 #define UGDK_UTIL_GDD_CACHEDLOADER_TH_
 
 #include <ugdk/util/gdd/simpleloader.h>
+//#include <ugdk/base/resourcecontainer.h>
 #include <map>
 #include <string>
 
@@ -11,7 +12,7 @@ namespace ugdk {
 namespace gdd {
 
 template <class T>
-class CachedLoader : public SimpleLoader<T> {
+class CachedLoader : public SimpleLoader<T>/*, public virtual ResourceContainer<T>*/ {
 
   public:
 
@@ -19,7 +20,7 @@ class CachedLoader : public SimpleLoader<T> {
 
     ~CachedLoader();
 
-    T* Load(std::string gddfile_path);
+    T* Load(const std::string& gddfile_path);
 
     void ClearCache();
 
@@ -30,11 +31,11 @@ class CachedLoader : public SimpleLoader<T> {
 
   private:
 
-    T* loadFromCache(std::string& gddfile_path);
+    T* loadFromCache(const std::string& gddfile_path);
 
-    T* loadNewData(std::string& gddfile_path);
+    T* loadNewData(const std::string& gddfile_path);
 
-    void addToCache(std::string& gddfile_path, T*& new_data);
+    void addToCache(const std::string& gddfile_path, T*& new_data);
 
     DataMap cache_;
 

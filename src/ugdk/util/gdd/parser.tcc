@@ -17,7 +17,7 @@ using std::vector;
     ASSERT_PARSE(((status = parseChunk(reader)) == ParseStatus::OK), NO_MSG, status)
 
 template <class T>
-ParseStatus::Type Parser<T>::Parse(string gddfile_path) {
+ParseStatus::Type Parser<T>::Parse(const string& gddfile_path) {
     Reader read(gddfile_path);
     if (!read.Begin()) {
         fprintf(stderr, "Could not open file \"%s\"\n", gddfile_path.c_str());

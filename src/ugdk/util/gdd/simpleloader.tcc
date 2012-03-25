@@ -9,7 +9,7 @@ namespace gdd {
 using std::string;
 
 template <class T>
-T* SimpleLoader<T>::Load(string gddfile_path) {
+T* SimpleLoader<T>::Load(const string& gddfile_path) {
     Parser<T> parser(AbstractLoader<T>::protocol());
     switch(parser.Parse(gddfile_path)) {
       case ParseStatus::OK:
