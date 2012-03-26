@@ -29,18 +29,17 @@ namespace base {
 
 typedef gdd::CachedLoader<AnimationSet> AnimationLoader;
 
-ResourceManager::ResourceManager() 
-    : 
-    texture_container_(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile)),
-    spritesheet_container_(new GenericContainer<graphic::Spritesheet*>(NullLoad<graphic::Spritesheet>)),
-    animation_loader_(new AnimationLoader(new AnimationProtocol)),
-    word_container_(new GenericContainer<LanguageWord*>(NullLoad<LanguageWord>)) {}
+ResourceManager::ResourceManager() {    
+    add_container(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile));
+    add_container(new GenericContainer<graphic::Spritesheet*>(NullLoad<graphic::Spritesheet>));
+    add_container(new AnimationLoader(new AnimationProtocol));
+    add_container(new GenericContainer<LanguageWord*>(NullLoad<LanguageWord>));
+}
 
 ResourceManager::~ResourceManager() {
-    delete texture_container_;
-    delete spritesheet_container_;
-    delete animation_loader_;
-    delete word_container_;
+    for(std::map<const std::type_info*, ResourceContainerBase*>::iterator it = containers_.begin();
+        it != containers_.end(); ++it)
+        delete it->second;
 }
 
 graphic::Texture*     ResourceManager::GetTextureFromTag        (const std::string& tag) {

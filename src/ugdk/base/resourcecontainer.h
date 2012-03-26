@@ -6,8 +6,13 @@
 namespace ugdk {
 namespace base {
 
+class ResourceContainerBase {
+  protected: ResourceContainerBase() {}
+  public:    virtual ~ResourceContainerBase() {}
+};
+
 template <class T>
-class ResourceContainer {
+class ResourceContainer : public ResourceContainerBase {
   protected: ResourceContainer() {}
   public:
     virtual ~ResourceContainer() {}
@@ -20,7 +25,7 @@ class ResourceContainer {
 };
 
 template <class T>
-class ResourceContainer<T*> {
+class ResourceContainer<T*> : public ResourceContainerBase {
   protected: ResourceContainer() {}
   public:
     virtual ~ResourceContainer() {}
