@@ -11,6 +11,7 @@ if (LUA51_FOUND)
     
 else (LUA51_FOUND)
 
+  list (REMOVE_ITEM UGDK_SRC ${UGDK_LUA_SRC})
   message (WARNING "Could NOT find Lua5.1. No Lua5.1 script modules will be compiled.")
 
 endif (LUA51_FOUND)

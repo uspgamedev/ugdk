@@ -19,6 +19,7 @@ if (PYTHONLIBS_FOUND)
     
 else (PYTHONLIBS_FOUND)
 
+  list (REMOVE_ITEM UGDK_SRC ${UGDK_PYTHON_SRC})
   message (WARNING "Could NOT find Lua5.1. No Lua5.1 script modules will be compiled.")
 
 endif (PYTHONLIBS_FOUND)

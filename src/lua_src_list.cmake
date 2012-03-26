@@ -1,0 +1,18 @@
+SET(UGDK_LUA_SRC 
+    ./src/ugdk/script/lua/basegear.h 
+    ./src/ugdk/script/lua/state.h 
+    ./src/ugdk/script/lua/bootstrapgear.cc 
+    ./src/ugdk/script/lua/auxlib.h 
+    ./src/ugdk/script/lua/luawrapper.h 
+    ./src/ugdk/script/lua/luadata.h 
+    ./src/ugdk/script/lua/native/traceback.h 
+    ./src/ugdk/script/lua/primitive.h 
+    ./src/ugdk/script/lua/header.h 
+    ./src/ugdk/script/lua/datagear.cc 
+    ./src/ugdk/script/lua/luadata.cc 
+    ./src/ugdk/script/lua/luawrapper.cc 
+    ./src/ugdk/script/lua/datagear.h 
+    ./src/ugdk/script/lua/defs.h 
+    ./src/ugdk/script/lua/bootstrapgear.h 
+    ./src/ugdk/script/lua/basegear.cc 
+)

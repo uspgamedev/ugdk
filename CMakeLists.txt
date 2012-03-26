@@ -60,6 +60,8 @@ set (LIB_DIR lib)
 
 include (${SRC_DIR}/src_list.cmake)
 include (${SRC_DIR}/module_list.cmake)
+include (${SRC_DIR}/lua_src_list.cmake)
+include (${SRC_DIR}/py_src_list.cmake)
 
 # #define's que voce queira incluir na compilacao
 # separe por espacos
@@ -84,10 +86,10 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	set (LDFLAGS "${LDFLAGS} -mmacosx-version-min=10.5")
 endif ()
 
-# ${FRAMEWORK_SRC} esta' definido?
-if (NOT FRAMEWORK_SRC)
-    message (FATAL_ERROR "Error: FRAMEWORK_SRC not defined! Please do so in the file src/src_list.cmake!")
-endif (NOT FRAMEWORK_SRC)
+# ${UGDK_SRC} esta' definido?
+if (NOT UGDK_SRC)
+    message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
+endif (NOT UGDK_SRC)
 
 include_directories ("src")
 include (cmake/ugdk.cmake)
@@ -139,9 +141,9 @@ endif  (MSVC)
 include_directories ("externals/opengl")
 
 if (${LINK_TYPE} STREQUAL STATIC)
-    add_library (${FRAMEWORK_BUILDNAME} STATIC ${FRAMEWORK_SRC} ${GENERATED_SRC})
+    add_library (${FRAMEWORK_BUILDNAME} STATIC ${UGDK_SRC} ${GENERATED_SRC})
 elseif (${LINK_TYPE} STREQUAL SHARED)
-    add_library (${FRAMEWORK_BUILDNAME} SHARED ${FRAMEWORK_SRC} ${GENERATED_SRC})
+    add_library (${FRAMEWORK_BUILDNAME} SHARED ${UGDK_SRC} ${GENERATED_SRC})
 endif (${LINK_TYPE} STREQUAL STATIC)
 
 

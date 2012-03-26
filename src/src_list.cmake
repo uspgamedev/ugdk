@@ -1,4 +1,4 @@
-SET(FRAMEWORK_SRC 
+SET(UGDK_SRC 
     ./src/ugdk/portable/tr1.h 
     ./src/ugdk/input.h 
     ./src/ugdk/audio/sample.h 
