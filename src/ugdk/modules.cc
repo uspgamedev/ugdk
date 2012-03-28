@@ -1,8 +1,8 @@
 
 #include <ugdk/script/module.h>
 
-#include <ugdk/script/lua/luawrapper.h>
-#include <ugdk/script/python/pythonwrapper.h>
+#include <ugdk/script/languages/lua/luawrapper.h>
+#include <ugdk/script/languages/python/pythonwrapper.h>
 
 #define UGDK_MODULES_NUM 11
 

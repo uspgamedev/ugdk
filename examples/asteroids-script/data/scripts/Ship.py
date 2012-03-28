@@ -20,7 +20,7 @@ class Ship (BasicEntity):
         self.shot_cost = 5.0                # energy required to shoot the weakest projectile
         self.max_charge_time = 5.0          # max time that you can charge a shot in seconds
         self.charge_time = 0                # used internally for counting, in seconds
-        self.power_range = [0.5, 3.0]       # range in which the shot can be
+        self.power_range = [0.5, 5.0]       # range in which the shot can be
         self.speed = 100.0                  # |acceleration| in a given frame
         self.max_speed = 150.0              # max |velocity| ship can attain.
         self.projectile_speed = 170         # 

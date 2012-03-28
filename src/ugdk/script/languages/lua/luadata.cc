@@ -2,8 +2,8 @@
 #include <algorithm>
 #include <functional>
 
-#include <ugdk/script/lua/luadata.h>
-#include <ugdk/script/lua/datagear.h>
+#include <ugdk/script/languages/lua/luadata.h>
+#include <ugdk/script/languages/lua/datagear.h>
 
 namespace ugdk {
 namespace script {

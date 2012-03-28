@@ -6,7 +6,7 @@
 #include <list>
 #include <vector>
 
-#include <ugdk/script/lua/defs.h>
+#include <ugdk/script/languages/lua/defs.h>
 #include <ugdk/script/langwrapper.h>
 
 namespace ugdk {

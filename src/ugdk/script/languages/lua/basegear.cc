@@ -1,10 +1,10 @@
 
 #include <cstdio>
 
-#include <ugdk/script/lua/basegear.h>
-#include <ugdk/script/lua/auxlib.h>
+#include <ugdk/script/languages/lua/basegear.h>
+#include <ugdk/script/languages/lua/auxlib.h>
 
-#include <ugdk/script/lua/native/traceback.h>
+#include <ugdk/script/languages/lua/native/traceback.h>
 
 namespace ugdk {
 namespace script {

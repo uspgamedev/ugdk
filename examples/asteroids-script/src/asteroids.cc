@@ -24,9 +24,9 @@
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/langwrapper.h>
 #include <ugdk/script/virtualobj.h>
-#include <ugdk/script/lua/luawrapper.h>
-#include <ugdk/script/lua/header.h>
-#include <ugdk/script/python/pythonwrapper.h>
+#include <ugdk/script/languages/lua/luawrapper.h>
+#include <ugdk/script/languages/lua/header.h>
+#include <ugdk/script/languages/python/pythonwrapper.h>
 
 #include "scriptscene.h"
 

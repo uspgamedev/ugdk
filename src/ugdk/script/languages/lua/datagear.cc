@@ -1,10 +1,10 @@
 
 #include <cstdio>
 
-#include <ugdk/script/lua/datagear.h>
-#include <ugdk/script/lua/auxlib.h>
+#include <ugdk/script/languages/lua/datagear.h>
+#include <ugdk/script/languages/lua/auxlib.h>
 
-#include <ugdk/script/swig/swigluarun.h>
+#include <ugdk/script/languages/lua/swigluarun.h>
 
 namespace ugdk {
 namespace script {

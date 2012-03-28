@@ -2,7 +2,7 @@
 #ifndef UGDK_SCRIPT_LUA_PRIMITIVE_H_
 #define UGDK_SCRIPT_LUA_PRIMITIVE_H_
 
-#include <ugdk/script/lua/header.h>
+#include <ugdk/script/languages/lua/header.h>
 
 namespace ugdk {
 namespace script {

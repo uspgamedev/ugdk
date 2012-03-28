@@ -4,7 +4,7 @@
 #include <Python.h>
 #include <vector>
 #include <ugdk/script/virtualdata.h>
-#include <ugdk/script/python/pythonwrapper.h>
+#include <ugdk/script/languages/python/pythonwrapper.h>
 
 namespace ugdk {
 namespace script {

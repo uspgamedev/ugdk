@@ -12,13 +12,6 @@ SET(UGDK_SRC
     ./src/ugdk/math/vector2D.cc 
     ./src/ugdk/math/frame.cc 
     ./src/ugdk/script/virtualobj.cc 
-    ./src/ugdk/script/python/pythonwrapper.cc 
-    ./src/ugdk/script/python/pythondata.cc 
-    ./src/ugdk/script/lua/bootstrapgear.cc 
-    ./src/ugdk/script/lua/datagear.cc 
-    ./src/ugdk/script/lua/luadata.cc 
-    ./src/ugdk/script/lua/luawrapper.cc 
-    ./src/ugdk/script/lua/basegear.cc 
     ./src/ugdk/script/scriptmanager.cc 
     ./src/ugdk/graphic/videomanager.cc 
     ./src/ugdk/graphic/light.cc 

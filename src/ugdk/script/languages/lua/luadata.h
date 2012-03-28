@@ -5,8 +5,8 @@
 #include <ugdk/script/type.h>
 #include <ugdk/script/virtualdata.h>
 
-#include <ugdk/script/lua/defs.h>
-#include <ugdk/script/lua/luawrapper.h>
+#include <ugdk/script/languages/lua/defs.h>
+#include <ugdk/script/languages/lua/luawrapper.h>
 
 namespace ugdk {
 namespace script {

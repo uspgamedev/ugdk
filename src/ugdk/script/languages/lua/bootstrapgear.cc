@@ -1,9 +1,9 @@
 
 #include <cstdio>
 
-#include <ugdk/script/lua/bootstrapgear.h>
-#include <ugdk/script/lua/auxlib.h>
-#include <ugdk/script/lua/datagear.h>
+#include <ugdk/script/languages/lua/bootstrapgear.h>
+#include <ugdk/script/languages/lua/auxlib.h>
+#include <ugdk/script/languages/lua/datagear.h>
 
 namespace ugdk {
 namespace script {
