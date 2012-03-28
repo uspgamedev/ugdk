@@ -134,6 +134,9 @@ int main(int argc, char *argv[]) {
 	printf("Size in c++ = (%f, %f)\n", ugdk::Engine::reference()->video_manager()->video_size().x,
 										ugdk::Engine::reference()->video_manager()->video_size().y);
 
+    VirtualObj animations = SCRIPT_MANAGER()->LoadModule("Animations");
+    animations["InitializeSpritesheets"]();
+
     asteroids::ScriptScene* scene = new asteroids::ScriptScene();
     scene->GenerateMap();
 

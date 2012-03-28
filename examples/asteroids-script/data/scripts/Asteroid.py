@@ -12,7 +12,7 @@ class Asteroid (BasicEntity):
         self.size_factor = size_factor
         r = Asteroid.GetActualRadius(size_factor)
         hp = 120 * size_factor
-        BasicEntity.__init__(self, x, y, "asteroid%s.png" % (randint(1,3)), r, hp)
+        BasicEntity.__init__(self, x, y, "images/asteroid%s.png" % (randint(1,3)), r, hp)
         self.node.modifier().set_rotation( random() * 2 * pi )
         self.has_splitted = False
         

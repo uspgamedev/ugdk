@@ -1,5 +1,6 @@
 from ugdk.ugdk_math import Vector2D
 from BasicEntity import BasicEntity
+from Animations import CreateExplosionAtEntity
 
 class Projectile (BasicEntity):
     base_radius = 5.0
@@ -10,7 +11,7 @@ class Projectile (BasicEntity):
     def __init__(self, x, y, velocity, power):
         self.power = power
         r = Projectile.GetActualRadius(power)
-        BasicEntity.__init__(self, x, y, "projectile.png", r, 1)
+        BasicEntity.__init__(self, x, y, "images/projectile.png", r, 1)
         self.velocity = velocity
         self.damage = 25.0 * power
         self.lifetime = 10.0 * power
@@ -33,13 +34,16 @@ class Projectile (BasicEntity):
             # collision between projectiles, destroy both
             target.TakeDamage(666)
             self.is_destroyed = True
+            CreateExplosionAtEntity(self)
             #print "Projectiles exploding..."
         elif target.type == "Ship.Ship" or target.type == "Asteroid.Asteroid":
             target.TakeDamage(self.GetDamage(target.type))
             target.ApplyVelocity(self.velocity * (0.15*self.power))
             self.is_destroyed = True
+            CreateExplosionAtEntity(self)
             #print "Projectile damaging ", target.type
         elif target.type == "Planet.Planet":
             target.TakeDamage(self.GetDamage(target.type))
             self.is_destroyed = True
+            CreateExplosionAtEntity(self)
             #print "Projectile impacted planet"

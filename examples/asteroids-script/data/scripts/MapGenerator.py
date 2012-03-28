@@ -91,7 +91,7 @@ def Generate():
 
 def GetBackgroundDrawable():
     screenSize = Engine_reference().video_manager().video_size()
-    texture_obj = Engine_reference().resource_manager().texture_container().Load("background%s.jpg" % (random.randint(1,3)) )
+    texture_obj = Engine_reference().resource_manager().texture_container().Load("images/background%s.jpg" % (random.randint(1,3)) )
     background = TexturedRectangle( texture_obj, screenSize )
     #background.set_hotspot(Drawable.CENTER)
     background.thisown = 0
