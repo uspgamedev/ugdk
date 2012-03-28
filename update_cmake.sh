@@ -1,8 +1,8 @@
 #!/bin/bash
 
-FILES=`find ./src/ugdk/ -name *.cc`
-LUA_FILES=`find ./src/ugdk/script/lua -name *.cc`
-PYTHON_FILES=`find ./src/ugdk/script/python -name *.cc`
+FILES=`find ./src/ugdk/ -name *.cc -not -path "*/script/languages/*"`
+LUA_FILES=`find ./src/ugdk/script/languages/lua -name *.cc`
+PYTHON_FILES=`find ./src/ugdk/script/languages/python -name *.cc`
 cd src/module
 MODULES=`find | grep -o "[^/]*\.\(i\)$"`
 cd ../..

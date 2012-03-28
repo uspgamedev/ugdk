@@ -4,6 +4,7 @@ find_package (Lua51)
 if (LUA51_FOUND)
 
   include_directories (${LUA_INCLUDE_DIR})
+  set (UGDK_SRC ${UGDK_SRC} ${UGDK_LUA_SRC})
   set (UGDK_LIBRARIES ${UGDK_LIBRARIES} ${LUA_LIBRARIES})
   ugdk_add_scriptlang (lua)
 
@@ -11,8 +12,7 @@ if (LUA51_FOUND)
     
 else (LUA51_FOUND)
 
-  list (REMOVE_ITEM UGDK_SRC ${UGDK_LUA_SRC})
-  message (WARNING "Could NOT find Lua5.1. No Lua5.1 script modules will be compiled.")
+  message ("Could NOT find Lua5.1. No Lua5.1 script modules will be compiled.")
 
 endif (LUA51_FOUND)
 
