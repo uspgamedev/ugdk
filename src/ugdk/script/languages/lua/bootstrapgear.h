@@ -4,9 +4,9 @@
 
 #include <vector>
 
-#include <ugdk/script/lua/header.h>
-#include <ugdk/script/lua/basegear.h>
-#include <ugdk/script/lua/state.h>
+#include <ugdk/script/languages/lua/header.h>
+#include <ugdk/script/languages/lua/basegear.h>
+#include <ugdk/script/languages/lua/state.h>
 
 #include <ugdk/script/langwrapper.h>
 #include <ugdk/script/module.h>

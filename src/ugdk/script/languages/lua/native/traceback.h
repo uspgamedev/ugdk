@@ -2,7 +2,7 @@
 #ifndef UGDK_SCRIPT_LUA_NATIVE_TRACEBACK_H_
 #define UGDK_SCRIPT_LUA_NATIVE_TRACEBACK_H_
 
-#include <ugdk/script/lua/header.h>
+#include <ugdk/script/languages/lua/header.h>
 
 extern "C" {
 

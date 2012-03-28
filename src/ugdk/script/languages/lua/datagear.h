@@ -3,9 +3,9 @@
 #define UGDK_SCRIPT_LUA_DATAGEAR_H_
 
 #include <ugdk/script/type.h>
-#include <ugdk/script/lua/header.h>
-#include <ugdk/script/lua/state.h>
-#include <ugdk/script/lua/basegear.h>
+#include <ugdk/script/languages/lua/header.h>
+#include <ugdk/script/languages/lua/state.h>
+#include <ugdk/script/languages/lua/basegear.h>
 #include <ugdk/util/uncopyable.h>
 
 namespace ugdk {

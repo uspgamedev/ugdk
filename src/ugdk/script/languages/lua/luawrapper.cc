@@ -1,12 +1,12 @@
 
 
-#include <ugdk/script/lua/luawrapper.h>
+#include <ugdk/script/languages/lua/luawrapper.h>
 
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/virtualobj.h>
-#include <ugdk/script/lua/luadata.h>
-#include <ugdk/script/lua/bootstrapgear.h>
-#include <ugdk/script/lua/datagear.h>
+#include <ugdk/script/languages/lua/luadata.h>
+#include <ugdk/script/languages/lua/bootstrapgear.h>
+#include <ugdk/script/languages/lua/datagear.h>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/util/pathmanager.h>

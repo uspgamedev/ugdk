@@ -1,7 +1,7 @@
-#include <ugdk/script/python/pythondata.h>
+#include <ugdk/script/languages/python/pythondata.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>
-#include <ugdk/script/swig/swigpyrun.h>
+#include <ugdk/script/languages/python/swigpyrun.h>
 
 #include <memory>
 #include <cstdlib>

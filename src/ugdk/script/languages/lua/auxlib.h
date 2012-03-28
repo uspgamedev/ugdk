@@ -4,8 +4,8 @@
 
 #include <functional>
 
-#include <ugdk/script/lua/header.h>
-#include <ugdk/script/lua/primitive.h>
+#include <ugdk/script/languages/lua/header.h>
+#include <ugdk/script/languages/lua/primitive.h>
 
 namespace ugdk {
 namespace script {
