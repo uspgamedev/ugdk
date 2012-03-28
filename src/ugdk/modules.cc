@@ -1,4 +1,6 @@
 
+#include <cstdio>
+
 #include <ugdk/script/module.h>
 
 #include <ugdk/script/languages/lua/luawrapper.h>
