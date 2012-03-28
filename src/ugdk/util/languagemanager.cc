@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "languagemanager.h"
 #include <ugdk/util/language.h>
+#include <cstdio>
 
 namespace ugdk {
 

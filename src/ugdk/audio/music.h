@@ -2,8 +2,6 @@
 #define HORUSEYE_FRAMEWORK_MUSIC_H_
 
 #include <string>
-#include <ugdk/config/config.h>
-#include "SDL.h"
 #include "SDL_mixer.h"
 
 namespace ugdk {

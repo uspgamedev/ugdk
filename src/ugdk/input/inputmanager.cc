@@ -1,4 +1,5 @@
 #include <algorithm>
+#include "SDL.h"
 #include <ugdk/input/inputmanager.h>
 
 namespace ugdk {
