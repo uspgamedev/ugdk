@@ -1,8 +1,8 @@
 #!/bin/bash
 
-FILES=`find ./src/ugdk/ | grep "^.*\.\(h\|cc\)$"`
-LUA_FILES=`find ./src/ugdk/script/lua | grep "^.*\.\(h\|cc\)$"`
-PYTHON_FILES=`find ./src/ugdk/script/python | grep "^.*\.\(h\|cc\)$"`
+FILES=`find ./src/ugdk/ -name *.cc`
+LUA_FILES=`find ./src/ugdk/script/lua -name *.cc`
+PYTHON_FILES=`find ./src/ugdk/script/python -name *.cc`
 cd src/module
 MODULES=`find | grep -o "[^/]*\.\(i\)$"`
 cd ../..
