@@ -26,4 +26,4 @@ namespace geometry {
 }
 }
  
-confirm_exports(ugdk_gdd)
+confirm_exports(pyramidworks_geometry)
