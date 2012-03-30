@@ -9,7 +9,6 @@ def CreateSpritesheet(path, frame_width, frame_height, hotspot):
     tex = resources.texture_container().Load(path, path)
     
     sheet = FlexibleSpritesheet(tex)
-    #sheet.thisown = 0
     sheet.set_frame_size( Vector2D(frame_width, frame_height) )
     sheet.set_hotspot(hotspot)
     resources.spritesheet_container().Insert(path, sheet)

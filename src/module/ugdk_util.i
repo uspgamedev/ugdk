@@ -33,6 +33,8 @@
 %include <ugdk/util/languagemanager.h>
 %include <ugdk/util/intervalkdtree.h>
 
+%template(Box2D) ugdk::ikdtree::Box<2>;
+%template(Box3D) ugdk::ikdtree::Box<3>;
 
 namespace ugdk {
 	export_class(AnimationParser)
