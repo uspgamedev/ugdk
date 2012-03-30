@@ -19,7 +19,7 @@ class Reader {
 
     Reader(FILE *file) : file_path_("<unknown>"), file_(file), line_(1) {}
 
-    Reader(std::string &file_path);
+    Reader(const std::string &file_path);
 
     ~Reader() {}
 

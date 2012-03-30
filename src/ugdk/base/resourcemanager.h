@@ -1,41 +1,47 @@
 #ifndef UGDK_BASE_RESOURCEMANAGER_H_
 #define UGDK_BASE_RESOURCEMANAGER_H_
 
+#include <typeinfo>
+#include <map>
 #include <ugdk/action.h>
 #include <ugdk/base/resourcecontainer.h>
-#include <ugdk/base/texturecontainer.h>
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
-#include <ugdk/util/gdd/cachedloader.h>
 
 #define RESOURCE_MANAGER()  (ugdk::Engine::reference()->resource_manager())
 
 namespace ugdk {
 namespace base {
 
-typedef ugdk::gdd::CachedLoader<AnimationSet> AnimationLoader;
-
 class ResourceManager {
   public:
     ResourceManager();
     ~ResourceManager();
     
-    // Non-const
-    TextureContainer&                         texture_container()     { return texture_container_;     }
-    ResourceContainer<graphic::Spritesheet*>& spritesheet_container() { return spritesheet_container_; }
-    AnimationLoader&                          animation_loader()      { return *animation_loader_;     }
-    ResourceContainer<LanguageWord*>&         word_container()        { return word_container_;        }
-
-
     static graphic::Texture*     GetTextureFromTag        (const std::string& tag);
+    static graphic::Texture*     GetTextureFromFile       (const std::string& file);
     static graphic::Spritesheet* GetSpritesheetFromTag    (const std::string& tag);
+    static AnimationSet*         GetAnimationSetFromFile  (const std::string& file);
     static graphic::Text*        CreateTextFromLanguageTag(const std::string& tag);
+
+    // Generic Methods
+    template <class T>
+    void add_container(ResourceContainer<T>* container) {
+        containers_[&typeid(T)] = container;
+    }
+    template <class T>
+    ResourceContainer<T>& get_container() {
+        return *static_cast<ResourceContainer<T>*>(containers_[&typeid(T)]);
+    }
+
+    // Retro-compatibility
+    ResourceContainer<graphic::Texture*>&     texture_container()     { return get_container<graphic::Texture*>();     }
+    ResourceContainer<graphic::Spritesheet*>& spritesheet_container() { return get_container<graphic::Spritesheet*>(); }
+    ResourceContainer<AnimationSet*>&         animation_loader()      { return get_container<AnimationSet*>();         }
+    ResourceContainer<LanguageWord*>&         word_container()        { return get_container<LanguageWord*>();         }
     
   private:
-    TextureContainer                         texture_container_;
-    ResourceContainer<graphic::Spritesheet*> spritesheet_container_;
-    AnimationLoader*                         animation_loader_;
-    ResourceContainer<LanguageWord*>         word_container_;
+    std::map<const std::type_info*, ResourceContainerBase*> containers_;
 };
 
 } // namespace base

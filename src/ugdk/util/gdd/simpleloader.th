@@ -19,7 +19,7 @@ class SimpleLoader : public AbstractLoader<T> {
 
     ~SimpleLoader() {}
 
-    T* Load(std::string gddfile_path);
+    T* Load(const std::string& gddfile_path);
 
     void newData(T* new_data) { loaded_data_ = new_data; }
 
