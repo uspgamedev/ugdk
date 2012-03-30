@@ -13,7 +13,7 @@
 namespace ugdk {
 namespace base {
 
-typedef gdd::CachedLoader<AnimationSet> AnimationLoader;
+typedef ugdk::gdd::CachedLoader<AnimationSet> AnimationLoader;
 
 class ResourceManager {
   public:

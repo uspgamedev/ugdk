@@ -41,6 +41,8 @@ public:
 
 	ugdk::ikdtree::Box<2> GetBoundingBox();
 
+    bool is_collidable();
+
 	bool IsColliding(ScriptEntity* obj) const;
 
 	void HandleCollision(ScriptEntity* target);

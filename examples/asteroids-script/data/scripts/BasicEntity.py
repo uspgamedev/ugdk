@@ -24,6 +24,7 @@ class EntityInterface:
         self.is_destroyed = False ###
         self.type = str(self.__class__)  ###
         self.id = EntityInterface.nextID
+        self.is_collidable = True ###
         EntityInterface.nextID += 1
 
     def ClearNewObjects(self): ###

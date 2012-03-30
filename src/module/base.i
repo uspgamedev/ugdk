@@ -2,6 +2,7 @@
 
 %include <module/export.swig>
 %include "std_string.i"
+%include "std_map.i"
 
 %{
 
@@ -13,11 +14,16 @@
 #include <ugdk/base/resourcemanager.h>
 
 #include <ugdk/graphic/texture.h>
+#include <ugdk/graphic/spritesheet.h>
+#include <ugdk/util/languageword.h>
 
 %}
 
 %include <ugdk/base/resourcecontainer.h> //class template
 %template(ResourceContainer_Texture) ugdk::base::ResourceContainer<ugdk::graphic::Texture*>;
+
+%template(ResourceContainer_Spritesheet) ugdk::base::ResourceContainer<ugdk::graphic::Spritesheet*>;
+%template(ResourceContainer_LanguageWord) ugdk::base::ResourceContainer<ugdk::LanguageWord*>;
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 %import(module="ugdk_input") <ugdk/input.h>
@@ -43,6 +49,7 @@ namespace ugdk {
 	
 namespace base {
     export_class(TextureContainer)
+    export_class(AnimationLoader)
     export_class(ResourceManager)
 }
 }

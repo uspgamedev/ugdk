@@ -14,14 +14,22 @@
 #include <ugdk/util/gdd/simpleloader.h>
 #include <ugdk/util/gdd/cachedloader.h>
 
+#include <ugdk/action/animationset.h>
+
 %}
+
+%import(module="ugdk_action") <ugdk/action/animationset.h>
 
 %include <ugdk/util/gdd/reader.h>
 %include <ugdk/util/gdd/abstractloader.h>
 %include <ugdk/util/gdd/descriptionprotocol.h>
-%include <ugdk/util/gdd/parser.h>
-%include <ugdk/util/gdd/simpleloader.h>
-%include <ugdk/util/gdd/cachedloader.h>
+%include <ugdk/util/gdd/parser.th>
+%include <ugdk/util/gdd/simpleloader.th>
+%include <ugdk/util/gdd/cachedloader.th>
+
+%template(AnimationAbstractLoader) ugdk::gdd::AbstractLoader<ugdk::AnimationSet>;
+%template(AnimationSimpleLoader) ugdk::gdd::SimpleLoader<ugdk::AnimationSet>;
+%template(AnimationLoader) ugdk::gdd::CachedLoader<ugdk::AnimationSet>;
 
 
 namespace ugdk {

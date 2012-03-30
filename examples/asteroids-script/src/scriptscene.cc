@@ -56,7 +56,7 @@ ScriptEntityVector ScriptScene::FindCollidingObjects(ScriptEntity* target) const
 	std::vector<ScriptEntity *>::const_iterator it;
     for(it = filtered_results->begin(); it != filtered_results->end(); ++it) {
         if((*it) == target) continue;
-		if( (*it)->IsColliding(target) && !target->is_destroyed())
+		if( (*it)->IsColliding(target) && (*it)->is_collidable() && !target->is_destroyed())
             result.push_front(*it);
     }
 

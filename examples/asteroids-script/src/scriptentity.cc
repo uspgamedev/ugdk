@@ -80,6 +80,10 @@ ugdk::ikdtree::Box<2> ScriptEntity::GetBoundingBox() {
     return ugdk::ikdtree::Box<2>(thisposmin.val, thisposmax.val);
 }
 
+bool ScriptEntity::is_collidable() {
+    return proxy_["is_collidable"].value<bool>(); 
+}
+
 bool ScriptEntity::IsColliding(ScriptEntity* obj) const {
 	Vector2D distance = obj->pos() - pos();
 	return distance.length() <= obj->radius() + radius();

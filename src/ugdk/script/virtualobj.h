@@ -77,7 +77,7 @@ class VirtualObj {
 	    return data_.get() < rhs.data_.get();
 	}
 
-	VirtualObj operator() (const std::list<VirtualObj>& args) const;
+	VirtualObj operator() (const List& args = List()) const;
 
 	VirtualObj attribute(const VirtualObj& key) const {
         return VirtualObj(data_->GetAttribute(key.data_));
