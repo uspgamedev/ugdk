@@ -63,7 +63,7 @@ class BasicEntity (EntityInterface):
     def __init__(self, x, y, texture_name, radius, life):
         EntityInterface.__init__(self, x, y, radius)
         self.size = Vector2D(self.radius*2, self.radius*2)
-        texture_obj = Engine_reference().resource_manager().texture_container().Load(texture_name)
+        texture_obj = Engine_reference().resource_manager().texture_container().Load(texture_name, texture_name)
         self.shape = TexturedRectangle( texture_obj, self.size )
         self.shape.set_hotspot(Drawable.CENTER)
         #self.shape.thisown = 0

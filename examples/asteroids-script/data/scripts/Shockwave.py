@@ -16,7 +16,7 @@ class Shockwave (GravityWell):
         self.radius = radius_range[0]
         self.is_antigrav = True
         self.size = Vector2D(self.radius*2, self.radius*2)
-        texture_obj = Engine_reference().resource_manager().texture_container().Load("images/shockwave.png")
+        texture_obj = Engine_reference().resource_manager().texture_container().Load("images/shockwave.png", "images/shockwave.png")
         self.shape = TexturedRectangle( texture_obj, self.size )
         self.shape.set_hotspot(Drawable.CENTER)
         #self.shape.thisown = 0

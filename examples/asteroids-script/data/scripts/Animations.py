@@ -6,9 +6,10 @@ from BasicEntity import EntityInterface
 
 def CreateSpritesheet(path, frame_width, frame_height, hotspot):
     resources = Engine_reference().resource_manager()
-    tex = resources.texture_container().Load(path)
+    tex = resources.texture_container().Load(path, path)
+    
     sheet = FlexibleSpritesheet(tex)
-    sheet.thisown = 0
+    #sheet.thisown = 0
     sheet.set_frame_size( Vector2D(frame_width, frame_height) )
     sheet.set_hotspot(hotspot)
     resources.spritesheet_container().Insert(path, sheet)
@@ -29,7 +30,7 @@ class AnimationEntity (EntityInterface):
         pass
         
 def CreateExplosionAtEntity(ent):
-    animset = Engine_reference().resource_manager().animation_loader().Load("animations/explosion.gdd")
+    animset = Engine_reference().resource_manager().animation_loader().Load("animations/explosion.gdd", "animations/explosion.gdd")
     sheet = Engine_reference().resource_manager().spritesheet_container().Find("images/explosion.png")
     sprite = Sprite(sheet, animset)
     sprite.SelectAnimation("BASIC_EXPLOSION")
