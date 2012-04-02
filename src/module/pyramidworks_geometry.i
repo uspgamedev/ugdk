@@ -14,6 +14,9 @@
 
 %import <module/util.i>
 
+%newobject pyramidworks::geometry::Circle::GetBoundingBox(const ugdk::Vector2D& position) const;
+%newobject pyramidworks::geometry::Rect::GetBoundingBox(const ugdk::Vector2D& position) const;
+
 %include <pyramidworks/geometry/geometricshape.h>
 %include <pyramidworks/geometry/circle.h>
 %include <pyramidworks/geometry/rect.h>
