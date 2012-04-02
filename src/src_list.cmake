@@ -4,6 +4,7 @@ SET(UGDK_SRC
     ./src/pyramidworks/collision/collisionobject.cc 
     ./src/pyramidworks/geometry/circle.cc 
     ./src/pyramidworks/geometry/rect.cc 
+    ./src/pyramidworks/modules.cc 
     ./src/ugdk/action/animation.cc 
     ./src/ugdk/action/animationset.cc 
     ./src/ugdk/action/scene.cc 
