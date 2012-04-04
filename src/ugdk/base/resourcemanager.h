@@ -1,6 +1,10 @@
 #ifndef UGDK_BASE_RESOURCEMANAGER_H_
 #define UGDK_BASE_RESOURCEMANAGER_H_
 
+#ifdef DEBUG
+#include <cstdio>
+#include <stdint.h>
+#endif
 #include <typeinfo>
 #include <map>
 #include <ugdk/action.h>
@@ -27,11 +31,23 @@ class ResourceManager {
     // Generic Methods
     template <class T>
     void add_container(ResourceContainer<T>* container) {
+#ifdef DEBUG
+		fprintf(stdout, "UGDK::ResourceManager - Log: add_container<%s>(%X)\n", 
+				typeid(T).name(),
+				reinterpret_cast<uintptr_t>(container));
+#endif
         containers_[&typeid(T)] = container;
     }
+
     template <class T>
     ResourceContainer<T>& get_container() {
-        return *static_cast<ResourceContainer<T>*>(containers_[&typeid(T)]);
+		ResourceContainer<T>* container = static_cast<ResourceContainer<T>*>(containers_[&typeid(T)]);
+#ifdef DEBUG
+		fprintf(stdout, "UGDK::ResourceManager - Log: get_container<%s>(%X)\n", 
+				typeid(T).name(),
+				reinterpret_cast<uintptr_t>(container));
+#endif
+        return *container;
     }
 
     // Retro-compatibility
