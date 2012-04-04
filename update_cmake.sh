@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILES=`find ./src/ugdk/ -name *.cc -not -path "*/script/languages/*"`
+FILES=`find ./src/ugdk/ ./src/pyramidworks/ -name *.cc -not -path "*/script/languages/*"`
 LUA_FILES=`find ./src/ugdk/script/languages/lua -name *.cc`
 PYTHON_FILES=`find ./src/ugdk/script/languages/python -name *.cc`
 cd src/module

@@ -35,4 +35,9 @@ SET(UGDK_SRC
     ./src/ugdk/action/scene.cc 
     ./src/ugdk/action/animationset.cc 
     ./src/ugdk/action/animation.cc 
+    ./src/pyramidworks/geometry/circle.cc 
+    ./src/pyramidworks/geometry/rect.cc 
+    ./src/pyramidworks/collision/collisionclass.cc 
+    ./src/pyramidworks/collision/collisionmanager.cc 
+    ./src/pyramidworks/collision/collisionobject.cc 
 )
