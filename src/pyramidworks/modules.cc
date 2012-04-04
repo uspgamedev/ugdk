@@ -28,13 +28,13 @@ extern "C" {
 #undef PYRAMIDWORKSPYTHON_DECLARE_INIT
 }
 
-namespace ugdk {
+namespace pyramidworks {
 
-using script::Module;
-using script::python::PyInitFunction;
+using ugdk::script::Module;
+using ugdk::script::python::PyInitFunction;
 
 #define PYRAMIDWORKSLUA_LIST_ITEM(name) \
-    script::Module<lua_CFunction>("pyramidworks."#name, luaopen_pyramidworks_##name),
+    ugdk::script::Module<lua_CFunction>("pyramidworks."#name, luaopen_pyramidworks_##name),
 
     static const Module<lua_CFunction> LUA_MODULES[PYRAMIDWORKS_MODULES_NUM] = {
         PYRAMIDWORKS_MODULES_LIST(PYRAMIDWORKSLUA_LIST_ITEM)
@@ -69,11 +69,11 @@ static void RegisterModules(wrapper_t* wrapper,
         );
 }
 
-void RegisterLuaModules(script::lua::LuaWrapper* wrapper) {
+void RegisterLuaModules(ugdk::script::lua::LuaWrapper* wrapper) {
     RegisterModules(wrapper, LUA_MODULES, "Lua");
 }
 
-void RegisterPythonModules(script::python::PythonWrapper* wrapper) {
+void RegisterPythonModules(ugdk::script::python::PythonWrapper* wrapper) {
     RegisterModules(wrapper, PYTHON_MODULES, "Python");
 }
 
