@@ -1,11 +1,11 @@
 #!/bin/bash
 
-FILES=`find ./src/ugdk/ ./src/pyramidworks/ -name *.cc -not -path "*/script/languages/*"`
-LUA_FILES=`find ./src/ugdk/script/languages/lua -name *.cc`
-PYTHON_FILES=`find ./src/ugdk/script/languages/python -name *.cc`
+FILES=`find ./src/ugdk/ ./src/pyramidworks/ -name *.cc -not -path "*/script/languages/*" | sort`
+LUA_FILES=`find ./src/ugdk/script/languages/lua -name *.cc | sort`
+PYTHON_FILES=`find ./src/ugdk/script/languages/python -name *.cc | sort`
 cd src/module
-UGDK_MODULES=`find | grep -o "[^/]*ugdk_.*\.\(i\)$"`
-PYRAMIDWORKS_MODULES=`find | grep -o "[^/]*pyramidworks_.*\.\(i\)$"`
+UGDK_MODULES=`find | grep -o "[^/]*ugdk_.*\.\(i\)$" | sort`
+PYRAMIDWORKS_MODULES=`find | grep -o "[^/]*pyramidworks_.*\.\(i\)$" | sort`
 cd ../..
 
 echo "SET(UGDK_SRC " > ./src/src_list.cmake
