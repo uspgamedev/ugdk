@@ -24,12 +24,16 @@ static T* NullLoad(const std::string& filepath) {
     return NULL;
 }
 
+bool type_info_cmp(const std::type_info* a, const std::type_info* b) {
+	return a->before(*b);
+}
+
 namespace ugdk {
 namespace base {
 
 typedef gdd::CachedLoader<AnimationSet> AnimationLoader;
 
-ResourceManager::ResourceManager() {    
+ResourceManager::ResourceManager() : containers_(type_info_cmp) {
     add_container(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile));
     add_container(new GenericContainer<graphic::Spritesheet*>(NullLoad<graphic::Spritesheet>));
     add_container(new AnimationLoader(new AnimationProtocol));

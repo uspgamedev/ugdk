@@ -31,21 +31,30 @@ class ResourceManager {
     // Generic Methods
     template <class T>
     void add_container(ResourceContainer<T>* container) {
-#ifdef DEBUG
-		fprintf(stdout, "UGDK::ResourceManager - Log: add_container<%s>(%X)\n", 
-				typeid(T).name(),
-				reinterpret_cast<uintptr_t>(container));
-#endif
         containers_[&typeid(T)] = container;
+#ifdef DEBUG
+		fprintf(stdout, "UGDK::ResourceManager - Log: add_container<%s:%lX>(%lX -> %lX); Size: %ld\n", 
+				typeid(T).name(),
+				reinterpret_cast<uintptr_t>(&typeid(T)),
+				reinterpret_cast<uintptr_t>(container),
+				reinterpret_cast<uintptr_t>(containers_[&typeid(T)]),
+				containers_.size()
+				);
+#endif
     }
 
     template <class T>
     ResourceContainer<T>& get_container() {
-		ResourceContainer<T>* container = static_cast<ResourceContainer<T>*>(containers_[&typeid(T)]);
+		ResourceContainerBase* base = containers_[&typeid(T)];
+		ResourceContainer<T>* container = static_cast<ResourceContainer<T>*>(base);
 #ifdef DEBUG
-		fprintf(stdout, "UGDK::ResourceManager - Log: get_container<%s>(%X)\n", 
+		fprintf(stdout, "UGDK::ResourceManager - Log: get_container<%s:%lX>(%lX -> %lX); Size: %ld\n", 
 				typeid(T).name(),
-				reinterpret_cast<uintptr_t>(container));
+				reinterpret_cast<uintptr_t>(&typeid(T)),
+				reinterpret_cast<uintptr_t>(base),
+				reinterpret_cast<uintptr_t>(container),
+				containers_.size()
+				);
 #endif
         return *container;
     }
@@ -57,7 +66,7 @@ class ResourceManager {
     ResourceContainer<LanguageWord*>&         word_container()        { return get_container<LanguageWord*>();         }
     
   private:
-    std::map<const std::type_info*, ResourceContainerBase*> containers_;
+    std::map<const std::type_info*, ResourceContainerBase*, bool (*)(const std::type_info*, const std::type_info*) > containers_;
 };
 
 } // namespace base
