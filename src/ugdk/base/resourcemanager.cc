@@ -25,7 +25,7 @@ static T* NullLoad(const std::string& filepath) {
 }
 
 bool type_info_cmp(const std::type_info* a, const std::type_info* b) {
-	return a->before(*b);
+    return a->before(*b);
 }
 
 namespace ugdk {
@@ -41,7 +41,7 @@ ResourceManager::ResourceManager() : containers_(type_info_cmp) {
 }
 
 ResourceManager::~ResourceManager() {
-    for(std::map<const std::type_info*, ResourceContainerBase*>::iterator it = containers_.begin();
+    for(ResourceMap::iterator it = containers_.begin();
         it != containers_.end(); ++it)
         delete it->second;
 }

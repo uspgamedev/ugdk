@@ -37,3 +37,7 @@ src/generated/*.py
 src/generated/*.rule
 /script_customtest.dir
 examples/asteroids-script/asteroids
+/asteroids.dir
+/x64
+/examples/asteroids-script/Release
+/examples/asteroids-script/Debug
