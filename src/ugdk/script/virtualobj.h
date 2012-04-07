@@ -185,6 +185,10 @@ class Bind {
         method_name_(obj.wrapper()) {
         method_name_.set_value(method_name);
     }
+    VirtualObj operator() () const {
+        std::list<VirtualObj> args;
+        return obj_[method_name_]((obj_, args)); 
+    }
     VirtualObj operator() (std::list<VirtualObj>& args) const {
         return obj_[method_name_]((obj_, args));
     }

@@ -2,7 +2,6 @@
 #define MODULE_PROXY_OBSERVER_H_
 
 #include <ugdk/script/virtualobj.h>
-#include <list>
 #include <ugdk/action/observer.h>
 
 namespace ugdk {
@@ -14,8 +13,7 @@ public:
     ObserverProxy(const ugdk::script::VirtualObj& proxy) : proxy_(proxy) {}
     
     virtual void Tick() {
-        std::list<ugdk::script::VirtualObj> args;
-        ( proxy_ | "Tick" )(args);
+        ( proxy_ | "Tick" )();
     }
     
 protected:
