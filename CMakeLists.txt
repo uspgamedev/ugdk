@@ -7,7 +7,7 @@ project (ugdk CXX C)
 set (FRAMEWORK_NAME UGDK)
 set (FRAMEWORK_RELEASENAME ugdk)
 set (FRAMEWORK_DEBUGNAME ugdk_d)
-set (FRAMEWORK_VERSION 0.2.0)
+set (FRAMEWORK_VERSION 0.3.0)
 
 # Some output.
 message ("=== ${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION} ===")
