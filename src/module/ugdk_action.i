@@ -2,6 +2,7 @@
 %module ugdk_action
 
 %include <module/export.swig>
+%include <module/proxy.swig>
 %include "std_vector.i"
 
 %{
@@ -13,6 +14,8 @@
 #include <ugdk/action/observer.h>
 #include <ugdk/action/scene.h>
 
+#include <module/ugdk/action/observerproxy.h>
+
 %}
 
 %template(AnimationFrameVector) std::vector<ugdk::action::AnimationFrame*>;
@@ -20,6 +23,8 @@
 %import(module="ugdk_base") <ugdk/base/types.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_audio") <ugdk/audio.h>
+
+proxy_class(ugdk::Observer)
 
 %include <ugdk/action/animationframe.h>
 %include <ugdk/action/animation.h>

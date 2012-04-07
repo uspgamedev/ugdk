@@ -2,6 +2,7 @@ from ugdk.ugdk_base import Engine_reference
 from ugdk.ugdk_math import Vector2D
 from ugdk.ugdk_spritesheet import FlexibleSpritesheet
 from ugdk.ugdk_drawable import Sprite
+from ugdk.ugdk_action import Observer
 from BasicEntity import EntityInterface
 
 def CreateSpritesheet(path, frame_width, frame_height, hotspot):
@@ -18,10 +19,20 @@ def InitializeSpritesheets():
     CreateSpritesheet("images/explosion.png", 128.0, 128.0, Vector2D(64.0,64.0) )
 
 
+class EndObserver (Observer):
+    def __init__(self, animent):
+        self.animent = animent
+    def Tick(self):
+        if self.animent != None:
+            self.animent.is_destroyed = True
+            self.animent = None
+        
 class AnimationEntity (EntityInterface):
     def __init__(self, x, y, sprite):
         EntityInterface.__init__(self, x, y, 1.0)
         self.sprite = sprite
+        self.observer = EndObserver( self)
+        self.sprite.AddObserverToAnimation(self.observer)
         self.node.set_drawable(self.sprite)
         self.is_collidable = False
         
