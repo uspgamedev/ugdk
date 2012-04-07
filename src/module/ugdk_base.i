@@ -2,6 +2,7 @@
 
 %include <module/export.swig>
 %include <module/ownership.swig>
+%include <module/proxy.swig>
 %include "std_string.i"
 %include "std_map.i"
 
@@ -19,7 +20,10 @@
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/util/languageword.h>
 
+#include <module/ugdk/action/sceneproxy.h>
+
 %}
+
 
 %include <ugdk/base/resourcecontainer.h> //class template
 
@@ -46,6 +50,8 @@ disable_disown(ugdk::LanguageWord* val)
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_util") <ugdk/util.h>
+
+proxy_class(ugdk::Scene)
 
 %include <ugdk/base/types.h>
 %include <ugdk/base/configuration.h>

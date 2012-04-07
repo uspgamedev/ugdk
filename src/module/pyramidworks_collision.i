@@ -2,6 +2,7 @@
 
 %include <module/export.swig>
 %include <module/ownership.swig>
+%include <module/proxy.swig>
 %include "std_string.i"
 %include "std_map.i"
 %include "std_vector.i"
@@ -14,6 +15,8 @@
 #include <pyramidworks/collision/collisionclass.h>
 #include <pyramidworks/collision/collisionmanager.h>
 #include <pyramidworks/collision/collisionobject.h>
+
+#include <module/pyramidworks/collision/collisionlogicproxy.h>
 
 %}
 
@@ -31,6 +34,8 @@
 %ignore pyramidworks::collision::CollisionManager::Get(const char n[]);
 %ignore pyramidworks::collision::CollisionObject::AddCollisionLogic(const char n[], CollisionLogic* logic);
 %ignore pyramidworks::collision::CollisionObject::InitializeCollisionClass(const char n[]);
+
+proxy_class(pyramidworks::collision::CollisionLogic)
 
 %template(CollisionInstanceList) std::vector<pyramidworks::collision::CollisionInstance>;
 

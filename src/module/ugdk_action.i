@@ -15,6 +15,8 @@
 #include <ugdk/action/scene.h>
 
 #include <module/ugdk/action/observerproxy.h>
+#include <module/ugdk/action/entityproxy.h>
+#include <module/ugdk/action/sceneproxy.h>
 
 %}
 
@@ -25,6 +27,8 @@
 %import(module="ugdk_audio") <ugdk/audio.h>
 
 proxy_class(ugdk::Observer)
+proxy_class(ugdk::Entity)
+proxy_class(ugdk::Scene)
 
 %include <ugdk/action/animationframe.h>
 %include <ugdk/action/animation.h>
