@@ -29,8 +29,8 @@ typedef size_t LangID;
 DEFINE_LANG_ID(Lua,     0);
 DEFINE_LANG_ID(Python,  1);
 
-}
+} /* namespace script */
 
-}
+} /* namespace ugdk */
 
 #endif /* UGDK_SCRIPT_DEFS_H_ */

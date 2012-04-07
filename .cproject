@@ -56,7 +56,6 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.toolchain.gnu.base.2119371475.1214296340" name="ugdk.i" rcbsApplicability="disable" resourcePath="src/module/math.i" toolsToInvoke=""/>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>

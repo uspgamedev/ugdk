@@ -9,7 +9,7 @@ set (GENERATED_SRC "")
 find_package (SWIG)
 
 macro (ugdk_add_scriptlang lang)
-  swig_add_module (ugdk_${lang} ${lang} ${MODULE_SRC} ${FRAMEWORK_SRC})
+  swig_add_module (ugdk_${lang} ${lang} ${UGDK_MODULE_SRC} ${FRAMEWORK_SRC})
   set (TEMP_ONLY_CXX)
   foreach (it ${swig_generated_sources})
     if (${it} MATCHES ".cc$")
@@ -25,12 +25,12 @@ if (SWIG_FOUND)
   include (cmake/UseSWIG.cmake)
   
   # Is MODULE_SRC defined?
-  if (NOT MODULE_SRC)
-      message (FATAL_ERROR "Variable MODULE_SRC not defined! Please do so in the file src/module_list.cmake!")
-  endif (NOT MODULE_SRC)
+  if (NOT UGDK_MODULE_SRC)
+      message (FATAL_ERROR "Variable UGDK_MODULE_SRC not defined! Please do so in the file src/module_list.cmake!")
+  endif (NOT UGDK_MODULE_SRC)
   
-  set_source_files_properties (${MODULE_SRC} PROPERTIES CPLUSPLUS ON)
-  set_source_files_properties (${MODULE_SRC} PROPERTIES SWIG_FLAGS "")
+  set_source_files_properties (${UGDK_MODULE_SRC} PROPERTIES CPLUSPLUS ON)
+  set_source_files_properties (${UGDK_MODULE_SRC} PROPERTIES SWIG_FLAGS "")
   
 else (SWIG_FOUND)
 

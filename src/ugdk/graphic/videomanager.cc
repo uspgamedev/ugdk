@@ -55,7 +55,10 @@ bool VideoManager::Initialize(const string& title, const Vector2D& size, bool fu
         SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
 	
     if(ChangeResolution(size, fullscreen) == false)
-        ChangeResolution(default_resolution, false);
+        if(ChangeResolution(default_resolution, false) == false) {
+            /* TODO: insert error message here. */
+            return false;
+        }
     
     InitializeExtensions();
 
