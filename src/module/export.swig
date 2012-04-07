@@ -41,8 +41,9 @@
 /*confirm_exports should use the target language to somehow call the
   RegisterType_* functions in the module passing the return value
   from the GetNull_* functions as argument.*/
-%define confirm_exports(modname)
+
 #ifdef SWIGLUA
+%define confirm_exports(modname)
 %luacode {
 print "Hey there!"
 for k,v in pairs(modname) do
@@ -54,7 +55,9 @@ for k,v in pairs(modname) do
   end
 end
 }
+%enddef
 #elif SWIGPYTHON
+%define confirm_exports(modname)
 %pythoncode {
 print "Python modname confirm exports!"
 module = __import__(__name__)
@@ -63,5 +66,6 @@ for key,value in module.__dict__.items():
 		arg = module.__dict__["GetNull_"+key[13:] ]()
 		value(arg)
 }
-#endif
 %enddef
+#endif
+
