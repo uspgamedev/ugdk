@@ -5,8 +5,8 @@ if (LUA51_FOUND)
 
   include_directories (${LUA_INCLUDE_DIR})
   set (UGDK_SRC ${UGDK_SRC} ${UGDK_LUA_SRC})
-  set (UGDK_LIBRARIES       ${UGDK_LIBRARIES} ${LUA_LIBRARIES})
-  set (UGDK_LIBRARIES_DEBUG ${UGDK_LIBRARIES} ${LUA_LIBRARIES})
+  set (UGDK_LIBRARIES       ${UGDK_LIBRARIES}       ${LUA_LIBRARIES})
+  set (UGDK_LIBRARIES_DEBUG ${UGDK_LIBRARIES_DEBUG} ${LUA_LIBRARIES})
   ugdk_add_scriptlang (lua)
 
   message ("-- Lua5.1 modules added.")

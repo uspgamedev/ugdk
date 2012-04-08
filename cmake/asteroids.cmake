@@ -14,15 +14,4 @@ else ()
 	set (UGDK_TEST_CFLAGS "")
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
-# FIXME
-target_link_libraries (asteroids
-  ${FRAMEWORK_BUILDNAME}
-  ${EXTRA_LIBRARIES}
-  ${SDL_LIBRARY}
-  ${SDLMIXER_LIBRARY}
-  ${SDLTTF_LIBRARY}
-  ${SDLIMAGE_LIBRARY}
-  ${OPENGL_LIBRARIES}
-  ${UGDK_LIBRARIES})
-  #${LUA_LIBRARIES}
-  #${PYTHON_FINAL_LIB})
+target_link_libraries(asteroids optimized ${FRAMEWORK_RELEASE} debug ${FRAMEWORK_DEBUG})

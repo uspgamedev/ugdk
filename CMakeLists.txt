@@ -108,6 +108,7 @@ endif (SWIG_FOUND)
 # pre-processor: #define's
 if (MSVC)
   set (CFLAGS_DEBUG "/DDEBUG")
+  
   foreach (d ${DEFS})
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
   endforeach (d)  
@@ -147,10 +148,6 @@ if (WIN32)
     set_target_properties (${FRAMEWORK_DEBUG}   PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
 endif (WIN32)
 
-if (PYTHONLIBS_FOUND)
-  include (cmake/asteroids.cmake)
-endif (PYTHONLIBS_FOUND)
-
 target_link_libraries (${FRAMEWORK_RELEASE}
 					   ${EXTRA_LIBRARIES}
 					   ${SDL_LIBRARY}
@@ -168,7 +165,7 @@ target_link_libraries (${FRAMEWORK_DEBUG}
 					   ${SDLIMAGE_LIBRARY}
 					   ${OPENGL_LIBRARIES}
                        ${UGDK_LIBRARIES_DEBUG})
-                       
+                                             
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
@@ -176,6 +173,10 @@ set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK
 set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA} ${CFLAGS_DEBUG}")
 set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME} (DEBUG)")
+
+if (PYTHONLIBS_FOUND)
+  include (cmake/asteroids.cmake)
+endif (PYTHONLIBS_FOUND)
 
 # Installing on *nix
 #if (UNIX)
