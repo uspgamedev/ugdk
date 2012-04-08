@@ -99,6 +99,22 @@ endif (SWIG_FOUND)
 include_directories ("src/kits")
 include_directories ("externals/opengl")
 
+# Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
+# Code found on http://stackoverflow.com/questions/7747857/in-cmake-how-do-i-work-around-the-debug-and-release-directories-visual-studio-2
+
+# First for the generic no-config case (e.g. with mingw)
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR} )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR} )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR} )
+# Second, for multi-config builds (e.g. msvc)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+
+
 if (${LINK_TYPE} STREQUAL STATIC)
     add_library (${FRAMEWORK_RELEASE} STATIC ${UGDK_SRC} ${GENERATED_SRC})
     if (NOT MSVC)
@@ -121,15 +137,6 @@ endif (MINGW)
 if (WIN32)
 	set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
 endif (WIN32)
-
-set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
-set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
-set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
-if(NOT MSVC)
-    set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
-    set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
-    set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
-endif()
 
 target_link_libraries (${FRAMEWORK_RELEASE}
 					   ${EXTRA_LIBRARIES}
