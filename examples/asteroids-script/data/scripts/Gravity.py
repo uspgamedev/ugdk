@@ -1,5 +1,7 @@
 from ugdk.ugdk_math import Vector2D
-from BasicEntity import BasicEntity, EntityInterface
+from ugdk.pyramidworks_collision import CollisionObject, CollisionLogic
+from ugdk.pyramidworks_geometry import Circle
+from BasicEntity import EntityInterface, BasicColLogic
 from Asteroid import Asteroid
 from random import randint, shuffle
 from math import pi
@@ -24,6 +26,14 @@ class GravityWell (EntityInterface):
         self.is_antigrav = False
         self.ignore_ids = []
         
+        self.collision_object = CollisionObject(getCollisionManager(), self)  #initialize collision object, second arg is passed to collisionlogic to handle collisions
+        self.collision_object.InitializeCollisionClass("Gravity")              # define the collision class
+        self.geometry = Circle(self.radius)                           #
+        self.collision_object.set_shape(self.geometry)                # set our shape
+        #finally add collision logics to whatever collision class we want
+        self.collision_object.AddCollisionLogic("Entity", BasicColLogic(self) )
+
+        
     def AddIDToIgnoreList(self, ID):
         if ID not in self.ignore_ids:
             self.ignore_ids.append(ID)
@@ -33,7 +43,7 @@ class GravityWell (EntityInterface):
             self.ignore_ids.remove(ID)
 
     def HandleCollision(self, target):
-        ignore_types = [self.type, "Planet.Planet", "Shockwave.Shockwave"]
+        ignore_types = ["Planet.Planet"]
         if target.type in ignore_types or target.id in self.ignore_ids:
             return #we don't affect planets (neither their wells)
         

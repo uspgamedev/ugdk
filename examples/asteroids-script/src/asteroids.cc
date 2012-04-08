@@ -14,6 +14,7 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/modules.h>
+#include <pyramidworks/modules.h>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/langwrapper.h>
@@ -36,11 +37,13 @@ static void InitScripts() {
     //inicializando lua
     LuaWrapper* lua_wrapper = new LuaWrapper();
     ugdk::RegisterLuaModules(lua_wrapper);
+    pyramidworks::RegisterLuaModules(lua_wrapper);
     SCRIPT_MANAGER()->Register("Lua", lua_wrapper);
 
     //inicializando python
     PythonWrapper* py_wrapper = new PythonWrapper();
     ugdk::RegisterPythonModules(py_wrapper);
+    pyramidworks::RegisterPythonModules(py_wrapper);
     SCRIPT_MANAGER()->Register("Python", py_wrapper);
 }
 
@@ -131,8 +134,12 @@ int main(int argc, char *argv[]) {
     VirtualObj animations = SCRIPT_MANAGER()->LoadModule("Animations");
     animations["InitializeSpritesheets"]();
 
-    asteroids::ScriptScene* scene = new asteroids::ScriptScene();
-    scene->GenerateMap();
+    //asteroids::ScriptScene* scene = new asteroids::ScriptScene();
+    //scene->GenerateMap();
+    
+    VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule("GameScene");
+    VirtualObj first_scene = scene_script["AsteroidsScene"]();
+    ugdk::Scene* scene = first_scene.value<ugdk::Scene*>();
 
     ugdk::Engine::reference()->PushScene(scene);
     // Transfers control to the framework.

@@ -2,21 +2,31 @@ from ugdk.ugdk_graphic import Node, Modifier, Drawable
 from ugdk.ugdk_drawable import TexturedRectangle
 from ugdk.ugdk_math import Vector2D
 from ugdk.ugdk_base import Color, Engine_reference
+from ugdk.ugdk_action import Entity
+from ugdk.pyramidworks_collision import CollisionObject, CollisionLogic
+from ugdk.pyramidworks_geometry import Circle
 from Radio import SOUND_PATH
 from BarUI import BarUI
 from random import randint
 
+MANAGER = None
 
 def window_size():
     return Engine_reference().video_manager().video_size()
+    
+    
+def getCollisionManager():
+    scene = Engine_reference().CurrentScene()
+    return scene.collisionManager
 
 #   Functions or attributes marked with ### means they're part of the 
 #   C++ ScriptEntity interface
 
-class EntityInterface:
+class EntityInterface (Entity):
     nextID = 1
     def __init__(self, x, y, radius):
         self.radius = radius  ###
+        self.hud_node = Node()
         self.node = Node()   ###
         self.node.modifier().set_offset( Vector2D(x,y) )
         self.node.thisown = 0
@@ -58,6 +68,12 @@ class EntityInterface:
     def __str__(self): return self.__repr__()
     
     
+class BasicColLogic(CollisionLogic):
+    def __init__(self, entity):
+        self.entity = entity
+    def Handle(self, data):
+        self.entity.HandleCollision(data)
+        
 class BasicEntity (EntityInterface):
     nextID = 1
     def __init__(self, x, y, texture_name, radius, life):
@@ -75,6 +91,14 @@ class BasicEntity (EntityInterface):
         self.max_life = life
         self.hit_sounds = ["hit1.wav", "hit2.wav", "hit3.wav", "hit4.wav"]
         self.life_hud = BarUI(self, "life", Color(1.0,0.0,0.0,1.0), Vector2D(0.0, self.radius))
+        self.hud_node.AddChild(self.life_hud.node)
+        
+        self.collision_object = CollisionObject(getCollisionManager(), self)  #initialize collision object, second arg is passed to collisionlogic to handle collisions
+        self.collision_object.InitializeCollisionClass("Entity")              # define the collision class
+        self.geometry = Circle(self.radius)                           #
+        self.collision_object.set_shape(self.geometry)                # set our shape
+        #finally add collision logics to whatever collision class we want
+        self.collision_object.AddCollisionLogic("Entity", BasicColLogic(self) )
 
     def Update(self, dt): ###
         self.UpdatePosition(dt)
@@ -89,6 +113,7 @@ class BasicEntity (EntityInterface):
         self.last_dt = dt
         self.HandleMapBoundaries(pos)
         self.node.modifier().set_offset(pos)
+        self.hud_node.modifier().set_offset(pos)
 
     def GetDamage(self, obj_type):
         # returns the amount of damage this object causes on collision with given obj_type

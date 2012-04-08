@@ -52,10 +52,6 @@ def Generate():
 
     print "Generating a %sx%s map with %s entities..." % (rows, columns, n)
 
-    #possibleCells = []
-    #for i in range(rows):
-    #    for j in range(columns):
-    #        possibleCells.append( (i,j) )
     possibleCells = [(i,j) for i in range(rows) for j in range(columns)]
     random.shuffle(possibleCells)
     # I had so many awesome ideas using awesome python features to do this 
