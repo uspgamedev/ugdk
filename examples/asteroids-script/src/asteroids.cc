@@ -138,7 +138,8 @@ int main(int argc, char *argv[]) {
     //scene->GenerateMap();
     
     VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule("GameScene");
-    VirtualObj first_scene = scene_script["AsteroidsScene"]();
+	VirtualObj scene_class = scene_script["AsteroidsScene"];
+    VirtualObj first_scene = scene_script["StartupScene"]();
     ugdk::Scene* scene = first_scene.value<ugdk::Scene*>();
 
     ugdk::Engine::reference()->PushScene(scene);

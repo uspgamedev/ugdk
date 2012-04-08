@@ -339,6 +339,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <None Include="data\scripts\BasicEntity.py" />
     <None Include="data\scripts\Config.py" />
     <None Include="data\scripts\EntityUI.py" />
+    <None Include="data\scripts\GameScene.py" />
     <None Include="data\scripts\Gravity.py" />
     <None Include="data\scripts\MapGenerator.py" />
     <None Include="data\scripts\Planet.py" />

@@ -6,9 +6,14 @@ from ugdk.ugdk_base import Engine_reference
 import Config
 import MapGenerator
     
+def StartupScene():
+    scene = AsteroidsScene()
+    scene.GenerateMap()
+    return scene
 
 class AsteroidsScene (Scene):
     def __init__(self):
+        Scene.__init__(self)
         maxval = MapGenerator.MAX_ENTITY_SIZE
         mincoords = [-maxval, -maxval]
         maxcoords = [Config.resolution.get_x() + maxval,  Config.resolution.get_y() + maxval]
@@ -74,8 +79,7 @@ class AsteroidsScene (Scene):
             self.Finish()
         elif input.KeyPressed(K_HOME):
             self.Finish()
-            cena = AsteroidsScene()
-            cena.GenerateMap()
+            cena = StartupScene()
             Engine_reference().PushScene( cena )
             
     def HandleCollisions(self):
