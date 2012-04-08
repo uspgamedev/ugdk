@@ -4,9 +4,9 @@ cmake_minimum_required (VERSION 2.6)
 
 # General definitions.
 project (ugdk CXX C)
-set (FRAMEWORK_NAME UGDK)
+set (FRAMEWORK_NAME    UGDK)
 set (FRAMEWORK_RELEASE ugdk)
-set (FRAMEWORK_DEBUG ugdk_d)
+set (FRAMEWORK_DEBUG   ugdk_d)
 set (FRAMEWORK_VERSION 0.3.0)
 
 # Some output.
@@ -48,24 +48,18 @@ include (${SRC_DIR}/pyramidworks_module_list.cmake)
 include (${SRC_DIR}/lua_src_list.cmake)
 include (${SRC_DIR}/py_src_list.cmake)
 
-# #define's que voce queira incluir na compilacao
-# separe por espacos
-set (DEFS "" CACHE STRING "#define's que voce queira incluir na compilacao; separe por espacos")
-if (WIN32)
-    LIST(APPEND DEFS "WIN32")
-endif (WIN32)
-
-# CFLAGS: flags que voce queira enviar ao compilador
 # LDFLAGS: flags que voce queira enviar ao ligador
-set (CFLAGS "" CACHE STRING "flags enviadas ao compilador")
 set (LDFLAGS "" CACHE STRING "flags enviadas ao linker")
-if (UNIX OR MINGW)
-    # se for o g++ para *nix ou o MinGW para Windows:
-    LIST(APPEND CFLAGS "-Wall -ansi -O3 -U_FORTIFY_SOURCE -msse2")
-endif (UNIX OR MINGW)
-
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
+endif ()
+
+add_definitions(-DDEBUG)
+if (UNIX OR MINGW)
+    # se for o g++ para *nix ou o MinGW para Windows:
+    add_definitions(-Wall -ansi -U_FORTIFY_SOURCE -msse2)
+elseif (MSVC) 
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast)
 endif ()
 
 # ${UGDK_SRC} esta' definido?
@@ -102,27 +96,19 @@ if (SWIG_FOUND)
   ugdk_setup_package (PythonLibs)
 endif (SWIG_FOUND)
 
-# pre-processor: #define's
-if (MSVC)
-  set (CFLAGS_DEBUG "/DDEBUG")
-  
-  foreach (d ${DEFS})
-    set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
-  endforeach (d)  
-  LIST(APPEND CFLAGS_EXTRA "/D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast")
-else (MSVC)
-  set (CFLAGS_DEBUG "-g -DDEBUG")
-endif  (MSVC)
-
 include_directories ("src/kits")
 include_directories ("externals/opengl")
 
 if (${LINK_TYPE} STREQUAL STATIC)
     add_library (${FRAMEWORK_RELEASE} STATIC ${UGDK_SRC} ${GENERATED_SRC})
-	add_library (${FRAMEWORK_DEBUG}   STATIC EXCLUDE_FROM_ALL ${UGDK_SRC} ${GENERATED_SRC})
+    if (NOT MSVC)
+        add_library (${FRAMEWORK_DEBUG} STATIC EXCLUDE_FROM_ALL ${UGDK_SRC} ${GENERATED_SRC})
+    endif ()
 elseif (${LINK_TYPE} STREQUAL SHARED)
     add_library (${FRAMEWORK_RELEASE} SHARED ${UGDK_SRC} ${GENERATED_SRC})
-	add_library (${FRAMEWORK_DEBUG}   SHARED EXCLUDE_FROM_ALL ${UGDK_SRC} ${GENERATED_SRC})
+    if (NOT MSVC)
+        add_library (${FRAMEWORK_DEBUG} SHARED EXCLUDE_FROM_ALL ${UGDK_SRC} ${GENERATED_SRC})
+    endif ()
 endif (${LINK_TYPE} STREQUAL STATIC)
 
 
@@ -137,13 +123,13 @@ if (WIN32)
 endif (WIN32)
 
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
-set_target_properties (${FRAMEWORK_DEBUG}   PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
-set_target_properties (${FRAMEWORK_DEBUG}   PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
-if (WIN32)
-	set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
-    set_target_properties (${FRAMEWORK_DEBUG}   PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
-endif (WIN32)
+set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
+if(NOT MSVC)
+    set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
+    set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
+    set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
+endif()
 
 target_link_libraries (${FRAMEWORK_RELEASE}
 					   ${EXTRA_LIBRARIES}
@@ -152,24 +138,28 @@ target_link_libraries (${FRAMEWORK_RELEASE}
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
 					   ${OPENGL_LIBRARIES}
-                       ${UGDK_LIBRARIES})
-                        
-target_link_libraries (${FRAMEWORK_DEBUG}
-					   ${EXTRA_LIBRARIES}
-					   ${SDL_LIBRARY}
-					   ${SDLMIXER_LIBRARY}
-					   ${SDLTTF_LIBRARY}
-					   ${SDLIMAGE_LIBRARY}
-					   ${OPENGL_LIBRARIES}
-                       ${UGDK_LIBRARIES_DEBUG})
+                       optmized ${UGDK_LIBRARIES}
+                       debug    ${UGDK_LIBRARIES_DEBUG})
+                      
+if(NOT MSVC)
+    target_link_libraries (${FRAMEWORK_DEBUG}
+                            ${EXTRA_LIBRARIES}
+                            ${SDL_LIBRARY}
+                            ${SDLMIXER_LIBRARY}
+                            ${SDLTTF_LIBRARY}
+                            ${SDLIMAGE_LIBRARY}
+                            ${OPENGL_LIBRARIES}
+                            ${UGDK_LIBRARIES_DEBUG})
+endif()
                                              
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
-set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
+set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAMEWORK_DEBUG}")
 
-set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES LINK_FLAGS "${LDFLAGS}")
-set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA} ${CFLAGS_DEBUG}")
-set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME} (DEBUG)")
+if(NOT MSVC)
+    set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES LINK_FLAGS "${LDFLAGS}")
+    set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME} (DEBUG)")
+endif()
 
 if (PYTHONLIBS_FOUND)
   include (cmake/asteroids.cmake)
