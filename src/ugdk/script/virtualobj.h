@@ -131,6 +131,8 @@ class VirtualObj {
     static VirtualObj Create (const std::string& str, LangWrapper* wrapper) {
         return Create(str.c_str(), wrapper);
     }
+    
+    void* unsafe_data() const { return data_->unsafe_data(); }
 
   private:
 

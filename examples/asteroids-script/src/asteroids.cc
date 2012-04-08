@@ -140,9 +140,12 @@ int main(int argc, char *argv[]) {
     VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule("GameScene");
 	VirtualObj scene_class = scene_script["AsteroidsScene"];
     VirtualObj first_scene = scene_script["StartupScene"]();
-    ugdk::Scene* scene = first_scene.value<ugdk::Scene*>();
+    //ugdk::Scene* scene = first_scene.value<ugdk::Scene*>();
 
-    ugdk::Engine::reference()->PushScene(scene);
+    //ugdk::Engine::reference()->PushScene(scene);
+    
+    //(first_scene | "GenerateMap")();
+    
     // Transfers control to the framework.
     ugdk::Engine::reference()->Run();
 

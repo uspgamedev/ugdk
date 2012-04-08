@@ -7,13 +7,20 @@ import Config
 import MapGenerator
     
 def StartupScene():
-    scene = AsteroidsScene()
-    scene.GenerateMap()
-    return scene
+    print "STARTING SCENE"
+    cena = AsteroidsScene()
+    print "GOING TO PUSH SCENE"
+    Engine_reference().PushScene( cena )
+    print "GOING TO GENERATE MAP"
+    cena.GenerateMap()
+    print "ALL DONE... Proceeding"
+    
 
 class AsteroidsScene (Scene):
     def __init__(self):
-        Scene.__init__(self)
+        print "Creating AsteroidsScene"
+        #Scene.__init__(self)
+        print "Initialized base class"
         maxval = MapGenerator.MAX_ENTITY_SIZE
         mincoords = [-maxval, -maxval]
         maxcoords = [Config.resolution.get_x() + maxval,  Config.resolution.get_y() + maxval]
@@ -21,7 +28,7 @@ class AsteroidsScene (Scene):
         self.objects = []
         self.colliding_objects = []
         self.startCollisions()
-        self.thisown = 0
+        #self.thisown = 0
         
     def startCollisions(self):
         self.collisionManager.Generate("Entity")
@@ -79,8 +86,7 @@ class AsteroidsScene (Scene):
             self.Finish()
         elif input.KeyPressed(K_HOME):
             self.Finish()
-            cena = StartupScene()
-            Engine_reference().PushScene( cena )
+            StartupScene()
             
     def HandleCollisions(self):
         collision_list = []

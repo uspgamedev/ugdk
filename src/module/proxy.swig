@@ -36,11 +36,15 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
 %typemap(in) T* {
     $1 = 0;
 }
+
+%typemap(out) T* {
+    lua_pushnil( L);
+}
 %enddef
 #elif SWIGPYTHON
 %define proxy_class(T)
 %typemap(in) T* {
-    printf("starting typemap\n");
+    printf("starting typemap in\n");
     int resConvert = 0;
     void *_argpObj = 0 ;
     resConvert = SWIG_ConvertPtr($input, &_argpObj, $1_descriptor, 0 | 0 );
@@ -54,6 +58,19 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
     }
     else {
         $1 = reinterpret_cast< T* >(_argpObj);
+    }
+}
+
+%typemap(out) T* {
+    printf("starting typemap out [%s](%d)\n", typeid($1).name(), $1);
+    T##Proxy* __proxy_result = dynamic_cast< T##Proxy* > ($1);
+    if (__proxy_result == NULL) {
+        /*the object to convert is not of his Proxy class type... Use default SWIG conversion.*/
+        $result = SWIG_NewPointerObj(SWIG_as_voidptr($1), $1_descriptor,  0 | 0 );
+    }
+    else {
+        printf("converting object back to proxy instance in script.\n");
+        $result = static_cast<PyObject*>(__proxy_result->get_proxy_vobj().unsafe_data() );
     }
 }
 %enddef

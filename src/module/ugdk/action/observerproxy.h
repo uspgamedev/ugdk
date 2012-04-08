@@ -16,6 +16,9 @@ public:
         ( proxy_ | "Tick" )();
     }
     
+    
+    ugdk::script::VirtualObj get_proxy_vobj() const { return proxy_; }
+    
 protected:
     ugdk::script::VirtualObj proxy_;
 };

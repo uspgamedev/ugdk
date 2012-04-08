@@ -44,6 +44,10 @@ class LuaData : public VirtualData {
     Ptr GetAttribute(Ptr key);
 
     Ptr SetAttribute(Ptr key, Ptr value);
+    
+    void* unsafe_data() const {
+        return NULL;
+    }
 
     void AddToBuffer();
     void RemoveFromBuffer() {}

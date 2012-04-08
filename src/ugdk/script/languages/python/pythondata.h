@@ -51,6 +51,10 @@ class PythonData : public VirtualData {
 	virtual Ptr GetAttribute(Ptr key);
 
     virtual Ptr SetAttribute(Ptr key, Ptr value);
+    
+    void* unsafe_data() const {
+        return static_cast<void*>(py_data_);
+    }
 
   protected:
     PythonWrapper* wrapper_;

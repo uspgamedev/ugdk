@@ -1,7 +1,7 @@
 from ugdk.ugdk_math import Vector2D
 from ugdk.pyramidworks_collision import CollisionObject, CollisionLogic
 from ugdk.pyramidworks_geometry import Circle
-from BasicEntity import EntityInterface, BasicColLogic
+from BasicEntity import EntityInterface, BasicColLogic, getCollisionManager
 from Asteroid import Asteroid
 from random import randint, shuffle
 from math import pi
