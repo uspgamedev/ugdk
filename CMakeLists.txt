@@ -62,9 +62,6 @@ set (LDFLAGS "" CACHE STRING "flags enviadas ao linker")
 if (UNIX OR MINGW)
     # se for o g++ para *nix ou o MinGW para Windows:
     set (CFLAGS "${CFLAGS} -Wall -ansi -O3 -U_FORTIFY_SOURCE -msse2")
-    if (${BUILD_TYPE} STREQUAL DEBUG)
-        set (CFLAGS "${CFLAGS} -g")
-    endif (${BUILD_TYPE} STREQUAL DEBUG)
 endif (UNIX OR MINGW)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -114,7 +111,7 @@ if (MSVC)
   endforeach (d)  
   set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast")
 else (MSVC)
-  set (CFLAGS_DEBUG "-DDEBUG")
+  set (CFLAGS_DEBUG "-g -DDEBUG")
 endif  (MSVC)
 
 include_directories ("src/kits")
@@ -122,10 +119,10 @@ include_directories ("externals/opengl")
 
 if (${LINK_TYPE} STREQUAL STATIC)
     add_library (${FRAMEWORK_RELEASE} STATIC ${UGDK_SRC} ${GENERATED_SRC})
-    add_library (${FRAMEWORK_DEBUG}   STATIC ${UGDK_SRC} ${GENERATED_SRC})
+	add_library (${FRAMEWORK_DEBUG}   STATIC EXCLUDE_FROM_ALL ${UGDK_SRC} ${GENERATED_SRC})
 elseif (${LINK_TYPE} STREQUAL SHARED)
     add_library (${FRAMEWORK_RELEASE} SHARED ${UGDK_SRC} ${GENERATED_SRC})
-    add_library (${FRAMEWORK_DEBUG}   SHARED ${UGDK_SRC} ${GENERATED_SRC})
+	add_library (${FRAMEWORK_DEBUG}   SHARED EXCLUDE_FROM_ALL ${UGDK_SRC} ${GENERATED_SRC})
 endif (${LINK_TYPE} STREQUAL STATIC)
 
 
