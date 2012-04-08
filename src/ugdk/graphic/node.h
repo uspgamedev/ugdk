@@ -43,7 +43,7 @@ class Node {
           double zindex()      const { return   zindex_; }
 
     void AddChild(Node *child) {
-        if(child->parent_) child->parent_->RemoveChild(child)
+        if(child->parent_) child->parent_->RemoveChild(child);
         childs_.push_back(child);
         child->parent_ = this;
         must_sort_ = true;
