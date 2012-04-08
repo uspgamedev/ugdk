@@ -52,7 +52,7 @@ include (${SRC_DIR}/py_src_list.cmake)
 # separe por espacos
 set (DEFS "" CACHE STRING "#define's que voce queira incluir na compilacao; separe por espacos")
 if (WIN32)
-    set (DEFS "${DEFS} WIN32")
+    LIST(APPEND DEFS "WIN32")
 endif (WIN32)
 
 # CFLAGS: flags que voce queira enviar ao compilador
@@ -61,11 +61,11 @@ set (CFLAGS "" CACHE STRING "flags enviadas ao compilador")
 set (LDFLAGS "" CACHE STRING "flags enviadas ao linker")
 if (UNIX OR MINGW)
     # se for o g++ para *nix ou o MinGW para Windows:
-    set (CFLAGS "${CFLAGS} -Wall -ansi -O3 -U_FORTIFY_SOURCE -msse2")
+    LIST(APPEND CFLAGS "-Wall -ansi -O3 -U_FORTIFY_SOURCE -msse2")
 endif (UNIX OR MINGW)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	set (LDFLAGS "${LDFLAGS} -mmacosx-version-min=10.5")
+	LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
 endif ()
 
 # ${UGDK_SRC} esta' definido?
@@ -109,7 +109,7 @@ if (MSVC)
   foreach (d ${DEFS})
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
   endforeach (d)  
-  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast")
+  LIST(APPEND CFLAGS_EXTRA "/D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast")
 else (MSVC)
   set (CFLAGS_DEBUG "-g -DDEBUG")
 endif  (MSVC)

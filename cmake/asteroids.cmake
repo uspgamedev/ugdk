@@ -1,6 +1,6 @@
 
 IF (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    SET(GAME_SRCS ${GAME_SRCS} src/mac/SDLMain.h src/mac/SDLMain.m)
+    LIST(APPEND GAME_SRCS src/mac/SDLMain.h src/mac/SDLMain.m)
 ENDIF ()
 add_executable (asteroids EXCLUDE_FROM_ALL examples/asteroids-script/src/asteroids.cc
                 ${GAME_SRCS})
