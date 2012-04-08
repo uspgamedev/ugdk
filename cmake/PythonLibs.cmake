@@ -6,15 +6,9 @@ if (PYTHONLIBS_FOUND)
   include_directories (${PYTHON_INCLUDE_DIRS})
   ugdk_add_scriptlang (python)
 
-  set (UGDK_SRC ${UGDK_SRC} ${UGDK_PYTHON_SRC})
-  set (PYTHON_FINAL_LIB ${PYTHON_LIBRARIES})
-  # Check if we have the debug library to link with on debug. If not, we'll
-  # just use the nondebug one.
-  if (${BUILD_TYPE} STREQUAL DEBUG AND PYTHON_DEBUG_LIBRARY)
-    set (PYTHON_FINAL_LIB ${PYTHON_DEBUG_LIBRARY})
-  endif (${BUILD_TYPE} STREQUAL DEBUG AND PYTHON_DEBUG_LIBRARY)
-  set (UGDK_LIBRARIES ${UGDK_LIBRARIES} ${PYTHON_FINAL_LIB})
-  unset (PYTHON_FINAL_LIB)
+  set (UGDK_SRC ${UGDK_SRC} ${UGDK_PYTHON_SRC}) 
+  set (UGDK_LIBRARIES       ${UGDK_LIBRARIES} ${PYTHON_LIBRARIES})
+  set (UGDK_LIBRARIES_DEBUG ${UGDK_LIBRARIES} ${PYTHON_DEBUG_LIBRARY})
 
   message ("-- Python modules added.")
     

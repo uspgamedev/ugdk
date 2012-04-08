@@ -5,36 +5,20 @@ cmake_minimum_required (VERSION 2.6)
 # General definitions.
 project (ugdk CXX C)
 set (FRAMEWORK_NAME UGDK)
-set (FRAMEWORK_RELEASENAME ugdk)
-set (FRAMEWORK_DEBUGNAME ugdk_d)
+set (FRAMEWORK_RELEASE ugdk)
+set (FRAMEWORK_DEBUG ugdk_d)
 set (FRAMEWORK_VERSION 0.3.0)
 
 # Some output.
 message ("=== ${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION} ===")
 
 # If the user did not define the parameteres, use default values.
-if (NOT BUILD_TYPE)
-    message ("-- No build type was defined, choosing default value: RELEASE")
-    set (BUILD_TYPE RELEASE)
-else (NOT BUILD_TYPE)
-    message ("-- Build type: ${BUILD_TYPE}")
-endif (NOT BUILD_TYPE)
-
 if (NOT LINK_TYPE)
     message ("-- No link type was defined, choosing default value: STATIC")
     set (LINK_TYPE STATIC)
 else (NOT LINK_TYPE)
     message ("-- Link type: ${LINK_TYPE}")
 endif (NOT LINK_TYPE)
-
-if (${BUILD_TYPE} STREQUAL RELEASE)
-    set (FRAMEWORK_BUILDNAME ${FRAMEWORK_RELEASENAME})
-elseif (${BUILD_TYPE} STREQUAL DEBUG)
-    set (FRAMEWORK_BUILDNAME ${FRAMEWORK_DEBUGNAME})
-	set (FRAMEWORK_NAME "${FRAMEWORK_NAME} (DEBUG)")
-else ()
-    message (FATAL_ERROR ">>> Unknown build type ${BUILD_TYPE}.")
-endif ()
 
 if ((NOT (${LINK_TYPE} STREQUAL STATIC)) AND (NOT (${LINK_TYPE} STREQUAL SHARED)))
     message (FATAL_ERROR ">>> Unknown link type ${LINK_TYPE}.")
@@ -121,31 +105,26 @@ if (SWIG_FOUND)
   ugdk_setup_package (PythonLibs)
 endif (SWIG_FOUND)
 
-if (${BUILD_TYPE} STREQUAL DEBUG)
-  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
-endif (${BUILD_TYPE} STREQUAL DEBUG)
-
 # pre-processor: #define's
 if (MSVC)
+  set (CFLAGS_DEBUG "/DDEBUG")
   foreach (d ${DEFS})
     set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
-  endforeach (d)
-  
+  endforeach (d)  
   set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast")
-  
 else (MSVC)
-  foreach (d ${DEFS})
-    set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -D${d}")
-  endforeach (d)
+  set (CFLAGS_DEBUG "-DDEBUG")
 endif  (MSVC)
 
 include_directories ("src/kits")
 include_directories ("externals/opengl")
 
 if (${LINK_TYPE} STREQUAL STATIC)
-    add_library (${FRAMEWORK_BUILDNAME} STATIC ${UGDK_SRC} ${GENERATED_SRC})
+    add_library (${FRAMEWORK_RELEASE} STATIC ${UGDK_SRC} ${GENERATED_SRC})
+    add_library (${FRAMEWORK_DEBUG}   STATIC ${UGDK_SRC} ${GENERATED_SRC})
 elseif (${LINK_TYPE} STREQUAL SHARED)
-    add_library (${FRAMEWORK_BUILDNAME} SHARED ${UGDK_SRC} ${GENERATED_SRC})
+    add_library (${FRAMEWORK_RELEASE} SHARED ${UGDK_SRC} ${GENERATED_SRC})
+    add_library (${FRAMEWORK_DEBUG}   SHARED ${UGDK_SRC} ${GENERATED_SRC})
 endif (${LINK_TYPE} STREQUAL STATIC)
 
 
@@ -159,30 +138,44 @@ if (WIN32)
 	set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
 endif (WIN32)
 
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
+set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
+set_target_properties (${FRAMEWORK_DEBUG}   PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
+set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
+set_target_properties (${FRAMEWORK_DEBUG}   PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
 if (WIN32)
-	set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
+	set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
+    set_target_properties (${FRAMEWORK_DEBUG}   PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
 endif (WIN32)
 
 if (PYTHONLIBS_FOUND)
   include (cmake/asteroids.cmake)
 endif (PYTHONLIBS_FOUND)
 
-target_link_libraries (${FRAMEWORK_BUILDNAME}
+target_link_libraries (${FRAMEWORK_RELEASE}
 					   ${EXTRA_LIBRARIES}
 					   ${SDL_LIBRARY}
 					   ${SDLMIXER_LIBRARY}
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
 					   ${OPENGL_LIBRARIES}
-             ${UGDK_LIBRARIES})
-             #${LUA_LIBRARIES}
-             #${PYTHON_FINAL_LIB})
+                       ${UGDK_LIBRARIES})
+                        
+target_link_libraries (${FRAMEWORK_DEBUG}
+					   ${EXTRA_LIBRARIES}
+					   ${SDL_LIBRARY}
+					   ${SDLMIXER_LIBRARY}
+					   ${SDLTTF_LIBRARY}
+					   ${SDLIMAGE_LIBRARY}
+					   ${OPENGL_LIBRARIES}
+                       ${UGDK_LIBRARIES_DEBUG})
+                       
+set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
+set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA}")
+set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
 
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS}")
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA}")
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
+set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES LINK_FLAGS "${LDFLAGS}")
+set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA} ${CFLAGS_DEBUG}")
+set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME} (DEBUG)")
 
 # Installing on *nix
 #if (UNIX)
