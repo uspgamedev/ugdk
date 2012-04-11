@@ -10,7 +10,7 @@
 
 namespace ugdk {
 
-class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
+class AnimationProtocol : public gdd::DescriptionProtocol<action::AnimationSet> {
 
   public:
 
@@ -37,7 +37,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
 
   private:
 
-    Animation *current_animation_;
+    action::Animation *current_animation_;
 
     graphic::Modifier* current_effect_;
 
