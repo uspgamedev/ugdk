@@ -135,7 +135,7 @@ void VideoManager::SetVSync(const bool active) {
 #endif
 }
 
-void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
+void VideoManager::MergeLights(std::list<action::Scene*>& scene_list) {
     // Lights are simply added together.
     glBlendFunc(GL_ONE, GL_ONE);
 
@@ -143,7 +143,7 @@ void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
     glDrawBuffer(GL_BACK);
     glReadBuffer(GL_BACK);
 
-    for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+    for(std::list<action::Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->RenderLight();
 
@@ -189,7 +189,7 @@ void VideoManager::BlendLightIntoBuffer() {
 }
 
 // Desenha backbuffer na tela
-void VideoManager::Render(std::list<Scene*>& scene_list, double dt) {
+void VideoManager::Render(std::list<action::Scene*>& scene_list, double dt) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     if(settings_.light_system)
@@ -199,7 +199,7 @@ void VideoManager::Render(std::list<Scene*>& scene_list, double dt) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Draw all the sprites from all scenes.
-    for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+    for(std::list<action::Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->Render(dt);
 
@@ -209,7 +209,7 @@ void VideoManager::Render(std::list<Scene*>& scene_list, double dt) {
 
     // Draw all interface layers, with the usual RGBA blend.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+    for(std::list<action::Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->interface_node()->Render(dt);
 
