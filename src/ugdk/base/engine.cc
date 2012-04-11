@@ -60,12 +60,12 @@ bool Engine::Initialize(const Configuration& configuration) {
 }
 
 void Engine::DeleteFinishedScenes() {
-    std::list<Scene*> to_delete;
-    for(std::list<Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it)
+    std::list<action::Scene*> to_delete;
+    for(std::list<action::Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it)
         if((*it)->finished())
             to_delete.push_front(*it);
 
-    for(std::list<Scene*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it) {
+    for(std::list<action::Scene*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it) {
         delete (*it);
         scene_list_.remove(*it);
     }
@@ -77,7 +77,7 @@ void Engine::Run() {
     Key key;
     SDL_Event event;
     double delta_t, total_fps = 0;
-    Scene* current_top_scene = NULL;
+    action::Scene* current_top_scene = NULL;
 
     quit_ = false;
     while(!quit_) {
@@ -144,7 +144,7 @@ void Engine::Run() {
             }
         }
     }
-    for(std::list<Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it) {
+    for(std::list<action::Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it) {
         (*it)->Finish();
         delete (*it);
     }
@@ -172,11 +172,11 @@ void Engine::Release() {
     SDL_Quit();
 }
 
-void Engine::PushScene(Scene* scene) {
+void Engine::PushScene(action::Scene* scene) {
     scene_list_.push_back(scene);
 }
 
-Scene* Engine::CurrentScene() const {
+action::Scene* Engine::CurrentScene() const {
     return scene_list_.empty() ? NULL : scene_list_.back();
 }
 
