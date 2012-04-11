@@ -25,7 +25,7 @@ class ResourceManager {
     static graphic::Texture*     GetTextureFromTag        (const std::string& tag);
     static graphic::Texture*     GetTextureFromFile       (const std::string& file);
     static graphic::Spritesheet* GetSpritesheetFromTag    (const std::string& tag);
-    static AnimationSet*         GetAnimationSetFromFile  (const std::string& file);
+    static action::AnimationSet*         GetAnimationSetFromFile  (const std::string& file);
     static graphic::Text*        CreateTextFromLanguageTag(const std::string& tag);
 
     // Generic Methods
@@ -62,7 +62,7 @@ class ResourceManager {
     // Retro-compatibility
     ResourceContainer<graphic::Texture*>&     texture_container()     { return get_container<graphic::Texture*>();     }
     ResourceContainer<graphic::Spritesheet*>& spritesheet_container() { return get_container<graphic::Spritesheet*>(); }
-    ResourceContainer<AnimationSet*>&         animation_loader()      { return get_container<AnimationSet*>();         }
+    ResourceContainer<action::AnimationSet*>&         animation_loader()      { return get_container<action::AnimationSet*>();         }
     ResourceContainer<LanguageWord*>&         word_container()        { return get_container<LanguageWord*>();         }
     
   private:
