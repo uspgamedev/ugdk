@@ -8,8 +8,8 @@
 namespace ugdk {
 namespace graphic {
 
-Sprite::Sprite(Spritesheet *spritesheet, AnimationSet *set) 
-    : spritesheet_(spritesheet), animation_manager_(new AnimationManager(10, set)) {}/*TODO: MANO TEM UM 10 NO MEU CÓDIGO */
+Sprite::Sprite(Spritesheet *spritesheet, action::AnimationSet *set) 
+    : spritesheet_(spritesheet), animation_manager_(new action::AnimationManager(10, set)) {}/*TODO: MANO TEM UM 10 NO MEU CÓDIGO */
 
 Sprite::~Sprite() {
     if (animation_manager_) delete animation_manager_;

@@ -11,7 +11,7 @@ namespace graphic {
 
 class Sprite : public Drawable {
   public:
-    Sprite(Spritesheet *spritesheet, AnimationSet *set = NULL);
+    Sprite(Spritesheet *spritesheet, action::AnimationSet *set = NULL);
     virtual ~Sprite();
 
     void Draw(double dt);
@@ -50,7 +50,7 @@ class Sprite : public Drawable {
     /** Given an observer object, the function include this in the animation manager
     *  @param *observer is a pointer to the observer object
     */
-    void AddObserverToAnimation(Observer *observer) {
+    void AddObserverToAnimation(action::Observer *observer) {
         animation_manager_->AddObserver(observer);
     }
 
@@ -69,7 +69,7 @@ class Sprite : public Drawable {
        
   private:
     Spritesheet *spritesheet_;
-    AnimationManager *animation_manager_;
+    action::AnimationManager *animation_manager_;
 
     /// Update the Sprite based on the time variation.
     /** One of the two main functions of the UGDK Engine. Most of the game logic 
