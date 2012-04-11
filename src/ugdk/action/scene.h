@@ -8,6 +8,8 @@
 
 namespace ugdk {
 
+namespace action {
+
 class Entity;
 
 /**
@@ -85,6 +87,8 @@ class Scene {
   friend class Engine;
 }; // class Scene.
 
-}
+} /* namespace action */
+
+} /* namespace ugdk */
 
 #endif /* UGDK_ACTION_SCENE_H_ */

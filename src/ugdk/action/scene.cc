@@ -8,6 +8,8 @@
 
 namespace ugdk {
 
+namespace action {
+
 using namespace std;
 
 Scene::Scene() : finished_(false), background_music_(NULL), stops_previous_music_(true), 
@@ -42,4 +44,6 @@ void Scene::End() {
         background_music_->Pause();
 }
 
-}
+} /* namespace action */
+
+} /* namespace ugdk */
