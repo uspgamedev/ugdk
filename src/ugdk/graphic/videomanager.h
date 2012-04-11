@@ -29,7 +29,7 @@ class VideoManager {
 
     bool Initialize(const std::string& title, const Vector2D& size, bool fullscreen, const std::string& icon);
     bool Release();
-    void Render(std::list<Scene*>&, double dt);
+    void Render(std::list<action::Scene*>&, double dt);
 
     // Configuration
     bool ChangeResolution(const Vector2D& size, bool fullscreen);
@@ -71,7 +71,7 @@ class VideoManager {
 
     void InitializeLight();
 
-    void MergeLights(std::list<Scene*>& scene_list);
+    void MergeLights(std::list<action::Scene*>& scene_list);
     void BlendLightIntoBuffer();
 
     void ClearModiferStack();
