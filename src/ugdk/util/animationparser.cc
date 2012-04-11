@@ -11,7 +11,7 @@ using namespace std;
 AnimationParser* AnimationParser::reference_ = NULL;
 
 AnimationParser::~AnimationParser () {
-    std::map<std::string, AnimationSet*>::iterator it;
+    std::map<std::string, action::AnimationSet*>::iterator it;
     it = animation_sets_.begin();
     while (it != animation_sets_.end()) {
 		it->second->Release();
@@ -25,8 +25,8 @@ AnimationParser* AnimationParser::reference() {
     return reference_ ? reference_ : (reference_ = new AnimationParser);
 }
 
-bool parseLine(char buffer[], AnimationSet *set) {
-    static Animation *seq = NULL;
+bool parseLine(char buffer[], action::AnimationSet *set) {
+    static action::Animation *seq = NULL;
     static char animation_name[256];
     char *token = buffer;
     size_t len = strlen(buffer);
@@ -36,14 +36,14 @@ bool parseLine(char buffer[], AnimationSet *set) {
         case '$':
         	sscanf(token+1, "%s", animation_name);
         	//printf("New animation: %s\n", animation_name);
-            set->Add(animation_name, seq = new Animation);
+	    set->Add(animation_name, seq = new action::Animation);
             return true;
         case '%':
             if (seq) {
                 int frame = 0, step = 0;
                 token++;
                 while (sscanf(token, "%d%*[ \t]%n", &frame, &step) > 0) {
-                    seq->push_back(new AnimationFrame(frame));
+		    seq->push_back(new action::AnimationFrame(frame));
                     token += step;
                 }
                 if (*token != '\0') {
@@ -71,9 +71,9 @@ bool parseLine(char buffer[], AnimationSet *set) {
     return true;
 }
 
-AnimationSet* parseFile(FILE *file) {
+action::AnimationSet* parseFile(FILE *file) {
     static char buffer[1024];
-    AnimationSet *set = new AnimationSet;
+    action::AnimationSet *set = new action::AnimationSet;
     buffer[0] = '\0';
     while (fgets(buffer, 1024, file))
         if(!parseLine(buffer, set)) {
@@ -84,7 +84,7 @@ AnimationSet* parseFile(FILE *file) {
     return set;
 }
 
-AnimationSet* AnimationParser::parse(const string& file_path) {
+action::AnimationSet* AnimationParser::parse(const string& file_path) {
     FILE *file = fopen(file_path.c_str(), "r");
     if (file == NULL) {
         printf("Could not open file: %s\n", file_path.c_str());
@@ -93,10 +93,10 @@ AnimationSet* AnimationParser::parse(const string& file_path) {
     return parseFile(file);
 }
 
-AnimationSet* AnimationParser::Load(const std::string& file_path) {
-    map<string, AnimationSet*>::iterator it = animation_sets_.find(file_path);
+action::AnimationSet* AnimationParser::Load(const std::string& file_path) {
+  map<string, action::AnimationSet*>::iterator it = animation_sets_.find(file_path);
     if (it == animation_sets_.end()) {
-        AnimationSet *set = parse(file_path);
+        action::AnimationSet *set = parse(file_path);
         if (!set) return NULL;
         animation_sets_[file_path] = set;
         return set;

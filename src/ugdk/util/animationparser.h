@@ -10,7 +10,9 @@
 
 namespace ugdk {
 
+namespace action{
 class AnimationSet;
+}
 
 class AnimationParser {
   public:
@@ -19,17 +21,17 @@ class AnimationParser {
 
     static AnimationParser* reference();
 
-    AnimationSet* Load(const std::string& file_path);
+    action::AnimationSet* Load(const std::string& file_path);
 
   private:
 
     AnimationParser () {}
 
-    AnimationSet* parse(const std::string& file_path);
+    action::AnimationSet* parse(const std::string& file_path);
 
     static AnimationParser *reference_;
 
-    std::map<std::string, AnimationSet*> animation_sets_;
+    std::map<std::string, action::AnimationSet*> animation_sets_;
 
 };
 
