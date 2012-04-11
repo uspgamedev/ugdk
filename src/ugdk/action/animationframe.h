@@ -9,6 +9,8 @@
 
 namespace ugdk {
 
+namespace action{
+
 class Observer;
 class AnimationSet;
 
@@ -58,7 +60,9 @@ class Animation : public std::vector<AnimationFrame*> {
 
 };
 
-}
+} /* namespace action */
+
+} /* namespace ugdk */
 #endif
 
 
