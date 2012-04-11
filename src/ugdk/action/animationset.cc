@@ -6,6 +6,8 @@
 
 namespace ugdk {
 
+namespace action{
+
 using namespace std;
 
 AnimationSet::AnimationSet () {}
@@ -76,4 +78,6 @@ void AnimationSet::Print(FILE *out) {
 	}
 }
 
-}
+} /* namespace action */
+
+} /* namespace ugdk */

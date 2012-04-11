@@ -11,6 +11,8 @@
 
 namespace ugdk {
 
+namespace action{
+
 class AnimationSet {
 
   public:
@@ -51,6 +53,8 @@ class AnimationSet {
 
 };
 
-}
+} /* namespace action */
+
+} /* namespace ugdk */
 
 #endif /* HORUSEYE_FRAMEWORK_ANIMATIONSET_H_*/
