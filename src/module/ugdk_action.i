@@ -15,7 +15,7 @@
 
 %}
 
-%template(AnimationFrameVector) std::vector<ugdk::AnimationFrame*>;
+%template(AnimationFrameVector) std::vector<ugdk::action::AnimationFrame*>;
 
 %import(module="ugdk_base") <ugdk/base/types.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
@@ -29,6 +29,7 @@
 %include <ugdk/action/scene.h>
 
 namespace ugdk {
+namespace action { 
     export_class(Animation)
     export_class(AnimationFrame)
     export_class(AnimationSet)
@@ -36,6 +37,7 @@ namespace ugdk {
     export_class(Entity)
     export_class(Observer)
     export_class(Scene)
+}
 }
 
 confirm_exports(ugdk_action)

@@ -22,7 +22,7 @@
 %import(module="ugdk_gdd") <ugdk/util/gdd/abstractloader.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 
-%template(DescriptionProtocol_AnimationSet) ugdk::gdd::DescriptionProtocol<ugdk::AnimationSet>;
+%template(DescriptionProtocol_AnimationSet) ugdk::gdd::DescriptionProtocol<ugdk::action::AnimationSet>;
 
 %include <ugdk/util/animationparser.h>
 %include <ugdk/util/animationprotocol.h>
