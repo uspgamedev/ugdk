@@ -3,11 +3,15 @@
 
 namespace ugdk {
 
+namespace action {
+
 class Entity {
   public:
     Entity() {}
     virtual void Update(double dt) = 0;
 };
+
+}  // namespace action
 
 }  // namespace ugdk
 
