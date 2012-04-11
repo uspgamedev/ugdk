@@ -4,6 +4,8 @@
 
 namespace ugdk {
 
+namespace action{
+
 #define ANIMATION_BUFFER_SIZE 256
 
 AnimationManager::AnimationManager(double fps, AnimationSet *set)
@@ -64,6 +66,8 @@ void AnimationManager::NotifyAllObservers() {
         observers[i]->Tick();
     }
 }
+
+} /* namespace action*/
 
 } /* namespace ugdk */
 

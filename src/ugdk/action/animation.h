@@ -10,6 +10,8 @@
 
 namespace ugdk {
 
+namespace action{
+
 class Observer;
 class AnimationSet;
 
@@ -70,7 +72,9 @@ class AnimationManager {
 
 };
 
-}
+} /* namespace action */
+
+} /* namespace ugdk */
 #endif
 
 
