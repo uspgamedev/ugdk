@@ -1,6 +1,6 @@
 from ugdk.ugdk_action import Scene
 from ugdk.ugdk_util import CreateBox2D
-from ugdk.pyramidworks_collision import CollisionManager
+from ugdk.pyramidworks_collision import CollisionManager, CollisionInstanceList
 from ugdk.ugdk_input import InputManager, K_ESCAPE, K_HOME
 from ugdk.ugdk_base import Engine_reference
 import Config
@@ -14,6 +14,7 @@ def StartupScene():
     print "GOING TO GENERATE MAP"
     cena.GenerateMap()
     print "ALL DONE... Proceeding"
+    return cena
     
 
 class AsteroidsScene (Scene):
@@ -35,6 +36,7 @@ class AsteroidsScene (Scene):
         self.collisionManager.Generate("Gravity")
 
     def Populate(self, objs):
+        print self, " POPULATE: receiving objects ", objs
         for obj in objs:
             self.AddObject(obj)
             
@@ -42,9 +44,12 @@ class AsteroidsScene (Scene):
         self.objects.append(obj)
         if obj.is_collidable:
             self.colliding_objects.append(obj)
-            obj.colliding_object.StartColliding()
+            obj.collision_object.StartColliding()
         self.AddEntity(obj)
-        self.content_node().AddChild(obj.node)
+        print self, "GOING TO ADD OBJECT %s [node=%s]" % (obj, obj.node)
+        CN = self.content_node()
+        CN.AddChild(obj.node)
+        print "SCENE CONTENT NODE = ", CN
         self.interface_node().AddChild(obj.hud_node)
             
         
@@ -52,7 +57,7 @@ class AsteroidsScene (Scene):
         self.objects.remove(obj)
         if obj in self.colliding_objects:
             self.colliding_objects.remove(obj)
-            obj.colliding_object.StopColliding()
+            obj.collision_object.StopColliding()
         self.RemoveEntity(obj)
         del obj.node
         del obj.hud_node
@@ -61,7 +66,13 @@ class AsteroidsScene (Scene):
         self.Populate( MapGenerator.Generate() )
         self.content_node().set_drawable(MapGenerator.GetBackgroundDrawable() )
         
-    def Update(self, dt):
+    def Focus(self):
+        pass
+
+    def DeFocus(self):
+        pass
+
+    def Update(self, dt):  ###
         to_delete = []
         for obj in self.objects:
             if len(obj.new_objects) > 0:
@@ -83,19 +94,24 @@ class AsteroidsScene (Scene):
         input = Engine_reference().input_manager()
         
         if input.KeyPressed(K_ESCAPE):
+            print "GameScene ESCAPING"
             self.Finish()
         elif input.KeyPressed(K_HOME):
             self.Finish()
             StartupScene()
             
     def HandleCollisions(self):
-        collision_list = []
-        
+        collision_list = CollisionInstanceList()
+        #print "HandleCollisions COLLISION_LIST = ", collision_list
         for obj in self.colliding_objects:
             if not obj.is_destroyed:
                 obj.collision_object.SearchCollisions(collision_list)
             
         for col in collision_list:
+            print "HC", col
+            print "HANDLE COLLISION::  [%s].Handle(%s)" % (col[0], col[1])
             col[0].Handle(col[1])
             
-            
+    def End(self):
+        pass
+

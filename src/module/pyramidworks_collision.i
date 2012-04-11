@@ -36,10 +36,12 @@
 %ignore pyramidworks::collision::CollisionObject::InitializeCollisionClass(const char n[]);
 
 proxy_class(pyramidworks::collision::CollisionLogic)
-
-%template(CollisionInstanceList) std::vector<pyramidworks::collision::CollisionInstance>;
+void_class()
 
 %include <pyramidworks/collision.h>
+%template(CollisionInstanceList) std::vector<pyramidworks::collision::CollisionInstance>;
+%template(CollisionInstance) std::pair<pyramidworks::collision::CollisionLogic*, void* >;
+
 %include <pyramidworks/collision/collisionlogic.h>
 %include <pyramidworks/collision/collisionclass.h>
 %include <pyramidworks/collision/collisionmanager.h>
@@ -56,8 +58,6 @@ namespace collision {
     export_class(CollisionClass)
     export_class(CollisionManager)
     export_class(CollisionObject)
-    export_class(CollisionInstance)
-    export_class(CollisionObjectList)
 }
 }
  

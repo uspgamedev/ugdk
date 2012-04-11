@@ -13,6 +13,7 @@
 namespace pyramidworks {
 namespace collision {
 
+
 CollisionObject::CollisionObject(CollisionManager* manager, void *data) 
     :   manager_(manager),
         data_(data),

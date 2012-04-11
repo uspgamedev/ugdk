@@ -21,7 +21,7 @@ class CollisionObject {
   public:
     /** @param data The data sent to the CollisionLogic when a collision happens.
       * @see CollisionLogic */
-    CollisionObject(CollisionManager* manager, void *data = NULL);
+    CollisionObject(CollisionManager* manager, void *data);
     ~CollisionObject();
 
     /// Search if there's any collision.

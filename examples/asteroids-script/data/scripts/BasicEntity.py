@@ -17,6 +17,7 @@ def window_size():
     
 def getCollisionManager():
     scene = Engine_reference().CurrentScene()
+    print "Getting COLLISION MANAGER from ", scene
     return scene.collisionManager
 
 #   Functions or attributes marked with ### means they're part of the 
@@ -93,7 +94,7 @@ class BasicEntity (EntityInterface):
         self.life_hud = BarUI(self, "life", Color(1.0,0.0,0.0,1.0), Vector2D(0.0, self.radius))
         self.hud_node.AddChild(self.life_hud.node)
         
-        self.collision_object = CollisionObject(getCollisionManager())  #initialize collision object, second arg is passed to collisionlogic to handle collisions
+        self.collision_object = CollisionObject(getCollisionManager(), self)  #initialize collision object, second arg is passed to collisionlogic to handle collisions
         self.collision_object.InitializeCollisionClass("Entity")              # define the collision class
         self.geometry = Circle(self.radius)                           #
         self.collision_object.set_shape(self.geometry)                # set our shape

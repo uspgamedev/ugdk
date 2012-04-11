@@ -138,15 +138,18 @@ int main(int argc, char *argv[]) {
     //scene->GenerateMap();
     
     VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule("GameScene");
-	VirtualObj scene_class = scene_script["AsteroidsScene"];
     VirtualObj first_scene = scene_script["StartupScene"]();
     //ugdk::Scene* scene = first_scene.value<ugdk::Scene*>();
+    VirtualObj vnode = (first_scene | "content_node")();
+    ugdk::graphic::Node* virtualnode = vnode.value<ugdk::graphic::Node*>();
 
     //ugdk::Engine::reference()->PushScene(scene);
     
     //(first_scene | "GenerateMap")();
     
     // Transfers control to the framework.
+    ugdk::Scene* scene = ugdk::Engine::reference()->CurrentScene();
+    ugdk::graphic::Node* node = scene->content_node();
     ugdk::Engine::reference()->Run();
 
     // Releases all loaded textures, to avoid issues when changing resolution.

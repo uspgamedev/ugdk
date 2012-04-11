@@ -30,6 +30,9 @@ proxy_class(ugdk::Observer)
 proxy_class(ugdk::Entity)
 proxy_class(ugdk::Scene)
 
+%ignore ugdk::Scene::content_node() const;
+%ignore ugdk::Scene::interface_node() const;
+
 %include <ugdk/action/animationframe.h>
 %include <ugdk/action/animation.h>
 %include <ugdk/action/animationset.h>
