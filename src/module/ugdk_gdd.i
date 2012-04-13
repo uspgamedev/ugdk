@@ -27,9 +27,9 @@
 %include <ugdk/util/gdd/simpleloader.th>
 %include <ugdk/util/gdd/cachedloader.th>
 
-%template(AnimationAbstractLoader) ugdk::gdd::AbstractLoader<ugdk::AnimationSet>;
-%template(AnimationSimpleLoader) ugdk::gdd::SimpleLoader<ugdk::AnimationSet>;
-%template(AnimationLoader) ugdk::gdd::CachedLoader<ugdk::AnimationSet>;
+%template(AnimationAbstractLoader) ugdk::gdd::AbstractLoader<ugdk::action::AnimationSet>;
+%template(AnimationSimpleLoader) ugdk::gdd::SimpleLoader<ugdk::action::AnimationSet>;
+%template(AnimationLoader) ugdk::gdd::CachedLoader<ugdk::action::AnimationSet>;
 
 
 namespace ugdk {
