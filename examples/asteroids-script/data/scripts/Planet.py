@@ -60,14 +60,14 @@ class Planet (BasicEntity):
         return 9000.1 # Vegeta, what does the scouter say about his power level?
 
     def HandleCollision(self, target):
-        if target.type == self.type:
+        if target.CheckType("Planet"):
             print "WTF dude, u tripping? Planets colliding with planets? Ya frakking nuts?"
             aux = self.velocity
             self.velocity = target.velocity
             target.velocity = aux
             self.ApplyCollisionRollback()
             target.ApplyCollisionRollback()
-        elif target.type == "Ship.Ship":
+        elif target.CheckType("Ship"):
             target.TakeDamage(self.GetDamage(target.type))
             #print target.type, "crash landed on Planet... No survivors.     Boo-hoo."
         # Projectiles and Asteroids take care of collising with Planets.

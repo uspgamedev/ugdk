@@ -44,7 +44,8 @@ class Asteroid (BasicEntity):
             return self.life
 
     def HandleCollision(self, target):
-        if target.type == self.type:
+        print "%s IS COLLIDING WITH %s" % (self, target)
+        if target.CheckType("Asteroid"):
             aux = self.velocity
             self.velocity = target.velocity
             target.velocity = aux
@@ -53,12 +54,12 @@ class Asteroid (BasicEntity):
             self.TakeDamage(target.GetDamage(self.type))
             target.TakeDamage(self.GetDamage(target.type))
             #print "Asteroid collided with asteroid"
-        elif target.type == "Ship.Ship":
+        elif target.CheckType("Ship"):
             target.TakeDamage(self.GetDamage(target.type))
             target.ApplyVelocity(self.velocity * 0.5)
             self.TakeDamage(self.life + 10) #just to make sure we die and split LOL
             #print "Asteroid damaging ", target.type
-        elif target.type == "Planet.Planet":
+        elif target.CheckType("Planet"):
             target.TakeDamage(self.GetDamage(target.type))
             self.is_destroyed = self.has_splitted = True # WE CANNOT SPLIT when colliding with a planet =P
             #print "Asteroid damaging ", target.type

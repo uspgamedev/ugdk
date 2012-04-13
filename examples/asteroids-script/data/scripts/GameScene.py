@@ -59,8 +59,10 @@ class AsteroidsScene (Scene):
             self.colliding_objects.remove(obj)
             obj.collision_object.StopColliding()
         self.RemoveEntity(obj)
+        print "REMOVING OBJECT", obj
         del obj.node
         del obj.hud_node
+        del obj
         
     def GenerateMap(self):
         self.Populate( MapGenerator.Generate() )

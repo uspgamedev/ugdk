@@ -34,10 +34,13 @@ class EntityInterface (Entity):
         self.new_objects = []  ###
         self.is_destroyed = False ###
         self.type = str(self.__class__)  ###
+        print "CLASS TYPE: ", self.type
         self.id = EntityInterface.nextID
         self.is_collidable = True ###
         EntityInterface.nextID += 1
 
+    def CheckType(self, typestr):
+        return self.type.count(typestr) > 0
     def ClearNewObjects(self): ###
         self.new_objects = []
 
