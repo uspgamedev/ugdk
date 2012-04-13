@@ -3,13 +3,14 @@
 
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/action/entity.h>
+#include <ugdk/script/baseproxy.h>
 #include <list>
 
 namespace ugdk {
 
-class Entity;
+class EntityProxy;
 
-class EntityProxy : public Entity {
+class EntityProxy : public Entity, public ugdk::script::BaseProxy<EntityProxy> {
 public:
     EntityProxy(const ugdk::script::VirtualObj& proxy) : proxy_(proxy) {}
     

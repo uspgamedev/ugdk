@@ -2,6 +2,7 @@
 %{
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/scriptmanager.h>
+#include <ugdk/script/baseproxy.h>
 %}
 
 #ifdef SWIGPYTHON
@@ -44,17 +45,17 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
 #elif SWIGPYTHON
 %define proxy_class(T)
 %typemap(in) T* {
-    printf("starting typemap in\n");
+    //printf("starting typemap in\n");
     int resConvert = 0;
     void *_argpObj = 0 ;
     resConvert = SWIG_ConvertPtr($input, &_argpObj, $1_descriptor, 0 | 0 );
-    printf("conversion result = %d\n", resConvert);
+    //printf("conversion result = %d\n", resConvert);
     if (!SWIG_IsOK(resConvert)) {
         Py_INCREF($input);
         ugdk::script::python::PythonWrapper* wrapper = static_cast<ugdk::script::python::PythonWrapper*>( SCRIPT_MANAGER()->GetWrapper("Python") );
         ugdk::script::VirtualData::Ptr vdata( new ugdk::script::python::PythonData(wrapper, $input, true) ); 
-        $1 = new T##Proxy( ugdk::script::VirtualObj(vdata) );
-        printf("converting arg to proxy class [T##Proxy*=%d][PyObj*=%d]\n", (int)$1, (int)$input);
+        $1 = T##Proxy::Get( ugdk::script::VirtualObj(vdata) );
+        //printf("converting arg to proxy class [T##Proxy*=%d][PyObj*=%d]\n", (int)$1, (int)$input);
     }
     else {
         $1 = reinterpret_cast< T* >(_argpObj);
@@ -62,7 +63,7 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
 }
 
 %typemap(out) T* {
-    printf("starting typemap out [TypeId=%s](T##Proxy*=%d)\n", typeid($1).name(), (int)$1);
+    //printf("starting typemap out [TypeId=%s](T##Proxy*=%d)\n", typeid($1).name(), (int)$1);
     T##Proxy* __proxy_result = dynamic_cast< T##Proxy* > ($1);
     if (__proxy_result == NULL) {
         /*the object to convert is not of his Proxy class type... Use default SWIG conversion.*/
@@ -71,7 +72,7 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
     else {
         $result = static_cast<PyObject*>(__proxy_result->get_proxy_vobj().unsafe_data() );
         Py_INCREF($result);
-        printf("converting object back to proxy instance in script. [PyObj*=%d]\n", (int)$result);
+        //printf("converting object back to proxy instance in script. [PyObj*=%d]\n", (int)$result);
     }
 }
 %enddef
@@ -92,7 +93,7 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
 #elif SWIGPYTHON
 %define void_class()
 %typemap(in) void* {
-    printf("starting void in \n");
+    //printf("starting void in \n");
 
     Py_INCREF($input);
     //ugdk::script::python::PythonWrapper* wrapper = static_cast<ugdk::script::python::PythonWrapper*>( SCRIPT_MANAGER()->GetWrapper("Python") );
@@ -101,7 +102,7 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
 }
 
 %typemap(out) void* {
-    printf("starting void out (void*=%d)\n", (int)$1);
+    //printf("starting void out (void*=%d)\n", (int)$1);
     $result = static_cast<PyObject*>( $1 );
     Py_INCREF($result);
 }

@@ -3,15 +3,16 @@
 
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/action/scene.h>
+#include <ugdk/script/baseproxy.h>
 
 namespace ugdk {
 
-class Scene;
+class SceneProxy;
 
-class SceneProxy : public Scene {
+class SceneProxy : public Scene, public ugdk::script::BaseProxy<SceneProxy> {
 public:
     SceneProxy(const ugdk::script::VirtualObj& proxy) : Scene(), proxy_(proxy) {}
-    
+
     virtual void Focus() { 
         Scene::Focus();
         (proxy_ | "Focus")();
@@ -36,7 +37,7 @@ public:
     }
     
     ugdk::script::VirtualObj get_proxy_vobj() const { return proxy_; }
-    
+  
 protected:
     ugdk::script::VirtualObj proxy_;
 };

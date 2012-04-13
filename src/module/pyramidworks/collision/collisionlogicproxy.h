@@ -3,13 +3,14 @@
 
 #include <ugdk/script/virtualobj.h>
 #include <pyramidworks/collision/collisionlogic.h>
+#include <ugdk/script/baseproxy.h>
 
 namespace pyramidworks {
 namespace collision {
 
-class CollisionLogic;
+class CollisionLogicProxy;
 
-class CollisionLogicProxy : public CollisionLogic {
+class CollisionLogicProxy : public CollisionLogic, public ugdk::script::BaseProxy<CollisionLogicProxy> {
 public:
     CollisionLogicProxy(const ugdk::script::VirtualObj& proxy) : proxy_(proxy) {}
     

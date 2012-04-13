@@ -3,12 +3,13 @@
 
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/action/observer.h>
+#include <ugdk/script/baseproxy.h>
 
 namespace ugdk {
 
-class Observer;
+class ObserverProxy;
 
-class ObserverProxy : public Observer {
+class ObserverProxy : public Observer, public ugdk::script::BaseProxy<ObserverProxy> {
 public:
     ObserverProxy(const ugdk::script::VirtualObj& proxy) : proxy_(proxy) {}
     
