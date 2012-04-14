@@ -1,5 +1,5 @@
 from ugdk.ugdk_math import Vector2D
-from BasicEntity import BasicEntity
+from BasicEntity import BasicEntity, CalculateAfterSpeedBasedOnMomentum
 from Animations import CreateExplosionAtEntity
 from random import random, randint, shuffle
 from math import pi
@@ -16,6 +16,7 @@ class Asteroid (BasicEntity):
         BasicEntity.__init__(self, x, y, "images/asteroid%s.png" % (randint(1,3)), r, hp)
         self.node.modifier().set_rotation( random() * 2 * pi )
         self.has_splitted = False
+        self.mass = 1000.0 + 200*size_factor
         
     def TakeDamage(self, damage):
         BasicEntity.TakeDamage(self, damage)
@@ -48,8 +49,11 @@ class Asteroid (BasicEntity):
         print "%s IS COLLIDING WITH %s" % (self, target)
         if target.CheckType("Asteroid"):
             aux = self.velocity
-            self.velocity = target.velocity
-            target.velocity = aux
+            after_speeds = CalculateAfterSpeedBasedOnMomentum(self, target)
+            self.velocity = target.velocity.Normalize()
+            target.velocity = aux.Normalize()
+            self.velocity = self.velocity * after_speeds[0]
+            target.velocity = target.velocity * after_speeds[1]
             self.ApplyCollisionRollback()
             target.ApplyCollisionRollback()
             self.TakeDamage(target.GetDamage(self.type))

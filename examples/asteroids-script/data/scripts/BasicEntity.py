@@ -178,3 +178,19 @@ def GetEquivalentValueInRange(origin_value, origin_range, destination_range):
     dc = destination_range[1] - destination_range[0]    # dc = D - C
     r = dc * xa / ba                                    # r = (D-C)(X-A)/(B-A)
     return destination_range[0] + r       # return C + r
+
+
+#### momentum
+# MaVa + MbVb = MaVa' + MbVb'
+# 1 = e = (Vb' - Va')/(Va-Vb)
+###
+# following momentum formulas, returns a pair of the speeds (velocity magnetude) of each entity (in order) after a collision
+# NOTE: assumes coefficient = 1.0; which should be enough for now... Severe changes required here if coefficient is another value.
+def CalculateAfterSpeedBasedOnMomentum(ent1, ent2):
+    m1 = ent1.mass
+    m2 = ent2.mass
+    v1 = ent1.velocity.Length()
+    v2 = ent2.velocity.Length()
+    new_v1 = ((2*m2*v2) + (v1 * (m1 - m2))) / (m1 + m2)
+    new_v2 = ((2*m1*v1) + (v2 * (m2 - m1))) / (m2 + m1)
+    return (new_v1, new_v2)
