@@ -46,10 +46,10 @@ class AsteroidsScene (Scene):
             self.colliding_objects.append(obj)
             obj.collision_object.StartColliding()
         self.AddEntity(obj)
-        print self, "GOING TO ADD OBJECT %s [node=%s]" % (obj, obj.node)
+        #print self, "GOING TO ADD OBJECT %s [node=%s]" % (obj, obj.node)
         CN = self.content_node()
         CN.AddChild(obj.node)
-        print "SCENE CONTENT NODE = ", CN
+        #print "SCENE CONTENT NODE = ", CN
         self.interface_node().AddChild(obj.hud_node)
             
         
