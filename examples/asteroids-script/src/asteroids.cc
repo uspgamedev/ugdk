@@ -138,18 +138,22 @@ int main(int argc, char *argv[]) {
     //scene->GenerateMap();
     
     VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule("GameScene");
-    VirtualObj first_scene = scene_script["StartupScene"]();
+	{
+		VirtualObj first_scene = scene_script["StartupScene"]();
+		//if this object, which is scene, exists when main ends, and that same scene
+		//was already deleted segfault occured
+	}
     //ugdk::Scene* scene = first_scene.value<ugdk::Scene*>();
-    VirtualObj vnode = (first_scene | "content_node")();
-    ugdk::graphic::Node* virtualnode = vnode.value<ugdk::graphic::Node*>();
+    //VirtualObj vnode = (first_scene | "content_node")();
+    //ugdk::graphic::Node* virtualnode = vnode.value<ugdk::graphic::Node*>();
 
     //ugdk::Engine::reference()->PushScene(scene);
     
     //(first_scene | "GenerateMap")();
     
     // Transfers control to the framework.
-    ugdk::Scene* scene = ugdk::Engine::reference()->CurrentScene();
-    ugdk::graphic::Node* node = scene->content_node();
+    //ugdk::Scene* scene = ugdk::Engine::reference()->CurrentScene();
+    //ugdk::graphic::Node* node = scene->content_node();
     ugdk::Engine::reference()->Run();
 
     // Releases all loaded textures, to avoid issues when changing resolution.

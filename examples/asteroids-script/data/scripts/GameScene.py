@@ -59,7 +59,8 @@ class AsteroidsScene (Scene):
             self.colliding_objects.remove(obj)
             obj.collision_object.StopColliding()
         self.RemoveEntity(obj)
-        print "REMOVING OBJECT", obj
+        print "REMOVING OBJECT %s [%s]" % (obj, obj.node)
+        #obj.node.__swig_destroy__(obj.node)
         del obj.node
         del obj.hud_node
         del obj
@@ -110,8 +111,8 @@ class AsteroidsScene (Scene):
                 obj.collision_object.SearchCollisions(collision_list)
             
         for col in collision_list:
-            print "HC", col
-            print "HANDLE COLLISION::  [%s].Handle(%s)" % (col[0], col[1])
+            #print "HC", col
+            #print "HANDLE COLLISION::  [%s].Handle(%s)" % (col[0], col[1])
             col[0].Handle(col[1])
             
     def End(self):

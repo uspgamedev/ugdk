@@ -30,7 +30,7 @@ class EntityInterface (Entity):
         self.hud_node = Node()
         self.node = Node()   ###
         self.node.modifier().set_offset( Vector2D(x,y) )
-        self.node.thisown = 0
+        #self.node.thisown = 0
         self.new_objects = []  ###
         self.is_destroyed = False ###
         self.type = str(self.__class__)  ###
