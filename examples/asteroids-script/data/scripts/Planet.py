@@ -6,7 +6,6 @@ from Shockwave import Shockwave
 from random import random, randint, shuffle
 from math import pi
 
-from Projectile import Projectile
 
 # yes, Planet is pretty similar to Asteroid... But, whatever =P
 class Planet (BasicEntity):

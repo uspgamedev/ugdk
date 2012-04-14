@@ -24,6 +24,7 @@
     <None Include="ScriptSystem_Notes.txt" />
     <None Include="TODO.txt" />
     <None Include="data\scripts\GameScene.py" />
+    <None Include="data\scripts\Animations.py" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\scriptentity.h" />

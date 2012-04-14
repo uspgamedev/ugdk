@@ -1,5 +1,6 @@
 from ugdk.ugdk_math import Vector2D
 from BasicEntity import BasicEntity
+from Animations import CreateExplosionAtEntity
 from random import random, randint, shuffle
 from math import pi
 
@@ -53,15 +54,18 @@ class Asteroid (BasicEntity):
             target.ApplyCollisionRollback()
             self.TakeDamage(target.GetDamage(self.type))
             target.TakeDamage(self.GetDamage(target.type))
+            CreateExplosionAtEntity(self, self.radius*0.7)
             #print "Asteroid collided with asteroid"
         elif target.CheckType("Ship"):
             target.TakeDamage(self.GetDamage(target.type))
             target.ApplyVelocity(self.velocity * 0.5)
             self.TakeDamage(self.life + 10) #just to make sure we die and split LOL
+            CreateExplosionAtEntity(self, (self.radius+target.radius)/2.0)
             #print "Asteroid damaging ", target.type
         elif target.CheckType("Planet"):
             target.TakeDamage(self.GetDamage(target.type))
             self.is_destroyed = self.has_splitted = True # WE CANNOT SPLIT when colliding with a planet =P
+            CreateExplosionAtEntity(self, target.radius*1.2)
             #print "Asteroid damaging ", target.type
 
         #No handler for projectile since that is strictly
