@@ -13,6 +13,10 @@ class BaseProxy {
 public:
     static void Set(void* key, T* object) { BaseProxy::table_[key] = object; }
 
+    static bool Check(const ugdk::script::VirtualObj& proxy) {
+        return BaseProxy::table_.count(proxy.unsafe_data()) > 0;
+    }
+
     static T* Get(const ugdk::script::VirtualObj& proxy) {
         void* key = proxy.unsafe_data();
         T* obj;

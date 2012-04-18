@@ -17,7 +17,7 @@ def window_size():
     
 def getCollisionManager():
     scene = Engine_reference().CurrentScene()
-    #print "Getting COLLISION MANAGER from ", scene
+    print "Getting COLLISION MANAGER from ", scene
     return scene.collisionManager
 
 #   Functions or attributes marked with ### means they're part of the 

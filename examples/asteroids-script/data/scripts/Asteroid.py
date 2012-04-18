@@ -49,11 +49,15 @@ class Asteroid (BasicEntity):
         print "%s IS COLLIDING WITH %s" % (self, target)
         if target.CheckType("Asteroid"):
             aux = self.velocity
-            after_speeds = CalculateAfterSpeedBasedOnMomentum(self, target)
-            self.velocity = target.velocity.Normalize()
-            target.velocity = aux.Normalize()
-            self.velocity = self.velocity * after_speeds[0]
-            target.velocity = target.velocity * after_speeds[1]
+            #after_speeds = CalculateAfterSpeedBasedOnMomentum(self, target)
+            #self.velocity = target.velocity.Normalize()
+            #target.velocity = aux.Normalize()
+            #self.velocity = self.velocity * after_speeds[0]
+            #target.velocity = target.velocity * after_speeds[1]
+
+            self.velocity = target.velocity
+            target.velocity = aux
+
             self.ApplyCollisionRollback()
             target.ApplyCollisionRollback()
             self.TakeDamage(target.GetDamage(self.type))
