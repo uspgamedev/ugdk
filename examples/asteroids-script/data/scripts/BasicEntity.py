@@ -17,7 +17,7 @@ def window_size():
     
 def getCollisionManager():
     scene = Engine_reference().CurrentScene()
-    print "Getting COLLISION MANAGER from ", scene
+    #print "Getting COLLISION MANAGER from ", scene
     return scene.collisionManager
 
 #   Functions or attributes marked with ### means they're part of the 
@@ -36,7 +36,7 @@ class EntityInterface (Entity):
         self.type = str(self.__class__)  ###
         if len(self.type.split("'")) > 1:
             self.type = self.type.split("'")[1]
-        print "CLASS TYPE: ", self.type
+        #print "CLASS TYPE: ", self.type
         self.id = EntityInterface.nextID
         self.is_collidable = True ###
         EntityInterface.nextID += 1

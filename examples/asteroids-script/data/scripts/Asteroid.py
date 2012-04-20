@@ -46,7 +46,7 @@ class Asteroid (BasicEntity):
             return self.life
 
     def HandleCollision(self, target):
-        print "%s IS COLLIDING WITH %s" % (self, target)
+        #print "%s IS COLLIDING WITH %s" % (self, target)
         if target.CheckType("Asteroid"):
             aux = self.velocity
             #after_speeds = CalculateAfterSpeedBasedOnMomentum(self, target)

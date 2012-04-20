@@ -6,27 +6,20 @@ from ugdk.ugdk_base import Engine_reference
 import Config
 import MapGenerator
     
-
-BACKUPCENA = None
-
 def StartupScene():
-    global BACKUPCENA
-    print "STARTING SCENE"
+    #print "STARTING SCENE"
     cena = AsteroidsScene()
-    print "GOING TO PUSH SCENE"
+    #print "GOING TO PUSH SCENE"
     Engine_reference().PushScene( cena )
-    print "GOING TO GENERATE MAP"
+    #print "GOING TO GENERATE MAP"
     cena.GenerateMap()
-    print "ALL DONE... Proceeding"
-    BACKUPCENA = cena
+    #print "ALL DONE... Proceeding"
     return cena
     
 
 class AsteroidsScene (Scene):
     def __init__(self):
-        print "Creating AsteroidsScene"
-        #Scene.__init__(self)
-        print "Initialized base class"
+        #print "Creating AsteroidsScene"
         maxval = MapGenerator.MAX_ENTITY_SIZE
         mincoords = [-maxval, -maxval]
         maxcoords = [Config.resolution.get_x() + maxval,  Config.resolution.get_y() + maxval]
@@ -41,7 +34,7 @@ class AsteroidsScene (Scene):
         self.collisionManager.Generate("Gravity")
 
     def Populate(self, objs):
-        print self, " POPULATE: receiving objects ", objs
+        #print self, " POPULATE: receiving objects ", objs
         for obj in objs:
             self.AddObject(obj)
             
@@ -51,12 +44,12 @@ class AsteroidsScene (Scene):
             self.colliding_objects.append(obj)
             obj.collision_object.StartColliding()
         self.AddEntity(obj)
-        print self, "GOING TO ADD OBJECT %s [node=%s]" % (obj, obj.node)
+        #print self, "GOING TO ADD OBJECT %s [node=%s]" % (obj, obj.node)
         CN = self.content_node()
         CN.AddChild(obj.node)
-        print "SCENE CONTENT NODE = ", CN
+        #print "SCENE CONTENT NODE = ", CN
         self.interface_node().AddChild(obj.hud_node)
-        print "FINISHED ADDING OBJECT"
+        #print "FINISHED ADDING OBJECT"
             
         
     def RemoveObject(self, obj):
@@ -65,18 +58,17 @@ class AsteroidsScene (Scene):
             self.colliding_objects.remove(obj)
             obj.collision_object.StopColliding()
         self.RemoveEntity(obj)
-        print "REMOVING OBJECT %s [%s]" % (obj, obj.node)
-        #obj.node.__swig_destroy__(obj.node)
+        #print "REMOVING OBJECT %s [%s]" % (obj, obj.node)
         del obj.node
         del obj.hud_node
         del obj
         
     def GenerateMap(self):
-        print "GENERATE MARK 1"
+        #print "GENERATE MARK 1"
         self.Populate( MapGenerator.Generate() )
-        print "GENERATE MARK 2"
+        #print "GENERATE MARK 2"
         self.content_node().set_drawable(MapGenerator.GetBackgroundDrawable() )
-        print "GENERATE MARK 3"
+        #print "GENERATE MARK 3"
         
     def Focus(self):
         pass
@@ -121,7 +113,7 @@ class AsteroidsScene (Scene):
             
         for col in collision_list:
             #print "HC", col
-            print "HANDLE COLLISION::  [%s].Handle(%s)" % (col[0], col[1])
+            #print "HANDLE COLLISION::  [%s].Handle(%s)" % (col[0], col[1])
             col[0].Handle(col[1])
             
     def End(self):

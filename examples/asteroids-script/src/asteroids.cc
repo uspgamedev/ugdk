@@ -23,8 +23,6 @@
 #include <ugdk/script/languages/lua/header.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
 
-#include "scriptscene.h"
-
 using ugdk::Vector2D;
 using ugdk::script::VirtualObj;
 
