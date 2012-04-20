@@ -25,6 +25,7 @@ class Ship (BasicEntity):
         self.max_speed = 150.0              # max |velocity| ship can attain.
         self.projectile_speed = 170         # 
         self.energy_hud = BarUI(self, "energy", Color(0.0,0.0,1.0,1.0), Vector2D(0.0, self.radius+BAR_HEIGHT))
+        self.hud_node.AddChild(self.energy_hud.node)
 
     def Update(self, dt):
         self.CheckCommands(dt)

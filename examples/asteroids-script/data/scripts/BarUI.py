@@ -49,7 +49,7 @@ class BarUI:
             self.bar_node.modifier().set_scale( Vector2D(scale, 1.0) )
 
     def UpdatePosition(self):
-        self.node.modifier().set_offset(self.entity.GetPos() + self.offset)
+        self.node.modifier().set_offset(self.offset) #+ self.entity.GetPos()
 
     def __repr__(self):
         return "<%s of entity %s>" % (self.type, self.entity)

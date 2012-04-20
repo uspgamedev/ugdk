@@ -14,6 +14,7 @@ class Shockwave (GravityWell):
         self.radius_range = radius_range
         GravityWell.__init__(self, x, y, radius_range[0])
         self.radius = radius_range[0]
+        self.geometry.set_radius(self.radius)
         self.is_antigrav = True
         self.size = Vector2D(self.radius*2, self.radius*2)
         texture_obj = Engine_reference().resource_manager().texture_container().Load("images/shockwave.png", "images/shockwave.png")
@@ -29,6 +30,7 @@ class Shockwave (GravityWell):
 
     def SetRadius(self, r):
         self.radius = r
+        self.geometry.set_radius(r)
         self.mass = GetMassByRadius(r)
         #self.size.set_x(self.radius * 2)
         #self.size.set_y(self.radius * 2)

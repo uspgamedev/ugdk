@@ -52,10 +52,6 @@ def Generate():
 
     print "Generating a %sx%s map with %s entities..." % (rows, columns, n)
 
-    #possibleCells = []
-    #for i in range(rows):
-    #    for j in range(columns):
-    #        possibleCells.append( (i,j) )
     possibleCells = [(i,j) for i in range(rows) for j in range(columns)]
     random.shuffle(possibleCells)
     # I had so many awesome ideas using awesome python features to do this 
@@ -91,7 +87,6 @@ def Generate():
 
 def GetBackgroundDrawable():
     screenSize = Engine_reference().video_manager().video_size()
-    #texture_obj = Engine_reference().resource_manager().texture_container().Load("images/background%s.jpg" % (random.randint(1,3)) )
     texture_obj = ResourceManager_GetTextureFromFile("images/background%s.jpg" % (random.randint(1,3)))
     background = TexturedRectangle( texture_obj, screenSize )
     #background.set_hotspot(Drawable.CENTER)

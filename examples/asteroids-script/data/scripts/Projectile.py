@@ -30,20 +30,20 @@ class Projectile (BasicEntity):
         return self.damage
 
     def HandleCollision(self, target):
-        if target.type == self.type:
+        if target.CheckType("Projectile"):
             # collision between projectiles, destroy both
             target.TakeDamage(666)
             self.is_destroyed = True
-            CreateExplosionAtEntity(self)
+            CreateExplosionAtEntity(self, self.radius*5)
             #print "Projectiles exploding..."
-        elif target.type == "Ship.Ship" or target.type == "Asteroid.Asteroid":
+        elif target.CheckType("Ship") or target.CheckType("Asteroid"):
             target.TakeDamage(self.GetDamage(target.type))
             target.ApplyVelocity(self.velocity * (0.15*self.power))
             self.is_destroyed = True
-            CreateExplosionAtEntity(self)
+            CreateExplosionAtEntity(self, target.radius)
             #print "Projectile damaging ", target.type
-        elif target.type == "Planet.Planet":
+        elif target.CheckType("Planet"):
             target.TakeDamage(self.GetDamage(target.type))
             self.is_destroyed = True
-            CreateExplosionAtEntity(self)
+            CreateExplosionAtEntity(self, target.radius*0.7)
             #print "Projectile impacted planet"

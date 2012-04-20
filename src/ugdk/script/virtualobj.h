@@ -11,6 +11,8 @@
 #include <vector>
 #include <map>
 
+#include <cstdio>
+
 namespace ugdk {
 namespace script {
 
@@ -131,6 +133,8 @@ class VirtualObj {
     static VirtualObj Create (const std::string& str, LangWrapper* wrapper) {
         return Create(str.c_str(), wrapper);
     }
+    
+    void* unsafe_data() const { return data_->unsafe_data(); }
 
   private:
 
@@ -184,6 +188,10 @@ class Bind {
         obj_(obj),
         method_name_(obj.wrapper()) {
         method_name_.set_value(method_name);
+    }
+    VirtualObj operator() () const {
+        std::list<VirtualObj> args;
+        return obj_[method_name_]((obj_, args)); 
     }
     VirtualObj operator() (std::list<VirtualObj>& args) const {
         return obj_[method_name_]((obj_, args));

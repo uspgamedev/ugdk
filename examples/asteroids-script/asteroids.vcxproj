@@ -334,11 +334,13 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\scripts\Animations.py" />
     <None Include="data\scripts\Asteroid.py" />
     <None Include="data\scripts\BarUI.py" />
     <None Include="data\scripts\BasicEntity.py" />
     <None Include="data\scripts\Config.py" />
     <None Include="data\scripts\EntityUI.py" />
+    <None Include="data\scripts\GameScene.py" />
     <None Include="data\scripts\Gravity.py" />
     <None Include="data\scripts\MapGenerator.py" />
     <None Include="data\scripts\Planet.py" />

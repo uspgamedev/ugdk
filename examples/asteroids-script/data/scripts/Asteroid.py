@@ -1,5 +1,6 @@
 from ugdk.ugdk_math import Vector2D
-from BasicEntity import BasicEntity
+from BasicEntity import BasicEntity, CalculateAfterSpeedBasedOnMomentum
+from Animations import CreateExplosionAtEntity
 from random import random, randint, shuffle
 from math import pi
 
@@ -15,6 +16,7 @@ class Asteroid (BasicEntity):
         BasicEntity.__init__(self, x, y, "images/asteroid%s.png" % (randint(1,3)), r, hp)
         self.node.modifier().set_rotation( random() * 2 * pi )
         self.has_splitted = False
+        self.mass = 1000.0 + 200*size_factor
         
     def TakeDamage(self, damage):
         BasicEntity.TakeDamage(self, damage)
@@ -44,23 +46,34 @@ class Asteroid (BasicEntity):
             return self.life
 
     def HandleCollision(self, target):
-        if target.type == self.type:
+        #print "%s IS COLLIDING WITH %s" % (self, target)
+        if target.CheckType("Asteroid"):
             aux = self.velocity
+            #after_speeds = CalculateAfterSpeedBasedOnMomentum(self, target)
+            #self.velocity = target.velocity.Normalize()
+            #target.velocity = aux.Normalize()
+            #self.velocity = self.velocity * after_speeds[0]
+            #target.velocity = target.velocity * after_speeds[1]
+
             self.velocity = target.velocity
             target.velocity = aux
+
             self.ApplyCollisionRollback()
             target.ApplyCollisionRollback()
             self.TakeDamage(target.GetDamage(self.type))
             target.TakeDamage(self.GetDamage(target.type))
+            CreateExplosionAtEntity(self, self.radius*0.7)
             #print "Asteroid collided with asteroid"
-        elif target.type == "Ship.Ship":
+        elif target.CheckType("Ship"):
             target.TakeDamage(self.GetDamage(target.type))
             target.ApplyVelocity(self.velocity * 0.5)
             self.TakeDamage(self.life + 10) #just to make sure we die and split LOL
+            CreateExplosionAtEntity(self, (self.radius+target.radius)/2.0)
             #print "Asteroid damaging ", target.type
-        elif target.type == "Planet.Planet":
+        elif target.CheckType("Planet"):
             target.TakeDamage(self.GetDamage(target.type))
             self.is_destroyed = self.has_splitted = True # WE CANNOT SPLIT when colliding with a planet =P
+            CreateExplosionAtEntity(self, target.radius*1.2)
             #print "Asteroid damaging ", target.type
 
         #No handler for projectile since that is strictly

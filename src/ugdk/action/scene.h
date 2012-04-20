@@ -22,7 +22,6 @@ class Entity;
 */
 class Scene {
   public:
-    Scene();
     virtual ~Scene();
 
     /// Method called when this Scene arrives on the top of the Scene stack.
@@ -65,6 +64,8 @@ class Scene {
 
   protected:
 
+    Scene();
+    
     /// Ends the scene activity.
     /** Note: do not release any resources in this method. */
     virtual void End();

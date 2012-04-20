@@ -14,6 +14,7 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/modules.h>
+#include <pyramidworks/modules.h>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/langwrapper.h>
@@ -21,8 +22,6 @@
 #include <ugdk/script/languages/lua/luawrapper.h>
 #include <ugdk/script/languages/lua/header.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
-
-#include "scriptscene.h"
 
 using ugdk::Vector2D;
 using ugdk::script::VirtualObj;
@@ -36,11 +35,13 @@ static void InitScripts() {
     //inicializando lua
     LuaWrapper* lua_wrapper = new LuaWrapper();
     ugdk::RegisterLuaModules(lua_wrapper);
+    pyramidworks::RegisterLuaModules(lua_wrapper);
     SCRIPT_MANAGER()->Register("Lua", lua_wrapper);
 
     //inicializando python
     PythonWrapper* py_wrapper = new PythonWrapper();
     ugdk::RegisterPythonModules(py_wrapper);
+    pyramidworks::RegisterPythonModules(py_wrapper);
     SCRIPT_MANAGER()->Register("Python", py_wrapper);
 }
 
@@ -131,11 +132,26 @@ int main(int argc, char *argv[]) {
     VirtualObj animations = SCRIPT_MANAGER()->LoadModule("Animations");
     animations["InitializeSpritesheets"]();
 
-    asteroids::ScriptScene* scene = new asteroids::ScriptScene();
-    scene->GenerateMap();
+    //asteroids::ScriptScene* scene = new asteroids::ScriptScene();
+    //scene->GenerateMap();
+    
+    VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule("GameScene");
+	{
+		VirtualObj first_scene = scene_script["StartupScene"]();
+		//if this object, which is scene, exists when main ends, and that same scene
+		//was already deleted segfault occured
+	}
+    //ugdk::Scene* scene = first_scene.value<ugdk::Scene*>();
+    //VirtualObj vnode = (first_scene | "content_node")();
+    //ugdk::graphic::Node* virtualnode = vnode.value<ugdk::graphic::Node*>();
 
-    ugdk::Engine::reference()->PushScene(scene);
+    //ugdk::Engine::reference()->PushScene(scene);
+    
+    //(first_scene | "GenerateMap")();
+    
     // Transfers control to the framework.
+    //ugdk::Scene* scene = ugdk::Engine::reference()->CurrentScene();
+    //ugdk::graphic::Node* node = scene->content_node();
     ugdk::Engine::reference()->Run();
 
     // Releases all loaded textures, to avoid issues when changing resolution.

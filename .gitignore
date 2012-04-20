@@ -41,3 +41,4 @@ examples/asteroids-script/asteroids
 /x64
 /examples/asteroids-script/Release
 /examples/asteroids-script/Debug
+examples/asteroids-script/data/scripts/ugdk/*
