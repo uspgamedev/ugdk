@@ -6,6 +6,7 @@
 #include <ugdk/script/baseproxy.h>
 
 namespace ugdk {
+namespace action {
 
 class SceneProxy;
 
@@ -39,5 +40,5 @@ public:
 };
 
 }
-
+}
 #endif

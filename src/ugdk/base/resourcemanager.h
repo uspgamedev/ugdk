@@ -47,7 +47,7 @@ class ResourceManager {
     ResourceContainer<T>& get_container() {
         ResourceContainerBase* base = containers_[&typeid(T)];
         ResourceContainer<T>* container = static_cast<ResourceContainer<T>*>(base);
-#ifdef DEBUG
+/*#ifdef DEBUG
         fprintf(stdout, "UGDK::ResourceManager - Log: get_container<%s:%lX>(%lX -> %lX); Size: %ld\n", 
                 typeid(T).name(),
                 reinterpret_cast<uintptr_t>(&typeid(T)),
@@ -55,7 +55,7 @@ class ResourceManager {
                 reinterpret_cast<uintptr_t>(container),
                 containers_.size()
                 );
-#endif
+#endif*/
         return *container;
     }
 

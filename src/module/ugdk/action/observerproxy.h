@@ -6,6 +6,7 @@
 #include <ugdk/script/baseproxy.h>
 
 namespace ugdk {
+namespace action {
 
 class ObserverProxy;
 
@@ -20,5 +21,5 @@ public:
 };
 
 }
-
+}
 #endif

@@ -25,7 +25,7 @@
 %import(module="ugdk_graphic") <ugdk/graphic/spritesheet.h>
 %import(module="ugdk_graphic") <ugdk/graphic/texture.h>
 
-proxy_class(ugdk::Observer)
+proxy_class(ugdk::action::Observer)
 
 %include <ugdk/graphic/drawable/shape.h>
 %include <ugdk/graphic/drawable/solidrectangle.h>

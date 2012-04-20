@@ -51,7 +51,7 @@ disable_disown(ugdk::LanguageWord* val)
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_util") <ugdk/util.h>
 
-proxy_class(ugdk::Scene)
+proxy_class(ugdk::action::Scene)
 
 %include <ugdk/base/types.h>
 %include <ugdk/base/configuration.h>

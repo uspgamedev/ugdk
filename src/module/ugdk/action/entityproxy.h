@@ -6,6 +6,7 @@
 #include <list>
 
 namespace ugdk {
+namespace action {
 
 class EntityProxy;
 
@@ -24,5 +25,5 @@ public:
 };
 
 }
-
+}
 #endif

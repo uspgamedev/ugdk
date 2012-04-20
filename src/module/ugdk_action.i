@@ -26,12 +26,12 @@
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_audio") <ugdk/audio.h>
 
-proxy_class(ugdk::Observer)
-proxy_class(ugdk::Entity)
-proxy_class(ugdk::Scene)
+proxy_class(ugdk::action::Observer)
+proxy_class(ugdk::action::Entity)
+proxy_class(ugdk::action::Scene)
 
-%ignore ugdk::Scene::content_node() const;
-%ignore ugdk::Scene::interface_node() const;
+%ignore ugdk::action::Scene::content_node() const;
+%ignore ugdk::action::Scene::interface_node() const;
 
 %include <ugdk/action/animationframe.h>
 %include <ugdk/action/animation.h>
