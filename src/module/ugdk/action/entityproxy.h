@@ -1,7 +1,6 @@
 #ifndef MODULE_PROXY_ENTITY_H_
 #define MODULE_PROXY_ENTITY_H_
 
-#include <ugdk/script/virtualobj.h>
 #include <ugdk/action/entity.h>
 #include <ugdk/script/baseproxy.h>
 #include <list>
@@ -12,7 +11,7 @@ class EntityProxy;
 
 class EntityProxy : public Entity, public ugdk::script::BaseProxy<EntityProxy> {
 public:
-    EntityProxy(const ugdk::script::VirtualObj& proxy) : proxy_(proxy) {}
+    EntityProxy(const ugdk::script::VirtualObj& proxy) : ugdk::script::BaseProxy<EntityProxy>(proxy) {}
     
     virtual void Update(double dt) {
         ugdk::script::VirtualObj vdt = ugdk::script::VirtualObj(proxy_.wrapper());
@@ -22,11 +21,6 @@ public:
         ( proxy_ | "Update" )(args);
     }
     
-    
-    ugdk::script::VirtualObj get_proxy_vobj() const { return proxy_; }
-    
-protected:
-    ugdk::script::VirtualObj proxy_;
 };
 
 }

@@ -11,7 +11,7 @@ class SceneProxy;
 
 class SceneProxy : public Scene, public ugdk::script::BaseProxy<SceneProxy> {
 public:
-    SceneProxy(const ugdk::script::VirtualObj& proxy) : Scene(), proxy_(proxy) {}
+    SceneProxy(const ugdk::script::VirtualObj& proxy) : Scene(), ugdk::script::BaseProxy<SceneProxy>(proxy) {}
 
     virtual void Focus() { 
         Scene::Focus();
@@ -35,11 +35,7 @@ public:
         Scene::End();
         (proxy_ | "End")(); 
     }
-    
-    ugdk::script::VirtualObj get_proxy_vobj() const { return proxy_; }
-  
-protected:
-    ugdk::script::VirtualObj proxy_;
+
 };
 
 }

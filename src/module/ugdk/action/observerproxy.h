@@ -11,17 +11,12 @@ class ObserverProxy;
 
 class ObserverProxy : public Observer, public ugdk::script::BaseProxy<ObserverProxy> {
 public:
-    ObserverProxy(const ugdk::script::VirtualObj& proxy) : proxy_(proxy) {}
+    ObserverProxy(const ugdk::script::VirtualObj& proxy) : ugdk::script::BaseProxy<ObserverProxy>(proxy) {}
     
     virtual void Tick() {
         ( proxy_ | "Tick" )();
     }
-    
-    
-    ugdk::script::VirtualObj get_proxy_vobj() const { return proxy_; }
-    
-protected:
-    ugdk::script::VirtualObj proxy_;
+
 };
 
 }

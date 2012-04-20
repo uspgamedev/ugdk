@@ -12,7 +12,7 @@ class CollisionLogicProxy;
 
 class CollisionLogicProxy : public CollisionLogic, public ugdk::script::BaseProxy<CollisionLogicProxy> {
 public:
-    CollisionLogicProxy(const ugdk::script::VirtualObj& proxy) : proxy_(proxy) {}
+    CollisionLogicProxy(const ugdk::script::VirtualObj& proxy) : ugdk::script::BaseProxy<CollisionLogicProxy>(proxy) {}
     
     virtual void Handle(void *data) {
         ugdk::script::VirtualObj vdata = ugdk::script::VirtualObj(proxy_.wrapper());
@@ -21,12 +21,7 @@ public:
         args.push_back(vdata);
         ( proxy_ | "Handle" )(args);
     }
-    
-    
-    ugdk::script::VirtualObj get_proxy_vobj() const { return proxy_; }
-    
-protected:
-    ugdk::script::VirtualObj proxy_;
+
 };
 
 }

@@ -51,13 +51,13 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
     resConvert = SWIG_ConvertPtr($input, &_argpObj, $1_descriptor, SWIG_POINTER_DISOWN );
     printf("conversion result = %d\n", resConvert);
     if (!SWIG_IsOK(resConvert)) {
-        //Py_INCREF($input);
+        Py_INCREF($input);
         ugdk::script::python::PythonWrapper* wrapper = static_cast<ugdk::script::python::PythonWrapper*>( SCRIPT_MANAGER()->GetWrapper("Python") );
         ugdk::script::VirtualData::Ptr vdata( new ugdk::script::python::PythonData(wrapper, $input, true) ); 
         ugdk::script::VirtualObj vobj(vdata);
         if (!T##Proxy::Check(vobj)) {
             printf(">>> T##Proxy instance was created\n");
-            Py_INCREF($input);
+            //Py_INCREF($input);
         }
         $1 = T##Proxy::Get( vobj );
         printf("converting arg to proxy class [T##Proxy*=%d][PyObj*=%d][PyRefCoutn=%d]\n", (int)$1, (int)$input, (int)$input->ob_refcnt);

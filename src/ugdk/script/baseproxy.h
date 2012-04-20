@@ -3,6 +3,7 @@
 
 #include <map>
 #include <ugdk/script/virtualobj.h>
+#
 
 namespace ugdk {
 namespace script {
@@ -11,6 +12,14 @@ namespace script {
 template <class T>
 class BaseProxy {
 public:
+    BaseProxy(const ugdk::script::VirtualObj& proxy) : proxy_(proxy) {}
+    ~BaseProxy() {
+        BaseProxy::table_.erase(proxy_.unsafe_data());
+    }
+
+    ugdk::script::VirtualObj get_proxy_vobj() const { return proxy_; }
+    
+
     static void Set(void* key, T* object) { BaseProxy::table_[key] = object; }
 
     static bool Check(const ugdk::script::VirtualObj& proxy) {
@@ -29,6 +38,9 @@ public:
         }
         return obj;
     }
+
+protected:
+    ugdk::script::VirtualObj proxy_;
 
 private:
     static std::map<void*, T*> table_;
