@@ -321,9 +321,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\examples\asteroids-script\src\asteroids.cc" />
-    <ClCompile Include="src\scriptentity.cc" />
-    <ClCompile Include="src\scriptentitystack.cc" />
-    <ClCompile Include="src\scriptscene.cc" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/Users/home/Documents/Visual Studio 2010/Projects/Horus Eye/ugdk/ZERO_CHECK.vcxproj">
@@ -350,11 +347,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <None Include="data\scripts\Shockwave.py" />
     <None Include="ScriptSystem_Notes.txt" />
     <None Include="TODO.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\scriptentity.h" />
-    <ClInclude Include="src\scriptentitystack.h" />
-    <ClInclude Include="src\scriptscene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

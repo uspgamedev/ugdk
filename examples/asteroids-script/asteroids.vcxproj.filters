@@ -4,9 +4,6 @@
     <ClCompile Include="C:\Users\home\Documents\Visual Studio 2010\Projects\Horus Eye\ugdk\examples\asteroids-script\src\asteroids.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\scriptentity.cc" />
-    <ClCompile Include="src\scriptentitystack.cc" />
-    <ClCompile Include="src\scriptscene.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\scripts\MapGenerator.py" />
@@ -25,11 +22,6 @@
     <None Include="TODO.txt" />
     <None Include="data\scripts\GameScene.py" />
     <None Include="data\scripts\Animations.py" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\scriptentity.h" />
-    <ClInclude Include="src\scriptentitystack.h" />
-    <ClInclude Include="src\scriptscene.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="CMakeLists.txt" />
