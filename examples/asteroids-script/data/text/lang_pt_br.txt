@@ -1,0 +1,22 @@
+#FONTS
+// barras-duplas especificam um comentario
+// na secao FONTS nós declaramos as fontes disponiveis
+// [NomeDaFonte]{tamanho}<ident=c><fancy=+>:<caminho para arquivo ttf>
+[FontA]{50}c:font/Filmcrypob.ttf
+
+#WORDS
+// na seção WORDS nós declaramos strings internacionalizadas simples que são usadas pelo jogo
+// [StrTag]{NomeDaFontASerUsada}:<string desejada nessa linguagem>
+
+[Play]{FontA}:Jogar
+[Help]{FontA}:Ajuda
+[Editor]{FontA}:Editor
+[Settings]{FontA}:Configurações
+[Credits]{FontA}:Creditos
+[Exit]{FontA}:Sair
+
+
+#FILES
+// na seção FILES nós declaramos arquivos de texto (muitas linhas de texto) que o jogo usa e que mudam de acordo com a linguagem
+// [ArquivoTag]{NomeDaFontASerUsada}:<caminho para o arquivo de texto nessa linguagem>
+[CreditsFile]{FontA}:text/credits_pt_br.txt

@@ -79,6 +79,7 @@ class BasicColLogic(CollisionLogic):
         self.entity = entity
     def Handle(self, data):
         self.entity.HandleCollision(data)
+
         
 class BasicEntity (EntityInterface):
     nextID = 1

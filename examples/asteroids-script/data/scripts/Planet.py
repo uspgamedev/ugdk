@@ -3,6 +3,7 @@ from BasicEntity import BasicEntity, window_size
 from Asteroid import Asteroid
 from Gravity import GravityWell
 from Shockwave import Shockwave
+from Animations import CreateExplosionFromCollision
 from random import random, randint, shuffle
 from math import pi
 
@@ -68,6 +69,7 @@ class Planet (BasicEntity):
             target.ApplyCollisionRollback()
         elif target.CheckType("Ship"):
             target.TakeDamage(self.GetDamage(target.type))
+            CreateExplosionFromCollision(self, target, target.radius*2)
             #print target.type, "crash landed on Planet... No survivors.     Boo-hoo."
         # Projectiles and Asteroids take care of collising with Planets.
 

@@ -47,10 +47,16 @@ class AnimationEntity (EntityInterface):
     def HandleCollision(self, target):
         pass
         
-def CreateExplosionAtEntity(ent, radius):
+def CreateExplosionFromCollision(ent, target, radius):
     animset = Engine_reference().resource_manager().animation_loader().Load("animations/explosion.gdd", "animations/explosion.gdd")
     sheet = Engine_reference().resource_manager().spritesheet_container().Find("images/explosion.png")
     sprite = Sprite(sheet, animset)
     sprite.SelectAnimation("BASIC_EXPLOSION")
-    sprite_ent = AnimationEntity(ent.GetPos().get_x(), ent.GetPos().get_y(), sprite, radius)
+    pos = ent.GetPos()
+    v = target.GetPos() - pos
+    v = v.Normalize()
+    pos = pos + (v * ent.radius)
+    posX = pos.get_x()
+    posY = pos.get_y()
+    sprite_ent = AnimationEntity(posX, posY, sprite, radius)
     ent.new_objects.append(sprite_ent)

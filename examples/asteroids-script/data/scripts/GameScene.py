@@ -116,6 +116,7 @@ class AsteroidsScene (Scene):
             #print "HANDLE COLLISION::  [%s].Handle(%s)" % (col[0], col[1])
             col[0].Handle(col[1])
             
+            
     def End(self):
         pass
 

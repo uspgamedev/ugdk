@@ -1,6 +1,6 @@
 from ugdk.ugdk_math import Vector2D
 from BasicEntity import BasicEntity, CalculateAfterSpeedBasedOnMomentum
-from Animations import CreateExplosionAtEntity
+from Animations import CreateExplosionFromCollision
 from random import random, randint, shuffle
 from math import pi
 
@@ -16,8 +16,14 @@ class Asteroid (BasicEntity):
         BasicEntity.__init__(self, x, y, "images/asteroid%s.png" % (randint(1,3)), r, hp)
         self.node.modifier().set_rotation( random() * 2 * pi )
         self.has_splitted = False
-        self.mass = 1000.0 + 200*size_factor
+        self.mass = 1000.0 + 100000000*size_factor
         
+        self.collidedWithAsteroids = []
+        
+    def Update(self, dt):
+        BasicEntity.Update(self, dt)
+        self.collidedWithAsteroids = []
+
     def TakeDamage(self, damage):
         BasicEntity.TakeDamage(self, damage)
         # if we're big enough, split asteroid when we are destroyed.
@@ -27,7 +33,7 @@ class Asteroid (BasicEntity):
             shuffle(angles)
             direction = self.velocity.Normalize()
             factor = self.size_factor / 1.5
-            print self, "is splitting, into factor", factor
+            #print self, "is splitting, into factor", factor
             for i in range(randint(2,4)):
                 v = direction.Rotate(angles.pop())
                 v = v * ((self.radius+Asteroid.GetActualRadius(factor))*1.15)
@@ -47,33 +53,36 @@ class Asteroid (BasicEntity):
 
     def HandleCollision(self, target):
         #print "%s IS COLLIDING WITH %s" % (self, target)
-        if target.CheckType("Asteroid"):
+        if target.CheckType("Asteroid") and not target.id in self.collidedWithAsteroids:
+            target.collidedWithAsteroids.append(self.id)
             aux = self.velocity
-            #after_speeds = CalculateAfterSpeedBasedOnMomentum(self, target)
-            #self.velocity = target.velocity.Normalize()
-            #target.velocity = aux.Normalize()
-            #self.velocity = self.velocity * after_speeds[0]
-            #target.velocity = target.velocity * after_speeds[1]
-
-            self.velocity = target.velocity
-            target.velocity = aux
 
             self.ApplyCollisionRollback()
             target.ApplyCollisionRollback()
+
+            after_speeds = CalculateAfterSpeedBasedOnMomentum(self, target)
+            self.velocity = target.velocity.Normalize()
+            target.velocity = aux.Normalize()
+            self.velocity = self.velocity * after_speeds[0]
+            target.velocity = target.velocity * after_speeds[1]
+
+            #self.velocity = target.velocity
+            #target.velocity = aux
+
             self.TakeDamage(target.GetDamage(self.type))
             target.TakeDamage(self.GetDamage(target.type))
-            CreateExplosionAtEntity(self, self.radius*0.7)
+            CreateExplosionFromCollision(self, target, self.radius*0.7)
             #print "Asteroid collided with asteroid"
         elif target.CheckType("Ship"):
             target.TakeDamage(self.GetDamage(target.type))
             target.ApplyVelocity(self.velocity * 0.5)
             self.TakeDamage(self.life + 10) #just to make sure we die and split LOL
-            CreateExplosionAtEntity(self, (self.radius+target.radius)/2.0)
+            CreateExplosionFromCollision(self, target, (self.radius+target.radius)/2.0)
             #print "Asteroid damaging ", target.type
         elif target.CheckType("Planet"):
             target.TakeDamage(self.GetDamage(target.type))
             self.is_destroyed = self.has_splitted = True # WE CANNOT SPLIT when colliding with a planet =P
-            CreateExplosionAtEntity(self, target.radius*1.2)
+            CreateExplosionFromCollision(self, target, target.radius*1.2)
             #print "Asteroid damaging ", target.type
 
         #No handler for projectile since that is strictly

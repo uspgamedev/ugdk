@@ -16,6 +16,9 @@ class Text : public Drawable {
 	Text(const std::vector<std::wstring>& message, Font* font);
 	~Text() {}
 
+    void SetMessage(const std::wstring& message);
+    void SetMessage(const std::vector<std::wstring>& message);
+
     void Draw(double dt);
 
 	virtual const Vector2D& size() const;

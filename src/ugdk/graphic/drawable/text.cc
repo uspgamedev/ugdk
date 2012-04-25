@@ -22,12 +22,20 @@ static Vector2D GetStringSize(const std::wstring& string, Font* font) {
 }
 
 Text::Text(const std::wstring& message, Font *font) : font_(font) {
+    this->SetMessage(message);
+}
+
+Text::Text(const std::vector<std::wstring>& message, Font *font) : font_(font) {
+    this->SetMessage(message);
+}
+
+void Text::SetMessage(const std::wstring& message) {
     message_.push_back(message);
     size_ = GetStringSize(message, font_);
     line_height_ = size_.y;
 }
 
-Text::Text(const std::vector<std::wstring>& message, Font *font) : font_(font) {
+void Text::SetMessage(const std::vector<std::wstring>& message) {
     std::vector<std::wstring>::const_iterator it;
     for(it = message.begin(); it != message.end(); ++it) {
         Vector2D line_size = GetStringSize(*it, font_);

@@ -10,9 +10,7 @@
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/math/vector2D.h>
-#include <ugdk/action/entity.h>
-#include <ugdk/action/scene.h>
-#include <ugdk/graphic/node.h>
+#include <ugdk/util/languagemanager.h>
 #include <ugdk/modules.h>
 #include <pyramidworks/modules.h>
 
@@ -122,36 +120,25 @@ int main(int argc, char *argv[]) {
     VirtualObj config = SCRIPT_MANAGER()->LoadModule("Config");
 
     Vector2D* resolution = config["resolution"].value<Vector2D*>();
-
     VIDEO_MANAGER()->ChangeResolution(*resolution, config["fullscreen"].value<bool>());
-    
 
-	printf("Size in c++ = (%f, %f)\n", ugdk::Engine::reference()->video_manager()->video_size().x,
-										ugdk::Engine::reference()->video_manager()->video_size().y);
+    VirtualObj languages = SCRIPT_MANAGER()->LoadModule("Languages");
+    languages["RegisterLanguages"]();
+    if(!ugdk::Engine::reference()->language_manager()->Setup( config["language"].value<std::string>() )) {
+        fprintf(stderr, "Language Setup FAILURE!!\n\n");
+    }
 
     VirtualObj animations = SCRIPT_MANAGER()->LoadModule("Animations");
     animations["InitializeSpritesheets"]();
 
-    //asteroids::ScriptScene* scene = new asteroids::ScriptScene();
-    //scene->GenerateMap();
-    
     VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule("GameScene");
 	{
 		VirtualObj first_scene = scene_script["StartupScene"]();
 		//if this object, which is scene, exists when main ends, and that same scene
 		//was already deleted segfault occured
 	}
-    //ugdk::Scene* scene = first_scene.value<ugdk::Scene*>();
-    //VirtualObj vnode = (first_scene | "content_node")();
-    //ugdk::graphic::Node* virtualnode = vnode.value<ugdk::graphic::Node*>();
-
-    //ugdk::Engine::reference()->PushScene(scene);
-    
-    //(first_scene | "GenerateMap")();
     
     // Transfers control to the framework.
-    //ugdk::Scene* scene = ugdk::Engine::reference()->CurrentScene();
-    //ugdk::graphic::Node* node = scene->content_node();
     ugdk::Engine::reference()->Run();
 
     // Releases all loaded textures, to avoid issues when changing resolution.
