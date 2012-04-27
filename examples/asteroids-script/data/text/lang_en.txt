@@ -3,11 +3,13 @@
 // in the FONTS section we declare the available fonts
 // [FontName]{size}<ident=c><fancy=+>:<path to font ttf file>
 [FontA]{50}c:font/Filmcrypob.ttf
+[FontS]{20}c:font/Filmcrypob.ttf
 
 #WORDS
 // in the WORDS section we declare simple internationalized strings to use in-game
 // [StrTag]{fontNameToUse}:<desired string in this language>
 
+[ShipName]{FontS}:Tetracontakaidigono
 [Play]{FontA}:Play
 [Help]{FontA}:Help
 [Editor]{FontA}:Editor

@@ -38,13 +38,9 @@
 %newobject ugdk::graphic::Texture::CreateFromFile(const std::string& filepath);
 %newobject ugdk::graphic::Texture::CreateRawTexture(int texture_width, int texture_height);
 
-%rename(ComposeNew) ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);;
+%rename(ComposeNew) ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);
+%rename(GetTextWithFont) ugdk::graphic::TextManager::GetText(const std::wstring& text, const std::string& font, int width = -1);
 
-/*
-graphic::Node has several methods that steals the ownership of the object
-so that might give us trouble in the future...
-check SWIG %delobject directive
-*/
 
 %include <ugdk/graphic/drawable.h>
 
@@ -60,6 +56,7 @@ enable_disown(ugdk::graphic::Drawable* drawable)
 %include <ugdk/graphic/node.h>
 disable_disown(ugdk::graphic::Drawable* drawable)
 %include <ugdk/graphic/spritesheet.h>
+
 %include <ugdk/graphic/textmanager.h>
 %include <ugdk/graphic/videomanager.h>
 

@@ -3,11 +3,13 @@
 // na secao FONTS nós declaramos as fontes disponiveis
 // [NomeDaFonte]{tamanho}<ident=c><fancy=+>:<caminho para arquivo ttf>
 [FontA]{50}c:font/Filmcrypob.ttf
+[FontS]{20}c:font/Filmcrypob.ttf
 
 #WORDS
 // na seção WORDS nós declaramos strings internacionalizadas simples que são usadas pelo jogo
 // [StrTag]{NomeDaFontASerUsada}:<string desejada nessa linguagem>
 
+[ShipName]{FontS}:TetraconPTBR
 [Play]{FontA}:Jogar
 [Help]{FontA}:Ajuda
 [Editor]{FontA}:Editor

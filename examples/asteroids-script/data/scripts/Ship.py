@@ -1,5 +1,5 @@
 from ugdk.ugdk_math import Vector2D
-from ugdk.ugdk_base import Color, Engine_reference
+from ugdk.ugdk_base import Color, Engine_reference, ResourceManager_CreateTextFromLanguageTag
 from ugdk.ugdk_input import InputManager, K_w, K_a, K_s, K_d, M_BUTTON_LEFT, K_ESCAPE, M_BUTTON_RIGHT
 from BasicEntity import BasicEntity, GetEquivalentValueInRange
 from Radio import Radio
@@ -7,6 +7,8 @@ from Projectile import Projectile
 from BarUI import BarUI, BAR_HEIGHT
 from Shockwave import Shockwave
 from math import pi
+
+from ugdk.ugdk_graphic import Node
 
 
 class Ship (BasicEntity):
@@ -26,6 +28,11 @@ class Ship (BasicEntity):
         self.projectile_speed = 170         # 
         self.energy_hud = BarUI(self, "energy", Color(0.0,0.0,1.0,1.0), Vector2D(0.0, self.radius+BAR_HEIGHT))
         self.hud_node.AddChild(self.energy_hud.node)
+
+        #self.nameText = Engine_reference().text_manager().GetText("Tetracontakaidigono")
+        self.nameText = ResourceManager_CreateTextFromLanguageTag("ShipName")
+        self.nameNode = Node(self.nameText)
+        self.node.AddChild(self.nameNode)
 
     def Update(self, dt):
         self.CheckCommands(dt)
