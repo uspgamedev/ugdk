@@ -1,5 +1,5 @@
 USP Game Development Kit
 Homepage: http://uspgamedev.org/ugdk/
 
-http://travis-ci.org/
-asdf
+master: !https://secure.travis-ci.org/uspgamedev/ugdk.png?branch=master(Build Status)!:http://travis-ci.org/uspgamedev/ugdk
+dev: !https://secure.travis-ci.org/uspgamedev/ugdk.png?branch=dev(Build Status)!:http://travis-ci.org/uspgamedev/ugdk
