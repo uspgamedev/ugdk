@@ -54,7 +54,7 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
 endif ()
 
-add_definitions(-DDEBUG)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 if (UNIX OR MINGW)
     # se for o g++ para *nix ou o MinGW para Windows:
     add_definitions(-Wall -ansi -U_FORTIFY_SOURCE -msse2)
