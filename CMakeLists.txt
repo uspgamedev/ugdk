@@ -2,14 +2,12 @@
 # Recquires CMake 2.6 or newer.
 cmake_minimum_required (VERSION 2.6)
 
-# General definitions.
 project (ugdk CXX C)
 set (FRAMEWORK_NAME    UGDK)
 set (FRAMEWORK_RELEASE ugdk)
 set (FRAMEWORK_DEBUG   ugdk_d)
 set (FRAMEWORK_VERSION 0.3.0)
 
-# Some output.
 message ("=== ${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION} ===")
 
 # If the user did not define the parameteres, use default values.
@@ -22,6 +20,10 @@ endif (NOT LINK_TYPE)
 
 if ((NOT (${LINK_TYPE} STREQUAL STATIC)) AND (NOT (${LINK_TYPE} STREQUAL SHARED)))
     message (FATAL_ERROR ">>> Unknown link type ${LINK_TYPE}.")
+endif ()
+
+if (${LINK_TYPE} STREQUAL SHARED)
+	set(BUILD_SHARED_LIBS True)
 endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -59,7 +61,7 @@ elseif (MSVC)
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast /MP)
 endif ()
 
-# ${UGDK_SRC} esta' definido?
+# ${UGDK_SRC} está definido?
 if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT UGDK_SRC)
@@ -112,12 +114,7 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 
-if (${LINK_TYPE} STREQUAL STATIC)
-    add_library (${FRAMEWORK_RELEASE} STATIC ${UGDK_SRC} ${GENERATED_SRC})
-elseif (${LINK_TYPE} STREQUAL SHARED)
-    add_library (${FRAMEWORK_RELEASE} SHARED ${UGDK_SRC} ${GENERATED_SRC})
-endif (${LINK_TYPE} STREQUAL STATIC)
-
+add_library (${FRAMEWORK_RELEASE} ${UGDK_SRC} ${GENERATED_SRC})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
@@ -129,7 +126,7 @@ if (WIN32)
 	set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
 endif (WIN32)
 
-target_link_libraries (${FRAMEWORK_RELEASE}
+target_link_libraries (${FRAMEWORK_RELEASE}	LINK_INTERFACE_LIBRARIES 
 					   ${EXTRA_LIBRARIES}
 					   ${SDL_LIBRARY}
 					   ${SDLMIXER_LIBRARY}
