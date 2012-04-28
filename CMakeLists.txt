@@ -126,15 +126,15 @@ if (WIN32)
 	set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
 endif (WIN32)
 
-target_link_libraries (${FRAMEWORK_RELEASE}	LINK_INTERFACE_LIBRARIES 
+target_link_libraries (${FRAMEWORK_RELEASE}	LINK_PUBLIC 
 					   ${EXTRA_LIBRARIES}
 					   ${SDL_LIBRARY}
 					   ${SDLMIXER_LIBRARY}
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
 					   ${OPENGL_LIBRARIES}
-                       optmized ${UGDK_LIBRARIES}
-                       debug    ${UGDK_LIBRARIES_DEBUG})
+                       optimized "${UGDK_LIBRARIES}"
+                       debug    "${UGDK_LIBRARIES_DEBUG}")
                       
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
