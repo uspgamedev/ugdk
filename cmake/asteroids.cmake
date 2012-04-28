@@ -14,4 +14,4 @@ else ()
 	set (UGDK_TEST_CFLAGS "")
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
-target_link_libraries(asteroids optimized ${FRAMEWORK_RELEASE} debug ${FRAMEWORK_DEBUG})
+target_link_libraries(asteroids ${FRAMEWORK_RELEASE})

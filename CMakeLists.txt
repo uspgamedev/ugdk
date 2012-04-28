@@ -39,9 +39,6 @@ ENDIF ()
 set (SRC_DIR src)
 set (LIB_DIR lib)
 
-#set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
-#set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
-
 include (${SRC_DIR}/src_list.cmake)
 include (${SRC_DIR}/ugdk_module_list.cmake)
 include (${SRC_DIR}/pyramidworks_module_list.cmake)
@@ -117,14 +114,8 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 if (${LINK_TYPE} STREQUAL STATIC)
     add_library (${FRAMEWORK_RELEASE} STATIC ${UGDK_SRC} ${GENERATED_SRC})
-    if (NOT MSVC)
-        add_library (${FRAMEWORK_DEBUG} STATIC EXCLUDE_FROM_ALL ${UGDK_SRC} ${GENERATED_SRC})
-    endif ()
 elseif (${LINK_TYPE} STREQUAL SHARED)
     add_library (${FRAMEWORK_RELEASE} SHARED ${UGDK_SRC} ${GENERATED_SRC})
-    if (NOT MSVC)
-        add_library (${FRAMEWORK_DEBUG} SHARED EXCLUDE_FROM_ALL ${UGDK_SRC} ${GENERATED_SRC})
-    endif ()
 endif (${LINK_TYPE} STREQUAL STATIC)
 
 
@@ -148,25 +139,9 @@ target_link_libraries (${FRAMEWORK_RELEASE}
                        optmized ${UGDK_LIBRARIES}
                        debug    ${UGDK_LIBRARIES_DEBUG})
                       
-if(NOT MSVC)
-    target_link_libraries (${FRAMEWORK_DEBUG}
-                            ${EXTRA_LIBRARIES}
-                            ${SDL_LIBRARY}
-                            ${SDLMIXER_LIBRARY}
-                            ${SDLTTF_LIBRARY}
-                            ${SDLIMAGE_LIBRARY}
-                            ${OPENGL_LIBRARIES}
-                            ${UGDK_LIBRARIES_DEBUG})
-endif()
-                                             
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAMEWORK_DEBUG}")
-
-if(NOT MSVC)
-    set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES LINK_FLAGS "${LDFLAGS}")
-    set_target_properties (${FRAMEWORK_DEBUG} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME} (DEBUG)")
-endif()
 
 if (PYTHONLIBS_FOUND)
   include (cmake/asteroids.cmake)
