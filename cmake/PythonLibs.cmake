@@ -14,7 +14,7 @@ if (PYTHONLIBS_FOUND)
     
 else (PYTHONLIBS_FOUND)
 
-  message ("Could NOT find Lua5.1. No Lua5.1 script modules will be compiled.")
+  message ("Could NOT find Python. No Python script modules will be compiled.")
 
 endif (PYTHONLIBS_FOUND)
 
