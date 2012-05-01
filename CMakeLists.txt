@@ -1,6 +1,6 @@
 
-# Recquires CMake 2.6 or newer.
-cmake_minimum_required (VERSION 2.6)
+# Requires CMake 2.8 or newer.
+cmake_minimum_required (VERSION 2.8)
 
 project (ugdk CXX C)
 set (FRAMEWORK_NAME    UGDK)
@@ -126,7 +126,20 @@ if (WIN32)
 	set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
 endif (WIN32)
 
-target_link_libraries (${FRAMEWORK_RELEASE}	LINK_PUBLIC 
+
+# We could use LINK_PUBLIC here, but it's a new feature in cmake 2.8.7, so we'd rather not require the newest version.
+
+target_link_libraries (${FRAMEWORK_RELEASE}
+					   ${EXTRA_LIBRARIES}
+					   ${SDL_LIBRARY}
+					   ${SDLMIXER_LIBRARY}
+					   ${SDLTTF_LIBRARY}
+					   ${SDLIMAGE_LIBRARY}
+					   ${OPENGL_LIBRARIES}
+                       optimized "${UGDK_LIBRARIES}"
+                       debug    "${UGDK_LIBRARIES_DEBUG}")
+
+target_link_libraries (${FRAMEWORK_RELEASE}	LINK_INTERFACE_LIBRARIES 
 					   ${EXTRA_LIBRARIES}
 					   ${SDL_LIBRARY}
 					   ${SDLMIXER_LIBRARY}
