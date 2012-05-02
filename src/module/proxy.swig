@@ -35,7 +35,15 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
 #ifdef SWIGLUA
 %define proxy_class(T)
 %typemap(in) T* {
-    $1 = 0;
+    if (!SWIG_IsOK(SWIG_ConvertPtr(L, $input, (void**)&$1, $1_descriptor,0))) {
+        ugdk::script::lua::LuaWrapper* wrapper = static_cast<ugdk::script::lua::LuaWrapper*>(SCRIPT_MANAGER()->GetWrapper("Lua"));
+        ugdk::script::lua::LuaData* luadata = wrapper->NewLuaData();
+        lua_pushvalue(L, $input);
+        luadata->unsafe_set_data();
+        ugdk::script::VirtualData::Ptr vdata(luadata);
+        ugdk::script::VirtualObj vobj(vdata);
+        $1 = T##Proxy::Get(vobj);
+    }
 }
 
 %typemap(out) T* {
