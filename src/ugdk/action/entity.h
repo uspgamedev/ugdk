@@ -8,6 +8,7 @@ namespace action {
 class Entity {
   public:
     Entity() {}
+    virtual ~Entity() {}
     virtual void Update(double dt) = 0;
 };
 

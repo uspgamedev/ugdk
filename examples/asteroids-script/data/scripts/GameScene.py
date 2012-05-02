@@ -2,23 +2,26 @@ from ugdk.ugdk_action import Scene
 from ugdk.ugdk_util import CreateBox2D
 from ugdk.pyramidworks_collision import CollisionManager, CollisionInstanceList
 from ugdk.ugdk_input import InputManager, K_ESCAPE, K_HOME
-from ugdk.ugdk_base import Engine_reference
+from ugdk.ugdk_base import Engine_reference, ResourceManager_CreateTextFromLanguageTag
+from ugdk.ugdk_graphic import Node
+from ugdk.ugdk_math import Vector2D
 import Config
 import MapGenerator
     
-def StartupScene():
+def StartupScene(df = 0.5):
     #print "STARTING SCENE"
     cena = AsteroidsScene()
     #print "GOING TO PUSH SCENE"
     Engine_reference().PushScene( cena )
     #print "GOING TO GENERATE MAP"
-    cena.GenerateMap()
+    cena.GenerateMap(df)
     #print "ALL DONE... Proceeding"
+    print "=== Starting Asteroids Scene [Difficulty = %s]" % (df)
     return cena
     
 
 class AsteroidsScene (Scene):
-    def __init__(self):
+    def __init__(self, difficultyFactor):
         #print "Creating AsteroidsScene"
         maxval = MapGenerator.MAX_ENTITY_SIZE
         mincoords = [-maxval, -maxval]
@@ -27,7 +30,10 @@ class AsteroidsScene (Scene):
         self.objects = []
         self.colliding_objects = []
         self.startCollisions()
-        #self.thisown = 0
+        self.asteroid_count = 0
+        self.ship_alive = True
+        self.finishTextNode = None
+        self.difficultyFactor = difficultyFactor
         
     def startCollisions(self):
         self.collisionManager.Generate("Entity")
@@ -50,9 +56,17 @@ class AsteroidsScene (Scene):
         #print "SCENE CONTENT NODE = ", CN
         self.interface_node().AddChild(obj.hud_node)
         #print "FINISHED ADDING OBJECT"
+        if obj.CheckType("Asteroid"):
+            self.asteroid_count += 1
+        if obj.CheckType("Ship"):
+            self.ship_alive = True
             
         
     def RemoveObject(self, obj):
+        if obj.CheckType("Asteroid"):
+            self.asteroid_count -= 1
+        if obj.CheckType("Ship"):
+            self.ship_alive = False
         self.objects.remove(obj)
         if obj in self.colliding_objects:
             self.colliding_objects.remove(obj)
@@ -65,11 +79,21 @@ class AsteroidsScene (Scene):
         
     def GenerateMap(self):
         #print "GENERATE MARK 1"
-        self.Populate( MapGenerator.Generate() )
+        self.Populate( MapGenerator.Generate(self.difficultyFactor) )
         #print "GENERATE MARK 2"
         self.content_node().set_drawable(MapGenerator.GetBackgroundDrawable() )
         #print "GENERATE MARK 3"
         
+    def SetAndShowSceneEndText(self, msgTag):
+        if self.finishTextNode != None: return
+        text = ResourceManager_CreateTextFromLanguageTag(msgTag)
+        self.finishTextNode = Node(text)
+        screenSize = Engine_reference().video_manager().video_size()
+        x = (screenSize.get_x()/2.0) - (text.width()/2.0)
+        y = (screenSize.get_y()/2.0) - (text.height()/2.0)
+        self.finishTextNode.modifier().set_offset( Vector2D(x, y) )
+        self.content_node().AddChild(self.finishTextNode)
+
     def Focus(self):
         pass
 
@@ -91,6 +115,11 @@ class AsteroidsScene (Scene):
         for obj in to_delete:
             self.RemoveObject(obj)
             
+        if self.asteroid_count <= 0:
+            self.SetAndShowSceneEndText("GameWon")
+        elif not self.ship_alive:
+            self.SetAndShowSceneEndText("GameOver")
+
         self.CheckCommands()
         self.HandleCollisions()
         
@@ -102,7 +131,7 @@ class AsteroidsScene (Scene):
             self.Finish()
         elif input.KeyPressed(K_HOME):
             self.Finish()
-            StartupScene()
+            StartupScene(self.difficultyFactor * 1.2)
             
     def HandleCollisions(self):
         collision_list = CollisionInstanceList()

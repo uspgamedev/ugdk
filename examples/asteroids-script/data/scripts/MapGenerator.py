@@ -28,7 +28,7 @@ def GetRandomPlanetSizeFactor():
 	# returns random float in [0.7, 1.3[
 	return random.random() * 0.6  + 0.7
 
-def Generate():
+def Generate(difficultyFactor):
     screenSize = Engine_reference().video_manager().video_size()
     print "Screen Size = (%s, %s)" % (screenSize.get_x(), screenSize.get_y())
     
@@ -48,7 +48,7 @@ def Generate():
     map_row = [False] * columns
     map = [map_row] * rows
 
-    n = int( (rows * columns) * PERCENT_OF_ENTITIES_IN_MAP_GRID )
+    n = int( (rows * columns) * PERCENT_OF_ENTITIES_IN_MAP_GRID * difficultyFactor)
 
     print "Generating a %sx%s map with %s entities..." % (rows, columns, n)
 
@@ -68,17 +68,18 @@ def Generate():
     ship = Ship(loc[0], loc[1])
     entities.append(ship)
 
-    for i in range( random.randint(PLANET_COUNT_RANGE[0], PLANET_COUNT_RANGE[1]) ):
+    planetCount = random.randint(PLANET_COUNT_RANGE[0], PLANET_COUNT_RANGE[1]) * difficultyFactor
+    for i in range(planetCount):
         loc = pickAPlace()
         planet = Planet(loc[0], loc[1], GetRandomPlanetSizeFactor())
         entities.append(planet)
 
     for i in range(n):
         loc = pickAPlace()
-        ast = Asteroid(loc[0], loc[1], GetRandomAsteroidSizeFactor())
+        ast = Asteroid(loc[0], loc[1], GetRandomAsteroidSizeFactor()*difficultyFactor)
         v = Vector2D(1,0).Rotate( random.random() * 2 * pi )
         v = v.Normalize()
-        v = v * (random.randint(ASTEROID_STARTING_SPEED_RANGE[0], ASTEROID_STARTING_SPEED_RANGE[1]))
+        v = v * (random.randint(ASTEROID_STARTING_SPEED_RANGE[0], ASTEROID_STARTING_SPEED_RANGE[1])) * difficultyFactor
         ast.ApplyVelocity(v)
         entities.append(ast)
 

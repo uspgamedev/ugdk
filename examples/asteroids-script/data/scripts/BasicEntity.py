@@ -176,6 +176,8 @@ class BasicEntity (EntityInterface):
 def GetEquivalentValueInRange(origin_value, origin_range, destination_range):
     xa = origin_value - origin_range[0]                 # xa = X - A
     ba = origin_range[1] - origin_range[0]              # ba = B - A
+    if ba == 0.0:  #Go POG! Go POG!
+        ba = 0.0001
     dc = destination_range[1] - destination_range[0]    # dc = D - C
     r = dc * xa / ba                                    # r = (D-C)(X-A)/(B-A)
     return destination_range[0] + r       # return C + r

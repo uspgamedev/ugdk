@@ -10,12 +10,8 @@
 // [StrTag]{NomeDaFontASerUsada}:<string desejada nessa linguagem>
 
 [ShipName]{FontS}:TetraconPTBR
-[Play]{FontA}:Jogar
-[Help]{FontA}:Ajuda
-[Editor]{FontA}:Editor
-[Settings]{FontA}:Configurações
-[Credits]{FontA}:Creditos
-[Exit]{FontA}:Sair
+[GameWon]{FontA}:É TEEETRAAA!
+[GameOver]{FontA}:Pede pra sair!
 
 
 #FILES

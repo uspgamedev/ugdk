@@ -29,10 +29,10 @@ class Ship (BasicEntity):
         self.energy_hud = BarUI(self, "energy", Color(0.0,0.0,1.0,1.0), Vector2D(0.0, self.radius+BAR_HEIGHT))
         self.hud_node.AddChild(self.energy_hud.node)
 
-        #self.nameText = Engine_reference().text_manager().GetText("Tetracontakaidigono")
-        self.nameText = ResourceManager_CreateTextFromLanguageTag("ShipName")
-        self.nameNode = Node(self.nameText)
-        self.node.AddChild(self.nameNode)
+        ##self.nameText = Engine_reference().text_manager().GetText("Tetracontakaidigono")
+        #self.nameText = ResourceManager_CreateTextFromLanguageTag("ShipName")
+        #self.nameNode = Node(self.nameText)
+        #self.node.AddChild(self.nameNode)
 
     def Update(self, dt):
         self.CheckCommands(dt)

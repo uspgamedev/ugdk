@@ -5,6 +5,7 @@ namespace ugdk{
 namespace action{
 class Observer{
   public:
+    virtual ~Observer() {}
     virtual void Tick() = 0;
 };
 

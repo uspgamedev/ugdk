@@ -10,12 +10,8 @@
 // [StrTag]{fontNameToUse}:<desired string in this language>
 
 [ShipName]{FontS}:Tetracontakaidigono
-[Play]{FontA}:Play
-[Help]{FontA}:Help
-[Editor]{FontA}:Editor
-[Settings]{FontA}:Settings
-[Credits]{FontA}:Credits
-[Exit]{FontA}:Exit
+[GameWon]{FontA}:Congratulations!
+[GameOver]{FontA}:WASTED!
 
 
 #FILES

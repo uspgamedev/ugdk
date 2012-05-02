@@ -51,7 +51,7 @@ class Planet (BasicEntity):
                 pos = pos + v
                 ast = Asteroid(pos.get_x(), pos.get_y(), factor)
                 v = v.Normalize()
-                speed = 20.0
+                speed = 50.0
                 v = v * (randint(int(speed*0.60), int(speed*1.40)))
                 ast.ApplyVelocity(v)
                 self.new_objects.append(ast)
