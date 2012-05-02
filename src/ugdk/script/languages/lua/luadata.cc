@@ -150,8 +150,12 @@ VirtualData::Ptr LuaData::SetAttribute(Ptr key, Ptr value) {
     return wrapper_->OperateBuffer(id_, DataGear::SetField);
 }
 
-void LuaData::unsafe_set_data() {
+void LuaData::UnsafePopValue() {
     wrapper_->data_gear().SetData(id_);
+}
+
+void LuaData::UnsafePushValue() {
+    wrapper_->data_gear().GetData(id_);
 }
 
 void LuaData::AddToBuffer() {

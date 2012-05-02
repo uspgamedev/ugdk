@@ -39,7 +39,7 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
         ugdk::script::lua::LuaWrapper* wrapper = static_cast<ugdk::script::lua::LuaWrapper*>(SCRIPT_MANAGER()->GetWrapper("Lua"));
         ugdk::script::lua::LuaData* luadata = wrapper->NewLuaData();
         lua_pushvalue(L, $input);
-        luadata->unsafe_set_data();
+        luadata->UnsafePopValue();
         ugdk::script::VirtualData::Ptr vdata(luadata);
         ugdk::script::VirtualObj vobj(vdata);
         $1 = T##Proxy::Get(vobj);
@@ -47,7 +47,16 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
 }
 
 %typemap(out) T* {
-    lua_pushnil( L);
+    using ugdk::script::lua::LuaData;
+    T##Proxy* _proxy_result = dynamic_cast<T##Proxy*>($1);
+    LuaData* luadata = NULL;
+    if (_proxy_result == NULL) {
+        SWIG_NewPointerObj(L, $result, $1_descriptor,0); SWIG_arg++;
+    } else {
+        luadata = static_cast<LuaData*>(_proxy_result->get_proxy_vobj().unsafe_data());
+        luadata->UnsafePushValue();
+        SWIG_arg++;
+    }
 }
 %enddef
 #elif SWIGPYTHON
@@ -97,7 +106,7 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
 }
 
 %typemap(out) void* {
-    lua_pushlightuserdata(L, $result);
+    lua_pushlightuserdata(L, $result); SWIG_arg++;
 }
 %enddef
 #elif SWIGPYTHON

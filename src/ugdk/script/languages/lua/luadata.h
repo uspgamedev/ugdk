@@ -52,7 +52,9 @@ class LuaData : public VirtualData {
     /// Unsafely sets this LuaData objects data.
     /** WARNING: Uses the lua value on the top of the stack.
      */
-    void unsafe_set_data();
+    void UnsafePopValue();
+
+    void UnsafePushValue();
 
     void AddToBuffer();
     void RemoveFromBuffer() {}
