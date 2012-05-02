@@ -85,18 +85,17 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
 #ifdef SWIGLUA
 %define void_class()
 %typemap(in) void* {
-    $1 = 0;
+    $1 = (void*)lua_touserdata(L, $input);
 }
 
 %typemap(out) void* {
-    lua_pushnil( L);
+    lua_pushlightuserdata(L, $result);
 }
 %enddef
 #elif SWIGPYTHON
 %define void_class()
 %typemap(in) void* {
     //printf("starting void in [PyObj*=%d][PyRefCount=%d]\n", (int)$input, (int)$input->ob_refcnt);
-
     //Py_INCREF($input);
     $1 = static_cast<void*>($input);
 }
