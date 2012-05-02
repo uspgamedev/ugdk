@@ -136,8 +136,8 @@ target_link_libraries (${FRAMEWORK_RELEASE}
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
 					   ${OPENGL_LIBRARIES}
-                       optimized "${UGDK_LIBRARIES}"
-                       debug    "${UGDK_LIBRARIES_DEBUG}")
+                       optimized  ${UGDK_LIBRARIES}
+                       debug      ${UGDK_LIBRARIES_DEBUG})
 
 target_link_libraries (${FRAMEWORK_RELEASE}	LINK_INTERFACE_LIBRARIES 
 					   ${EXTRA_LIBRARIES}
@@ -146,8 +146,8 @@ target_link_libraries (${FRAMEWORK_RELEASE}	LINK_INTERFACE_LIBRARIES
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
 					   ${OPENGL_LIBRARIES}
-                       optimized "${UGDK_LIBRARIES}"
-                       debug    "${UGDK_LIBRARIES_DEBUG}")
+                       optimized  ${UGDK_LIBRARIES}
+                       debug      ${UGDK_LIBRARIES_DEBUG})
                       
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
