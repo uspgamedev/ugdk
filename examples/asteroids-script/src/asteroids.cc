@@ -43,6 +43,7 @@ static void InitScripts() {
     SCRIPT_MANAGER()->Register("Python", py_wrapper);
 }
 
+/*
 static void SurpriseLuaTest() {
 
     puts("=== START Surprise Lua tests! ===");
@@ -96,7 +97,7 @@ static void SurpriseLuaTest() {
 
     puts("=== Lua tests are finished. ===");
 }
-
+*/
 
 int main(int argc, char *argv[]) {
 
@@ -130,7 +131,7 @@ int main(int argc, char *argv[]) {
     InitScripts();
     ugdk::Engine::reference()->Initialize(engine_config);
 
-    SurpriseLuaTest();
+    //SurpriseLuaTest();
 
     {
         VirtualObj config = SCRIPT_MANAGER()->LoadModule(prefix+"Config");

@@ -45,12 +45,10 @@
 #ifdef SWIGLUA
 %define confirm_exports(modname)
 %luacode {
-print "Hey there!"
+print "[Lua] modname confirm exports!"
 for k,v in pairs(modname) do
   m = string.match(k, "RegisterType_(.+)")
-  print(k,v)
   if m then
-    print "Something may be registered."
     v(modname["GetNull_"..m]())
   end
 end
@@ -59,7 +57,7 @@ end
 #elif SWIGPYTHON
 %define confirm_exports(modname)
 %pythoncode {
-print "Python modname confirm exports!"
+print "[Python] modname confirm exports!"
 module = __import__(__name__)
 for key,value in module.__dict__.items():
 	if key.startswith("RegisterType_"):

@@ -1,5 +1,8 @@
 
 require "ugdk.base"
+require "ugdk.util"
+
+local lang_manager = ugdk_base.Engine_reference():language_manager()
 
 function RegisterLanguages ()
   ugdk_base.Engine_reference():language_manager():RegisterLanguage(
