@@ -46,7 +46,7 @@ class LuaData : public VirtualData {
     Ptr SetAttribute(Ptr key, Ptr value);
     
     void* unsafe_data() const {
-        return NULL;
+        return static_cast<void*>(this);
     }
 
     void AddToBuffer();
