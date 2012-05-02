@@ -34,14 +34,29 @@ void Scene::Focus() {
     }
 }
 
+void Scene::AddEntity(Entity *entity) { 
+    entities_.push_back(entity);
+    entity->OnSceneAdd(this);
+}
+
 void Scene::Update(double delta_t) {
     for(std::list<Entity*>::iterator it = entities_.begin(); it != entities_.end(); ++it)
         (*it)->Update(delta_t);
+
+    FlushEntityQueue();
 }
 
 void Scene::End() {
     if(background_music_ != NULL)
         background_music_->Pause();
+}
+
+void Scene::FlushEntityQueue() {
+    while(!queued_entities_.empty()) {
+        Entity* e = queued_entities_.front();
+        AddEntity(e);
+        queued_entities_.pop();
+    }
 }
 
 } /* namespace action */
