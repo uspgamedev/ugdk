@@ -53,6 +53,10 @@ for k,v in pairs(modname) do
   end
 end
 }
+%init {
+    SWIG_Lua_get_class_registry(L);
+    lua_setglobal(L, "SWIG");
+}
 %enddef
 #elif SWIGPYTHON
 %define confirm_exports(modname)

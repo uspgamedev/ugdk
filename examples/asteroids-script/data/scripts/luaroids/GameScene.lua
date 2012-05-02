@@ -2,10 +2,19 @@
 require "ugdk.base"
 require "ugdk.action"
 
---local AsteroidsScene = 
+local AsteroidsScene = {}
 
-table.foreach(ugdk_action.GetNull_Scene(), print)
+function AsteroidsScene:Focus () end
+function AsteroidsScene:DeFocus () end
+function AsteroidsScene:End () end
+
+function AsteroidsScene:Update (dt)
+  
+end
+
+setmetatable(AsteroidsScene, SWIG.Scene)
 
 function StartupScene ()
   -- does nothing for now.
+  ugdk_base.Engine_reference():PushScene(AsteroidsScene)
 end
