@@ -48,7 +48,7 @@ class Asteroid (BasicEntity):
     def GetDamage(self, obj_type):
         if obj_type == self.type:
             return self.life * 0.2
-        elif obj_type == "Ship.Ship" or obj_type == "Planet.Planet":
+        elif obj_type == "pyroids.Ship.Ship" or obj_type == "pyroids.Planet.Planet":
             return self.life
 
     def HandleCollision(self, target):

@@ -43,7 +43,7 @@ class GravityWell (EntityInterface):
             self.ignore_ids.remove(ID)
 
     def HandleCollision(self, target):
-        ignore_types = ["Planet.Planet"]
+        ignore_types = ["pyroids.Planet.Planet"]
         if target.type in ignore_types or target.id in self.ignore_ids:
             return #we don't affect planets (neither their wells)
         
