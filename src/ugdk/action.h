@@ -9,6 +9,7 @@ class AnimationSet;
 class Scene;
 class Entity;
 class Observer;
+class Task;
 
 }  // namespace action
 }  // namespace ugdk

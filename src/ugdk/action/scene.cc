@@ -44,7 +44,9 @@ void Scene::AddEntity(Entity *entity) {
 
 void Scene::Update(double delta_t) {
     UpdateEntities(delta_t);
+    UpdateTasks(delta_t);
     DeleteToBeRemovedEntities();
+    DeleteFinishedTasks();
     FlushEntityQueue();
 }
 
