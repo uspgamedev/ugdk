@@ -8,6 +8,6 @@ cp -v src/generated/*.py examples/asteroids-script/data/scripts/ugdk/
 
 # Run tests.
 cd examples/asteroids-script/
-./asteroids
+./asteroids $1
 cd ../..
 

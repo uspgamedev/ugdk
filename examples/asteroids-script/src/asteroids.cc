@@ -100,6 +100,21 @@ static void SurpriseLuaTest() {
 
 int main(int argc, char *argv[]) {
 
+    if (argc < 2) {
+        puts("PLEASE SPECIFY A SCRIPTING LANGUAGE. (lua|python)");
+        return EXIT_FAILURE;
+    }
+
+    string prefix;
+    if (string(argv[1]) == "lua")
+        prefix = "luaroids.";
+    else if (string(argv[1]) == "python")
+        prefix = "pyroids.";
+    else {
+        puts("Unknown language!");
+        return EXIT_FAILURE;
+    }
+
     ugdk::Configuration engine_config;
     engine_config.window_title = "Asteroids";
     engine_config.window_size  = Vector2D(640.0, 480.0);
@@ -117,21 +132,21 @@ int main(int argc, char *argv[]) {
 
     SurpriseLuaTest();
 
-    VirtualObj config = SCRIPT_MANAGER()->LoadModule("Config");
+    VirtualObj config = SCRIPT_MANAGER()->LoadModule(prefix+"Config");
 
     Vector2D* resolution = config["resolution"].value<Vector2D*>();
     VIDEO_MANAGER()->ChangeResolution(*resolution, config["fullscreen"].value<bool>());
 
-    VirtualObj languages = SCRIPT_MANAGER()->LoadModule("Languages");
+    VirtualObj languages = SCRIPT_MANAGER()->LoadModule(prefix+"Languages");
     languages["RegisterLanguages"]();
     if(!ugdk::Engine::reference()->language_manager()->Setup( config["language"].value<std::string>() )) {
         fprintf(stderr, "Language Setup FAILURE!!\n\n");
     }
 
-    VirtualObj animations = SCRIPT_MANAGER()->LoadModule("Animations");
+    VirtualObj animations = SCRIPT_MANAGER()->LoadModule(prefix+"Animations");
     animations["InitializeSpritesheets"]();
 
-    VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule("GameScene");
+    VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule(prefix+"GameScene");
 	{
 		VirtualObj first_scene = scene_script["StartupScene"]();
 		//if this object, which is scene, exists when main ends, and that same scene
