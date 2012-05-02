@@ -81,6 +81,8 @@ class Scene {
     Music* background_music_;
 
   private:
+    void UpdateEntities(double delta_t);
+    void DeleteToBeRemovedEntities();
     void FlushEntityQueue();
 
     /// Whether this scene stops the previous music even if wont play any music.

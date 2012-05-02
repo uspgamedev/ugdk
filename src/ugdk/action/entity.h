@@ -9,10 +9,17 @@ namespace action {
 
 class Entity {
   public:
-    Entity() {}
+    Entity() : to_be_removed_(false) {}
+    virtual ~Entity() {}
+
+    bool to_be_removed() const { return to_be_removed_; }
+    
     virtual void Update(double dt) = 0;
     
     virtual void OnSceneAdd(Scene* scene) {}
+
+  protected:
+    bool to_be_removed_;
 };
 
 }  // namespace action

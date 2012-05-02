@@ -40,15 +40,30 @@ void Scene::AddEntity(Entity *entity) {
 }
 
 void Scene::Update(double delta_t) {
-    for(std::list<Entity*>::iterator it = entities_.begin(); it != entities_.end(); ++it)
-        (*it)->Update(delta_t);
-
+    UpdateEntities(delta_t);
+    DeleteToBeRemovedEntities();
     FlushEntityQueue();
 }
 
 void Scene::End() {
     if(background_music_ != NULL)
         background_music_->Pause();
+}
+
+void Scene::UpdateEntities(double delta_t) {
+    for(std::list<Entity*>::iterator it = entities_.begin(); it != entities_.end(); ++it)
+        (*it)->Update(delta_t);
+}
+
+static bool entityIsToBeRemoved (const Entity* value) {
+    bool is_dead = value->to_be_removed();
+    if (is_dead)
+        delete value;
+    return is_dead;
+}
+
+void Scene::DeleteToBeRemovedEntities() {
+    entities_.remove_if(entityIsToBeRemoved);
 }
 
 void Scene::FlushEntityQueue() {
