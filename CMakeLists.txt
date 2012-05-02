@@ -1,25 +1,16 @@
 
-# Recquires CMake 2.6 or newer.
-cmake_minimum_required (VERSION 2.6)
+# Requires CMake 2.8 or newer.
+cmake_minimum_required (VERSION 2.8)
 
-# General definitions.
 project (ugdk CXX C)
-set (FRAMEWORK_NAME UGDK)
-set (FRAMEWORK_RELEASENAME ugdk)
-set (FRAMEWORK_DEBUGNAME ugdk_d)
+set (FRAMEWORK_NAME    UGDK)
+set (FRAMEWORK_RELEASE ugdk)
+set (FRAMEWORK_DEBUG   ugdk_d)
 set (FRAMEWORK_VERSION 0.3.0)
 
-# Some output.
 message ("=== ${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION} ===")
 
 # If the user did not define the parameteres, use default values.
-if (NOT BUILD_TYPE)
-    message ("-- No build type was defined, choosing default value: RELEASE")
-    set (BUILD_TYPE RELEASE)
-else (NOT BUILD_TYPE)
-    message ("-- Build type: ${BUILD_TYPE}")
-endif (NOT BUILD_TYPE)
-
 if (NOT LINK_TYPE)
     message ("-- No link type was defined, choosing default value: STATIC")
     set (LINK_TYPE STATIC)
@@ -27,17 +18,12 @@ else (NOT LINK_TYPE)
     message ("-- Link type: ${LINK_TYPE}")
 endif (NOT LINK_TYPE)
 
-if (${BUILD_TYPE} STREQUAL RELEASE)
-    set (FRAMEWORK_BUILDNAME ${FRAMEWORK_RELEASENAME})
-elseif (${BUILD_TYPE} STREQUAL DEBUG)
-    set (FRAMEWORK_BUILDNAME ${FRAMEWORK_DEBUGNAME})
-	set (FRAMEWORK_NAME "${FRAMEWORK_NAME} (DEBUG)")
-else ()
-    message (FATAL_ERROR ">>> Unknown build type ${BUILD_TYPE}.")
-endif ()
-
 if ((NOT (${LINK_TYPE} STREQUAL STATIC)) AND (NOT (${LINK_TYPE} STREQUAL SHARED)))
     message (FATAL_ERROR ">>> Unknown link type ${LINK_TYPE}.")
+endif ()
+
+if (${LINK_TYPE} STREQUAL SHARED)
+	set(BUILD_SHARED_LIBS True)
 endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -55,39 +41,30 @@ ENDIF ()
 set (SRC_DIR src)
 set (LIB_DIR lib)
 
-#set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
-#set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
-
 include (${SRC_DIR}/src_list.cmake)
 include (${SRC_DIR}/ugdk_module_list.cmake)
 include (${SRC_DIR}/pyramidworks_module_list.cmake)
 include (${SRC_DIR}/lua_src_list.cmake)
 include (${SRC_DIR}/py_src_list.cmake)
 
-# #define's que voce queira incluir na compilacao
-# separe por espacos
-set (DEFS "" CACHE STRING "#define's que voce queira incluir na compilacao; separe por espacos")
-if (WIN32)
-    set (DEFS "${DEFS} WIN32")
-endif (WIN32)
-
-# CFLAGS: flags que voce queira enviar ao compilador
 # LDFLAGS: flags que voce queira enviar ao ligador
-set (CFLAGS "" CACHE STRING "flags enviadas ao compilador")
 set (LDFLAGS "" CACHE STRING "flags enviadas ao linker")
-if (UNIX OR MINGW)
-    # se for o g++ para *nix ou o MinGW para Windows:
-    set (CFLAGS "${CFLAGS} -Wall -ansi -O3 -U_FORTIFY_SOURCE -msse2")
-    if (${BUILD_TYPE} STREQUAL DEBUG)
-        set (CFLAGS "${CFLAGS} -g")
-    endif (${BUILD_TYPE} STREQUAL DEBUG)
-endif (UNIX OR MINGW)
-
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	set (LDFLAGS "${LDFLAGS} -mmacosx-version-min=10.5")
+	LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
 endif ()
 
-# ${UGDK_SRC} esta' definido?
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+if (UNIX OR MINGW)
+    # se for o g++ para *nix ou o MinGW para Windows:
+    add_definitions(-Wall -ansi -U_FORTIFY_SOURCE -msse2)
+elseif (MSVC) 
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast /MP)
+endif ()
+if(WIN32)
+    add_definitions(-DWIN32)
+endif()
+
+# ${UGDK_SRC} está definido?
 if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT UGDK_SRC)
@@ -121,33 +98,26 @@ if (SWIG_FOUND)
   ugdk_setup_package (PythonLibs)
 endif (SWIG_FOUND)
 
-if (${BUILD_TYPE} STREQUAL DEBUG)
-  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
-endif (${BUILD_TYPE} STREQUAL DEBUG)
-
-# pre-processor: #define's
-if (MSVC)
-  foreach (d ${DEFS})
-    set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
-  endforeach (d)
-  
-  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast")
-  
-else (MSVC)
-  foreach (d ${DEFS})
-    set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -D${d}")
-  endforeach (d)
-endif  (MSVC)
-
 include_directories ("src/kits")
 include_directories ("externals/opengl")
 
-if (${LINK_TYPE} STREQUAL STATIC)
-    add_library (${FRAMEWORK_BUILDNAME} STATIC ${UGDK_SRC} ${GENERATED_SRC})
-elseif (${LINK_TYPE} STREQUAL SHARED)
-    add_library (${FRAMEWORK_BUILDNAME} SHARED ${UGDK_SRC} ${GENERATED_SRC})
-endif (${LINK_TYPE} STREQUAL STATIC)
+# Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
+# Code found on http://stackoverflow.com/questions/7747857/in-cmake-how-do-i-work-around-the-debug-and-release-directories-visual-studio-2
 
+# First for the generic no-config case (e.g. with mingw)
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR} )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR} )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR} )
+# Second, for multi-config builds (e.g. msvc)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+
+
+add_library (${FRAMEWORK_RELEASE} ${UGDK_SRC} ${GENERATED_SRC})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
@@ -159,30 +129,34 @@ if (WIN32)
 	set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
 endif (WIN32)
 
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
-if (WIN32)
-	set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
-endif (WIN32)
 
-if (PYTHONLIBS_FOUND)
-  include (cmake/asteroids.cmake)
-endif (PYTHONLIBS_FOUND)
+# We could use LINK_PUBLIC here, but it's a new feature in cmake 2.8.7, so we'd rather not require the newest version.
 
-target_link_libraries (${FRAMEWORK_BUILDNAME}
+target_link_libraries (${FRAMEWORK_RELEASE}
 					   ${EXTRA_LIBRARIES}
 					   ${SDL_LIBRARY}
 					   ${SDLMIXER_LIBRARY}
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
 					   ${OPENGL_LIBRARIES}
-             ${UGDK_LIBRARIES})
-             #${LUA_LIBRARIES}
-             #${PYTHON_FINAL_LIB})
+                       ${UGDK_LIBRARIES})
 
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS}")
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA}")
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
+target_link_libraries (${FRAMEWORK_RELEASE}	LINK_INTERFACE_LIBRARIES 
+					   ${EXTRA_LIBRARIES}
+					   ${SDL_LIBRARY}
+					   ${SDLMIXER_LIBRARY}
+					   ${SDLTTF_LIBRARY}
+					   ${SDLIMAGE_LIBRARY}
+					   ${OPENGL_LIBRARIES}
+                       ${UGDK_LIBRARIES})
+                      
+set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
+set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
+set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAMEWORK_DEBUG}")
+
+if (PYTHONLIBS_FOUND)
+  include (cmake/asteroids.cmake)
+endif (PYTHONLIBS_FOUND)
 
 # Installing on *nix
 #if (UNIX)
