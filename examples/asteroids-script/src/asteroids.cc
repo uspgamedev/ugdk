@@ -132,29 +132,31 @@ int main(int argc, char *argv[]) {
 
     SurpriseLuaTest();
 
-    VirtualObj config = SCRIPT_MANAGER()->LoadModule(prefix+"Config");
+    {
+        VirtualObj config = SCRIPT_MANAGER()->LoadModule(prefix+"Config");
 
-    Vector2D* resolution = config["resolution"].value<Vector2D*>();
-    VIDEO_MANAGER()->ChangeResolution(*resolution, config["fullscreen"].value<bool>());
+        Vector2D* resolution = config["resolution"].value<Vector2D*>();
+        VIDEO_MANAGER()->ChangeResolution(*resolution, config["fullscreen"].value<bool>());
 
-    VirtualObj languages = SCRIPT_MANAGER()->LoadModule(prefix+"Languages");
-    languages["RegisterLanguages"]();
-    if(!ugdk::Engine::reference()->language_manager()->Setup( config["language"].value<std::string>() )) {
-        fprintf(stderr, "Language Setup FAILURE!!\n\n");
-    }
+        VirtualObj languages = SCRIPT_MANAGER()->LoadModule(prefix+"Languages");
+        languages["RegisterLanguages"]();
+        if(!ugdk::Engine::reference()->language_manager()->Setup( config["language"].value<std::string>() )) {
+            fprintf(stderr, "Language Setup FAILURE!!\n\n");
+        }
 
-    VirtualObj animations = SCRIPT_MANAGER()->LoadModule(prefix+"Animations");
-    animations["InitializeSpritesheets"]();
-
-    VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule(prefix+"GameScene");
-	{
-		VirtualObj first_scene = scene_script["StartupScene"]();
-		//if this object, which is scene, exists when main ends, and that same scene
-		//was already deleted segfault occured
-	}
+        VirtualObj animations = SCRIPT_MANAGER()->LoadModule(prefix+"Animations");
+        animations["InitializeSpritesheets"]();
     
-    // Transfers control to the framework.
-    ugdk::Engine::reference()->Run();
+        VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule(prefix+"GameScene");
+        {
+            scene_script["StartupScene"]();
+            //if this object, which is scene, exists when main ends, and that same scene
+            //was already deleted segfault occured
+        }
+
+        // Transfers control to the framework.
+        ugdk::Engine::reference()->Run();
+    }
 
     // Releases all loaded textures, to avoid issues when changing resolution.
     ugdk::Engine::reference()->video_manager()->Release();

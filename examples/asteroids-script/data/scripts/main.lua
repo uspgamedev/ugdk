@@ -1,5 +1,6 @@
 
 require "ugdk.math"
+require "ugdk.base"
 
 print "============ HEY FROM LUA"
 
@@ -29,6 +30,7 @@ print "<+>meta.get<+>"
 ls(getmetatable(v)[".get"])
 print "<+>meta.set<+>"
 ls(getmetatable(v)[".set"])
+print "Engine stuff"
 
 print "============ BYE FROM LUA"
 
