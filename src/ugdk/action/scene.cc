@@ -1,6 +1,7 @@
 #include <ugdk/action/scene.h>
 
 #include <ugdk/action/entity.h>
+#include <ugdk/action/task.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/audio/audiomanager.h>
 #include <ugdk/audio/music.h>
@@ -18,6 +19,8 @@ Scene::Scene() : finished_(false), background_music_(NULL), stops_previous_music
 Scene::~Scene() {
     delete content_node_;
     delete interface_node_;
+    for(std::list<Task*>::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
+        delete (*it);
 }
 
 void Scene::Focus() {
@@ -55,6 +58,11 @@ void Scene::UpdateEntities(double delta_t) {
         (*it)->Update(delta_t);
 }
 
+void Scene::UpdateTasks(double delta_t) {
+    for(std::list<Task*>::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
+        (**it)(delta_t);
+}
+
 static bool entityIsToBeRemoved (const Entity* value) {
     bool is_dead = value->to_be_removed();
     if (is_dead)
@@ -64,6 +72,17 @@ static bool entityIsToBeRemoved (const Entity* value) {
 
 void Scene::DeleteToBeRemovedEntities() {
     entities_.remove_if(entityIsToBeRemoved);
+}
+
+static bool taskIsFinished (const Task* value) {
+    bool is_dead = value->finished();
+    if (is_dead)
+        delete value;
+    return is_dead;
+}
+
+void Scene::DeleteFinishedTasks() {
+    tasks_.remove_if(taskIsFinished);
 }
 
 void Scene::FlushEntityQueue() {

@@ -39,6 +39,9 @@ class Scene {
     /// Will be added at the end of the 
     void QueuedAddEntity(Entity *entity) { queued_entities_.push(entity); }
 
+    /// Adds a Task to the scene.
+    void AddTask(Task *task) { tasks_.push_back(task); }
+
     /// Finishes the scene.
     void Finish() { End(); finished_ = true; }
 
@@ -82,7 +85,9 @@ class Scene {
 
   private:
     void UpdateEntities(double delta_t);
+    void UpdateTasks(double delta_t);
     void DeleteToBeRemovedEntities();
+    void DeleteFinishedTasks();
     void FlushEntityQueue();
 
     /// Whether this scene stops the previous music even if wont play any music.
@@ -93,6 +98,7 @@ class Scene {
 
     std::list<Entity*> entities_;
     std::queue<Entity*> queued_entities_;
+    std::list<Task*> tasks_;
    
   friend class Engine;
 }; // class Scene.
