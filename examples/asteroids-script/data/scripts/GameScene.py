@@ -10,11 +10,11 @@ import MapGenerator
     
 def StartupScene(df = 0.5):
     #print "STARTING SCENE"
-    cena = AsteroidsScene()
+    cena = AsteroidsScene(df)
     #print "GOING TO PUSH SCENE"
     Engine_reference().PushScene( cena )
     #print "GOING TO GENERATE MAP"
-    cena.GenerateMap(df)
+    cena.GenerateMap()
     #print "ALL DONE... Proceeding"
     print "=== Starting Asteroids Scene [Difficulty = %s]" % (df)
     return cena
@@ -92,7 +92,7 @@ class AsteroidsScene (Scene):
         x = (screenSize.get_x()/2.0) - (text.width()/2.0)
         y = (screenSize.get_y()/2.0) - (text.height()/2.0)
         self.finishTextNode.modifier().set_offset( Vector2D(x, y) )
-        self.content_node().AddChild(self.finishTextNode)
+        self.interface_node().AddChild(self.finishTextNode)
 
     def Focus(self):
         pass
@@ -131,7 +131,7 @@ class AsteroidsScene (Scene):
             self.Finish()
         elif input.KeyPressed(K_HOME):
             self.Finish()
-            StartupScene(self.difficultyFactor * 1.2)
+            StartupScene(self.difficultyFactor * 1.15)
             
     def HandleCollisions(self):
         collision_list = CollisionInstanceList()
