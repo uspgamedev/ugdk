@@ -138,7 +138,8 @@ target_link_libraries (${FRAMEWORK_RELEASE}
 					   ${SDLMIXER_LIBRARY}
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
-					   ${OPENGL_LIBRARIES})
+					   ${OPENGL_LIBRARIES}
+                       ${UGDK_LIBRARIES})
 
 target_link_libraries (${FRAMEWORK_RELEASE}	LINK_INTERFACE_LIBRARIES 
 					   ${EXTRA_LIBRARIES}
@@ -146,16 +147,8 @@ target_link_libraries (${FRAMEWORK_RELEASE}	LINK_INTERFACE_LIBRARIES
 					   ${SDLMIXER_LIBRARY}
 					   ${SDLTTF_LIBRARY}
 					   ${SDLIMAGE_LIBRARY}
-					   ${OPENGL_LIBRARIES})
-                       
-if (SWIG_FOUND AND LUA51_FOUND)
-    target_link_libraries (${FRAMEWORK_RELEASE} ${LUA_LIBRARIES})
-    target_link_libraries (${FRAMEWORK_RELEASE} LINK_INTERFACE_LIBRARIES ${LUA_LIBRARIES})
-endif(SWIG_FOUND AND LUA51_FOUND)
-if (SWIG_FOUND AND PYTHONLIBS_FOUND)
-    target_link_libraries (${FRAMEWORK_RELEASE} optimized ${PYTHON_LIBRARIES} debug ${PYTHON_DEBUG_LIBRARY})
-    target_link_libraries (${FRAMEWORK_RELEASE} LINK_INTERFACE_LIBRARIES optimized ${PYTHON_LIBRARIES} debug ${PYTHON_DEBUG_LIBRARY})
-endif (SWIG_FOUND AND PYTHONLIBS_FOUND)
+					   ${OPENGL_LIBRARIES}
+                       ${UGDK_LIBRARIES})
                       
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")

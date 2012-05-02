@@ -4,8 +4,14 @@ find_package (PythonLibs 2.7)
 if (PYTHONLIBS_FOUND)
 
   include_directories (${PYTHON_INCLUDE_DIRS})
-  LIST(APPEND UGDK_SRC              ${UGDK_PYTHON_SRC})
   ugdk_add_scriptlang (python)
+
+  LIST(APPEND UGDK_SRC ${UGDK_PYTHON_SRC}) 
+  if(PYTHON_DEBUG_LIBRARY)
+    LIST(APPEND UGDK_LIBRARIES optimized;${PYTHON_LIBRARIES};debug;${PYTHON_DEBUG_LIBRARY})
+  else(PYTHON_DEBUG_LIBRARY)
+    LIST(APPEND UGDK_LIBRARIES ${PYTHON_LIBRARIES})
+  endif(PYTHON_DEBUG_LIBRARY)
 
   message ("-- Python modules added.")
     
