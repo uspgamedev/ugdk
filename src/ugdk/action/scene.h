@@ -3,6 +3,7 @@
 
 #include <list>
 #include <queue>
+#include <map>
 #include <ugdk/action.h>
 #include <ugdk/audio.h>
 #include <ugdk/graphic.h>
@@ -42,7 +43,7 @@ class Scene {
     void RemoveAllEntities();
 
     /// Adds a Task to the scene.
-    void AddTask(Task *task) { tasks_.push_back(task); }
+    void AddTask(Task *task);
 
     /// Finishes the scene.
     void Finish() { End(); finished_ = true; }
@@ -100,7 +101,9 @@ class Scene {
 
     std::list<Entity*> entities_;
     std::queue<Entity*> queued_entities_;
-    std::list<Task*> tasks_;
+
+    typedef std::map<int, std::list<Task*> > TasksContainer;
+    TasksContainer tasks_;
    
   friend class Engine;
 }; // class Scene.

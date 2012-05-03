@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include <ugdk/action/scene.h>
 
 #include <ugdk/action/entity.h>
@@ -11,6 +13,21 @@ namespace ugdk {
 
 namespace action {
 
+static bool entityIsToBeRemoved (const Entity* value) {
+    bool is_dead = value->to_be_removed();
+    if (is_dead)
+        delete value;
+    return is_dead;
+}
+
+static bool taskIsFinished (const Task* value) {
+    bool is_dead = value->finished();
+    if (is_dead)
+        delete value;
+    return is_dead;
+}
+
+
 using namespace std;
 
 Scene::Scene() : finished_(false), background_music_(NULL), stops_previous_music_(true), 
@@ -20,8 +37,9 @@ Scene::~Scene() {
     //RemoveAllEntities(); Play safe... TODO: activate this and refactor users!
     delete content_node_;
     delete interface_node_;
-    for(std::list<Task*>::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
-        delete (*it);
+    for(TasksContainer::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
+        for(std::list<Task*>::iterator j = it->second.begin(); j != it->second.end(); ++j)
+            delete (*j);
 }
 
 void Scene::Focus() {
@@ -50,6 +68,10 @@ void Scene::RemoveAllEntities() {
     entities_.clear();
 }
 
+void Scene::AddTask(Task *task) {
+    tasks_[task->priority()].push_back(task);
+}
+
 void Scene::Update(double delta_t) {
     UpdateEntities(delta_t);
     UpdateTasks(delta_t);
@@ -69,30 +91,18 @@ void Scene::UpdateEntities(double delta_t) {
 }
 
 void Scene::UpdateTasks(double delta_t) {
-    for(std::list<Task*>::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
-        (**it)(delta_t);
-}
-
-static bool entityIsToBeRemoved (const Entity* value) {
-    bool is_dead = value->to_be_removed();
-    if (is_dead)
-        delete value;
-    return is_dead;
+    for(TasksContainer::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
+        for(std::list<Task*>::iterator j = it->second.begin(); j != it->second.end(); ++j)
+            (**j)(delta_t);
 }
 
 void Scene::DeleteToBeRemovedEntities() {
     entities_.remove_if(entityIsToBeRemoved);
 }
 
-static bool taskIsFinished (const Task* value) {
-    bool is_dead = value->finished();
-    if (is_dead)
-        delete value;
-    return is_dead;
-}
-
 void Scene::DeleteFinishedTasks() {
-    tasks_.remove_if(taskIsFinished);
+    for(TasksContainer::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
+        it->second.remove_if(taskIsFinished);
 }
 
 void Scene::FlushEntityQueue() {
