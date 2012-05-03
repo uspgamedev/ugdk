@@ -39,6 +39,8 @@ class Scene {
     /// Will be added at the end of the 
     void QueuedAddEntity(Entity *entity) { queued_entities_.push(entity); }
 
+    void RemoveAllEntities();
+
     /// Adds a Task to the scene.
     void AddTask(Task *task) { tasks_.push_back(task); }
 

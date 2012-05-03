@@ -17,6 +17,7 @@ Scene::Scene() : finished_(false), background_music_(NULL), stops_previous_music
     content_node_(new graphic::Node), interface_node_(new graphic::Node) {}
 
 Scene::~Scene() {
+    //RemoveAllEntities(); Play safe... TODO: activate this and refactor users!
     delete content_node_;
     delete interface_node_;
     for(std::list<Task*>::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
@@ -40,6 +41,13 @@ void Scene::Focus() {
 void Scene::AddEntity(Entity *entity) { 
     entities_.push_back(entity);
     entity->OnSceneAdd(this);
+}
+
+void Scene::RemoveAllEntities() {
+    std::list<Entity*>::iterator i;
+    for (i = entities_.begin(); i != entities_.end(); ++i)
+        delete (*i);
+    entities_.clear();
 }
 
 void Scene::Update(double delta_t) {
