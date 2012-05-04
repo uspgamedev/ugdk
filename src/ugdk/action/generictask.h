@@ -15,7 +15,7 @@ class GenericTask : public Task {
   public:
     GenericTask(std::tr1::function<bool (double)> func)  : function_(func) {}
 
-    GenericTask(std::tr1::function<bool (double> func, int priority) 
+    GenericTask(std::tr1::function<bool (double)> func, int priority) 
         : Task(priority), function_(func) {}
 
     void operator()(double dt) {
