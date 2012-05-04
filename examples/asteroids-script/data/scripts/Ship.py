@@ -3,7 +3,7 @@ from ugdk.ugdk_base import Color, Engine_reference, ResourceManager_CreateTextFr
 from ugdk.ugdk_input import InputManager, K_w, K_a, K_s, K_d, M_BUTTON_LEFT, K_ESCAPE, M_BUTTON_RIGHT
 from BasicEntity import BasicEntity, GetEquivalentValueInRange
 from Radio import Radio
-from Projectile import Projectile
+from Projectile import Projectile, AntiGravShield
 from BarUI import BarUI, BAR_HEIGHT
 from Shockwave import Shockwave
 from math import pi
@@ -29,6 +29,7 @@ class Ship (BasicEntity):
         self.energy_hud = BarUI(self, "energy", Color(0.0,0.0,1.0,1.0), Vector2D(0.0, self.radius+BAR_HEIGHT))
         self.hud_node.AddChild(self.energy_hud.node)
 
+        self.gravshield = AntiGravShield(self, 40)
         ##self.nameText = Engine_reference().text_manager().GetText("Tetracontakaidigono")
         #self.nameText = ResourceManager_CreateTextFromLanguageTag("ShipName")
         #self.nameNode = Node(self.nameText)
@@ -70,12 +71,13 @@ class Ship (BasicEntity):
         accel = accel * self.speed
         self.acceleration = accel
 
-        
+        self.gravshield.active = input.MouseDown(M_BUTTON_RIGHT)
+
         if input.MouseDown(M_BUTTON_LEFT):
             self.charge_time += dt
             if self.charge_time >= self.max_charge_time:
                 self.charge_time = self.max_charge_time
-        else:
+        elif not self.gravshield.active:
             if self.energy < self.max_energy:
                 self.energy += self.energy_regen_rate * dt
 
@@ -85,11 +87,11 @@ class Ship (BasicEntity):
             self.Shoot(mouse_dir, power, cost)
             self.charge_time = 0.0
             
-        if input.MousePressed(M_BUTTON_RIGHT):
-            pos = self.GetPos()
-            wave = Shockwave(pos.get_x(), pos.get_y(), 4.0, [self.radius, self.radius*5])
-            wave.AddIDToIgnoreList(self.id)
-            self.new_objects.append(wave)
+        #if input.MousePressed(M_BUTTON_RIGHT):
+        #    pos = self.GetPos()
+        #    wave = Shockwave(pos.get_x(), pos.get_y(), 4.0, [self.radius, self.radius*5])
+        #    wave.AddIDToIgnoreList(self.id)
+        #    self.new_objects.append(wave)
 
     def Shoot(self, direction, power, cost):
         if self.energy < cost:    return
@@ -103,7 +105,7 @@ class Ship (BasicEntity):
         self.radio.PlaySound("fire.wav")
 
     def HandleCollision(self, target):
-        if target.type == "Planet.Planet":
+        if target.type == "Planet":
             pass
         #No handler for projectile since that is strictly
         #"do it only one time", and Projectile will handle it

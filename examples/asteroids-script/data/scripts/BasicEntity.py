@@ -36,6 +36,7 @@ class EntityInterface (Entity):
         self.type = str(self.__class__)  ###
         if len(self.type.split("'")) > 1:
             self.type = self.type.split("'")[1]
+        self.type = self.type.split(".")[1]
         #print "CLASS TYPE: ", self.type
         self.id = EntityInterface.nextID
         self.is_collidable = True ###
@@ -43,6 +44,7 @@ class EntityInterface (Entity):
 
     def CheckType(self, typestr):
         return self.type.count(typestr) > 0
+
     def ClearNewObjects(self): ###
         self.new_objects = []
 

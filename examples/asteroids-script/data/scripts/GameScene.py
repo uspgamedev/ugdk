@@ -1,7 +1,7 @@
 from ugdk.ugdk_action import Scene
 from ugdk.ugdk_util import CreateBox2D
 from ugdk.pyramidworks_collision import CollisionManager, CollisionInstanceList
-from ugdk.ugdk_input import InputManager, K_ESCAPE, K_HOME
+from ugdk.ugdk_input import InputManager, K_ESCAPE, K_HOME, K_PAGEUP, K_PAGEDOWN
 from ugdk.ugdk_base import Engine_reference, ResourceManager_CreateTextFromLanguageTag
 from ugdk.ugdk_graphic import Node
 from ugdk.ugdk_math import Vector2D
@@ -32,12 +32,15 @@ class AsteroidsScene (Scene):
         self.startCollisions()
         self.asteroid_count = 0
         self.ship_alive = True
+        self.hero = None
         self.finishTextNode = None
         self.difficultyFactor = difficultyFactor
         
     def startCollisions(self):
         self.collisionManager.Generate("Entity")
         self.collisionManager.Generate("Gravity")
+
+    def GetHero(self):  return self.hero
 
     def Populate(self, objs):
         #print self, " POPULATE: receiving objects ", objs
@@ -60,6 +63,7 @@ class AsteroidsScene (Scene):
             self.asteroid_count += 1
         if obj.CheckType("Ship"):
             self.ship_alive = True
+            self.hero = obj
             
         
     def RemoveObject(self, obj):
@@ -67,6 +71,7 @@ class AsteroidsScene (Scene):
             self.asteroid_count -= 1
         if obj.CheckType("Ship"):
             self.ship_alive = False
+            self.hero = None
         self.objects.remove(obj)
         if obj in self.colliding_objects:
             self.colliding_objects.remove(obj)
@@ -129,9 +134,15 @@ class AsteroidsScene (Scene):
         if input.KeyPressed(K_ESCAPE):
             print "GameScene ESCAPING"
             self.Finish()
-        elif input.KeyPressed(K_HOME):
+        elif input.KeyPressed(K_PAGEUP):
             self.Finish()
             StartupScene(self.difficultyFactor * 1.15)
+        elif input.KeyPressed(K_PAGEDOWN):
+            self.Finish()
+            StartupScene(self.difficultyFactor * 0.85)
+        elif input.KeyPressed(K_HOME):
+            self.Finish()
+            StartupScene(self.difficultyFactor)
             
     def HandleCollisions(self):
         collision_list = CollisionInstanceList()

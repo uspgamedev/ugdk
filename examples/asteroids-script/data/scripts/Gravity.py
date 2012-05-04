@@ -25,7 +25,7 @@ class GravityWell (EntityInterface):
         EntityInterface.__init__(self, x, y, r)
         self.is_antigrav = False
         self.ignore_ids = []
-        
+        self.active = True
         self.collision_object = CollisionObject(getCollisionManager(), self)  #initialize collision object, second arg is passed to collisionlogic to handle collisions
         self.collision_object.InitializeCollisionClass("Gravity")              # define the collision class
         self.geometry = Circle(self.radius)                           #
@@ -34,6 +34,9 @@ class GravityWell (EntityInterface):
         self.collision_object.AddCollisionLogic("Entity", BasicColLogic(self) )
 
         
+    def ToggleActive(self):
+        self.active = not self.active
+
     def AddIDToIgnoreList(self, ID):
         if ID not in self.ignore_ids:
             self.ignore_ids.append(ID)
@@ -43,8 +46,8 @@ class GravityWell (EntityInterface):
             self.ignore_ids.remove(ID)
 
     def HandleCollision(self, target):
-        ignore_types = ["Planet.Planet"]
-        if target.type in ignore_types or target.id in self.ignore_ids:
+        ignore_types = ["Planet"]
+        if not self.active or target.type in ignore_types or target.id in self.ignore_ids:
             return #we don't affect planets (neither their wells)
         
         grav_vec = self.GetPos() - target.GetPos()

@@ -1,6 +1,7 @@
 from ugdk.ugdk_math import Vector2D
 from BasicEntity import BasicEntity, CalculateAfterSpeedBasedOnMomentum
 from Animations import CreateExplosionFromCollision
+from Projectile import Turret
 from random import random, randint, shuffle
 from math import pi
 
@@ -17,11 +18,12 @@ class Asteroid (BasicEntity):
         self.node.modifier().set_rotation( random() * 2 * pi )
         self.has_splitted = False
         self.mass = 1000.0 + 100000000*size_factor
-        
         self.collidedWithAsteroids = []
+        self.turret = Turret(self, 2.0, 70, 0.4)
         
     def Update(self, dt):
         BasicEntity.Update(self, dt)
+        self.turret.Update(dt)
         self.collidedWithAsteroids = []
 
     def TakeDamage(self, damage):
@@ -48,7 +50,7 @@ class Asteroid (BasicEntity):
     def GetDamage(self, obj_type):
         if obj_type == self.type:
             return self.life * 0.2
-        elif obj_type == "Ship.Ship" or obj_type == "Planet.Planet":
+        elif obj_type == "Ship" or obj_type == "Planet":
             return self.life
 
     def HandleCollision(self, target):

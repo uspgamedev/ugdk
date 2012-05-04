@@ -68,7 +68,7 @@ def Generate(difficultyFactor):
     ship = Ship(loc[0], loc[1])
     entities.append(ship)
 
-    planetCount = random.randint(PLANET_COUNT_RANGE[0], PLANET_COUNT_RANGE[1]) * difficultyFactor
+    planetCount = int( random.randint(PLANET_COUNT_RANGE[0], PLANET_COUNT_RANGE[1]) * difficultyFactor  )
     for i in range(planetCount):
         loc = pickAPlace()
         planet = Planet(loc[0], loc[1], GetRandomPlanetSizeFactor())

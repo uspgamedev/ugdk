@@ -33,21 +33,21 @@ class Planet (BasicEntity):
             # produce our shockwave before the asteroids since the C++ part pop()'s the objects
             # out of the list, so last objects in self.new_objects are created first.
             pos = self.GetPos()
-            print "Planet cracking down..."
+            #print "Planet cracking down..."
             wave = Shockwave(pos.get_x(), pos.get_y(), 4.0, [self.radius, window_size().Length() * 0.35])
             wave.AddIDToIgnoreList(self.id)
             self.new_objects.append(wave)
-            print "Shockwave created"
+            #print "Shockwave created"
             # and create our 'asteroid parts'
             angles = [0.0, -pi/4.0, -pi/2.0, -3*pi/2.0, pi, 3*pi/2.0, pi/2.0, pi/4.0]
             shuffle(angles)
             direction = Vector2D(1,0).Rotate(random()*2*pi)
             direction = direction.Normalize()
             factor = 0.75
-            print self, "is breaking, into factor", factor
+            #print self, "is breaking, into factor", factor
             for i in range(randint(2,5)):
                 v = direction.Rotate(angles.pop())
-                v = v * ((self.radius+Asteroid.GetActualRadius(factor))*1.15)
+                v = v * ((self.radius+Asteroid.GetActualRadius(factor))*0.5)
                 pos = pos + v
                 ast = Asteroid(pos.get_x(), pos.get_y(), factor)
                 v = v.Normalize()
