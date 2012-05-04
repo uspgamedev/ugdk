@@ -18,6 +18,7 @@
 #include <module/ugdk/action/observerproxy.h>
 #include <module/ugdk/action/entityproxy.h>
 #include <module/ugdk/action/sceneproxy.h>
+#include <module/ugdk/action/taskproxy.h>
 
 %}
 
@@ -31,6 +32,7 @@
 proxy_class(ugdk::action::Observer)
 proxy_class(ugdk::action::Entity)
 proxy_class(ugdk::action::Scene)
+proxy_class(ugdk::action::Task)
 
 %ignore ugdk::action::Scene::content_node() const;
 %ignore ugdk::action::Scene::interface_node() const;
