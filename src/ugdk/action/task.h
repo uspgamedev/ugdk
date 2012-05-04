@@ -14,6 +14,7 @@ class Task {
     virtual ~Task() {}
 
     virtual void operator()(double dt) = 0;
+
     int priority() const { return priority_; }
 
     bool finished() const { return finished_; }

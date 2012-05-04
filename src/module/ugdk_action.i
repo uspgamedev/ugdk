@@ -34,6 +34,7 @@ proxy_class(ugdk::action::Scene)
 
 %ignore ugdk::action::Scene::content_node() const;
 %ignore ugdk::action::Scene::interface_node() const;
+%ignore ugdk::action::Entity::OnSceneAdd(Scene* scene);
 
 %include <ugdk/action/animationframe.h>
 %include <ugdk/action/animation.h>

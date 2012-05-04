@@ -9,7 +9,6 @@ namespace action {
 
 class Entity {
   public:
-    Entity() : to_be_removed_(false) {}
     virtual ~Entity() {}
 
     bool to_be_removed() const { return to_be_removed_; }
@@ -19,6 +18,7 @@ class Entity {
     virtual void OnSceneAdd(Scene* scene) {}
 
   protected:
+    Entity() : to_be_removed_(false) {}
     bool to_be_removed_;
 };
 
