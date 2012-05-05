@@ -34,8 +34,8 @@ CollisionObject::~CollisionObject() {
         delete shape_;
 }
 
-void CollisionObject::SearchCollisions(std::vector<CollisionInstance> &collision_list) {
-    std::map<const CollisionClass*, CollisionLogic*>::iterator it;
+void CollisionObject::SearchCollisions(std::vector<CollisionInstance> &collision_list) const {
+    std::map<const CollisionClass*, CollisionLogic*>::const_iterator it;
     for(it = known_collisions_.begin(); it != known_collisions_.end(); ++it) {
 
         const CollisionObjectList& target_list = it->first->FindCollidingObjects(this);
@@ -76,6 +76,7 @@ void CollisionObject::StartColliding() {
     }
 #endif
     collision_class_->AddObject(this);
+    manager_->AddActiveObject(this);
     is_active_ = true;
 }
 
@@ -85,6 +86,7 @@ void CollisionObject::StopColliding() {
     if(collision_class_ == NULL) fprintf(stderr, "Pyramidworks - CollisionObject Warning: StopColliding called with an object with NULL collision_class.\n");
 #endif
     collision_class_->RemoveObject(this);
+    manager_->RemoveActiveObject(this);
     is_active_ = false;
 }
 

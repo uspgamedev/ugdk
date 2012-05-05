@@ -3,8 +3,10 @@
 
 #include <string>
 #include <map>
+#include <set>
 #include <ugdk/util/intervalkdtree.h>
 #include <pyramidworks/collision.h>
+#include <ugdk/action.h>
 
 namespace pyramidworks {
 namespace collision {
@@ -33,10 +35,17 @@ class CollisionManager {
       * @return A pointer to a CollisionClass. */
     CollisionClass* Get(const std::string &name) { return cache_[name]; }
     CollisionClass* Get(const char n[]) { const std::string str(n); return Get(str); }
+
+    void AddActiveObject(const CollisionObject* obj) { active_objects_.insert(obj); }
+    void RemoveActiveObject(const CollisionObject* obj) { active_objects_.erase(obj); }
+
+    /// Warning: this task depends on resources from this object. Do not use it after this object is destroyed.
+    ugdk::action::Task* GenerateHandleCollisionTask();
     
   private:
     const ugdk::ikdtree::Box<2> tree_bounding_box_;
     std::map<std::string, CollisionClass*> cache_;
+    std::set<const CollisionObject*> active_objects_;
 };
 
 } // namespace collision

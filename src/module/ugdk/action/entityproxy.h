@@ -21,6 +21,15 @@ public:
         args.push_back(vdt);
         ( proxy_ | "Update" )(args);
     }
+
+    virtual void OnSceneAdd(Scene* scene) {
+        ugdk::script::VirtualObj vdt = ugdk::script::VirtualObj(proxy_.wrapper());
+        vdt.set_value(scene);
+        std::list<ugdk::script::VirtualObj> args;
+        args.push_back(vdt);
+        if(proxy_["OnSceneAdd"])
+            ( proxy_ | "OnSceneAdd" )(args);
+    }
     
 };
 
