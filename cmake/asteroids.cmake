@@ -6,6 +6,13 @@ add_executable (asteroids EXCLUDE_FROM_ALL examples/asteroids-script/src/asteroi
                 ${GAME_SRCS})
 
 set_target_properties (asteroids PROPERTIES RUNTIME_OUTPUT_DIRECTORY examples/asteroids-script/)
+if(WIN32)
+    add_custom_command(TARGET asteroids POST_BUILD 
+                        COMMAND xcopy src\\generated\\*.py examples\\asteroids-script\\data\\scripts\\ugdk\\ /q /k /y > nul
+                        #[WORKING_DIRECTORY dir]
+                        COMMENT "Updating Python script modules." 
+                        VERBATIM)
+endif(WIN32)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set (UGDK_TEST_CFLAGS "-g -Wall -ansi -O0 -U_FORTIFY_SOURCE -msse2")
