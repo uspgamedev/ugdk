@@ -34,6 +34,9 @@ private:
     Menu* menu_;
 };
 
+
+Menu::MenuCallback Menu::FINISH_MENU(&ugdk::action::Scene::Finish);
+
 Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box) 
   : objects_tree_(new ObjectTree(tree_bounding_box,5)) {
 

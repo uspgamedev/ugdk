@@ -20,14 +20,15 @@ namespace ui {
 class Menu: public action::Scene {
   typedef ikdtree::IntervalKDTree<const UIElement*, 2> ObjectTree;
   public:
-    typedef std::map<input::Key, std::tr1::function<void (Menu*)> > InputCallbacks;
+    typedef std::tr1::function<void (Menu*)> MenuCallback;
+    typedef std::map<input::Key, MenuCallback > InputCallbacks;
 
     Menu(const ikdtree::Box<2>& tree_bounding_box);
     ~Menu();
 
     void CheckInteraction(const Vector2D &mouse_pos);
 
-    void AddCallback(input::Key key, std::tr1::function<void (Menu*)> callback) {
+    void AddCallback(input::Key key, MenuCallback callback) {
         input_callbacks_[key] = callback;
     }
 
@@ -36,6 +37,8 @@ class Menu: public action::Scene {
     void RefreshObject(const UIElement *obj);
 
     const InputCallbacks& input_callbacks() const { return input_callbacks_; }
+
+    static MenuCallback FINISH_MENU;
 
   private:
     ObjectTree* objects_tree_;
