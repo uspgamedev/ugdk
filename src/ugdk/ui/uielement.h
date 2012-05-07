@@ -10,12 +10,12 @@
 
 class UIElement {
   public:
-    typedef std::tr1::function<void (UIElement *)> UICallback;
+    typedef std::tr1::function<void (const UIElement *)> UICallback;
     
     UIElement(ugdk::Vector2D top_left, ugdk::Vector2D bottom_right, UICallback function)
     : top_left_(top_left), 
       bottom_right_(bottom_right),
-      function_(function);
+      function_(function) {};
     
     virtual ~UIElement();
 
@@ -23,7 +23,7 @@ class UIElement {
     
     ugdk::graphic::Node* node() const { return node_; }
 
-    void Interact() const { function_(); }
+    void Interact() const { if(function_) function_(this); }
 
   private:
     std::string name_;
