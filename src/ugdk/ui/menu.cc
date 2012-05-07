@@ -1,20 +1,29 @@
 #include <vector>
 #include "menu.h"
-#include <ugdk/util/intervalkdtree.h>
 #include <ugdk/action/generictask.h>
+#include <ugdk/base/engine.h>
 #include <ugdk/graphic/node.h>
+#include <ugdk/input/inputmanager.h>
+#include <ugdk/util/intervalkdtree.h>
 
 namespace ugdk {
 namespace ui {
 
-static bool CheckMouse(double dt) {
-    // TODO: implement
+using std::tr1::placeholders::_1;
+
+static bool CheckMouse(Menu* menu, double dt) {
+    input::InputManager* input = INPUT_MANAGER();
+    if(input->MousePressed(input::M_BUTTON_LEFT)) {
+        menu->CheckInteraction(input->GetMousePosition());
+    }
     return true;
 }
 
 Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box) 
   : objects_tree_(new ObjectTree(tree_bounding_box,5)) {
-      this->AddTask(new action::GenericTask(CheckMouse));
+
+      std::tr1::function<void (double)> func = std::tr1::bind(&CheckMouse, this, _1);
+      this->AddTask(new action::GenericTask(func));
 }
 
 Menu::~Menu() { delete objects_tree_; }
