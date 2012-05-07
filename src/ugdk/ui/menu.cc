@@ -19,11 +19,27 @@ static bool CheckMouse(Menu* menu, double dt) {
     return true;
 }
 
+class CallbackCheckTask : public action::Task {
+public:
+    CallbackCheckTask(Menu* menu) : menu_(menu) {}
+    void operator()(double dt) {
+        input::InputManager* input = INPUT_MANAGER();
+        const Menu::InputCallbacks& callbacks = menu_->input_callbacks();
+        for(Menu::InputCallbacks::const_iterator it = callbacks.begin(); it != callbacks.end(); ++it) {
+            if(input->KeyPressed(it->first))
+                it->second(menu_);
+        }
+    }
+private:
+    Menu* menu_;
+};
+
 Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box) 
   : objects_tree_(new ObjectTree(tree_bounding_box,5)) {
 
       std::tr1::function<bool (double)> func = std::tr1::bind(&CheckMouse, this, _1);
       this->AddTask(new action::GenericTask(func));
+      this->AddTask(new CallbackCheckTask(this));
 }
 
 Menu::~Menu() { delete objects_tree_; }
