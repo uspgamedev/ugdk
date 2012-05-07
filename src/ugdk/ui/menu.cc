@@ -22,7 +22,7 @@ static bool CheckMouse(Menu* menu, double dt) {
 Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box) 
   : objects_tree_(new ObjectTree(tree_bounding_box,5)) {
 
-      std::tr1::function<void (double)> func = std::tr1::bind(&CheckMouse, this, _1);
+      std::tr1::function<bool (double)> func = std::tr1::bind(&CheckMouse, this, _1);
       this->AddTask(new action::GenericTask(func));
 }
 

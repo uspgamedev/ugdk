@@ -10,10 +10,10 @@
 #include <ugdk/graphic.h>
 #include <pyramidworks/collision.h>
 
-typedef std::list<const UIElement *> UICollisionList;
-
 namespace ugdk {
 namespace ui {
+
+typedef std::list<const UIElement *> UICollisionList;
 
 class Menu: public action::Scene {
   typedef ikdtree::IntervalKDTree<const UIElement*, 2> ObjectTree;

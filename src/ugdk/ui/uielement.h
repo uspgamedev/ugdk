@@ -1,36 +1,40 @@
-#ifndef UGDK_UIELEMENT_H_
-#define UGDK_UIELEMENT_H_
+#ifndef UGDK_UI_UIELEMENT_H_
+#define UGDK_UI_UIELEMENT_H_
 
 #include <functional>
 #include <string>
 
 #include <ugdk/util.h>
+#include <ugdk/graphic.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/util/intervalkdtree.h>
+
+namespace ugdk {
+namespace ui {
 
 class UIElement {
   public:
     typedef std::tr1::function<void (const UIElement *)> UICallback;
     
-    UIElement(ugdk::Vector2D top_left, ugdk::Vector2D bottom_right, UICallback function)
-    : top_left_(top_left), 
-      bottom_right_(bottom_right),
-      function_(function) {};
+    UIElement(const Vector2D& top_left, const Vector2D& bottom_right, UICallback function);
     
     virtual ~UIElement();
 
-    ugdk::ikdtree::Box<2> GetBoundingBox() const { return ugdk::ikdtree::Box<2>(top_left_.val, bottom_right_.val); }
+    ikdtree::Box<2> GetBoundingBox() const { return ikdtree::Box<2>(top_left_.val, bottom_right_.val); }
     
-    ugdk::graphic::Node* node() const { return node_; }
+    graphic::Node* node() const { return node_; }
 
     void Interact() const { if(function_) function_(this); }
 
   private:
     std::string name_;
     UICallback function_;
-    ugdk::Vector2D top_left_;
-    ugdk::Vector2D bottom_right_;
-    ugdk::graphic::Node* node_;
+    Vector2D top_left_;
+    Vector2D bottom_right_;
+    graphic::Node* node_;
 };
+
+} // namespace ui
+} // namespace ugdk
 
 #endif /* UGDK_UIELEMENT_H_ */
