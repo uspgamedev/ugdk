@@ -4,17 +4,17 @@
 #include <string>
 #include <functional>
 #include <map>
+#include <ugdk/math/vector2D.h>
 #include <ugdk/util.h>
+#include <ugdk/ui.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/input.h>
 #include <ugdk/input/keys.h>
-#include <ugdk/ui/uielement.h>
 #include <ugdk/graphic.h>
 #include <pyramidworks/collision.h>
 
 namespace ugdk {
 namespace ui {
-
 //typedef std::list<const UIElement *> UICollisionList;
 
 class Menu: public action::Scene {
@@ -23,18 +23,18 @@ class Menu: public action::Scene {
     typedef std::tr1::function<void (Menu*)> MenuCallback;
     typedef std::map<input::Key, MenuCallback > InputCallbacks;
 
-    Menu(const ikdtree::Box<2>& tree_bounding_box);
+    Menu(const ikdtree::Box<2>& tree_bounding_box, const Vector2D offset);
     ~Menu();
 
-    void CheckInteraction(const Vector2D &mouse_pos);
+    void CheckInteraction(const Vector2D& mouse_pos);
 
     void AddCallback(input::Key key, MenuCallback callback) {
         input_callbacks_[key] = callback;
     }
 
-    void AddObject(const UIElement *obj);
-    void RemoveObject(const UIElement *obj);
-    void RefreshObject(const UIElement *obj);
+    void AddObject(const UIElement* obj);
+    void RemoveObject(const UIElement* obj);
+    void RefreshObject(const UIElement* obj);
 
     const InputCallbacks& input_callbacks() const { return input_callbacks_; }
 

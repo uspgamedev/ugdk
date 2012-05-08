@@ -1,19 +1,21 @@
 #include <vector>
-#include "menu.h"
+#include <ugdk/ui/menu.h>
+#include <ugdk/ui/uielement.h>
+
 #include <ugdk/action/generictask.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/input/inputmanager.h>
 #include <ugdk/util/intervalkdtree.h>
 
+using std::tr1::placeholders::_1;
+
 namespace ugdk {
 namespace ui {
 
-using std::tr1::placeholders::_1;
-
 static bool CheckMouse(Menu* menu, double dt) {
     input::InputManager* input = INPUT_MANAGER();
-    if(input->MousePressed(input::M_BUTTON_LEFT)) {
+    if(input->MouseUp(input::M_BUTTON_LEFT)) {
         menu->CheckInteraction(input->GetMousePosition());
     }
     return true;
@@ -37,9 +39,9 @@ private:
 
 Menu::MenuCallback Menu::FINISH_MENU(&ugdk::action::Scene::Finish);
 
-Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box) 
-  : objects_tree_(new ObjectTree(tree_bounding_box,5)) {
-
+Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const Vector2D offset) 
+  : objects_tree_(new ObjectTree(tree_bounding_box,5)){
+      interface_node()->modifier()->set_offset(offset);
       std::tr1::function<bool (double)> func = std::tr1::bind(&CheckMouse, this, _1);
       this->AddTask(new action::GenericTask(func));
       this->AddTask(new CallbackCheckTask(this));
