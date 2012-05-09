@@ -6,6 +6,7 @@
 
 #include <ugdk/util.h>
 #include <ugdk/graphic.h>
+#include <ugdk/graphic/node.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/util/intervalkdtree.h>
 
@@ -18,12 +19,13 @@ class UIElement {
   public:
     typedef std::tr1::function<void (const UIElement *)> UICallback;
     
-    UIElement(const Vector2D& top_left, const Vector2D& bottom_right, Menu* owner, UICallback function);
+    UIElement(const Vector2D& top_left, Menu* owner, UICallback function);
     
     virtual ~UIElement();
 
     ikdtree::Box<2> GetBoundingBox() const ;
     
+    void set_drawable(graphic::Drawable* drawable) { node_->set_drawable(drawable); }
     graphic::Node* node() const { return node_; }
 
     void Interact() const { if(function_) function_(this); }
@@ -33,7 +35,6 @@ class UIElement {
     std::string name_;
     UICallback function_;
     Vector2D top_left_;
-    Vector2D bottom_right_;
     graphic::Node* node_;
 };
 

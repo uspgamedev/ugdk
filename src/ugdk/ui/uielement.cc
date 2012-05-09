@@ -1,19 +1,17 @@
 #include <functional>
 #include <string>
+#include <stdio.h>
 
 #include <ugdk/ui/uielement.h>
-#include <ugdk/graphic/node.h>
+#include <ugdk/graphic/drawable.h>
 #include <ugdk/util.h>
 #include <ugdk/ui/menu.h>
-#include <ugdk/math/vector2D.h>
-#include <ugdk/util/intervalkdtree.h>
 
 namespace ugdk {
 namespace ui {
 
-UIElement::UIElement(const Vector2D& top_left, const Vector2D& bottom_right, Menu* owner, UICallback function)
+UIElement::UIElement(const Vector2D& top_left, Menu* owner, UICallback function)
     : top_left_(top_left), 
-      bottom_right_(bottom_right),
       owner_(owner),
       function_(function),
       node_(new graphic::Node) {
@@ -25,9 +23,11 @@ UIElement::~UIElement() {
 }
 
 ikdtree::Box<2> UIElement::GetBoundingBox() const {
-    Vector2D top_left = owner_->interface_node()->modifier()->offset();
-    Vector2D bottom_right = top_left + bottom_right_;
+    if (!node_->drawable())
+        return ikdtree::Box<2>(Vector2D(0.0, 0.0).val, Vector2D(0.0, 0.0).val);
+    Vector2D top_left = owner_->interface_node()->modifier()->offset() - node_->drawable()->hotspot();
     top_left += top_left_;
+    Vector2D bottom_right = top_left + node_->drawable()->size();
     return ikdtree::Box<2>(top_left.val, bottom_right.val);
 }
 
