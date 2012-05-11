@@ -48,7 +48,7 @@ def Generate(difficultyFactor):
     map_row = [False] * columns
     map = [map_row] * rows
 
-    n = int( (rows * columns) * PERCENT_OF_ENTITIES_IN_MAP_GRID * difficultyFactor)
+    n = int( (rows * columns) * PERCENT_OF_ENTITIES_IN_MAP_GRID )
 
     print "Generating a %sx%s map with %s entities..." % (rows, columns, n)
 
@@ -68,7 +68,7 @@ def Generate(difficultyFactor):
     ship = Ship(loc[0], loc[1])
     entities.append(ship)
 
-    planetCount = int( random.randint(PLANET_COUNT_RANGE[0], PLANET_COUNT_RANGE[1]) * difficultyFactor  )
+    planetCount = int( random.randint(PLANET_COUNT_RANGE[0], PLANET_COUNT_RANGE[1])   )
     for i in range(planetCount):
         loc = pickAPlace()
         planet = Planet(loc[0], loc[1], GetRandomPlanetSizeFactor())

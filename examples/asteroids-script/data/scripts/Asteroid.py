@@ -10,6 +10,15 @@ class Asteroid (BasicEntity):
     def GetActualRadius(size_factor):
         return 30.0 * size_factor
 
+    @staticmethod
+    def GetTurretCooldown(size_factor):
+        return 1.0/size_factor
+
+    @staticmethod
+    def CheckChanceForTurret(size_factor):
+        chance = size_factor/2.0  #2.0 here is the (approximate?) maximum Asteroid sizeFactor in difficulty 1
+        return random() < chance
+
     def __init__(self, x, y, size_factor):
         self.size_factor = size_factor
         r = Asteroid.GetActualRadius(size_factor)
@@ -19,11 +28,14 @@ class Asteroid (BasicEntity):
         self.has_splitted = False
         self.mass = 1000.0 + 100000000*size_factor
         self.collidedWithAsteroids = []
-        self.turret = Turret(self, 2.0, 70, 0.4)
+        self.turret = None
+        if Asteroid.CheckChanceForTurret(size_factor):
+            self.turret = Turret(self, Asteroid.GetTurretCooldown(size_factor), 70, 0.4)
         
     def Update(self, dt):
         BasicEntity.Update(self, dt)
-        self.turret.Update(dt)
+        if self.turret != None:
+            self.turret.Update(dt)
         self.collidedWithAsteroids = []
 
     def TakeDamage(self, damage):

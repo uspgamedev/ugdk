@@ -3,6 +3,9 @@ from ugdk.ugdk_base import Engine_reference
 from BasicEntity import BasicEntity
 from Animations import CreateExplosionFromCollision
 
+from random import random
+from math import pi
+
 class Projectile (BasicEntity):
     base_radius = 5.0
     @staticmethod
@@ -64,6 +67,7 @@ class Turret:
         self.elapsed = 0.0
         self.speed = speed
         self.power = power
+        self.firing_angle_offset = 2.0
     
     def Update(self, dt):
         self.elapsed += dt
@@ -76,13 +80,21 @@ class Turret:
     def GetTarget(self):
         return Engine_reference().CurrentScene().GetHero()
 
+    def GetShootingAngle(self):
+        r = random()
+        r = r * (self.firing_angle_offset*2)
+        return r - self.firing_angle_offset
+
     def Shoot(self, target):
         pos = self.parent.GetPos()
         dir = target.GetPos() - pos
         dir = dir.Normalize()
         dir = dir * 1.1 * (self.parent.radius + Projectile.GetActualRadius(self.power))
         pos = pos + dir
-        vel = self.parent.velocity + (dir.Normalize() * self.speed)
+        vel = target.velocity + (dir.Normalize() * (self.speed + self.parent.velocity.Length()))
+        angle = self.GetShootingAngle() #angle is in degrees
+        angle = angle * pi / 180.0
+        vel = vel.Rotate( angle ) #we need angle in radians
         proj = Projectile(pos.get_x(), pos.get_y(), vel, self.power)
         self.parent.new_objects.append(proj)
         if hasattr(target, "radio"): #yay pog

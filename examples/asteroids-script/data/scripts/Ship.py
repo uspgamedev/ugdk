@@ -23,13 +23,13 @@ class Ship (BasicEntity):
         self.max_charge_time = 1.0          # max time that you can charge a shot in seconds
         self.charge_time = 0                # used internally for counting, in seconds
         self.power_range = [0.5, 3.0]       # range in which the shot can be
-        self.speed = 200.0                  # |acceleration| in a given frame
-        self.max_speed = 150.0              # max |velocity| ship can attain.
+        self.speed = 400.0                  # |acceleration| in a given frame
+        self.max_speed = 200.0              # max |velocity| ship can attain.
         self.projectile_speed = 170         # 
         self.energy_hud = BarUI(self, "energy", Color(0.0,0.0,1.0,1.0), Vector2D(0.0, self.radius+BAR_HEIGHT))
         self.hud_node.AddChild(self.energy_hud.node)
 
-        self.gravshield = AntiGravShield(self, 40)
+        self.gravshield = AntiGravShield(self, 35)
         ##self.nameText = Engine_reference().text_manager().GetText("Tetracontakaidigono")
         #self.nameText = ResourceManager_CreateTextFromLanguageTag("ShipName")
         #self.nameNode = Node(self.nameText)
