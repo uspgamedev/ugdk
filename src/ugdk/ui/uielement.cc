@@ -25,7 +25,7 @@ UIElement::~UIElement() {
 ikdtree::Box<2> UIElement::GetBoundingBox() const {
     if (!node_->drawable())
         return ikdtree::Box<2>(Vector2D(0.0, 0.0).val, Vector2D(0.0, 0.0).val);
-    Vector2D top_left = owner_->interface_node()->modifier()->offset() - node_->drawable()->hotspot();
+    Vector2D top_left = owner_->node()->modifier()->offset() - node_->drawable()->hotspot();
     top_left += top_left_;
     Vector2D bottom_right = top_left + node_->drawable()->size();
     return ikdtree::Box<2>(top_left.val, bottom_right.val);

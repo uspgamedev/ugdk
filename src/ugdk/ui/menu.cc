@@ -37,17 +37,26 @@ private:
 };
 
 
-Menu::MenuCallback Menu::FINISH_MENU(&ugdk::action::Scene::Finish);
+//Menu::MenuCallback Menu::FINISH_MENU(&ugdk::action::Scene::Finish);
 
-Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const Vector2D offset) 
+Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const Vector2D& offset) 
   : objects_tree_(new ObjectTree(tree_bounding_box,5)){
-      interface_node()->modifier()->set_offset(offset);
-      std::tr1::function<bool (double)> func = std::tr1::bind(&CheckMouse, this, _1);
-      this->AddTask(new action::GenericTask(func));
-      this->AddTask(new CallbackCheckTask(this));
+      node_ = new graphic::Node();
+      node_->modifier()->set_offset(offset);
+      //std::tr1::function<bool (double)> func = std::tr1::bind(&CheckMouse, this, _1);
+      //this->AddTask(new action::GenericTask(func));
+      //this->AddTask(new CallbackCheckTask(this));
 }
 
 Menu::~Menu() { delete objects_tree_; }
+
+void Menu::Update(double dt) {
+    CheckMouse(this, dt);
+}
+
+void Menu::OnSceneAdd(action::Scene* scene) {
+    scene->AddTask(new CallbackCheckTask(this));
+}
 
 void Menu::CheckInteraction(const Vector2D &mouse_pos) {
     double min_coords[2], max_coords[2];
@@ -64,12 +73,12 @@ void Menu::CheckInteraction(const Vector2D &mouse_pos) {
 
 void Menu::AddObject(const UIElement *obj) {
     objects_tree_->Insert(obj->GetBoundingBox(), obj);
-    interface_node()->AddChild(obj->node());
+    node_->AddChild(obj->node());
 }
 
 void Menu::RemoveObject(const UIElement *obj) { 
     objects_tree_->Remove(obj);
-    interface_node()->RemoveChild(obj->node());
+    node_->RemoveChild(obj->node());
 }
 
 void Menu::RefreshObject(const UIElement *obj) {
