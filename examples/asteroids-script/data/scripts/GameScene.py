@@ -1,8 +1,9 @@
 from ugdk.ugdk_action import Scene
 from ugdk.ugdk_util import CreateBox2D
 from ugdk.pyramidworks_collision import CollisionManager, CollisionInstanceList
-from ugdk.ugdk_input import InputManager, K_ESCAPE, K_HOME, K_PAGEUP, K_PAGEDOWN
-from ugdk.ugdk_base import Engine_reference, ResourceManager_CreateTextFromLanguageTag
+from ugdk.ugdk_input import InputManager, K_ESCAPE, K_HOME, K_PAGEUP, K_PAGEDOWN, K_p
+from ugdk.ugdk_base import Engine_reference, ResourceManager_CreateTextFromLanguageTag, Color
+from ugdk.ugdk_drawable import SolidRectangle
 from ugdk.ugdk_graphic import Node
 from ugdk.ugdk_math import Vector2D
 import Config
@@ -143,6 +144,8 @@ class AsteroidsScene (Scene):
         elif input.KeyPressed(K_HOME):
             self.Finish()
             StartupScene(self.difficultyFactor)
+        elif input.KeyPressed(K_p):
+            Engine_reference().PushScene( PauseScene() )
             
     def HandleCollisions(self):
         collision_list = CollisionInstanceList()
@@ -160,3 +163,41 @@ class AsteroidsScene (Scene):
     def End(self):
         pass
 
+################################################################################
+
+class PauseScene (Scene):
+    def __init__(self):
+        screenSize = Engine_reference().video_manager().video_size()
+        rect = SolidRectangle(screenSize)
+        rect.set_color( Color(0.5, 0.5, 0.5) )
+        self.backNode = Node(rect)
+        self.backNode.modifier().set_alpha(0.5)
+        self.content_node().AddChild(self.backNode)
+
+        text = ResourceManager_CreateTextFromLanguageTag("Pause")
+        self.textNode = Node(text)
+        x = (screenSize.get_x()/2.0) - (text.width()/2.0)
+        y = (screenSize.get_y()/2.0) - (text.height()/2.0)
+        self.textNode.modifier().set_offset( Vector2D(x, y) )
+        self.interface_node().AddChild(self.textNode)
+
+    def Focus(self):
+        pass
+
+    def DeFocus(self):
+        pass
+
+    def Update(self, dt):  ###
+        input = Engine_reference().input_manager()
+        resume = False
+        resume = resume or input.KeyPressed(K_ESCAPE)
+        resume = resume or input.KeyPressed(K_HOME)
+        resume = resume or input.KeyPressed(K_PAGEUP)
+        resume = resume or input.KeyPressed(K_PAGEDOWN)
+        resume = resume or input.KeyPressed(K_p)
+        if resume:
+            self.Finish()
+
+            
+    def End(self):
+        pass

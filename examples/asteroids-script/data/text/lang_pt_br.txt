@@ -12,6 +12,7 @@
 [ShipName]{FontS}:TetraconPTBR
 [GameWon]{FontA}:É TEEETRAAA!
 [GameOver]{FontA}:Pede pra sair!
+[Pause]{FontA}:Jogo Pausado
 
 
 #FILES
