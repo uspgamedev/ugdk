@@ -42,7 +42,7 @@ class AnimationManager {
     //Note: try to use period() instead whenever you can.
     double    fps() const { return 1.0/(period_scaling_factor_*current_animation_->period()); }
     double period() const { return period_scaling_factor_*current_animation_->period(); }
-    int n_frames() const { return current_animation_->size(); }
+    unsigned int n_frames() const { return static_cast<unsigned int>(current_animation_->size()); }
 
     int GetFrame();
     void set_default_frame(int default_frame) {
