@@ -18,14 +18,14 @@
 namespace ugdk {
 namespace ui {
 //typedef std::list<const UIElement *> UICollisionList;
+    
+typedef std::tr1::function<void (Menu*)> MenuCallback;
+typedef std::map<input::Key, MenuCallback > InputCallbacks;
 
 class Menu: public action::Entity {
-  typedef ikdtree::IntervalKDTree<const UIElement*, 2> ObjectTree;
+  typedef ikdtree::IntervalKDTree<UIElement*, 2> ObjectTree;
   public:
-    typedef std::tr1::function<void (Menu*)> MenuCallback;
-    typedef std::map<input::Key, MenuCallback > InputCallbacks;
-
-    Menu(const ikdtree::Box<2>& tree_bounding_box, const Vector2D& offset);
+    Menu(const ikdtree::Box<2>& tree_bounding_box, const Vector2D& offset, action::Scene* owner_scene);
     ~Menu();
 
     void CheckInteraction(const Vector2D& mouse_pos);
@@ -37,21 +37,30 @@ class Menu: public action::Entity {
     void Update(double dt);
     void OnSceneAdd(action::Scene* scene);
 
-    void AddObject(const UIElement* obj);
-    void RemoveObject(const UIElement* obj);
-    void RefreshObject(const UIElement* obj);
+    std::vector<UIElement *>* Menu::GetMouseCollision();
+
+    void FinishScene() { owner_scene_->Finish(); }
+    void InteractWithFocused();
+
+    void AddObject(UIElement* obj);
+    void RemoveObject(UIElement* obj);
+    void RefreshObject(UIElement* obj);
 
     graphic::Node* node() { return node_; } 
 
     const InputCallbacks& input_callbacks() const { return input_callbacks_; }
-
-    //static MenuCallback FINISH_MENU;
-
+    
   private:
+    Vector2D last_mouse_position_;
+    UIElement* focused_element_;
+    std::list< const UIElement* > uielements_;
+    action::Scene* owner_scene_;
     ObjectTree* objects_tree_;
     InputCallbacks input_callbacks_;
     graphic::Node* node_;
 };
+
+const static MenuCallback FINISH_MENU(&Menu::FinishScene);
 
 } // namespace ui
 } // namespace ugdk
