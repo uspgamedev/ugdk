@@ -19,7 +19,9 @@ class Task {
 
   protected:
     bool finished_;
-    int priority_;
+
+  private:
+    const int priority_;
 };
 
 } /* namespace action */
