@@ -9,22 +9,23 @@ from ugdk.ugdk_math import Vector2D
 import Config
 import MapGenerator
     
-def StartupScene(df = 0.5):
+def StartupScene():
     #print "STARTING SCENE"
-    cena = AsteroidsScene(df)
+    cena = ManagerScene()
     #print "GOING TO PUSH SCENE"
     Engine_reference().PushScene( cena )
-    #print "GOING TO GENERATE MAP"
-    cena.GenerateMap()
-    #print "ALL DONE... Proceeding"
-    print "=== Starting Asteroids Scene [Difficulty = %s]" % (df)
     return cena
     
 
 class ManagerScene (Scene):
+    IDLE = 0
+    ACTIVE = 1
+    PLAYER_DIED = 2
+    PLAYER_WON = 3
     def __init__(self):
         self.lives = 5
         self.difficulty = 0.5
+        self.status = ManagerScene.IDLE
 
     def Focus(self):
         pass
@@ -33,24 +34,52 @@ class ManagerScene (Scene):
         pass
 
     def Update(self, dt):  ###
-        pass
+        self.CheckCommands()
+        replay = self.status != ManagerScene.ACTIVE
+        if replay and self.lives > 0:
+            if self.status == ManagerScene.PLAYER_WON:
+                self.difficulty *= 1.15
+                print "Game WON!"
+            elif self.status == ManagerScene.PLAYER_DIED:
+                print "You are no match for teh might of teh Asteroid Army!"
+            cena = AsteroidsScene(self, self.difficulty)
+            Engine_reference().PushScene(cena)
+            cena.GenerateMap()
+            self.status = ManagerScene.ACTIVE
+            print "=== Starting Asteroids Scene [Difficulty = %s][Lives Left = %s]" % (self.difficulty, self.lives)
             
+    def UpdateLives(self, amount): self.lives += amount
+    def SetGameResult(self, won):
+        if won:
+            self.status = ManagerScene.PLAYER_WON
+        else:
+            self.status = ManagerScene.PLAYER_DIED
+            self.UpdateLives(-1)
+
+    def CheckCommands(self):
+        input = Engine_reference().input_manager()
+        
+        if input.KeyPressed(K_ESCAPE):
+            print "Manager ESCAPING"
+            self.Finish()
+
     def End(self):
         pass
 
-class TestTask(Task):
-    def __init__(self, x):
-        self.x = x
-        #self.priori = 1
+class SceneFinishTask(Task):
+    def __init__(self, delay):
+        self.timeRemaining = delay
 
     def __call__(self, dt):
-        print "%s calling, count = %s" % (self, self.x)
-        self.x -= 1
-        return self.x > 0
+        self.timeRemaining -= dt
+        if self.timeRemaining <= 0:
+            Engine_reference().CurrentScene().Finish()
+            return False
+        return True
 
 
 class AsteroidsScene (Scene):
-    def __init__(self, difficultyFactor):
+    def __init__(self, managerScene, difficultyFactor):
         #print "Creating AsteroidsScene"
         maxval = MapGenerator.MAX_ENTITY_SIZE
         mincoords = [-maxval, -maxval]
@@ -65,9 +94,7 @@ class AsteroidsScene (Scene):
         self.finishTextNode = None
         self.difficultyFactor = difficultyFactor
         #self.AddTask(self.collisionManager.GenerateHandleCollisionTask() )
-        self.tasktest = TestTask(10)
-        #self.tasktest.thisown = 0
-        self.AddTask( self.tasktest )
+        self.managerScene = managerScene
         
     def startCollisions(self):
         self.collisionManager.Generate("Entity")
@@ -132,6 +159,17 @@ class AsteroidsScene (Scene):
         self.finishTextNode.modifier().set_offset( Vector2D(x, y) )
         self.interface_node().AddChild(self.finishTextNode)
 
+    def CheckForEndGame(self):
+        if self.finishTextNode != None: return
+        if self.asteroid_count <= 0:
+            self.SetAndShowSceneEndText("GameWon")
+            self.managerScene.SetGameResult(True)
+            self.AddTask(SceneFinishTask(5.0))
+        elif not self.ship_alive:
+            self.SetAndShowSceneEndText("GameOver")
+            self.managerScene.SetGameResult(False)
+            self.AddTask(SceneFinishTask(5.0))
+        
     def Focus(self):
         pass
 
@@ -153,10 +191,7 @@ class AsteroidsScene (Scene):
         for obj in to_delete:
             self.RemoveObject(obj)
             
-        if self.asteroid_count <= 0:
-            self.SetAndShowSceneEndText("GameWon")
-        elif not self.ship_alive:
-            self.SetAndShowSceneEndText("GameOver")
+        self.CheckForEndGame()
 
         self.CheckCommands()
         self.HandleCollisions()
@@ -167,15 +202,15 @@ class AsteroidsScene (Scene):
         if input.KeyPressed(K_ESCAPE):
             print "GameScene ESCAPING"
             self.Finish()
-        elif input.KeyPressed(K_PAGEUP):
-            self.Finish()
-            StartupScene(self.difficultyFactor * 1.15)
-        elif input.KeyPressed(K_PAGEDOWN):
-            self.Finish()
-            StartupScene(self.difficultyFactor * 0.85)
-        elif input.KeyPressed(K_HOME):
-            self.Finish()
-            StartupScene(self.difficultyFactor)
+        #elif input.KeyPressed(K_PAGEUP):
+        #    self.Finish()
+        #    StartupScene(self.difficultyFactor * 1.15)
+        #elif input.KeyPressed(K_PAGEDOWN):
+        #    self.Finish()
+        #    StartupScene(self.difficultyFactor * 0.85)
+        #elif input.KeyPressed(K_HOME):
+        #    self.Finish()
+        #    StartupScene(self.difficultyFactor)
         elif input.KeyPressed(K_p):
             Engine_reference().PushScene( PauseScene() )
             
