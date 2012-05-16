@@ -12,10 +12,10 @@ class TaskProxy;
 class TaskProxy : public Task, public ugdk::script::BaseProxy<TaskProxy> {
   public:
     TaskProxy(const ugdk::script::VirtualObj& proxy) : ugdk::script::BaseProxy<TaskProxy>(proxy) {
-		ugdk::script::VirtualObj vpriori = proxy["priority"];
+		/*ugdk::script::VirtualObj vpriori = proxy["priority"];
 		if (vpriori) {
 			priority_ = vpriori.value<int>();
-		}
+		}*/
 	}
 
     virtual void operator()(double dt) {

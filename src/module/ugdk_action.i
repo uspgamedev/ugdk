@@ -3,7 +3,6 @@
 
 %include <module/export.swig>
 %include <module/proxy.swig>
-%include <module/ownership.swig>
 %include "std_vector.i"
 
 %{
@@ -45,10 +44,7 @@ proxy_class(ugdk::action::Task)
 %include <ugdk/action/task.h>
 %include <ugdk/action/entity.h>
 %include <ugdk/action/observer.h>
-
-enable_disown(ugdk::action::Task* task)
 %include <ugdk/action/scene.h>
-disable_disown(ugdk::action::Task* task)
 
 namespace ugdk {
 namespace action { 
