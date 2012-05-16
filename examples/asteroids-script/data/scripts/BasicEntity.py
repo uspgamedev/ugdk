@@ -20,8 +20,6 @@ def getCollisionManager():
     #print "Getting COLLISION MANAGER from ", scene
     return scene.collisionManager
 
-#   Functions or attributes marked with ### means they're part of the 
-#   C++ ScriptEntity interface
 
 class EntityInterface (Entity):
     nextID = 1

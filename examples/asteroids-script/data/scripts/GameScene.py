@@ -1,4 +1,4 @@
-from ugdk.ugdk_action import Scene
+from ugdk.ugdk_action import Scene, Task
 from ugdk.ugdk_util import CreateBox2D
 from ugdk.pyramidworks_collision import CollisionManager, CollisionInstanceList
 from ugdk.ugdk_input import InputManager, K_ESCAPE, K_HOME, K_PAGEUP, K_PAGEDOWN, K_p
@@ -21,6 +21,34 @@ def StartupScene(df = 0.5):
     return cena
     
 
+class ManagerScene (Scene):
+    def __init__(self):
+        self.lives = 5
+        self.difficulty = 0.5
+
+    def Focus(self):
+        pass
+
+    def DeFocus(self):
+        pass
+
+    def Update(self, dt):  ###
+        pass
+            
+    def End(self):
+        pass
+
+class TestTask(Task):
+    def __init__(self, x):
+        self.x = x
+        #self.priori = 1
+
+    def __call__(self, dt):
+        print "%s calling, count = %s" % (self, self.x)
+        self.x -= 1
+        return self.x > 0
+
+
 class AsteroidsScene (Scene):
     def __init__(self, difficultyFactor):
         #print "Creating AsteroidsScene"
@@ -36,6 +64,10 @@ class AsteroidsScene (Scene):
         self.hero = None
         self.finishTextNode = None
         self.difficultyFactor = difficultyFactor
+        #self.AddTask(self.collisionManager.GenerateHandleCollisionTask() )
+        self.tasktest = TestTask(10)
+        #self.tasktest.thisown = 0
+        self.AddTask( self.tasktest )
         
     def startCollisions(self):
         self.collisionManager.Generate("Entity")
