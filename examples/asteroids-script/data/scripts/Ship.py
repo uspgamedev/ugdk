@@ -30,10 +30,10 @@ class Ship (BasicEntity):
         self.hud_node.AddChild(self.energy_hud.node)
 
         self.gravshield = AntiGravShield(self, 35)
-        ##self.nameText = Engine_reference().text_manager().GetText("Tetracontakaidigono")
+        self.nameText = Engine_reference().text_manager().GetText("Defiant")
         #self.nameText = ResourceManager_CreateTextFromLanguageTag("ShipName")
-        #self.nameNode = Node(self.nameText)
-        #self.node.AddChild(self.nameNode)
+        self.nameNode = Node(self.nameText)
+        self.node.AddChild(self.nameNode)
 
     def Update(self, dt):
         self.CheckCommands(dt)

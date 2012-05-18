@@ -19,16 +19,16 @@ class BarUI:
         self.back_shape = SolidRectangle( Vector2D(entity.size.get_x(), BAR_HEIGHT) )
         self.back_shape.set_color( Color(0.0, 0.0, 0.0, 0.5) )
         self.back_shape.set_hotspot(Drawable.CENTER)
-        self.back_shape.thisown = 0
+        #self.back_shape.thisown = 0
         self.back_node = Node( self.back_shape )
-        self.back_node.thisown = 0
+        #self.back_node.thisown = 0
 
         self.shape = SolidRectangle( Vector2D(entity.size.get_x(), BAR_HEIGHT) )
         self.shape.set_color( color )
         self.shape.set_hotspot(Drawable.CENTER)
-        self.shape.thisown = 0
+        #self.shape.thisown = 0
         self.bar_node = Node( self.shape )
-        self.bar_node.thisown = 0
+        #self.bar_node.thisown = 0
 
         self.node = Node()
         self.node.modifier().set_offset( entity.GetPos() + self.offset )
@@ -55,3 +55,43 @@ class BarUI:
         return "<%s of entity %s>" % (self.type, self.entity)
         
     def __str__(self): return self.__repr__()
+
+
+class StatsUI:
+    def __init__(self, managerScene, x, y, backColor, backAlpha=1.0):
+        self.managerScene = managerScene
+        self.node = Node()
+        #self.node.thisown = 0
+        self.backShape = SolidRectangle( Vector2D(150.0, 75.0) )
+        self.backShape.set_color( backColor )
+        self.node.set_drawable( self.backShape )
+        self.node.modifier().set_alpha(backAlpha)
+        self.node.modifier().set_offset( Vector2D(x,y) )
+        
+        self.texts = []
+        self.stringsFunctions = [self.GetLivesText, self.GetDifficultyText, self.GetPointsText]
+        self.strings = [f() for f in self.stringsFunctions]
+        for i in range(len(self.strings)):
+            self.texts.append( Engine_reference().text_manager().GetText(self.strings[i]) )
+            textNode = Node()
+            textNode.set_drawable(self.texts[i])
+            textNode.modifier().set_offset( Vector2D(0.0, i * 20.0 ) )
+            #textNode.thisown = 0
+            self.node.AddChild(textNode)
+
+    def GetLivesText(self):
+        return "Lives: %s" % (self.managerScene.lives)
+
+    def GetDifficultyText(self):
+        return "Difficulty: %.2f" % (self.managerScene.difficulty)
+
+    def GetPointsText(self):
+        return "Points: %s" % (self.managerScene.points)
+
+    def Update(self):
+        for i in range(len(self.stringsFunctions)):
+            newstr = self.stringsFunctions[i]()
+            if newstr != self.strings[i]:
+                self.strings[i] = newstr
+                self.texts[i].SetMessage(newstr)
+            

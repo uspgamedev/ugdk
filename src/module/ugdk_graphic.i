@@ -3,6 +3,7 @@
 
 %include <module/export.swig>
 %include <module/ownership.swig>
+%include <module/widetypes.swig>
 %include "std_string.i"
 %include "std_vector.i"
 %include "std_map.i"
@@ -52,9 +53,11 @@
 %include <ugdk/graphic/font.h>
 %include <ugdk/graphic/light.h>
 %include <ugdk/graphic/modifier.h>
+enable_disown(ugdk::graphic::Node* new_child)
 enable_disown(ugdk::graphic::Drawable* drawable)
 %include <ugdk/graphic/node.h>
 disable_disown(ugdk::graphic::Drawable* drawable)
+disable_disown(ugdk::graphic::Node* new_child)
 %include <ugdk/graphic/spritesheet.h>
 
 %include <ugdk/graphic/textmanager.h>

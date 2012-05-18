@@ -8,6 +8,7 @@ from ugdk.ugdk_graphic import Node
 from ugdk.ugdk_math import Vector2D
 import Config
 import MapGenerator
+import BarUI
     
 def StartupScene():
     #print "STARTING SCENE"
@@ -22,19 +23,27 @@ class ManagerScene (Scene):
     ACTIVE = 1
     PLAYER_DIED = 2
     PLAYER_WON = 3
+    PLAYER_QUIT = 4
     def __init__(self):
         self.lives = 5
         self.difficulty = 0.5
+        self.points = 0
         self.status = ManagerScene.IDLE
+        self.stats = BarUI.StatsUI(self, 100.0, 100.0, Color(0.6,0.6,0.6), 0.4 )
+        self.interface_node().AddChild(self.stats.node)
 
     def Focus(self):
-        pass
+        self.stats.node.set_active(True)
 
     def DeFocus(self):
-        pass
+        self.stats.node.set_active(False)
 
     def Update(self, dt):  ###
         self.CheckCommands()
+        self.stats.Update()
+        if self.status == ManagerScene.PLAYER_QUIT:
+            self.Finish()
+            return
         replay = self.status != ManagerScene.ACTIVE
         if replay and self.lives > 0:
             if self.status == ManagerScene.PLAYER_WON:
@@ -49,12 +58,16 @@ class ManagerScene (Scene):
             print "=== Starting Asteroids Scene [Difficulty = %s][Lives Left = %s]" % (self.difficulty, self.lives)
             
     def UpdateLives(self, amount): self.lives += amount
+    def UpdatePoints(self, amount): self.points += amount
+
     def SetGameResult(self, won):
         if won:
             self.status = ManagerScene.PLAYER_WON
         else:
             self.status = ManagerScene.PLAYER_DIED
             self.UpdateLives(-1)
+    def SetGameQuit(self):
+        self.status = ManagerScene.PLAYER_QUIT
 
     def CheckCommands(self):
         input = Engine_reference().input_manager()
@@ -95,6 +108,7 @@ class AsteroidsScene (Scene):
         self.difficultyFactor = difficultyFactor
         #self.AddTask(self.collisionManager.GenerateHandleCollisionTask() )
         self.managerScene = managerScene
+        self.stats = BarUI.StatsUI(managerScene, 0.0, 0.0, Color(0.0,0.0,0.0), 0.4 )
         
     def startCollisions(self):
         self.collisionManager.Generate("Entity")
@@ -138,7 +152,10 @@ class AsteroidsScene (Scene):
             obj.collision_object.StopColliding()
         self.RemoveEntity(obj)
         #print "REMOVING OBJECT %s [%s]" % (obj, obj.node)
+        #self.content_node().RemoveChild(obj.node)
+        obj.node.thisown = 1
         del obj.node
+        obj.hud_node.thisown = 1
         del obj.hud_node
         del obj
         
@@ -148,6 +165,7 @@ class AsteroidsScene (Scene):
         #print "GENERATE MARK 2"
         self.content_node().set_drawable(MapGenerator.GetBackgroundDrawable() )
         #print "GENERATE MARK 3"
+        self.interface_node().AddChild(self.stats.node)
         
     def SetAndShowSceneEndText(self, msgTag):
         if self.finishTextNode != None: return
@@ -192,7 +210,7 @@ class AsteroidsScene (Scene):
             self.RemoveObject(obj)
             
         self.CheckForEndGame()
-
+        self.stats.Update()
         self.CheckCommands()
         self.HandleCollisions()
         
@@ -201,6 +219,7 @@ class AsteroidsScene (Scene):
         
         if input.KeyPressed(K_ESCAPE):
             print "GameScene ESCAPING"
+            self.managerScene.SetGameQuit()
             self.Finish()
         #elif input.KeyPressed(K_PAGEUP):
         #    self.Finish()
