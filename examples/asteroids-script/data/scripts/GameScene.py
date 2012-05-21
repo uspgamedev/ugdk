@@ -113,6 +113,7 @@ class AsteroidsScene (Scene):
     def startCollisions(self):
         self.collisionManager.Generate("Entity")
         self.collisionManager.Generate("Gravity")
+        self.collisionManager.Generate("PowerUp")
 
     def GetHero(self):  return self.hero
 
@@ -146,6 +147,7 @@ class AsteroidsScene (Scene):
         if obj.CheckType("Ship"):
             self.ship_alive = False
             self.hero = None
+        self.managerScene.UpdatePoints( obj.GetPointsValue() )
         self.objects.remove(obj)
         if obj in self.colliding_objects:
             self.colliding_objects.remove(obj)
@@ -167,6 +169,13 @@ class AsteroidsScene (Scene):
         #print "GENERATE MARK 3"
         self.interface_node().AddChild(self.stats.node)
         
+    def GetLivePlanetsPoints(self):
+        v = 0
+        for obj in self.objects:
+            if obj.CheckType("Planet") and not obj.is_destroyed:
+                v += obj.life
+        return v
+
     def SetAndShowSceneEndText(self, msgTag):
         if self.finishTextNode != None: return
         text = ResourceManager_CreateTextFromLanguageTag(msgTag)
@@ -182,6 +191,8 @@ class AsteroidsScene (Scene):
         if self.asteroid_count <= 0:
             self.SetAndShowSceneEndText("GameWon")
             self.managerScene.SetGameResult(True)
+            self.managerScene.UpdatePoints( self.GetLivePlanetsPoints() )
+            self.managerScene.UpdatePoints( self.hero.life*5 )
             self.AddTask(SceneFinishTask(5.0))
         elif not self.ship_alive:
             self.SetAndShowSceneEndText("GameOver")

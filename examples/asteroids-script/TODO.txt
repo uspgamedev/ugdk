@@ -1,5 +1,16 @@
+- Criar novos items/powerups
+- arrumar drop de items dos asteroids
+- criar/arrumar imagens diferentes para items/efeitos diferentes
+- arrumar imagem do Projetil para parecer um pulso em vez de um circulo, e ai arrumar hotspot dele no Projectile
+  e arrumar orientacao (rotacao) dele de acordo com a velocidade pra ficar certo
 
-- arrumar shockwave (e possivelmente seu gráfico)
+- variar dano de projetil (talvez de colisao really) baseado na velocidade no momento da colisão
+
+##############
+# pra pensar melhor
+##############
+- melhorar pontuacao
+- talvez ter um popup "+X" de pontos nos lugares
 
 - melhorar transferencia de velocidade do impacto de projeteis (ta indo mto em qualquer coisa)
 
@@ -10,8 +21,6 @@
 - melhorar imagens (projeteis)
 
 - Colocar outros valores no Config.py (?)
-
-- GameOver/Reset quando player morre?
 
 - Check if ScriptScene correctly deletes it's ScriptEntities when destroyed/finishes (might have
   something todo with ScriptEntity as well =P)

@@ -86,7 +86,7 @@ class StatsUI:
         return "Difficulty: %.2f" % (self.managerScene.difficulty)
 
     def GetPointsText(self):
-        return "Points: %s" % (self.managerScene.points)
+        return "Points: %d" % (self.managerScene.points)
 
     def Update(self):
         for i in range(len(self.stringsFunctions)):

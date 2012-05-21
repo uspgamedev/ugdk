@@ -35,6 +35,23 @@ class Ship (BasicEntity):
         self.nameNode = Node(self.nameText)
         self.node.AddChild(self.nameNode)
 
+    def TakeDamage(self, damage):
+        if damage < 0:  return
+        self.life -= damage
+        if damage > 0:
+            sound_name = self.hit_sounds[ randint(0, len(self.hit_sounds)-1) ]
+            sound = Engine_reference().audio_manager().LoadSample(SOUND_PATH + sound_name)
+            sound.Play()
+        if self.life <= 0:
+            self.is_destroyed = True
+        #print self, "took %s damage, current life = %s" % (damage, self.life)
+
+    def Heal(self, amount):
+        if amount < 0:  return
+        self.energy += amount
+        if self.energy > self.max_energy:
+            self.energy = self.max_energy
+
     def Update(self, dt):
         self.CheckCommands(dt)
         self.radio.CheckCommands()
@@ -100,7 +117,7 @@ class Ship (BasicEntity):
         dir = direction.Normalize() * 1.15 * (self.radius + Projectile.GetActualRadius(power))
         pos = pos + dir
         vel = self.velocity + (direction.Normalize() * self.projectile_speed)
-        proj = Projectile(pos.get_x(), pos.get_y(), vel, power)
+        proj = Projectile(pos.get_x(), pos.get_y(), vel, power, True)
         self.new_objects.append(proj)
         self.radio.PlaySound("fire.wav")
 

@@ -12,7 +12,7 @@ class Projectile (BasicEntity):
     def GetActualRadius(power):
         return Projectile.base_radius * power
 
-    def __init__(self, x, y, velocity, power):
+    def __init__(self, x, y, velocity, power, isFromPlayer=False):
         self.power = power
         self.damage = 25.0 * power
         self.original_damage = self.damage
@@ -20,6 +20,8 @@ class Projectile (BasicEntity):
         self.original_radius = Projectile.GetActualRadius(power)
         BasicEntity.__init__(self, x, y, "images/projectile.png", self.original_radius, self.damage)
         self.velocity = velocity
+        self.isFromPlayer = isFromPlayer
+        self.value = 0
         self.life_hud.node.set_active(False)
 
     def Update(self, dt):
@@ -32,6 +34,7 @@ class Projectile (BasicEntity):
     def TakeDamage(self, damage):
         BasicEntity.TakeDamage(self, damage)
         scale = self.life / self.original_damage
+        self.damage = self.life
         self.node.modifier().set_scale( Vector2D(scale, scale) )
 
     def GetDamage(self, obj_type):
@@ -39,7 +42,13 @@ class Projectile (BasicEntity):
             return self.damage * 0.05
         return self.damage
 
+    def GetPointsValue(self):
+        return self.value
+
     def HandleCollision(self, target):
+        if self.isFromPlayer and target.CheckType("Asteroid"):
+            self.value = self.life / 2
+
         if target.CheckType("Projectile"):
             # collision between projectiles, destroy both
             target.TakeDamage(self.GetDamage(target.type))
@@ -67,7 +76,7 @@ class Turret:
         self.elapsed = 0.0
         self.speed = speed
         self.power = power
-        self.firing_angle_offset = 2.0
+        self.firing_angle_offset = 2.5
     
     def Update(self, dt):
         self.elapsed += dt
@@ -102,13 +111,6 @@ class Turret:
 
 
 ###################################
-
-class Shield(BasicEntity):
-    def __init__(self, parent):
-        self.parent = parent
-        self.active = False
-        BasicEntity.__init__(self, x, y, "images/shockwave.png", parent.radius*1.1, 1)
-
 
 from Gravity import GravityWell
 

@@ -2,6 +2,7 @@ from ugdk.ugdk_math import Vector2D
 from BasicEntity import BasicEntity, CalculateAfterSpeedBasedOnMomentum
 from Animations import CreateExplosionFromCollision
 from Projectile import Turret
+from Items import CreateLifePack
 from random import random, randint, shuffle
 from math import pi
 
@@ -28,6 +29,7 @@ class Asteroid (BasicEntity):
         self.has_splitted = False
         self.mass = 1000.0 + 100000000*size_factor
         self.collidedWithAsteroids = []
+        self.diedFromPlanet = False
         self.turret = None
         if Asteroid.CheckChanceForTurret(size_factor):
             self.turret = Turret(self, Asteroid.GetTurretCooldown(size_factor), 70, 0.4)
@@ -58,12 +60,21 @@ class Asteroid (BasicEntity):
                 v = v * (randint(int(speed*0.60), int(speed*1.40)))
                 ast.ApplyVelocity(v)
                 self.new_objects.append(ast)
+            ###
+            lifepack = CreateLifePack(self.GetPos().get_x(), self.GetPos().get_y(), 20.0)
+            self.new_objects.append(lifepack)
 
     def GetDamage(self, obj_type):
         if obj_type == self.type:
             return self.life * 0.2
         elif obj_type == "Ship" or obj_type == "Planet":
             return self.life
+
+    def GetPointsValue(self):
+        if self.diedFromPlanet: return 0
+        v = self.max_life
+        if self.turret != None: v += 100
+        return v
 
     def HandleCollision(self, target):
         #print "%s IS COLLIDING WITH %s" % (self, target)
@@ -97,6 +108,7 @@ class Asteroid (BasicEntity):
             target.TakeDamage(self.GetDamage(target.type))
             self.is_destroyed = self.has_splitted = True # WE CANNOT SPLIT when colliding with a planet =P
             CreateExplosionFromCollision(self, target, target.radius*1.2)
+            self.diedFromPlanet = True
             #print "Asteroid damaging ", target.type
 
         #No handler for projectile since that is strictly

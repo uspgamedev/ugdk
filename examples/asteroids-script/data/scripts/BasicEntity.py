@@ -49,6 +49,9 @@ class EntityInterface (Entity):
     def GetPos(self):
         return self.node.modifier().offset()
 
+    def GetPointsValue(self):
+        return 0
+
     def HandleMapBoundaries(self, pos):
         max = window_size()
         # checking for horizontal map boundaries
@@ -99,13 +102,17 @@ class BasicEntity (EntityInterface):
         self.hit_sounds = ["hit1.wav", "hit2.wav", "hit3.wav", "hit4.wav"]
         self.life_hud = BarUI(self, "life", Color(1.0,0.0,0.0,1.0), Vector2D(0.0, self.radius))
         self.hud_node.AddChild(self.life_hud.node)
-        
+
         self.collision_object = CollisionObject(getCollisionManager(), self)  #initialize collision object, second arg is passed to collisionlogic to handle collisions
         self.collision_object.InitializeCollisionClass("Entity")              # define the collision class
         self.geometry = Circle(self.radius)                           #
         self.collision_object.set_shape(self.geometry)                # set our shape
         #finally add collision logics to whatever collision class we want
         self.collision_object.AddCollisionLogic("Entity", BasicColLogic(self) )
+
+    def ApplyEffect(self, effect):
+        #since effects are entities too, we just do this
+        self.new_objects.append(effect)
 
     def Update(self, dt): ###
         self.UpdatePosition(dt)
@@ -142,7 +149,7 @@ class BasicEntity (EntityInterface):
         self.life += amount
         if self.life > self.max_life:
             self.life = self.max_life
-        print self, "has recovered %s life, current life = %s" % (amount, self.life)
+        #print self, "has recovered %s life, current life = %s" % (amount, self.life)
         
     def ApplyVelocity(self, v):
         self.velocity = self.velocity + v

@@ -59,6 +59,9 @@ class Planet (BasicEntity):
     def GetDamage(self, obj_type):
         return 9000.1 # Vegeta, what does the scouter say about his power level?
 
+    def GetPointsValue(self):
+        return -self.max_life*2
+
     def HandleCollision(self, target):
         if target.CheckType("Planet"):
             print "WTF dude, u tripping? Planets colliding with planets? Ya frakking nuts?"
