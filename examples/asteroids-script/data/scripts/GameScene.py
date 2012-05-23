@@ -192,7 +192,10 @@ class AsteroidsScene (Scene):
             self.SetAndShowSceneEndText("GameWon")
             self.managerScene.SetGameResult(True)
             self.managerScene.UpdatePoints( self.GetLivePlanetsPoints() )
-            self.managerScene.UpdatePoints( self.hero.life*5 )
+            phl = 100
+            if self.hero != None:
+                phl = self.hero.life * 5
+            self.managerScene.UpdatePoints( phl )
             self.AddTask(SceneFinishTask(5.0))
         elif not self.ship_alive:
             self.SetAndShowSceneEndText("GameOver")

@@ -2,11 +2,12 @@ from ugdk.ugdk_math import Vector2D
 from ugdk.ugdk_base import Color, Engine_reference, ResourceManager_CreateTextFromLanguageTag
 from ugdk.ugdk_input import InputManager, K_w, K_a, K_s, K_d, M_BUTTON_LEFT, K_ESCAPE, M_BUTTON_RIGHT
 from BasicEntity import BasicEntity, GetEquivalentValueInRange
-from Radio import Radio
+from Radio import Radio, SOUND_PATH
 from Projectile import Projectile, AntiGravShield
 from BarUI import BarUI, BAR_HEIGHT
 from Shockwave import Shockwave
 from math import pi
+from random import randint
 
 from ugdk.ugdk_graphic import Node
 
@@ -46,7 +47,7 @@ class Ship (BasicEntity):
             self.is_destroyed = True
         #print self, "took %s damage, current life = %s" % (damage, self.life)
 
-    def Heal(self, amount):
+    def RestoreEnergy(self, amount):
         if amount < 0:  return
         self.energy += amount
         if self.energy > self.max_energy:
@@ -70,21 +71,32 @@ class Ship (BasicEntity):
         mouse_dir = mouse_dir.Normalize()
         self.node.modifier().set_rotation( mouse_dir.Angle() - 3*pi/2.0 )
         accel = Vector2D(0.0, 0.0)
+        ############
+        #if input.KeyDown(K_w):
+        #    accel += mouse_dir
+        #if input.KeyDown(K_a):
+        #    left = mouse_dir.Rotate(-pi/2.0)
+        #    left = left.Normalize()
+        #    accel += left
+        #    accel = accel.Normalize()
+        #if input.KeyDown(K_s):
+        #    accel += -mouse_dir
+        #    accel = accel.Normalize()
+        #if input.KeyDown(K_d):
+        #    right = mouse_dir.Rotate(pi/2.0)
+        #    right = right.Normalize()
+        #    accel += right
+        #    accel = accel.Normalize()
+        #############
         if input.KeyDown(K_w):
-            accel += mouse_dir
+            accel += Vector2D(0.0, -1.0)
         if input.KeyDown(K_a):
-            left = mouse_dir.Rotate(-pi/2.0)
-            left = left.Normalize()
-            accel += left
-            accel = accel.Normalize()
+            accel += Vector2D(-1.0, 0.0)
         if input.KeyDown(K_s):
-            accel += -mouse_dir
-            accel = accel.Normalize()
+            accel += Vector2D(0.0, 1.0)
         if input.KeyDown(K_d):
-            right = mouse_dir.Rotate(pi/2.0)
-            right = right.Normalize()
-            accel += right
-            accel = accel.Normalize()
+            accel += Vector2D(1.0, 0.0)
+        accel = accel.Normalize()
         accel = accel * self.speed
         self.acceleration = accel
 

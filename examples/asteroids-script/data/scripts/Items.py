@@ -13,7 +13,7 @@ from math import pi
 # Factory Methods
 #########################################
 
-def CreateLifePack(x, y, amount):
+def CreateRepairPack(x, y, amount):
     e = AbsoluteLifeEffect(0, amount)
     p = PowerUp(x, y, "images/item.png", 30.0, e)
     return p
