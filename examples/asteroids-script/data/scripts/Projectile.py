@@ -19,6 +19,17 @@ class Projectile (BasicEntity):
         self.lifetime = 10.0 * power
         self.original_radius = Projectile.GetActualRadius(power)
         BasicEntity.__init__(self, x, y, "images/projectile.png", self.original_radius, self.damage)
+        self.shape.set_hotspot( Vector2D(32.0, 32.0) )
+        self.shape.set_size( Vector2D(64, 128) )  # original projectile2 size
+
+        # scale:
+        # base_radius <=> 0.5 (scale value)
+        # 
+        # radius <=> scale
+        scale = self.radius * 0.20 / Projectile.base_radius
+
+        self.node.modifier().set_scale( Vector2D(scale, scale) )
+        self.node.modifier().set_rotation( velocity.Angle() - 3*pi/2.0 )
         self.velocity = velocity
         self.isFromPlayer = isFromPlayer
         self.value = 0
@@ -26,6 +37,7 @@ class Projectile (BasicEntity):
 
     def Update(self, dt):
         self.UpdatePosition(dt)
+        self.node.modifier().set_rotation( self.velocity.Angle() - 3*pi/2.0 )
         self.lifetime -= dt
         if self.lifetime <= 0:
             #gotta destroy this thing
@@ -33,7 +45,12 @@ class Projectile (BasicEntity):
 
     def TakeDamage(self, damage):
         BasicEntity.TakeDamage(self, damage)
-        scale = self.life / self.original_damage
+        #scale = self.life / self.original_damage
+    
+        # original radius <=> original damage (original/max life)
+
+        self.radius = self.original_radius * self.life / self.original_damage
+        scale = self.radius * 0.20 / Projectile.base_radius
         self.damage = self.life
         self.node.modifier().set_scale( Vector2D(scale, scale) )
 

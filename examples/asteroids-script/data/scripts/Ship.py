@@ -31,10 +31,6 @@ class Ship (BasicEntity):
         self.hud_node.AddChild(self.energy_hud.node)
 
         self.gravshield = AntiGravShield(self, 35)
-        self.nameText = Engine_reference().text_manager().GetText("Defiant")
-        #self.nameText = ResourceManager_CreateTextFromLanguageTag("ShipName")
-        self.nameNode = Node(self.nameText)
-        self.node.AddChild(self.nameNode)
 
     def TakeDamage(self, damage):
         if damage < 0:  return
