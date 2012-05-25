@@ -1,8 +1,6 @@
 - Criar novos items/powerups
 - arrumar drop de items dos asteroids
-- criar/arrumar imagens diferentes para items/efeitos diferentes
-- arrumar imagem do Projetil para parecer um pulso em vez de um circulo, e ai arrumar hotspot dele no Projectile
-  e arrumar orientacao (rotacao) dele de acordo com a velocidade pra ficar certo
+- arrumar efeitos graficos de power up, pra mostrar nome quando vc pega, e piscar qdo ta acabando o tempo
 
 - variar dano de projetil (talvez de colisao really) baseado na velocidade no momento da colisão
 

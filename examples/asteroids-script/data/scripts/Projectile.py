@@ -1,5 +1,5 @@
 from ugdk.ugdk_math import Vector2D
-from ugdk.ugdk_base import Engine_reference
+from ugdk.ugdk_base import Engine_reference, Color
 from BasicEntity import BasicEntity
 from Animations import CreateExplosionFromCollision
 
@@ -22,6 +22,11 @@ class Projectile (BasicEntity):
         self.shape.set_hotspot( Vector2D(32.0, 32.0) )
         self.shape.set_size( Vector2D(64, 128) )  # original projectile2 size
 
+        self.isFromPlayer = isFromPlayer
+        if isFromPlayer:
+            self.node.modifier().set_color( Color(0.0, 0.5, 1.0, 0.9) )
+        else:
+            self.node.modifier().set_color( Color(1.0, 0.0, 0.3, 1.0) )
         # scale:
         # base_radius <=> 0.5 (scale value)
         # 
@@ -31,7 +36,6 @@ class Projectile (BasicEntity):
         self.node.modifier().set_scale( Vector2D(scale, scale) )
         self.node.modifier().set_rotation( velocity.Angle() - 3*pi/2.0 )
         self.velocity = velocity
-        self.isFromPlayer = isFromPlayer
         self.value = 0
         self.life_hud.node.set_active(False)
 

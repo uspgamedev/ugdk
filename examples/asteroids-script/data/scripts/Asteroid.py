@@ -2,7 +2,7 @@ from ugdk.ugdk_math import Vector2D
 from BasicEntity import BasicEntity, CalculateAfterSpeedBasedOnMomentum
 from Animations import CreateExplosionFromCollision
 from Projectile import Turret
-from Items import CreateRepairPack
+from ItemFactory import CreatePowerUp
 from random import random, randint, shuffle
 from math import pi
 
@@ -61,7 +61,7 @@ class Asteroid (BasicEntity):
                 ast.ApplyVelocity(v)
                 self.new_objects.append(ast)
             ###
-            lifepack = CreateRepairPack(self.GetPos().get_x(), self.GetPos().get_y(), 20.0)
+            lifepack = CreatePowerUp(self.GetPos().get_x(), self.GetPos().get_y())
             self.new_objects.append(lifepack)
 
     def GetDamage(self, obj_type):
