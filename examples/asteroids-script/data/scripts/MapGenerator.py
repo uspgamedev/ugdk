@@ -28,7 +28,7 @@ def GetRandomPlanetSizeFactor():
 	# returns random float in [0.7, 1.3[
 	return random.random() * 0.6  + 0.7
 
-def Generate(difficultyFactor):
+def Generate(difficultyFactor, heroData):
     screenSize = Engine_reference().video_manager().video_size()
     print "Screen Size = (%s, %s)" % (screenSize.get_x(), screenSize.get_y())
     
@@ -65,7 +65,7 @@ def Generate(difficultyFactor):
     ##
 
     loc = pickAPlace()
-    ship = Ship(loc[0], loc[1])
+    ship = Ship(loc[0], loc[1], heroData)
     entities.append(ship)
 
     planetCount = int( random.randint(PLANET_COUNT_RANGE[0], PLANET_COUNT_RANGE[1])   )

@@ -1,7 +1,7 @@
 from ugdk.ugdk_math import Vector2D
 from BasicEntity import BasicEntity, CalculateAfterSpeedBasedOnMomentum
 from Animations import CreateExplosionFromCollision
-from Projectile import Turret
+from Weapons import Turret
 from ItemFactory import CreatePowerUp
 from random import random, randint, shuffle
 from math import pi
@@ -43,14 +43,19 @@ class Asteroid (BasicEntity):
     def TakeDamage(self, damage):
         BasicEntity.TakeDamage(self, damage)
         # if we're big enough, split asteroid when we are destroyed.
-        if self.is_destroyed and self.size_factor > 0.4 and not self.has_splitted:
+        if self.is_destroyed:
+            self.Break()
+
+    def Break(self):
+        if self.size_factor > 0.4 and not self.has_splitted:
             self.has_splitted = True
             angles = [0.0, -pi/4.0, -pi/2.0, -3*pi/2.0, pi, 3*pi/2.0, pi/2.0, pi/4.0]
             shuffle(angles)
             direction = self.velocity.Normalize()
+            pieceNumber = randint(2,3)
             factor = self.size_factor / 1.5
             #print self, "is splitting, into factor", factor
-            for i in range(randint(2,4)):
+            for i in range(pieceNumber):
                 v = direction.Rotate(angles.pop())
                 v = v * ((self.radius+Asteroid.GetActualRadius(factor))*1.15)
                 pos = self.GetPos() + v
@@ -63,6 +68,7 @@ class Asteroid (BasicEntity):
             ###
             lifepack = CreatePowerUp(self.GetPos().get_x(), self.GetPos().get_y())
             self.new_objects.append(lifepack)
+        self.is_destroyed = True
 
     def GetDamage(self, obj_type):
         if obj_type == self.type:

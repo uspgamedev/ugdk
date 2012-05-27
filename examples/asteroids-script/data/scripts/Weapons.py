@@ -1,6 +1,6 @@
 from ugdk.ugdk_math import Vector2D
 from ugdk.ugdk_base import Engine_reference, Color
-from BasicEntity import BasicEntity
+from BasicEntity import BasicEntity, GetEquivalentValueInRange
 from Animations import CreateExplosionFromCollision
 
 from random import random
@@ -12,15 +12,15 @@ class Projectile (BasicEntity):
     def GetActualRadius(power):
         return Projectile.base_radius * power
 
-    def __init__(self, x, y, velocity, power, isFromPlayer=False):
+    def __init__(self, x, y, velocity, power, damage = 25.0, isFromPlayer=False):
         self.power = power
-        self.damage = 25.0 * power
+        self.damage = damage * power
         self.original_damage = self.damage
         self.lifetime = 10.0 * power
         self.original_radius = Projectile.GetActualRadius(power)
         BasicEntity.__init__(self, x, y, "images/projectile.png", self.original_radius, self.damage)
         self.shape.set_hotspot( Vector2D(32.0, 32.0) )
-        self.shape.set_size( Vector2D(64, 128) )  # original projectile2 size
+        self.shape.set_size( Vector2D(64, 128) )  # original projectile.png size
 
         self.isFromPlayer = isFromPlayer
         if isFromPlayer:
@@ -78,7 +78,7 @@ class Projectile (BasicEntity):
             #print "Projectiles exploding..."
         elif target.CheckType("Ship") or target.CheckType("Asteroid"):
             target.TakeDamage(self.GetDamage(target.type))
-            target.ApplyVelocity(self.velocity * (0.15*self.power))
+            target.ApplyVelocity(self.velocity * (0.1*self.power))
             self.is_destroyed = True
             CreateExplosionFromCollision(self, target, target.radius)
             #print "Projectile damaging ", target.type
@@ -132,10 +132,53 @@ class Turret:
 
 
 ###################################
+class Weapon:
+    def __init__(self):
+        pass
+    def Toggle(self, active, dt):
+        return False # return -> boolean indicating if weapon succesfully fired
+    def Dismantle(self):
+        pass # this function should perform any action necessary to kill/destroy/remove this weapon.
+
+class Pulse (Weapon):
+    def __init__(self, ship):
+        self.ship = ship
+        self.shot_cost = 5.0                # energy required to shoot the weakest projectile
+        self.max_charge_time = 1.0          # max time that you can charge a shot in seconds
+        self.charge_time = 0                # used internally for counting, in seconds
+        self.power_range = [0.5, 3.0]       # range in which the shot can be
+        self.projectile_speed = 170         #
+
+    def Toggle(self, active, dt):
+        if active:
+            self.charge_time += dt
+            if self.charge_time >= self.max_charge_time:
+                self.charge_time = self.max_charge_time
+        if not active and self.charge_time > 0:
+            power = GetEquivalentValueInRange(self.charge_time, [0, self.max_charge_time], self.power_range)
+            cost = self.shot_cost * (1 + (power * self.charge_time))
+            mouse_dir = Engine_reference().input_manager().GetMousePosition() - self.ship.GetPos()
+            mouse_dir = mouse_dir.Normalize()
+            self.charge_time = 0.0
+            return self.Shoot(mouse_dir, power, cost)
+        return False
+        
+    def Shoot(self, direction, power, cost):
+        if self.ship.energy < cost:    return False
+        self.ship.TakeEnergy(cost)
+        pos = self.ship.GetPos()
+        dir = direction.Normalize() * 1.15 * (self.ship.radius + Projectile.GetActualRadius(power))
+        pos = pos + dir
+        vel = self.ship.velocity + (direction.Normalize() * self.projectile_speed)
+        proj = Projectile(pos.get_x(), pos.get_y(), vel, power, self.ship.data.pulse_damage, True)
+        self.ship.new_objects.append(proj)
+        self.ship.radio.PlaySound("fire.wav")
+        return True
+
 
 from Gravity import GravityWell
 
-class AntiGravShield(GravityWell):
+class AntiGravShield(GravityWell, Weapon):
     def __init__(self, parent, energyCostPerSec):
         self.parent = parent
         self.energyCostPerSec = energyCostPerSec
@@ -145,6 +188,11 @@ class AntiGravShield(GravityWell):
         self.is_antigrav = True
         parent.new_objects.append(self)
     
+    def Toggle(self, active, dt):
+        self.active = active
+        self.Update(dt)
+        return self.active
+
     def Update(self, dt):
         if self.parent.is_destroyed:
             self.is_destroyed = True
@@ -155,4 +203,4 @@ class AntiGravShield(GravityWell):
                 if self.parent.energy < self.parent.max_energy*0.05:
                     self.active = False
                 else:
-                    self.parent.energy -= self.energyCostPerSec * dt
+                    self.parent.TakeEnergy( self.energyCostPerSec * dt )

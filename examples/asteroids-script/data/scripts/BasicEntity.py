@@ -95,6 +95,7 @@ class BasicEntity (EntityInterface):
         #self.shape.thisown = 0
         self.node.set_drawable(self.shape)
         self.velocity = Vector2D(0.0, 0.0)
+        self.max_velocity = 5000.0 #length of the maximum velocity - the entity can't achieve a velocity with length greater than this by whatever means
         self.last_velocity = None
         self.last_dt = 0.000001
         self.life = life
@@ -102,13 +103,16 @@ class BasicEntity (EntityInterface):
         self.hit_sounds = ["hit1.wav", "hit2.wav", "hit3.wav", "hit4.wav"]
         self.life_hud = BarUI(self, "life", Color(1.0,0.0,0.0,1.0), Vector2D(0.0, self.radius))
         self.hud_node.AddChild(self.life_hud.node)
+        self.setupCollisionObject()
 
+    def setupCollisionObject(self):
         self.collision_object = CollisionObject(getCollisionManager(), self)  #initialize collision object, second arg is passed to collisionlogic to handle collisions
         self.collision_object.InitializeCollisionClass("Entity")              # define the collision class
         self.geometry = Circle(self.radius)                           #
         self.collision_object.set_shape(self.geometry)                # set our shape
         #finally add collision logics to whatever collision class we want
         self.collision_object.AddCollisionLogic("Entity", BasicColLogic(self) )
+        self.collision_object.thisown = 0
 
     def ApplyEffect(self, effect):
         #since effects are entities too, we just do this
@@ -117,8 +121,8 @@ class BasicEntity (EntityInterface):
     def Update(self, dt): ###
         self.UpdatePosition(dt)
         self.life_hud.Update()
-        if self.velocity.Length() > 5000:
-            self.velocity = self.velocity * (5000.0 / self.velocity.Length())
+        if self.velocity.Length() > self.max_velocity:
+            self.velocity = self.velocity * (self.max_velocity / self.velocity.Length())
 
     def UpdatePosition(self, dt):
         pos = self.GetPos()
@@ -142,7 +146,7 @@ class BasicEntity (EntityInterface):
             sound.Play()
         if self.life <= 0:
             self.is_destroyed = True
-        #print self, "took %s damage, current life = %s" % (damage, self.life)
+        #print self, "took %s damage, current life = %s [max life =%s]" % (damage, self.life, self.max_life)
 
     def Heal(self, amount):
         if amount < 0:  return

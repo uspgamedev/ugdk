@@ -31,7 +31,7 @@ class BarUI:
         #self.bar_node.thisown = 0
 
         self.node = Node()
-        self.node.modifier().set_offset( entity.GetPos() + self.offset )
+        self.node.modifier().set_offset(  self.offset )
         self.node.thisown = 0
         self.node.AddChild(self.back_node)
         self.node.AddChild(self.bar_node)
@@ -39,17 +39,13 @@ class BarUI:
         self.type = str(self.__class__)
 
     def Update(self):
-        self.UpdatePosition()
         if hasattr(self.entity, self.attr_name) and hasattr(self.entity, "max_"+self.attr_name):
             current = self.entity.__dict__[self.attr_name]
             max = self.entity.__dict__["max_"+self.attr_name]
             if current <= 0:    current = 0
             size = current * self.entity.size.get_x() / max
-            scale = size / self.entity.size.get_x()  # I know this is redundant, by I prefer in this case to be more verbose
+            scale = size / self.entity.size.get_x()  # I know this is redundant, by I prefer it in this case to be more verbose
             self.bar_node.modifier().set_scale( Vector2D(scale, 1.0) )
-
-    def UpdatePosition(self):
-        self.node.modifier().set_offset(self.offset) #+ self.entity.GetPos()
 
     def __repr__(self):
         return "<%s of entity %s>" % (self.type, self.entity)

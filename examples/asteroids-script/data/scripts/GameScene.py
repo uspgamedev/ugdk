@@ -1,7 +1,7 @@
 from ugdk.ugdk_action import Scene, Task
 from ugdk.ugdk_util import CreateBox2D
 from ugdk.pyramidworks_collision import CollisionManager, CollisionInstanceList
-from ugdk.ugdk_input import InputManager, K_ESCAPE, K_HOME, K_PAGEUP, K_PAGEDOWN, K_p
+from ugdk.ugdk_input import InputManager, K_ESCAPE, K_HOME, K_PAGEUP, K_PAGEDOWN, K_p, K_SPACE
 from ugdk.ugdk_base import Engine_reference, ResourceManager_CreateTextFromLanguageTag, Color
 from ugdk.ugdk_drawable import SolidRectangle
 from ugdk.ugdk_graphic import Node
@@ -9,6 +9,7 @@ from ugdk.ugdk_math import Vector2D
 import Config
 import MapGenerator
 import BarUI
+import Ship
     
 def StartupScene():
     #print "STARTING SCENE"
@@ -29,6 +30,7 @@ class ManagerScene (Scene):
         self.difficulty = 0.5
         self.points = 0
         self.status = ManagerScene.IDLE
+        self.heroData = Ship.ShipData(100.0, 100.0, 25.0)
         self.stats = BarUI.StatsUI(self, 100.0, 100.0, Color(0.6,0.6,0.6), 0.4 )
         self.interface_node().AddChild(self.stats.node)
 
@@ -53,9 +55,9 @@ class ManagerScene (Scene):
                 print "You are no match for teh might of teh Asteroid Army!"
             cena = AsteroidsScene(self, self.difficulty)
             Engine_reference().PushScene(cena)
-            cena.GenerateMap()
+            cena.GenerateMap(self.heroData)
             self.status = ManagerScene.ACTIVE
-            print "=== Starting Asteroids Scene [Difficulty = %s][Lives Left = %s]" % (self.difficulty, self.lives)
+            print "=== Starting Asteroids Scene [Difficulty = %s][Lives Left = %s][%s]" % (self.difficulty, self.lives, self.heroData)
             
     def UpdateLives(self, amount): self.lives += amount
     def UpdatePoints(self, amount): self.points += amount
@@ -146,6 +148,7 @@ class AsteroidsScene (Scene):
             self.asteroid_count -= 1
         if obj.CheckType("Ship"):
             self.ship_alive = False
+            self.managerScene.heroData = self.hero.data
             self.hero = None
         self.managerScene.UpdatePoints( obj.GetPointsValue() )
         self.objects.remove(obj)
@@ -154,16 +157,15 @@ class AsteroidsScene (Scene):
             obj.collision_object.StopColliding()
         self.RemoveEntity(obj)
         #print "REMOVING OBJECT %s [%s]" % (obj, obj.node)
-        #self.content_node().RemoveChild(obj.node)
         obj.node.thisown = 1
         del obj.node
         obj.hud_node.thisown = 1
         del obj.hud_node
         del obj
         
-    def GenerateMap(self):
+    def GenerateMap(self, heroData):
         #print "GENERATE MARK 1"
-        self.Populate( MapGenerator.Generate(self.difficultyFactor) )
+        self.Populate( MapGenerator.Generate(self.difficultyFactor, heroData) )
         #print "GENERATE MARK 2"
         self.content_node().set_drawable(MapGenerator.GetBackgroundDrawable() )
         #print "GENERATE MARK 3"
@@ -235,17 +237,16 @@ class AsteroidsScene (Scene):
             print "GameScene ESCAPING"
             self.managerScene.SetGameQuit()
             self.Finish()
-        #elif input.KeyPressed(K_PAGEUP):
-        #    self.Finish()
-        #    StartupScene(self.difficultyFactor * 1.15)
-        #elif input.KeyPressed(K_PAGEDOWN):
-        #    self.Finish()
-        #    StartupScene(self.difficultyFactor * 0.85)
-        #elif input.KeyPressed(K_HOME):
-        #    self.Finish()
-        #    StartupScene(self.difficultyFactor)
-        elif input.KeyPressed(K_p):
+        elif input.KeyPressed(K_SPACE) or input.KeyPressed(K_p):
             Engine_reference().PushScene( PauseScene() )
+        ### cheats
+        elif input.KeyPressed(K_PAGEUP):
+            self.managerScene.difficulty *= 1.15
+        elif input.KeyPressed(K_PAGEDOWN):
+            self.managerScene.difficulty *= 0.85
+        elif input.KeyPressed(K_HOME):
+            self.managerScene.lives += 1
+        
             
     def HandleCollisions(self):
         collision_list = CollisionInstanceList()
@@ -261,7 +262,8 @@ class AsteroidsScene (Scene):
             
             
     def End(self):
-        pass
+        if self.hero != None:
+            self.managerScene.heroData = self.hero.data
 
 ################################################################################
 

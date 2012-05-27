@@ -24,54 +24,63 @@ def CreateLifeBoost():
 def CreateLifeRegen():
     return Items.AbsoluteLifeEffect(10.0, 5.0, True, True)
 def CreateLifeMaxBoost():
-    pass
+    return Items.MaxValueIncreaseEffect(Items.MaxValueIncreaseEffect.LIFE, 25.0)
 
 def CreateEnergyBoost():
     return Items.AbsoluteEnergyEffect(0, 25.0)
 def CreateEnergyRegen():
     return Items.AbsoluteEnergyEffect(10.0, 15.0, True)
 def CreateEnergyMaxBoost():
-    pass
+    return Items.MaxValueIncreaseEffect(Items.MaxValueIncreaseEffect.ENERGY, 25.0)
 
 ####################
 # Pulse
 ####################
 def CreatePulsePack(x, y):
     powerUps = {
-        "Power Boost": None,
-        "Multiplicity Boost": None,
-        "Homing Boost": None,
+        "Power Boost": CreatePulseDamagePack,
+        "Multiplicity Boost": CreatePulseDamagePack,
+        "Homing Boost": CreatePulseDamagePack,
     }
     choice = random.choice(powerUps.keys())
     e = powerUps[choice]()
     p = Items.PowerUp(x, y, "images/pulsePowerUp.png", 20.0, e, choice)
     return p
 
+def CreatePulseDamagePack():
+    return Items.PulseDamageIncreaseEffect(5.0)
+
 ####################
 # Passive
 ####################
 def CreatePassivePack(x, y):
     powerUps = {
-        "Orbit Armor": None,
-        "Force Shield": None,
-        "Item Attractor": None,
-        "Matter Absorption": None,
+        "Orbit Armor": CreateShieldPack,
+        "Force Shield": CreateShieldPack,
+        "Item Attractor": CreateItemAttractorPack,
+        "Matter Absorption": CreateItemAttractorPack,
     }
     choice = random.choice(powerUps.keys())
     e = powerUps[choice]()
     p = Items.PowerUp(x, y, "images/passivePowerUp.png", 20.0, e, choice)
     return p
 
+def CreateShieldPack():
+    return Items.ShieldEffect(300.0)
+
+def CreateItemAttractorPack():
+    return Items.ItemAttractorEffect(60.0, 320.0, 15.0)
+
 ####################
 # Active
 ####################
 def CreateActivePack(x, y):
     powerUps = {
-        "Anti Grav Shield": None,
-        "Laser": None,
-        "Shock Bomb": None,
-        "Blackhole": None,
-        "Hyperspace": None,
+        "Anti Grav Shield": CreateEnergyMaxBoost,
+        "Laser": CreateEnergyMaxBoost,
+        "Shock Bomb": CreateEnergyMaxBoost,
+        "Blackhole": CreateEnergyMaxBoost,
+        "Hyperspace": CreateEnergyMaxBoost,
     }
     choice = random.choice(powerUps.keys())
     e = powerUps[choice]()
@@ -83,11 +92,11 @@ def CreateActivePack(x, y):
 ####################
 def CreateInstantPack(x, y):
     powerUps = {
-        "Explosion": None,
-        "Freeze": None,
-        "Slowdown": None,
-        "Fractal Shot": None,
-        "Fracture": None,
+        "Explosion": CreateLifeMaxBoost,
+        "Freeze": CreateLifeMaxBoost,
+        "Slowdown": CreateLifeMaxBoost,
+        "Fractal Shot": CreateLifeMaxBoost,
+        "Fracture": CreateLifeMaxBoost,
     }
     choice = random.choice(powerUps.keys())
     e = powerUps[choice]()
