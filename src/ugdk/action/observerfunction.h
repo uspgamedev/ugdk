@@ -8,7 +8,7 @@ namespace ugdk {
 
 namespace action {
 
-class ObserverFunction {
+class ObserverFunction : public Observer {
   public:
     ObserverFunction(std::tr1::function<void (void)> tick) : tick_(tick) {}
     ~ObserverFunction() {}
