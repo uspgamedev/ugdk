@@ -32,7 +32,7 @@ class Menu: public action::Entity {
     void Update(double dt);
     void OnSceneAdd(action::Scene* scene);
 
-    std::vector<UIElement *>* Menu::GetMouseCollision();
+    std::vector<UIElement *>* GetMouseCollision();
 
     void AddCallback(input::Key key, MenuCallback callback) {
         input_callbacks_[key] = callback;
