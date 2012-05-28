@@ -10,11 +10,11 @@
 namespace ugdk {
 namespace ui {
 
-UIElement::UIElement(const Vector2D& top_left, Menu* owner, UICallback function)
+UIElement::UIElement(const Vector2D& top_left, graphic::Drawable* drawable, UICallback function)
     : top_left_(top_left), 
-      owner_(owner),
+      owner_(NULL),
       function_(function),
-      node_(new graphic::Node) {
+      node_(new graphic::Node(drawable)) {
           node_->modifier()->set_offset(top_left_);
 }
 

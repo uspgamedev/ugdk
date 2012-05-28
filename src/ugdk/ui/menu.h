@@ -42,7 +42,11 @@ class Menu: public action::Entity {
 
     void FinishScene() { owner_scene_->Finish(); }
     void InteractWithFocused();
-    void SetOptionDrawable(graphic::Drawable* option_graphic) { option_graphic_->set_drawable(option_graphic); }
+    void SetOptionDrawable(graphic::Drawable* option_graphic, int index = 0) {
+        if(!option_node_[index]) option_node_[index] = new graphic::Node;
+        option_node_[index]->set_drawable(option_graphic);
+    }
+    void PositionSelectionDrawables();
 
     void AddObject(UIElement* obj);
     void RemoveObject(UIElement* obj);
@@ -54,7 +58,7 @@ class Menu: public action::Entity {
     
   private:
     graphic::Node* node_;
-    graphic::Node* option_graphic_;
+    graphic::Node* option_node_[2];
     Vector2D last_mouse_position_;
     UIElement* focused_element_;
     std::list< const UIElement* > uielements_;

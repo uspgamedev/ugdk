@@ -7,6 +7,7 @@
 #include <ugdk/action/generictask.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/base/engine.h>
+#include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/input/inputmanager.h>
 #include <ugdk/util/intervalkdtree.h>
@@ -34,15 +35,20 @@ private:
 Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const Vector2D& offset, action::Scene* owner_scene) 
   : objects_tree_(new ObjectTree(tree_bounding_box,5)),
     owner_scene_(owner_scene),
-    node_(new graphic::Node()),
-    option_graphic_(new graphic::Node()) {
+    node_(new graphic::Node()) {
       node_->modifier()->set_offset(offset);
+      option_node_[0] = NULL;
+      option_node_[1] = NULL;
       //std::tr1::function<bool (double)> func = std::tr1::bind(&CheckMouse, this, _1);
       //this->AddTask(new action::GenericTask(func));
       //this->AddTask(new CallbackCheckTask(this));
 }
 
-Menu::~Menu() { delete objects_tree_; }
+Menu::~Menu() {
+    if(option_node_[0]) delete option_node_[0];
+    if(option_node_[1]) delete option_node_[1];
+    delete objects_tree_;
+}
 
 void Menu::Update(double dt) {
     input::InputManager* input = INPUT_MANAGER();
@@ -51,13 +57,22 @@ void Menu::Update(double dt) {
         std::vector<UIElement *> *intersecting_uielements = GetMouseCollision();
         if(intersecting_uielements->size() > 0) {
             focused_element_ = (*intersecting_uielements)[0];
-            focused_element_->node()->AddChild(option_graphic_);
+            if(option_node_[0]) focused_element_->node()->AddChild(option_node_[0]);
+            if(option_node_[1]) focused_element_->node()->AddChild(option_node_[1]);
+            PositionSelectionDrawables();
         }
         delete intersecting_uielements;
     }
     last_mouse_position_ = mouse_pos;
     if(input->MouseUp(input::M_BUTTON_LEFT))
         this->CheckInteraction(mouse_pos);
+}
+
+void Menu::PositionSelectionDrawables() {
+    if(option_node_[0]) option_node_[0]->modifier()->set_offset(
+        Vector2D(-focused_element_->node()->drawable()->hotspot().x - option_node_[0]->drawable()->hotspot().x, 0.0));
+    if(option_node_[1]) option_node_[1]->modifier()->set_offset(
+        Vector2D(focused_element_->node()->drawable()->hotspot().x + option_node_[1]->drawable()->hotspot().x, 0.0));
 }
 
 void Menu::OnSceneAdd(action::Scene* scene) {
@@ -86,12 +101,14 @@ void Menu::CheckInteraction(const Vector2D &mouse_pos) {
 }
 
 void Menu::AddObject(UIElement *obj) {
+    obj->set_owner(this);
     objects_tree_->Insert(obj->GetBoundingBox(), obj);
     node_->AddChild(obj->node());
     uielements_.push_back(obj);
 }
 
 void Menu::RemoveObject(UIElement *obj) { 
+    obj->set_owner(NULL);
     objects_tree_->Remove(obj);
     node_->RemoveChild(obj->node());
     uielements_.remove(obj);

@@ -19,14 +19,14 @@ class UIElement {
   public:
     typedef std::tr1::function<void (const UIElement *)> UICallback;
     
-    UIElement(const Vector2D& top_left, Menu* owner, UICallback function);
+    UIElement(const Vector2D& top_left, graphic::Drawable* drawable, UICallback function);
     
     virtual ~UIElement();
 
     ikdtree::Box<2> GetBoundingBox() const ;
-    
-    void set_drawable(graphic::Drawable* drawable) { node_->set_drawable(drawable); }
     graphic::Node* node() const { return node_; }
+
+    void set_owner(Menu* owner) { owner_ = owner; }
 
     void Interact() const { if(function_) function_(this); }
 
