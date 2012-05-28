@@ -1,5 +1,6 @@
 #include <vector>
 #include <functional>
+#include <algorithm>
 
 #include <ugdk/ui/menu.h>
 #include <ugdk/ui/uielement.h>
@@ -17,6 +18,9 @@ using std::tr1::placeholders::_1;
 namespace ugdk {
 namespace ui {
 
+const MenuCallback Menu::FINISH_MENU(&Menu::FinishScene);
+const MenuCallback Menu::INTERACT_MENU(&Menu::InteractWithFocused);
+
 class CallbackCheckTask : public action::Task {
 public:
     CallbackCheckTask(Menu* menu) : menu_(menu) {}
@@ -32,10 +36,12 @@ private:
     Menu* menu_;
 };
 
-Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const Vector2D& offset, action::Scene* owner_scene) 
+Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
   : objects_tree_(new ObjectTree(tree_bounding_box,5)),
-    owner_scene_(owner_scene),
-    node_(new graphic::Node()) {
+    owner_scene_(NULL),
+    node_(new graphic::Node()),
+    focused_element_(NULL),
+    hook_(hook) {
       node_->modifier()->set_offset(offset);
       option_node_[0] = NULL;
       option_node_[1] = NULL;
@@ -55,17 +61,43 @@ void Menu::Update(double dt) {
     Vector2D mouse_pos = input->GetMousePosition();
     if((mouse_pos - last_mouse_position_).NormOne() > 10e-10) {
         std::vector<UIElement *> *intersecting_uielements = GetMouseCollision();
-        if(intersecting_uielements->size() > 0) {
-            focused_element_ = (*intersecting_uielements)[0];
-            if(option_node_[0]) focused_element_->node()->AddChild(option_node_[0]);
-            if(option_node_[1]) focused_element_->node()->AddChild(option_node_[1]);
-            PositionSelectionDrawables();
-        }
+        if(intersecting_uielements->size() > 0)
+            SelectUIElement((*intersecting_uielements)[0]);
         delete intersecting_uielements;
     }
     last_mouse_position_ = mouse_pos;
     if(input->MouseUp(input::M_BUTTON_LEFT))
         this->CheckInteraction(mouse_pos);
+    if(input->KeyUp(input::K_DOWN))
+        this->FocusNextElement(1);
+    if(input->KeyUp(input::K_UP))
+        this->FocusNextElement(-1);
+}
+
+void Menu::SelectUIElement(UIElement* target) {
+    focused_element_ = target;
+    if(option_node_[0]) focused_element_->node()->AddChild(option_node_[0]);
+    if(option_node_[1]) focused_element_->node()->AddChild(option_node_[1]);
+    PositionSelectionDrawables();
+}
+
+void Menu::FocusNextElement(int offset) {
+    std::list< UIElement* >::iterator current_element = 
+        std::find(uielements_.begin(), uielements_.end(), focused_element_);
+
+    if(current_element == uielements_.end())
+        current_element = uielements_.begin();
+
+    for(; offset > 0; --offset)
+        if(++current_element == uielements_.end())
+            current_element = uielements_.begin();
+    for(; offset < 0; ++offset) {
+        if(current_element == uielements_.begin())
+            current_element = uielements_.end();
+        --current_element;
+    }
+
+    SelectUIElement(*current_element);
 }
 
 void Menu::PositionSelectionDrawables() {
@@ -76,7 +108,12 @@ void Menu::PositionSelectionDrawables() {
 }
 
 void Menu::OnSceneAdd(action::Scene* scene) {
+    owner_scene_ = scene;
     scene->AddTask(new CallbackCheckTask(this));
+}
+
+void Menu::FinishScene() const {
+    owner_scene_->Finish();
 }
 
 std::vector<UIElement *>* Menu::GetMouseCollision() {
@@ -91,7 +128,10 @@ std::vector<UIElement *>* Menu::GetMouseCollision() {
     return objects_tree_->getIntersectingItems(box);
 }
 
-void Menu::InteractWithFocused() { focused_element_->Interact(); }
+void Menu::InteractWithFocused() { 
+    if(focused_element_)
+        focused_element_->Interact();
+}
 
 void Menu::CheckInteraction(const Vector2D &mouse_pos) {
     std::vector<UIElement *>* intersecting_uielements = GetMouseCollision();
@@ -102,9 +142,11 @@ void Menu::CheckInteraction(const Vector2D &mouse_pos) {
 
 void Menu::AddObject(UIElement *obj) {
     obj->set_owner(this);
+    obj->node()->drawable()->set_hotspot(hook_);
     objects_tree_->Insert(obj->GetBoundingBox(), obj);
     node_->AddChild(obj->node());
     uielements_.push_back(obj);
+    if(!focused_element_) SelectUIElement(obj);
 }
 
 void Menu::RemoveObject(UIElement *obj) { 
