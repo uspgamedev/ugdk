@@ -11,6 +11,7 @@
 #include <ugdk/ui.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/action/entity.h>
+#include <ugdk/graphic/node.h>
 #include <ugdk/input.h>
 #include <ugdk/input/keys.h>
 #include <pyramidworks/collision.h>
@@ -41,6 +42,7 @@ class Menu: public action::Entity {
 
     void FinishScene() { owner_scene_->Finish(); }
     void InteractWithFocused();
+    void SetOptionDrawable(graphic::Drawable* option_graphic) { option_graphic_->set_drawable(option_graphic); }
 
     void AddObject(UIElement* obj);
     void RemoveObject(UIElement* obj);
@@ -51,13 +53,14 @@ class Menu: public action::Entity {
     const InputCallbacks& input_callbacks() const { return input_callbacks_; }
     
   private:
+    graphic::Node* node_;
+    graphic::Node* option_graphic_;
     Vector2D last_mouse_position_;
     UIElement* focused_element_;
     std::list< const UIElement* > uielements_;
     action::Scene* owner_scene_;
     ObjectTree* objects_tree_;
     InputCallbacks input_callbacks_;
-    graphic::Node* node_;
 };
 
 const static MenuCallback FINISH_MENU(&Menu::FinishScene);

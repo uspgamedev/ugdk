@@ -33,8 +33,9 @@ private:
 
 Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const Vector2D& offset, action::Scene* owner_scene) 
   : objects_tree_(new ObjectTree(tree_bounding_box,5)),
-    owner_scene_(owner_scene) {
-      node_ = new graphic::Node();
+    owner_scene_(owner_scene),
+    node_(new graphic::Node()),
+    option_graphic_(new graphic::Node()) {
       node_->modifier()->set_offset(offset);
       //std::tr1::function<bool (double)> func = std::tr1::bind(&CheckMouse, this, _1);
       //this->AddTask(new action::GenericTask(func));
@@ -46,10 +47,12 @@ Menu::~Menu() { delete objects_tree_; }
 void Menu::Update(double dt) {
     input::InputManager* input = INPUT_MANAGER();
     Vector2D mouse_pos = input->GetMousePosition();
-    if((mouse_pos - last_mouse_position_).NormOne() < 10e-6) {
+    if((mouse_pos - last_mouse_position_).NormOne() > 10e-10) {
         std::vector<UIElement *> *intersecting_uielements = GetMouseCollision();
-        if(intersecting_uielements->size() > 0)
+        if(intersecting_uielements->size() > 0) {
             focused_element_ = (*intersecting_uielements)[0];
+            focused_element_->node()->AddChild(option_graphic_);
+        }
         delete intersecting_uielements;
     }
     last_mouse_position_ = mouse_pos;
