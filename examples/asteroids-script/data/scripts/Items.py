@@ -148,6 +148,9 @@ class ShieldEffect(Effect):
         self.unique_in_target = True
         self.collision_object = CollisionObject(getCollisionManager(), self)
         self.collision_object.InitializeCollisionClass("PowerUp")
+        self.geometry = Circle(1.0)
+        self.geometry.thisown = 0
+        self.collision_object.set_shape( self.geometry )
 
     def OnSceneAdd(self, scene):
         self.radius = self.target.radius * 1.2
