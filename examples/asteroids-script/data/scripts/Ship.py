@@ -3,7 +3,7 @@ from ugdk.ugdk_base import Color, Engine_reference, ResourceManager_CreateTextFr
 from ugdk.ugdk_input import InputManager, K_w, K_a, K_s, K_d, M_BUTTON_LEFT, K_ESCAPE, M_BUTTON_RIGHT
 from BasicEntity import BasicEntity, GetEquivalentValueInRange
 from Radio import Radio, SOUND_PATH
-from Weapons import Pulse, AntiGravShield
+import Weapons
 from BarUI import BarUI, BAR_HEIGHT
 from Shockwave import Shockwave
 from math import pi
@@ -35,8 +35,10 @@ class Ship (BasicEntity, object):
         self.energy_hud = BarUI(self, "energy", Color(0.0,0.0,1.0,1.0), Vector2D(0.0, self.radius+BAR_HEIGHT))
         self.hud_node.AddChild(self.energy_hud.node)
 
-        self.pulse_weapon = Pulse(self)
-        self.right_weapon = AntiGravShield(self, 35)
+        self.pulse_weapon = Weapons.Pulse()
+        self.right_weapon = Weapons.ShockBomb() #AntiGravShield(35)
+        self.pulse_weapon.Activate(self)
+        self.right_weapon.Activate(self)
 
     def set_max_life(self, value):
         self.data.max_life = value
@@ -57,6 +59,12 @@ class Ship (BasicEntity, object):
         self.energy -= amount
         if self.energy < 0:
             self.energy = 0.0
+
+    def SetRightWeapon(self, weapon):
+        if self.right_weapon != None:
+            self.right_weapon.Dismantle()
+        self.right_weapon = weapon
+        self.right_weapon.Activate(self)
 
     def Update(self, dt):
         self.CheckCommands(dt)
@@ -114,8 +122,5 @@ class Ship (BasicEntity, object):
                 self.energy += self.energy_regen_rate * dt
 
     def HandleCollision(self, target):
-        if target.type == "Planet":
-            pass
-        #No handler for projectile since that is strictly
-        #"do it only one time", and Projectile will handle it
-        #    same goes for collision with Asteroid
+        pass
+        #other entities handle collision with Ship

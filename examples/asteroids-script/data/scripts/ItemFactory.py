@@ -1,5 +1,6 @@
-import Items
 import Config
+import Items
+import Weapons
 import random
 
 ####################
@@ -55,7 +56,7 @@ def CreatePulseDamagePack():
 ####################
 def CreatePassivePack(x, y):
     powerUps = {
-        "Orbit Armor": CreateShieldPack,
+        "Satellites": CreateShieldPack,
         "Force Shield": CreateShieldPack,
         "Item Attractor": CreateItemAttractorPack,
         "Matter Absorption": CreateItemAttractorPack,
@@ -76,33 +77,47 @@ def CreateItemAttractorPack():
 ####################
 def CreateActivePack(x, y):
     powerUps = {
-        "Anti Grav Shield": CreateEnergyMaxBoost,
-        "Laser": CreateEnergyMaxBoost,
-        "Shock Bomb": CreateEnergyMaxBoost,
-        "Blackhole": CreateEnergyMaxBoost,
-        "Hyperspace": CreateEnergyMaxBoost,
+        "Anti Grav Shield": CreateAntiGravShieldPack,
+        "Laser": CreateShockBombPack,
+        "Shock Bomb": CreateShockBombPack,
+        "Blackhole": CreateShockBombPack,
+        "Hyperspace": CreateHyperspacePack,
     }
     choice = random.choice(powerUps.keys())
     e = powerUps[choice]()
     p = Items.PowerUp(x, y, "images/activePowerUp.png", 20.0, e, choice)
     return p
 
+def CreateAntiGravShieldPack():
+    return Items.WeaponPickupEffect( Weapons.AntiGravShield(35.0) )
+
+def CreateShockBombPack():
+    return Items.WeaponPickupEffect( Weapons.ShockBomb() )
+
+def CreateHyperspacePack():
+    return Items.WeaponPickupEffect( Weapons.Hyperspace() )
+
 ####################
 # Instant
 ####################
 def CreateInstantPack(x, y):
     powerUps = {
-        "Explosion": CreateLifeMaxBoost,
-        "Freeze": CreateLifeMaxBoost,
-        "Slowdown": CreateLifeMaxBoost,
-        "Fractal Shot": CreateLifeMaxBoost,
-        "Fracture": CreateLifeMaxBoost,
+        "Explosion": CreateExplosionPack,
+        "Freeze": CreateExplosionPack,
+        "Slowdown": CreateExplosionPack,
+        "Fractal Shot": CreateFracturePack,
+        "Fracture": CreateFracturePack,
     }
     choice = random.choice(powerUps.keys())
     e = powerUps[choice]()
     p = Items.PowerUp(x, y, "images/instantPowerUp.png", 15.0, e, choice)
     return p
 
+def CreateExplosionPack():
+    return Items.ShockwaveEffect(2.0, [5.0, 300.0], 100.0, 1.0)
+
+def CreateFracturePack():
+    return Items.FractureEffect()
 
 ###############################################
 # Main Factory Function

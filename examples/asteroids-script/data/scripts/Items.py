@@ -6,6 +6,8 @@ from ugdk.pyramidworks_collision import CollisionObject, CollisionLogic
 from ugdk.pyramidworks_geometry import Circle
 from BasicEntity import BasicEntity, EntityInterface, BasicColLogic, getCollisionManager
 import Config
+import Shockwave
+import Animations
 
 from random import random, randint, shuffle
 from math import pi
@@ -69,6 +71,7 @@ class Effect (EntityInterface):
         self.is_collidable = False
         self.target = None
         self.lifetime = lifetime
+        self.unique_in_target = False #if True, there can be only 1 effect of this type in a entity simultaneously
 
     def Update(self, dt):
         if not self.is_destroyed and self.target != None and not self.target.is_destroyed:
@@ -83,7 +86,7 @@ class Effect (EntityInterface):
     def Apply(self, dt):
         pass
 
-
+#############
 class AbsoluteLifeEffect (Effect):
     def __init__(self, lifetime, amount, doHeal=True, isRegen=False):
         Effect.__init__(self, lifetime)
@@ -99,7 +102,7 @@ class AbsoluteLifeEffect (Effect):
             self.target.TakeDamage(value)
         else:
             self.target.Heal(value)
-
+################
 class AbsoluteEnergyEffect (Effect):
     def __init__(self, lifetime, amount, isRegen=False):
         Effect.__init__(self, lifetime)
@@ -111,7 +114,7 @@ class AbsoluteEnergyEffect (Effect):
         if self.regen:
             value *= dt
         self.target.RestoreEnergy(value)
-
+#################
 class MaxValueIncreaseEffect (Effect):
     ENERGY = "energy"
     LIFE = "life"
@@ -127,7 +130,7 @@ class MaxValueIncreaseEffect (Effect):
         elif self.valueTypeName == MaxValueIncreaseEffect.LIFE:
             self.target.set_max_life( self.target.max_life + self.amount )
             self.target.life += self.amount
-
+##################
 class PulseDamageIncreaseEffect(Effect):
     def __init__(self, amount):
         Effect.__init__(self, 0)
@@ -135,13 +138,14 @@ class PulseDamageIncreaseEffect(Effect):
     def Apply(self, dt):
         self.target.data.pulse_damage += self.amount
 
-
+#################
 class ShieldEffect(Effect):
     def __init__(self, life):
         Effect.__init__(self, 10)
         self.max_life = life
         self.life = life
         self.is_collidable = True
+        self.unique_in_target = True
         self.collision_object = CollisionObject(getCollisionManager(), self)
         self.collision_object.InitializeCollisionClass("PowerUp")
 
@@ -153,6 +157,7 @@ class ShieldEffect(Effect):
         self.shape = TexturedRectangle( texture_obj, self.size )
         self.shape.set_hotspot(Drawable.CENTER)
         self.node.set_drawable(self.shape)
+        self.node.modifier().set_alpha(0.5)
 
         self.geometry = Circle(self.radius)
         self.collision_object.set_shape(self.geometry)
@@ -167,17 +172,18 @@ class ShieldEffect(Effect):
             self.lifetime = 0.0
 
     def HandleCollision(self, coltarget):
-        if coltarget.CheckType("Asteroid") or coltarget.CheckType("Projectile"):
+        if coltarget.CheckType("Asteroid") or (coltarget.CheckType("Projectile") and coltarget.GetParentID() != self.target.id):
             self.life -= coltarget.GetDamage(self.target.type)
             coltarget.TakeDamage(coltarget.life + 10)
-            print "SHIELD COLLISION %s/%s" % (self.life, self.max_life)
+            #print "SHIELD COLLISION %s/%s" % (self.life, self.max_life)
 
-
+#####################
 class ItemAttractorEffect(Effect):
     def __init__(self, lifetime, radius, force):
         Effect.__init__(self, lifetime)
         self.radius = radius
         self.is_collidable = True
+        self.unique_in_target = True
         self.force = force
         self.collision_object = CollisionObject(getCollisionManager(), self)
         self.collision_object.InitializeCollisionClass("PowerUp")
@@ -194,3 +200,44 @@ class ItemAttractorEffect(Effect):
             v = v.Normalize()
             v = v * self.force
             coltarget.ApplyVelocity(v)
+
+####################
+class WeaponPickupEffect(Effect):
+    def __init__(self, weapon):
+        Effect.__init__(self, 0)
+        self.weapon = weapon
+    def Apply(self, dt):
+        self.target.SetRightWeapon(self.weapon)
+
+####################
+class ShockwaveEffect(Effect):
+    def __init__(self, shock_lifetime, shock_radius_range, shock_damage, wave_damage):
+        Effect.__init__(self, 0)
+        self.shock_lifetime = shock_lifetime
+        self.shock_radius_range = shock_radius_range
+        self.shock_damage = shock_damage    # done once when shockwave hits a target
+        self.wave_damage = wave_damage      # done continously while shockwave pushes a target
+
+    def Apply(self, dt):
+        pos = self.target.GetPos()
+        wave = Shockwave.Shockwave(pos.get_x(), pos.get_y(), self.shock_lifetime, self.shock_radius_range)
+        wave.shock_damage = self.shock_damage
+        wave.wave_damage = self.wave_damage
+        wave.shock_force_factor = 0.4
+        wave.AddIDToIgnoreList(self.target.id)
+        self.target.new_objects.append(wave)
+        exploAnim = Animations.CreateExplosionAtLocation(pos, self.shock_radius_range[1])
+        self.target.new_objects.append(exploAnim)
+
+##################
+class FractureEffect(Effect):
+    def __init__(self):
+        Effect.__init__(self, 0)
+
+    def Apply(self, dt):
+        scene = Engine_reference().CurrentScene()
+        for obj in scene.objects:
+            if obj.CheckType("Asteroid"):
+                exploAnim = Animations.CreateExplosionAtLocation(obj.GetPos(), obj.radius)
+                obj.new_objects.append(exploAnim)
+                obj.Break()

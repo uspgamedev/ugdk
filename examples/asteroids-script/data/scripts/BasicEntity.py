@@ -103,6 +103,7 @@ class BasicEntity (EntityInterface):
         self.hit_sounds = ["hit1.wav", "hit2.wav", "hit3.wav", "hit4.wav"]
         self.life_hud = BarUI(self, "life", Color(1.0,0.0,0.0,1.0), Vector2D(0.0, self.radius))
         self.hud_node.AddChild(self.life_hud.node)
+        self.active_effects = {}
         self.setupCollisionObject()
 
     def setupCollisionObject(self):
@@ -117,9 +118,23 @@ class BasicEntity (EntityInterface):
     def ApplyEffect(self, effect):
         #since effects are entities too, we just do this
         self.new_objects.append(effect)
+        if self.active_effects.has_key(effect.type):
+            if effect.unique_in_target:
+                for e in self.active_effects[effect.type]:
+                    e.is_destroyed = True
+            self.active_effects[effect.type].append(effect)
+        else:
+            self.active_effects[effect.type] = [effect]
+        
+    def CleanUpActiveEffects(self):
+        for effectType, effects in self.active_effects.items():
+            for e in effects:
+                if e.is_destroyed:
+                    self.active_effects[effectType].remove(e)
 
     def Update(self, dt): ###
         self.UpdatePosition(dt)
+        self.CleanUpActiveEffects()
         self.life_hud.Update()
         if self.velocity.Length() > self.max_velocity:
             self.velocity = self.velocity * (self.max_velocity / self.velocity.Length())
@@ -169,7 +184,12 @@ class BasicEntity (EntityInterface):
         self.node.modifier().set_offset(pos)
         self.last_velocity = self.velocity
     
-    
+####################
+class RangeCheck(EntityInterface):
+    def __init__(self, radius):
+        EntityInterface.__init__(x, y, radius)
+
+
 #################################################
 # utility functions
 #################################################
@@ -199,12 +219,13 @@ def GetEquivalentValueInRange(origin_value, origin_range, destination_range):
 # 1 = e = (Vb' - Va')/(Va-Vb)
 ###
 # following momentum formulas, returns a pair of the speeds (velocity magnetude) of each entity (in order) after a collision
-# NOTE: assumes coefficient = 1.0; which should be enough for now... Severe changes required here if coefficient is another value.
-def CalculateAfterSpeedBasedOnMomentum(ent1, ent2):
+def CalculateAfterSpeedBasedOnMomentum(ent1, ent2, e=0.2):
     m1 = ent1.mass
     m2 = ent2.mass
     v1 = ent1.velocity.Length()
     v2 = ent2.velocity.Length()
-    new_v1 = ((2*m2*v2) + (v1 * (m1 - m2))) / (m1 + m2)
-    new_v2 = ((2*m1*v1) + (v2 * (m2 - m1))) / (m2 + m1)
-    return (new_v1, new_v2)
+    #nv1 = ((2*m2*v2) + (v1 * (m1 - m2))) / (m1 + m2)
+    #nv2 = ((2*m1*v1) + (v2 * (m2 - m1))) / (m2 + m1)
+    nv1 = ( (m1*v1) + (m2*v2) - m2*e*(v1-v2) ) / (m1 + m2)
+    nv2 = e*(v1 - v2) + nv1
+    return (nv1, nv2)

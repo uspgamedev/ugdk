@@ -68,7 +68,7 @@ class Asteroid (BasicEntity):
             ###
             lifepack = CreatePowerUp(self.GetPos().get_x(), self.GetPos().get_y())
             self.new_objects.append(lifepack)
-        self.is_destroyed = True
+            self.is_destroyed = True
 
     def GetDamage(self, obj_type):
         if obj_type == self.type:
@@ -86,16 +86,21 @@ class Asteroid (BasicEntity):
         #print "%s IS COLLIDING WITH %s" % (self, target)
         if target.CheckType("Asteroid") and not target.id in self.collidedWithAsteroids:
             target.collidedWithAsteroids.append(self.id)
-            aux = self.velocity
-
+            
             self.ApplyCollisionRollback()
             target.ApplyCollisionRollback()
-
+            aux = self.velocity
             after_speeds = CalculateAfterSpeedBasedOnMomentum(self, target)
             self.velocity = target.velocity.Normalize()
             target.velocity = aux.Normalize()
-            self.velocity = self.velocity * after_speeds[0]
-            target.velocity = target.velocity * after_speeds[1]
+            sf = 1.0
+            tf = 1.0
+            if after_speeds[0] > 80.0:
+                st= 0.7
+            if after_speeds[1] > 80.0:
+                tf = 0.7 
+            self.velocity = self.velocity * (after_speeds[0]*sf)
+            target.velocity = target.velocity * (after_speeds[1]*tf)
 
             #self.velocity = target.velocity
             #target.velocity = aux

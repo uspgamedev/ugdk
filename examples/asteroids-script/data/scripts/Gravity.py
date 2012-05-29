@@ -2,7 +2,6 @@ from ugdk.ugdk_math import Vector2D
 from ugdk.pyramidworks_collision import CollisionObject, CollisionLogic
 from ugdk.pyramidworks_geometry import Circle
 from BasicEntity import EntityInterface, BasicColLogic, getCollisionManager
-from Asteroid import Asteroid
 from random import randint, shuffle
 from math import pi
 
@@ -33,7 +32,12 @@ class GravityWell (EntityInterface):
         #finally add collision logics to whatever collision class we want
         self.collision_object.AddCollisionLogic("Entity", BasicColLogic(self) )
 
-        
+    def SetBaseRadius(self, r):
+        self.mass = GetMassByRadius(r)
+        rmax = GetMaxGravForceDist(self.mass)
+        self.radius = rmax
+        self.geometry.set_radius(rmax)
+
     def ToggleActive(self):
         self.active = not self.active
 
