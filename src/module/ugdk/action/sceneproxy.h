@@ -1,3 +1,4 @@
+
 #ifndef MODULE_PROXY_SCENE_H_
 #define MODULE_PROXY_SCENE_H_
 
@@ -11,8 +12,9 @@ namespace action {
 class SceneProxy;
 
 class SceneProxy : public Scene, public ugdk::script::BaseProxy<SceneProxy> {
-public:
-    SceneProxy(const ugdk::script::VirtualObj& proxy) : Scene(), ugdk::script::BaseProxy<SceneProxy>(proxy) {}
+  public:
+    SceneProxy(const ugdk::script::VirtualObj& proxy) :
+        Scene(), ugdk::script::BaseProxy<SceneProxy>(proxy) {}
 
     virtual void Focus() { 
         Scene::Focus();

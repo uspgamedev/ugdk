@@ -28,12 +28,32 @@ Use as following:    proxy_class(T)
 where T is the original type (Ex.:  namespace1::subnamespace::Class)
 
 Proxy classes need to follow a simple interface/ way to create them, so check your examples.
-Mainly, they need to be named ClassProxy, and their construct receive a ugdk::script::VirtualObj&
+Mainly, they need to be named ClassProxy, and their constructor receives a ugdk::script::VirtualObj&
 */
 
 
 #ifdef SWIGLUA
+%{
+#include <module/luaproxy.h>
+%}
+
+%luacode {
+  function proxy (name)
+    local udata = _G["rawproxy_"..name]()
+    local vobj = getmetatable(udata)
+    print ("Making proxy for "..name)
+    table.foreach(vobj, print)
+    setmetatable(vobj, swig[name])
+    return udata
+  end
+}
+
 %define proxy_class(T)
+%init {
+    lua_pushcfunction(L, ugdk::script::lua::CreateUserdataProxy<T##Proxy>);
+    lua_setfield(L, LUA_GLOBALSINDEX, "rawproxy_"#T);
+}
+
 %typemap(in) T* {
     if (!SWIG_IsOK(SWIG_ConvertPtr(L, $input, (void**)&$1, $1_descriptor,0))) {
         ugdk::script::lua::LuaWrapper* wrapper = static_cast<ugdk::script::lua::LuaWrapper*>(SCRIPT_MANAGER()->GetWrapper("Lua"));

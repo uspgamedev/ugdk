@@ -55,7 +55,7 @@ end
 }
 %init {
     SWIG_Lua_get_class_registry(L);
-    lua_setglobal(L, "SWIG");
+    lua_setglobal(L, "swig");
 }
 %enddef
 #elif SWIGPYTHON
