@@ -101,10 +101,16 @@ void Menu::FocusNextElement(int offset) {
 }
 
 void Menu::PositionSelectionDrawables() {
-    if(option_node_[0]) option_node_[0]->modifier()->set_offset(
-        Vector2D(-focused_element_->node()->drawable()->hotspot().x - option_node_[0]->drawable()->hotspot().x, 0.0));
-    if(option_node_[1]) option_node_[1]->modifier()->set_offset(
-        Vector2D(focused_element_->node()->drawable()->hotspot().x + option_node_[1]->drawable()->hotspot().x, 0.0));
+    double focus_x = focused_element_->node()->drawable()->hotspot().x,
+           size_x = focused_element_->node()->drawable()->size().x;
+    if(option_node_[0]) {
+        double draw0_x = option_node_[0]->drawable()->hotspot().x;
+        option_node_[0]->modifier()->set_offset(Vector2D(-focus_x - draw0_x, 0.0));
+    }
+    if(option_node_[1]) {
+        double draw1_x = option_node_[1]->drawable()->hotspot().x;
+        option_node_[1]->modifier()->set_offset(Vector2D(size_x - focus_x + draw1_x, 0.0));
+    }
 }
 
 void Menu::OnSceneAdd(action::Scene* scene) {
