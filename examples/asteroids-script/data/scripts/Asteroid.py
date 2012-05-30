@@ -1,4 +1,5 @@
 from ugdk.ugdk_math import Vector2D
+from ugdk.ugdk_base import Color
 from BasicEntity import BasicEntity, CalculateAfterSpeedBasedOnMomentum
 from Animations import CreateExplosionFromCollision
 from Weapons import Turret
@@ -32,7 +33,7 @@ class Asteroid (BasicEntity):
         self.diedFromPlanet = False
         self.turret = None
         if Asteroid.CheckChanceForTurret(size_factor):
-            self.turret = Turret(self, Asteroid.GetTurretCooldown(size_factor), 70, 0.4)
+            self.turret = Turret(self, "Ship", Asteroid.GetTurretCooldown(size_factor), 70, 0.4, Color(1.0, 0.0, 0.3, 1.0))
         
     def Update(self, dt):
         BasicEntity.Update(self, dt)
@@ -73,8 +74,7 @@ class Asteroid (BasicEntity):
     def GetDamage(self, obj_type):
         if obj_type == self.type:
             return self.life * 0.2
-        elif obj_type == "Ship" or obj_type == "Planet":
-            return self.life
+        return self.life
 
     def GetPointsValue(self):
         if self.diedFromPlanet: return 0
@@ -121,6 +121,10 @@ class Asteroid (BasicEntity):
             CreateExplosionFromCollision(self, target, target.radius*1.2)
             self.diedFromPlanet = True
             #print "Asteroid damaging ", target.type
+        elif target.CheckType("Satellite"):
+            target.TakeDamage(self.GetDamage(target.type))
+            self.TakeDamage(self.life + 10) #just to make sure we die and split LOL
+            CreateExplosionFromCollision(self, target, (self.radius+target.radius)/2.0)
 
         #No handler for projectile since that is strictly
         #"do it only one time", and Projectile will handle it

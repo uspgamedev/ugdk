@@ -56,15 +56,18 @@ def CreatePulseDamagePack():
 ####################
 def CreatePassivePack(x, y):
     powerUps = {
-        "Satellites": CreateShieldPack,
+        "Satellites": CreateSatellitePack,
         "Force Shield": CreateShieldPack,
         "Item Attractor": CreateItemAttractorPack,
-        "Matter Absorption": CreateItemAttractorPack,
+        "Matter Absorption": CreateSatellitePack,
     }
     choice = random.choice(powerUps.keys())
     e = powerUps[choice]()
     p = Items.PowerUp(x, y, "images/passivePowerUp.png", 20.0, e, choice)
     return p
+
+def CreateSatellitePack():
+    return Items.SatelliteEffect()
 
 def CreateShieldPack():
     return Items.ShieldEffect(300.0)

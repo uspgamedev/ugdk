@@ -11,6 +11,9 @@ import MapGenerator
 import BarUI
 import Ship
     
+
+import ItemFactory
+
 def StartupScene():
     #print "STARTING SCENE"
     cena = ManagerScene()
@@ -116,6 +119,7 @@ class AsteroidsScene (Scene):
         self.collisionManager.Generate("Entity")
         self.collisionManager.Generate("Gravity")
         self.collisionManager.Generate("PowerUp")
+        self.collisionManager.Generate("RangeCheck")
 
     def GetHero(self):  return self.hero
 
@@ -246,6 +250,8 @@ class AsteroidsScene (Scene):
             self.managerScene.difficulty *= 0.85
         elif input.KeyPressed(K_HOME):
             self.managerScene.lives += 1
+            cheat = ItemFactory.CreatePassivePack(self.hero.GetPos().get_x(), self.hero.GetPos().get_y())
+            self.AddObject(cheat)
         
             
     def HandleCollisions(self):
@@ -297,6 +303,7 @@ class PauseScene (Scene):
         resume = resume or input.KeyPressed(K_PAGEUP)
         resume = resume or input.KeyPressed(K_PAGEDOWN)
         resume = resume or input.KeyPressed(K_p)
+        resume = resume or input.KeyPressed(K_SPACE)
         if resume:
             self.Finish()
 

@@ -49,6 +49,9 @@ class EntityInterface (Entity):
     def GetPos(self):
         return self.node.modifier().offset()
 
+    def GetDirection(self):
+        return Vector2D(0.0, 1.0)
+
     def GetPointsValue(self):
         return 0
 
@@ -148,6 +151,11 @@ class BasicEntity (EntityInterface):
         self.node.modifier().set_offset(pos)
         self.hud_node.modifier().set_offset(pos)
 
+    def GetDirection(self):
+        if self.velocity.Length() == 0.0:
+            return Vector2D(0.0, 1.0)
+        return self.velocity.Normalize()
+
     def GetDamage(self, obj_type):
         # returns the amount of damage this object causes on collision with given obj_type
         print self.type, " GetDamage NOT IMPLEMENTED"
@@ -186,9 +194,54 @@ class BasicEntity (EntityInterface):
     
 ####################
 class RangeCheck(EntityInterface):
-    def __init__(self, radius):
-        EntityInterface.__init__(x, y, radius)
+    def __init__(self, x, y, radius, target_type):
+        EntityInterface.__init__(self, x, y, radius)
+        self.parent = None
+        self.target_type = target_type
+        self.target = None
+        self.dist = -1.0
+        self.setupCollisionObject()
 
+    def setupCollisionObject(self):
+        self.collision_object = CollisionObject(getCollisionManager(), self)  #initialize collision object, second arg is passed to collisionlogic to handle collisions
+        self.collision_object.InitializeCollisionClass("RangeCheck")              # define the collision class
+        self.geometry = Circle(self.radius)                           #
+        self.collision_object.set_shape(self.geometry)                # set our shape
+        #finally add collision logics to whatever collision class we want
+        self.collision_object.AddCollisionLogic("Entity", BasicColLogic(self) )
+        self.collision_object.thisown = 0
+
+    def GetTarget(self):
+        return self.target
+
+    def SetRadius(self, r):
+        self.radius = r
+        self.geometry.set_radius(r)
+    
+    def AttachToEntity(self, ent):
+        self.parent = ent
+        self.parent.new_objects.append(self)
+
+    def Update(self, dt):
+        if self.parent != None:
+            if self.parent.is_destroyed:
+                self.is_destroyed = True
+            else:
+                self.node.modifier().set_offset(self.parent.GetPos())
+        if self.target != None and self.target.is_destroyed:
+            self.target = None
+            self.dist = -1.0
+
+    def GetDistTo(self, ent):
+        d = self.GetPos() - ent.GetPos()
+        return d.Length()
+
+    def HandleCollision(self, target):
+        if target.CheckType(self.target_type):
+            d = self.GetDistTo(target)
+            if self.dist < 0.0 or d < self.dist:
+                self.target = target
+                self.dist = d
 
 #################################################
 # utility functions

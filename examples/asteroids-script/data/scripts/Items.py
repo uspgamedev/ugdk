@@ -8,6 +8,7 @@ from BasicEntity import BasicEntity, EntityInterface, BasicColLogic, getCollisio
 import Config
 import Shockwave
 import Animations
+import Ship
 
 from random import random, randint, shuffle
 from math import pi
@@ -130,6 +131,7 @@ class MaxValueIncreaseEffect (Effect):
         elif self.valueTypeName == MaxValueIncreaseEffect.LIFE:
             self.target.set_max_life( self.target.max_life + self.amount )
             self.target.life += self.amount
+
 ##################
 class PulseDamageIncreaseEffect(Effect):
     def __init__(self, amount):
@@ -137,6 +139,34 @@ class PulseDamageIncreaseEffect(Effect):
         self.amount = amount
     def Apply(self, dt):
         self.target.data.pulse_damage += self.amount
+
+#################
+class SatelliteEffect(Effect):
+    def __init__(self):
+        Effect.__init__(self, 10)
+        self.sat1 = None
+        self.sat2 = None
+        self.unique_in_target = True
+
+    def OnSceneAdd(self, scene):
+        self.sat1 = Ship.Satellite(self.target, 100, pi/2.0)
+        self.sat2 = Ship.Satellite(self.target, 100, 3*pi/2.0)
+        self.target.new_objects.append(self.sat1)
+        self.target.new_objects.append(self.sat2)
+
+    def Apply(self, dt):
+        if (self.sat1.is_destroyed and self.sat2.is_destroyed) or self.target.is_destroyed:
+            self.sat1.is_destroyed = True
+            self.sat2.is_destroyed = True
+            self.lifetime = 0.0
+        else:
+            self.lifetime = 10.0
+
+    def Update(self, dt):
+        Effect.Update(self,dt)
+        if self.is_destroyed:
+            self.sat1.is_destroyed = True
+            self.sat2.is_destroyed = True
 
 #################
 class ShieldEffect(Effect):

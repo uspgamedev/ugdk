@@ -1,6 +1,6 @@
 from ugdk.ugdk_math import Vector2D
 from ugdk.ugdk_base import Engine_reference, Color
-from BasicEntity import BasicEntity, GetEquivalentValueInRange
+from BasicEntity import BasicEntity, RangeCheck, GetEquivalentValueInRange
 from Animations import CreateExplosionFromCollision
 import Shockwave
 
@@ -24,11 +24,10 @@ class Projectile (BasicEntity):
         self.shape.set_hotspot( Vector2D(32.0, 32.0) )
         self.shape.set_size( Vector2D(64, 128) )  # original projectile.png size
         self.on_hit_events = []
+        
         self.isFromPlayer = isFromPlayer
-        if isFromPlayer:
-            self.node.modifier().set_color( Color(0.0, 0.5, 1.0, 0.9) )
-        else:
-            self.node.modifier().set_color( Color(1.0, 0.0, 0.3, 1.0) )
+        self.hitsFriendlyToParent = True
+        self.hitsSameClassAsParent = True
         # scale:
         # base_radius <=> 0.5 (scale value)
         # 
@@ -80,13 +79,33 @@ class Projectile (BasicEntity):
         for f in self.on_hit_events:
             f(self, target)
 
+    def IsParentFriendlyToEntity(self, ent):
+        if self.parent == None: return False
+
+        p = self.parent
+        while True:
+            if ent.id == p.id:
+                return True
+            if hasattr(p, "parent"):
+                p = p.parent
+            else:
+                break
+        return False
+
     def HandleCollision(self, target):
         if self.isFromPlayer and target.CheckType("Asteroid"):
             self.value = self.life / 2
 
+        if not self.hitsFriendlyToParent and self.IsParentFriendlyToEntity(target):
+            return
+        if not self.hitsSameClassAsParent and target.type == self.parent.type:
+            return
+
         if target.CheckType("Projectile"):
             # collision between projectiles, destroy both
             target.TakeDamage(self.GetDamage(target.type))
+            if target.is_destroyed:
+                target.CallOnHitEvents(self)
             #self.is_destroyed = True
             CreateExplosionFromCollision(self, target, self.radius*5)
             #print "Projectiles exploding..."
@@ -103,17 +122,26 @@ class Projectile (BasicEntity):
             CreateExplosionFromCollision(self, target, target.radius*0.7)
             self.CallOnHitEvents(target)
             #print "Projectile impacted planet"
-
-
+        elif target.CheckType("Satellite") and not self.isFromPlayer:
+            target.TakeDamage(self.GetDamage(target.type))
+            self.is_destroyed = True
+            CreateExplosionFromCollision(self, target, target.radius)
+            self.CallOnHitEvents(target)
+            
 #########################
 class Turret:
-    def __init__(self, parent, cooldown, speed, power):
+    def __init__(self, parent, target_type, cooldown, speed, power, color=None):
         self.parent = parent
         self.cooldown = cooldown
         self.elapsed = 0.0
         self.speed = speed
         self.power = power
+        self.color = color
         self.firing_angle_offset = 2.5
+        self.hitsFriendlyToParent = True
+        self.hitsSameClassAsParent = True
+        self.rangeCheck = RangeCheck(0, 0, 500.0, target_type)
+        self.rangeCheck.AttachToEntity(parent)
     
     def Update(self, dt):
         self.elapsed += dt
@@ -124,7 +152,7 @@ class Turret:
                 self.Shoot( target )
 
     def GetTarget(self):
-        return Engine_reference().CurrentScene().GetHero()
+        return self.rangeCheck.GetTarget()
 
     def GetShootingAngle(self):
         r = random()
@@ -143,6 +171,10 @@ class Turret:
         vel = vel.Rotate( angle ) #we need angle in radians
         proj = Projectile(pos.get_x(), pos.get_y(), vel, self.power)
         proj.SetParent(self.parent)
+        proj.hitsFriendlyToParent = self.hitsFriendlyToParent
+        proj.hitsSameClassAsParent = self.hitsSameClassAsParent
+        if self.color != None:
+            proj.node.modifier().set_color( self.color )
         self.parent.new_objects.append(proj)
         if hasattr(target, "radio"): #yay pog
             target.radio.PlaySound("fire.wav")
@@ -158,6 +190,7 @@ class Weapon:
         return False # return -> boolean indicating if weapon succesfully fired
     def Dismantle(self):
         pass # this function should perform any action necessary to kill/destroy/remove this weapon.
+
 ########
 class Pulse (Weapon):
     def __init__(self):
@@ -190,6 +223,7 @@ class Pulse (Weapon):
         vel = self.parent.velocity + (direction.Normalize() * self.projectile_speed)
         proj = Projectile(pos.get_x(), pos.get_y(), vel, power, self.parent.data.pulse_damage, True)
         proj.SetParent(self.parent)
+        proj.node.modifier().set_color( Color(0.0, 0.5, 1.0, 0.9) )
         self.parent.new_objects.append(proj)
         self.parent.radio.PlaySound("fire.wav")
         return True

@@ -21,7 +21,7 @@ class ShipData:
     def __str__(self): return self.__repr__()
         
 
-class Ship (BasicEntity, object):
+class Ship (BasicEntity):
     def __init__(self, x, y, data):
         BasicEntity.__init__(self, x, y, "images/ship.png", 20.0, data.max_life)
         self.radio = Radio()
@@ -66,6 +66,9 @@ class Ship (BasicEntity, object):
         self.right_weapon = weapon
         self.right_weapon.Activate(self)
 
+    def GetDirection(self):
+        return Engine_reference().input_manager().GetMousePosition()
+
     def Update(self, dt):
         self.CheckCommands(dt)
         self.radio.CheckCommands()
@@ -76,6 +79,7 @@ class Ship (BasicEntity, object):
         self.UpdatePosition(dt)
         self.life_hud.Update()
         self.energy_hud.Update()
+        self.CleanUpActiveEffects()
 
     def CheckCommands(self, dt):
         input = Engine_reference().input_manager()
@@ -124,3 +128,38 @@ class Ship (BasicEntity, object):
     def HandleCollision(self, target):
         pass
         #other entities handle collision with Ship
+
+###################
+
+class Satellite(BasicEntity):
+    def __init__(self, parent, life, starting_angle):
+        self.parent = parent
+        x = parent.GetPos().get_x()
+        y = parent.GetPos().get_y()
+        BasicEntity.__init__(self, x, y, "images/satellite.png", parent.radius/2.0, life)
+        self.orbit_angle = starting_angle
+        self.angle_speed = pi/2.5  # angle speed in radians per second
+        self.turret = Weapons.Turret(self, "Asteroid", 0.6, 150.0, 0.6, Color(0.0, 1.0, 0.1, 0.7))
+        self.turret.hitsFriendlyToParent = False
+        self.turret.hitsSameClassAsParent = False
+
+    def CalculateOrbitPos(self):
+        pos = self.parent.GetPos()
+        direction = Vector2D(0, 1).Rotate(self.orbit_angle).Normalize()
+        orbit = direction * (self.parent.radius + self.radius + 7.0)
+        return orbit + pos
+
+    def Update(self, dt):
+        if self.parent.is_destroyed:
+            self.is_destroyed = True
+            return
+        self.node.modifier().set_offset(self.CalculateOrbitPos() )
+        self.orbit_angle += self. angle_speed * dt
+        if self.orbit_angle > 2*pi:
+            self.orbit_angle -= 2*pi
+        self.velocity = self.velocity * 0.0
+        self.turret.Update(dt)
+        BasicEntity.Update(self, dt)
+        
+    def HandleCollision(self, target):
+        pass

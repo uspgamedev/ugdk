@@ -49,7 +49,7 @@ class Shockwave (GravityWell):
             #print self, "is ending..."
             
     def HandleCollision(self, target):
-        ignore_types = ["GravityWell", "Planet", "Shockwave"]
+        ignore_types = ["GravityWell", "Planet", "Shockwave", "Satellite"]
         if target.type in ignore_types or target.id in self.ignore_ids:
             return 
         
