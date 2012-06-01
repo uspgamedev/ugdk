@@ -82,9 +82,9 @@ Mainly, they need to be named ClassProxy, and their constructor receives a ugdk:
             luadata->UnsafePopValue();
             printf("Created proxy cache of type "#T" (0x%p)\n", luadata);
         }
-        ugdk::script::VirtualData::Ptr vdata(luadata);
-        ugdk::script::VirtualObj vobj(vdata);
-        $1 = T##Proxy::Get(vobj);
+        //ugdk::script::VirtualData::Ptr vdata(luadata);
+        //ugdk::script::VirtualObj vobj(vdata);
+        $1 = T##Proxy::Get(static_cast<ugdk::script::VirtualData*>(luadata));
     }
 }
 

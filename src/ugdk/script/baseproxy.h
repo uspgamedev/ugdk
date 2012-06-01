@@ -39,6 +39,19 @@ public:
         return obj;
     }
 
+    static T* Get(ugdk::script::VirtualData* proxy) {
+        void* key = proxy->unsafe_data();
+        T* obj;
+        if (BaseProxy::table_.count(key) == 0) {
+            obj = new T(VirtualObj(VirtualData::Ptr(proxy)));
+            Set(key, obj);
+        }
+        else {
+            obj = BaseProxy::table_[key];
+        }
+        return obj;
+    }
+
 protected:
     ugdk::script::VirtualObj proxy_;
 
