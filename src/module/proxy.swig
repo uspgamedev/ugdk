@@ -38,28 +38,50 @@ Mainly, they need to be named ClassProxy, and their constructor receives a ugdk:
 %}
 
 %luacode {
+  local function hackmetatable (meta)
+    local hacked = {}
+    for k,v in pairs(meta) do
+      if k == "__index" then
+        hacked[k] = UGDK_proxymethods.getter
+      elseif k == "__newindex" then
+        hacked[k] = UGDK_proxymethods.setter
+      else
+        hacked[k] = v
+      end
+    end
+    return hacked
+  end
   function proxy (name)
-    local udata = _G["rawproxy_"..name]()
-    local vobj = getmetatable(udata)
     print ("Making proxy for "..name)
-    table.foreach(vobj, print)
-    setmetatable(vobj, swig[name])
-    return udata
+    local obj = {}
+    setmetatable(obj, hackmetatable(swig[name]))
+    return obj
   end
 }
 
-%define proxy_class(T)
 %init {
-    lua_pushcfunction(L, ugdk::script::lua::CreateUserdataProxy<T##Proxy>);
-    lua_setfield(L, LUA_GLOBALSINDEX, "rawproxy_"#T);
+    ugdk::script::lua::ExportMetamethods(L);
 }
 
+%define proxy_class(T)
 %typemap(in) T* {
     if (!SWIG_IsOK(SWIG_ConvertPtr(L, $input, (void**)&$1, $1_descriptor,0))) {
         ugdk::script::lua::LuaWrapper* wrapper = static_cast<ugdk::script::lua::LuaWrapper*>(SCRIPT_MANAGER()->GetWrapper("Lua"));
-        ugdk::script::lua::LuaData* luadata = wrapper->NewLuaData();
+        ugdk::script::lua::LuaData* luadata = NULL;
         lua_pushvalue(L, $input);
-        luadata->UnsafePopValue();
+        lua_getfield(L, -1, "__unsafedata");
+        if (lua_isuserdata(L, -1)) {
+            luadata = static_cast<ugdk::script::lua::LuaData*> (lua_touserdata(L, -1));
+            lua_pop(L, 2);
+            printf("Using proxy cache of type "#T" (0x%p)\n", luadata);
+        } else {
+            lua_pop(L, 1);
+            luadata = wrapper->NewLuaData();
+            lua_pushlightuserdata(L, static_cast<void*>(luadata));
+            lua_setfield(L, -2, "__unsafedata");
+            luadata->UnsafePopValue();
+            printf("Created proxy cache of type "#T" (0x%p)\n", luadata);
+        }
         ugdk::script::VirtualData::Ptr vdata(luadata);
         ugdk::script::VirtualObj vobj(vdata);
         $1 = T##Proxy::Get(vobj);

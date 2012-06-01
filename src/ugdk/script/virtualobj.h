@@ -134,7 +134,10 @@ class VirtualObj {
         return Create(str.c_str(), wrapper);
     }
     
-    void* unsafe_data() const { return data_->unsafe_data(); }
+    void* unsafe_data() const {
+        printf("WITHIN UNSAFE (0x%p)\n", data_.get());
+        return data_->unsafe_data();
+    }
 
   private:
 

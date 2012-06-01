@@ -2,6 +2,8 @@
 #ifndef MODULE_PROXY_SCENE_H_
 #define MODULE_PROXY_SCENE_H_
 
+#include <cstdio>
+
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/script/baseproxy.h>
@@ -18,6 +20,7 @@ class SceneProxy : public Scene, public ugdk::script::BaseProxy<SceneProxy> {
 
     virtual void Focus() { 
         Scene::Focus();
+        printf("SCENE (0x%p)\n", this);
         (proxy_ | "Focus")();
     }
     virtual void DeFocus() {
@@ -36,7 +39,10 @@ class SceneProxy : public Scene, public ugdk::script::BaseProxy<SceneProxy> {
     
     virtual void End() { 
         Scene::End();
-        (proxy_ | "End")(); 
+        printf("SCENE (0x%p)\n", this);
+        printf("END-BEFORE (0x%p)\n", proxy_.unsafe_data());
+        (proxy_ | "End")();
+        puts("END-AFTER");
     }
 
 };
