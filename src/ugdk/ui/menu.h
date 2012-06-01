@@ -46,7 +46,8 @@ class Menu: public action::Entity {
     void RemoveObject(UIElement* obj);
     void RefreshObject(UIElement* obj);
 
-    graphic::Node* node() { return node_; } 
+    graphic::Node* node() { return node_; }
+    const UIElement* focused_element() const { return focused_element_; }
 
     const InputCallbacks& input_callbacks() const { return input_callbacks_; }
 
