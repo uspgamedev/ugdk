@@ -12,6 +12,15 @@ namespace lua {
 
 /// Public:
 
+static void dumpstack (lua_State* L) {
+    LuaMsg("Dumping stack:\n");
+    for (int i = 1; i <= lua_gettop(L); i++) {
+        lua_getfield(L, LUA_GLOBALSINDEX, "print");
+        lua_pushvalue(L, i);
+        lua_call(L, 1, 0);
+    }
+}
+
 int DataGear::GenerateID(lua_State* L) {
     State L_(L);
 
@@ -26,6 +35,7 @@ int DataGear::GenerateID(lua_State* L) {
         DataID generated = L_.aux().ref(-2);
         L_.settop(0);
         L_.pushinteger(generated);
+        LuaMsg("Generated ID #%d\n", generated);
     }
 
     return 1;
@@ -42,6 +52,7 @@ int DataGear::DestroyID(lua_State* L) {
     if (dtgear.PushDataTable()) {
         L_.aux().unref(-1, id);
         L_.pop(1);
+        LuaMsg("Destroyed ID #%d\n", id);
     }
 
     return 0;
@@ -181,6 +192,14 @@ int DataGear::Execute(lua_State* L) {
 
     // Pushes the function.
     dtgear.PushData(1, func_id);
+    if (!L_.isfunction(-1) && !L_.istable(-1)) {
+        dumpstack(L);
+        return luaL_error(
+            L,
+            "WAT %d (%d) : %d",
+            func_id, buffer.size(), result_id
+        );
+    }
     // Pushes the arguments.
     for (DataBuffer::iterator it = buffer.begin(); it != buffer.end(); ++it)
         dtgear.PushData(1, *it);
@@ -366,6 +385,7 @@ bool DataGear::SetData (DataID id) {
 /// Private:
 
 bool DataGear::PushDataTable() {
+    LuaMsg("From datatable #%d\n", datatable_id_);
     L_.rawgeti(Constant::REGISTRYINDEX(), datatable_id_);
     if (!L_.istable(-1)) {
         L_.pop(1);

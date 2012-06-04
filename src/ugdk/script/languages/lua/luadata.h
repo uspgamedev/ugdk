@@ -49,6 +49,8 @@ class LuaData : public VirtualData {
         return const_cast<void*>(static_cast<const void*>(this));
     }
 
+    DataID id () const { return id_; }
+
     /// Unsafely sets this LuaData objects data.
     /** WARNING: Uses the lua value on the top of the stack.
      */
