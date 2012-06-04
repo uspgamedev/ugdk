@@ -9,7 +9,7 @@ namespace collision {
 
 /// \class GenericCollisionLogic genericcollisionlogic.h "pyramidworks/collision/genericcollisionlogic.h"
 /// CollisionLogic implementation using std::tr1::function.
-class GenericCollisionLogic {
+class GenericCollisionLogic : public CollisionLogic {
   public:
     GenericCollisionLogic(std::tr1::function<void (void*)> func)
         : func_(func) {}
