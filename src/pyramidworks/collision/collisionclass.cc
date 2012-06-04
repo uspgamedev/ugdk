@@ -39,14 +39,17 @@ const CollisionObjectList CollisionClass::FindCollidingObjects(
 }
     
 void CollisionClass::AddObject(const CollisionObject *obj) {
+	if(parent_) parent_->AddObject(obj);
     objects_tree_->Insert(obj->GetBoundingBox(), obj);
 }
 
 void CollisionClass::RemoveObject(const CollisionObject *obj) { 
+	if(parent_) parent_->RemoveObject(obj);
     objects_tree_->Remove(obj);
 }
 
 void CollisionClass::RefreshObject(const CollisionObject *obj) {
+	if(parent_) parent_->RefreshObject(obj);
     objects_tree_->Update(obj->GetBoundingBox(), obj);
 }
 

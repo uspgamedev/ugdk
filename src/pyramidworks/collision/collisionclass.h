@@ -35,7 +35,7 @@ class CollisionClass {
     // Unnecessary, used for debugging purposes.
     std::string name_;
 #endif
-    const CollisionClass* parent_;
+    CollisionClass* parent_;
     ObjectTree* objects_tree_;
 };
 
