@@ -16,13 +16,18 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
 
   public:
 
-    DataGear(lua_State* L, DataID datatable_id) :
+    /*DataGear(lua_State* L, DataID datatable_id) :
       BaseGear(L),
-      datatable_id_(datatable_id) {}
+      datatable_id_(datatable_id) {}*/
+
+    DataGear(lua_State *L) :
+      BaseGear(L) {}
 
     ~DataGear() {
-        L_.aux().unref(Constant::REGISTRYINDEX(), datatable_id_);
-        datatable_id_ = LUA_NOREF;
+        L_.pushnil();
+        L_.setfield(Constant::REGISTRYINDEX(), "UGDK_LUA_DATATABLE");
+        /*L_.aux().unref(Constant::REGISTRYINDEX(), datatable_id_);
+        datatable_id_ = LUA_NOREF;*/
         L_.close();
     }
 
@@ -92,7 +97,7 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
 
   private:
 
-    DataID datatable_id_;
+    //DataID datatable_id_;
 
     DataGear& operator=(const DataGear& rhs) {
         return *this;

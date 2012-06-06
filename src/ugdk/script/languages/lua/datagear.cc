@@ -385,8 +385,8 @@ bool DataGear::SetData (DataID id) {
 /// Private:
 
 bool DataGear::PushDataTable() {
-    LuaMsg("From datatable #%d\n", datatable_id_);
-    L_.rawgeti(Constant::REGISTRYINDEX(), datatable_id_);
+    LuaMsg("From datatable\n");
+    L_.getfield(Constant::REGISTRYINDEX(), "UGDK_LUA_DATATABLE");
     if (!L_.istable(-1)) {
         L_.pop(1);
         return false;
