@@ -43,6 +43,7 @@ Scene::~Scene() {
 }
 
 void Scene::Focus() {
+    if(focus_callback_) focus_callback_(this);
     if(background_music_ != NULL) { 
         if(!background_music_->IsPlaying())
             background_music_->PlayForever();
@@ -54,6 +55,10 @@ void Scene::Focus() {
         if(current_music != NULL)
             current_music->Stop();
     }
+}
+
+void Scene::DeFocus() {
+    if(defocus_callback_) defocus_callback_(this);
 }
 
 void Scene::AddEntity(Entity *entity) { 

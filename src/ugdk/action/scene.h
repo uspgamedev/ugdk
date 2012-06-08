@@ -1,6 +1,7 @@
 #ifndef UGDK_ACTION_SCENE_H_
 #define UGDK_ACTION_SCENE_H_
 
+#include <functional>
 #include <list>
 #include <queue>
 #include <map>
@@ -23,13 +24,15 @@ namespace action {
 */
 class Scene {
   public:
+    Scene();
+      
     virtual ~Scene();
 
     /// Method called when this Scene arrives on the top of the Scene stack.
     virtual void Focus();
 
     /// Method called when this Scene leaves the top of the Scene stack.
-    virtual void DeFocus() {}
+    virtual void DeFocus();
 
     /// Adds an Entity to the scene.
     void AddEntity(Entity *entity);
@@ -72,9 +75,14 @@ class Scene {
     /**@}
      */
 
-  protected:
+    void set_defocus_callback(std::tr1::function<void (Scene*)> defocus_callback) { 
+        defocus_callback_ = defocus_callback;
+    }
+    void set_focus_callback(std::tr1::function<void (Scene*)> focus_callback) { 
+        focus_callback_ = focus_callback;
+    }
 
-    Scene();
+  protected:
     
     /// Ends the scene activity.
     /** Note: do not release any resources in this method. */
@@ -101,6 +109,8 @@ class Scene {
 
     std::list<Entity*> entities_;
     std::queue<Entity*> queued_entities_;
+    std::tr1::function<void (Scene*)> defocus_callback_;
+    std::tr1::function<void (Scene*)> focus_callback_;
 
     typedef std::map<int, std::list<Task*> > TasksContainer;
     TasksContainer tasks_;

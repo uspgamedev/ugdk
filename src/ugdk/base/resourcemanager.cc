@@ -63,7 +63,8 @@ action::AnimationSet*         ResourceManager::GetAnimationSetFromFile  (const s
 }
 
 graphic::Text*        ResourceManager::CreateTextFromLanguageTag(const std::string& tag) {
-    return RESOURCE_MANAGER()->word_container().Find(tag)->GenerateText();
+    ugdk::LanguageWord* word = RESOURCE_MANAGER()->word_container().Find(tag);
+    return word ? word->GenerateText() : NULL;
 }
 
 } // namespace base
