@@ -1,3 +1,13 @@
+v0.3.1:
+* New Features:
+  - Scene/Entity utility functions.
+  - Tasks for Scene
+  - Menus
+  - Pyramidworks for Scripts
+  - GenericCollisionLogic
+* Action module now uses namespace ugdk::action.
+* Text can have it's content changed.
+
 v0.3.0:
 * UGDK now includes the Pyramidworks, a kit providing a collision system, formerly part of Horus Eye.
 * New Features:
