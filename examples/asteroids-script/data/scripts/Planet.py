@@ -13,7 +13,7 @@ class Planet (BasicEntity):
     def __init__(self, x, y, size_factor):
         self.size_factor = size_factor
         r = 75.0 * size_factor
-        hp = 60 * size_factor
+        hp = 600 * size_factor
         BasicEntity.__init__(self, x, y, "images/planet%s.png" % (randint(1,5)), r, hp)
         self.has_splitted = False
         self.well = GravityWell(x, y, r)
@@ -58,6 +58,9 @@ class Planet (BasicEntity):
 
     def GetDamage(self, obj_type):
         return 9000.1 # Vegeta, what does the scouter say about his power level?
+
+    def GetPointsValue(self):
+        return -self.max_life*2
 
     def HandleCollision(self, target):
         if target.CheckType("Planet"):

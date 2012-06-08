@@ -58,13 +58,20 @@ void AnimationManager::Update(double delta_t) {
 }
 
 void AnimationManager::AddObserver(Observer* observer) {
-    observers.push_back(observer);
+    observers_.push_back(observer);
+}
+
+void AnimationManager::AddTickFunction(std::tr1::function<void (void)> tick) {
+    ticks_.push_back(tick);
 }
 
 void AnimationManager::NotifyAllObservers() {
-    for (int i = 0; i < (int)observers.size(); ++i) {
-        observers[i]->Tick();
+    for (int i = 0; i < (int)observers_.size(); ++i) {
+        observers_[i]->Tick();
     }
+    for(std::vector< std::tr1::function<void (void)> >::iterator it = ticks_.begin();
+        it != ticks_.end(); ++it)
+        (*it)();
 }
 
 } /* namespace action*/

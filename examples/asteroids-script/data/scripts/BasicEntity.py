@@ -20,8 +20,6 @@ def getCollisionManager():
     #print "Getting COLLISION MANAGER from ", scene
     return scene.collisionManager
 
-#   Functions or attributes marked with ### means they're part of the 
-#   C++ ScriptEntity interface
 
 class EntityInterface (Entity):
     nextID = 1
@@ -50,6 +48,12 @@ class EntityInterface (Entity):
 
     def GetPos(self):
         return self.node.modifier().offset()
+
+    def GetDirection(self):
+        return Vector2D(0.0, 1.0)
+
+    def GetPointsValue(self):
+        return 0
 
     def HandleMapBoundaries(self, pos):
         max = window_size()
@@ -94,6 +98,7 @@ class BasicEntity (EntityInterface):
         #self.shape.thisown = 0
         self.node.set_drawable(self.shape)
         self.velocity = Vector2D(0.0, 0.0)
+        self.max_velocity = 5000.0 #length of the maximum velocity - the entity can't achieve a velocity with length greater than this by whatever means
         self.last_velocity = None
         self.last_dt = 0.000001
         self.life = life
@@ -101,19 +106,41 @@ class BasicEntity (EntityInterface):
         self.hit_sounds = ["hit1.wav", "hit2.wav", "hit3.wav", "hit4.wav"]
         self.life_hud = BarUI(self, "life", Color(1.0,0.0,0.0,1.0), Vector2D(0.0, self.radius))
         self.hud_node.AddChild(self.life_hud.node)
-        
+        self.active_effects = {}
+        self.setupCollisionObject()
+
+    def setupCollisionObject(self):
         self.collision_object = CollisionObject(getCollisionManager(), self)  #initialize collision object, second arg is passed to collisionlogic to handle collisions
         self.collision_object.InitializeCollisionClass("Entity")              # define the collision class
         self.geometry = Circle(self.radius)                           #
         self.collision_object.set_shape(self.geometry)                # set our shape
         #finally add collision logics to whatever collision class we want
         self.collision_object.AddCollisionLogic("Entity", BasicColLogic(self) )
+        self.collision_object.thisown = 0
+
+    def ApplyEffect(self, effect):
+        #since effects are entities too, we just do this
+        self.new_objects.append(effect)
+        if self.active_effects.has_key(effect.type):
+            if effect.unique_in_target:
+                for e in self.active_effects[effect.type]:
+                    e.is_destroyed = True
+            self.active_effects[effect.type].append(effect)
+        else:
+            self.active_effects[effect.type] = [effect]
+        
+    def CleanUpActiveEffects(self):
+        for effectType, effects in self.active_effects.items():
+            for e in effects:
+                if e.is_destroyed:
+                    self.active_effects[effectType].remove(e)
 
     def Update(self, dt): ###
         self.UpdatePosition(dt)
+        self.CleanUpActiveEffects()
         self.life_hud.Update()
-        if self.velocity.Length() > 5000:
-            self.velocity = self.velocity * (5000.0 / self.velocity.Length())
+        if self.velocity.Length() > self.max_velocity:
+            self.velocity = self.velocity * (self.max_velocity / self.velocity.Length())
 
     def UpdatePosition(self, dt):
         pos = self.GetPos()
@@ -123,6 +150,11 @@ class BasicEntity (EntityInterface):
         self.HandleMapBoundaries(pos)
         self.node.modifier().set_offset(pos)
         self.hud_node.modifier().set_offset(pos)
+
+    def GetDirection(self):
+        if self.velocity.Length() == 0.0:
+            return Vector2D(0.0, 1.0)
+        return self.velocity.Normalize()
 
     def GetDamage(self, obj_type):
         # returns the amount of damage this object causes on collision with given obj_type
@@ -137,14 +169,14 @@ class BasicEntity (EntityInterface):
             sound.Play()
         if self.life <= 0:
             self.is_destroyed = True
-        #print self, "took %s damage, current life = %s" % (damage, self.life)
+        #print self, "took %s damage, current life = %s [max life =%s]" % (damage, self.life, self.max_life)
 
     def Heal(self, amount):
         if amount < 0:  return
         self.life += amount
         if self.life > self.max_life:
             self.life = self.max_life
-        print self, "has recovered %s life, current life = %s" % (amount, self.life)
+        #print self, "has recovered %s life, current life = %s" % (amount, self.life)
         
     def ApplyVelocity(self, v):
         self.velocity = self.velocity + v
@@ -160,7 +192,57 @@ class BasicEntity (EntityInterface):
         self.node.modifier().set_offset(pos)
         self.last_velocity = self.velocity
     
+####################
+class RangeCheck(EntityInterface):
+    def __init__(self, x, y, radius, target_type):
+        EntityInterface.__init__(self, x, y, radius)
+        self.parent = None
+        self.target_type = target_type
+        self.target = None
+        self.dist = -1.0
+        self.setupCollisionObject()
+
+    def setupCollisionObject(self):
+        self.collision_object = CollisionObject(getCollisionManager(), self)  #initialize collision object, second arg is passed to collisionlogic to handle collisions
+        self.collision_object.InitializeCollisionClass("RangeCheck")              # define the collision class
+        self.geometry = Circle(self.radius)                           #
+        self.collision_object.set_shape(self.geometry)                # set our shape
+        #finally add collision logics to whatever collision class we want
+        self.collision_object.AddCollisionLogic("Entity", BasicColLogic(self) )
+        self.collision_object.thisown = 0
+
+    def GetTarget(self):
+        return self.target
+
+    def SetRadius(self, r):
+        self.radius = r
+        self.geometry.set_radius(r)
     
+    def AttachToEntity(self, ent):
+        self.parent = ent
+        self.parent.new_objects.append(self)
+
+    def Update(self, dt):
+        if self.parent != None:
+            if self.parent.is_destroyed:
+                self.is_destroyed = True
+            else:
+                self.node.modifier().set_offset(self.parent.GetPos())
+        if self.target != None and self.target.is_destroyed:
+            self.target = None
+            self.dist = -1.0
+
+    def GetDistTo(self, ent):
+        d = self.GetPos() - ent.GetPos()
+        return d.Length()
+
+    def HandleCollision(self, target):
+        if target.CheckType(self.target_type):
+            d = self.GetDistTo(target)
+            if self.dist < 0.0 or d < self.dist:
+                self.target = target
+                self.dist = d
+
 #################################################
 # utility functions
 #################################################
@@ -190,12 +272,13 @@ def GetEquivalentValueInRange(origin_value, origin_range, destination_range):
 # 1 = e = (Vb' - Va')/(Va-Vb)
 ###
 # following momentum formulas, returns a pair of the speeds (velocity magnetude) of each entity (in order) after a collision
-# NOTE: assumes coefficient = 1.0; which should be enough for now... Severe changes required here if coefficient is another value.
-def CalculateAfterSpeedBasedOnMomentum(ent1, ent2):
+def CalculateAfterSpeedBasedOnMomentum(ent1, ent2, e=0.2):
     m1 = ent1.mass
     m2 = ent2.mass
     v1 = ent1.velocity.Length()
     v2 = ent2.velocity.Length()
-    new_v1 = ((2*m2*v2) + (v1 * (m1 - m2))) / (m1 + m2)
-    new_v2 = ((2*m1*v1) + (v2 * (m2 - m1))) / (m2 + m1)
-    return (new_v1, new_v2)
+    #nv1 = ((2*m2*v2) + (v1 * (m1 - m2))) / (m1 + m2)
+    #nv2 = ((2*m1*v1) + (v2 * (m2 - m1))) / (m2 + m1)
+    nv1 = ( (m1*v1) + (m2*v2) - m2*e*(v1-v2) ) / (m1 + m2)
+    nv2 = e*(v1 - v2) + nv1
+    return (nv1, nv2)

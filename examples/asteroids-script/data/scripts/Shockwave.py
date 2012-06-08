@@ -27,6 +27,7 @@ class Shockwave (GravityWell):
         self.affected_targets = []
         self.shock_damage = 30.0    # done once when shockwave hits a target
         self.wave_damage = 0.1      # done continously while shockwave pushes a target
+        self.shock_force_factor = 1.0 # multiplier factor to the shock force, which is the force that pushes/pulls entities from the wave
 
     def SetRadius(self, r):
         self.radius = r
@@ -48,7 +49,7 @@ class Shockwave (GravityWell):
             #print self, "is ending..."
             
     def HandleCollision(self, target):
-        ignore_types = ["GravityWell", "Planet", "Shockwave"]
+        ignore_types = ["GravityWell", "Planet", "Shockwave", "Satellite"]
         if target.type in ignore_types or target.id in self.ignore_ids:
             return 
         
@@ -78,10 +79,9 @@ class Shockwave (GravityWell):
             self.affected_targets.append(target.id)
 
             current_r_range = [self.radius, self.radius_range[0]]
-            current_gravforce_range = [GetGravForce(self.mass, r) for r in current_r_range]
+            current_shockforce_range = [GetGravForce(self.mass, r) for r in current_r_range]
             current_r_range.reverse()
-            GravForce = GetEquivalentValueInRange(dist, current_r_range, current_gravforce_range )
-            #v = v * GravForce
+            ShockForce = GetEquivalentValueInRange(dist, current_r_range, current_shockforce_range )
 
             v_transpost = Vector2D( -v.get_y(), -v.get_x())
             m = v_transpost * target.velocity
@@ -91,4 +91,5 @@ class Shockwave (GravityWell):
             wave_speed = ( self.radius_range[1] - self.radius_range[0] ) / self.max_lifetime
             v = v * (wave_speed/1.02)
 
+        v = v * self.shock_force_factor
         target.ApplyVelocity(v)

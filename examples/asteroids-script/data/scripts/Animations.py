@@ -60,3 +60,14 @@ def CreateExplosionFromCollision(ent, target, radius):
     posY = pos.get_y()
     sprite_ent = AnimationEntity(posX, posY, sprite, radius)
     ent.new_objects.append(sprite_ent)
+    return sprite_ent
+
+def CreateExplosionAtLocation(pos, radius):
+    animset = Engine_reference().resource_manager().animation_loader().Load("animations/explosion.gdd", "animations/explosion.gdd")
+    sheet = Engine_reference().resource_manager().spritesheet_container().Find("images/explosion.png")
+    sprite = Sprite(sheet, animset)
+    sprite.SelectAnimation("BASIC_EXPLOSION")
+    posX = pos.get_x()
+    posY = pos.get_y()
+    sprite_ent = AnimationEntity(posX, posY, sprite, radius)
+    return sprite_ent

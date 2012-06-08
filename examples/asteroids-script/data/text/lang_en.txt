@@ -12,6 +12,7 @@
 [ShipName]{FontS}:Tetracontakaidigono
 [GameWon]{FontA}:Congratulations!
 [GameOver]{FontA}:WASTED!
+[Pause]{FontA}:Game Paused
 
 
 #FILES

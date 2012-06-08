@@ -30,6 +30,7 @@ Text::Text(const std::vector<std::wstring>& message, Font *font) : font_(font) {
 }
 
 void Text::SetMessage(const std::wstring& message) {
+    message_.clear();
     message_.push_back(message);
     size_ = GetStringSize(message, font_);
     line_height_ = size_.y;
@@ -46,6 +47,7 @@ void Text::SetMessage(const std::vector<std::wstring>& message) {
 
         line_width_.push_back(line_size.x);
     }
+    message_.clear();
     message_ = message;
 }
 

@@ -53,6 +53,10 @@ class Sprite : public Drawable {
     void AddObserverToAnimation(action::Observer *observer) {
         animation_manager_->AddObserver(observer);
     }
+    
+    void AddTickFunctionToAnimation(std::tr1::function<void (void)> tick) {
+        animation_manager_->AddTickFunction(tick);
+    }
 
     /// Return the animation frame number
     /** @return an integer that is the animation frame number

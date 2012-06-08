@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <functional>
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/action/animationframe.h>
 
@@ -42,7 +43,7 @@ class AnimationManager {
     //Note: try to use period() instead whenever you can.
     double    fps() const { return 1.0/(period_scaling_factor_*current_animation_->period()); }
     double period() const { return period_scaling_factor_*current_animation_->period(); }
-    int n_frames() const { return current_animation_->size(); }
+    unsigned int n_frames() const { return static_cast<unsigned int>(current_animation_->size()); }
 
     int GetFrame();
     void set_default_frame(int default_frame) {
@@ -57,6 +58,7 @@ class AnimationManager {
     void Select(int index);
     void Update(double delta_t);
     void AddObserver(Observer* observer);
+    void AddTickFunction(std::tr1::function<void (void)> tick);
 
   private:
     double period_scaling_factor_;
@@ -67,7 +69,8 @@ class AnimationManager {
     int default_frame_;
     double elapsed_time_;
 
-    std::vector<Observer *> observers;
+    std::vector<Observer *> observers_;
+    std::vector< std::tr1::function<void (void)> > ticks_;
     void NotifyAllObservers();
 
 };
