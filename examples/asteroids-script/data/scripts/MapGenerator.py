@@ -6,6 +6,7 @@ from Asteroid import Asteroid
 from Planet import Planet
 import random
 from math import pi
+import Config
 
 MAX_ENTITY_SIZE = 200.0  #in pixels
 
@@ -21,20 +22,20 @@ def GetCellCenter(i, j):
     return (x, y)
     
 def GetRandomAsteroidSizeFactor():
-	# returns random float in [0.5, 1.2[
-	return random.random() * 0.7 + 0.5
-	
+    # returns random float in [0.5, 1.2[
+    return random.random() * 0.7 + 0.5
+    
 def GetRandomPlanetSizeFactor():
-	# returns random float in [0.7, 1.3[
-	return random.random() * 0.6  + 0.7
+    # returns random float in [0.7, 1.3[
+    return random.random() * 0.6  + 0.7
 
 def Generate(difficultyFactor, heroData):
-    screenSize = Engine_reference().video_manager().video_size()
+    screenSize = Config.gamesize
     print "Screen Size = (%s, %s)" % (screenSize.get_x(), screenSize.get_y())
     
     entities = []
     # for the purpose of generating random map objects, we create a imaginary table henceforth known as the "MAP"
-    # the MAP represents the playable area, that is, the screen.
+    # the MAP represents the playable area (from now on, no longer related to the screen).
     # each cell in the map is of the size MAX_ENTITY_SIZExMAX_ENTITY_SIZE
     # a object can only be placed in the center position of a cell, and only one object per cell,
     # although there can be empty cells.
