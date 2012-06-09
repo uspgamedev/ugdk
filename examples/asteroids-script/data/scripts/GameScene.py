@@ -233,6 +233,10 @@ class AsteroidsScene (Scene):
         self.stats.Update()
         self.CheckCommands()
         self.HandleCollisions()
+
+        if self.hero != None:
+            video_size = Engine_reference().video_manager().video_size()
+            self.content_node().modifier().set_offset(-self.hero.GetPos() + video_size * 0.5)
         
     def CheckCommands(self):
         input = Engine_reference().input_manager()

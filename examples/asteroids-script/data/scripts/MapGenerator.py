@@ -88,7 +88,7 @@ def Generate(difficultyFactor, heroData):
 
 
 def GetBackgroundDrawable():
-    screenSize = Engine_reference().video_manager().video_size()
+    screenSize = Config.gamesize #Engine_reference().video_manager().video_size()
     texture_obj = ResourceManager_GetTextureFromFile("images/background%s.jpg" % (random.randint(1,3)))
     background = TexturedRectangle( texture_obj, screenSize )
     #background.set_hotspot(Drawable.CENTER)
