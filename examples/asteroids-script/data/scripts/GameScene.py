@@ -101,7 +101,7 @@ class AsteroidsScene (Scene):
         #print "Creating AsteroidsScene"
         maxval = MapGenerator.MAX_ENTITY_SIZE
         mincoords = [-maxval, -maxval]
-        maxcoords = [Config.resolution.get_x() + maxval,  Config.resolution.get_y() + maxval]
+        maxcoords = [Config.gamesize.get_x() + maxval,  Config.gamesize.get_y() + maxval]
         self.collisionManager = CollisionManager( CreateBox2D(mincoords[0], mincoords[1], maxcoords[0], maxcoords[1]) )
         self.objects = []
         self.colliding_objects = []
@@ -114,6 +114,8 @@ class AsteroidsScene (Scene):
         #self.AddTask(self.collisionManager.GenerateHandleCollisionTask() )
         self.managerScene = managerScene
         self.stats = BarUI.StatsUI(managerScene, 0.0, 0.0, Color(0.0,0.0,0.0), 0.4 )
+        self.hud = Node()
+        self.interface_node().AddChild(self.hud)
         
     def startCollisions(self):
         self.collisionManager.Generate("Entity")
@@ -138,7 +140,7 @@ class AsteroidsScene (Scene):
         CN = self.content_node()
         CN.AddChild(obj.node)
         #print "SCENE CONTENT NODE = ", CN
-        self.interface_node().AddChild(obj.hud_node)
+        self.hud.AddChild(obj.hud_node)
         #print "FINISHED ADDING OBJECT"
         if obj.CheckType("Asteroid"):
             self.asteroid_count += 1
@@ -146,7 +148,6 @@ class AsteroidsScene (Scene):
             self.ship_alive = True
             self.hero = obj
             
-        
     def RemoveObject(self, obj):
         if obj.CheckType("Asteroid"):
             self.asteroid_count -= 1
@@ -171,7 +172,8 @@ class AsteroidsScene (Scene):
         #print "GENERATE MARK 1"
         self.Populate( MapGenerator.Generate(self.difficultyFactor, heroData) )
         #print "GENERATE MARK 2"
-        self.content_node().set_drawable(MapGenerator.GetBackgroundDrawable() )
+        #self.content_node().set_drawable(MapGenerator.GetBackgroundDrawable() )
+        self.content_node().AddChild(MapGenerator.GetBackgroundNode() )
         #print "GENERATE MARK 3"
         self.interface_node().AddChild(self.stats.node)
         
@@ -233,6 +235,17 @@ class AsteroidsScene (Scene):
         self.stats.Update()
         self.CheckCommands()
         self.HandleCollisions()
+
+        if self.hero != None:
+            video_size = Engine_reference().video_manager().video_size()
+            pos = self.hero.GetPos()
+            if pos.get_x() < Config.gamesize.get_x() * 0.5:
+                pos.set_x(pos.get_x() + Config.gamesize.get_x())
+            if pos.get_y() < Config.gamesize.get_y() * 0.5:
+                pos.set_y(pos.get_y() + Config.gamesize.get_y())
+            self.content_node().modifier().set_offset(-pos + video_size * 0.5)
+            #self.hud.modifier().set_offset(-self.hero.GetPos() + video_size * 0.5)
+            self.hud.modifier().set_offset(-pos + video_size * 0.5)
         
     def CheckCommands(self):
         input = Engine_reference().input_manager()

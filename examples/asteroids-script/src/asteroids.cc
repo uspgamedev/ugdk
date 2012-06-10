@@ -132,11 +132,11 @@ int main(int argc, char *argv[]) {
     animations["InitializeSpritesheets"]();
 
     VirtualObj scene_script = SCRIPT_MANAGER()->LoadModule("GameScene");
-	{
-		VirtualObj first_scene = scene_script["StartupScene"]();
-		//if this object, which is scene, exists when main ends, and that same scene
-		//was already deleted segfault occured
-	}
+    {
+        VirtualObj first_scene = scene_script["StartupScene"]();
+        //if this object, which is scene, exists when main ends, and that same scene
+        //was already deleted segfault occured
+    }
     
     // Transfers control to the framework.
     ugdk::Engine::reference()->Run();

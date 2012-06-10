@@ -21,8 +21,9 @@ class Projectile (BasicEntity):
         self.lifetime = 10.0 * power
         self.original_radius = Projectile.GetActualRadius(power)
         BasicEntity.__init__(self, x, y, "images/projectile.png", self.original_radius, self.damage)
-        self.shape.set_hotspot( Vector2D(32.0, 32.0) )
-        self.shape.set_size( Vector2D(64, 128) )  # original projectile.png size
+        for shape in self.shapes:
+            shape.set_hotspot( Vector2D(32.0, 32.0) )
+            shape.set_size( Vector2D(64, 128) )  # original projectile.png size
         self.on_hit_events = []
         
         self.isFromPlayer = isFromPlayer
@@ -33,16 +34,17 @@ class Projectile (BasicEntity):
         # 
         # radius <=> scale
         scale = self.radius * 0.20 / Projectile.base_radius
-
-        self.node.modifier().set_scale( Vector2D(scale, scale) )
-        self.node.modifier().set_rotation( velocity.Angle() - 3*pi/2.0 )
+        for node in self.nodes:
+            node.modifier().set_scale( Vector2D(scale, scale) )
+            node.modifier().set_rotation( velocity.Angle() - 3*pi/2.0 )
         self.velocity = velocity
         self.value = 0
         self.life_hud.node.set_active(False)
 
     def Update(self, dt):
         self.UpdatePosition(dt)
-        self.node.modifier().set_rotation( self.velocity.Angle() - 3*pi/2.0 )
+        for node in self.nodes:
+            node.modifier().set_rotation( self.velocity.Angle() - 3*pi/2.0 )
         self.lifetime -= dt
         if self.lifetime <= 0:
             #gotta destroy this thing
@@ -208,7 +210,7 @@ class Pulse (Weapon):
         if not active and self.charge_time > 0:
             power = GetEquivalentValueInRange(self.charge_time, [0, self.max_charge_time], self.power_range)
             cost = self.shot_cost * (1 + (power * self.charge_time))
-            mouse_dir = Engine_reference().input_manager().GetMousePosition() - self.parent.GetPos()
+            mouse_dir = Engine_reference().input_manager().GetMousePosition() - (Engine_reference().video_manager().video_size() * 0.5) #self.parent.GetPos()
             mouse_dir = mouse_dir.Normalize()
             self.charge_time = 0.0
             return self.Shoot(mouse_dir, power, cost)
@@ -279,7 +281,7 @@ class ShockBomb(Weapon):
     def Toggle(self, active, dt):
         if active and self.can_shoot:
             self.can_shoot = False
-            mouse_dir = Engine_reference().input_manager().GetMousePosition() - self.parent.GetPos()
+            mouse_dir = Engine_reference().input_manager().GetMousePosition() - (Engine_reference().video_manager().video_size() * 0.5)
             mouse_dir = mouse_dir.Normalize()
             return self.Shoot(mouse_dir)
         elif not active:

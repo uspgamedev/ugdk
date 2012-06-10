@@ -18,11 +18,11 @@ class Shockwave (GravityWell):
         self.is_antigrav = True
         self.size = Vector2D(self.radius*2, self.radius*2)
         texture_obj = Engine_reference().resource_manager().texture_container().Load("images/shockwave.png", "images/shockwave.png")
-        self.shape = TexturedRectangle( texture_obj, self.size )
-        self.shape.set_hotspot(Drawable.CENTER)
-        #self.shape.thisown = 0
-        self.node.set_drawable(self.shape)
-        self.node.modifier().set_alpha(0.5)
+        for node in self.nodes:
+            shape = TexturedRectangle( texture_obj, self.size )
+            shape.set_hotspot(Drawable.CENTER)
+            node.set_drawable(shape)
+            node.modifier().set_alpha(0.5)
         self.scale_range = [1.0, radius_range[1]/radius_range[0]]
         self.affected_targets = []
         self.shock_damage = 30.0    # done once when shockwave hits a target
@@ -33,11 +33,9 @@ class Shockwave (GravityWell):
         self.radius = r
         self.geometry.set_radius(r)
         self.mass = GetMassByRadius(r)
-        #self.size.set_x(self.radius * 2)
-        #self.size.set_y(self.radius * 2)
-        #self.shape.set_size(self.size)
         scale = GetEquivalentValueInRange(r, self.radius_range, self.scale_range)
-        self.node.modifier().set_scale( Vector2D(scale, scale) )
+        for node in self.nodes:
+            node.modifier().set_scale( Vector2D(scale, scale) )
         
     def Update(self, dt):
         self.lifetime += dt

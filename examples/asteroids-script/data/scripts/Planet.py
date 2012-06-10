@@ -1,9 +1,10 @@
 from ugdk.ugdk_math import Vector2D
-from BasicEntity import BasicEntity, window_size
+from BasicEntity import BasicEntity
 from Asteroid import Asteroid
 from Gravity import GravityWell
 from Shockwave import Shockwave
 from Animations import CreateExplosionFromCollision
+import Config
 from random import random, randint, shuffle
 from math import pi
 
@@ -34,7 +35,7 @@ class Planet (BasicEntity):
             # out of the list, so last objects in self.new_objects are created first.
             pos = self.GetPos()
             #print "Planet cracking down..."
-            wave = Shockwave(pos.get_x(), pos.get_y(), 4.0, [self.radius, window_size().Length() * 0.35])
+            wave = Shockwave(pos.get_x(), pos.get_y(), 4.0, [self.radius, Config.gamesize.Length() * 0.35])
             wave.AddIDToIgnoreList(self.id)
             self.new_objects.append(wave)
             #print "Shockwave created"

@@ -27,12 +27,16 @@ class PowerUp (BasicEntity):
         self.wasApplied = False
         self.blink_time = 0.0
 
-        self.textNode = Node()
-        self.textDrawable = Engine_reference().text_manager().GetText(name)
-        self.textNode.set_drawable( self.textDrawable )
-        self.textNode.modifier().set_offset( Vector2D(-self.textDrawable.width()/2.0, 0.0 ) )
-        self.textNode.set_active(False)
-        self.node.AddChild(self.textNode)
+        self.textDrawables = []
+        self.textNodes = []
+        for node in self.nodes:
+            text = Engine_reference().text_manager().GetText(name)
+            textNode = Node(text)
+            textNode.modifier().set_offset( Vector2D(-text.width()/2.0, 0.0 ) )
+            textNode.set_active(False)
+            self.textDrawables.append(text)
+            self.textNodes.append(textNode)
+            node.AddChild(textNode)
 
     def setupCollisionObject(self):
         self.collision_object = CollisionObject(getCollisionManager(), self)  #initialize collision object, second arg is passed to collisionlogic to handle collisions
@@ -60,7 +64,8 @@ class PowerUp (BasicEntity):
             target.ApplyEffect(self.effect)
             self.wasApplied = True
             self.lifetime = 3.0
-            self.textNode.set_active(True)
+            for textNode in self.textNodes:
+                textNode.set_active(True)
             self.node.modifier().set_alpha(0.2)
             self.node.set_active(True)
             #TODO: play powerup sound !
@@ -187,10 +192,11 @@ class ShieldEffect(Effect):
         self.size = Vector2D(self.radius*2, self.radius*2)
         texture_name = "images/shockwave.png"
         texture_obj = Engine_reference().resource_manager().texture_container().Load(texture_name, texture_name)
-        self.shape = TexturedRectangle( texture_obj, self.size )
-        self.shape.set_hotspot(Drawable.CENTER)
-        self.node.set_drawable(self.shape)
-        self.node.modifier().set_alpha(0.5)
+        for node in self.nodes:
+            shape = TexturedRectangle( texture_obj, self.size )
+            shape.set_hotspot(Drawable.CENTER)
+            node.set_drawable(shape)
+            node.modifier().set_alpha(0.5)
 
         self.geometry = Circle(self.radius)
         self.collision_object.set_shape(self.geometry)

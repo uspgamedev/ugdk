@@ -8,42 +8,49 @@ from ugdk.pyramidworks_geometry import Circle
 from Radio import SOUND_PATH
 from BarUI import BarUI
 from random import randint
+import Config
 
 MANAGER = None
 
-def window_size():
-    return Engine_reference().video_manager().video_size()
-    
-    
 def getCollisionManager():
     scene = Engine_reference().CurrentScene()
     #print "Getting COLLISION MANAGER from ", scene
     return scene.collisionManager
 
-
 class EntityInterface (Entity):
     nextID = 1
     def __init__(self, x, y, radius):
-        self.radius = radius  ###
+        self.radius = radius
         self.hud_node = Node()
-        self.node = Node()   ###
+
+        self.node = Node()
         self.node.modifier().set_offset( Vector2D(x,y) )
-        #self.node.thisown = 0
-        self.new_objects = []  ###
-        self.is_destroyed = False ###
-        self.type = str(self.__class__)  ###
+        self.nodes = []
+        for i in range(2):
+            for j in range(2):
+                node = Node()
+                node.modifier().set_offset(Vector2D(Config.gamesize.get_x() * i, Config.gamesize.get_y() * j))
+                self.node.AddChild(node)
+                self.nodes.append(node)
+
+        self.new_objects = []
+        self.is_destroyed = False
+        self.is_collidable = True
+
+        # Calculating Type
+        self.type = str(self.__class__)
         if len(self.type.split("'")) > 1:
             self.type = self.type.split("'")[1]
         self.type = self.type.split(".")[1]
-        #print "CLASS TYPE: ", self.type
+
+        # Get Unique ID
         self.id = EntityInterface.nextID
-        self.is_collidable = True ###
         EntityInterface.nextID += 1
 
     def CheckType(self, typestr):
         return self.type.count(typestr) > 0
 
-    def ClearNewObjects(self): ###
+    def ClearNewObjects(self):
         self.new_objects = []
 
     def GetPos(self):
@@ -56,22 +63,24 @@ class EntityInterface (Entity):
         return 0
 
     def HandleMapBoundaries(self, pos):
-        max = window_size()
+        max = Config.gamesize
+
         # checking for horizontal map boundaries
         if pos.get_x() < 0.0:
             pos.set_x( max.get_x() + pos.get_x() )
         if pos.get_x() > max.get_x():
             pos.set_x( pos.get_x() - max.get_x() )
+
         # checking for vertical map boundaries
         if pos.get_y() < 0.0:
             pos.set_y( max.get_y() + pos.get_y() )
         if pos.get_y() > max.get_y():
             pos.set_y( pos.get_y() - max.get_y() )
             
-    def Update(self, dt): ###
+    def Update(self, dt):
         pass
 
-    def HandleCollision(self, target): ###
+    def HandleCollision(self, target):
         print self.type, " HandleCollision NOT IMPLEMENTED"
         
     def __repr__(self):
@@ -86,17 +95,22 @@ class BasicColLogic(CollisionLogic):
     def Handle(self, data):
         self.entity.HandleCollision(data)
 
-        
+ 
 class BasicEntity (EntityInterface):
     nextID = 1
     def __init__(self, x, y, texture_name, radius, life):
         EntityInterface.__init__(self, x, y, radius)
         self.size = Vector2D(self.radius*2, self.radius*2)
         texture_obj = Engine_reference().resource_manager().texture_container().Load(texture_name, texture_name)
-        self.shape = TexturedRectangle( texture_obj, self.size )
-        self.shape.set_hotspot(Drawable.CENTER)
-        #self.shape.thisown = 0
-        self.node.set_drawable(self.shape)
+
+        self.shapes = []
+        for node in self.nodes:
+            shape = TexturedRectangle( texture_obj, self.size )
+            shape.set_hotspot(Drawable.CENTER)
+            self.shapes.append(shape)
+            node.set_drawable(shape)
+
+        self.shape = self.shapes[0]
         self.velocity = Vector2D(0.0, 0.0)
         self.max_velocity = 5000.0 #length of the maximum velocity - the entity can't achieve a velocity with length greater than this by whatever means
         self.last_velocity = None

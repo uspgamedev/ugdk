@@ -26,7 +26,9 @@ class Asteroid (BasicEntity):
         r = Asteroid.GetActualRadius(size_factor)
         hp = 120 * size_factor
         BasicEntity.__init__(self, x, y, "images/asteroid%s.png" % (randint(1,3)), r, hp)
-        self.node.modifier().set_rotation( random() * 2 * pi )
+        angle = random() * 2 * pi
+        for node in self.nodes:
+            node.modifier().set_rotation( angle )
         self.has_splitted = False
         self.mass = 1000.0 + 100000000*size_factor
         self.collidedWithAsteroids = []
