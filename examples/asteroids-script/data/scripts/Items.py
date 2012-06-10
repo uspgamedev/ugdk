@@ -192,10 +192,11 @@ class ShieldEffect(Effect):
         self.size = Vector2D(self.radius*2, self.radius*2)
         texture_name = "images/shockwave.png"
         texture_obj = Engine_reference().resource_manager().texture_container().Load(texture_name, texture_name)
-        self.shape = TexturedRectangle( texture_obj, self.size )
-        self.shape.set_hotspot(Drawable.CENTER)
-        self.node.set_drawable(self.shape)
-        self.node.modifier().set_alpha(0.5)
+        for node in self.nodes:
+            shape = TexturedRectangle( texture_obj, self.size )
+            shape.set_hotspot(Drawable.CENTER)
+            node.set_drawable(shape)
+            node.modifier().set_alpha(0.5)
 
         self.geometry = Circle(self.radius)
         self.collision_object.set_shape(self.geometry)

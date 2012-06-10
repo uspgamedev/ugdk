@@ -281,7 +281,7 @@ class ShockBomb(Weapon):
     def Toggle(self, active, dt):
         if active and self.can_shoot:
             self.can_shoot = False
-            mouse_dir = Engine_reference().input_manager().GetMousePosition() - self.parent.GetPos()
+            mouse_dir = Engine_reference().input_manager().GetMousePosition() - (Engine_reference().video_manager().video_size() * 0.5)
             mouse_dir = mouse_dir.Normalize()
             return self.Shoot(mouse_dir)
         elif not active:
