@@ -65,7 +65,8 @@ class StatsUI:
         self.node.modifier().set_offset( Vector2D(x,y) )
         
         self.texts = []
-        self.stringsFunctions = [self.GetLivesText, self.GetDifficultyText, self.GetPointsText]
+        self.stringsFunctions = [self.GetLivesText, self.GetDifficultyText,
+                                    self.GetPointsText, self.GetShipPosition, self.GetShipHudPosition]
         self.strings = [f() for f in self.stringsFunctions]
         for i in range(len(self.strings)):
             self.texts.append( Engine_reference().text_manager().GetText(self.strings[i]) )
@@ -83,6 +84,20 @@ class StatsUI:
 
     def GetPointsText(self):
         return "Points: %d" % (self.managerScene.points)
+
+    def GetShipPosition(self):
+        try:
+            pos = Engine_reference().CurrentScene().GetHero().GetPos()
+            return "Ship Position: %.1f; %.1f" % (pos.get_x(), pos.get_y())
+        except:
+            return ""
+    
+    def GetShipHudPosition(self):
+        try:
+            pos = Engine_reference().CurrentScene().GetHero().hud_node.modifier().offset()
+            return "Ship Hud Position: %.1f; %.1f" % (pos.get_x(), pos.get_y())
+        except:
+            return ""
 
     def Update(self):
         for i in range(len(self.stringsFunctions)):

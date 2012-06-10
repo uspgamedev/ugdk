@@ -84,7 +84,7 @@ class Ship (BasicEntity):
     def CheckCommands(self, dt):
         input = Engine_reference().input_manager()
 
-        mouse_dir = input.GetMousePosition() - self.node.modifier().offset()
+        mouse_dir = input.GetMousePosition() - Engine_reference().video_manager().video_size() * 0.5 #self.node.modifier().offset()
         mouse_dir = mouse_dir.Normalize()
         self.node.modifier().set_rotation( mouse_dir.Angle() - 3*pi/2.0 )
         accel = Vector2D(0.0, 0.0)
