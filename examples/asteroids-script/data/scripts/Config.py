@@ -17,7 +17,7 @@ language = "en_US"
 ##################################
 
 # PowerUps
-gamesize = Vector2D(1000.0, 1000.0)
+gamesize = Vector2D(2000.0, 2000.0)
 repairChance = 30.0    # the <powerUpType>Chance variables should sum up to 100.0
 pulseChance = 10.0
 passiveChance = 20.0

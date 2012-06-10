@@ -101,7 +101,7 @@ class AsteroidsScene (Scene):
         #print "Creating AsteroidsScene"
         maxval = MapGenerator.MAX_ENTITY_SIZE
         mincoords = [-maxval, -maxval]
-        maxcoords = [Config.resolution.get_x() + maxval,  Config.resolution.get_y() + maxval]
+        maxcoords = [Config.gamesize.get_x() + maxval,  Config.gamesize.get_y() + maxval]
         self.collisionManager = CollisionManager( CreateBox2D(mincoords[0], mincoords[1], maxcoords[0], maxcoords[1]) )
         self.objects = []
         self.colliding_objects = []
