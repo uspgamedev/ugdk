@@ -16,25 +16,40 @@ class BarUI:
         self.offset = offset
         self.offset.set_y( offset.get_y() + BAR_HEIGHT)
 
-        self.back_shape = SolidRectangle( Vector2D(entity.size.get_x(), BAR_HEIGHT) )
-        self.back_shape.set_color( Color(0.0, 0.0, 0.0, 0.5) )
-        self.back_shape.set_hotspot(Drawable.CENTER)
-        #self.back_shape.thisown = 0
-        self.back_node = Node( self.back_shape )
-        #self.back_node.thisown = 0
-
-        self.shape = SolidRectangle( Vector2D(entity.size.get_x(), BAR_HEIGHT) )
-        self.shape.set_color( color )
-        self.shape.set_hotspot(Drawable.CENTER)
-        #self.shape.thisown = 0
-        self.bar_node = Node( self.shape )
-        #self.bar_node.thisown = 0
-
         self.node = Node()
-        self.node.modifier().set_offset(  self.offset )
+        self.node.modifier().set_offset( self.offset )
         self.node.thisown = 0
-        self.node.AddChild(self.back_node)
-        self.node.AddChild(self.bar_node)
+
+        self.nodes = []
+        for i in range(2):
+            for j in range(2):
+                import Config
+
+                node = Node()
+                node.modifier().set_offset(Vector2D(Config.gamesize.get_x() * i, Config.gamesize.get_y() * j))
+                self.node.AddChild(node)
+                self.nodes.append(node)
+
+        self.back_shapes = []
+        self.back_nodes = []
+        self.shapes = []
+        self.bar_nodes = []
+        for node in self.nodes:
+            back_shape = SolidRectangle( Vector2D(entity.size.get_x(), BAR_HEIGHT) )
+            back_shape.set_color( Color(0.0, 0.0, 0.0, 0.5) )
+            back_shape.set_hotspot(Drawable.CENTER)
+            back_node = Node( back_shape )
+            node.AddChild(back_node)
+            self.back_shapes.append(back_shape)
+            self.back_nodes.append(back_node)
+
+            shape = SolidRectangle( Vector2D(entity.size.get_x(), BAR_HEIGHT) )
+            shape.set_color( color )
+            shape.set_hotspot(Drawable.CENTER)
+            bar_node = Node( shape )
+            node.AddChild(bar_node)
+            self.shapes.append(shape)
+            self.bar_nodes.append(bar_node)
 
         self.type = str(self.__class__)
 
@@ -45,7 +60,8 @@ class BarUI:
             if current <= 0:    current = 0
             size = current * self.entity.size.get_x() / max
             scale = size / self.entity.size.get_x()  # I know this is redundant, by I prefer it in this case to be more verbose
-            self.bar_node.modifier().set_scale( Vector2D(scale, 1.0) )
+            for bar_node in self.bar_nodes:
+                bar_node.modifier().set_scale( Vector2D(scale, 1.0) )
 
     def __repr__(self):
         return "<%s of entity %s>" % (self.type, self.entity)

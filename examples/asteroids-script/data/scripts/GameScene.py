@@ -244,8 +244,8 @@ class AsteroidsScene (Scene):
             if pos.get_y() < Config.gamesize.get_y() * 0.5:
                 pos.set_y(pos.get_y() + Config.gamesize.get_y())
             self.content_node().modifier().set_offset(-pos + video_size * 0.5)
-            
-            self.hud.modifier().set_offset(-self.hero.GetPos() + video_size * 0.5)
+            #self.hud.modifier().set_offset(-self.hero.GetPos() + video_size * 0.5)
+            self.hud.modifier().set_offset(-pos + video_size * 0.5)
         
     def CheckCommands(self):
         input = Engine_reference().input_manager()

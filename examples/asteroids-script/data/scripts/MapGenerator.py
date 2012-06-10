@@ -112,10 +112,10 @@ def GetBackgroundSingleNode(i):
     botright.modifier().set_scale(Vector2D(-1.0, -1.0))
     botright.modifier().set_offset(Config.gamesize)
 
-    #fullnode.AddChild(topleft)
+    fullnode.AddChild(topleft)
     fullnode.AddChild(topright)
     fullnode.AddChild(botleft)
-    #fullnode.AddChild(botright)
+    fullnode.AddChild(botright)
 
     return fullnode
 

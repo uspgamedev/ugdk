@@ -109,9 +109,6 @@ class BasicEntity (EntityInterface):
                 self.nodes.append(node)
 
         self.shape = self.shapes[0]
-        #self.shape = TexturedRectangle( texture_obj, self.size )
-        #self.shape.set_hotspot(Drawable.CENTER)
-        #self.node.set_drawable(self.shape)
         self.velocity = Vector2D(0.0, 0.0)
         self.max_velocity = 5000.0 #length of the maximum velocity - the entity can't achieve a velocity with length greater than this by whatever means
         self.last_velocity = None
