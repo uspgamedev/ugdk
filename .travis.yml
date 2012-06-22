@@ -6,3 +6,6 @@ before_script:
   - sudo mv boost_1_49_0/boost /usr/local/include
   - cmake .
 script: "make"
+notifications:
+  email:
+      - uspgamedev@googlegroups.com
