@@ -90,7 +90,7 @@ void Modifier::ComposeColor(const Color& color) {
 }
 
 void Modifier::ComposeRotation(const double rotation) {
-    rotation_ *= fmod(rotation,TWO_PI);
+    rotation_ += fmod(rotation,TWO_PI);
     flags_ |= HAS_TRANSFORMATION;
 }
 
