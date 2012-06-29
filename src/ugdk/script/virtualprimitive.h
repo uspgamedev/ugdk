@@ -23,9 +23,9 @@ class VirtualPrimitive { private: VirtualPrimitive() {} };
 template <class T>
 class VirtualPrimitive<T*> {
   public:
-    static T* value(const VirtualData::Ptr data) {
+    static T* value(const VirtualData::Ptr data, bool disown) {
         return static_cast <T*> (
-            data->Unwrap(TypeRegistry<T>::type())
+            data->Unwrap(TypeRegistry<T>::type(), disown)
         );
     }
     static void set_value(const VirtualData::Ptr data, T* value) {
@@ -39,7 +39,7 @@ class VirtualPrimitive<T*> {
     template <> \
     class VirtualPrimitive<type> { \
       public: \
-        static type value(const VirtualData::Ptr data) { \
+        static type value(const VirtualData::Ptr data, bool disown) { \
             return static_cast<type>(data->Unwrap##name()); \
         } \
         static void set_value(const VirtualData::Ptr data, type value) { \

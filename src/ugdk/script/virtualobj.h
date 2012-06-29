@@ -51,8 +51,8 @@ class VirtualObj {
 	~VirtualObj() {}
 
 	template <class T>
-	T value() const {
-	    return VirtualPrimitive<T>::value(data_);
+	T value(bool disown = false) const {
+	    return VirtualPrimitive<T>::value(data_, disown);
 	}
 
 	template <class T>
@@ -168,17 +168,17 @@ T ConvertTable (const U& data_map) {
 }
 
 template <>
-inline VirtualObj::List VirtualObj::value<VirtualObj::List>() const {
+inline VirtualObj::List VirtualObj::value<VirtualObj::List>(bool disown) const {
     return ConvertSequence<List>(data_->UnwrapList());
 }
 
 template <>
-inline VirtualObj::Vector VirtualObj::value<VirtualObj::Vector>() const {
+inline VirtualObj::Vector VirtualObj::value<VirtualObj::Vector>(bool disown) const {
     return ConvertSequence<Vector>(data_->UnwrapVector());
 }
 
 template <>
-inline VirtualObj::Map VirtualObj::value<VirtualObj::Map>() const {
+inline VirtualObj::Map VirtualObj::value<VirtualObj::Map>(bool disown) const {
     return ConvertTable<Map>(data_->UnwrapMap());
 }
 

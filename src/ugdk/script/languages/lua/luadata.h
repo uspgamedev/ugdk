@@ -22,7 +22,7 @@ class LuaData : public VirtualData {
 
     ~LuaData();
 
-    void* Unwrap(const VirtualType& type) const;
+    void* Unwrap(const VirtualType& type, bool disown) const;
     const char* UnwrapString() const;
     bool UnwrapBoolean() const;
     int UnwrapInteger() const;
