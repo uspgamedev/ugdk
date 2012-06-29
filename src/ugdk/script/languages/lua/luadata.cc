@@ -19,11 +19,12 @@ LuaData::~LuaData() {
             .NoResult();
 }
 
-void* LuaData::Unwrap(const VirtualType& type) const {
+void* LuaData::Unwrap(const VirtualType& type, bool disown) const {
     return wrapper_->data_gear()
         .SafeCall(DataGear::UnwrapData)
         .Arg(id_)
         .Arg(type.FromLang(LANG(Lua)))
+        .Arg(static_cast<int>(disown))
         .GetResult<UData>(NULL);
 }
 
