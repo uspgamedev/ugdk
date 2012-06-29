@@ -41,6 +41,7 @@ SET(UGDK_SRC
     ./src/ugdk/util/gdd/reader.cc 
     ./src/ugdk/util/language.cc 
     ./src/ugdk/util/languagemanager.cc 
+    ./src/ugdk/util/idgenerator.cc
     ./src/ugdk/util/pathmanager.cc 
     ./src/ugdk/util/utf8.cc 
 )
