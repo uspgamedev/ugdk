@@ -2,8 +2,9 @@
 #define UGDK_ACTION_H_
 
 namespace ugdk {
-namespace action{
+namespace action {
 
+class Animation;
 class AnimationManager;
 class AnimationSet;
 class Scene;
