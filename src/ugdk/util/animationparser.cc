@@ -3,6 +3,7 @@
 #include <ugdk/util/animationparser.h>
 #include <ugdk/action/animation.h>
 #include <ugdk/action/animationset.h>
+#include <ugdk/action/animationframe.h>
 
 namespace ugdk {
 

@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <ugdk/action/animationset.h>
 #include <ugdk/action/animation.h>
+#include <ugdk/action/animationframe.h>
 
 #define ANIMATION_BUFFER_SIZE 256
 

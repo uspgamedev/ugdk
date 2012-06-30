@@ -1,17 +1,19 @@
-#ifndef HORUSEYE_FRAMEWORK_ANIMATION_H_
-#define HORUSEYE_FRAMEWORK_ANIMATION_H_
+#ifndef UGDK_ACTION_ANIMATION_H_
+#define UGDK_ACTION_ANIMATION_H_
 
 #include <vector>
 #include <string>
 #include <functional>
-#include <ugdk/graphic/modifier.h>
-#include <ugdk/action/animationframe.h>
+#include <ugdk/action.h>
+#include <ugdk/graphic.h>
+#include <ugdk/action/animationframe.h> // FIXME: not necessary.
+
 
 #define DEFAULT_PERIOD 0.1
 
 namespace ugdk {
 
-namespace action{
+namespace action {
 
 class Observer;
 class AnimationSet;
@@ -41,20 +43,14 @@ class AnimationManager {
     void set_speedup_factor(const double factor) { set_slowdown_factor(1.0/factor); }
 
     //Note: try to use period() instead whenever you can.
-    double    fps() const { return 1.0/(period_scaling_factor_*current_animation_->period()); }
-    double period() const { return period_scaling_factor_*current_animation_->period(); }
-    unsigned int n_frames() const { return static_cast<unsigned int>(current_animation_->size()); }
+    double    fps() const;
+    double period() const;
+    unsigned int n_frames() const;
 
-    int GetFrame();
-    void set_default_frame(int default_frame) {
-        default_frame_ = default_frame;
-    }
-    const graphic::Modifier* get_current_modifier() const {
-        return current_animation_
-                ? current_animation_->at(current_frame_)->modifier()
-                : NULL;
-    }
-    void Select(std::string name);
+    int GetFrame() const;
+    void set_default_frame(int default_frame) { default_frame_ = default_frame; }
+    const graphic::Modifier* get_current_modifier() const;
+    void Select(const std::string& name);
     void Select(int index);
     void Update(double delta_t);
     void AddObserver(Observer* observer);
@@ -78,6 +74,7 @@ class AnimationManager {
 } /* namespace action */
 
 } /* namespace ugdk */
-#endif
+
+#endif /* UGDK_ACTION_ANIMATION_H_ */
 
 

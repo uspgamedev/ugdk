@@ -2,6 +2,7 @@
 #include <string>
 #include <algorithm>
 #include <ugdk/util/animationprotocol.h>
+#include <ugdk/action/animationframe.h>
 
 #define DEFAULT_FRAME 0
 #define DEG_TO_RAD_FACTOR 0.00872664626
