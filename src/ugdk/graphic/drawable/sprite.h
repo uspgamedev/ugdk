@@ -19,7 +19,7 @@ class Sprite : public Drawable {
     
     /// Change the current animation to a new animation from the previously selected AnimationSet.
     /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/
-    void SelectAnimation(std::string animation_name) {
+    void SelectAnimation(const std::string& animation_name) {
         animation_manager_->Select(animation_name);
     }
     /// Change the current animation to a new animation from the previously selected AnimationSet.
