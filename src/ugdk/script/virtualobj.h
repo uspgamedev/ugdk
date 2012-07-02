@@ -6,6 +6,7 @@
 #include <ugdk/script/type.h>
 #include <ugdk/script/langwrapper.h>
 #include <ugdk/script/virtualprimitive.h>
+#include <ugdk/util/uncopyable.h>
 
 #include <list>
 #include <vector>
@@ -181,7 +182,7 @@ inline VirtualObj::Map VirtualObj::value<VirtualObj::Map>(bool disown) const {
     return ConvertTable<Map>(data_->UnwrapMap());
 }
 
-class Bind {
+class Bind : public util::Uncopyable {
   public:
     Bind(VirtualObj& obj, const std::string& method_name) :
         obj_(obj),

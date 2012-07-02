@@ -1,11 +1,12 @@
 #ifndef UGDK_ACTION_TASK_H_
 #define UGDK_ACTION_TASK_H_
 
-namespace ugdk {
+#include <ugdk/util/uncopyable.h>
 
+namespace ugdk {
 namespace action {
 
-class Task {
+class Task : public util::Uncopyable {
   public:
     Task() : finished_(false), priority_(0) {}
     Task(int priority) : finished_(false), priority_(priority) {}

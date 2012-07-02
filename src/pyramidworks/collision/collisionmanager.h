@@ -7,13 +7,14 @@
 #include <ugdk/util/intervalkdtree.h>
 #include <pyramidworks/collision.h>
 #include <ugdk/action.h>
+#include <ugdk/util/uncopyable.h>
 
 namespace pyramidworks {
 namespace collision {
 
 /// \class CollisionManager collisionmanager.h "pyramidworks/collision/collisionmanager.h"
 /// A singleton that manages all collisions.
-class CollisionManager {
+class CollisionManager : public ugdk::util::Uncopyable {
   public:
     CollisionManager(const ugdk::ikdtree::Box<2>& tree_bounding_box);
     ~CollisionManager();
