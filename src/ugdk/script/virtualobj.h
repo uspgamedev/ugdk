@@ -182,7 +182,7 @@ inline VirtualObj::Map VirtualObj::value<VirtualObj::Map>(bool disown) const {
     return ConvertTable<Map>(data_->UnwrapMap());
 }
 
-class Bind : public util::Uncopyable {
+class Bind {
   public:
     Bind(VirtualObj& obj, const std::string& method_name) :
         obj_(obj),
@@ -223,7 +223,8 @@ inline TempList VirtualObj::operator,(const VirtualObj& rhs) const {
 }
 
 inline Bind VirtualObj::operator|(const std::string& method_name) {
-    return Bind(*this, method_name);
+	Bind result(*this, method_name);
+	return result;
 }
 
 } /* namespace script */
