@@ -8,4 +8,4 @@ before_script:
 script: "make"
 notifications:
   email:
-      - uspgamedev@googlegroups.com
+      - travis@uspgamedev.org
