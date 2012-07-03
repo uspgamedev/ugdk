@@ -47,17 +47,17 @@ if (COMMAND set_up_hermetic_build)
 endif()
 
 # Define helper functions and macros used by Google Test.
-include(cmake/internal_utils.cmake)
+include(test/cmake/internal_utils.cmake)
 
 config_compiler_and_linker()  # Defined in internal_utils.cmake.
 
 # Where Google Test's .h files can be found.
 include_directories(
-  ${gtest_SOURCE_DIR}/include
-  ${gtest_SOURCE_DIR})
+  ${gtest_SOURCE_DIR}/test/include
+  ${gtest_SOURCE_DIR}/test)
 
 # Where Google Test's libraries can be found.
-link_directories(${gtest_BINARY_DIR}/src)
+link_directories(${gtest_BINARY_DIR}/test)
 
 ########################################################################
 #
@@ -67,8 +67,8 @@ link_directories(${gtest_BINARY_DIR}/src)
 # Google Test libraries.  We build them using more strict warnings than what
 # are used for other targets, to ensure that gtest can be compiled by a user
 # aggressive about warnings.
-cxx_library(gtest "${cxx_strict}" src/gtest-all.cc)
-cxx_library(gtest_main "${cxx_strict}" src/gtest_main.cc)
+cxx_library(gtest "${cxx_strict}" test/src/gtest-all.cc)
+cxx_library(gtest_main "${cxx_strict}" test/src/gtest_main.cc)
 target_link_libraries(gtest_main gtest)
 
 ########################################################################
@@ -79,15 +79,4 @@ target_link_libraries(gtest_main gtest)
 # gtest_build_samples option to ON.  You can do it by running ccmake
 # or specifying the -Dbuild_gtest_samples=ON flag when running cmake.
 
-if (gtest_build_samples)
-  cxx_executable(sample1_unittest samples gtest_main samples/sample1.cc)
-  cxx_executable(sample2_unittest samples gtest_main samples/sample2.cc)
-  cxx_executable(sample3_unittest samples gtest_main)
-  cxx_executable(sample4_unittest samples gtest_main samples/sample4.cc)
-  cxx_executable(sample5_unittest samples gtest_main samples/sample1.cc)
-  cxx_executable(sample6_unittest samples gtest_main)
-  cxx_executable(sample7_unittest samples gtest_main)
-  cxx_executable(sample8_unittest samples gtest_main)
-  cxx_executable(sample9_unittest samples gtest)
-  cxx_executable(sample10_unittest samples gtest)
-endif()
+cxx_executable(ugdktest test/test "gtest_main ${FRAMEWORK_RELEASE}")

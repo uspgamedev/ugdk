@@ -98,6 +98,8 @@ if (SWIG_FOUND)
   ugdk_setup_package (PythonLibs)
 endif (SWIG_FOUND)
 
+include ("test/CMakeLists.txt")
+
 include_directories ("src/kits")
 include_directories ("externals/opengl")
 
