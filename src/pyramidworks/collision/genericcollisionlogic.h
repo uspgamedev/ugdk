@@ -1,7 +1,8 @@
 #ifndef PYRAMIDWORKS_COLLISION_GENERICCOLLISIONLOGIC_H_
 #define PYRAMIDWORKS_COLLISION_GENERICCOLLISIONLOGIC_H_
 
-#include <functional>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 #include <pyramidworks/collision/collisionlogic.h>
 
 namespace pyramidworks {

@@ -1,7 +1,8 @@
 #ifndef UGDK_ACTION_SCENE_H_
 #define UGDK_ACTION_SCENE_H_
 
-#include <functional>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 #include <list>
 #include <queue>
 #include <map>

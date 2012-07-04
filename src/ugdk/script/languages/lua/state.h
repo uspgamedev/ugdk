@@ -7,7 +7,8 @@
 #include <cstdlib>
 #include <cstdio>
 
-#include <functional>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 
 #include <ugdk/script/languages/lua/header.h>
 #include <ugdk/script/languages/lua/defs.h>

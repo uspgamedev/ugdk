@@ -2,7 +2,8 @@
 #define UGDK_UI_MENU_H_
 
 #include <string>
-#include <functional>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 #include <map>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/action.h>

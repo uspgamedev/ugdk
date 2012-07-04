@@ -3,7 +3,8 @@
 #define UGDK_SCRIPT_LUA_BASEGEAR_H_
 
 #include <vector>
-#include <tuple>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(tuple)
 
 #include <ugdk/script/languages/lua/header.h>
 #include <ugdk/script/languages/lua/state.h>
