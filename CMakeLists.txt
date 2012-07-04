@@ -94,7 +94,6 @@ if (SWIG_FOUND)
   ugdk_setup_package (PythonLibs)
 endif (SWIG_FOUND)
 
-include_directories ("src/kits")
 include_directories ("externals/opengl")
 
 # Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
@@ -153,7 +152,7 @@ set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAM
 if (PYTHONLIBS_FOUND)
   include (cmake/asteroids.cmake)
 endif (PYTHONLIBS_FOUND)
-include ("test/CMakeLists.txt")
+include (cmake/gtest.cmake)
 
 # Installing on *nix
 #if (UNIX)
