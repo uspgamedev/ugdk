@@ -1,7 +1,8 @@
 *~
 .*.swp
-CMake*
 !CMakeLists.txt
+CMakeCache.txt
+CMakeFiles/
 Makefile
 cmake_install.cmake
 src/ugdk/config/config.h
