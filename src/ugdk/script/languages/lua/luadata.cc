@@ -1,6 +1,7 @@
 
 #include <algorithm>
-#include <functional>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 
 #include <ugdk/script/languages/lua/luadata.h>
 #include <ugdk/script/languages/lua/datagear.h>

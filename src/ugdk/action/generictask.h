@@ -1,7 +1,8 @@
 #ifndef UGDK_ACTION_GENERICTASK_H_
 #define UGDK_ACTION_GENERICTASK_H_
 
-#include <functional>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 #include <ugdk/action/task.h>
 
 namespace ugdk {

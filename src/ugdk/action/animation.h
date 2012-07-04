@@ -3,7 +3,8 @@
 
 #include <vector>
 #include <string>
-#include <functional>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/action/animationframe.h> // FIXME: not necessary.

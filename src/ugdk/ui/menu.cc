@@ -1,5 +1,5 @@
+
 #include <vector>
-#include <functional>
 #include <algorithm>
 
 #include <ugdk/ui/menu.h>

@@ -56,9 +56,9 @@ endif ()
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 if (UNIX OR MINGW)
     # se for o g++ para *nix ou o MinGW para Windows:
-    add_definitions(-Wall -ansi -U_FORTIFY_SOURCE -msse2)
+    add_definitions(-Wall -ansi -U_FORTIFY_SOURCE -msse2 -DBOOST_HAS_TR1_TUPLE)
 elseif (MSVC) 
-    add_definitions(/D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast /MP)
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /DBOOST_HAS_TR1_TUPLE /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast /MP)
 endif ()
 if(WIN32)
     add_definitions(-DWIN32)
@@ -88,17 +88,12 @@ include_directories(${SDLTTF_INCLUDE_DIR})
 find_package(SDL_image REQUIRED)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
-find_package(Boost 1.48.0 REQUIRED)
-include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
-include_directories(${Boost_INCLUDE_DIRS})
-
 ugdk_setup_package (SWIG)
 if (SWIG_FOUND)
   ugdk_setup_package (Lua51)
   ugdk_setup_package (PythonLibs)
 endif (SWIG_FOUND)
 
-include_directories ("src/kits")
 include_directories ("externals/opengl")
 
 # Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
@@ -157,6 +152,7 @@ set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAM
 if (PYTHONLIBS_FOUND)
   include (cmake/asteroids.cmake)
 endif (PYTHONLIBS_FOUND)
+include (cmake/gtest.cmake)
 
 # Installing on *nix
 #if (UNIX)

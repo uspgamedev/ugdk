@@ -9,7 +9,7 @@
 #include <vector>
 #include <list>
 #include <map>
-#include <functional>
+#include FROM_TR1(functional)
 
 #include <ugdk/base/types.h>
 #include <ugdk/script/type.h>

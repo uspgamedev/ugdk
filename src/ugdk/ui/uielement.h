@@ -1,7 +1,9 @@
+
 #ifndef UGDK_UI_UIELEMENT_H_
 #define UGDK_UI_UIELEMENT_H_
 
-#include <functional>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 #include <string>
 
 #include <ugdk/util.h>
