@@ -57,7 +57,7 @@ include_directories(
   ${gtest_SOURCE_DIR}/test)
 
 # Where Google Test's libraries can be found.
-link_directories(${gtest_BINARY_DIR}/test)
+link_directories(${gtest_BINARY_DIR}/test/src)
 
 ########################################################################
 #
