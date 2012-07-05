@@ -152,7 +152,7 @@ set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAM
 if (PYTHONLIBS_FOUND)
   include (cmake/asteroids.cmake)
 endif (PYTHONLIBS_FOUND)
-include (cmake/gtest.cmake)
+subdirs (test)
 
 # Installing on *nix
 #if (UNIX)
