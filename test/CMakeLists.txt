@@ -76,4 +76,16 @@ target_link_libraries(gtest_main gtest)
 # gtest_build_samples option to ON.  You can do it by running ccmake
 # or specifying the -Dbuild_gtest_samples=ON flag when running cmake.
 
-cxx_executable(ugdktest src "gtest_main;${FRAMEWORK_RELEASE}")
+if(MSVC)
+    SET(CMAKE_EXE_LINKER_FLAGS /NODEFAULTLIB:libcmtd.lib)
+endif()
+
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "" )
+# Second, for multi-config builds (e.g. msvc)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "" )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+
+
+cxx_executable(test src "gtest_main;${FRAMEWORK_RELEASE}")
