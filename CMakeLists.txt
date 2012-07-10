@@ -1,4 +1,3 @@
-﻿
 # Requires CMake 2.8 or newer.
 cmake_minimum_required (VERSION 2.8)
 
