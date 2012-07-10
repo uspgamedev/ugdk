@@ -1,4 +1,4 @@
-
+﻿
 # Requires CMake 2.8 or newer.
 cmake_minimum_required (VERSION 2.8)
 
@@ -149,9 +149,6 @@ set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAMEWORK_DEBUG}")
 
-if (PYTHONLIBS_FOUND)
-  include (cmake/asteroids.cmake)
-endif (PYTHONLIBS_FOUND)
 include (cmake/gtest.cmake)
 
 # Installing on *nix
