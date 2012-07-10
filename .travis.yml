@@ -5,7 +5,7 @@ before_script:
   - tar xf boost_1_49_0.tar.gz
   - sudo mv boost_1_49_0/boost /usr/local/include
   - cmake .
-script: "make"
+script: "make test && ./test/test"
 notifications:
   email:
       - travis@uspgamedev.org

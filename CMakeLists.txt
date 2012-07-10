@@ -149,7 +149,7 @@ set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAMEWORK_DEBUG}")
 
-include (cmake/gtest.cmake)
+subdirs (test)
 
 # Installing on *nix
 #if (UNIX)

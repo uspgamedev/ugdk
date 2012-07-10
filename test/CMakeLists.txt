@@ -14,7 +14,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 option(
   gtest_force_shared_crt
   "Use shared (DLL) run-time lib even when Google Test is built as static lib."
-  OFF)
+  ON)
 
 option(gtest_build_tests "Build all of gtest's own tests." OFF)
 
@@ -32,6 +32,8 @@ endif()
 ########################################################################
 #
 # Project-wide settings
+project(gtest CXX C)
+cmake_minimum_required(VERSION 2.6.2)
 
 # Name of the project.
 #
@@ -44,17 +46,15 @@ if (COMMAND set_up_hermetic_build)
 endif()
 
 # Define helper functions and macros used by Google Test.
-include(cmake/gtest_internal_utils.cmake)
+include(internal_utils.cmake)
 
 config_compiler_and_linker()  # Defined in internal_utils.cmake.
 
 # Where Google Test's .h files can be found.
-include_directories(
-  "externals/include"
-  "externals")
+include_directories("gtest" "${gtest_BINARY_DIR}")
 
 # Where Google Test's libraries can be found.
-link_directories(${gtest_BINARY_DIR}/test/gtest_src)
+link_directories(${gtest_BINARY_DIR}/gtest_src)
 
 ########################################################################
 #
@@ -64,8 +64,8 @@ link_directories(${gtest_BINARY_DIR}/test/gtest_src)
 # Google Test libraries.  We build them using more strict warnings than what
 # are used for other targets, to ensure that gtest can be compiled by a user
 # aggressive about warnings.
-cxx_library(gtest "${cxx_strict}" test/gtest_src/gtest-all.cc)
-cxx_library(gtest_main "${cxx_strict}" test/gtest_src/gtest_main.cc)
+cxx_library(gtest "${cxx_strict}" gtest_src/gtest-all.cc)
+cxx_library(gtest_main "${cxx_strict}" gtest_src/gtest_main.cc)
 target_link_libraries(gtest_main gtest)
 
 ########################################################################
@@ -76,4 +76,16 @@ target_link_libraries(gtest_main gtest)
 # gtest_build_samples option to ON.  You can do it by running ccmake
 # or specifying the -Dbuild_gtest_samples=ON flag when running cmake.
 
-cxx_executable(ugdktest test/src "gtest_main;${FRAMEWORK_RELEASE}")
+if(MSVC)
+    SET(CMAKE_EXE_LINKER_FLAGS /NODEFAULTLIB:libcmtd.lib)
+endif()
+
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "" )
+# Second, for multi-config builds (e.g. msvc)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "" )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+
+
+cxx_executable(test src "gtest_main;${FRAMEWORK_RELEASE}")

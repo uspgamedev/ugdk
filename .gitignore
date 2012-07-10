@@ -16,11 +16,12 @@ src/ugdk/config/config.h
 /deploy
 /Release
 /Debug
-/*.dir
-/*.filters
+*.dir
+*.filters
 *.opensdf
-/*.sln
-/*.vcxproj
+*.sln
+*.vcxproj
+/test/lib
 doc/doxy
 src/generated/*_wrap.cc
 src/generated/*.py
