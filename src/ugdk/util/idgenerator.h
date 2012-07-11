@@ -1,7 +1,7 @@
 #ifndef HORUSEYE_FRAMEWORK_IDGENERATOR_H_
 #define HORUSEYE_FRAMEWORK_IDGENERATOR_H_
 
-#include <list>
+#include <unordered_set>
 
 #include <ugdk/util/uncopyable.h>
 
@@ -18,11 +18,11 @@ class IdGenerator : public Uncopyable {
     int Id();
     int RemoveId(int id);
   private:
-    int             current_id_;
-    const int       min_id_,
-                    max_id_,
-                    error_value_;
-    std::list<int>  unused_ids_;
+    int                     current_id_;
+    const int               min_id_,
+                            max_id_,
+                            error_value_;
+    std::unordered_set<int> unused_ids_;
 };
 
 } // namespace util
