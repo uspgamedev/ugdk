@@ -9,11 +9,7 @@ namespace ugdk {
 namespace util {
 class IdGenerator : public Uncopyable {
   public:
-	  IdGenerator(int min_id, int max_id, int error_value) :
-	    current_id_(min_id),
-	    min_id_(min_id),
-	    max_id_(max_id),
-	    error_value_(error_value)  {}
+	  IdGenerator(int min_id, int max_id, int error_value);
     ~IdGenerator() {}
     /// Generate a new id.
     /** @return The new unique id. */
