@@ -197,6 +197,8 @@ class Bind {
         return obj_[method_name_]((obj_, args));
     }
   private:
+    Bind& operator=(Bind&); // Bind cannot be copied.
+
     VirtualObj&   obj_;
     VirtualObj    method_name_;
 };
@@ -223,8 +225,8 @@ inline TempList VirtualObj::operator,(const VirtualObj& rhs) const {
 }
 
 inline Bind VirtualObj::operator|(const std::string& method_name) {
-	Bind result(*this, method_name);
-	return result;
+    Bind result(*this, method_name);
+    return result;
 }
 
 } /* namespace script */
