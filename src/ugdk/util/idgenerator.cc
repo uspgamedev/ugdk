@@ -5,7 +5,7 @@ namespace util {
 
 using std::unordered_set;
 
-IdGenerator(int min_id, int max_id, int error_value) :
+IdGenerator::IdGenerator(int min_id, int max_id, int error_value) :
     current_id_(min_id),
 	  min_id_(min_id),
 	  max_id_(max_id),
@@ -15,6 +15,7 @@ IdGenerator(int min_id, int max_id, int error_value) :
       printf("UGDK - IdGenerator\n");
       printf("The min_id is greater than the max_id"); 
       printf("(%d > %d)\n", min_id, max_id);
+    }
 #endif
 }
 
