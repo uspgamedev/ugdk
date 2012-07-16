@@ -147,7 +147,7 @@ endfunction()
 # creates a named C++ executable that depends on the given libraries and
 # is built from the given source files with the given compiler flags.
 function(cxx_executable_with_flags name cxx_flags libs)
-  add_executable(${name} ${ARGN})
+  add_executable(${name} EXCLUDE_FROM_ALL ${ARGN})
   if (cxx_flags)
     set_target_properties(${name}
       PROPERTIES
