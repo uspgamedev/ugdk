@@ -82,12 +82,13 @@ int DataGear::UnwrapData(lua_State* L) {
     GETARG(L_, 1, DataGear, dtgear);
     DataID id = L_.aux().checkintteger(2);
     GETARGPTR(L_, 3, swig_type_info, type);
+    bool disown = L_.aux().checkintteger(4);
     L_.settop(0);
 
     void *data = NULL; // dummy
 
     if (dtgear.GetData(id) &&
-        SWIG_IsOK(SWIG_ConvertPtr(L, -1, &data, type, 0))) {
+        SWIG_IsOK(SWIG_ConvertPtr(L, -1, &data, type, disown ? SWIG_POINTER_DISOWN : 0))) {
         L_.pushudata(data);
     } else L_.pushnil();
 

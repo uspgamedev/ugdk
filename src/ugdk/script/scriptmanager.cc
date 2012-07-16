@@ -43,24 +43,24 @@ void ScriptManager::Finalize() {
 	wrappers_.clear();
 }
 
-void ScriptManager::Register(string name, LangWrapper* wrapper) {
+void ScriptManager::Register(const string& name, LangWrapper* wrapper) {
 	if (wrappers_.count(name)) return;
 	wrappers_[name] = wrapper;
 }
 
-LangWrapper* ScriptManager::GetWrapper(string name) {
+LangWrapper* ScriptManager::GetWrapper(const string& name) {
 	if (!wrappers_.count(name))	return NULL;
 	return wrappers_[name];
 }
 
-void ScriptManager::ExecuteCode(string language, string code) {
+void ScriptManager::ExecuteCode(const string& language, const string& code) {
 	if (!wrappers_.count(language)) return;
 	
 	wrappers_[language]->ExecuteCode(code);
 }
 
 
-VirtualObj ScriptManager::LoadModule(string script) {
+VirtualObj ScriptManager::LoadModule(const string& script) {
 	string filepath = PATH_MANAGER()->ResolvePath(
         "scripts/" + ConvertDottedNotationToPath(script)
     );
@@ -79,7 +79,7 @@ VirtualObj ScriptManager::LoadModule(string script) {
 	return VirtualObj();
 }
 
-bool ScriptManager::CheckIfFileExists(string filepath) {
+bool ScriptManager::CheckIfFileExists(const string& filepath) {
     FILE* file = fopen(filepath.c_str(), "r");
     if (file) {
         fclose(file);

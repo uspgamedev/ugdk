@@ -22,14 +22,14 @@ public:
 	bool Initialize();
 	void Finalize();
 
-	void Register(std::string name, LangWrapper* wrapper);
-	LangWrapper* GetWrapper(std::string name);
+	void Register(const std::string& name, LangWrapper* wrapper);
+	LangWrapper* GetWrapper(const std::string& name);
 
-	void ExecuteCode(std::string language, std::string code);
+	void ExecuteCode(const std::string& language, const std::string& code);
 
-	VirtualObj LoadModule(std::string filepath);
+	VirtualObj LoadModule(const std::string& filepath);
 	
-    bool CheckIfFileExists(std::string filepath);
+    bool CheckIfFileExists(const std::string& filepath);
     
     /// Converts "folder/subfolder/file" (without extension) style paths to "folder.subfolder.file"
     std::string ConvertPathToDottedNotation(const std::string& path);

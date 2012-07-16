@@ -9,7 +9,7 @@
 #include <vector>
 #include <list>
 #include <map>
-#include <functional>
+#include FROM_TR1(functional)
 
 #include <ugdk/base/types.h>
 #include <ugdk/script/type.h>
@@ -61,7 +61,7 @@ class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
     }
 
     /// Tries to unwrap the data contained in this object using the given type.
-    virtual void* Unwrap(const VirtualType& type) const = 0;
+    virtual void* Unwrap(const VirtualType& type, bool disown) const = 0;
     virtual const char* UnwrapString() const = 0;
     virtual bool UnwrapBoolean() const = 0;
     virtual int UnwrapInteger() const = 0;

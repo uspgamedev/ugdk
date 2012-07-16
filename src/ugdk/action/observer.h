@@ -1,10 +1,13 @@
-#ifndef HORUSEYE_FRAMEWORK_OBSERVER_H_
-#define HORUSEYE_FRAMEWORK_OBSERVER_H_
-namespace ugdk{
+#ifndef UGDK_ACTION_OBSERVER_H_
+#define UGDK_ACTION_OBSERVER_H_
 
-namespace action{
-class Observer{
+namespace ugdk {
+
+namespace action {
+
+class Observer {
   public:
+    virtual ~Observer() {}
     virtual void Tick() = 0;
 };
 
@@ -12,4 +15,4 @@ class Observer{
 
 } /* namespace ugdk */
 
-#endif /* HORUSEYE_FRAMEWORK_OBSERVER_H_ */
+#endif /* UGDK_ACTION_OBSERVER_H_ */

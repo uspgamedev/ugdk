@@ -53,14 +53,14 @@ class Modifier {
     /**@name Getters and Setters
      *@{
      */
-    const Vector2D& offset()   const { return   offset_; }
-    const Vector2D& scale()    const { return    scale_; }
+    const Vector2D& offset()    const { return   offset_; }
+    const Vector2D& scale()     const { return    scale_; }
     double           rotation() const { return rotation_; }
-    const Mirror&   mirror()   const { return   mirror_; }
-    const Color&    color()    const { return    color_; }
+    const Mirror&   mirror()    const { return   mirror_; }
+    const Color&    color()     const { return    color_; }
     double           alpha()    const { return  color_.a; }
-    int             flags()    const { return    flags_; }
-    bool            visible()  const { return  visible_; }
+    int             flags()     const { return    flags_; }
+    bool            visible()   const { return  visible_; }
 
     // Setters.
     void set_offset(const Vector2D& offset) { offset_ = offset; flags_ |= HAS_TRANSFORMATION; }

@@ -29,7 +29,7 @@ class CollisionObject {
       * list of CollisionObject it's colliding with and generates a list of the collisions.
       * @param collision_list A list in which the result is appended to.
       * @return A list of CollisionInstance, appended to the collision_list argument. */
-    void SearchCollisions(std::vector<CollisionInstance> &collision_list);
+    void SearchCollisions(std::vector<CollisionInstance> &collision_list) const;
 
     /// Verifies if this CollisionObject is colliding with another CollisionObject.
     /** @param obj The CollisionObject to check against.

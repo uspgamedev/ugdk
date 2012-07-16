@@ -37,6 +37,7 @@ void Modifier::Compose(const Modifier* mod2) {
     this->ComposeRotation( mod2->rotation_ );
     this->ComposeMirror(   mod2->mirror_   );
     this->ComposeColor(    mod2->color_    );
+    this->ComposeVisible(  mod2->visible_  );
 }
 
 Modifier* Modifier::Compose(const Modifier* mod1, const Modifier* mod2) {
@@ -90,7 +91,7 @@ void Modifier::ComposeColor(const Color& color) {
 }
 
 void Modifier::ComposeRotation(const double rotation) {
-    rotation_ *= fmod(rotation,TWO_PI);
+    rotation_ += fmod(rotation,TWO_PI);
     flags_ |= HAS_TRANSFORMATION;
 }
 

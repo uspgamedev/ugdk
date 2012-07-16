@@ -3,6 +3,7 @@
 
 %include <module/export.swig>
 %include <module/proxy.swig>
+%include <module/widetypes.swig>
 %include "std_string.i"
 %include "std_vector.i"
 
@@ -24,6 +25,8 @@
 %import(module="ugdk_graphic") <ugdk/graphic/drawable.h>
 %import(module="ugdk_graphic") <ugdk/graphic/spritesheet.h>
 %import(module="ugdk_graphic") <ugdk/graphic/texture.h>
+
+%ignore ugdk::graphic::Text::SetMessage(const std::vector<std::wstring>& message);
 
 proxy_class(ugdk::action::Observer)
 

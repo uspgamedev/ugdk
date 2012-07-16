@@ -53,7 +53,7 @@ class IntervalKDTree {
 template <int DIMENSIONS>
 class Box {
     public:
-        Box (Coordinate *min_coordinates, Coordinate *max_coordinates);
+        Box (const Coordinate *min_coordinates, const Coordinate *max_coordinates);
         Box (const Box& box);
         void setBox (const Box& box);
         ~Box ();
@@ -222,7 +222,7 @@ void IntervalKDTree<T, DIMENSIONS>::PrintTree () {
 // Box implementation
 
 template <int DIMENSIONS>
-Box<DIMENSIONS>::Box (Coordinate *min_coordinates, Coordinate *max_coordinates) {
+Box<DIMENSIONS>::Box (const Coordinate *min_coordinates, const Coordinate *max_coordinates) {
     if (min_coordinates != NULL && max_coordinates != NULL) {
         for (int k = 0; k < DIMENSIONS; ++k) {
             min_coordinates_[k] = min_coordinates[k];

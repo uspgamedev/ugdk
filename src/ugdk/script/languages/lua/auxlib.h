@@ -2,7 +2,8 @@
 #ifndef UGDK_SCRIPT_LUA_AUXLIB_H_
 #define UGDK_SCRIPT_LUA_AUXLIB_H_
 
-#include <functional>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 
 #include <ugdk/script/languages/lua/header.h>
 #include <ugdk/script/languages/lua/primitive.h>

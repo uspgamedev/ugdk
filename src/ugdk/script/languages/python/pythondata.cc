@@ -12,9 +12,10 @@ namespace python {
 
 using std::tr1::shared_ptr;
 
-void* PythonData::Unwrap(const VirtualType& type) const {
+void* PythonData::Unwrap(const VirtualType& type, bool disown) const {
 	void* pointer;
-	int res = SWIG_ConvertPtrAndOwn(py_data_, &pointer, type.FromLang(LANG(Python)), 0, NULL);
+	int res = SWIG_ConvertPtrAndOwn(py_data_, &pointer, type.FromLang(LANG(Python)), 
+                                    disown ? SWIG_POINTER_DISOWN : 0, NULL);
 	if (SWIG_IsOK(res))
 	    return pointer;
 	return NULL;

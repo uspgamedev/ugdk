@@ -304,10 +304,10 @@ void VideoManager::PushAndApplyModifier(const Modifier* apply) {
         double s = sin(apply->rotation()), c = cos(apply->rotation());
 
         // Builds the full transformation matrix all at once.
-        double M[16] = {  sx*c, sy*s, 0.0, 0.0, // First column
-                        -sx*s, sy*c, 0.0, 0.0,
-                         0.0, 0.0, 1.0, 0.0,
-                           tx,   ty, 0.0, 1.0 };
+        double M[16] = { sx*c,  -sy*s,  0.0, 0.0, // First column
+                         sx*s,  sy*c,   0.0, 0.0,
+                         0.0,   0.0,    1.0, 0.0,
+                         tx,    ty,     0.0, 1.0 };
 
         //glTranslated(apply->offset().x, apply->offset().y, 0.0);
         //glScalef(apply->scale().x, apply->scale().y, 0.0);
