@@ -32,10 +32,10 @@ int IDGenerator::GenerateID() {
     return current_id_++;
 }
 
-int IDGenerator::RemoveID(int id) {
-    if (id < min_id_ || id > max_id_) return error_value_;
-    if (unused_ids_.size() == ((max_id_ - min_id_) + 1)) return error_value_;
-    if (unused_ids_.insert(id).second == false ) return error_value_;
+int IDGenerator::ReleaseID(int id) {
+    if (id < min_id_ || id >= current_id_) return error_value_;
+    if (unused_ids_.size() == range()) return error_value_;
+    if (unused_ids_.insert(id).second == false) return error_value_;
     return id;
 }
 

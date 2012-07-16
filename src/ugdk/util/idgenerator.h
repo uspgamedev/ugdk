@@ -18,13 +18,14 @@ class IDGenerator : public Uncopyable {
     int GenerateID();
     /// Release an id.
     /** @return An error value or the recieved id.*/
-    int RemoveID(int id);
+    int ReleaseID(int id);
   private:
     int                             current_id_;
     const int                       min_id_,
                                     max_id_,
                                     error_value_;
     std::tr1::unordered_set<int>    unused_ids_;
+    size_t range () const { return static_cast<size_t>(max_id_ - min_id_ + 1);}
 };
 
 } // namespace util
