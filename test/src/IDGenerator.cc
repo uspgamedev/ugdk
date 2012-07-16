@@ -23,6 +23,7 @@ TEST(IDGenerator, ScrambledGeneration) {
   for (int i = 0; i < 4; ++i) {
     EXPECT_NE(1, (id[i+1] = idgen.GenerateID()));
     EXPECT_NE(1, (id[i] = idgen.GenerateID()));
+    EXPECT_NE(id[i], id[i+1]);
     EXPECT_EQ(id[i+1], idgen.ReleaseID(id[i+1]));
   }
 }
