@@ -60,4 +60,12 @@ TEST(Vector2D, Methods) {
 	{	Vector2D f = b.Rotate(PI/2);
 		EXPECT_EQ(f.x, 11.0);
 		EXPECT_TRUE(f.y < 1.0e-6); }
+
+    {   Vector2D hm = a.HorizontalMirror();
+        EXPECT_EQ(hm.x, -5.0);
+        EXPECT_EQ(hm.y, 7.0); }
+
+     {   Vector2D vm = a.VerticalMirror();
+        EXPECT_EQ(vm.x, 5.0);
+        EXPECT_EQ(vm.y, -7.0); }
 }
