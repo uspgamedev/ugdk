@@ -73,6 +73,8 @@ class FixedSpritesheet : public Spritesheet {
     std::vector<Vector2D> frame_sizes_;
 };
 
+Spritesheet* CreateSpritesheetFromTag(const std::string&);
+
 }  // namespace graphic
 }  // namespace ugdk
 

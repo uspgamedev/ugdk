@@ -166,5 +166,10 @@ void FixedSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     if(popmatrix) glPopMatrix();
 }
 
+Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
+
+    return NULL;
+}
+
 }  // namespace graphic
 }  // namespace ugdk
