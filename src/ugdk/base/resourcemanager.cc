@@ -56,7 +56,7 @@ graphic::Texture*     ResourceManager::GetTextureFromFile       (const std::stri
 }
 
 graphic::Spritesheet* ResourceManager::GetSpritesheetFromTag    (const std::string& tag) {
-    return RESOURCE_MANAGER()->spritesheet_container().Find(tag);
+    return RESOURCE_MANAGER()->spritesheet_container().Load(tag, tag);
 }
 
 action::AnimationSet*         ResourceManager::GetAnimationSetFromFile  (const std::string& file) {
