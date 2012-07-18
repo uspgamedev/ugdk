@@ -138,11 +138,11 @@ VirtualData::Ptr LuaData::Execute(const vector<Ptr>& args) {
         args.end(),
         std::tr1::mem_fn(&VirtualData::AddToBuffer)
     );
-    printf("Executing #%d\n", id_);
     return wrapper_->OperateBuffer(id_, DataGear::Execute);
 }
 
 VirtualData::Ptr LuaData::GetAttribute(Ptr key) {
+    wrapper_->CleanBuffer();
     key->AddToBuffer();
     return wrapper_->OperateBuffer(id_, DataGear::GetField);
 }

@@ -52,7 +52,6 @@ Mainly, they need to be named ClassProxy, and their constructor receives a ugdk:
     return hacked
   end
   function proxy (name)
-    print ("Making proxy for "..name)
     local obj = {}
     setmetatable(obj, hackmetatable(swig[name]))
     return obj
@@ -73,14 +72,14 @@ Mainly, they need to be named ClassProxy, and their constructor receives a ugdk:
         if (lua_isuserdata(L, -1)) {
             luadata = static_cast<ugdk::script::lua::LuaData*> (lua_touserdata(L, -1));
             lua_pop(L, 2);
-            printf("Using proxy cache of type "#T" (%p)\n", luadata);
+            //printf("Using proxy cache of type "#T" (%p)\n", luadata);
         } else {
             lua_pop(L, 1);
             luadata = wrapper->NewLuaData();
             lua_pushlightuserdata(L, static_cast<void*>(luadata));
             lua_setfield(L, -2, "__unsafedata");
             luadata->UnsafePopValue();
-            printf("Created proxy cache of type "#T" (%p)\n", luadata);
+            //printf("Created proxy cache of type "#T" (%p)\n", luadata);
         }
         //ugdk::script::VirtualData::Ptr vdata(luadata);
         //ugdk::script::VirtualObj vobj(vdata);

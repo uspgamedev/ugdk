@@ -20,7 +20,6 @@ class SceneProxy : public Scene, public ugdk::script::BaseProxy<SceneProxy> {
 
     virtual void Focus() { 
         Scene::Focus();
-        printf("SCENE (0x%p)\n", this);
         (proxy_ | "Focus")();
     }
     virtual void DeFocus() {
@@ -39,12 +38,8 @@ class SceneProxy : public Scene, public ugdk::script::BaseProxy<SceneProxy> {
     
     virtual void End() { 
         Scene::End();
-        printf("SCENE (%p)\n", this);
-        printf("END-BEFORE (%p)\n", proxy_.unsafe_data());
         script::VirtualObj::List args;
-        //proxy_["End"]((proxy_, args));
         (proxy_ | "End")(args);
-        puts("END-AFTER");
     }
 
 };

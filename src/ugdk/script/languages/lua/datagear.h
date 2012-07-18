@@ -7,6 +7,7 @@
 #include <ugdk/script/languages/lua/state.h>
 #include <ugdk/script/languages/lua/basegear.h>
 #include <ugdk/util/uncopyable.h>
+#include <ugdk/util/idgenerator.h>
 
 namespace ugdk {
 namespace script {
@@ -21,7 +22,8 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
       datatable_id_(datatable_id) {}*/
 
     DataGear(lua_State *L) :
-      BaseGear(L) {}
+      BaseGear(L),
+      idgen_(1, INT_MAX, 0) {}
 
     ~DataGear() {
         L_.pushnil();
@@ -98,6 +100,7 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
   private:
 
     //DataID datatable_id_;
+    ugdk::util::IDGenerator idgen_;
 
     DataGear& operator=(const DataGear& rhs) {
         return *this;

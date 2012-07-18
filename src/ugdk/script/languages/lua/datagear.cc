@@ -31,11 +31,15 @@ int DataGear::GenerateID(lua_State* L) {
     if (!dtgear.PushDataTable())
         L_.pushinteger(LUA_NOREF);
     else {
-        L_.pushboolean(false);
-        DataID generated = L_.aux().ref(-2);
+        //DataID generated = L_.aux().ref(-2);
+        DataID generated = dtgear.idgen_.GenerateID();
+        if (generated != 0) {
+            L_.pushinteger(generated);
+            L_.pushboolean(false);
+            L_.settable(-3);
+        } else generated = LUA_NOREF;
         L_.settop(0);
         L_.pushinteger(generated);
-        LuaMsg("Generated ID #%d\n", generated);
     }
 
     return 1;
@@ -50,9 +54,17 @@ int DataGear::DestroyID(lua_State* L) {
     L_.settop(0);
 
     if (dtgear.PushDataTable()) {
-        L_.aux().unref(-1, id);
-        L_.pop(1);
-        LuaMsg("Destroyed ID #%d\n", id);
+        //L_.aux().unref(-1, id);
+        //L_.pop(1);
+        DataID destroyed = dtgear.idgen_.ReleaseID(id);
+        if (destroyed != id)
+            LuaMsg("WARNING: Attempt to release Invalid lua data id.\n");
+        else {
+            L_.pushinteger(id);
+            L_.pushnil();
+            L_.settable(-3);
+            L_.settop(0);
+        }
     }
 
     return 0;
@@ -78,7 +90,7 @@ int DataGear::WrapData(lua_State* L) {
 int DataGear::UnwrapData(lua_State* L) {
     State L_(L);
 
-    L_.settop(3);
+    L_.settop(4);
     GETARG(L_, 1, DataGear, dtgear);
     DataID id = L_.aux().checkintteger(2);
     GETARGPTR(L_, 3, swig_type_info, type);
@@ -194,7 +206,6 @@ int DataGear::Execute(lua_State* L) {
     // Pushes the function.
     dtgear.PushData(1, func_id);
     if (!L_.isfunction(-1) && !L_.istable(-1)) {
-        dumpstack(L);
         return luaL_error(
             L,
             "WAT %d (%d) : %d",
@@ -237,6 +248,8 @@ int DataGear::GetField(lua_State* L) {
 
     // Pushes the container at index 2.
     dtgear.PushData(1, container_id);
+    if (L_.isnil(2))
+        return luaL_error(L, "Attempt to index a nil object.");
     // Pushes the key at index 3.
     dtgear.PushData(1, key_id);
     // Gets the field value in the container using the key. The key is poped and
@@ -244,7 +257,7 @@ int DataGear::GetField(lua_State* L) {
     L_.gettable(2);
 
     // Pops the field into the data table.
-    dtgear.PopData(1,value_id);
+    dtgear.PopData(1, value_id);
 
     return 0;
 }
@@ -386,7 +399,6 @@ bool DataGear::SetData (DataID id) {
 /// Private:
 
 bool DataGear::PushDataTable() {
-    LuaMsg("From datatable\n");
     L_.getfield(Constant::REGISTRYINDEX(), "UGDK_LUA_DATATABLE");
     if (!L_.istable(-1)) {
         L_.pop(1);
