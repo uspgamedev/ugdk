@@ -172,7 +172,7 @@ Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
     using script::VirtualObj;
     if(tag.size() == 0) return NULL;
 
-    VirtualObj data = SCRIPT_MANAGER()->LoadModule("spritesheets." + tag);
+    VirtualObj data = SCRIPT_MANAGER()->LoadModule("spritesheets." + SCRIPT_MANAGER()->ConvertPathToDottedNotation(tag));
     if(!data) return NULL;
 
     FixedSpritesheetData sprite_data(data["file"].value<std::string>());
