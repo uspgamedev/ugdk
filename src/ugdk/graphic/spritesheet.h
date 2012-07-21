@@ -5,15 +5,16 @@
 #include <vector>
 #include <utility>
 
-#include "SDL_opengl.h"
-
 #include <ugdk/base/types.h>
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/spritesheet.h>
-#include <ugdk/graphic/videomanager.h>
 
 #ifdef SWIG
 #pragma SWIG nowarn=312
+#endif
+#ifndef __GL_H__
+extern "C" {
+typedef unsigned int GLuint;
+}
 #endif
 
 namespace ugdk {
