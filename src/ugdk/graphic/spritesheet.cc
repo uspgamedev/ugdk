@@ -7,12 +7,13 @@
 #include "SDL_image.h"
 #include "SDL_opengl.h"
 
-#include <ugdk/base/types.h>
+#include <ugdk/graphic/spritesheet.h>
+
 #include <ugdk/base/engine.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/videomanager.h>
+
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>
 
@@ -38,7 +39,7 @@ SpritesheetData::SpritesheetData(const std::string& filename) {
 SpritesheetData::~SpritesheetData() {
     delete file_data_;
 
-    for(std::vector<SpritesheetFrame>::iterator it = frames_.begin();
+    for(std::list<SpritesheetFrame>::iterator it = frames_.begin();
         it != frames_.end(); ++it)
         delete it->surface;
 }
@@ -89,23 +90,23 @@ void SpritesheetData::FillWithFramesize(int width, int height, const Vector2D& h
     }
 }
 
-Spritesheet::Spritesheet(SpritesheetData& data) {
-    const std::vector<SpritesheetData::SpritesheetFrame>& frames = data.frames();
+Spritesheet::Spritesheet(const SpritesheetData& data) {
+    const std::list<SpritesheetData::SpritesheetFrame>& frames = data.frames();
 
-    lists_base_ = glGenLists(frames.size());
+    lists_base_ = glGenLists(static_cast<GLsizei>(frames.size()));
 
-    std::vector<SpritesheetData::SpritesheetFrame>::const_iterator it;
+    std::list<SpritesheetData::SpritesheetFrame>::const_iterator it;
     GLuint id;
     for(it = frames.begin(), id = 0; it != frames.end(); ++it, ++id) {
         Texture* texture = Texture::CreateFromSurface(it->surface->surface);
-        CreateList(id, texture, it->hotspot);
+        createList(id, texture, it->hotspot);
         frames_.push_back(texture);
         frame_sizes_.push_back(Vector2D(static_cast<double>(texture->width()), static_cast<double>(texture->height())));
     }
 }
 
 Spritesheet::~Spritesheet() {
-    glDeleteLists(lists_base_, frames_.size());
+    glDeleteLists(lists_base_, static_cast<GLsizei>(frames_.size()));
 
     // Clear the Textures
     for(std::vector<Texture*>::iterator it = frames_.begin();
@@ -113,7 +114,7 @@ Spritesheet::~Spritesheet() {
         delete *it;
 }
 
-void Spritesheet::CreateList(GLuint id, Texture* texture, const Vector2D& hotspot) {
+void Spritesheet::createList(GLuint id, Texture* texture, const Vector2D& hotspot) {
     if(texture == NULL) return;
     glColor3f(1.0, 1.0, 1.0);
 
