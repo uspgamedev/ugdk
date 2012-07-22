@@ -47,9 +47,7 @@ class VideoManager {
     void PushAndApplyModifier(const Modifier*);
     void PushAndApplyModifier(const Modifier& apply) { PushAndApplyModifier(&apply); }
     bool PopModifier();
-    const Modifier& CurrentModifier() const {
-        return (modifiers_.empty()) ? Modifier::IDENTITY : modifiers_.top(); 
-    }
+    const Modifier& CurrentModifier() const;
 
   private:
     Vector2D video_size_;

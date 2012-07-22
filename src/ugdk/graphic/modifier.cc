@@ -1,7 +1,8 @@
-
-#include <ugdk/graphic/modifier.h>
+#include <sstream>
 #include <algorithm>
 #include <cmath>
+
+#include <ugdk/graphic/modifier.h>
 
 #define TWO_PI 6.28318530
 #define TO_UNIT_INTERVAL(double) ( std::min(std::max((double), 0.0), 1.0) )
@@ -10,23 +11,8 @@ namespace ugdk {
 
 namespace graphic {
 
-const Modifier Modifier::IDENTITY;
-
-Modifier::Modifier(const Modifier& mod) :
-        offset_(mod.offset_),
-        scale_(mod.scale_),
-        rotation_(mod.rotation_),
-        mirror_(mod.mirror_),
-        color_(mod.color_),
-        visible_(mod.visible_) {}
-
-Modifier::Modifier(const Modifier* mod) :
-        offset_(mod->offset_),
-        scale_(mod->scale_),
-        rotation_(mod->rotation_),
-        mirror_(mod->mirror_),
-        color_(mod->color_),
-        visible_(mod->visible_) {}
+Modifier::Modifier() : offset_(), scale_(1.0, 1.0), rotation_(0.0), 
+    mirror_(MIRROR_NONE), color_(WHITE), visible_(true), flags_(0) {}
 
 void Modifier::Compose(const Modifier* mod2) {
 
@@ -98,6 +84,11 @@ void Modifier::ComposeRotation(const double rotation) {
 void Modifier::ComposeAlpha(const double alpha) {
     color_.a *= TO_UNIT_INTERVAL(alpha);
     flags_ |= HAS_COLOR;
+}
+    
+Modifier* Modifier::Copy(const Modifier* mod2) { 
+    if(mod2 == NULL) return NULL;
+    return new Modifier(*mod2);
 }
 
 }  // namespace graphic
