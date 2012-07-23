@@ -38,6 +38,7 @@ class FixedSpritesheetData {
     /// Adds a new frame to the frame list.
     void AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot);
     
+    /// Adds frames of equal size, all with the same hotspot.
     void FillWithFramesize(int width, int height, const Vector2D& hotspot);
 
     /// Getter for the frame data.
@@ -72,6 +73,8 @@ class FixedSpritesheet : public Spritesheet {
     std::vector<Texture*> frames_;
     std::vector<Vector2D> frame_sizes_;
 };
+
+Spritesheet* CreateSpritesheetFromTag(const std::string&);
 
 }  // namespace graphic
 }  // namespace ugdk

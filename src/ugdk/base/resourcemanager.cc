@@ -5,6 +5,7 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/base/genericcontainer.h>
 #include <ugdk/graphic/spritesheet.h>
+#include <ugdk/graphic/spritesheet/fixedspritesheet.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/animationprotocol.h>
 #include <ugdk/util/languageword.h>
@@ -35,7 +36,7 @@ typedef gdd::CachedLoader<action::AnimationSet> AnimationLoader;
 
 ResourceManager::ResourceManager() : containers_(type_info_cmp) {
     add_container(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile));
-    add_container(new GenericContainer<graphic::Spritesheet*>(NullLoad<graphic::Spritesheet>));
+    add_container(new GenericContainer<graphic::Spritesheet*>(graphic::CreateSpritesheetFromTag));
     add_container(new AnimationLoader(new AnimationProtocol));
     add_container(new GenericContainer<LanguageWord*>(NullLoad<LanguageWord>));
 }
@@ -55,7 +56,7 @@ graphic::Texture*     ResourceManager::GetTextureFromFile       (const std::stri
 }
 
 graphic::Spritesheet* ResourceManager::GetSpritesheetFromTag    (const std::string& tag) {
-    return RESOURCE_MANAGER()->spritesheet_container().Find(tag);
+    return RESOURCE_MANAGER()->spritesheet_container().Load(tag, tag);
 }
 
 action::AnimationSet*         ResourceManager::GetAnimationSetFromFile  (const std::string& file) {

@@ -11,6 +11,8 @@
 #include <ugdk/graphic/spritesheet/fixedspritesheet.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/videomanager.h>
+#include <ugdk/script/scriptmanager.h>
+#include <ugdk/script/virtualobj.h>
 
 namespace ugdk {
 namespace graphic {
@@ -164,6 +166,38 @@ void FixedSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     glCallList(lists_base_ + frame_number);
 
     if(popmatrix) glPopMatrix();
+}
+
+Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
+    using script::VirtualObj;
+    if(tag.size() == 0) return NULL;
+
+    VirtualObj data = SCRIPT_MANAGER()->LoadModule("spritesheets." + SCRIPT_MANAGER()->ConvertPathToDottedNotation(tag));
+    if(!data) return NULL;
+
+    FixedSpritesheetData sprite_data(data["file"].value<std::string>());
+
+    if(data["fill"]) {
+        VirtualObj::Vector fill = data["fill"].value<VirtualObj::Vector>();
+        int width = fill[0].value<int>();
+        int height = fill[1].value<int>();
+        Vector2D* hotspot = fill[2].value<Vector2D*>();
+        sprite_data.FillWithFramesize(width, height, *hotspot);
+    }
+    if(data["frames"]) {
+        VirtualObj::Vector frames = data["frames"].value<VirtualObj::Vector>();
+        for(VirtualObj::Vector::iterator it = frames.begin(); it != frames.end(); ++it) {
+            VirtualObj::Vector frame = it->value<VirtualObj::Vector>();
+            int top_left_x = frame[0].value<int>();
+            int top_left_y = frame[1].value<int>();
+            int width = frame[2].value<int>();
+            int height = frame[3].value<int>();
+            Vector2D* hotspot = frame[4].value<Vector2D*>();
+            sprite_data.AddFrame(top_left_x, top_left_y, width, height, *hotspot);
+        }
+    }
+
+    return new FixedSpritesheet(sprite_data);
 }
 
 }  // namespace graphic
