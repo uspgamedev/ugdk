@@ -13,12 +13,12 @@ namespace python {
 using std::tr1::shared_ptr;
 
 void* PythonData::Unwrap(const VirtualType& type, bool disown) const {
-	void* pointer;
-	int res = SWIG_ConvertPtrAndOwn(py_data_, &pointer, type.FromLang(LANG(Python)), 
+    void* pointer;
+    int res = SWIG_ConvertPtrAndOwn(py_data_, &pointer, type.FromLang(LANG(Python)), 
                                     disown ? SWIG_POINTER_DISOWN : 0, NULL);
-	if (SWIG_IsOK(res))
-	    return pointer;
-	return NULL;
+    if (SWIG_IsOK(res))
+        return pointer;
+    return NULL;
 }
 const char* PythonData::UnwrapString() const {
     if (py_data_ == NULL)   return NULL;
@@ -49,7 +49,7 @@ static T UnwrapSequence(PyObject* py_data_, PythonWrapper* wrapper_) {
         data = new PythonData(wrapper_, obj, true); //PythonData takes care of the new ref
         seq.push_back(  VirtualData::Ptr(data)  );
     }
-	return seq;
+    return seq;
 }
 /*************/
 
@@ -104,8 +104,8 @@ void PythonData::Wrap(void* data, const VirtualType& type) {
 
     py_data_ = SWIG_NewInstanceObj(data, type.FromLang(LANG(Python)), 1);
     own_ref_ = true;
-	/*Apparently, the PyObject return by the SWIG conversion function is a new reference.
-	  So our PyVData needs to handle it.*/
+    /*Apparently, the PyObject return by the SWIG conversion function is a new reference.
+      So our PyVData needs to handle it.*/
 }
 
 void PythonData::WrapString(const char* str) {
@@ -147,63 +147,63 @@ void PythonData::WrapNumber(double number) {
 /// Tries to execute ourselves as a function in a script language,
 /// passing the given arguments and returning the result.
 VirtualData::Ptr PythonData::Execute(const std::vector<Ptr>& args) {
-	if (!PyCallable_Check(py_data_)) {
-		//The object we contain is not callable - cannot execute it.
-		return VirtualData::Ptr();
-	}
+    if (!PyCallable_Check(py_data_)) {
+        //The object we contain is not callable - cannot execute it.
+        return VirtualData::Ptr();
+    }
 
-	PyObject* arglist = PyTuple_New(args.size()); //new ref
-	if (arglist == NULL) {
-		/*Some error occured... Py/C API doesn't specify what might cause the failure here...
-		   Most likely out of memory? */
-		return VirtualData::Ptr();
-	}
+    PyObject* arglist = PyTuple_New(args.size()); //new ref
+    if (arglist == NULL) {
+        /*Some error occured... Py/C API doesn't specify what might cause the failure here...
+           Most likely out of memory? */
+        return VirtualData::Ptr();
+    }
 
-	//PyTuple_SetItem(tuple, index(int), object) -> sets the element of the given index within the given tuple as the object passed
-	// OBS.: steals the reference to object;  returns 0 on success
-	for (unsigned int i = 0; i < args.size(); i++) {
-		//check appropriate type of args[i]
-		PythonData* py_arg = static_cast<PythonData*>(args[i].get());
-		
-		/* We INCREF the refcount of all args passed since PyTuple_SetItem steals the ref, and when it is
-		   deleted when this method finishes, it will DECREF this ref.
-		   Since VObjs use shared_ptr to hold VDatas, the system only has 1 VData with a unique py_data_, and the others
-		   are refs to it. Therefore what we have here are not copies, we can't let the ref of the args' py_data_ go away!
-		   =P
-		   (in other words, if we do not do this, the py_data_ passed as arg may have a bad refcount and be deleted
-		    and so if we try to use it after this some shit will happen)*/
-		Py_INCREF(py_arg->py_data_);
-		
-		PyTuple_SetItem(arglist, i, py_arg->py_data_);
-	}
+    //PyTuple_SetItem(tuple, index(int), object) -> sets the element of the given index within the given tuple as the object passed
+    // OBS.: steals the reference to object;  returns 0 on success
+    for (unsigned int i = 0; i < args.size(); i++) {
+        //check appropriate type of args[i]
+        PythonData* py_arg = static_cast<PythonData*>(args[i].get());
+        
+        /* We INCREF the refcount of all args passed since PyTuple_SetItem steals the ref, and when it is
+           deleted when this method finishes, it will DECREF this ref.
+           Since VObjs use shared_ptr to hold VDatas, the system only has 1 VData with a unique py_data_, and the others
+           are refs to it. Therefore what we have here are not copies, we can't let the ref of the args' py_data_ go away!
+           =P
+           (in other words, if we do not do this, the py_data_ passed as arg may have a bad refcount and be deleted
+            and so if we try to use it after this some shit will happen)*/
+        Py_INCREF(py_arg->py_data_);
+        
+        PyTuple_SetItem(arglist, i, py_arg->py_data_);
+    }
 
-	PyObject* result = PyObject_CallObject(py_data_, arglist); //return is new ref
-	/*If result = NULL, CallObject failed (somehow)*/
+    PyObject* result = PyObject_CallObject(py_data_, arglist); //return is new ref
+    /*If result = NULL, CallObject failed (somehow)*/
     if (result == NULL) {
-        printf("[Python] Erro executing callable object (python exception details below)\n");
+        fprintf(stderr, "[Python] Error executing callable object (python exception details below)\n");
         wrapper_->PrintPythonExceptionDetails();
         return VirtualData::Ptr();
     }
 
     //WAAARPPER!!!
-	VirtualData::Ptr vdata( new PythonData(wrapper_, result, true) ); //PyVirtualData takes care of the ref.
-	
-	//Before returning, kill the argument tuple we created.
-	Py_XDECREF(arglist);  //WARNING: in theory, this is correct. However in my testing (in the prototype) this cause some serious shit.
-	
-	return vdata;
+    VirtualData::Ptr vdata( new PythonData(wrapper_, result, true) ); //PyVirtualData takes care of the ref.
+    
+    //Before returning, kill the argument tuple we created.
+    Py_XDECREF(arglist);  //WARNING: in theory, this is correct. However in my testing (in the prototype) this cause some serious shit.
+    
+    return vdata;
 }
 
 /// Tries to get a attribute with the given name from this object.
 VirtualData::Ptr PythonData::GetAttribute(Ptr key) {
     PythonData* vkey = static_cast<PythonData*>(key.get());
     PyObject* key_data = vkey->py_data_;
-	PyObject* attr;
-	
-	/*We give preference for getting a object's attributes. If it doesn't have a attribute
-	  with the given name, check if he has a item with key = attr_name */
-	if (PyObject_HasAttr(py_data_, key_data)) {
-		attr = PyObject_GetAttr(py_data_, key_data); //return is new ref
+    PyObject* attr;
+    
+    /*We give preference for getting a object's attributes. If it doesn't have a attribute
+      with the given name, check if he has a item with key = attr_name */
+    if (PyObject_HasAttr(py_data_, key_data)) {
+        attr = PyObject_GetAttr(py_data_, key_data); //return is new ref
 
         if (PyCallable_Check(attr) && PyObject_HasAttrString(attr, "__func__") ) {
             /*return attr.__func__, so that we always return a function or unbinded method (without self)*/
@@ -212,22 +212,22 @@ VirtualData::Ptr PythonData::GetAttribute(Ptr key) {
             attr = PyObject_GetAttrString(original, "__func__"); //another new ref
             Py_XDECREF(original);
         }
-	}
-	else {
-		if (!PyMapping_Check(py_data_)) {
-			//Object doesn't have attribute with the given name and can't have items...
-			return VirtualData::Ptr();
-		}
-		if (!PyMapping_HasKey(py_data_, key_data) ) {
-			//Object doesn't have attribute or item with the given name...
-			return VirtualData::Ptr();
-		}
-		attr = PyObject_GetItem(py_data_, key_data); //return is new ref
-	}
-	/*If Py_GetAttr or Py_GetItem failed somehow, they will return null.*/
-	
-	VirtualData::Ptr vdata( new PythonData(wrapper_, attr, true) );
-	return vdata;
+    }
+    else {
+        if (!PyMapping_Check(py_data_)) {
+            //Object doesn't have attribute with the given name and can't have items...
+            return VirtualData::Ptr();
+        }
+        if (!PyMapping_HasKey(py_data_, key_data) ) {
+            //Object doesn't have attribute or item with the given name...
+            return VirtualData::Ptr();
+        }
+        attr = PyObject_GetItem(py_data_, key_data); //return is new ref
+    }
+    /*If Py_GetAttr or Py_GetItem failed somehow, they will return null.*/
+    
+    VirtualData::Ptr vdata( new PythonData(wrapper_, attr, true) );
+    return vdata;
 }
 
 VirtualData::Ptr PythonData::SetAttribute(Ptr key, Ptr value) {

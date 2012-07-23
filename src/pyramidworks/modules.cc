@@ -51,22 +51,19 @@ using ugdk::script::python::PyInitFunction;
 
 #undef PYRAMIDWORKSPYTHON_LIST_ITEM
 
-static const char* SUCCESS_MSG[2] = {
-    "Failed to register module",
-    "Successfully registered module"
-};
-
 template <class wrapper_t, class init_func_t>
 static void RegisterModules(wrapper_t* wrapper,
                             const Module<init_func_t> modules[],
                             const char* lang_name) {
-    for (size_t i = 0; i < PYRAMIDWORKS_MODULES_NUM; ++i)
-        printf(
-            "[%s] %s \"%s\".\n",
-            lang_name,
-            SUCCESS_MSG[wrapper->RegisterModule(modules[i])],
-            modules[i].name().c_str()
-        );
+    for (size_t i = 0; i < PYRAMIDWORKS_MODULES_NUM; ++i) {
+        if(!wrapper->RegisterModule(modules[i])) {
+            fprintf(stderr, "[%s] Load module '%s': >>ERROR<<\n", lang_name, modules[i].name().c_str());
+        } else {
+#ifdef DEBUG
+            fprintf(stderr, "[%s] Load module '%s': ok\n", lang_name, modules[i].name().c_str());
+#endif
+        }
+    }
 }
 
 void RegisterLuaModules(ugdk::script::lua::LuaWrapper* wrapper) {

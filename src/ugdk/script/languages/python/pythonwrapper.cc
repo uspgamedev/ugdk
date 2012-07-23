@@ -18,32 +18,34 @@ namespace python {
 using std::tr1::shared_ptr;
 
 VirtualData::Ptr PythonWrapper::NewData() {
-	VirtualData::Ptr vdata( new PythonData(this, NULL, false) ); 
-	return vdata;
+    VirtualData::Ptr vdata( new PythonData(this, NULL, false) ); 
+    return vdata;
 }
 
 void PythonWrapper::ExecuteCode(const std::string& code) {
-	PyRun_SimpleString(code.c_str());
+    PyRun_SimpleString(code.c_str());
 }
 
 VirtualObj PythonWrapper::LoadModule(const std::string& name) {
     std::string dotted_name =
         SCRIPT_MANAGER()->ConvertPathToDottedNotation(name);
-	PyObject* module = PyImport_ImportModule(dotted_name.c_str()); //new ref
+    PyObject* module = PyImport_ImportModule(dotted_name.c_str()); //new ref
     if (module == NULL) {
-        printf("[Python] Error loading module: \"%s\" (python exception details below)\n", dotted_name.c_str());
+        fprintf(stderr, "[Python] Error loading module: '%s' (python exception details below)\n", dotted_name.c_str());
         PrintPythonExceptionDetails();
         return VirtualObj();
     }
-    printf("[Python] Loading module: %s\n", dotted_name.c_str());
-	VirtualData::Ptr vdata( new PythonData(this, module, true) ); //PythonData takes care of the ref.
-	return VirtualObj(vdata);
+#ifdef DEBUG
+    printf("[Python] Loaded module '%s'.\n", dotted_name.c_str());
+#endif
+    VirtualData::Ptr vdata( new PythonData(this, module, true) ); //PythonData takes care of the ref.
+    return VirtualObj(vdata);
 }
 
 /// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
 bool PythonWrapper::Initialize() {
-	Py_Initialize();
-	//TODO: Fix sys.path with our paths...
+    Py_Initialize();
+    //TODO: Fix sys.path with our paths...
     PyRun_SimpleString("import sys");
     std::string command = "sys.path.append(\"" + PATH_MANAGER()->ResolvePath("scripts/") + "\")";
     //std::string command = "sys.path.append(\"./\")";
@@ -53,12 +55,12 @@ bool PythonWrapper::Initialize() {
     for (it = modules_.begin(); it != modules_.end(); ++it) {
         (*it->init_func())();
     }
-	return true;
+    return true;
 }
 
 /// Finalizes the LangWrapper, finalizing any language specific stuff.
 void PythonWrapper::Finalize() {
-	Py_Finalize();
+    Py_Finalize();
 }
 
 void PythonWrapper::PrintPythonExceptionDetails() {
@@ -70,8 +72,8 @@ void PythonWrapper::PrintPythonExceptionDetails() {
         /*value and tb can be null (no exception) :: we own ref to all of them*/
 
         PyObject* arglist = PyTuple_New(3); //new ref
-	    if (arglist == NULL) {
-            printf("[Python] Error 1... Can't print exception details... >_<\n");
+        if (arglist == NULL) {
+            fprintf(stderr, "[Python] Error 1, can't print exception details.\n");
             break;
         }
         PyTuple_SetItem(arglist, 0, exc_type);   // PyTuple_SetItem
@@ -82,19 +84,19 @@ void PythonWrapper::PrintPythonExceptionDetails() {
           I would have a LOT of work to do here =P*/
         traceback = PyImport_ImportModule("traceback");
         if (traceback == NULL) {
-            printf("[Python] Error 2... Can't print exception details... >_<\n");
+            fprintf(stderr, "[Python] Error 2, can't print exception details.\n");
             break;
         }
 
         format = PyObject_GetAttrString(traceback, "format_exception"); //return is new ref
         if (format == NULL) {
-            printf("[Python] Error 3... Can't print exception details... >_<\n");
+            fprintf(stderr, "[Python] Error 3, can't print exception details.\n");
             break;
         }
 
         errlist = PyObject_CallObject(format, arglist); //return is new ref
         if (errlist == NULL) {
-            printf("[Python] Error 4... Can't print exception details... >_<\n");
+            fprintf(stderr, "[Python] Error 4, can't print exception details.\n");
             break;
         }
 
@@ -107,12 +109,12 @@ void PythonWrapper::PrintPythonExceptionDetails() {
         }
 
         if (errstr == NULL) {
-            printf("[Python] Error 5... Can't print exception details... >_<\n");
+            fprintf(stderr, "[Python] Error 5, can't print exception details.\n");
             break;
         }
 
         char* message = PyString_AsString(errstr);
-        printf("%s\n", message);
+        fprintf(stderr, "%s\n", message);
 
     } while (0);
 

@@ -14,9 +14,9 @@
 %include "ugdk/script/type.h"
 
 #ifdef SWIGPYTHON
-	#define CURRENT_LANG ugdk::script::LANG(Python)
+    #define CURRENT_LANG ugdk::script::LANG(Python)
 #elif SWIGLUA
-	#define CURRENT_LANG ugdk::script::LANG(Lua)
+    #define CURRENT_LANG ugdk::script::LANG(Lua)
 /* Else not used on purpose, so that some shit happens when someone tries to use
    this for any non-supported language.*/
 #endif
@@ -45,7 +45,6 @@
 #ifdef SWIGLUA
 %define confirm_exports(modname)
 %luacode {
-print "[Lua] modname confirm exports!"
 for k,v in pairs(modname) do
   m = string.match(k, "RegisterType_(.+)")
   if m then
@@ -61,12 +60,11 @@ end
 #elif SWIGPYTHON
 %define confirm_exports(modname)
 %pythoncode {
-print "[Python] modname confirm exports!"
 module = __import__(__name__)
 for key,value in module.__dict__.items():
-	if key.startswith("RegisterType_"):
-		arg = module.__dict__["GetNull_"+key[13:] ]()
-		value(arg)
+    if key.startswith("RegisterType_"):
+        arg = module.__dict__["GetNull_"+key[13:] ]()
+        value(arg)
 }
 %enddef
 #endif

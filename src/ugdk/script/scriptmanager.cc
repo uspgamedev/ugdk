@@ -15,68 +15,66 @@ using std::string;
 ScriptManager* ScriptManager::ref_ = NULL;
 
 ScriptManager::ScriptManager() {
-	// TODO Auto-generated constructor stub
+    // TODO Auto-generated constructor stub
 
 }
 
 bool ScriptManager::Initialize() {
-	bool is_ok = true;
+    bool is_ok = true;
 
-	WrapperMap::iterator it = wrappers_.begin();
-	while (it != wrappers_.end()) {
-		LangWrapper* wrap = it->second;
-		is_ok = is_ok && wrap->Initialize();
-		++it;
-	}
+    WrapperMap::iterator it = wrappers_.begin();
+    while (it != wrappers_.end()) {
+        LangWrapper* wrap = it->second;
+        is_ok = is_ok && wrap->Initialize();
+        ++it;
+    }
 
-	return is_ok;
+    return is_ok;
 }
 
 void ScriptManager::Finalize() {
-	WrapperMap::iterator it = wrappers_.begin();
-	while (it != wrappers_.end()) {
-		LangWrapper* wrap = it->second;
-		wrap->Finalize();
-		delete wrap;
-		++it;
-	}
-	wrappers_.clear();
+    WrapperMap::iterator it = wrappers_.begin();
+    while (it != wrappers_.end()) {
+        LangWrapper* wrap = it->second;
+        wrap->Finalize();
+        delete wrap;
+        ++it;
+    }
+    wrappers_.clear();
 }
 
 void ScriptManager::Register(const string& name, LangWrapper* wrapper) {
-	if (wrappers_.count(name)) return;
-	wrappers_[name] = wrapper;
+    if (wrappers_.count(name)) return;
+    wrappers_[name] = wrapper;
 }
 
 LangWrapper* ScriptManager::GetWrapper(const string& name) {
-	if (!wrappers_.count(name))	return NULL;
-	return wrappers_[name];
+    if (!wrappers_.count(name))	return NULL;
+    return wrappers_[name];
 }
 
 void ScriptManager::ExecuteCode(const string& language, const string& code) {
-	if (!wrappers_.count(language)) return;
-	
-	wrappers_[language]->ExecuteCode(code);
+    if (!wrappers_.count(language)) return;
+    
+    wrappers_[language]->ExecuteCode(code);
 }
 
 
 VirtualObj ScriptManager::LoadModule(const string& script) {
-	string filepath = PATH_MANAGER()->ResolvePath(
+    string filepath = PATH_MANAGER()->ResolvePath(
         "scripts/" + ConvertDottedNotationToPath(script)
     );
 
-	printf("Loading module \"%s\".\n", script.c_str());
-	WrapperMap::iterator it = wrappers_.begin();
-	while (it != wrappers_.end()) {
-		LangWrapper* wrap = it->second;
-		if ( CheckIfFileExists(filepath + "." + wrap->file_extension()) ) {
-            printf("Found module \"%s\".\n", (filepath+"."+wrap->file_extension()).c_str() );
-			return wrap->LoadModule( script );
-		}
-		++it;
-	}
-    printf("Uncapable of loading module (path notation) \"%s\".\n", filepath.c_str() );
-	return VirtualObj();
+    WrapperMap::iterator it = wrappers_.begin();
+    while (it != wrappers_.end()) {
+        LangWrapper* wrap = it->second;
+        if ( CheckIfFileExists(filepath + "." + wrap->file_extension()) ) {
+            return wrap->LoadModule( script );
+        }
+        ++it;
+    }
+    fprintf(stderr, "Uncapable of loading module (path notation) \"%s\".\n", filepath.c_str() );
+    return VirtualObj();
 }
 
 bool ScriptManager::CheckIfFileExists(const string& filepath) {
@@ -90,16 +88,16 @@ bool ScriptManager::CheckIfFileExists(const string& filepath) {
 
 /// Converts "folder/subfolder/file" (without extension) style paths to "folder.subfolder.file"
 std::string ScriptManager::ConvertPathToDottedNotation(const std::string& path) {
-	string dotted( path );
-	replace(dotted.begin(), dotted.end(), '/', '.');
-	return dotted;
+    string dotted( path );
+    replace(dotted.begin(), dotted.end(), '/', '.');
+    return dotted;
 }
 
 /// Converts dotted notation strings ("folder.subfolder.file") to "folder/subfolder/file".
 std::string ScriptManager::ConvertDottedNotationToPath(const std::string& dotted) {
-	string path( dotted );
-	replace(path.begin(), path.end(), '.', '/');
-	return path;
+    string path( dotted );
+    replace(path.begin(), path.end(), '.', '/');
+    return path;
 }
 
 

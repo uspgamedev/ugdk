@@ -18,19 +18,19 @@ typedef ugdk::script::InheritableLangWrapper<PyInitFunction> PythonWrapperBase;
 
 class PythonWrapper : public PythonWrapperBase {
   public:
-	PythonWrapper() : PythonWrapperBase("py", LANG(Python)) {}
-	virtual ~PythonWrapper() {}
+    PythonWrapper() : PythonWrapperBase("py", LANG(Python)) {}
+    virtual ~PythonWrapper() {}
 
     virtual VirtualData::Ptr NewData();
 
-	virtual void ExecuteCode(const std::string& code);
-	
-	virtual VirtualObj LoadModule(const std::string& name);
+    virtual void ExecuteCode(const std::string& code);
+    
+    virtual VirtualObj LoadModule(const std::string& name);
 
-	/// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
-	virtual bool Initialize();
-	/// Finalizes the LangWrapper, finalizing any language specific stuff.
-	virtual void Finalize();
+    /// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
+    virtual bool Initialize();
+    /// Finalizes the LangWrapper, finalizing any language specific stuff.
+    virtual void Finalize();
 
     void PrintPythonExceptionDetails();
 
