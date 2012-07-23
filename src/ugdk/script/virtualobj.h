@@ -134,7 +134,9 @@ class VirtualObj {
         return Create(str.c_str(), wrapper);
     }
     
-    void* unsafe_data() const { return data_->unsafe_data(); }
+    void* unsafe_data() const {
+        return data_->unsafe_data();
+    }
 
   private:
 
@@ -187,7 +189,7 @@ class Bind {
     Bind(VirtualObj& obj, const std::string& method_name) :
         obj_(obj),
         method_name_(obj.wrapper()) {
-        method_name_.set_value(method_name);
+        method_name_.set_value(method_name.c_str());
     }
     VirtualObj operator() () const {
         std::list<VirtualObj> args;
