@@ -1,5 +1,8 @@
+
 #ifndef MODULE_PROXY_SCENE_H_
 #define MODULE_PROXY_SCENE_H_
+
+#include <cstdio>
 
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/action/scene.h>
@@ -11,8 +14,9 @@ namespace action {
 class SceneProxy;
 
 class SceneProxy : public Scene, public ugdk::script::BaseProxy<SceneProxy> {
-public:
-    SceneProxy(const ugdk::script::VirtualObj& proxy) : Scene(), ugdk::script::BaseProxy<SceneProxy>(proxy) {}
+  public:
+    SceneProxy(const ugdk::script::VirtualObj& proxy) :
+        Scene(), ugdk::script::BaseProxy<SceneProxy>(proxy) {}
 
     virtual void Focus() { 
         Scene::Focus();
@@ -34,7 +38,8 @@ public:
     
     virtual void End() { 
         Scene::End();
-        (proxy_ | "End")(); 
+        script::VirtualObj::List args;
+        (proxy_ | "End")(args);
     }
 
 };

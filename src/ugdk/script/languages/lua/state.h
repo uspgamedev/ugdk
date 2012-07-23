@@ -81,6 +81,7 @@ class State {
     }
     bool isnil (int index) const { return !!(lua_isnil(L_, index)); }
     bool isstring (int index) const { return !!(lua_isstring(L_, index)); }
+    bool isfunction (int index) const { return !!(lua_isfunction(L_, index)); }
     bool istable (int index) const { return !!(lua_istable(L_, index)); }
 
 

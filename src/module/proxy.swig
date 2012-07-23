@@ -28,18 +28,76 @@ Use as following:    proxy_class(T)
 where T is the original type (Ex.:  namespace1::subnamespace::Class)
 
 Proxy classes need to follow a simple interface/ way to create them, so check your examples.
-Mainly, they need to be named ClassProxy, and their construct receive a ugdk::script::VirtualObj&
+Mainly, they need to be named ClassProxy, and their constructor receives a ugdk::script::VirtualObj&
 */
 
 
 #ifdef SWIGLUA
+%{
+#include <module/luaproxy.h>
+%}
+
+%luacode {
+  local function hackmetatable (meta)
+    local hacked = {}
+    for k,v in pairs(meta) do
+      if k == "__index" then
+        hacked[k] = UGDK_proxymethods.getter
+      elseif k == "__newindex" then
+        hacked[k] = UGDK_proxymethods.setter
+      else
+        hacked[k] = v
+      end
+    end
+    return hacked
+  end
+  function proxy (name)
+    local obj = {}
+    setmetatable(obj, hackmetatable(swig[name]))
+    return obj
+  end
+}
+
+%init {
+    ugdk::script::lua::ExportMetamethods(L);
+}
+
 %define proxy_class(T)
 %typemap(in) T* {
-    $1 = 0;
+    if (!SWIG_IsOK(SWIG_ConvertPtr(L, $input, (void**)&$1, $1_descriptor,0))) {
+        ugdk::script::lua::LuaWrapper* wrapper = static_cast<ugdk::script::lua::LuaWrapper*>(SCRIPT_MANAGER()->GetWrapper("Lua"));
+        ugdk::script::lua::LuaData* luadata = NULL;
+        lua_pushvalue(L, $input);
+        lua_getfield(L, -1, "__unsafedata");
+        if (lua_isuserdata(L, -1)) {
+            luadata = static_cast<ugdk::script::lua::LuaData*> (lua_touserdata(L, -1));
+            lua_pop(L, 2);
+            //printf("Using proxy cache of type "#T" (%p)\n", luadata);
+        } else {
+            lua_pop(L, 1);
+            luadata = wrapper->NewLuaData();
+            lua_pushlightuserdata(L, static_cast<void*>(luadata));
+            lua_setfield(L, -2, "__unsafedata");
+            luadata->UnsafePopValue();
+            //printf("Created proxy cache of type "#T" (%p)\n", luadata);
+        }
+        //ugdk::script::VirtualData::Ptr vdata(luadata);
+        //ugdk::script::VirtualObj vobj(vdata);
+        $1 = T##Proxy::Get(static_cast<ugdk::script::VirtualData*>(luadata));
+    }
 }
 
 %typemap(out) T* {
-    lua_pushnil( L);
+    using ugdk::script::lua::LuaData;
+    T##Proxy* _proxy_result = dynamic_cast<T##Proxy*>($1);
+    LuaData* luadata = NULL;
+    if (_proxy_result == NULL) {
+        SWIG_NewPointerObj(L, $result, $1_descriptor,0); SWIG_arg++;
+    } else {
+        luadata = static_cast<LuaData*>(_proxy_result->get_proxy_vobj().unsafe_data());
+        luadata->UnsafePushValue();
+        SWIG_arg++;
+    }
 }
 %enddef
 #elif SWIGPYTHON
@@ -85,18 +143,17 @@ Mainly, they need to be named ClassProxy, and their construct receive a ugdk::sc
 #ifdef SWIGLUA
 %define void_class()
 %typemap(in) void* {
-    $1 = 0;
+    $1 = (void*)lua_touserdata(L, $input);
 }
 
 %typemap(out) void* {
-    lua_pushnil( L);
+    lua_pushlightuserdata(L, $result); SWIG_arg++;
 }
 %enddef
 #elif SWIGPYTHON
 %define void_class()
 %typemap(in) void* {
     //printf("starting void in [PyObj*=%d][PyRefCount=%d]\n", (int)$input, (int)$input->ob_refcnt);
-
     //Py_INCREF($input);
     $1 = static_cast<void*>($input);
 }

@@ -23,8 +23,10 @@ bool BootstrapGear::Initialize(const ModuleList& modules) {
 DataGear* BootstrapGear::NextGear() {
     // too small to call in protected mode.
     L_.newtable();
-    int datatable_id = L_.aux().ref(Constant::REGISTRYINDEX());
-    return datatable_id == LUA_NOREF ? NULL : new DataGear(L_, datatable_id);
+    L_.setfield(Constant::REGISTRYINDEX(), "UGDK_LUA_DATATABLE");
+    //int datatable_id = L_.aux().ref(Constant::REGISTRYINDEX());
+    //return datatable_id == LUA_NOREF ? NULL : new DataGear(L_, datatable_id);
+    return new DataGear(L_);
 }
 
 void BootstrapGear::Abort() {

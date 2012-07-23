@@ -46,8 +46,17 @@ class LuaData : public VirtualData {
     Ptr SetAttribute(Ptr key, Ptr value);
     
     void* unsafe_data() const {
-        return NULL;
+        return const_cast<void*>(static_cast<const void*>(this));
     }
+
+    DataID id () const { return id_; }
+
+    /// Unsafely sets this LuaData objects data.
+    /** WARNING: Uses the lua value on the top of the stack.
+     */
+    void UnsafePopValue();
+
+    void UnsafePushValue();
 
     void AddToBuffer();
     void RemoveFromBuffer() {}
