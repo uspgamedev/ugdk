@@ -4,39 +4,47 @@
 #include <algorithm>
 
 #include "SDL.h"
+#include "SDL_image.h"
+#include "SDL_opengl.h"
 
-#include <ugdk/base/types.h>
+#include <ugdk/graphic/spritesheet.h>
+
 #include <ugdk/base/engine.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/graphic/spritesheet/fixedspritesheet.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/videomanager.h>
+
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>
 
 namespace ugdk {
 namespace graphic {
 
-FixedSpritesheetData::FixedSpritesheetData(const std::string& filename) {
+struct PixelSurface {
+    SDL_Surface* surface;
+    
+    PixelSurface(SDL_Surface* _surface) : surface(_surface) {}
+    ~PixelSurface() { if(surface) SDL_FreeSurface(surface); }
+};
+
+SpritesheetData::SpritesheetData(const std::string& filename) {
     std::string filepath = PATH_MANAGER()->ResolvePath(filename);
-    file_data_ = IMG_Load(filepath.c_str());
+    file_data_ = new PixelSurface(IMG_Load(filepath.c_str()));
 #ifdef DEBUG
     if(file_data_ == NULL)
-        fprintf(stderr, "FixedSpritesheetData - NULL received when loading \"%s\"\n", filepath.c_str());
+        fprintf(stderr, "SpritesheetData - NULL received when loading \"%s\"\n", filepath.c_str());
 #endif
 }
 
-FixedSpritesheetData::~FixedSpritesheetData() {
-    if(file_data_ != NULL) {
-        SDL_FreeSurface(file_data_);
-    }
+SpritesheetData::~SpritesheetData() {
+    delete file_data_;
 
-    for(std::vector<SpritesheetFrame>::iterator it = frames_.begin();
+    for(std::list<SpritesheetFrame>::iterator it = frames_.begin();
         it != frames_.end(); ++it)
-        SDL_FreeSurface(it->surface);
+        delete it->surface;
 }
 
-void FixedSpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot) {
+void SpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot) {
     if(file_data_ == NULL) return;
     
     SDL_Surface* surface = NULL;
@@ -54,51 +62,51 @@ void FixedSpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int
 #endif
     surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, rmask, gmask, bmask, amask);
 
-    SDL_LockSurface(file_data_);
+    SDL_LockSurface(file_data_->surface);
     SDL_LockSurface(surface);
 
-    Uint32 *source_pixels = static_cast<Uint32*>(file_data_->pixels);
+    Uint32 *source_pixels = static_cast<Uint32*>(file_data_->surface->pixels);
     Uint32 *target_pixels = static_cast<Uint32*>(surface->pixels);
     
     for(int y = 0; y < height; ++y)
         for(int x = 0; x < width; ++x) {
             Uint8 r, g, b, a;
-            SDL_GetRGBA(source_pixels[(y + topleft_y) * file_data_->w + (x + topleft_x)], file_data_->format, &r, &g, &b, &a);
+            SDL_GetRGBA(source_pixels[(y + topleft_y) * file_data_->surface->w + (x + topleft_x)], file_data_->surface->format, &r, &g, &b, &a);
             target_pixels[y * width + x] = SDL_MapRGBA(surface->format, r, g, b, a);
         }
     
     SDL_UnlockSurface(surface);
-    SDL_UnlockSurface(file_data_);
+    SDL_UnlockSurface(file_data_->surface);
 
-    frames_.push_back(SpritesheetFrame(surface, hotspot));
+    frames_.push_back(SpritesheetFrame(new PixelSurface(surface), hotspot));
 }
 
-void FixedSpritesheetData::FillWithFramesize(int width, int height, const Vector2D& hotspot) {
+void SpritesheetData::FillWithFramesize(int width, int height, const Vector2D& hotspot) {
     if(file_data_ == NULL) return;
-    for(int y = 0; y + height <= file_data_->h; y += height) {
-        for(int x = 0; x + width <= file_data_->w; x += width) {
+    for(int y = 0; y + height <= file_data_->surface->h; y += height) {
+        for(int x = 0; x + width <= file_data_->surface->w; x += width) {
             AddFrame(x, y, width, height, hotspot);
         }
     }
 }
 
-FixedSpritesheet::FixedSpritesheet(FixedSpritesheetData& data) {
-    const std::vector<FixedSpritesheetData::SpritesheetFrame>& frames = data.frames();
+Spritesheet::Spritesheet(const SpritesheetData& data) {
+    const std::list<SpritesheetData::SpritesheetFrame>& frames = data.frames();
 
-    lists_base_ = glGenLists(frames.size());
+    lists_base_ = glGenLists(static_cast<GLsizei>(frames.size()));
 
-    std::vector<FixedSpritesheetData::SpritesheetFrame>::const_iterator it;
+    std::list<SpritesheetData::SpritesheetFrame>::const_iterator it;
     GLuint id;
     for(it = frames.begin(), id = 0; it != frames.end(); ++it, ++id) {
-        Texture* texture = Texture::CreateFromSurface(it->surface);
-        CreateList(id, texture, it->hotspot);
+        Texture* texture = Texture::CreateFromSurface(it->surface->surface);
+        createList(id, texture, it->hotspot);
         frames_.push_back(texture);
         frame_sizes_.push_back(Vector2D(static_cast<double>(texture->width()), static_cast<double>(texture->height())));
     }
 }
 
-FixedSpritesheet::~FixedSpritesheet() {
-    glDeleteLists(lists_base_, frames_.size());
+Spritesheet::~Spritesheet() {
+    glDeleteLists(lists_base_, static_cast<GLsizei>(frames_.size()));
 
     // Clear the Textures
     for(std::vector<Texture*>::iterator it = frames_.begin();
@@ -106,7 +114,7 @@ FixedSpritesheet::~FixedSpritesheet() {
         delete *it;
 }
 
-void FixedSpritesheet::CreateList(GLuint id, Texture* texture, const Vector2D& hotspot) {
+void Spritesheet::createList(GLuint id, Texture* texture, const Vector2D& hotspot) {
     if(texture == NULL) return;
     glColor3f(1.0, 1.0, 1.0);
 
@@ -138,7 +146,7 @@ void FixedSpritesheet::CreateList(GLuint id, Texture* texture, const Vector2D& h
     } glEndList();
 }
 
-void FixedSpritesheet::Draw(int frame_number, const Vector2D& hotspot) {
+void Spritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
     if(!mod.visible()) return;
 
@@ -175,7 +183,7 @@ Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
     VirtualObj data = SCRIPT_MANAGER()->LoadModule("spritesheets." + SCRIPT_MANAGER()->ConvertPathToDottedNotation(tag));
     if(!data) return NULL;
 
-    FixedSpritesheetData sprite_data(data["file"].value<std::string>());
+    SpritesheetData sprite_data(data["file"].value<std::string>());
 
     if(data["fill"]) {
         VirtualObj::Vector fill = data["fill"].value<VirtualObj::Vector>();
@@ -197,7 +205,7 @@ Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
         }
     }
 
-    return new FixedSpritesheet(sprite_data);
+    return new Spritesheet(sprite_data);
 }
 
 }  // namespace graphic

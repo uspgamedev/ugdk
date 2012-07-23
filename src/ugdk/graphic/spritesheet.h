@@ -1,25 +1,88 @@
-#ifndef UGDK_GRAPHIC_SPRITESHEET_SPRITESHEET_H_
-#define UGDK_GRAPHIC_SPRITESHEET_SPRITESHEET_H_
+#ifndef UGDK_GRAPHIC_SPRITESHEET_H_
+#define UGDK_GRAPHIC_SPRITESHEET_H_
 
+#include <string>
+#include <list>
+#include <vector>
+#include <utility>
+
+#include <ugdk/base/types.h>
+#include <ugdk/graphic.h>
 #include <ugdk/math/vector2D.h>
+
+#ifdef SWIG
+#pragma SWIG nowarn=312
+#endif
+#ifndef __GL_H__
+extern "C" {
+typedef unsigned int GLuint;
+}
+#endif
 
 namespace ugdk {
 namespace graphic {
 
+struct PixelSurface;
+
+/// Container for an unoptimized FixedSpritesheet data. May freely add new frames.
+class SpritesheetData {
+  public:
+    struct SpritesheetFrame {
+        PixelSurface* surface;
+        Vector2D hotspot;
+
+        SpritesheetFrame(PixelSurface* _surface, const Vector2D& _hotspot)
+            : surface(_surface), hotspot(_hotspot) {}
+    };
+
+    /// Creates a new FixedSpritesheetData from the given file.
+    SpritesheetData(const std::string& filename);
+    ~SpritesheetData();
+    
+    /// Adds a new frame to the frame list.
+    void AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot);
+    
+    /// Adds frames of equal size, all with the same hotspot.
+    void FillWithFramesize(int width, int height, const Vector2D& hotspot);
+
+    /// Getter for the frame data.
+    const std::list<SpritesheetFrame>& frames() const { return frames_; }
+
+  private:
+    PixelSurface* file_data_;
+    std::list<SpritesheetFrame> frames_;
+};
+
 class Spritesheet {
   public:
-    virtual ~Spritesheet() {}
+    /// Converts the given FixedSpritesheetData into an optimized FixedSpritesheet. 
+    Spritesheet(const SpritesheetData& data);
+    virtual ~Spritesheet();
 
-    virtual void Draw(int frame_number, const Vector2D& hotspot) = 0;
-    
-    virtual             int frame_count()                const = 0;
-    virtual const Vector2D& frame_size(int frame_number) const = 0;
+    size_t frame_count() const {
+        return frame_sizes_.size();
+    }
 
-  protected:
-    Spritesheet() {}
+    const Vector2D& frame_size(int frame_number) const {
+        return frame_sizes_[frame_number];
+    }
+
+    /** Draws at position, a draw_size square with the given frame_number
+        modified by mirror and both the image and given color and alpha. */
+    void Draw(int frame_number, const Vector2D& hotspot);
+
+  private:
+    void createList(GLuint id, Texture* texture, const Vector2D& hotspot);
+
+    GLuint lists_base_;
+
+    std::vector<Texture*> frames_;
+    std::vector<Vector2D> frame_sizes_;
 };
+
+Spritesheet* CreateSpritesheetFromTag(const std::string&);
 
 }  // namespace graphic
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_GRAPHIC_SPRITESHEET_H_

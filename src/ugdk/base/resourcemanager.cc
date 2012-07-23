@@ -5,7 +5,6 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/base/genericcontainer.h>
 #include <ugdk/graphic/spritesheet.h>
-#include <ugdk/graphic/spritesheet/fixedspritesheet.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/animationprotocol.h>
 #include <ugdk/util/languageword.h>

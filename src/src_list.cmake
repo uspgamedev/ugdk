@@ -21,8 +21,7 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/light.cc 
     ./src/ugdk/graphic/modifier.cc 
     ./src/ugdk/graphic/node.cc 
-    ./src/ugdk/graphic/spritesheet/fixedspritesheet.cc 
-    ./src/ugdk/graphic/spritesheet/flexiblespritesheet.cc 
+    ./src/ugdk/graphic/spritesheet.cc
     ./src/ugdk/graphic/textmanager.cc 
     ./src/ugdk/graphic/texture.cc 
     ./src/ugdk/graphic/videomanager.cc 
