@@ -12,6 +12,9 @@ namespace graphic {
 class Sprite : public Drawable {
   public:
     Sprite(Spritesheet *spritesheet, action::AnimationSet *set = NULL);
+    explicit Sprite(const std::string& spritesheet_tag, action::AnimationSet *set = NULL);
+    explicit Sprite(const std::string& spritesheet_tag, const std::string& animation_set_tag);
+    explicit Sprite(Spritesheet *spritesheet, const std::string& animation_set_tag);
     virtual ~Sprite();
 
     void Draw(double dt);
@@ -22,7 +25,7 @@ class Sprite : public Drawable {
     void SelectAnimation(const std::string& animation_name) {
         animation_manager_->Select(animation_name);
     }
-    /// Change the current animation to a new animation from the previously selected AnimationSet.
+    /// Change the current animation to a new animation from the previo2usly selected AnimationSet.
     /**Given a animation index (a integer), the function changes the current animation to a new animation of AnimationSet*/
     void SelectAnimation(int animation_index) {
         animation_manager_->Select(animation_index);
