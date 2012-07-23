@@ -29,7 +29,7 @@
 #define VALID_NAME_TOKEN(token) ((isalnum((token))) || ((token) == '_'))
 
 // Checks if 'token' is a valid value character.
-#define VALID_VALUE_TOKEN(token) ((isalnum((token))) || ((token) == '_') || ((token) == '.'))
+#define VALID_VALUE_TOKEN(token) ((isalnum((token))) || ((token) == '_') || ((token) == '.') || ((token) == '-'))
 
 // Prints an empty field error, where the field is of type 'type'.
 #define ERR_EMPTY_FIELD(read, type) \

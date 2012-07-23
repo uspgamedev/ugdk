@@ -278,7 +278,7 @@ void VideoManager::InitializeLight() {
 }
 
 void VideoManager::PushAndApplyModifier(const Modifier* apply) {
-    Modifier top = (modifiers_.empty()) ? Modifier::IDENTITY : modifiers_.top();
+    Modifier top = CurrentModifier();
 
     if(apply->flags() & Modifier::HAS_COLOR) top.ComposeColor(apply);
     top.ComposeMirror(apply);
@@ -324,6 +324,11 @@ bool VideoManager::PopModifier() {
     modifiers_.pop();
     glPopMatrix();
     return true;
+}
+
+const Modifier& VideoManager::CurrentModifier() const {
+    static Modifier IDENTITY;
+    return (modifiers_.empty()) ? IDENTITY : modifiers_.top(); 
 }
 
 void VideoManager::ClearModiferStack() {

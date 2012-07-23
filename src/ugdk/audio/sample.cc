@@ -19,6 +19,10 @@ void Sample::Play() {
     Play(0);
 }
 
+void Sample::PlayForever() {
+    Play(-1);
+}
+
 void Sample::Play(int loops) {
     if(data_)
         channel_ = Mix_PlayChannel(-1, data_, loops);

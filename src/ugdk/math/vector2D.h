@@ -86,6 +86,18 @@ class Vector2D {
     */
     Vector2D Rotate(const double angle) const;
 
+    /// Returns a new vector equivalent to this vector when mirrored according to the y axis.
+    /** The horizantally mirrored vector of a vector (x, y) is (-x, y)
+     *  @return horizontally mirrored vector
+     */
+    Vector2D HorizontalMirror();
+
+    /// Returns a new vector equivalent to this vector when mirrored according to the x axis.
+    /** The vertically mirrored vector of a vector (x, y) is (x, -y)
+     *  @return horizontally mirrored vector
+     */
+    Vector2D VerticalMirror();
+
     /// Returns a new vector which is this vector scaled coordinate by coordinate with "scale".
     /** The resulting scaled vector is (this->x * scale.x, this->y * scale.y).
      *  @return scaled vector

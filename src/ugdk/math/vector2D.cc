@@ -29,6 +29,14 @@ Vector2D Vector2D::Rotate(const double angle) const {
     return Vector2D(x * ca - y * sa, x * sa + y * ca);
 }
 
+Vector2D Vector2D::HorizontalMirror() {
+    return Vector2D(-x, y);
+}
+
+Vector2D Vector2D::VerticalMirror() {
+    return Vector2D(x, -y);
+}
+
 Vector2D Vector2D::Scale(const Vector2D &scale) const {
     return Vector2D(x * scale.x, y * scale.y);
 }
