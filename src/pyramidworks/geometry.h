@@ -6,6 +6,7 @@ namespace geometry {
 
 class GeometricShape;
 class Circle;
+class ConvexPolygon;
 class Rect;
 
 } // namespace collision
