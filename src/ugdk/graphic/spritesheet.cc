@@ -212,14 +212,23 @@ Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
     VirtualObj data = SCRIPT_MANAGER()->LoadModule("spritesheets." + SCRIPT_MANAGER()->ConvertPathToDottedNotation(tag));
     if(!data) return NULL;
 
-    SpritesheetData sprite_data(data["file"].value<std::string>());
+    std::list<std::string> filenames;
+    {
+        VirtualObj::Vector files = data["file"].value<VirtualObj::Vector>();
+        for(VirtualObj::Vector::iterator it = files.begin(); it != files.end(); ++it)
+            filenames.push_back(it->value<std::string>());
+    }
+
+    SpritesheetData sprite_data(filenames);
 
     if(data["fill"]) {
+        // TODO: make fill a vector of fills.
         VirtualObj::Vector fill = data["fill"].value<VirtualObj::Vector>();
         int width = fill[0].value<int>();
         int height = fill[1].value<int>();
         Vector2D* hotspot = fill[2].value<Vector2D*>();
-        sprite_data.FillWithFramesize(width, height, *hotspot);
+        int file = (fill.size() >= 4) ? fill[4].value<int>() : 0;
+        sprite_data.FillWithFramesize(width, height, *hotspot, file);
     }
     if(data["frames"]) {
         VirtualObj::Vector frames = data["frames"].value<VirtualObj::Vector>();
@@ -230,7 +239,8 @@ Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
             int width = frame[2].value<int>();
             int height = frame[3].value<int>();
             Vector2D* hotspot = frame[4].value<Vector2D*>();
-            sprite_data.AddFrame(top_left_x, top_left_y, width, height, *hotspot);
+            int file = (frame.size() >= 6) ? frame[5].value<int>() : 0;
+            sprite_data.AddFrame(top_left_x, top_left_y, width, height, *hotspot, file);
         }
     }
 
