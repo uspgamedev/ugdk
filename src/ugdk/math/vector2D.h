@@ -1,6 +1,6 @@
 
-#ifndef HORUSEYE_FRAMEWORK_VECTOR2D_H_
-#define HORUSEYE_FRAMEWORK_VECTOR2D_H_
+#ifndef UGDK_MATH_VECTOR2D_H_
+#define UGDK_MATH_VECTOR2D_H_
 
 #ifdef SWIG
 #pragma SWIG nowarn=312
@@ -230,4 +230,4 @@ Vector2D operator*(const double  &scalar, const Vector2D &right);
 
 }  // namespace ugdk
 
-#endif  // HORUSEYE_FRAMEWORK_VECTOR2D_H_
+#endif  // UGDK_MATH_VECTOR2D_H_
