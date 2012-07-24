@@ -24,6 +24,9 @@ class ConvexPolygon : public GeometricShape {
 	bool Intersects(const ugdk::Vector2D& this_pos, const  ConvexPolygon *obj, const ugdk::Vector2D& that_pos) const;
     ugdk::ikdtree::Box<2> GetBoundingBox(const ugdk::Vector2D& position) const;
 
+	double bbox_width() { return bbox_half_width_*2; }
+	double bbox_height() { return bbox_half_height_*2; }
+
   private:
     std::vector<ugdk::Vector2D> vertices_;
 	double bbox_half_width_, bbox_half_height_;

@@ -16,7 +16,7 @@ ConvexPolygon::ConvexPolygon(const std::vector<ugdk::Vector2D>& vertices) : Geom
 }
 
 bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const ConvexPolygon *polygon, const ugdk::Vector2D& otherpos) const {
-	return checkAxisSeparation(vertices_, this_pos, polygon->vertices_, otherpos);
+	return ! checkAxisSeparation(vertices_, this_pos, polygon->vertices_, otherpos);
 }
 
 bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Rect *rect, const ugdk::Vector2D& otherpos) const {
@@ -30,7 +30,7 @@ bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Rect *rect
 	rect_vertices.push_back(v3);
 	rect_vertices.push_back(v4);
 
-	return checkAxisSeparation(vertices_, this_pos, rect_vertices, otherpos);
+	return ! checkAxisSeparation(vertices_, this_pos, rect_vertices, otherpos);
 }
 
 bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Circle *circle, const ugdk::Vector2D& circ_pos) const {
@@ -49,6 +49,7 @@ bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Circle *ci
 	double R = circle->radius();
 	int p2;
 	Vector2D A, B, edge, edgeNormal, proj, AC;
+	bool isCircleInside = true;
 	for (int i = 0; i < vertices_.size(); i++) {
 		p2 = i + 1;
 		if (p2 >= vertices_.size())	p2 = 0;
@@ -60,15 +61,15 @@ bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Circle *ci
 		edgeNormal.y = edge.x;
 
 		if (!insideSameSpace(edgeNormal, circ_pos)) {
+			isCircleInside = false;
 			AC = circ_pos - A;
 			proj = edge.Normalize() * (edge * AC);
 			if		((proj-circ_pos).LengthSquared() <= R*R)	return true;
 			else if ( (A - circ_pos).LengthSquared() <= R*R)	return true;
 			else if ( (B - circ_pos).LengthSquared() <= R*R)	return true;
-			return false;
 		}
 	}
-	return true; /* circ_pos is inside this convex polygon */
+	return isCircleInside;
 }
 
 bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const GeometricShape *obj, const ugdk::Vector2D& that_pos) const {
@@ -119,8 +120,8 @@ bool ConvexPolygon::axisSeparationTest(const ugdk::Vector2D& p1, const ugdk::Vec
 
 	bool ref_side = insideSameSpace(edgeNormal, (ref - p1));
 
-	for (int i = 0; i<vertices_.size(); i++) {
-		bool side = insideSameSpace(edgeNormal, ((vertices_[i]+obj2pos) - p1));
+	for (int i = 0; i<obj.size(); i++) {
+		bool side = insideSameSpace(edgeNormal, ((obj[i]+obj2pos) - p1));
 		if (side == ref_side) {
 			/* The point we're checking (of the other polygon) is in the same side as our reference point (from our polygon),
 				so this edge cannot be a separating axis. */
