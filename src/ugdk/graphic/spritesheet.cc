@@ -20,33 +20,7 @@
 namespace ugdk {
 namespace graphic {
 
-struct PixelSurface {
-    SDL_Surface* surface;
-    
-    PixelSurface(SDL_Surface* _surface) : surface(_surface) {}
-    ~PixelSurface() { if(surface) SDL_FreeSurface(surface); }
-};
-
-SpritesheetData::SpritesheetData(const std::string& filename) {
-    std::string filepath = PATH_MANAGER()->ResolvePath(filename);
-    file_data_ = new PixelSurface(IMG_Load(filepath.c_str()));
-#ifdef DEBUG
-    if(file_data_ == NULL)
-        fprintf(stderr, "SpritesheetData - NULL received when loading \"%s\"\n", filepath.c_str());
-#endif
-}
-
-SpritesheetData::~SpritesheetData() {
-    delete file_data_;
-
-    for(std::list<SpritesheetFrame>::iterator it = frames_.begin();
-        it != frames_.end(); ++it)
-        delete it->surface;
-}
-
-void SpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot) {
-    if(file_data_ == NULL) return;
-    
+static SDL_Surface* createBaseSurface(Uint32 width, Uint32 height) {
     SDL_Surface* surface = NULL;
     Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -61,33 +35,88 @@ void SpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int heig
     amask = 0xff000000;
 #endif
     surface = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, rmask, gmask, bmask, amask);
+    return surface;
+}
 
-    SDL_LockSurface(file_data_->surface);
-    SDL_LockSurface(surface);
+static void extractPartOfSurface(SDL_Surface* source, SDL_Surface* target, int topleft_x, int topleft_y, int width, int height) {
+    SDL_LockSurface(source);
+    SDL_LockSurface(target);
 
-    Uint32 *source_pixels = static_cast<Uint32*>(file_data_->surface->pixels);
-    Uint32 *target_pixels = static_cast<Uint32*>(surface->pixels);
+    Uint32 *source_pixels = static_cast<Uint32*>(source->pixels);
+    Uint32 *target_pixels = static_cast<Uint32*>(target->pixels);
     
     for(int y = 0; y < height; ++y)
         for(int x = 0; x < width; ++x) {
             Uint8 r, g, b, a;
-            SDL_GetRGBA(source_pixels[(y + topleft_y) * file_data_->surface->w + (x + topleft_x)], file_data_->surface->format, &r, &g, &b, &a);
-            target_pixels[y * width + x] = SDL_MapRGBA(surface->format, r, g, b, a);
+            SDL_GetRGBA(source_pixels[(y + topleft_y) * source->w + (x + topleft_x)], source->format, &r, &g, &b, &a);
+            target_pixels[y * width + x] = SDL_MapRGBA(target->format, r, g, b, a);
         }
     
-    SDL_UnlockSurface(surface);
-    SDL_UnlockSurface(file_data_->surface);
+    SDL_UnlockSurface(target);
+    SDL_UnlockSurface(source);
+}
+
+
+struct PixelSurface {
+    SDL_Surface* surface;
+    
+    PixelSurface(SDL_Surface* _surface) : surface(_surface) {}
+    PixelSurface(const std::string& filepath) : surface(IMG_Load(filepath.c_str())) {}
+    ~PixelSurface() { if(surface) SDL_FreeSurface(surface); }
+};
+
+SpritesheetData::SpritesheetData(const std::string& filename) {
+    std::string filepath = PATH_MANAGER()->ResolvePath(filename);
+    file_data_.push_back(new PixelSurface(filepath));
+#ifdef DEBUG
+    if(file_data_.back()->surface == NULL)
+        fprintf(stderr, "SpritesheetData - NULL received when loading \"%s\"\n", filepath.c_str());
+#endif
+}
+
+SpritesheetData::SpritesheetData(const std::list<std::string>& filenames) {
+    std::list<std::string>::const_iterator it;
+    for(it = filenames.begin(); it != filenames.end(); ++it) {
+        std::string filepath = PATH_MANAGER()->ResolvePath(*it);
+        file_data_.push_back(new PixelSurface(filepath));
+#ifdef DEBUG
+        if(file_data_.back()->surface == NULL)
+            fprintf(stderr, "SpritesheetData - NULL received when loading \"%s\"\n", filepath.c_str());
+#endif
+    }
+}
+
+SpritesheetData::~SpritesheetData() {
+    for(std::vector<PixelSurface*>::iterator it = file_data_.begin(); it != file_data_.end(); ++it)
+        delete *it;
+
+    for(std::list<SpritesheetFrame>::iterator it = frames_.begin();
+        it != frames_.end(); ++it)
+        delete it->surface;
+}
+
+void SpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot, size_t file) {
+    if(file >= file_data_.size() || file_data_[file]->surface == NULL) return;
+    
+    SDL_Surface* surface = createBaseSurface(width, height);
+    extractPartOfSurface(file_data_[file]->surface, surface, topleft_x, topleft_y, width, height);
 
     frames_.push_back(SpritesheetFrame(new PixelSurface(surface), hotspot));
 }
 
-void SpritesheetData::FillWithFramesize(int width, int height, const Vector2D& hotspot) {
-    if(file_data_ == NULL) return;
-    for(int y = 0; y + height <= file_data_->surface->h; y += height) {
-        for(int x = 0; x + width <= file_data_->surface->w; x += width) {
+void SpritesheetData::FillWithFramesize(int width, int height, const Vector2D& hotspot, size_t file) {
+    if(file >= file_data_.size() || file_data_[file]->surface == NULL) return;
+
+    for(int y = 0; y + height <= file_data_[file]->surface->h; y += height) {
+        for(int x = 0; x + width <= file_data_[file]->surface->w; x += width) {
             AddFrame(x, y, width, height, hotspot);
         }
     }
+}
+    
+void SpritesheetData::FillWithFramesizeFromAllFiles(int width, int height, const Vector2D& hotspot) {
+    for(size_t i = 0; i < file_data_.size(); ++i)
+        FillWithFramesize(width, height, hotspot, i);
 }
 
 Spritesheet::Spritesheet(const SpritesheetData& data) {
