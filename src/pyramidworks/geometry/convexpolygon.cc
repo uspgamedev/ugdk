@@ -47,10 +47,10 @@ bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Circle *ci
 	RETURN COLIDE-CIRCULO-DENTRO
 	*/
 	double R = circle->radius();
-	int p2;
+	size_t p2;
 	Vector2D A, B, edge, edgeNormal, proj, AC;
 	bool isCircleInside = true;
-	for (int i = 0; i < vertices_.size(); i++) {
+	for (size_t i = 0; i < vertices_.size(); i++) {
 		p2 = i + 1;
 		if (p2 >= vertices_.size())	p2 = 0;
 
@@ -85,7 +85,7 @@ ugdk::ikdtree::Box<2> ConvexPolygon::GetBoundingBox(const ugdk::Vector2D& thispo
 }
 
 void ConvexPolygon::calculateSize() {
-	for (int i=0; i < vertices_.size(); i++) {
+	for (size_t i=0; i < vertices_.size(); i++) {
 		if (fabs(vertices_[i].x) > bbox_half_width_)
 			bbox_half_width_ = fabs(vertices_[i].x);
 		if (fabs(vertices_[i].y) > bbox_half_height_)
@@ -95,17 +95,10 @@ void ConvexPolygon::calculateSize() {
 
 bool ConvexPolygon::checkAxisSeparation(const std::vector<ugdk::Vector2D>& obj1, const ugdk::Vector2D& obj1pos,
 										const std::vector<ugdk::Vector2D>& obj2, const ugdk::Vector2D& obj2pos) const {
-	int p2, ref;
-	for (int i = 0; i < obj1.size(); i++) {
+	size_t p2;
+	for (size_t i = 0; i < obj1.size(); i++) {
 		p2 = i + 1;
 		if (p2 >= obj1.size())	p2 = 0;
-
-		ref = 0;
-		if (i == 0) {
-			if (obj1.size() == 2)	ref = 0;
-			else if (obj1.size() == 3)	ref = 2;
-			else	ref = 0;
-		}
 
 		if (axisSeparationTest(obj1[i]+obj1pos, obj1[p2]+obj1pos, obj1pos, obj2, obj2pos))
 			return true;
@@ -120,7 +113,7 @@ bool ConvexPolygon::axisSeparationTest(const ugdk::Vector2D& p1, const ugdk::Vec
 
 	bool ref_side = insideSameSpace(edgeNormal, (ref - p1));
 
-	for (int i = 0; i<obj.size(); i++) {
+	for (size_t i = 0; i<obj.size(); i++) {
 		bool side = insideSameSpace(edgeNormal, ((obj[i]+obj2pos) - p1));
 		if (side == ref_side) {
 			/* The point we're checking (of the other polygon) is in the same side as our reference point (from our polygon),
