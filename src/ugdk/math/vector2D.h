@@ -168,6 +168,15 @@ class Vector2D {
         return a.Rotate(angle);
     }
 
+
+	/// Compares this vector to the given vector, return True if they are equivalent.
+		/** Two vectors are equivalent if the coordinates are equal.
+        *  @return True if vectors are equivalent.
+        */
+	bool operator==(const Vector2D &rhs) {
+		return x==rhs.x && y==rhs.y;
+	}
+
     // TODO document and revise
     Vector2D& operator+=(const Vector2D &other);
     

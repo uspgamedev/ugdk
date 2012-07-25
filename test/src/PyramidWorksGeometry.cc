@@ -139,7 +139,7 @@ TEST(ConvexPolygon, ConvexPolygonIntersection) {
 
 	{	EXPECT_TRUE( cp.Intersects(cpPos, &rect, rPos) ); }
 
-	{	Vector2D tPos (6,10); /**/
+	{	Vector2D tPos (6,10); /*NOT WORKING - vertices (1 of each polygon) are in the same pos*/
 		EXPECT_TRUE( cp.Intersects(cpPos, &triangle, tPos) ); }
 
 	{	Vector2D tPos (6,3);

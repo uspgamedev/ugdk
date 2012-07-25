@@ -143,7 +143,7 @@ bool ConvexPolygon::axisSeparationTest(const ugdk::Vector2D& p1, const ugdk::Vec
 }
 
 bool ConvexPolygon::insideSameSpace(const ugdk::Vector2D& line, const ugdk::Vector2D& point) const {
-	return (line * point) >= 0;
+	return (line * point) > 0;
 }
 
 } // namespace geometry
