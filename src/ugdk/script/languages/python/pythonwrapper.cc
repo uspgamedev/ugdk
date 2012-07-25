@@ -64,72 +64,65 @@ void PythonWrapper::Finalize() {
 }
 
 void PythonWrapper::PrintPythonExceptionDetails() {
-    PyObject *exc_type=NULL, *exc_value=NULL, *exc_tb=NULL, *arglist=NULL,
-             *traceback=NULL, *format=NULL, *errlist=NULL, *errstr=NULL;
+    if(PyErr_Occurred() == NULL) {
+        puts("No Exception.");
+        return;
+    }
+    PyObject *temp, *exc_typ, *exc_val, *exc_tb;
+    PyErr_Fetch(&exc_typ,&exc_val,&exc_tb);
+    PyErr_NormalizeException(&exc_typ,&exc_val,&exc_tb);
 
-    do {
-        PyErr_Fetch(&exc_type, &exc_value, &exc_tb);
-        /*value and tb can be null (no exception) :: we own ref to all of them*/
+    temp = PyObject_GetAttrString(exc_typ, "__name__");
+    if (temp != NULL) {
+        fprintf(stderr, "%s: ", PyString_AsString(temp));
+        Py_DECREF(temp);
+    }
+    Py_DECREF(exc_typ);
 
-        PyObject* arglist = PyTuple_New(3); //new ref
-        if (arglist == NULL) {
-            fprintf(stderr, "[Python] Error 1, can't print exception details.\n");
-            break;
+    if(exc_val != NULL) {
+        temp = PyObject_Str(exc_val);
+        if (temp != NULL) {
+            fprintf(stderr, PyString_AsString(temp));
+            Py_DECREF(temp);
         }
-        PyTuple_SetItem(arglist, 0, exc_type);   // PyTuple_SetItem
-        PyTuple_SetItem(arglist, 1, exc_value);  // steals the reference
-        PyTuple_SetItem(arglist, 2, exc_tb);	 // to the given item
+        Py_DECREF(exc_val);
+    }
 
-        /*It's kinda ugly to do this, but if we do not use traceback.format_exception
-          I would have a LOT of work to do here =P*/
-        traceback = PyImport_ImportModule("traceback");
-        if (traceback == NULL) {
-            fprintf(stderr, "[Python] Error 2, can't print exception details.\n");
-            break;
-        }
-
-        format = PyObject_GetAttrString(traceback, "format_exception"); //return is new ref
-        if (format == NULL) {
-            fprintf(stderr, "[Python] Error 3, can't print exception details.\n");
-            break;
-        }
-
-        errlist = PyObject_CallObject(format, arglist); //return is new ref
-        if (errlist == NULL) {
-            fprintf(stderr, "[Python] Error 4, can't print exception details.\n");
-            break;
-        }
-
-        errstr = PyString_FromString("[Python] Exception Details:\n");
-        PyObject* errstr_part;
-        Py_ssize_t size = PyList_Size(errlist);
-        for (Py_ssize_t i=0; i<size; i++) {
-            errstr_part = PyList_GetItem(errlist, i); //borrowed reference
-            PyString_Concat(&errstr, errstr_part);
-        }
-
-        if (errstr == NULL) {
-            fprintf(stderr, "[Python] Error 5, can't print exception details.\n");
-            break;
-        }
-
-        char* message = PyString_AsString(errstr);
-        fprintf(stderr, "%s\n", message);
-
-    } while (0);
-
-    Py_XDECREF(arglist);
-    Py_XDECREF(traceback);
-    Py_XDECREF(format);
-    Py_XDECREF(errlist);
-    Py_XDECREF(errstr);
+    printf("\n");
+    if(exc_tb == NULL) return;
     
-    /*///////////////////////////////////////
-    // what we do above in C++ is basically the following in Python:
-    PyRun_SimpleString("import sys, traceback");
-    PyRun_SimpleString("exc = sys.exc_info()");
-    PyRun_SimpleString("tb = traceback.format_exception(exc[0], exc[1], exc[2])");
-    PyRun_SimpleString("for s in tb:    print s");*/
+    PyObject *pName = PyString_FromString("traceback");
+    PyObject *pModule = PyImport_Import(pName);
+    Py_DECREF(pName);
+    
+    if(pModule == NULL) return;
+
+    PyObject *pFunc = PyObject_GetAttrString(pModule, "format_tb");
+    
+    if (pFunc && PyCallable_Check(pFunc)) {
+        PyObject *pArgs = PyTuple_New(1);
+        PyTuple_SetItem(pArgs, 0, exc_tb);
+
+        PyObject *pValue = PyObject_CallObject(pFunc, pArgs);
+        if (pValue != NULL) {
+            Py_ssize_t len = PyList_Size(pValue);
+            PyObject *t;
+            for (Py_ssize_t i = 0; i < len; i++) {
+                PyObject *tt = PyList_GetItem(pValue,i);
+                t = Py_BuildValue("(O)",tt);
+                
+                char *buffer;
+                if(!PyArg_ParseTuple(t,"s",&buffer)) break;
+
+                fputs(buffer, stderr);
+            }
+        }
+        Py_DECREF(pValue);
+        Py_DECREF(pArgs);
+    }
+    Py_DECREF(pFunc);
+
+    Py_DECREF(pModule);
 }
 
 }
