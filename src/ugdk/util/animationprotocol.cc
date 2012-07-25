@@ -201,7 +201,9 @@ bool AnimationProtocol::NewEntry_EffectAlpha(const gdd::GDDArgs &args) {
     double new_alpha = (double)(atof(args[0].c_str()));
     new_alpha = std::min( std::max(new_alpha,0.0), 1.0 ); // new_alpha is of [0.0,1.0]
 
-    current_effect_->set_alpha(new_alpha);
+    Color c = current_effect_->color();
+    c.a = new_alpha;
+    current_effect_->set_color(c);
     return true;
 
 }
@@ -326,8 +328,10 @@ bool AnimationProtocol::NewEntry_FrameAlpha(const gdd::GDDArgs &args) {
     action::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
 
-    if (composing_) cur_frame->modifier()->ComposeAlpha(new_alpha);
-    else            cur_frame->modifier()->set_alpha(new_alpha);
+    Color c = cur_frame->modifier()->color();
+    if (composing_) c.a *= new_alpha;
+    else            c.a  = new_alpha;
+    cur_frame->modifier()->set_color(c);
     return true;
 
 }

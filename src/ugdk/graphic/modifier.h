@@ -51,7 +51,6 @@ class Modifier {
     double          rotation()  const { return rotation_; }
     const Mirror&   mirror()    const { return   mirror_; }
     const Color&    color()     const { return    color_; }
-    double          alpha()     const { return  color_.a; }
     uint16          flags()     const { return    flags_; }
     bool            visible()   const { return  visible_; }
 
@@ -64,8 +63,6 @@ class Modifier {
     void set_mirror(const Mirror mirror);
     /// Truncates each component to [0,1] and sets it to the Modifier.
     void set_color(const Color& color);
-    /// Truncates alpha to [0,1] and sets it to the Modifier.
-    void set_alpha(const double alpha);
     void set_visible(const bool visible) { visible_ = visible; }
     /**@}
      */
@@ -84,9 +81,7 @@ class Modifier {
     void ComposeMirror(const Mirror& mirror);
     /// Truncates each component to [0,1] and composes on the Modifier.
     void ComposeColor(const Color& color);
-    /// Truncates alpha to [0,1] and composes on the Modifier.    void ComposeAlpha(const double alpha);
-	void ComposeAlpha(const double alpha);
-    void ComposeVisible(const bool visible) { visible_ = !(!visible_ || !visible); }
+    void ComposeVisible(const bool visible) { visible_ = visible_ && visible; }
     
     void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeOffset(   mod2->offset_   ); }
     void ComposeScale(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeScale(    mod2->scale_    ); }

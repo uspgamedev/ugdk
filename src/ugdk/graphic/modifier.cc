@@ -4,7 +4,7 @@
 
 #include <ugdk/graphic/modifier.h>
 
-#define TWO_PI 6.28318530
+#define TWO_PI 6.283185307179586476925286766559
 #define TO_UNIT_INTERVAL(double) ( std::min(std::max((double), 0.0), 1.0) )
 
 namespace ugdk {
@@ -27,7 +27,6 @@ void Modifier::Compose(const Modifier* mod2) {
 }
 
 Modifier* Modifier::Compose(const Modifier* mod1, const Modifier* mod2) {
-
     if(mod1 == NULL) return Copy(mod2);
 
     Modifier* mod = Copy(mod1);
@@ -45,10 +44,7 @@ void Modifier::set_mirror(const Mirror mirror) {
 }
 
 void Modifier::set_color(const Color& color) {
-    color_.r = TO_UNIT_INTERVAL(color.r);
-    color_.g = TO_UNIT_INTERVAL(color.g);
-    color_.b = TO_UNIT_INTERVAL(color.b);
-    color_.a = TO_UNIT_INTERVAL(color.a);
+    color_ = color;
     flags_ |= HAS_COLOR;
 }
 
@@ -57,22 +53,13 @@ void Modifier::set_rotation(const double rotation) {
     flags_ |= HAS_TRANSFORMATION;
 }
 
-void Modifier::set_alpha(const double alpha) {
-    color_.a = TO_UNIT_INTERVAL(alpha);
-    flags_ |= HAS_COLOR;
-}
-
-
 void Modifier::ComposeMirror(const Mirror& mirror) {
     if( (mirror & MIRROR_HFLIP) || (mirror & MIRROR_VFLIP) )
         mirror_ ^= mirror;
 }
 
 void Modifier::ComposeColor(const Color& color) {
-    color_.r *= TO_UNIT_INTERVAL(color.r);
-    color_.g *= TO_UNIT_INTERVAL(color.g);
-    color_.b *= TO_UNIT_INTERVAL(color.b);
-    color_.a *= TO_UNIT_INTERVAL(color.a);
+    color_.Compose(color);
     flags_ |= HAS_COLOR;
 }
 
@@ -81,11 +68,6 @@ void Modifier::ComposeRotation(const double rotation) {
     flags_ |= HAS_TRANSFORMATION;
 }
 
-void Modifier::ComposeAlpha(const double alpha) {
-    color_.a *= TO_UNIT_INTERVAL(alpha);
-    flags_ |= HAS_COLOR;
-}
-    
 Modifier* Modifier::Copy(const Modifier* mod2) { 
     if(mod2 == NULL) return NULL;
     return new Modifier(*mod2);

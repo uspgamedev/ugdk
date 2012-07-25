@@ -11,7 +11,7 @@
 #include <ugdk/math/vector2D.h>
 
 #ifdef SWIG
-#pragma SWIG nowarn=312
+#pragma SWIG nowarn=325
 #endif
 #ifndef __GL_H__
 extern "C" {
