@@ -21,8 +21,12 @@ void* PythonData::Unwrap(const VirtualType& type, bool disown) const {
     return NULL;
 }
 const char* PythonData::UnwrapString() const {
-    if (py_data_ == NULL)   return NULL;
-    return PyString_AsString(py_data_);
+    if (py_data_ == NULL) return "INVALID";
+    PyObject *temp = PyObject_Str(py_data_);
+    if(temp == NULL) return "INVALID";
+    char* result = PyString_AsString(temp);
+    Py_DECREF(temp);
+    return result;
 }
 bool PythonData::UnwrapBoolean() const {
     return !!PyObject_IsTrue(py_data_); //HEEEEL YEAAAAH!!
