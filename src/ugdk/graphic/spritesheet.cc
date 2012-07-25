@@ -143,6 +143,11 @@ Spritesheet::~Spritesheet() {
         delete *it;
 }
 
+const Vector2D& Spritesheet::frame_size(size_t frame_number) const {
+    static const Vector2D invalid_size(0.0, 0.0);
+    return frame_number < frame_sizes_.size() ? frame_sizes_[frame_number] : invalid_size;
+}
+
 void Spritesheet::createList(GLuint id, Texture* texture, const Vector2D& hotspot) {
     if(texture == NULL) return;
     glColor3f(1.0, 1.0, 1.0);
@@ -180,9 +185,9 @@ void Spritesheet::Draw(int frame_number, const Vector2D& hotspot) {
     if(!mod.visible()) return;
 
     bool popmatrix = false;
-    if(mod.mirror() != MIRROR_NONE || hotspot.LengthSquared() > 1.0e-6) {
+    if(mod.mirror() != MIRROR_NONE || hotspot.NormOne() > 1.0e-6) {
         glPushMatrix();
-        // TODO: optimize mirroring, and combine the matrices
+        // TODO: combine the matrices
 
         // hotspot
         glTranslated(-hotspot.x, -hotspot.y, 0.0);
