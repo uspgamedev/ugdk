@@ -94,9 +94,9 @@ void ConvexPolygon::calculateSize() {
 
 bool ConvexPolygon::checkAxisSeparation(const std::vector<ugdk::Vector2D>& obj1, const ugdk::Vector2D& obj1pos,
 										const std::vector<ugdk::Vector2D>& obj2, const ugdk::Vector2D& obj2pos) const {
-	size_t p2;
+	size_t i, p2;
 	/* For each edge in the obj1 polygon, we check if that edge is a separating axis between the two polygons. */
-	for (size_t i = 0; i < obj1.size(); i++) {
+	for (i = 0; i < obj1.size(); i++) {
 		p2 = i + 1;
 		if (p2 >= obj1.size())	p2 = 0;
 
@@ -105,6 +105,17 @@ bool ConvexPolygon::checkAxisSeparation(const std::vector<ugdk::Vector2D>& obj1,
 		if (axisSeparationTest(obj1[i]+obj1pos, obj1[p2]+obj1pos, obj1pos, obj2, obj2pos))
 			return true;
 	}
+
+	/* In order for this test work properly, we need to check *every*  edge if it is a separating axis, so that includes
+	   also testing obj2 edges. */
+	for (i = 0; i < obj2.size(); i++) {
+		p2 = i + 1;
+		if (p2 >= obj2.size())	p2 = 0;
+
+		if (axisSeparationTest(obj2[i]+obj2pos, obj2[p2]+obj2pos, obj2pos, obj1, obj1pos))
+			return true;
+	}
+
 	return false;
 }
 
