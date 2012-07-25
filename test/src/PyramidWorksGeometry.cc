@@ -46,3 +46,37 @@ TEST(ConvexPolygon, RectIntersection) {
 	{	Vector2D rPos (3,9);
 		EXPECT_TRUE( cp.Intersects(cpPos, &r, rPos) ); }
 }
+
+TEST(ConvexPolygon, CircleIntersection) {
+	vector<Vector2D> vertices;
+	vertices.push_back( Vector2D(-1,0) );
+	vertices.push_back( Vector2D(1,6) );
+	vertices.push_back( Vector2D(2,-2) );
+	vertices.push_back( Vector2D(1,-3) );
+	vertices.push_back( Vector2D(-0.5,-2) );
+	ConvexPolygon cp (vertices);
+	Vector2D cpPos (2, 4);
+
+	Circle r (0.5);
+	
+	{	Vector2D rPos (3,10.25);
+		EXPECT_TRUE( cp.Intersects(cpPos, &r, rPos) ); }
+
+	{	Vector2D rPos (8,6);
+		EXPECT_FALSE( cp.Intersects(cpPos, &r, rPos) ); }
+
+	{	Vector2D rPos (1,7);
+		EXPECT_FALSE( cp.Intersects(cpPos, &r, rPos) ); }
+
+	{	Vector2D rPos (4,4);   /**/
+		EXPECT_TRUE( cp.Intersects(cpPos, &r, rPos) ); }
+
+	{	Vector2D rPos (3,3);
+		EXPECT_TRUE( cp.Intersects(cpPos, &r, rPos) ); }
+
+	{	Vector2D rPos (3,2);
+		EXPECT_TRUE( cp.Intersects(cpPos, &r, rPos) ); }
+
+	{	Vector2D rPos (3.8, 1);
+		EXPECT_FALSE( cp.Intersects(cpPos, &r, rPos) ); }
+}

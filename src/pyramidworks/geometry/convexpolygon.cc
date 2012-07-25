@@ -4,8 +4,6 @@
 #include <cmath>
 #include <ugdk/util/intervalkdtree.h>
 
-#define SQRT_TWO 1.4142136
-
 namespace pyramidworks {
 namespace geometry {
 
@@ -34,22 +32,13 @@ bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Rect *rect
 }
 
 bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Circle *circle, const ugdk::Vector2D& circ_pos) const {
-	/*
-	circulo = centro C, raio R
-	pra cada aresta E (A-B) do convexo:
-		bool io = pontoEstaDentro(E, C)
-		if !io:
-			D =  (AB/|AB |) * <AB, AC>
-			if |D-C|² <= R²:   RETURN COLIDE
-			else if |A-C|² <= R²:  RETURN COLIDE
-			else if |B-C|² <= R²:  RETURN COLIDE
-			RETURN NAO-COLIDE
-	RETURN COLIDE-CIRCULO-DENTRO
-	*/
-	double R = circle->radius();
+	double R = circle->radius(), AC_edge_angle, BC_edge_angle;
 	size_t p2;
-	Vector2D A, B, edge, edgeNormal, proj, AC;
+	Vector2D A, B, edge, edgeNormal, AC;
 	bool isCircleInside = true;
+	bool isProjInEdge;
+	/* For each edge in the convex polygon, check if the center of the circle is "inside" the polygon. 
+	   If this is true for all edges, the center of the circle is inside the polygon area and therefore they intersect. */
 	for (size_t i = 0; i < vertices_.size(); i++) {
 		p2 = i + 1;
 		if (p2 >= vertices_.size())	p2 = 0;
@@ -59,13 +48,22 @@ bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Circle *ci
 		edge = B - A;
 		edgeNormal.x = -edge.y;
 		edgeNormal.y = edge.x;
+		AC = circ_pos - A;
 
-		if (!insideSameSpace(edgeNormal, circ_pos)) {
+		if (insideSameSpace(edgeNormal, AC)) {
+			/* This edge says the center point is "outside" the polygon, so the circle cannot be inside the polygon.
+			   So check if the circle intersects with the edge by calculating the distance between the center and the edge
+			   using projection. */
 			isCircleInside = false;
-			AC = circ_pos - A;
-			proj = edge.Normalize() * (edge * AC);
-			if		((proj-circ_pos).LengthSquared() <= R*R)	return true;
-			else if ( (A - circ_pos).LengthSquared() <= R*R)	return true;
+			edgeNormal = edgeNormal.Normalize();
+			edge = edge.Normalize();
+			AC_edge_angle = AC.Normalize() * edge;
+			BC_edge_angle = (circ_pos-B).Normalize() * (edge*-1);
+			isProjInEdge = ( 0 <= AC_edge_angle && AC_edge_angle <= 1.0) && ( 0 <= BC_edge_angle && BC_edge_angle <= 1.0 );
+			/* If the projection of the center to the edge line is in the edge "space" and the distance is less than the circle radius, it is intersecting.*/
+			if		(isProjInEdge && (edgeNormal * AC) <= R)	return true;
+			/* Else if either extremity of the edge is close to the center point, we're also intersecting.*/
+			else if ( (     AC     ).LengthSquared() <= R*R)	return true;
 			else if ( (B - circ_pos).LengthSquared() <= R*R)	return true;
 		}
 	}
@@ -85,6 +83,7 @@ ugdk::ikdtree::Box<2> ConvexPolygon::GetBoundingBox(const ugdk::Vector2D& thispo
 }
 
 void ConvexPolygon::calculateSize() {
+	/* Calculate rough width and height of the convex polygon in order to build a bounding box. */
 	for (size_t i=0; i < vertices_.size(); i++) {
 		if (fabs(vertices_[i].x) > bbox_half_width_)
 			bbox_half_width_ = fabs(vertices_[i].x);
@@ -96,10 +95,13 @@ void ConvexPolygon::calculateSize() {
 bool ConvexPolygon::checkAxisSeparation(const std::vector<ugdk::Vector2D>& obj1, const ugdk::Vector2D& obj1pos,
 										const std::vector<ugdk::Vector2D>& obj2, const ugdk::Vector2D& obj2pos) const {
 	size_t p2;
+	/* For each edge in the obj1 polygon, we check if that edge is a separating axis between the two polygons. */
 	for (size_t i = 0; i < obj1.size(); i++) {
 		p2 = i + 1;
 		if (p2 >= obj1.size())	p2 = 0;
 
+		/* obj1 and obj2 Vector2Ds are in local coordinates relative to that polygon - so add the polygon position to the
+		   obj1 vectors we are passing to the separating axis edge test. */
 		if (axisSeparationTest(obj1[i]+obj1pos, obj1[p2]+obj1pos, obj1pos, obj2, obj2pos))
 			return true;
 	}
@@ -111,8 +113,10 @@ bool ConvexPolygon::axisSeparationTest(const ugdk::Vector2D& p1, const ugdk::Vec
 	Vector2D edge = p2 - p1;
 	Vector2D edgeNormal (-edge.y, edge.x);
 
+	/* Store the side of the reference point in the given polygon (obj1) relative to the given edge (p2-p1) to check against. */
 	bool ref_side = insideSameSpace(edgeNormal, (ref - p1));
 
+	/* Now check in which side of the edge each vertex of the obj2 polygon is. */
 	for (size_t i = 0; i<obj.size(); i++) {
 		bool side = insideSameSpace(edgeNormal, ((obj[i]+obj2pos) - p1));
 		if (side == ref_side) {
@@ -121,6 +125,9 @@ bool ConvexPolygon::axisSeparationTest(const ugdk::Vector2D& p1, const ugdk::Vec
 			return false;
 		}
 	}
+
+	/* All vertices of the obj2 polygon are on the opposing side of the given reference point relative to the edge, so this
+	   edge is a separating axis. */
 	return true;
 }
 

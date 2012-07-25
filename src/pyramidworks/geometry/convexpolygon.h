@@ -33,6 +33,15 @@ class ConvexPolygon : public GeometricShape {
 
 	void calculateSize();
 
+	/// Checks if there's an separating axis between the two given objects (convex polygons represented as a Vector2D list and a position). 
+	/// If a separating axis exist, the two polygons do not intersect.
+	/** @param obj1 The list of vertices, in local coordinates, of the first convex polygon. Each pair of adjacent vectors 
+				(plus the last and initial vectors) in the list correspond to a pair of vertices that form a edge of the polygon. Vertices should be ordered clockwise.
+        @param obj1pos The position of the first convex polygon.
+        @param obj2 The list of vertices, in local coordinates, of the second convex polygon. Each pair of adjacent vectors 
+				(plus the last and initial vectors) in the list correspond to a pair of vertices that form a edge of the polygon. Vertices should be ordered clockwise.
+		@param obj2pos The position of the second convex polygon.
+        @return True if there's a separating axis. */
 	bool checkAxisSeparation(const std::vector<ugdk::Vector2D>& obj1, const ugdk::Vector2D& obj1pos, 
 							 const std::vector<ugdk::Vector2D>& obj2, const ugdk::Vector2D& obj2pos) const;
 	bool axisSeparationTest(const ugdk::Vector2D& p1, const ugdk::Vector2D& p2, const ugdk::Vector2D& ref,
