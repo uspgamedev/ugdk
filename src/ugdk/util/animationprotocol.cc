@@ -26,13 +26,10 @@ namespace ugdk {
 //      entry_functions_[RING_TYPE][KEY_0] = ENTRY_FUNCTION_NAME;
 //      entry_functions_[RING_TYPE][KEY_1] = ENTRY_FUNCTION_NAME;
 //      etc...
-// 5 since there are five standard ids for keywords: "foo", "f", "Foo", "F", "FOO".
-#define ENTRY_MAP_BULK_ASSIGN(RING_TYPE, ENTRY_FUNCTION, KEY_0, KEY_1, KEY_2, KEY_3, KEY_4) \
-    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_0, ENTRY_FUNCTION);                                 \
-    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_1, ENTRY_FUNCTION);                                 \
-    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_2, ENTRY_FUNCTION);                                 \
-    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_3, ENTRY_FUNCTION);                                 \
-    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_4, ENTRY_FUNCTION)
+// 5 since there are five standard ids for keywords: "foo", "f".
+#define ENTRY_MAP_BULK_ASSIGN(RING_TYPE, ENTRY_FUNCTION, KEY_0, KEY_1) \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_0, ENTRY_FUNCTION);            \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_1, ENTRY_FUNCTION);
 
 using std::string;
 using std::pair;
@@ -44,39 +41,21 @@ using gdd::LoadError;
 AnimationProtocol::AnimationProtocol() : current_animation_(NULL), current_effect_(NULL), composing_(false) {
     //TODO: Make this map static maybe?
 
-    /*TODO: Nuke this commented code when you're sure the new ver. works.
-    //entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "number")   ] = &AnimationProtocol::NewEntry_EffectNumber;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "alpha")    ] = &AnimationProtocol::NewEntry_EffectAlpha;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "color")    ] = &AnimationProtocol::NewEntry_EffectColor;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "position") ] = &AnimationProtocol::NewEntry_EffectPosition;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "mirror")   ] = &AnimationProtocol::NewEntry_EffectMirror;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "scale")    ] = &AnimationProtocol::NewEntry_EffectSize;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECentãT_RING, "rotation") ] = &AnimationProtocol::NewEntry_EffectRotation;
+    //ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectNumber  , "number"  , "n");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectAlpha   , "alpha"   , "a");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectColor   , "color"   , "c");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectPosition, "position", "p");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectMirror  , "mirror"  , "m");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectSize    , "size"    , "s");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectRotation, "rotation", "r");
 
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "number")   ] = &AnimationProtocol::NewEntry_FrameNumber;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "alpha")    ] = &AnimationProtocol::NewEntry_FrameAlpha;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "color")    ] = &AnimationProtocol::NewEntry_FrameColor;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "position") ] = &AnimationProtocol::NewEntry_FramePosition;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "mirror")   ] = &AnimationProtocol::NewEntry_FrameMirror;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "size")     ] = &AnimationProtocol::NewEntry_FrameSize;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "rotation") ] = &AnimationProtocol::NewEntry_FrameRotation;
-    */
-
-    //ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectNumber  , "number"  , "n", "Number"  , "N", "NUMBER"  );
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectAlpha   , "alpha"   , "a", "Alpha"   , "A", "ALPHA"   );
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectColor   , "color"   , "c", "Color"   , "C", "COLOR"   );
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectPosition, "position", "p", "Position", "P", "POSITION");
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectMirror  , "mirror"  , "m", "Mirror"  , "M", "MIRROR"  );
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectSize    , "size"    , "s", "Size"    , "S", "SIZE"    );
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectRotation, "rotation", "r", "Rotation", "R", "ROTATION");
-
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameNumber   , "number"  , "n", "Number"  , "N", "NUMBER"  );
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameAlpha    , "alpha"   , "a", "Alpha"   , "A", "ALPHA"   );
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameColor    , "color"   , "c", "Color"   , "C", "COLOR"   );
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FramePosition , "position", "p", "Position", "P", "POSITION");
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameMirror   , "mirror"  , "m", "Mirror"  , "M", "MIRROR"  );
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameSize     , "size"    , "s", "Size"    , "S", "SIZE"    );
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameRotation , "rotation", "r", "Rotation", "R", "ROTATION");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameNumber   , "number"  , "n");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameAlpha    , "alpha"   , "a");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameColor    , "color"   , "c");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FramePosition , "position", "p");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameMirror   , "mirror"  , "m");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameSize     , "size"    , "s");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameRotation , "rotation", "r");
 }
 
 bool AnimationProtocol::NewDescription() {
@@ -143,8 +122,17 @@ bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& ent
     * We don't need to check the scope here, the parser will throw a Syntax Error in case of bad scope,
     * or the protocol will throw a Load Error in the case of Invalid Ring
     */
-    ENTRY_METHOD(current_scope_, entry_name) (entry_args);
-    return true;
+    std::string lower_name = entry_name;
+    std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
+
+    EntryFunction func = ENTRY_METHOD_PTR(current_scope_, lower_name);
+    if(func != NULL) {
+        return (this->*func)(entry_args);
+    } else {
+        string msg = "Unknown entry name '" + lower_name + "'.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
 }
 
 bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
