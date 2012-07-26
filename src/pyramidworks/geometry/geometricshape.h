@@ -34,6 +34,13 @@ class GeometricShape {
         @param that_pos The absolute position of the other shape.
         @return True if there's an intersection. */
     virtual bool Intersects(const ugdk::Vector2D& this_pos, const Rect *obj, const ugdk::Vector2D& that_pos) const = 0;
+
+	/// Checks if there's an intersection with a Convex Polygon.
+	/** @param this_pos The absolute position for this shape.
+        @param obj The shape to compare with.
+        @param that_pos The absolute position of the other shape.
+        @return True if there's an intersection. */
+	virtual bool Intersects(const ugdk::Vector2D& this_pos, const ConvexPolygon *obj, const ugdk::Vector2D& that_pos) const = 0;
     
     /// Returns a bounding box for this shape.
     /** The box is at the shape's position and offset
