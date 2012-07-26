@@ -46,10 +46,10 @@ typedef struct Color {
         a *= rhs.a;
     }
 
-    Color&  operator*=(const Color& rhs) { Compose(rhs); }
+    Color&  operator*=(const Color& rhs) { Compose(rhs); return *this; }
     Color   operator*(const Color& rhs) const {
         Color result(rhs);
-        result.Compose(*this);
+        result *= *this;
         return result;
     }
     
