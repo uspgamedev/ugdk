@@ -24,6 +24,7 @@ void Modifier::Compose(const Modifier* mod2) {
     this->ComposeMirror(   mod2->mirror_   );
     this->ComposeColor(    mod2->color_    );
     this->ComposeVisible(  mod2->visible_  );
+    flags_ |= mod2->flags_;
 }
 
 Modifier* Modifier::Compose(const Modifier* mod1, const Modifier* mod2) {
