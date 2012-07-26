@@ -1,6 +1,8 @@
 #include <math.h>
 #include <ugdk/math/integer2D.h>
 
+#define PI 3.14159265
+
 namespace ugdk {
 
 // Returns the norm-1.
@@ -17,10 +19,11 @@ double Integer2D::Angle() const {
 }
 
 void Integer2D::Rotate(RotDeg rotdeg) const {
-    for (int i = rotdeg, int j = 1; i >= 0; i--, j = -j) {
-      x = -j*x;
-      y = j*y;
-    }
+    double angle = 0.0;
+    for (int i = rotdeg; i >= 0; i--) angle += PI;
+    double ca = cos(angle), sa = sin(angle);   
+    x = x * ca - y * sa;
+    y = x * sa + y * ca;
 }
 
 Integer2D Integer2D::Rotated(RotDeg rotdeg) const {
