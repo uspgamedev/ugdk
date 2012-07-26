@@ -1,7 +1,6 @@
 #include "convexpolygon.h"
 #include "rect.h"
 #include "circle.h"
-#include <cmath>
 #include <ugdk/util/intervalkdtree.h>
 
 namespace pyramidworks {
