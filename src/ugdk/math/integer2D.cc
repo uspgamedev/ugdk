@@ -16,9 +16,15 @@ double Integer2D::Angle() const {
     return atan2(static_cast<double>(y), static_cast<double>(x));
 }
 
-Integer2D Integer2D::Rotate(const int angle) const {
-    int ca = cos(angle), sa = sin(angle);   
-    return Integer2D(x * ca - y * sa, x * sa + y * ca);
+void Integer2D::Rotate(RotDeg rotdeg) const {
+    for (int i = rotdeg, int j = 1; i >= 0; i--, j = -j) {
+      x = -j*x;
+      y = j*y;
+    }
+}
+
+Integer2D Integer2D::Rotated(RotDeg rotdeg) const {
+    return Integer2D(x, y).rotate(rotdeg); 
 }
 
 Integer2D Integer2D::HorizontalMirror() {

@@ -9,8 +9,8 @@
 namespace ugdk {
 namespace math {
 
-enum ENUM_MAGICO {
-    NOVIENTA, CIENTOEOITIENTA, MENOSNOVIENTA
+enum RotDeg {
+    NINETY, 2NINETY, 3NINETY
 };
 
 // 2 dimension vectors, using doubles.
@@ -82,16 +82,16 @@ class Integer2D {
     *  @return Rotated Integer
     *  @see Angle
     */
-    void Rotate(ENUM_MAGICO);
+    void Rotate(RotDeg rotdeg);
     
     /// Returns a new integer equal to this integer rotated by "angle" (in radians) counter-clockwise.
     /** The integer rotated of a integer (x,y) is (x * cos(angle) - y * sin(angle) , x * sin(angle) + y * cos(angle));  angle in radians
     *  @return Rotated Integer
     *  @see Angle
     */
-    void Rotate(ENUM_MAGICO, const Integer2D& center) {
+    void Rotate(RotDeg rotdeg, const Integer2D& center) {
         *this -= center;
-        Rotate(ENUM_MAGICO);
+        Rotate(rotdeg);
         *this += center;
     }
 
@@ -100,15 +100,15 @@ class Integer2D {
     *  @return Rotated Integer
     *  @see Angle
     */
-    Integer2D Rotated(const int angle) const;
+    Integer2D Rotated(RotDeg rotdeg) const;
 
     /// Returns a new integer equal to this integer rotated by "angle" (in radians) counter-clockwise.
     /** The integer rotated of a integer (x,y) is (x * cos(angle) - y * sin(angle) , x * sin(angle) + y * cos(angle));  angle in radians
     *  @return Rotated Integer
     *  @see Angle
     */
-    Integer2D Rotated(ENUM_MAGICO, const Integer2D& center) const {
-        return center + (*this - center).Rotate(ENUM_MAGICO);
+    Integer2D Rotated(RotDeg rotdeg, const Integer2D& center) const {
+        return center + (*this - center).Rotate(rotdeg);
 
     /// Returns a new integer equivalent to this integer when mirrored according to the y axis.
     /** The horizantally mirrored integer of a integer (x, y) is (-x, y)
