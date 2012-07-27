@@ -15,7 +15,15 @@ class EntityProxy : public Entity, public ugdk::script::BaseProxy<EntityProxy> {
 public:
     EntityProxy(const ugdk::script::VirtualObj& proxy) : ugdk::script::BaseProxy<EntityProxy>(proxy) {}
     
+	virtual bool to_be_removed() const {
+		ugdk::script::VirtualObj to_be_removed = proxy_["to_be_removed"];
+		if (to_be_removed)
+			return to_be_removed.value<bool>();
+		return to_be_removed_; 
+	}
+
     virtual void Update(double dt) {
+		if (to_be_removed())	return;
         ugdk::script::VirtualObj vdt = ugdk::script::VirtualObj(proxy_.wrapper());
         vdt.set_value(dt);
         std::list<ugdk::script::VirtualObj> args;

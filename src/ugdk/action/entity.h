@@ -11,7 +11,7 @@ class Entity {
   public:
     virtual ~Entity() {}
 
-    bool to_be_removed() const { return to_be_removed_; }
+    virtual bool to_be_removed() const { return to_be_removed_; }
     
     virtual void Update(double dt) = 0;
     
