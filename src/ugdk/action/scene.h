@@ -56,7 +56,7 @@ class Scene {
     /**
        @param delta_t Time in seconds since last update
     */
-    virtual void Update(double delta_t);
+    void Update(double delta_t);
 
     /// Whether this scene stops the previous music even if wont play any music.
     void StopsPreviousMusic(bool set) { stops_previous_music_ = set; }
