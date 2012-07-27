@@ -2,6 +2,7 @@
 %module ugdk_math
 
 %include <module/export.swig>
+%include "std_vector.i"
 
 %{
 
@@ -27,6 +28,8 @@
 %newobject ugdk::Vector2D::operator*(const Vector2D &right) const;
 
 %include <ugdk/math/vector2D.h>
+%template(Vector2DList) std::vector<ugdk::Vector2D>;
+
 %include <ugdk/math/frame.h>
 
 namespace ugdk {
