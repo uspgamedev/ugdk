@@ -9,20 +9,10 @@ set (FRAMEWORK_VERSION 0.3.0)
 
 message ("=== ${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION} ===")
 
-# If the user did not define the parameteres, use default values.
-if (NOT LINK_TYPE)
-    message ("-- No link type was defined, choosing default value: STATIC")
-    set (LINK_TYPE STATIC)
-else (NOT LINK_TYPE)
-    message ("-- Link type: ${LINK_TYPE}")
-endif (NOT LINK_TYPE)
+option(UGDK_STATICLIB "Set to ON to build UGDK with static linking." ON)
 
-if ((NOT (${LINK_TYPE} STREQUAL STATIC)) AND (NOT (${LINK_TYPE} STREQUAL SHARED)))
-    message (FATAL_ERROR ">>> Unknown link type ${LINK_TYPE}.")
-endif ()
-
-if (${LINK_TYPE} STREQUAL SHARED)
-	set(BUILD_SHARED_LIBS True)
+if(NOT UGDK_STATICLIB)
+    set(BUILD_SHARED_LIBS True)
 endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -110,7 +100,6 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
-
 add_library (${FRAMEWORK_RELEASE} ${UGDK_SRC} ${GENERATED_SRC})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
@@ -148,38 +137,9 @@ set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
 set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAMEWORK_DEBUG}")
 
-subdirs (test)
+add_subdirectory (test)
 
-# Installing on *nix
-#if (UNIX)
-#   set (FRAMEWORK_INSTALL_DIR "/usr/lib/${FRAMEWORK_BUILDNAME}")
-# 
-#   install (CODE "message (\"Installing ${GAME_NAME} ${GAME_VERSION}... Make sure you have root privileges.\")")
-# 
-#   if (LINK_TYPE EQUAL STATIC)
-#       install (TARGETS ${FRAMEWORK_BUILDNAME} LIBRARY DESTINATION ${FRAMEWORK_INSTALL_DIR})
-#   elseif (LINK_TYPE EQUAL SHARED)
-#       install (TARGETS ${FRAMEWORK_BUILDNAME} ARCHIVE DESTINATION ${FRAMEWORK_INSTALL_DIR})
-#   else ()
-#      message (FATAL_ERROR "")
-#
-  #install ( FILES license.txt readme.html DESTINATION ${GAME_INSTALL_DIR})
-  #install ( DIRECTORY config images levels licenses musics quests samples screenshots themes languages DESTINATION ${GAME_INSTALL_DIR} PATTERN ".svn" EXCLUDE)
-  # install ( DIRECTORY data DESTINATION ${GAME_INSTALL_DIR} PATTERN ".svn" EXCLUDE)
-  #
-  # install ( CODE "message (\"Creating files at ${GAME_FINAL_DIR}...\")")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"cmake\" \"-E\" \"copy\" \"${GAME_INSTALL_DIR}/${GAME_UNIXNAME}\" \"${GAME_FINAL_DIR}/${GAME_UNIXNAME}\")")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"mkdir\" \"$ENV{HOME}/.horus_eye\")")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"chmod\" \"777\" \"$ENV{HOME}/.horus_eye\")")
-  #install ( CODE "set (USER_GROUP \"\")")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"id\" \"-g\" OUTPUT_VARIABLE USER_GROUP)")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"chown\" \"$ENV{USER}:${USER_GROUP}\" \"$ENV{HOME}/.horus_eye\")")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"echo\" \"-n\" \"${GAME_INSTALL_DIR}/\" OUTPUT_FILE \"$ENV{HOME}/.horus_eye/rootpath.txt\")")
-
-  #install ( CODE "message (\"Done! Please run ${GAME_UNIXNAME} to start ${GAME_NAME}.\")")
-  #endif  (UNIX)
-
-  #set (USER_HOME "$ENV{HOME}")
+set(UGDK_EXTERNAL_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src;${SDL_INCLUDE_DIR};${SDLTTF_INCLUDE_DIR} CACHE STRING "UGDK include directories" FORCE)
 
 CONFIGURE_FILE(
     "${SRC_DIR}/ugdk/config/config.h.in"
