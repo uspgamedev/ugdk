@@ -1,5 +1,6 @@
 
 #include <cstdio>
+#include <string>
 
 #include <ugdk/script/languages/lua/datagear.h>
 #include <ugdk/script/languages/lua/auxlib.h>
