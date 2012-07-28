@@ -12,7 +12,7 @@ class Rect : public GeometricShape {
   public:
     /** @param width  The rect width. 
       * @param height The rect height. */
-    Rect(double width, double height) : GeometricShape(), half_width_(width/2), half_height_(height/2) {}
+    Rect(double _width, double _height) : GeometricShape(), half_width_(_width/2), half_height_(_height/2) {}
     
     /// Returns the rect width.
     /** @return A double. */

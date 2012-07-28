@@ -37,10 +37,10 @@ private:
 };
 
 Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
-  : objects_tree_(new ObjectTree(tree_bounding_box,5)),
+  : node_(new graphic::Node()),
     owner_scene_(NULL),
-    node_(new graphic::Node()),
     focused_element_(NULL),
+    objects_tree_(new ObjectTree(tree_bounding_box,5)),
     hook_(hook) {
       node_->modifier()->set_offset(offset);
       option_node_[0] = NULL;

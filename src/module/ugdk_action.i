@@ -28,6 +28,7 @@
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_audio") <ugdk/audio.h>
 %import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_util") <ugdk/util/uncopyable.h>
 
 proxy_class(ugdk::action::Observer)
 proxy_class(ugdk::action::Entity)

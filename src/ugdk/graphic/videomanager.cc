@@ -227,11 +227,11 @@ static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ell
                                  screen->format->Rmask, screen->format->Gmask,
                                  screen->format->Bmask, screen->format->Amask);
     if(temp == NULL)
-        return false;
+        return NULL;
     SDL_Surface *data = SDL_DisplayFormatAlpha(temp);
     SDL_FreeSurface(temp);
     if(data == NULL)
-        return false;
+        return NULL;
 
     Vector2D origin = size * 0.5;
 

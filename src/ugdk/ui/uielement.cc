@@ -11,9 +11,9 @@ namespace ugdk {
 namespace ui {
 
 UIElement::UIElement(const Vector2D& top_left, graphic::Drawable* drawable, UICallback function)
-    : top_left_(top_left), 
-      owner_(NULL),
+    : owner_(NULL),
       function_(function),
+      top_left_(top_left),
       node_(new graphic::Node(drawable)) {
           node_->modifier()->set_offset(top_left_);
 }
