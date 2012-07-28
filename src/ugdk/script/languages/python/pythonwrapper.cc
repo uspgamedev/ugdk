@@ -83,13 +83,13 @@ void PythonWrapper::PrintPythonExceptionDetails() {
     if(exc_val != NULL) {
         temp = PyObject_Str(exc_val);
         if (temp != NULL) {
-            fprintf(stderr, PyString_AsString(temp));
+            fprintf(stderr, "%s", PyString_AsString(temp));
             Py_DECREF(temp);
         }
         Py_DECREF(exc_val);
     }
 
-    printf("\n");
+    fprintf(stderr, "\n");
     if(exc_tb == NULL) return;
     
     PyObject *pName = PyString_FromString("traceback");
