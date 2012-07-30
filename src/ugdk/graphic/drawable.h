@@ -15,7 +15,8 @@ class Drawable {
     };
     virtual ~Drawable() {};
 
-    virtual void Draw(double dt) = 0;
+    virtual void Update(double dt) = 0;
+    virtual void Draw() const = 0;
     virtual const Vector2D& size() const = 0;
 
     void set_hotspot(const Vector2D& hotspot) { hotspot_ = hotspot; }
