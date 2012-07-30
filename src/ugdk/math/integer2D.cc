@@ -53,10 +53,14 @@ Integer2D Integer2D::Rotated(RotDeg rotdeg) const {
 
 
 void Integer2D::Mirror(const ugdk::Mirror& mirror) {
+    int temp;
+
     switch(mirror) {
-        case MIRROR_HFLIP:  x = -x;         break;
-        case MIRROR_VFLIP:  y = -y;         break;
-        case MIRROR_HVFLIP: x = -x; y = -y; break;
+        case MIRROR_HFLIP:          x = -x;                             break;
+        case MIRROR_VFLIP:          y = -y;                             break;
+        case MIRROR_BYNEGATIVEDIAG: SWAPVARS(temp,x,y); // and then negativate both at the next case.
+        case MIRROR_HVFLIP:         x = -x; y = -y;                     break;
+        case MIRROR_BYPOSITIVEDIAG: SWAPVARS(temp,x,y);                 break;
         case MIRROR_NONE: // do nothing.
         default: break;
     }

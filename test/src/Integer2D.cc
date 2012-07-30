@@ -71,6 +71,14 @@ TEST(Integer2D, Methods) {
         EXPECT_EQ(5, vm.x);
         EXPECT_EQ(-7, vm.y); }
 		
+    {  Integer2D t = a.Mirrored(MIRROR_BYPOSITIVEDIAG);
+        EXPECT_EQ(7, t.x);
+        EXPECT_EQ(5, t.y); }
+		
+    {  Integer2D t = b.Mirrored(MIRROR_BYNEGATIVEDIAG);
+        EXPECT_EQ(11, t.x);
+        EXPECT_EQ(0, t.y); }
+		
 	{ Integer2D t = a.Scaled(b,c);
 		EXPECT_EQ(0,t.x);
 		EXPECT_EQ(-38,t.y); }
