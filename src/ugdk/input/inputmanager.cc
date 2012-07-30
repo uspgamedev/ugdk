@@ -55,12 +55,16 @@ bool InputManager::KeyPressed(Key key) {
     return (keystate_now_[key] && !keystate_last_[key]);
 }
 
+bool InputManager::KeyReleased(Key key) {
+    return (!keystate_now_[key] && keystate_last_[key]);
+}
+
 bool InputManager::KeyDown(Key key) {
     return keystate_now_[key];
 }
 
 bool InputManager::KeyUp(Key key) {
-    return (!keystate_now_[key] && keystate_last_[key]);
+    return !keystate_now_[key];
 }
 
 bool InputManager::CheckSequence(Key* sequence, int size) {
@@ -78,12 +82,16 @@ bool InputManager::MousePressed(MouseButton button) {
   return (mousestate_now_[button] && !mousestate_last_[button]);
 }
 
+bool InputManager::MouseReleased(MouseButton button) {
+    return (!mousestate_now_[button] && mousestate_last_[button]);
+}
+
 bool InputManager::MouseDown(MouseButton button) {
     return mousestate_now_[button];
 }
 
 bool InputManager::MouseUp(MouseButton button) {
-    return (!mousestate_now_[button] && mousestate_last_[button]);
+    return !mousestate_now_[button];
 }
 
 void InputManager::UpdateDevices() {

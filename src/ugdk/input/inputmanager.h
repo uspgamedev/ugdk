@@ -21,10 +21,12 @@ class InputManager {
     Vector2D GetMousePosition(void);
     void ShowCursor(bool toggle);
     bool KeyPressed(Key key);
+    bool KeyReleased(Key key);
     bool KeyDown(Key key);
     bool KeyUp(Key key);
         
     bool MousePressed(MouseButton button);
+    bool MouseReleased(MouseButton button);
     bool MouseDown(MouseButton button);
     bool MouseUp(MouseButton button);
 	bool CheckSequence(Key* sequence, int size);
