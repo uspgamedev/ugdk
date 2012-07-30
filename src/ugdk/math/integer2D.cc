@@ -13,7 +13,7 @@ Integer2D::Integer2D(const ugdk::Vector2D& vec2d)
 
 // Returns the norm-1.
 int Integer2D::NormOne() const {
-    return abs(x) + abs(y);
+    return std::abs(x) + std::abs(y);
 }
 
 double Integer2D::Length() const {
@@ -206,7 +206,7 @@ int Integer2D::operator*(const Integer2D &right) const {
 }
 
 Integer2D Integer2D::operator%(const Integer2D& right) const {
-    assert( right.x != 0, right.y != 0 );
+    assert( right.x != 0 && right.y != 0 );
 
     return Remainder(right);
 }
