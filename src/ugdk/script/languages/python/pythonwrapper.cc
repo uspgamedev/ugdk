@@ -44,6 +44,7 @@ VirtualObj PythonWrapper::LoadModule(const std::string& name) {
 
 /// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
 bool PythonWrapper::Initialize() {
+    Py_NoSiteFlag = 1;
     Py_Initialize();
     //TODO: Fix sys.path with our paths...
     PyRun_SimpleString("import sys");
