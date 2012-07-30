@@ -8,6 +8,10 @@
 
 namespace ugdk {
 
+namespace math {
+class Integer2D;
+} // namespace math
+
 // 2 dimension vectors, using doubles.
 class Vector2D {
   public:
@@ -28,6 +32,9 @@ class Vector2D {
     *  @param y is the y-value argument
     */
     Vector2D(double _x, double _y) : x(_x), y(_y) {}
+
+    /// Copy constructor from Integer2D.
+    Vector2D(const ugdk::math::Integer2D& int2d);
 
     ~Vector2D() { }
 

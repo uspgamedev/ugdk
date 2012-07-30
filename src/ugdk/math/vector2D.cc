@@ -1,7 +1,11 @@
 #include <cmath>
 #include <ugdk/math/vector2D.h>
+#include <ugdk/math/integer2D.h>
 
 namespace ugdk {
+
+Vector2D::Vector2D(const ugdk::math::Integer2D& int2d)
+  : x(static_cast<double>(int2d.x)), y(static_cast<double>(int2d.y)) {}
 
 // Returns the norm-1.
 double Vector2D::NormOne() const {

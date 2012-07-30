@@ -2,11 +2,16 @@
 #ifndef UGDK_MATH_INTEGER2D_H_
 #define UGDK_MATH_INTEGER2D_H_
 
+#include <ugdk/base/types.h>
+
 #ifdef SWIG
 #pragma SWIG nowarn=312
 #endif
 
 namespace ugdk {
+
+class Vector2D;
+
 namespace math {
 
 enum RotDeg {
@@ -33,6 +38,9 @@ class Integer2D {
     *  @param y is the y-value argument
     */
     Integer2D(int _x, int _y) : x(_x), y(_y) {}
+
+    /// Copy constructor from Vector2D.
+    Integer2D(const ugdk::Vector2D& vec2d);
 
     ~Integer2D() { }
 
@@ -111,23 +119,66 @@ class Integer2D {
         return center + (*this - center).Rotated(rotdeg);
     }
     
-    /// Returns a new integer equivalent to this integer when mirrored according to the y axis.
-    /** The horizantally mirrored integer of a integer (x, y) is (-x, y)
-     *  @return horizontally mirrored integer
+    /// Mirrors this Integer2D (in-place), following "mirror"'s spec.
+    /** @param mirror Either MIRROR_NONE, MIRROR_HFLIP, MIRROR_VFLIP, or MIRROR HV_FLIP.
+     *  @see Mirrored
      */
-    Integer2D HorizontalMirror();
+    void Mirror(const ugdk::Mirror& mirror);
+    
+    /// Returns a new Integer2D, mirrored by "mirror"'s spec.
+    /** @param mirror Either MIRROR_NONE, MIRROR_HFLIP, MIRROR_VFLIP, or MIRROR HV_FLIP.
+     *  @see Mirror
+     */
+    Integer2D Mirrored(const ugdk::Mirror& mirror) const;
 
-    /// Returns a new integer equivalent to this integer when mirrored according to the x axis.
-    /** The vertically mirrored integer of a integer (x, y) is (x, -y)
-     *  @return horizontally mirrored integer
+    /// In-place integer multiplication, coordinate by coordinate.
+    /** @see Multiplied
+     *  @see Scale
      */
-    Integer2D VerticalMirror();
+    void Multiply(const Integer2D& multiplier);
+    
+    /// Returns a new Integer2D equal to this multiplied coordinate by coordinate by "multiplier".
+    /** @see Multiply
+     *  @see Scaled
+     */
+    Integer2D Multiplied(const Integer2D& multiplier) const;
+    
+    /// In-place integer division, coordinate by coordinate.
+    /** @see Divided
+     *  @see Scale
+     */
+    void Divide(const Integer2D& divider);
+    
+    /// Returns a new Integer2D equal to this divided coordinate by coordinate by "multiplier".
+    /** @see Divide
+     *  @see Scale
+     */
+    Integer2D Divided(const Integer2D& divider) const;
+    
+    /// Multiplies in-place by "multiplier", and then divides by "divisor".
+    /** @see Scaled
+     *  @see Multiply
+     *  @see Divide
+     */
+    void Scale(const Integer2D& multiplier, const Integer2D& divisor);
+    
+    /// Returns a new Integer2D, multiplied by "multiplier", and divided by "divisor".
+    /** @see Scale
+     *  @see Multiply
+     *  @see Divide
+     */
+    Integer2D Scaled(const Integer2D& multiplier, const Integer2D& divisor) const;
 
-    /// Returns a new integer which is this integer scaled coordinate by coordinate with "scale".
-    /** The resulting scaled integer is (this->x * scale.x, this->y * scale.y).
-     *  @return scaled integer
+    /// In-place remainder (coordinate by coordinate) of integer division by "divisor".
+    /** @see Remainder
      */
-    Integer2D Scale(const Integer2D &scale) const;
+    void Mod(const Integer2D& divisor);
+    
+    /// Returns a new Integer2D that is equal to the remainder of the integer division by "divisor".
+    /** @see Mod
+     */
+    Integer2D Remainder(const Integer2D& divisor) const;
+
 
     // Operators methods
 
@@ -142,6 +193,9 @@ class Integer2D {
     
     // TODO document
     Integer2D& operator/=(int scalar);
+
+    // TODO document
+    Integer2D& operator%=(int scalar);
 
     /// Method that returns a integer equal to the sum of two others
         /** The sum of two vectors (x,y) (w,z) is igual to the integer (x+w, y+z)
@@ -174,6 +228,9 @@ class Integer2D {
         *  @return Inverse Scalar Multiplied Integer
         */
     Integer2D operator/(int scalar) const;
+
+     /// Method that returns an Integer2D equal to the coordinate by coordinate remainder of the integer division by scalar.
+    Integer2D operator%(int scalar) const;
 
     /// Method that returns a scalar equal to the inner product of two vectors
         /** By definition the inner product of two vectors (x,y) (w,z) is equal to (x*w) + (y*z)
