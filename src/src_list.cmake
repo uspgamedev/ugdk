@@ -22,12 +22,13 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/light.cc 
     ./src/ugdk/graphic/modifier.cc 
     ./src/ugdk/graphic/node.cc 
-    ./src/ugdk/graphic/spritesheet.cc
+    ./src/ugdk/graphic/spritesheet.cc 
     ./src/ugdk/graphic/textmanager.cc 
     ./src/ugdk/graphic/texture.cc 
     ./src/ugdk/graphic/videomanager.cc 
     ./src/ugdk/input/inputmanager.cc 
     ./src/ugdk/math/frame.cc 
+    ./src/ugdk/math/integer2D.cc 
     ./src/ugdk/math/vector2D.cc 
     ./src/ugdk/modules.cc 
     ./src/ugdk/script/scriptmanager.cc 

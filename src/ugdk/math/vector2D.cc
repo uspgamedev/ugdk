@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 #include <ugdk/math/vector2D.h>
 
 namespace ugdk {
