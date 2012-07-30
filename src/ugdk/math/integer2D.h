@@ -138,10 +138,10 @@ class Integer2D {
     Integer2D& operator-=(const Integer2D &other);
     
     // TODO document
-    Integer2D& operator*=(const int   &scalar);
+    Integer2D& operator*=(int scalar);
     
     // TODO document
-    Integer2D& operator/=(const int   &scalar);
+    Integer2D& operator/=(int scalar);
 
     /// Method that returns a integer equal to the sum of two others
         /** The sum of two vectors (x,y) (w,z) is igual to the integer (x+w, y+z)
@@ -167,13 +167,13 @@ class Integer2D {
         /** A integer (x,y) multiplied by a scalar a is equal to the integer (x * scalar, y*scalar)
         *  @return Scalar Multiplied Integer
         */
-    Integer2D operator*(const int   &scalar) const;
+    Integer2D operator*(int scalar) const;
 
      /// Method that returns a integer equal to the a integer multiplied by the inverse of a scalar
         /** A integer (x,y) multiplied by the inverse of a scalar is equal to the integer (x * 1/scalar, y * 1/scalar)
         *  @return Inverse Scalar Multiplied Integer
         */
-    Integer2D operator/(const int   &scalar) const;
+    Integer2D operator/(int scalar) const;
 
     /// Method that returns a scalar equal to the inner product of two vectors
         /** By definition the inner product of two vectors (x,y) (w,z) is equal to (x*w) + (y*z)
@@ -186,7 +186,7 @@ class Integer2D {
     /** A integer (x,y) multiplied by a scalar a is equal to the integer (x * scalar, y*scalar)
     *  @return Scalar Multiplied Integer
     */
-Integer2D operator*(const int  &scalar, const Integer2D &right);
+Integer2D operator*(int scalar, const Integer2D &right);
 
 }  // namespace math
 }  // namespace ugdk

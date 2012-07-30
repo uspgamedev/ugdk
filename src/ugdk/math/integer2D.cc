@@ -57,13 +57,13 @@ Integer2D& Integer2D::operator-=(const Integer2D &other) {
     return *this;
 }
 
-Integer2D& Integer2D::operator*=(const int   &scalar) {
+Integer2D& Integer2D::operator*=(int scalar) {
     x *= scalar;
     y *= scalar;
     return *this;
 }
     
-Integer2D& Integer2D::operator/=(const int   &scalar) {
+Integer2D& Integer2D::operator/=(int scalar) {
     x /= scalar;
     y /= scalar;
     return *this;
@@ -85,13 +85,13 @@ Integer2D Integer2D::operator-() const {
     return Integer2D(-x, -y);
 }
 
-Integer2D Integer2D::operator*(const int   &scalar) const {
+Integer2D Integer2D::operator*(int scalar) const {
     Integer2D ret = *this;
     ret *= scalar;
     return ret;
 }
 
-Integer2D Integer2D::operator/(const int   &scalar) const {
+Integer2D Integer2D::operator/(int scalar) const {
     Integer2D ret = *this;
     ret /= scalar;
     return ret;
@@ -103,7 +103,7 @@ int Integer2D::operator*(const Integer2D &right) const {
 
 ///
 
-Integer2D operator*(const int  &scalar, const Integer2D &right) {
+Integer2D operator*(int scalar, const Integer2D &right) {
     return right * scalar;
 }
 
