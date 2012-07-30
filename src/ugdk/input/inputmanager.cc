@@ -55,12 +55,16 @@ bool InputManager::KeyPressed(Key key) {
     return (keystate_now_[key] && !keystate_last_[key]);
 }
 
+bool InputManager::KeyReleased(Key key) {
+    return (!keystate_now_[key] && keystate_last_[key]);
+}
+
 bool InputManager::KeyDown(Key key) {
     return keystate_now_[key];
 }
 
 bool InputManager::KeyUp(Key key) {
-    return (!keystate_now_[key] && keystate_last_[key]);
+    return !keystate_now_[key];
 }
 
 bool InputManager::CheckSequence(Key* sequence, int size) {

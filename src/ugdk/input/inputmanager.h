@@ -21,6 +21,7 @@ class InputManager {
     Vector2D GetMousePosition(void);
     void ShowCursor(bool toggle);
     bool KeyPressed(Key key);
+    bool KeyReleased(Key key);
     bool KeyDown(Key key);
     bool KeyUp(Key key);
         
