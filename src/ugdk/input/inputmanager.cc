@@ -82,12 +82,16 @@ bool InputManager::MousePressed(MouseButton button) {
   return (mousestate_now_[button] && !mousestate_last_[button]);
 }
 
+bool InputManager::MouseReleased(MouseButton button) {
+    return (!mousestate_now_[button] && mousestate_last_[button]);
+}
+
 bool InputManager::MouseDown(MouseButton button) {
     return mousestate_now_[button];
 }
 
 bool InputManager::MouseUp(MouseButton button) {
-    return (!mousestate_now_[button] && mousestate_last_[button]);
+    return !mousestate_now_[button];
 }
 
 void InputManager::UpdateDevices() {

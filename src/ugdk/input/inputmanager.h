@@ -26,6 +26,7 @@ class InputManager {
     bool KeyUp(Key key);
         
     bool MousePressed(MouseButton button);
+    bool MouseReleased(MouseButton button);
     bool MouseDown(MouseButton button);
     bool MouseUp(MouseButton button);
 	bool CheckSequence(Key* sequence, int size);

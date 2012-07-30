@@ -66,7 +66,7 @@ void Menu::Update(double dt) {
         delete intersecting_uielements;
     }
     last_mouse_position_ = mouse_pos;
-    if(input->MouseUp(input::M_BUTTON_LEFT))
+    if(input->MouseReleased(input::M_BUTTON_LEFT))
         this->CheckInteraction(mouse_pos);
     if(input->KeyReleased(input::K_DOWN))
         this->FocusNextElement(1);
