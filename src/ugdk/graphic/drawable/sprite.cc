@@ -20,7 +20,7 @@ Sprite::Sprite(const std::string& spritesheet_tag, action::AnimationSet *set)
 Sprite::Sprite(const std::string& spritesheet_tag, const std::string& animation_set_tag) 
     : spritesheet_(base::ResourceManager::GetSpritesheetFromTag(spritesheet_tag)),
       animation_manager_(new action::AnimationManager(10,
-			 base::ResourceManager::GetAnimationSetFromFile(animation_set_tag))) {}/*TODO: MANO TEM MAIS UM 10 NO MEU CÓDIGO */
+             base::ResourceManager::GetAnimationSetFromFile(animation_set_tag))) {}/*TODO: MANO TEM MAIS UM 10 NO MEU CÓDIGO */
 
 
 Sprite::Sprite(Spritesheet *spritesheet, const std::string& animation_set_tag)
@@ -31,7 +31,11 @@ Sprite::~Sprite() {
     if (animation_manager_) delete animation_manager_;
 }
 
-void Sprite::Draw(double dt) {
+void Sprite::Update(double delta_t) {
+    animation_manager_->Update(delta_t);
+}
+
+void Sprite::Draw() const {
     if(spritesheet_) {
         int frame_number = animation_manager_->GetFrame();
 
@@ -40,11 +44,6 @@ void Sprite::Draw(double dt) {
         spritesheet_->Draw(frame_number, hotspot_);
         if(animation_mod) VIDEO_MANAGER()->PopModifier();
     }
-    Update(dt);
-}
-
-void Sprite::Update(double delta_t) {
-    animation_manager_->Update(delta_t);
 }
 
 const Vector2D& Sprite::size() const {

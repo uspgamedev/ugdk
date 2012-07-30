@@ -19,7 +19,9 @@ TexturedRectangle::TexturedRectangle(Texture* texture, const Vector2D& size)
 
 TexturedRectangle::~TexturedRectangle() {}
 
-void TexturedRectangle::Draw(double dt) {
+void TexturedRectangle::Update(double dt) {}
+
+void TexturedRectangle::Draw() const {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
     if(!mod.visible()) return;
 
@@ -32,7 +34,7 @@ void TexturedRectangle::Draw(double dt) {
     if(mod.mirror() & MIRROR_VFLIP) { // Vertical flip
         origin.y = target.y;
         target.y = 0.0;
-	}
+    }
 
     origin -= hotspot_;
     target -= hotspot_;
@@ -47,7 +49,7 @@ void TexturedRectangle::Draw(double dt) {
                  TEX_COORD_THREE[] = { 1.0, 1.0 },
                  TEX_COORD_FOUR[]  = { 0.0, 1.0 };
 
-	glBegin( GL_QUADS ); { //Start quad
+    glBegin( GL_QUADS ); { //Start quad
         glTexCoord2dv(TEX_COORD_ONE);
         glVertex2dv( origin.val );
 

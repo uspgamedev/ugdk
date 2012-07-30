@@ -30,19 +30,30 @@ Node::~Node() {
     }
 }
 
-void Node::Render(double dt) {
+void Node::Update(double dt) {
+    if(!active_) return;
+    if(childs_.empty() && !drawable_) return; // optimization!
+
+    if(drawable_) drawable_->Update(dt);
+
+    if(must_sort_) SortChildren();
+    NodeSet::const_iterator it;
+    for(it = childs_.begin(); it != childs_.end(); ++it)
+        (*it)->Update(dt);
+}
+
+void Node::Render() const {
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
     Modifier* modifier = modifier_;
     if(modifier) VIDEO_MANAGER()->PushAndApplyModifier(modifier);
 
-    if(drawable_) drawable_->Draw(dt);
+    if(drawable_) drawable_->Draw();
 
-    if(must_sort_) SortChildren();
     NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
-        (*it)->Render(dt);
+        (*it)->Render();
     
     if(modifier) VIDEO_MANAGER()->PopModifier();
 }

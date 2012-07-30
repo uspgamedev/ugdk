@@ -60,7 +60,9 @@ const Vector2D& Text::size() const {
     return size_;
 }
 
-void Text::Draw(double dt) {
+void Text::Update(double dt) {}
+
+void Text::Draw() const {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
     if(!mod.visible()) return;
     
@@ -68,32 +70,32 @@ void Text::Draw(double dt) {
         Color(1.000000, 1.000000, 1.000000), // 255, 255, 255
         Color(0.831372, 0.666666, 0.000000), // 212, 170,   0
         Color(0.333333, 0.266666, 0.000000)};//  85,  68,   0
-		
-	Font::IdentType ident = font_->ident();
+        
+    Font::IdentType ident = font_->ident();
 
     glEnable(GL_TEXTURE_2D);
     glListBase(font_->id());
 
     glPushMatrix();
-	
-	// TODO: combine the hotspot and mirror matrices.
+    
+    // TODO: combine the hotspot and mirror matrices.
 
     // Hotspot
     glTranslated(-hotspot_.x, -hotspot_.y, 0.0);
 
     // horizontal flip
     if(mod.mirror() & MIRROR_HFLIP) {
-		glTranslated(size_.x, 0.0, 0.0);
+        glTranslated(size_.x, 0.0, 0.0);
         glScaled(-1.0, 1.0, 1.0);
-	}
+    }
 
     // vertical flip
     if(mod.mirror() & MIRROR_VFLIP) {
-		glTranslated(0.0, size_.y, 0.0);
+        glTranslated(0.0, size_.y, 0.0);
         glScaled(1.0, -1.0, 1.0);
-	}
-	
-	int fancy_line_number = 0;
+    }
+    
+    int fancy_line_number = 0;
     if (font_->IsFancy()) fancy_line_number = 2;
     for(; fancy_line_number >= 0; fancy_line_number--) {
         glTranslated(-1.0, -1.0, 0);

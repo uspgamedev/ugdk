@@ -46,13 +46,13 @@ static Vector2D default_resolution(800.0, 600.0);
 bool VideoManager::Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon) {
     modifiers_.empty();
     title_ = title;
-	
+    
     // Set window title.
     SDL_WM_SetCaption(title.c_str(), (icon.length() > 0) ? icon.c_str() : NULL );
-	
+    
     if(icon.length() > 0)
         SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
-	
+    
     if(ChangeResolution(size, fullscreen) == false)
         if(ChangeResolution(default_resolution, false) == false) {
             /* TODO: insert error message here. */
@@ -134,7 +134,7 @@ void VideoManager::SetVSync(const bool active) {
 #endif
 }
 
-void VideoManager::MergeLights(std::list<action::Scene*>& scene_list) {
+void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
     // Lights are simply added together.
     glBlendFunc(GL_ONE, GL_ONE);
 
@@ -142,7 +142,7 @@ void VideoManager::MergeLights(std::list<action::Scene*>& scene_list) {
     glDrawBuffer(GL_BACK);
     glReadBuffer(GL_BACK);
 
-    for(std::list<action::Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->RenderLight();
 
@@ -188,19 +188,19 @@ void VideoManager::BlendLightIntoBuffer() {
 }
 
 // Desenha backbuffer na tela
-void VideoManager::Render(std::list<action::Scene*>& scene_list, double dt) {
+void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     if(settings_.light_system)
-        MergeLights(scene_list);
+        mergeLights(scene_list);
 
     // Usual blend function for drawing RGBA images.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Draw all the sprites from all scenes.
-    for(std::list<action::Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->Render(dt);
+            (*it)->content_node()->Render();
 
     // Using the light texture, merge it into the screen.
     if(settings_.light_system)
@@ -208,9 +208,9 @@ void VideoManager::Render(std::list<action::Scene*>& scene_list, double dt) {
 
     // Draw all interface layers, with the usual RGBA blend.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    for(std::list<action::Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->interface_node()->Render(dt);
+            (*it)->interface_node()->Render();
 
 
     // Swap the buffers to show the backbuffer to the user.

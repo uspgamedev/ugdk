@@ -25,7 +25,8 @@ class Node {
     ~Node();
 
     /// Pushes the modifier to the VideoManager, renders 
-    void Render(double dt);
+    void Update(double dt);
+    void Render() const;
     void RenderLight() const;
 
     void set_drawable(Drawable* drawable) { drawable_ = drawable; }

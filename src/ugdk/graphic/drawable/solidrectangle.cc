@@ -13,8 +13,10 @@ namespace graphic {
 SolidRectangle::SolidRectangle(const Vector2D& size) : size_(size) {}
 
 SolidRectangle::~SolidRectangle() {}
+    
+void SolidRectangle::Update(double dt) {}
 
-void SolidRectangle::Draw(double dt) {
+void SolidRectangle::Draw() const {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
     if(!mod.visible()) return;
 
@@ -27,7 +29,7 @@ void SolidRectangle::Draw(double dt) {
     if(mod.mirror() & MIRROR_VFLIP) { // Vertical flip
         origin.y = target.y;
         target.y = 0.0;
-	}
+    }
 
     origin -= hotspot_;
     target -= hotspot_;
@@ -37,7 +39,7 @@ void SolidRectangle::Draw(double dt) {
     glColor4dv(color.val);
 
     glDisable(GL_TEXTURE_2D);
-	glBegin( GL_QUADS ); { //Start quad
+    glBegin( GL_QUADS ); { //Start quad
         glVertex2dv( origin.val );
         glVertex2d(  target.x, origin.y );
         glVertex2dv( target.val );

@@ -17,7 +17,8 @@ class Sprite : public Drawable {
     explicit Sprite(Spritesheet *spritesheet, const std::string& animation_set_tag);
     virtual ~Sprite();
 
-    void Draw(double dt);
+    void Update(double dt);
+    void Draw() const;
     const Vector2D& size() const;
     
     /// Change the current animation to a new animation from the previously selected AnimationSet.
@@ -81,7 +82,6 @@ class Sprite : public Drawable {
     /// Update the Sprite based on the time variation.
     /** One of the two main functions of the UGDK Engine. Most of the game logic 
         resides within the Update of child classes.*/
-    void Update(double delta_t);
 };
 
 }  // namespace graphic
