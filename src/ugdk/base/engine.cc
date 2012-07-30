@@ -40,15 +40,15 @@ bool Engine::Initialize(const Configuration& configuration) {
     path_manager_     = new           PathManager(configuration.base_path);
     resource_manager_ = new base::ResourceManager();
     language_manager_ = new       LanguageManager(configuration.default_language);
-	
-	std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";
+    
+    std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";
 
     video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, icon_path);
     audio_manager_->Initialize();
      text_manager_->Initialize();
 
-	if (!SCRIPT_MANAGER()->Initialize())
-	    puts("Failed to initialize script manager.");
+    if (!SCRIPT_MANAGER()->Initialize())
+        puts("Failed to initialize script manager.");
 
     scene_list_.clear();
 
@@ -133,7 +133,7 @@ void Engine::Run() {
 
             // Sends the scene list to the videomanager, who handles everything 
             // needed to draw
-            video_manager_->Render(scene_list_, delta_t);
+            video_manager_->Render(scene_list_);
 
             ++frames_since_reset_;
             total_fps += 1.0/delta_t;
@@ -158,8 +158,8 @@ void Engine::Release() {
     audio_manager()->Release();
     delete audio_manager_;
 
-	text_manager_->Release();
-	delete text_manager_;
+    text_manager_->Release();
+    delete text_manager_;
 
     video_manager()->Release();
     delete video_manager_;
