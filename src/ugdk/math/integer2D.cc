@@ -30,7 +30,7 @@ void Integer2D::Rotate(RotDeg rotdeg) {
     switch(rotdeg) {
         case NINETY: // (x, y) = (y, -x)
         SWAPVARS(temp,x,y);
-        y = -y;
+        x = -x;
         break;
 
         case TWO_NINETY: // (x, y) = (-x, -y)
@@ -40,7 +40,7 @@ void Integer2D::Rotate(RotDeg rotdeg) {
 
         case THREE_NINETY: // (x, y) = (-y, x)
         SWAPVARS(temp,x,y);
-        x = -x;
+        y = -y;
         break;
     }
 }
@@ -54,8 +54,8 @@ Integer2D Integer2D::Rotated(RotDeg rotdeg) const {
 
 void Integer2D::Mirror(const ugdk::Mirror& mirror) {
     switch(mirror) {
-        case MIRROR_HFLIP:  y = -y;         break;
-        case MIRROR_VFLIP:  x = -x;         break;
+        case MIRROR_HFLIP:  x = -x;         break;
+        case MIRROR_VFLIP:  y = -y;         break;
         case MIRROR_HVFLIP: x = -x; y = -y; break;
         case MIRROR_NONE: // do nothing.
         default: break;
@@ -199,6 +199,12 @@ Integer2D Integer2D::operator%(int scalar) const {
 
 int Integer2D::operator*(const Integer2D &right) const {
     return x * right.x + y * right.y;
+}
+
+Integer2D Integer2D::operator%(const Integer2D& right) const {
+    assert( right.x != 0, right.y != 0 );
+
+    return Remainder(right);
 }
 
 //-//

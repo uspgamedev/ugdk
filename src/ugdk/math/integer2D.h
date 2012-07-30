@@ -229,7 +229,7 @@ class Integer2D {
         */
     Integer2D operator/(int scalar) const;
 
-     /// Method that returns an Integer2D equal to the coordinate by coordinate remainder of the integer division by scalar.
+     /// Remainder of integer division by "scalar" in each coordinate.
     Integer2D operator%(int scalar) const;
 
     /// Method that returns a scalar equal to the inner product of two vectors
@@ -237,6 +237,9 @@ class Integer2D {
         *  @return InnerProduct
         */
     int    operator*(const Integer2D &right) const;
+    
+     /// Remainder of integer division by "scalar" coordinate by coordinate.
+    Integer2D operator%(const Integer2D& right) const;
 };
 
  /// Method that returns a integer equal to the a integer multiplied by a scalar

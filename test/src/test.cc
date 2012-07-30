@@ -2,4 +2,5 @@
 #include "IDGenerator.cc"
 #include "Modifier.cc"
 #include "Vector2D.cc"
+#include "Integer2D.cc"
 #include "PyramidWorksGeometry.cc"
