@@ -10,7 +10,7 @@ namespace ugdk {
 namespace math {
 
 enum RotDeg {
-    NINETY, 2NINETY, 3NINETY
+  NINETY, TWO_NINETY, THREE_NINETY
 };
 
 // 2 dimension vectors, using doubles.
@@ -108,8 +108,9 @@ class Integer2D {
     *  @see Angle
     */
     Integer2D Rotated(RotDeg rotdeg, const Integer2D& center) const {
-        return center + (*this - center).Rotate(rotdeg);
-
+        return center + (*this - center).Rotated(rotdeg);
+    }
+    
     /// Returns a new integer equivalent to this integer when mirrored according to the y axis.
     /** The horizantally mirrored integer of a integer (x, y) is (-x, y)
      *  @return horizontally mirrored integer

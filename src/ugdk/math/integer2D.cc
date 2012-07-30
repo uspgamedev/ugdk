@@ -1,9 +1,10 @@
-#include <math.h>
+#include <cmath>
 #include <ugdk/math/integer2D.h>
 
 #define PI 3.14159265
 
 namespace ugdk {
+namespace math {
 
 // Returns the norm-1.
 int Integer2D::NormOne() const {
@@ -18,7 +19,7 @@ double Integer2D::Angle() const {
     return atan2(static_cast<double>(y), static_cast<double>(x));
 }
 
-void Integer2D::Rotate(RotDeg rotdeg) const {
+void Integer2D::Rotate(RotDeg rotdeg) {
     double angle = 0.0;
     for (int i = rotdeg; i >= 0; i--) angle += PI;
     double ca = cos(angle), sa = sin(angle);   
@@ -27,7 +28,9 @@ void Integer2D::Rotate(RotDeg rotdeg) const {
 }
 
 Integer2D Integer2D::Rotated(RotDeg rotdeg) const {
-    return Integer2D(x, y).rotate(rotdeg); 
+    Integer2D ret = *this;
+    ret.Rotate(rotdeg);
+    return ret;
 }
 
 Integer2D Integer2D::HorizontalMirror() {
@@ -54,30 +57,55 @@ Integer2D& Integer2D::operator-=(const Integer2D &other) {
     return *this;
 }
 
+Integer2D& Integer2D::operator*=(const int   &scalar) {
+    x *= scalar;
+    y *= scalar;
+    return *this;
+}
+    
+Integer2D& Integer2D::operator/=(const int   &scalar) {
+    x /= scalar;
+    y /= scalar;
+    return *this;
+}
+
 Integer2D Integer2D::operator+(const Integer2D &right) const {
-    return Integer2D::Add(*this, right);
+    Integer2D ret = *this;
+    ret += right;
+    return ret;
 }
+
 Integer2D Integer2D::operator-(const Integer2D &right) const {
-    return Integer2D::Subtract(*this, right);
+    Integer2D ret = *this;
+    ret -= right;
+    return ret;
 }
+
 Integer2D Integer2D::operator-() const {
-    return Integer2D(-this->x, -this->y);
+    return Integer2D(-x, -y);
 }
 
 Integer2D Integer2D::operator*(const int   &scalar) const {
-    return Integer2D::Multiply(*this, scalar);
+    Integer2D ret = *this;
+    ret *= scalar;
+    return ret;
 }
+
 Integer2D Integer2D::operator/(const int   &scalar) const {
-    return Integer2D::Multiply(*this, 1.0 / scalar);
+    Integer2D ret = *this;
+    ret /= scalar;
+    return ret;
 }
+
 int Integer2D::operator*(const Integer2D &right) const {
-    return Integer2D::InnerProduct(*this, right);
+    return x * right.x + y * right.y;
 }
 
 ///
 
 Integer2D operator*(const int  &scalar, const Integer2D &right) {
-    return Integer2D::Multiply(right, scalar);
+    return right * scalar;
 }
 
+}  // namespace math
 }  // namespace ugdk
