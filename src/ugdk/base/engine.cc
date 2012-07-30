@@ -11,7 +11,6 @@
 #include <ugdk/input/inputmanager.h>
 #include <ugdk/time/timemanager.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/util/animationparser.h>
 #include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
 
