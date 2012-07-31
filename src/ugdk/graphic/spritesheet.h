@@ -71,7 +71,7 @@ class Spritesheet {
 
     /** Draws at position, a draw_size square with the given frame_number
         modified by mirror and both the image and given color and alpha. */
-    void Draw(int frame_number, const Vector2D& hotspot);
+    void Draw(int frame_number, const Vector2D& hotspot) const;
 
   private:
     void createList(GLuint id, Texture* texture, const Vector2D& hotspot);

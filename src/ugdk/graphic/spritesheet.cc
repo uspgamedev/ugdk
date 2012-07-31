@@ -180,7 +180,7 @@ void Spritesheet::createList(GLuint id, Texture* texture, const Vector2D& hotspo
     } glEndList();
 }
 
-void Spritesheet::Draw(int frame_number, const Vector2D& hotspot) {
+void Spritesheet::Draw(int frame_number, const Vector2D& hotspot) const {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
     if(!mod.visible()) return;
 

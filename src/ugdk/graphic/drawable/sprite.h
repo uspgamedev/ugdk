@@ -11,10 +11,10 @@ namespace graphic {
 
 class Sprite : public Drawable {
   public:
-    Sprite(Spritesheet *spritesheet, action::AnimationSet *set = NULL);
+    Sprite(const Spritesheet *spritesheet, action::AnimationSet *set = NULL);
     explicit Sprite(const std::string& spritesheet_tag, action::AnimationSet *set = NULL);
     explicit Sprite(const std::string& spritesheet_tag, const std::string& animation_set_tag);
-    explicit Sprite(Spritesheet *spritesheet, const std::string& animation_set_tag);
+    explicit Sprite(const Spritesheet *spritesheet, const std::string& animation_set_tag);
     virtual ~Sprite();
 
     void Update(double dt);
@@ -76,7 +76,7 @@ class Sprite : public Drawable {
 
        
   private:
-    Spritesheet *spritesheet_;
+    const Spritesheet *spritesheet_;
     action::AnimationManager *animation_manager_;
 
     /// Update the Sprite based on the time variation.
