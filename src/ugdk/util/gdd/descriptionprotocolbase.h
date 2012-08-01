@@ -15,7 +15,6 @@
 namespace ugdk {
 namespace gdd {
 
-class DescriptionProtocolBase;
 class ArgsConverter {
 public:
     virtual ~ArgsConverter() {}
