@@ -33,12 +33,19 @@ protected:
     bool error(DescriptionProtocolBase* target, LoadError::Type error_type, const std::string& msg) const;
 };
 
+enum ProtocolField {
+    PROPERTY, RING, ENTRY
+};
+
 class DescriptionProtocolBase {
   public:
     virtual ~DescriptionProtocolBase();
 
     virtual bool NewDescription() = 0;
     virtual bool NewData(const GDDString& data_name) = 0;
+
+    void Register(ProtocolField, const GDDString& name, bool (DescriptionProtocolBase::*function) (double));
+    void Register(ProtocolField, const GDDString& name, bool (DescriptionProtocolBase::*function) (void));
 
     bool NewProperty(const GDDString& property_name, const GDDArgs& property_args);
     bool NewRing(const GDDString& ring_typename);
@@ -48,13 +55,15 @@ class DescriptionProtocolBase {
   protected:
     DescriptionProtocolBase() {}
 
-    bool genericSchemaSearch(std::map<std::string, ArgsConverter*>& schemas, const std::string& error_msg, 
+    bool genericSchemaSearch(ProtocolField field, const std::string& error_msg, 
         const GDDString& key_name, const GDDArgs& args);
 
     bool error(LoadError::Type error_type, const std::string &msg);
     bool error(LoadError::Type error_type) { return error(error_type, ""); }
 
   private:
+    std::map<std::string, ArgsConverter*>& find_schema(ProtocolField);
+
     std::map<std::string, ArgsConverter*> properties_schema_, rings_schema_, entries_schema_;
     GDDString simple_chain_ringname_;
 

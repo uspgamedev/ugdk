@@ -1,6 +1,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <cassert>
 #include <ugdk/util/gdd/descriptionprotocolbase.h>
 #include <cstdio>
 
@@ -15,6 +16,8 @@ bool ArgsConverter::error(DescriptionProtocolBase* target, LoadError::Type error
 
 class VoidArgsConverter : public ArgsConverter {
   public:
+    VoidArgsConverter(bool (DescriptionProtocolBase::*function) (void)) : function_(function) {}
+
     bool Process(DescriptionProtocolBase* target, const GDDArgs& args) const {
         if(args.size() != 0) {
             return error(target, LoadError::INVALID_VALUE, "Expected no value at all.");
@@ -27,6 +30,8 @@ class VoidArgsConverter : public ArgsConverter {
     
 class DoubleArgsConverter : public ArgsConverter {
   public:
+    DoubleArgsConverter(bool (DescriptionProtocolBase::*function) (double)) : function_(function) {}
+
     bool Process(DescriptionProtocolBase* target, const GDDArgs& args) const {
         if(args.size() != 1 || !is_a_double(args[0])) {
             return error(target, LoadError::INVALID_VALUE, "Expected value is a single double.");
@@ -48,30 +53,28 @@ DescriptionProtocolBase::~DescriptionProtocolBase() {
         delete it->second;
 }
     
-bool DescriptionProtocolBase::genericSchemaSearch(std::map<std::string, ArgsConverter*>& schemas, const std::string& error_msg, 
-                                                  const GDDString& key_name, const GDDArgs& args) {
-    std::string lower_name = key_name;
+void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, bool (DescriptionProtocolBase::*function) (double)) {
+    std::string lower_name = name;
     std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
-    
-    std::map<std::string, ArgsConverter*>::iterator converter = schemas.find(lower_name);
-    if(converter == schemas.end()) {
-        std::string msg = "Unknown " + error_msg + " name '" + lower_name + "'.";
-        return error(LoadError::INVALID_VALUE, msg);
-    } else {
-        return converter->second->Process(this, args);
-    }
+    find_schema(field)[lower_name] = new DoubleArgsConverter(function);
 }
 
+void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, bool (DescriptionProtocolBase::*function) (void)) {
+    std::string lower_name = name;
+    std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
+    find_schema(field)[lower_name] = new VoidArgsConverter(function);
+}
+    
 bool DescriptionProtocolBase::NewProperty(const GDDString& property_name, const GDDArgs& property_args) {
-    return genericSchemaSearch(properties_schema_, "property", property_name, property_args);
+    return genericSchemaSearch(PROPERTY, "property", property_name, property_args);
 }
 
 bool DescriptionProtocolBase::NewRing(const GDDString& ring_typename) {
-    return genericSchemaSearch(rings_schema_, "ring", ring_typename, GDDArgs());
+    return genericSchemaSearch(RING, "ring", ring_typename, GDDArgs());
 }
 
 bool DescriptionProtocolBase::NewEntry(const GDDString& entry_name, const GDDArgs& entry_args) {
-    return genericSchemaSearch(entries_schema_, "entry", entry_name, entry_args);
+    return genericSchemaSearch(ENTRY, "entry", entry_name, entry_args);
 }
 
 bool DescriptionProtocolBase::NewSimpleChain(const GDDString& ring_typename, const GDDArgs& ring_args) {
@@ -83,6 +86,33 @@ bool DescriptionProtocolBase::NewSimpleChain(const GDDString& ring_typename, con
         if (!NewEntry(ring_typename, entry_arg)) return false;
     }
     return true;
+}
+    
+std::map<std::string, ArgsConverter*>& DescriptionProtocolBase::find_schema(ProtocolField field) {
+    switch(field) {
+    case PROPERTY:  return properties_schema_;
+    case RING:      return rings_schema_;
+    case ENTRY:     return entries_schema_;
+    default:
+        assert(false); 
+        static std::map<std::string, ArgsConverter*> invalid;
+        return invalid;
+    }
+}
+
+bool DescriptionProtocolBase::genericSchemaSearch(ProtocolField field, const std::string& error_msg, 
+                                                  const GDDString& key_name, const GDDArgs& args) {
+    std::map<std::string, ArgsConverter*>& schemas = find_schema(field);
+    std::string lower_name = key_name;
+    std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
+    
+    std::map<std::string, ArgsConverter*>::iterator converter = schemas.find(lower_name);
+    if(converter == schemas.end()) {
+        std::string msg = "Unknown " + error_msg + " name '" + lower_name + "'.";
+        return error(LoadError::INVALID_VALUE, msg);
+    } else {
+        return converter->second->Process(this, args);
+    }
 }
 
 bool DescriptionProtocolBase::error(LoadError::Type error_type, const std::string &msg) {
