@@ -110,22 +110,29 @@ bool AnimationProtocol::NewRing_Frame(void) {
 }
 
 bool AnimationProtocol::NewEntry_Number(int frame) {
-    if(current_scope_ == FRAME_RING) {        action::AnimationFrame* cur_frame = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
+    if(current_scope_ == FRAME_RING) {
+        action::AnimationFrame* cur_frame = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
         cur_frame->set_frame(frame);
         return true;
-    } else {        /* TODO: implement the else */        return false;    }}
+    } else {
+        /* TODO: implement the else */
+        return false;
+    }
+}
 
 bool AnimationProtocol::NewEntry_Alpha(double new_alpha) {
     new_alpha = std::min( std::max(new_alpha,0.0), 1.0 ); // new_alpha is of [0.0,1.0]
 
-    if(current_scope_ == FRAME_RING) {        action::AnimationFrame* cur_frame
+    if(current_scope_ == FRAME_RING) {
+        action::AnimationFrame* cur_frame
             = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
 
         Color c = cur_frame->modifier()->color();
         if (composing_) c.a *= new_alpha;
         else            c.a  = new_alpha;
         cur_frame->modifier()->set_color(c);
-    } else {        Color c = current_effect_->color();
+    } else {
+        Color c = current_effect_->color();
         c.a = new_alpha;
         current_effect_->set_color(c);
     }
@@ -146,17 +153,20 @@ bool AnimationProtocol::NewEntry_Color(std::string arg) {
 
     Color c = Color(r/255.0, g/255.0, b/255.0);
 
-    if(current_scope_ == FRAME_RING) {        action::AnimationFrame* cur_frame
+    if(current_scope_ == FRAME_RING) {
+        action::AnimationFrame* cur_frame
             = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
         if (composing_) cur_frame->modifier()->ComposeColor(c);
         else            cur_frame->modifier()->set_color(c);
-    } else {        current_effect_->set_color(c);
+    } else {
+        current_effect_->set_color(c);
     }
     return true;
 }
 bool AnimationProtocol::NewEntry_Position(double x, double y) {
     Vector2D new_pos(x, y);
-    if(current_scope_ == FRAME_RING) {        action::AnimationFrame* cur_frame
+    if(current_scope_ == FRAME_RING) {
+        action::AnimationFrame* cur_frame
             = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
         if (composing_) cur_frame->modifier()->ComposeOffset(new_pos);
         else            cur_frame->modifier()->set_offset(new_pos);
@@ -176,26 +186,32 @@ bool AnimationProtocol::NewEntry_Mirror(std::string arg) {
         default: return error(LoadError::INVALID_VALUE, "Invalid argument to Mirror");
         }
     }
-        if(current_scope_ == FRAME_RING) {        action::AnimationFrame* cur_frame
+    
+    if(current_scope_ == FRAME_RING) {
+        action::AnimationFrame* cur_frame
             = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
         if (composing_) cur_frame->modifier()->ComposeMirror(new_mirror);
         else            cur_frame->modifier()->set_mirror(new_mirror);
-    } else        current_effect_->set_mirror(new_mirror);
+    } else
+        current_effect_->set_mirror(new_mirror);
     return true;
 }
 bool AnimationProtocol::NewEntry_Size(double x, double y) {
     Vector2D new_size(x, y);
-    if(current_scope_ == FRAME_RING) {        action::AnimationFrame* cur_frame
+    if(current_scope_ == FRAME_RING) {
+        action::AnimationFrame* cur_frame
             = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
         if (composing_) cur_frame->modifier()->ComposeScale(new_size);
         else            cur_frame->modifier()->set_scale(new_size);
-    } else        current_effect_->set_scale(new_size);
+    } else
+        current_effect_->set_scale(new_size);
     return true;
 
 }
 bool AnimationProtocol::NewEntry_Rotation(double new_rot) {
     new_rot *= DEG_TO_RAD_FACTOR;
-    if(current_scope_ == FRAME_RING) {        action::AnimationFrame* cur_frame
+    if(current_scope_ == FRAME_RING) {
+        action::AnimationFrame* cur_frame
             = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
         if (composing_) cur_frame->modifier()->ComposeRotation(new_rot);
         else            cur_frame->modifier()->set_rotation(new_rot);
