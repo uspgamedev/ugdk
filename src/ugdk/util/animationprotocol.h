@@ -43,21 +43,21 @@ class AnimationProtocol : public gdd::DescriptionProtocol<action::AnimationSet> 
     bool NewRing_Effect(void);
     bool NewRing_Frame(void);
 
-    bool NewEntry_EffectNumber(   const gdd::GDDArgs& ); //TODO: implement this function.
-    bool NewEntry_EffectAlpha(    const gdd::GDDArgs& );
-    bool NewEntry_EffectColor(    const gdd::GDDArgs& );
+    bool NewEntry_EffectNumber(int); //TODO: implement this function.
+    bool NewEntry_EffectAlpha(double);
+    bool NewEntry_EffectColor(std::string);
     bool NewEntry_EffectPosition( const gdd::GDDArgs& );
     bool NewEntry_EffectMirror(   const gdd::GDDArgs& );
     bool NewEntry_EffectSize(     const gdd::GDDArgs& );
-    bool NewEntry_EffectRotation( const gdd::GDDArgs& );
+    bool NewEntry_EffectRotation(double);
 
-    bool NewEntry_FrameNumber(   const gdd::GDDArgs& );
-    bool NewEntry_FrameAlpha(    const gdd::GDDArgs& );
-    bool NewEntry_FrameColor(    const gdd::GDDArgs& );
+    bool NewEntry_FrameNumber(int);
+    bool NewEntry_FrameAlpha(double);
+    bool NewEntry_FrameColor(std::string);
     bool NewEntry_FramePosition( const gdd::GDDArgs& );
     bool NewEntry_FrameMirror(   const gdd::GDDArgs& );
     bool NewEntry_FrameSize(     const gdd::GDDArgs& );
-    bool NewEntry_FrameRotation( const gdd::GDDArgs& );
+    bool NewEntry_FrameRotation(double);
 
 
     const bool arg_is_not_doubleing(const gdd::GDDString&) {
