@@ -18,6 +18,15 @@ class LoadError {
     };
 };
 
+class ArgsConverter {
+public:
+    virtual ~ArgsConverter() {}
+    virtual bool Process(const GDDArgs& args) const = 0;
+
+protected:
+    ArgsConverter() {}
+};
+
 } /* namespace gdd */
 } /* namespace ugdk */
 

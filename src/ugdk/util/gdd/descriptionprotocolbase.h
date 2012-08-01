@@ -11,18 +11,11 @@
 
 #include <ugdk/util/gdd/abstractloader.h>
 #include <ugdk/util/gdd/types.h>
+#include <ugdk/util/gdd/typedargsconverter.h>
 
 namespace ugdk {
 namespace gdd {
 
-class ArgsConverter {
-public:
-    virtual ~ArgsConverter() {}
-    virtual bool Process(const GDDArgs& args) const = 0;
-
-protected:
-    ArgsConverter() {}
-};
 
 enum ProtocolField {
     PROPERTY, RING, ENTRY
@@ -35,22 +28,40 @@ class DescriptionProtocolBase {
     virtual bool NewDescription() = 0;
     virtual bool NewData(const GDDString& data_name) = 0;
 
-    void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (void)> function);
-
-    void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (double)> function);
-    void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (int)> function);
-    void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (std::string)> function);
-    
     template<class P>
     void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (void), P* obj) {
         std::tr1::function<bool ()> result = std::tr1::bind(function, obj);
-        Register(field, name, result);
+        find_schema(field)[to_lower(name)] = new TypedArgsConverter<void, void, void, void, void>(result);
     }
-
-    template<class P, typename T>
-    void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T), P* obj) {
-        std::tr1::function<bool (T)> result = std::tr1::bind(function, obj, std::tr1::placeholders::_1);
-        Register(field, name, result);
+    template<class P, typename T1>
+    void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T1), P* obj) {
+        using namespace std::tr1::placeholders;
+        std::tr1::function<bool (T1)> result = std::tr1::bind(function, obj, _1);
+        registerFunc(field, name, result);
+    }
+    template<class P, typename T1, typename T2>
+    void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T1, T2), P* obj) {
+        using namespace std::tr1::placeholders;
+        std::tr1::function<bool (T1, T2)> result = std::tr1::bind(function, obj, _1, _2);
+        registerFunc(field, name, result);
+    }
+    template<class P, typename T1, typename T2, typename T3>
+    void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T1, T2, T3), P* obj) {
+        using namespace std::tr1::placeholders;
+        std::tr1::function<bool (T1, T2, T3)> result = std::tr1::bind(function, obj, _1, _2, _3);
+        registerFunc(field, name, result);
+    }
+    template<class P, typename T1, typename T2, typename T3, typename T4>
+    void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T1, T2, T3, T4), P* obj) {
+        using namespace std::tr1::placeholders;
+        std::tr1::function<bool (T1, T2, T3, T4)> result = std::tr1::bind(function, obj, _1, _2, _3, _4);
+        registerFunc(field, name, result);
+    }
+    template<class P, typename T1, typename T2, typename T3, typename T4, typename T5>
+    void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T1, T2, T3, T4, T5), P* obj) {
+        using namespace std::tr1::placeholders;
+        std::tr1::function<bool (T1, T2, T3, T4, T5)> result = std::tr1::bind(function, obj, _1, _2, _3, _4, _5);
+        registerFunc(field, name, result);
     }
 
     bool NewProperty(const GDDString& property_name, const GDDArgs& property_args);
@@ -70,12 +81,33 @@ class DescriptionProtocolBase {
 
   private:
     std::map<std::string, ArgsConverter*>& find_schema(ProtocolField);
+    static std::string to_lower(const std::string& str);
 
     std::map<std::string, ArgsConverter*> properties_schema_, rings_schema_, entries_schema_;
     GDDString simple_chain_ringname_;
 
     friend class ArgsConverter;
-
+    
+    template<typename T1, typename T2, typename T3, typename T4, typename T5>
+    void registerFunc(ProtocolField field, const GDDString& name, function<bool (T1, T2, T3, T4, T5)> function) {
+        find_schema(field)[to_lower(name)] = new TypedArgsConverter<T1, T2, T3, T4, T5>(function);
+    }
+    template<typename T1, typename T2, typename T3, typename T4>
+    void registerFunc(ProtocolField field, const GDDString& name, function<bool (T1, T2, T3, T4)> function) {
+        find_schema(field)[to_lower(name)] = new TypedArgsConverter<T1, T2, T3, T4, void>(function);
+    }
+    template<typename T1, typename T2, typename T3>
+    void registerFunc(ProtocolField field, const GDDString& name, function<bool (T1, T2, T3)> function) {
+        find_schema(field)[to_lower(name)] = new TypedArgsConverter<T1, T2, T3, void, void>(function);
+    }
+    template<typename T1, typename T2>
+    void registerFunc(ProtocolField field, const GDDString& name, function<bool (T1, T2)> function) {
+        find_schema(field)[to_lower(name)] = new TypedArgsConverter<T1, T2, void, void, void>(function);
+    }
+    template<typename T1>
+    void registerFunc(ProtocolField field, const GDDString& name, function<bool (T1)> function) {
+        find_schema(field)[to_lower(name)] = new TypedArgsConverter<T1, void, void, void, void>(function);
+    }
 };
 
 } /* namespace gdd */
