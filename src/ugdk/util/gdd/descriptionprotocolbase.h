@@ -49,6 +49,7 @@ class DescriptionProtocolBase {
 
     void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (double)> function);
     void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (int)> function);
+    void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (std::string)> function);
     void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (void)> function);
     
     template<class P, typename T>

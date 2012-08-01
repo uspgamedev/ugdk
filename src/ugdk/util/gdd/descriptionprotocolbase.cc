@@ -25,6 +25,8 @@ static bool error(LoadError::Type error_type, const std::string &msg) {
     return false;
 }
 
+//====================================================================
+// Check if the given args is of the wanted type.
 template<typename T>
 static bool is_of_type(const GDDArgs& args) { return false; }
 
@@ -37,6 +39,11 @@ static bool is_of_type<double>(const GDDArgs& args) { return args.size() == 1; }
 template<>
 static bool is_of_type<int>(const GDDArgs& args) { return args.size() == 1; } // TODO: implement this
 
+template<>
+static bool is_of_type<std::string>(const GDDArgs& args) { return args.size() == 1; }
+
+//====================================================================
+// Error message for when the given args is not of the wanted type.
 template<typename T>
 static std::string type_error_message() { return "INVALID TYPE"; }
 
@@ -49,6 +56,11 @@ static std::string type_error_message<double>() { return "Expected value is a si
 template<>
 static std::string type_error_message<int>() { return "Expected value is a single int."; }
 
+template<>
+static std::string type_error_message<std::string>() { return "Expected value is a single string."; }
+
+//====================================================================
+// Convert the given args to the wanted type.
 template<typename T>
 T convert_to_type(const GDDArgs& args);
 
@@ -58,7 +70,11 @@ double convert_to_type(const GDDArgs& args) { return atof(args[0].c_str()); }
 template<>
 int convert_to_type(const GDDArgs& args) { return atoi(args[0].c_str()); }
 
-//
+template<>
+std::string convert_to_type(const GDDArgs& args) { return args[0]; }
+
+//====================================================================
+// Wrapper for function that converts the given argument to the necessary type.
 template<typename T>
 struct ConvertFunction {
     function<bool (T)> function_;
@@ -70,9 +86,10 @@ struct ConvertFunction {
     }
 };
 
-template<>
+template<> // T=void calls the function another way.
 bool ConvertFunction<void>::operator()(const GDDArgs& args) const { return function_(); }
 
+// 
 template<typename T>
 class TypedArgsConverter : public ArgsConverter {
 public:
@@ -104,18 +121,16 @@ static std::string to_lower(const std::string& str) {
     return lower_name;
 }
 
-void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, function<bool (double)> function) {
-    find_schema(field)[to_lower(name)] = new TypedArgsConverter<double>(function);
+#define DECLARE_REGISTER(TYPE) \
+void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, function<bool (TYPE)> function) { \
+    find_schema(field)[to_lower(name)] = new TypedArgsConverter<TYPE>(function); \
 }
 
-void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, function<bool (int)> function) {
-    find_schema(field)[to_lower(name)] = new TypedArgsConverter<int>(function);
-}
+DECLARE_REGISTER(double)
+DECLARE_REGISTER(int)
+DECLARE_REGISTER(std::string)
+DECLARE_REGISTER(void)
 
-void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, function<bool (void)> function) {
-    find_schema(field)[to_lower(name)] = new TypedArgsConverter<void>(function);
-}
-    
 bool DescriptionProtocolBase::NewProperty(const GDDString& property_name, const GDDArgs& property_args) {
     return genericSchemaSearch(PROPERTY, "property", property_name, property_args);
 }
