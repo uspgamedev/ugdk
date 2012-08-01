@@ -10,6 +10,9 @@ set (FRAMEWORK_VERSION 0.3.0)
 message ("=== ${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION} ===")
 
 option(UGDK_STATICLIB "Set to ON to build UGDK with static linking." ON)
+option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
+option(UGDK_LUA_BINDINGS "Set to ON to enable Lua as one of the languages to create bindings." ON)
+option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
 
 if(NOT UGDK_STATICLIB)
     set(BUILD_SHARED_LIBS True)
@@ -77,11 +80,18 @@ include_directories(${SDLTTF_INCLUDE_DIR})
 find_package(SDL_image REQUIRED)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
-ugdk_setup_package (SWIG)
-if (SWIG_FOUND)
-  ugdk_setup_package (Lua51)
-  ugdk_setup_package (PythonLibs)
-endif (SWIG_FOUND)
+if (UGDK_CREATE_BINDINGS)
+    ugdk_setup_package (SWIG)
+    if (SWIG_FOUND)
+        if (UGDK_LUA_BINDINGS)
+            ugdk_setup_package (Lua51)
+        endif (UGDK_LUA_BINDINGS)
+        
+        if (UGDK_PYTHON_BINDINGS)
+            ugdk_setup_package (PythonLibs)
+        endif (UGDK_PYTHON_BINDINGS)
+    endif (SWIG_FOUND)
+endif (UGDK_CREATE_BINDINGS)
 
 include_directories ("externals/opengl")
 
