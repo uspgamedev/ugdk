@@ -10,21 +10,10 @@
 #include FROM_TR1(functional)
 
 #include <ugdk/util/gdd/abstractloader.h>
+#include <ugdk/util/gdd/types.h>
 
 namespace ugdk {
-
 namespace gdd {
-
-typedef std::string               GDDString;
-typedef std::vector<GDDString>    GDDArgs;
-
-class LoadError {
-  public:
-    enum Type {
-        TYPE_MISMATCH,
-        INVALID_VALUE
-    };
-};
 
 class DescriptionProtocolBase;
 class ArgsConverter {
@@ -47,20 +36,21 @@ class DescriptionProtocolBase {
     virtual bool NewDescription() = 0;
     virtual bool NewData(const GDDString& data_name) = 0;
 
+    void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (void)> function);
+
     void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (double)> function);
     void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (int)> function);
     void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (std::string)> function);
-    void Register(ProtocolField, const GDDString& name, std::tr1::function<bool (void)> function);
-    
-    template<class P, typename T>
-    void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T), P* obj) {
-        std::tr1::function<bool (T)> result = std::tr1::bind(function, obj, std::tr1::placeholders::_1);
-        Register(field, name, result);
-    }
     
     template<class P>
     void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (void), P* obj) {
         std::tr1::function<bool ()> result = std::tr1::bind(function, obj);
+        Register(field, name, result);
+    }
+
+    template<class P, typename T>
+    void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T), P* obj) {
+        std::tr1::function<bool (T)> result = std::tr1::bind(function, obj, std::tr1::placeholders::_1);
         Register(field, name, result);
     }
 

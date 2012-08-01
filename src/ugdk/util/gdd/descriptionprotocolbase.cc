@@ -2,8 +2,10 @@
 #include <algorithm>
 #include <vector>
 #include <cassert>
-#include <ugdk/util/gdd/descriptionprotocolbase.h>
 #include <cstdio>
+
+#include <ugdk/util/gdd/descriptionprotocolbase.h>
+#include <ugdk/util/gdd/typeconverter.h>
 
 namespace ugdk {
 namespace gdd {
@@ -25,70 +27,6 @@ static bool error(LoadError::Type error_type, const std::string &msg) {
     return false;
 }
 
-//====================================================================
-// Check if the given args is of the wanted type.
-template<typename T>
-static bool is_of_type(const GDDArgs& args) { return false; }
-
-template<>
-static bool is_of_type<void>(const GDDArgs& args) { return args.size() == 0; }
-
-template<>
-static bool is_of_type<double>(const GDDArgs& args) { return args.size() == 1; } // TODO: implement this
-
-template<>
-static bool is_of_type<int>(const GDDArgs& args) { return args.size() == 1; } // TODO: implement this
-
-template<>
-static bool is_of_type<std::string>(const GDDArgs& args) { return args.size() == 1; }
-
-//====================================================================
-// Error message for when the given args is not of the wanted type.
-template<typename T>
-static std::string type_error_message() { return "INVALID TYPE"; }
-
-template<>
-static std::string type_error_message<void>() { return "Expected no value at all."; }
-
-template<>
-static std::string type_error_message<double>() { return "Expected value is a single double."; }
-
-template<>
-static std::string type_error_message<int>() { return "Expected value is a single int."; }
-
-template<>
-static std::string type_error_message<std::string>() { return "Expected value is a single string."; }
-
-//====================================================================
-// Convert the given args to the wanted type.
-template<typename T>
-T convert_to_type(const GDDArgs& args);
-
-template<>
-double convert_to_type(const GDDArgs& args) { return atof(args[0].c_str()); }
-
-template<>
-int convert_to_type(const GDDArgs& args) { return atoi(args[0].c_str()); }
-
-template<>
-std::string convert_to_type(const GDDArgs& args) { return args[0]; }
-
-//====================================================================
-// Wrapper for function that converts the given argument to the necessary type.
-template<typename T>
-struct ConvertFunction {
-    function<bool (T)> function_;
-
-    ConvertFunction(function<bool (T)> func) : function_(func) {}
-
-    bool operator()(const GDDArgs& args) const { 
-        return function_(convert_to_type<T>(args));
-    }
-};
-
-template<> // T=void calls the function another way.
-bool ConvertFunction<void>::operator()(const GDDArgs& args) const { return function_(); }
-
 // 
 template<typename T>
 class TypedArgsConverter : public ArgsConverter {
@@ -96,15 +34,26 @@ public:
     TypedArgsConverter(function<bool (T)> function) : function_(function) {}
     
     bool Process(const GDDArgs& args) const {
-        if(!is_of_type<T>(args)) {
-            return error(LoadError::INVALID_VALUE, type_error_message<T>());
-        }
-        return function_(args);
+        if(!size_matches(args)) return error(LoadError::INVALID_VALUE, "Expected a single value.");
+        if(!type_matches(args)) return error(LoadError::TYPE_MISMATCH, type_error_message<T>());
+        return call(args);
     }
   private:
-    ConvertFunction<T> function_;
+    bool call(const GDDArgs& args) const { return function_(convert_to_type<T>(args[0])); }
+    bool size_matches(const GDDArgs& args) const { return args.size() == 1; }
+    bool type_matches(const GDDArgs& args) const { return is_of_type<T>(args[0]); }
+
+    function<bool (T)> function_;
 };
-    
+
+// T=void
+template<> 
+bool TypedArgsConverter<void>::call(const GDDArgs& args) const { return function_(); }
+template<>
+bool TypedArgsConverter<void>::size_matches(const GDDArgs& args) const { return args.size() == 0; }
+template<>
+bool TypedArgsConverter<void>::type_matches(const GDDArgs& args) const { return true; }
+
 DescriptionProtocolBase::~DescriptionProtocolBase() {
     std::map<std::string, ArgsConverter*>::iterator it;
     for(it = properties_schema_.begin(); it != properties_schema_.end(); ++it) 
