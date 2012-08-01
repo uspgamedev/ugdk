@@ -8,39 +8,51 @@
 namespace ugdk {
 namespace gdd {
 
-static bool is_a_double(const std::string& arg) { return true; } // TODO: implement this
-
-bool ArgsConverter::error(DescriptionProtocolBase* target, LoadError::Type error_type, const std::string& msg) const { 
-    return target->error(error_type, msg);
+using std::tr1::function;
+static bool error(LoadError::Type error_type, const std::string &msg) {
+    switch (error_type) {
+      case LoadError::TYPE_MISMATCH:
+        fprintf(stderr, "Load Error: type mismatch. %s\n", msg.c_str());
+        break;
+      case LoadError::INVALID_VALUE:
+        fprintf(stderr, "Load Error: invalid value. %s\n", msg.c_str());
+        break;
+      default:
+        fprintf(stderr, "Load Error: unknown. %s\n", msg.c_str()); // \comofas
+        break;
+    }
+    return false;
 }
+
+static bool is_a_double(const std::string& arg) { return true; } // TODO: implement this
 
 class VoidArgsConverter : public ArgsConverter {
   public:
-    VoidArgsConverter(bool (DescriptionProtocolBase::*function) (void)) : function_(function) {}
+    VoidArgsConverter(function<bool (void)> function) : function_(function) {}
 
-    bool Process(DescriptionProtocolBase* target, const GDDArgs& args) const {
+    bool Process(const GDDArgs& args) const {
         if(args.size() != 0) {
-            return error(target, LoadError::INVALID_VALUE, "Expected no value at all.");
+            return error(LoadError::INVALID_VALUE, "Expected no value at all.");
         }
-        return (target->*function_)();
+        return function_();
     }
   private:
-    bool (DescriptionProtocolBase::*function_) (void);
+    function<bool (void)> function_;
 };
     
 class DoubleArgsConverter : public ArgsConverter {
   public:
-    DoubleArgsConverter(bool (DescriptionProtocolBase::*function) (double)) : function_(function) {}
+    DoubleArgsConverter(function<bool (double)> function) : function_(function) {}
 
-    bool Process(DescriptionProtocolBase* target, const GDDArgs& args) const {
+    bool Process(const GDDArgs& args) const {
         if(args.size() != 1 || !is_a_double(args[0])) {
-            return error(target, LoadError::INVALID_VALUE, "Expected value is a single double.");
+            return error(LoadError::INVALID_VALUE, "Expected value is a single double.");
         }
         double val = atof(args[0].c_str());
-        return (target->*function_)(val);
+        return function_(val);
     }
   private:
-    bool (DescriptionProtocolBase::*function_) (double);
+    function<bool (double)> function_;
 };
     
 DescriptionProtocolBase::~DescriptionProtocolBase() {
@@ -53,13 +65,13 @@ DescriptionProtocolBase::~DescriptionProtocolBase() {
         delete it->second;
 }
     
-void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, bool (DescriptionProtocolBase::*function) (double)) {
+void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, function<bool (double)> function) {
     std::string lower_name = name;
     std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
     find_schema(field)[lower_name] = new DoubleArgsConverter(function);
 }
 
-void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, bool (DescriptionProtocolBase::*function) (void)) {
+void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, function<bool (void)> function) {
     std::string lower_name = name;
     std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
     find_schema(field)[lower_name] = new VoidArgsConverter(function);
@@ -111,23 +123,12 @@ bool DescriptionProtocolBase::genericSchemaSearch(ProtocolField field, const std
         std::string msg = "Unknown " + error_msg + " name '" + lower_name + "'.";
         return error(LoadError::INVALID_VALUE, msg);
     } else {
-        return converter->second->Process(this, args);
+        return converter->second->Process(args);
     }
 }
 
 bool DescriptionProtocolBase::error(LoadError::Type error_type, const std::string &msg) {
-    switch (error_type) {
-      case LoadError::TYPE_MISMATCH:
-        fprintf(stderr, "Load Error: type mismatch. %s\n", msg.c_str());
-        break;
-      case LoadError::INVALID_VALUE:
-        fprintf(stderr, "Load Error: invalid value. %s\n", msg.c_str());
-        break;
-      default:
-        fprintf(stderr, "Load Error: unknown. %s\n", msg.c_str()); // \comofas
-        break;
-    }
-    return false;
+    return ::ugdk::gdd::error(error_type, msg);
 }
 
 } /* namespace gdd */
