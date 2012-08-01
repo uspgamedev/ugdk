@@ -33,6 +33,9 @@ namespace ugdk {
 
 using std::string;
 using std::pair;
+using std::tr1::bind;
+using std::tr1::function;
+using namespace std::tr1::placeholders;
 
 using gdd::GDDString;
 using gdd::GDDArgs;
@@ -56,6 +59,14 @@ AnimationProtocol::AnimationProtocol() : current_animation_(NULL), current_effec
     ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameMirror   , "mirror"  , "m");
     ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameSize     , "size"    , "s");
     ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameRotation , "rotation", "r");
+
+    this->set_simple_chain_ringname("frame");
+
+    RegisterBind(gdd::PROPERTY, "fps", &AnimationProtocol::NewProperty_Fps, this);
+    RegisterBind(gdd::PROPERTY, "compose", &AnimationProtocol::NewProperty_Compose, this);
+    
+    RegisterBind(gdd::RING, "effect", &AnimationProtocol::NewRing_Effect, this);
+    RegisterBind(gdd::RING, "frame", &AnimationProtocol::NewRing_Frame, this);
 }
 
 bool AnimationProtocol::NewDescription() {
@@ -73,47 +84,36 @@ bool AnimationProtocol::NewData(const GDDString& data_name) {
     //TODO: Verificar integridade da current_animation_ .
     return true;
 }
-
-bool AnimationProtocol::NewProperty(const GDDString& property_name, const GDDArgs& property_args) {
-    if (property_name == "fps" && property_args.size() == 1) {
-        int value;
-        if (sscanf(property_args[0].c_str(), "%d", &value) != 1) {
-            string msg = "Could not read animation fps.";
-            error(LoadError::INVALID_VALUE, msg);
-            return false;
-        }
-        current_animation_->set_fps((double)(value));
-    } else if (property_name == "compose" && property_args.size() == 0) {
-        composing_ = true;
-    } else return false;
+    
+bool AnimationProtocol::NewProperty_Fps(double fps) {
+    if(fps < 0.0) {
+        string msg = "FPS must be positive.";
+        return error(LoadError::INVALID_VALUE, msg);
+    }
+    current_animation_->set_fps(fps);
     return true;
 }
 
-bool AnimationProtocol::NewRing(const GDDString& ring_typename) {
+bool AnimationProtocol::NewProperty_Compose(void) {
+    return composing_ = true;
+}
 
-    if(ring_typename == "effect") {
-        if(!composing_) {
-            if(current_effect_) {
-                delete current_effect_;
-                current_effect_ = NULL;
-            }
-            current_effect_ = new graphic::Modifier();
+bool AnimationProtocol::NewRing_Effect(void) {
+    if(!composing_) {
+        if(current_effect_) {
+            delete current_effect_;
+            current_effect_ = NULL;
         }
-        current_scope_ = EFFECT_RING;
+        current_effect_ = new graphic::Modifier();
     }
-    else if(ring_typename == "frame") {
-        graphic::Modifier temp_modifier = *current_effect_;
-        current_animation_->push_back(new action::AnimationFrame(DEFAULT_FRAME, new graphic::Modifier(temp_modifier)));
+    current_scope_ = EFFECT_RING;
+    return true;
+}
 
-        current_scope_ = FRAME_RING;
-    }
-    else {
-        string msg  = "Unkown Ring: \"";
-        msg += "TODO: Fix this error message"; //TODO: scope_to_string(current_scope_);
-        msg += "\".";
-        error(LoadError::INVALID_VALUE, msg);
-        return false;
-    }
+bool AnimationProtocol::NewRing_Frame(void) {
+    graphic::Modifier temp_modifier = *current_effect_;
+    current_animation_->push_back(new action::AnimationFrame(DEFAULT_FRAME, new graphic::Modifier(temp_modifier)));
+    current_scope_ = FRAME_RING;
     return true;
 }
 
@@ -134,34 +134,6 @@ bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& ent
         return false;
     }
 }
-
-bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
-                                         const GDDArgs& ring_args) {
-    //if (ring_typename == "frames")
-        for(size_t i = 0; i < ring_args.size(); i++) {
-            GDDArgs entry_arg;
-            entry_arg.push_back(ring_args[i]);
-
-            if (!NewRing("frame")) return false;
-            if (!NewEntry(ring_typename, entry_arg)) return false;
-            /*
-            int value;
-            if (sscanf(ring_args[i].c_str(), "%d", &value) != 1) {
-                string msg = "Could not read animation frame number.";
-                error(LoadError::INVALID_VALUE, msg);
-                return false;
-            }
-            Modifier temp_modifier = *current_effect_;
-            current_animation_->push_back(
-      AnimationFrame(value, new Modifier(temp_modifier))
-            );
-            */
-        }
-    //else return false; //TODO: Mensagem da load error.
-    return true;
-}
-
-
 
 // NewEntry Functions
 // Effect

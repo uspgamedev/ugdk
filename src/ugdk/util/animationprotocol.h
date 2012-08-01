@@ -23,10 +23,8 @@ class AnimationProtocol : public gdd::DescriptionProtocol<action::AnimationSet> 
 
     bool NewDescription();
     bool NewData(const gdd::GDDString& data_name);
-    bool NewProperty(const gdd::GDDString& property_name, const gdd::GDDArgs& property_args);
-    bool NewRing(const gdd::GDDString& ring_typename);
+
     bool NewEntry(const gdd::GDDString& entry_name, const gdd::GDDArgs& entry_args);
-    bool NewSimpleChain(const gdd::GDDString& ring_typename, const gdd::GDDArgs& ring_args);
 
   private:
     action::Animation *current_animation_;
@@ -38,6 +36,12 @@ class AnimationProtocol : public gdd::DescriptionProtocol<action::AnimationSet> 
 
 
     std::map< std::pair<ParsingScope, gdd::GDDString>, EntryFunction > entry_functions_;
+    
+    bool NewProperty_Fps(double);
+    bool NewProperty_Compose(void);
+    
+    bool NewRing_Effect(void);
+    bool NewRing_Frame(void);
 
     bool NewEntry_EffectNumber(   const gdd::GDDArgs& ); //TODO: implement this function.
     bool NewEntry_EffectAlpha(    const gdd::GDDArgs& );
