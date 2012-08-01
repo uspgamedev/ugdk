@@ -9,6 +9,7 @@ namespace ugdk {
 namespace gdd {
 
 using std::tr1::function;
+
 static bool error(LoadError::Type error_type, const std::string &msg) {
     switch (error_type) {
       case LoadError::TYPE_MISMATCH:
@@ -24,35 +25,67 @@ static bool error(LoadError::Type error_type, const std::string &msg) {
     return false;
 }
 
-static bool is_a_double(const std::string& arg) { return true; } // TODO: implement this
+template<typename T>
+static bool is_of_type(const GDDArgs& args) { return false; }
 
-class VoidArgsConverter : public ArgsConverter {
-  public:
-    VoidArgsConverter(function<bool (void)> function) : function_(function) {}
+template<>
+static bool is_of_type<void>(const GDDArgs& args) { return args.size() == 0; }
 
-    bool Process(const GDDArgs& args) const {
-        if(args.size() != 0) {
-            return error(LoadError::INVALID_VALUE, "Expected no value at all.");
-        }
-        return function_();
+template<>
+static bool is_of_type<double>(const GDDArgs& args) { return args.size() == 1; } // TODO: implement this
+
+template<>
+static bool is_of_type<int>(const GDDArgs& args) { return args.size() == 1; } // TODO: implement this
+
+template<typename T>
+static std::string type_error_message() { return "INVALID TYPE"; }
+
+template<>
+static std::string type_error_message<void>() { return "Expected no value at all."; }
+
+template<>
+static std::string type_error_message<double>() { return "Expected value is a single double."; }
+
+template<>
+static std::string type_error_message<int>() { return "Expected value is a single int."; }
+
+template<typename T>
+T convert_to_type(const GDDArgs& args);
+
+template<>
+double convert_to_type(const GDDArgs& args) { return atof(args[0].c_str()); }
+
+template<>
+int convert_to_type(const GDDArgs& args) { return atoi(args[0].c_str()); }
+
+//
+template<typename T>
+struct ConvertFunction {
+    function<bool (T)> function_;
+
+    ConvertFunction(function<bool (T)> func) : function_(func) {}
+
+    bool operator()(const GDDArgs& args) const { 
+        return function_(convert_to_type<T>(args));
     }
-  private:
-    function<bool (void)> function_;
 };
-    
-class DoubleArgsConverter : public ArgsConverter {
-  public:
-    DoubleArgsConverter(function<bool (double)> function) : function_(function) {}
 
+template<>
+bool ConvertFunction<void>::operator()(const GDDArgs& args) const { return function_(); }
+
+template<typename T>
+class TypedArgsConverter : public ArgsConverter {
+public:
+    TypedArgsConverter(function<bool (T)> function) : function_(function) {}
+    
     bool Process(const GDDArgs& args) const {
-        if(args.size() != 1 || !is_a_double(args[0])) {
-            return error(LoadError::INVALID_VALUE, "Expected value is a single double.");
+        if(!is_of_type<T>(args)) {
+            return error(LoadError::INVALID_VALUE, type_error_message<T>());
         }
-        double val = atof(args[0].c_str());
-        return function_(val);
+        return function_(args);
     }
   private:
-    function<bool (double)> function_;
+    ConvertFunction<T> function_;
 };
     
 DescriptionProtocolBase::~DescriptionProtocolBase() {
@@ -65,16 +98,22 @@ DescriptionProtocolBase::~DescriptionProtocolBase() {
         delete it->second;
 }
     
-void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, function<bool (double)> function) {
-    std::string lower_name = name;
+static std::string to_lower(const std::string& str) {
+    std::string lower_name = str;
     std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
-    find_schema(field)[lower_name] = new DoubleArgsConverter(function);
+    return lower_name;
+}
+
+void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, function<bool (double)> function) {
+    find_schema(field)[to_lower(name)] = new TypedArgsConverter<double>(function);
+}
+
+void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, function<bool (int)> function) {
+    find_schema(field)[to_lower(name)] = new TypedArgsConverter<int>(function);
 }
 
 void DescriptionProtocolBase::Register(ProtocolField field, const GDDString& name, function<bool (void)> function) {
-    std::string lower_name = name;
-    std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
-    find_schema(field)[lower_name] = new VoidArgsConverter(function);
+    find_schema(field)[to_lower(name)] = new TypedArgsConverter<void>(function);
 }
     
 bool DescriptionProtocolBase::NewProperty(const GDDString& property_name, const GDDArgs& property_args) {
@@ -115,8 +154,7 @@ std::map<std::string, ArgsConverter*>& DescriptionProtocolBase::find_schema(Prot
 bool DescriptionProtocolBase::genericSchemaSearch(ProtocolField field, const std::string& error_msg, 
                                                   const GDDString& key_name, const GDDArgs& args) {
     std::map<std::string, ArgsConverter*>& schemas = find_schema(field);
-    std::string lower_name = key_name;
-    std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
+    std::string lower_name = to_lower(key_name);
     
     std::map<std::string, ArgsConverter*>::iterator converter = schemas.find(lower_name);
     if(converter == schemas.end()) {
