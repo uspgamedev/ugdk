@@ -1,6 +1,7 @@
 #ifndef UGDK_UTIL_DESCRIPTIONPROTOCOL_H_
 #define UGDK_UTIL_DESCRIPTIONPROTOCOL_H_
 
+#include <ugdk/util/gdd/types.h>
 #include <ugdk/util/gdd/descriptionprotocolbase.h>
 
 namespace ugdk {

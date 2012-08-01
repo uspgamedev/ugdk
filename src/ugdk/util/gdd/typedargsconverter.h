@@ -9,7 +9,7 @@
 #include <ugdk/portable/tr1.h>
 #include FROM_TR1(tuple)
 
-#include <ugdk/util/gdd/descriptionprotocolbase.h>
+#include <ugdk/util/gdd/types.h>
 #include <ugdk/util/gdd/typeconverter.h>
 
 namespace ugdk {
