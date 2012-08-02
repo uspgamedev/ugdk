@@ -1,4 +1,5 @@
 #include <cmath>
+#include <algorithm>
 #include <assert.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/math/vector2D.h>
@@ -8,12 +9,14 @@
 namespace ugdk {
 namespace math {
 
+static int absolute_value(int v) { return std::max(v, -v); }
+
 Integer2D::Integer2D(const ugdk::Vector2D& vec2d)
   : x(static_cast<int>(vec2d.x)), y(static_cast<int>(vec2d.y)) {}
 
 // Returns the norm-1.
 int Integer2D::NormOne() const {
-    return std::abs(x) + std::abs(y);
+    return absolute_value(x) + absolute_value(y);
 }
 
 double Integer2D::Length() const {
