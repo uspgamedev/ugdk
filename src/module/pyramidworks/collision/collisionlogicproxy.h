@@ -4,6 +4,8 @@
 #include <ugdk/script/virtualobj.h>
 #include <pyramidworks/collision/collisionlogic.h>
 #include <ugdk/script/baseproxy.h>
+#include <cassert>
+#include <cstdio>
 
 namespace pyramidworks {
 namespace collision {
@@ -15,11 +17,14 @@ public:
     CollisionLogicProxy(const ugdk::script::VirtualObj& proxy) : ugdk::script::BaseProxy<CollisionLogicProxy>(proxy) {}
     
     virtual void Handle(void *data) {
-        ugdk::script::VirtualObj vdata = ugdk::script::VirtualObj(proxy_.wrapper());
+		// TODO: fix this
+		fputs("ERROR: CollisionLogicProxy::Handle not implemented.", stderr);
+		assert(false);
+        /*ugdk::script::VirtualObj vdata = ugdk::script::VirtualObj(proxy_.wrapper());
         vdata.set_value(data);
         std::list<ugdk::script::VirtualObj> args;
         args.push_back(vdata);
-        ( proxy_ | "Handle" )(args);
+        ( proxy_ | "Handle" )(args);*/
     }
 
 };
