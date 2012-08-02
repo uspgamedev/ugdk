@@ -35,6 +35,7 @@ SET(UGDK_SRC
     ./src/ugdk/script/virtualobj.cc 
     ./src/ugdk/time/timeaccumulator.cc 
     ./src/ugdk/time/timemanager.cc 
+    ./src/ugdk/ui/button.cc 
     ./src/ugdk/ui/menu.cc 
     ./src/ugdk/ui/uielement.cc 
     ./src/ugdk/util/animationprotocol.cc 
