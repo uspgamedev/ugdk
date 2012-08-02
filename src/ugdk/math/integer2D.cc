@@ -1,10 +1,15 @@
+
+#include <ugdk/math/integer2D.h>
+
 #include <cmath>
 #include <algorithm>
 #include <assert.h>
-#include <ugdk/math/integer2D.h>
 #include <ugdk/math/vector2D.h>
 
 #define SWAPVARS(temp,var1,var2) temp = var1; var1 = var2; var2 = temp
+
+using namespace ugdk::enums;
+using mirroraxis::MirrorAxis;
 
 namespace ugdk {
 namespace math {
@@ -55,21 +60,19 @@ Integer2D Integer2D::Rotated(RotDeg rotdeg) const {
 }
 
 
-void Integer2D::Mirror(const ugdk::Mirror& mirror) {
+void Integer2D::Mirror(const MirrorAxis mirror) {
     int temp;
 
     switch(mirror) {
-        case MIRROR_HFLIP:          x = -x;                             break;
-        case MIRROR_VFLIP:          y = -y;                             break;
-        case MIRROR_BYNEGATIVEDIAG: SWAPVARS(temp,x,y); // and then negativate both at the next case.
-        case MIRROR_HVFLIP:         x = -x; y = -y;                     break;
-        case MIRROR_BYPOSITIVEDIAG: SWAPVARS(temp,x,y);                 break;
-        case MIRROR_NONE: // do nothing.
-        default: break;
+        case mirroraxis::HORZ:      y = -y;                             break;
+        case mirroraxis::DIAG_UP:   SWAPVARS(temp,x,y);                 break;
+        case mirroraxis::VERT:      x = -x;                             break;
+        case mirroraxis::DIAG_DOWN: SWAPVARS(temp,x,y); x = -x; y = -y; break;
+        default: assert(false); break;
     }
 }
 
-Integer2D Integer2D::Mirrored(const ugdk::Mirror& mirror) const {
+Integer2D Integer2D::Mirrored(const MirrorAxis mirror) const {
     Integer2D ret = *this;
     ret.Mirror(mirror);
     return ret;

@@ -63,19 +63,19 @@ TEST(Integer2D, Methods) {
 		EXPECT_EQ(11, f.x);
 		EXPECT_EQ(0, f.y); }
 
-    {   Integer2D hm = a.Mirrored(MIRROR_HFLIP);
+    {   Integer2D hm = a.Mirrored(mirroraxis::VERT);
         EXPECT_EQ(-5, hm.x);
         EXPECT_EQ(7, hm.y); }
 
-    {  Integer2D vm = a.Mirrored(MIRROR_VFLIP);
+    {  Integer2D vm = a.Mirrored(mirroraxis::HORZ);
         EXPECT_EQ(5, vm.x);
         EXPECT_EQ(-7, vm.y); }
 		
-    {  Integer2D t = a.Mirrored(MIRROR_BYPOSITIVEDIAG);
+    {  Integer2D t = a.Mirrored(mirroraxis::DIAG_UP);
         EXPECT_EQ(7, t.x);
         EXPECT_EQ(5, t.y); }
 		
-    {  Integer2D t = b.Mirrored(MIRROR_BYNEGATIVEDIAG);
+    {  Integer2D t = b.Mirrored(mirroraxis::DIAG_DOWN);
         EXPECT_EQ(11, t.x);
         EXPECT_EQ(0, t.y); }
 		

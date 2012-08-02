@@ -2,6 +2,7 @@
 #include <ugdk/math/vector2D.h>
 
 using namespace ugdk;
+using namespace ugdk::enums;
 
 #define PI 3.1415926535897932384626433832795
 
@@ -61,11 +62,19 @@ TEST(Vector2D, Methods) {
 		EXPECT_EQ(f.x, 11.0);
 		EXPECT_TRUE(f.y < 1.0e-6); }
 
-    {   Vector2D hm = a.HorizontalMirror();
+    {   Vector2D hm = a.Mirrored(mirroraxis::VERT);
         EXPECT_EQ(hm.x, -5.0);
         EXPECT_EQ(hm.y, 7.0); }
 
-     {   Vector2D vm = a.VerticalMirror();
+    {   Vector2D vm = a.Mirrored(mirroraxis::HORZ);
         EXPECT_EQ(vm.x, 5.0);
         EXPECT_EQ(vm.y, -7.0); }
+
+    {   Vector2D t = a.Mirrored(mirroraxis::DIAG_UP);
+        EXPECT_EQ(t.x, 7.0);
+        EXPECT_EQ(t.y, 5.0); }
+
+    {   Vector2D t = a.Mirrored(mirroraxis::DIAG_DOWN);
+        EXPECT_EQ(t.x, -7.0);
+        EXPECT_EQ(t.y, -5.0); }
 }

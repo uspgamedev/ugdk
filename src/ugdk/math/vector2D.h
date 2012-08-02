@@ -2,6 +2,8 @@
 #ifndef UGDK_MATH_VECTOR2D_H_
 #define UGDK_MATH_VECTOR2D_H_
 
+#include <ugdk/base/types.h>
+
 #ifdef SWIG
 #pragma SWIG nowarn=312
 #endif
@@ -92,18 +94,18 @@ class Vector2D {
     *  @see Angle
     */
     Vector2D Rotate(const double angle) const;
-
-    /// Returns a new vector equivalent to this vector when mirrored according to the y axis.
-    /** The horizantally mirrored vector of a vector (x, y) is (-x, y)
-     *  @return horizontally mirrored vector
+    
+    /// Mirrors this Vector2D (in-place) by the "axis" axis. Include types.h and use "using namespace ugdk::enums".
+    /** @param axis Either mirroraxis::HORZ, mirroraxis::VERT, mirroraxis::DIAG_UP, or mirroraxis::DIAG_DOWN.
+     *  @see Mirrored
      */
-    Vector2D HorizontalMirror();
-
-    /// Returns a new vector equivalent to this vector when mirrored according to the x axis.
-    /** The vertically mirrored vector of a vector (x, y) is (x, -y)
-     *  @return horizontally mirrored vector
+    void Mirror(const ugdk::enums::mirroraxis::MirrorAxis axis);
+    
+    /// Returns a new Vector2D, mirrored by the "axis" axis. Include types.h and use "using namespace ugdk::enums".
+    /** @param axis Either mirroraxis::HORZ, mirroraxis::VERT, mirroraxis::DIAG_UP, or mirroraxis::DIAG_DOWN.
+     *  @see Mirror
      */
-    Vector2D VerticalMirror();
+    Vector2D Mirrored(const ugdk::enums::mirroraxis::MirrorAxis axis) const;
 
     /// Returns a new vector which is this vector scaled coordinate by coordinate with "scale".
     /** The resulting scaled vector is (this->x * scale.x, this->y * scale.y).

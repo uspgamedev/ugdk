@@ -119,17 +119,17 @@ class Integer2D {
         return center + (*this - center).Rotated(rotdeg);
     }
     
-    /// Mirrors this Integer2D (in-place), following "mirror"'s spec.
-    /** @param mirror Either MIRROR_NONE, MIRROR_HFLIP, MIRROR_VFLIP, or MIRROR HV_FLIP.
+    /// Mirrors this Integer2D (in-place) by the "axis" axis. Include types.h and use "using namespace ugdk::enums".
+    /** @param axis Either mirroraxis::HORZ, mirroraxis::VERT, mirroraxis::DIAG_UP, or mirroraxis::DIAG_DOWN.
      *  @see Mirrored
      */
-    void Mirror(const ugdk::Mirror& mirror);
+    void Mirror(const ugdk::enums::mirroraxis::MirrorAxis mirror);
     
-    /// Returns a new Integer2D, mirrored by "mirror"'s spec.
-    /** @param mirror Either MIRROR_NONE, MIRROR_HFLIP, MIRROR_VFLIP, or MIRROR HV_FLIP.
+    /// Returns a new Integer2D, mirrored by the "axis" axis. Include types.h and use "using namespace ugdk::enums".
+    /** @param axis Either mirroraxis::HORZ, mirroraxis::VERT, mirroraxis::DIAG_UP, or mirroraxis::DIAG_DOWN.
      *  @see Mirror
      */
-    Integer2D Mirrored(const ugdk::Mirror& mirror) const;
+    Integer2D Mirrored(const ugdk::enums::mirroraxis::MirrorAxis mirror) const;
 
     /// In-place integer multiplication, coordinate by coordinate.
     /** @see Multiplied

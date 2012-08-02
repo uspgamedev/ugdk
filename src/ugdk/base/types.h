@@ -19,12 +19,21 @@ typedef int32_t int32;
 typedef int64_t int64;
 
 typedef uint8 Mirror;
-static const Mirror MIRROR_NONE             = 0;
-static const Mirror MIRROR_HFLIP            = 1;
-static const Mirror MIRROR_VFLIP            = 2;
-static const Mirror MIRROR_HVFLIP           = 3;
-static const Mirror MIRROR_BYPOSITIVEDIAG   = 4;
-static const Mirror MIRROR_BYNEGATIVEDIAG   = 5;
+static const Mirror MIRROR_NONE     = 0;
+static const Mirror MIRROR_HFLIP    = 1;
+static const Mirror MIRROR_VFLIP    = 2;
+static const Mirror MIRROR_HVFLIP   = 3;
+
+namespace enums {
+namespace mirroraxis {
+enum MirrorAxis {
+    HORZ = 0,
+    DIAG_UP = 45,
+    VERT = 90,
+    DIAG_DOWN = 135
+};
+}
+}
 
 typedef struct Color {
     Color() : r(1.0), g(1.0), b(1.0), a(1.0) {}
