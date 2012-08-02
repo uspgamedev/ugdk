@@ -42,7 +42,7 @@ Vector2D Vector2D::Rotate(const double angle) const {
 }
 
 void Vector2D::Mirror(const MirrorAxis mirror) {
-    int temp;
+    double temp;
 
     switch(mirror) {
         case mirroraxis::HORZ:      y = -y;                             break;

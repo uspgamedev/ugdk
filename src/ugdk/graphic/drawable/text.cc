@@ -117,9 +117,9 @@ void Text::Draw() const {
                         break;
                 }
                 #ifdef WIN32
-                    glCallLists(message_[i].length(), GL_SHORT, (GLshort *) message_[i].c_str());
+                    glCallLists(static_cast<GLsizei>(message_[i].length()), GL_SHORT, (GLshort *) message_[i].c_str());
                 #else
-                    glCallLists(message_[i].length(), GL_INT, (GLint *) message_[i].c_str());
+                    glCallLists(static_cast<GLsizei>(message_[i].length()), GL_INT, (GLint *) message_[i].c_str());
                 #endif
                 glPopMatrix();
             }

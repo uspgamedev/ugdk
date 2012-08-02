@@ -25,7 +25,7 @@ static T* NullLoad(const std::string& filepath) {
 }
 
 bool type_info_cmp(const std::type_info* a, const std::type_info* b) {
-    return a->before(*b);
+    return (a->before(*b) != 0);
 }
 
 namespace ugdk {

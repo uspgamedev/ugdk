@@ -95,7 +95,7 @@ int DataGear::UnwrapData(lua_State* L) {
     GETARG(L_, 1, DataGear, dtgear);
     DataID id = L_.aux().checkintteger(2);
     GETARGPTR(L_, 3, swig_type_info, type);
-    bool disown = L_.aux().checkintteger(4);
+    bool disown = (L_.aux().checkintteger(4) != 0);
     L_.settop(0);
 
     void *data = NULL; // dummy
@@ -113,7 +113,7 @@ static DataID MakeID(DataGear& dtgear) {
     dtgear->pushcfunction(DataGear::GenerateID);
     dtgear->pushudata(&dtgear);
     dtgear->call(1,1);
-    DataID id = dtgear->tointeger(-1);
+    DataID id = static_cast<DataID>(dtgear->tointeger(-1));
     dtgear->pop(1);
     return id;
 }

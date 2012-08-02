@@ -44,7 +44,7 @@ TEST(Vector2D, Operators) {
 }
 
 TEST(Vector2D, Methods) {
-	Vector2D a(5.0, 7.0), b(0.0, -11.0);
+	Vector2D a(5.0, 7.0), b(0.0, -11.0), c(5.6,7.2);
 
 	{	EXPECT_EQ(a.Length(), 8.6023252670426267717294735350497); }
 
@@ -62,19 +62,19 @@ TEST(Vector2D, Methods) {
 		EXPECT_EQ(f.x, 11.0);
 		EXPECT_TRUE(f.y < 1.0e-6); }
 
-    {   Vector2D hm = a.Mirrored(mirroraxis::VERT);
-        EXPECT_EQ(hm.x, -5.0);
-        EXPECT_EQ(hm.y, 7.0); }
+    {   Vector2D hm = c.Mirrored(mirroraxis::VERT);
+        EXPECT_EQ(hm.x, -5.6);
+        EXPECT_EQ(hm.y, 7.2); }
 
-    {   Vector2D vm = a.Mirrored(mirroraxis::HORZ);
-        EXPECT_EQ(vm.x, 5.0);
-        EXPECT_EQ(vm.y, -7.0); }
+    {   Vector2D vm = c.Mirrored(mirroraxis::HORZ);
+        EXPECT_EQ(vm.x, 5.6);
+        EXPECT_EQ(vm.y, -7.2); }
 
-    {   Vector2D t = a.Mirrored(mirroraxis::DIAG_UP);
-        EXPECT_EQ(t.x, 7.0);
-        EXPECT_EQ(t.y, 5.0); }
+    {   Vector2D t = c.Mirrored(mirroraxis::DIAG_UP);
+        EXPECT_EQ(t.x, 7.2);
+        EXPECT_EQ(t.y, 5.6); }
 
-    {   Vector2D t = a.Mirrored(mirroraxis::DIAG_DOWN);
-        EXPECT_EQ(t.x, -7.0);
-        EXPECT_EQ(t.y, -5.0); }
+    {   Vector2D t = c.Mirrored(mirroraxis::DIAG_DOWN);
+        EXPECT_EQ(t.x, -7.2);
+        EXPECT_EQ(t.y, -5.6); }
 }
