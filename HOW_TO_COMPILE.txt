@@ -2,17 +2,24 @@
 GNU/Linux:
 ==========
 
-1) Get CMake 2.6 or a higher version
+1) Get CMake 2.8 or a higher version
 
-2) Get the folowing libraries: 
+2a) Get the folowing libraries: (Debian packages for reference)
  * libsdl1.2-dev
  * libsdl-image1.2-dev
  * libsdl-mixer1.2-dev
  * libsdl-ttf2.0-dev
 
-3) Open a terminal in the same folder of this file.
+2b) Optionally install the following packages:
+ * liblua5.1-dev
+ * python2.7-dev
+ * swig2.0
+ 
+ ## Note: the last two packages are not avaiable in the Debian Squeeze repositories.
 
-4) $ cmake . (Do not forget the '.' at the end)
+4) Open a terminal in the same folder of this file.
+
+5) $ cmake . (Do not forget the '.' at the end)
    $ make
 
 Optionally, you can use CMake to generate files for your favorite IDE. Search
@@ -22,7 +29,7 @@ for cmake -G options.
 Mac OS X:
 =========
 
-1) Install CMake 2.6 or a higher version
+1) Install CMake 2.8 or a higher version
 
 2) Install the following libraries: 
 - SDL 1.2
@@ -47,7 +54,7 @@ Windows
 =======
 
 1) Have the following software installed:
-- CMake 2.6 or higher
+- CMake 2.8 or higher
 - Python 2.7 (must have registry entry)
 - Lua 5.1 (must have LUA_DIR set)
 - SWIG 2.0.4 (must be on PATH)
@@ -59,10 +66,7 @@ containing the following libraries:
 - SDL_Mixer 1.2
 - SDL_TTF 2.0
 
-3) Set the BOOST_ROOT variable to the root folder of where the Boost library is installed.
-Note: Boost version must be at least 1.48.0
+3) Using CMake, generate the project files for the IDE you wish to use.
 
-4) Using CMake, generate the project files for the IDE you wish to use.
-
-5) Build using the generated project.
+4) Build using the generated project.
 
