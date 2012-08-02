@@ -17,7 +17,7 @@ class Button : public UIElement {
     ~Button();
 
     void Interact() const { if(function_) function_(this); }
-    virtual ikdtree::Box<2> GetBoundingBox() const = 0;
+    ikdtree::Box<2> GetBoundingBox() const;
 
   private:
     ButtonCallback function_;
