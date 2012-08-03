@@ -3,7 +3,7 @@ SET(UGDK_SRC
     ./src/pyramidworks/collision/collisionmanager.cc 
     ./src/pyramidworks/collision/collisionobject.cc 
     ./src/pyramidworks/geometry/circle.cc 
-    ./src/pyramidworks/geometry/convexpolygon.cc
+    ./src/pyramidworks/geometry/convexpolygon.cc 
     ./src/pyramidworks/geometry/rect.cc 
     ./src/pyramidworks/modules.cc 
     ./src/ugdk/action/animation.cc 

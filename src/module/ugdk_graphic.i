@@ -28,6 +28,7 @@
 %ignore ugdk::graphic::Texture::CreateFromSurface(SDL_Surface* data);
 %ignore ugdk::graphic::VideoManager::PushAndApplyModifier(const Modifier& apply);
 %ignore ugdk::graphic::Font::GetLetterSize(wchar_t letter);
+%ignore ugdk::graphic::SpritesheetData::frames() const;
 
 %newobject ugdk::graphic::Font::GetLetterSize(wchar_t letter);
 %newobject ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);
