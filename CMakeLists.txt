@@ -2,15 +2,13 @@
 cmake_minimum_required (VERSION 2.8)
 
 project (ugdk CXX C)
-set (FRAMEWORK_NAME    UGDK)
-set (FRAMEWORK_RELEASE ugdk)
-set (FRAMEWORK_DEBUG   ugdk_d)
 set (FRAMEWORK_VERSION_MAJOR 0)
 set (FRAMEWORK_VERSION_MINOR 4)
 set (FRAMEWORK_VERSION_PATCH 0)
-set (FRAMEWORK_VERSION ${FRAMEWORK_VERSION_MAJOR}.${FRAMEWORK_VERSION_MINOR}.${FRAMEWORK_VERSION_PATCH})
+set (FRAMEWORK_BIGVERSION ${FRAMEWORK_VERSION_MAJOR}.${FRAMEWORK_VERSION_MINOR})
+set (FRAMEWORK_VERSION ${FRAMEWORK_BIGVERSION}.${FRAMEWORK_VERSION_PATCH})
 
-message ("=== ${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION} ===")
+message ("=== UGDK version ${FRAMEWORK_VERSION} ===")
 
 option(UGDK_STATICLIB "Set to ON to build UGDK with static linking." ON)
 option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
@@ -60,7 +58,7 @@ include (${SRC_DIR}/py_src_list.cmake)
 # LDFLAGS: flags que voce queira enviar ao ligador
 set (LDFLAGS "" CACHE STRING "flags enviadas ao linker")
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
+    LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
 endif ()
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
@@ -128,42 +126,47 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
-add_library (${FRAMEWORK_RELEASE} ${UGDK_SRC} ${GENERATED_SRC})
+add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
+    set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
 endif (CMAKE_COMPILER_IS_GNUCXX)
 if (MINGW)
-	set (EXTRA_LIBRARIES mingw32 ${EXTRA_LIBRARIES})
+    set (EXTRA_LIBRARIES mingw32 ${EXTRA_LIBRARIES})
 endif (MINGW)
 if (WIN32)
-	set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
+    set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
 endif (WIN32)
 
 
 # We could use LINK_PUBLIC here, but it's a new feature in cmake 2.8.7, so we'd rather not require the newest version.
 
-target_link_libraries (${FRAMEWORK_RELEASE}
-					   ${EXTRA_LIBRARIES}
-					   ${SDL_LIBRARY}
-					   ${SDLMIXER_LIBRARY}
-					   ${SDLTTF_LIBRARY}
-					   ${SDLIMAGE_LIBRARY}
-					   ${OPENGL_LIBRARIES}
+target_link_libraries (libugdk
+                       ${EXTRA_LIBRARIES}
+                       ${SDL_LIBRARY}
+                       ${SDLMIXER_LIBRARY}
+                       ${SDLTTF_LIBRARY}
+                       ${SDLIMAGE_LIBRARY}
+                       ${OPENGL_LIBRARIES}
                        ${UGDK_LIBRARIES})
 
-target_link_libraries (${FRAMEWORK_RELEASE}	LINK_INTERFACE_LIBRARIES 
-					   ${EXTRA_LIBRARIES}
-					   ${SDL_LIBRARY}
-					   ${SDLMIXER_LIBRARY}
-					   ${SDLTTF_LIBRARY}
-					   ${SDLIMAGE_LIBRARY}
-					   ${OPENGL_LIBRARIES}
+target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
+                       ${EXTRA_LIBRARIES}
+                       ${SDL_LIBRARY}
+                       ${SDLMIXER_LIBRARY}
+                       ${SDLTTF_LIBRARY}
+                       ${SDLIMAGE_LIBRARY}
+                       ${OPENGL_LIBRARIES}
                        ${UGDK_LIBRARIES})
                       
-set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
-set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
-set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAMEWORK_DEBUG}")
+set_target_properties (libugdk PROPERTIES 
+    LINK_FLAGS "${LDFLAGS}"
+    PROJECT_NAME UGDK
+    OUTPUT_NAME ugdk${FRAMEWORK_BIGVERSION}
+    OUTPUT_NAME_DEBUG ugdk${FRAMEWORK_BIGVERSION}-dbg
+    SOVERSION ${FRAMEWORK_VERSION_PATCH}
+    VERSION ${FRAMEWORK_VERSION}
+)
 
 add_subdirectory (test)
 
@@ -174,15 +177,21 @@ CONFIGURE_FILE(
     "${SRC_DIR}/ugdk/config/config.h"
 )
 
-set(FRAMEWORK_BIGVERSION "${FRAMEWORK_VERSION_MAJOR}.${FRAMEWORK_VERSION_MINOR}")
-install(TARGETS ugdk
+install(TARGETS libugdk
     DESTINATION lib
 #    CONFIGURATIONS Release
-    RENAME "ugdk${FRAMEWORK_BIGVERSION}"
 )
 
-install(DIRECTORY src/ugdk src/pyramidworks DESTINATION include/ugdk${FRAMEWORK_BIGVERSION}
-          FILES_MATCHING PATTERN "*.h")
-#install(DIRECTORY src/generated/ DESTINATION ASDFASDFAS
-#          FILES_MATCHING PATTERN "*.py")
-# TODO: find correct place, place an IF(PYTHON)
+install(DIRECTORY src/ugdk src/pyramidworks DESTINATION include/ugdk${FRAMEWORK_BIGVERSION} FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
+
+if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
+    FILE(STRINGS "${PYTHON_INCLUDE_DIR}/patchlevel.h" python_version_str
+         REGEX "^#define[ \t]+PY_VERSION[ \t]+\"[^\"]+\"")
+    STRING(REGEX REPLACE "^#define[ \t]+PY_VERSION[ \t]+\"([0-9].[0-9])[^\"]*\".*" "\\1"
+           PYTHON_VERSION "${python_version_str}")
+    UNSET(python_version_str)
+    install(DIRECTORY src/generated/ 
+            DESTINATION lib/python${PYTHON_VERSION}/dist-packages/
+            FILES_MATCHING PATTERN "*.py")
+endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
+

@@ -88,4 +88,4 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 
-cxx_executable(test src "gtest_main;${FRAMEWORK_RELEASE}")
+cxx_executable(test src "gtest_main;libugdk")
