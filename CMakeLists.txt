@@ -7,6 +7,9 @@ set (FRAMEWORK_VERSION_MINOR 4)
 set (FRAMEWORK_VERSION_PATCH 0)
 set (FRAMEWORK_BIGVERSION ${FRAMEWORK_VERSION_MAJOR}.${FRAMEWORK_VERSION_MINOR})
 set (FRAMEWORK_VERSION ${FRAMEWORK_BIGVERSION}.${FRAMEWORK_VERSION_PATCH})
+set (GROUP_NAME "USPGameDev Team")
+set (HOME_URL "http://uspgamedev.org/")
+set (CONTACT_MAIL "admin@uspgamedev.org")
 
 message ("=== UGDK version ${FRAMEWORK_VERSION} ===")
 
@@ -33,18 +36,6 @@ ENDIF ()
 # Important build locations.
 set (SRC_DIR src)
 set (LIB_DIR lib)
-
-# set (CPACK_VAR VARVAL)
-set (CPACK_GENERATOR DEB)
-set (CPACK_PACKAGE_DESCRIPTION_FILE README.txt)
-set (CPACK_PACKAGE_CONTACT "USPGameDev <admin@uspgamedev.org>")
-set (CPACK_PACKAGE_VERSION_MAJOR ${FRAMEWORK_VERSION_MAJOR})
-set (CPACK_PACKAGE_VERSION_MINOR ${FRAMEWORK_VERSION_MINOR})
-set (CPACK_PACKAGE_VERSION_PATCH ${FRAMEWORK_VERSION_PATCH})
-
-# set (CPACK_DEB_VAR VARLVAL)
-
-include (CPack)
 
 #set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
 #set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
@@ -110,6 +101,35 @@ if (UGDK_CREATE_BINDINGS)
 endif (UGDK_CREATE_BINDINGS)
 
 include_directories ("externals/opengl")
+
+
+##########################################
+# Package Configuration
+
+set (CPACK_GENERATOR DEB)
+set (CPACK_PACKAGE_DESCRIPTION_FILE README.txt)
+set (CPACK_PACKAGE_NAME libugdk)
+set (CPACK_PACKAGE_VENDOR ${GROUP_NAME})
+set (CPACK_PACKAGE_CONTACT "${GROUP_NAME} <${CONTACT_MAIL}>")
+set (CPACK_PACKAGE_INSTALL_REGISTRY_KEY "ugdk")
+set (CPACK_PACKAGE_VERSION_MAJOR ${FRAMEWORK_VERSION_MAJOR})
+set (CPACK_PACKAGE_VERSION_MINOR ${FRAMEWORK_VERSION_MINOR})
+set (CPACK_PACKAGE_VERSION_PATCH ${FRAMEWORK_VERSION_PATCH})
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "USP Game Development Kit, a framework for developing 2d games.")
+set (CPACK_DEBIAN_PACKAGE_NAME "libugdk${FRAMEWORK_BIGVERSION}")
+set (CPACK_DEBIAN_PACKAGE_HOMEPAGE ${HOME_URL})
+set (CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2, libsdl-mixer1.2-dev, libsdl-ttf2.0-0, lua5.1, python2.6")
+set (DEBIAN_PACKAGE_BUILDS_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2-dev, libsdl-mixer1.2-dev, libsdl-ttf2.0-dev, swig2.0, lua5.1-dev, python2.6-dev, cmake")
+set (CPACK_NSIS_CONTACT ${CONTACT_MAIL})
+set (CPACK_NSIS_DISPLAY_NAME "USP Game Development Kit")
+set (CPACK_NSIS_PACKAGE_HOMEPAGE ${HOME_URL})
+set (CPACK_RPM_PACKAGE_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
+set (CPACK_RPM_PACKAGE_URL ${HOME_URL})
+
+include (CPack)
+
+#
+##########################################
 
 # Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
 # Code found on http://stackoverflow.com/questions/7747857/in-cmake-how-do-i-work-around-the-debug-and-release-directories-visual-studio-2
