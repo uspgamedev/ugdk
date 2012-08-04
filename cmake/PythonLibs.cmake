@@ -1,5 +1,5 @@
 
-find_package (PythonLibs 2.7)
+find_package (PythonLibs 2.6)
 
 if (PYTHONLIBS_FOUND)
 

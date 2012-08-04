@@ -2,12 +2,16 @@
 cmake_minimum_required (VERSION 2.8)
 
 project (ugdk CXX C)
-set (FRAMEWORK_NAME    UGDK)
-set (FRAMEWORK_RELEASE ugdk)
-set (FRAMEWORK_DEBUG   ugdk_d)
-set (FRAMEWORK_VERSION 0.4.0)
+set (FRAMEWORK_VERSION_MAJOR 0)
+set (FRAMEWORK_VERSION_MINOR 4)
+set (FRAMEWORK_VERSION_PATCH 0)
+set (FRAMEWORK_BIGVERSION ${FRAMEWORK_VERSION_MAJOR}.${FRAMEWORK_VERSION_MINOR})
+set (FRAMEWORK_VERSION ${FRAMEWORK_BIGVERSION}.${FRAMEWORK_VERSION_PATCH})
+set (GROUP_NAME "USPGameDev Team")
+set (HOME_URL "http://uspgamedev.org/")
+set (CONTACT_MAIL "admin@uspgamedev.org")
 
-message ("=== ${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION} ===")
+message ("=== UGDK version ${FRAMEWORK_VERSION} ===")
 
 option(UGDK_STATICLIB "Set to ON to build UGDK with static linking." ON)
 option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
@@ -33,6 +37,9 @@ ENDIF ()
 set (SRC_DIR src)
 set (LIB_DIR lib)
 
+#set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
+#set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
+
 include (${SRC_DIR}/src_list.cmake)
 include (${SRC_DIR}/ugdk_module_list.cmake)
 include (${SRC_DIR}/pyramidworks_module_list.cmake)
@@ -42,7 +49,7 @@ include (${SRC_DIR}/py_src_list.cmake)
 # LDFLAGS: flags que voce queira enviar ao ligador
 set (LDFLAGS "" CACHE STRING "flags enviadas ao linker")
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
+    LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
 endif ()
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
@@ -95,6 +102,35 @@ endif (UGDK_CREATE_BINDINGS)
 
 include_directories ("externals/opengl")
 
+
+##########################################
+# Package Configuration
+
+set (CPACK_GENERATOR DEB)
+set (CPACK_PACKAGE_DESCRIPTION_FILE README.txt)
+set (CPACK_PACKAGE_NAME libugdk)
+set (CPACK_PACKAGE_VENDOR ${GROUP_NAME})
+set (CPACK_PACKAGE_CONTACT "${GROUP_NAME} <${CONTACT_MAIL}>")
+set (CPACK_PACKAGE_INSTALL_REGISTRY_KEY "ugdk")
+set (CPACK_PACKAGE_VERSION_MAJOR ${FRAMEWORK_VERSION_MAJOR})
+set (CPACK_PACKAGE_VERSION_MINOR ${FRAMEWORK_VERSION_MINOR})
+set (CPACK_PACKAGE_VERSION_PATCH ${FRAMEWORK_VERSION_PATCH})
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "USP Game Development Kit, a framework for developing 2d games.")
+set (CPACK_DEBIAN_PACKAGE_NAME "libugdk${FRAMEWORK_BIGVERSION}")
+set (CPACK_DEBIAN_PACKAGE_HOMEPAGE ${HOME_URL})
+set (CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2, libsdl-mixer1.2-dev, libsdl-ttf2.0-0, lua5.1, python2.6")
+set (DEBIAN_PACKAGE_BUILDS_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2-dev, libsdl-mixer1.2-dev, libsdl-ttf2.0-dev, swig2.0, lua5.1-dev, python2.6-dev, cmake")
+set (CPACK_NSIS_CONTACT ${CONTACT_MAIL})
+set (CPACK_NSIS_DISPLAY_NAME "USP Game Development Kit")
+set (CPACK_NSIS_PACKAGE_HOMEPAGE ${HOME_URL})
+set (CPACK_RPM_PACKAGE_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
+set (CPACK_RPM_PACKAGE_URL ${HOME_URL})
+
+include (CPack)
+
+#
+##########################################
+
 # Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
 # Code found on http://stackoverflow.com/questions/7747857/in-cmake-how-do-i-work-around-the-debug-and-release-directories-visual-studio-2
 
@@ -110,42 +146,47 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
-add_library (${FRAMEWORK_RELEASE} ${UGDK_SRC} ${GENERATED_SRC})
+add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
+    set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
 endif (CMAKE_COMPILER_IS_GNUCXX)
 if (MINGW)
-	set (EXTRA_LIBRARIES mingw32 ${EXTRA_LIBRARIES})
+    set (EXTRA_LIBRARIES mingw32 ${EXTRA_LIBRARIES})
 endif (MINGW)
 if (WIN32)
-	set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
+    set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
 endif (WIN32)
 
 
 # We could use LINK_PUBLIC here, but it's a new feature in cmake 2.8.7, so we'd rather not require the newest version.
 
-target_link_libraries (${FRAMEWORK_RELEASE}
-					   ${EXTRA_LIBRARIES}
-					   ${SDL_LIBRARY}
-					   ${SDLMIXER_LIBRARY}
-					   ${SDLTTF_LIBRARY}
-					   ${SDLIMAGE_LIBRARY}
-					   ${OPENGL_LIBRARIES}
+target_link_libraries (libugdk
+                       ${EXTRA_LIBRARIES}
+                       ${SDL_LIBRARY}
+                       ${SDLMIXER_LIBRARY}
+                       ${SDLTTF_LIBRARY}
+                       ${SDLIMAGE_LIBRARY}
+                       ${OPENGL_LIBRARIES}
                        ${UGDK_LIBRARIES})
 
-target_link_libraries (${FRAMEWORK_RELEASE}	LINK_INTERFACE_LIBRARIES 
-					   ${EXTRA_LIBRARIES}
-					   ${SDL_LIBRARY}
-					   ${SDLMIXER_LIBRARY}
-					   ${SDLTTF_LIBRARY}
-					   ${SDLIMAGE_LIBRARY}
-					   ${OPENGL_LIBRARIES}
+target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
+                       ${EXTRA_LIBRARIES}
+                       ${SDL_LIBRARY}
+                       ${SDLMIXER_LIBRARY}
+                       ${SDLTTF_LIBRARY}
+                       ${SDLIMAGE_LIBRARY}
+                       ${OPENGL_LIBRARIES}
                        ${UGDK_LIBRARIES})
                       
-set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES LINK_FLAGS "${LDFLAGS}")
-set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
-set_target_properties (${FRAMEWORK_RELEASE} PROPERTIES OUTPUT_NAME_DEBUG "${FRAMEWORK_DEBUG}")
+set_target_properties (libugdk PROPERTIES 
+    LINK_FLAGS "${LDFLAGS}"
+    PROJECT_NAME UGDK
+    OUTPUT_NAME ugdk${FRAMEWORK_BIGVERSION}
+    OUTPUT_NAME_DEBUG ugdk${FRAMEWORK_BIGVERSION}-dbg
+    SOVERSION ${FRAMEWORK_VERSION_PATCH}
+    VERSION ${FRAMEWORK_VERSION}
+)
 
 add_subdirectory (test)
 
@@ -156,5 +197,21 @@ CONFIGURE_FILE(
     "${SRC_DIR}/ugdk/config/config.h"
 )
 
+install(TARGETS libugdk
+    DESTINATION lib
+#    CONFIGURATIONS Release
+)
 
+install(DIRECTORY src/ugdk src/pyramidworks DESTINATION include/ugdk${FRAMEWORK_BIGVERSION} FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
+
+if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
+    FILE(STRINGS "${PYTHON_INCLUDE_DIR}/patchlevel.h" python_version_str
+         REGEX "^#define[ \t]+PY_VERSION[ \t]+\"[^\"]+\"")
+    STRING(REGEX REPLACE "^#define[ \t]+PY_VERSION[ \t]+\"([0-9].[0-9])[^\"]*\".*" "\\1"
+           PYTHON_VERSION "${python_version_str}")
+    UNSET(python_version_str)
+    install(DIRECTORY src/generated/ 
+            DESTINATION lib/python${PYTHON_VERSION}/dist-packages/
+            FILES_MATCHING PATTERN "*.py")
+endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
 
