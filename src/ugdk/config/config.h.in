@@ -4,6 +4,7 @@
 
 ///
 @CHECKMAC@
+@UGDK_PYTHON_LOCATION@
 ///
 
 #endif // UGDK_CONFIG_CONFIG_H_
