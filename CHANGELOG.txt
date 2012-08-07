@@ -1,3 +1,67 @@
+v0.4.0:
+* New Features:
+  - IDGenerator class.
+  - script::VirtualObj::operator[] (const string&)
+  - New, easier to use constructors to class Sprite.
+  - Vector2D now has mirror transformations.
+  - Sample::PlayForever().
+  - New header math.h.
+  - Support for Lua proxies.
+  - Convex polygon collision support.
+  - Build a spritesheet from various image files.
+  - All Python objects may give string values.
+  - Script wrapper for stc::vector<Vector2D>
+  - Integer2D class.
+* Changes:
+  - Improved class Color.
+  - Cleaned Modifier interface.
+  - Improved AnimationProtocol.
+  - Modifier::Compose now combines flags.
+  - Scene::Update is no longer virtual.
+  - Changed input up/down and pressed/released semantics.
+  - Drawables have update functions.
+  - Added some constness to Spritesheet:Draw.
+* Fixes:
+  - Function paremeters' type in sprite.h.
+  - Cleared uncopyable-related warnings.
+  - Vector2D rotations in redering.
+  - Modifier::Composer no longer ignores visibility.
+  - Class script::Bind is now Uncopyable.
+  - script::Bind::operator= (const Bind&)
+  - GDDReader now accepts '-' as a valid token.
+  - Python exception printing.
+  - SpriteSheet::frame_size no longer crashes with non-existant frames.
+  - Color::operator*= (const Color&);
+  - Text drawing now respects Mirror and Color modifiers.
+  - Matrix order when applying modifier in rendering.
+  - Various warnings fixed.
+  - TR1 header includes compatibility.
+  - Animations bug on hidden scenes.
+  - Divided class UIElement in interface UIElement and Button.
+  - Button::GetBoundingBox.
+* Removed:
+  - Class FlexibleSpriteSheet.
+  - Some useless copy-constructors from Modifier.
+  - Excessive output from script system.
+* Tests:
+  - Vector2D
+  - IDGenerator
+  - Modifier
+  - Color
+  - Convex collisions.
+  - Integer2D
+* Build:
+  - Tests are now a sub-project.
+  - UGDK no longer depends on Boost.
+  - Changed how to build static or shared.
+  - Users do not need Python installed anymore.
+* Changed Travis e-mail notification.
+* Travis now runs UGDK's tests.
+* Travis builds both release and debug,
+* Added DEB package generation do CMake.
+  
+* Examples projects are now separeted from UGDK.
+
 v0.3.1:
 * New Features:
   - Scene/Entity utility functions.
