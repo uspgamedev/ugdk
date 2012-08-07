@@ -12,15 +12,7 @@ if (PYTHONLIBS_FOUND)
         LIST(APPEND UGDK_LIBRARIES ${PYTHON_LIBRARIES})
     endif(PYTHON_DEBUG_LIBRARY)
   
-    if (PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
-        FILE(STRINGS "${PYTHON_INCLUDE_DIR}/patchlevel.h" python_version_str
-             REGEX "^#define[ \t]+PY_VERSION[ \t]+\"[^\"]+\"")
-        STRING(REGEX REPLACE "^#define[ \t]+PY_VERSION[ \t]+\"([0-9].[0-9])[^\"]*\".*" "\\1"
-               PYTHON_VERSION "${python_version_str}")
-        UNSET(python_version_str)
-    endif (PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
-  
-    set (UGDK_PYTHON_SCRIPTS_INSTALL_LOCATION share/ugdk${FRAMEWORK_BIGVERSION}/python)
+    set (UGDK_PYTHON_SCRIPTS_INSTALL_LOCATION share/ugdk/${FRAMEWORK_BIGVERSION}/python)
 
     message ("-- Python modules added.")
     
