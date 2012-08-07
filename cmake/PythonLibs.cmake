@@ -12,8 +12,6 @@ if (PYTHONLIBS_FOUND)
         LIST(APPEND UGDK_LIBRARIES ${PYTHON_LIBRARIES})
     endif(PYTHON_DEBUG_LIBRARY)
   
-    set (UGDK_PYTHON_SCRIPTS_INSTALL_LOCATION share/ugdk/${FRAMEWORK_BIGVERSION}/python)
-
     message ("-- Python modules added.")
     
 else (PYTHONLIBS_FOUND)

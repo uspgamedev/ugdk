@@ -1,15 +1,20 @@
-
 #include <Python.h>
+
 #include <ugdk/script/languages/python/pythonwrapper.h>
+
+#include <string>
+#include <cstdlib>
+
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(memory)
+
+#include <ugdk/config/config.h>
 #include <ugdk/script/languages/python/pythondata.h>
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/languages/python/swigpyrun.h>
 #include <ugdk/util/pathmanager.h>   // Two includes just so that we can use the engine's PathManager in a
 #include <ugdk/base/engine.h>        // single line of code here. Not nice. =(
-#include <string>
-#include <memory>
-#include <cstdlib>
 
 namespace ugdk {
 namespace script {
@@ -46,11 +51,19 @@ VirtualObj PythonWrapper::LoadModule(const std::string& name) {
 bool PythonWrapper::Initialize() {
     Py_NoSiteFlag = 1;
     Py_Initialize();
-    //TODO: Fix sys.path with our paths...
-    PyRun_SimpleString("import sys");
-    std::string command = "sys.path.append(\"" + PATH_MANAGER()->ResolvePath("scripts/") + "\")";
-    //std::string command = "sys.path.append(\"./\")";
-    PyRun_SimpleString(command.c_str());
+
+    PyObject *path = PySys_GetObject("path");
+    PyList_Append(path, PyString_FromString(PATH_MANAGER()->ResolvePath("scripts/").c_str()));
+
+#ifdef UGDK_INSTALL_LOCATION
+    PyList_Append(path, PyString_FromString(UGDK_INSTALL_LOCATION "/" UGDK_BIGVERSION "/python"));
+#endif
+    const char* ugdk_dir = getenv("UGDK_DIR");
+    if(ugdk_dir) {
+        std::string fullpath = ugdk_dir;
+        fullpath += "/" UGDK_BIGVERSION "/python";
+        PyList_Append(path, PyString_FromString(fullpath.c_str()));
+    }
 
     std::vector<PythonModule>::iterator it;
     for (it = modules_.begin(); it != modules_.end(); ++it) {

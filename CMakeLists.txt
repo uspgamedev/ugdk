@@ -10,6 +10,7 @@ set (FRAMEWORK_VERSION ${FRAMEWORK_BIGVERSION}.${FRAMEWORK_VERSION_PATCH})
 set (GROUP_NAME "USPGameDev Team")
 set (HOME_URL "http://uspgamedev.org/")
 set (CONTACT_MAIL "admin@uspgamedev.org")
+set (UGDK_INSTALL_LOCATION share/ugdk)
 
 message ("=== UGDK version ${FRAMEWORK_VERSION} ===")
 
@@ -191,7 +192,7 @@ set_target_properties (libugdk PROPERTIES
 add_subdirectory (test)
 
 if (UNIX AND PYTHONLIBS_FOUND)
-    set (UGDK_PYTHON_LOCATION "#define UGDK_PYTHON_LOCATION \"/usr/${UGDK_PYTHON_SCRIPTS_INSTALL_LOCATION}\"")
+    set (UGDK_INSTALL_LOCATION_DEFINE "#define UGDK_INSTALL_LOCATION \"/usr/${UGDK_INSTALL_LOCATION}\"")
 endif (UNIX AND PYTHONLIBS_FOUND)
 
 
@@ -211,7 +212,7 @@ install(DIRECTORY src/ugdk src/pyramidworks DESTINATION include/ugdk${FRAMEWORK_
 
 if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
     install(DIRECTORY src/generated/ 
-            DESTINATION ${UGDK_PYTHON_SCRIPTS_INSTALL_LOCATION}
+            DESTINATION ${UGDK_INSTALL_LOCATION}/${FRAMEWORK_BIGVERSION}/python
             FILES_MATCHING PATTERN "*.py")
 endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
 
