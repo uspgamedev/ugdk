@@ -12,21 +12,25 @@ namespace graphic {
 class Font;
 class Text : public Drawable {
   public:
-	Text(const std::wstring& message, Font* font);
-	Text(const std::vector<std::wstring>& message, Font* font);
-	~Text() {}
+    Text(const std::wstring& message, Font* font);
+    Text(const std::vector<std::wstring>& message, Font* font);
+    ~Text() {}
 
-    void Draw(double dt);
+    void SetMessage(const std::wstring& message);
+    void SetMessage(const std::vector<std::wstring>& message);
 
-	virtual const Vector2D& size() const;
+    void Update(double dt);
+    void Draw() const;
+
+    virtual const Vector2D& size() const;
 
   private:
     Font* font_;
-	std::vector<std::wstring> message_;
+    std::vector<std::wstring> message_;
 
     Vector2D size_;
     double line_height_;
-	std::vector<double> line_width_;
+    std::vector<double> line_width_;
 };
 
 }  // namespace graphic

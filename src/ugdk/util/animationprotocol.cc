@@ -2,6 +2,7 @@
 #include <string>
 #include <algorithm>
 #include <ugdk/util/animationprotocol.h>
+#include <ugdk/action/animationframe.h>
 
 #define DEFAULT_FRAME 0
 #define DEG_TO_RAD_FACTOR 0.00872664626
@@ -25,13 +26,10 @@ namespace ugdk {
 //      entry_functions_[RING_TYPE][KEY_0] = ENTRY_FUNCTION_NAME;
 //      entry_functions_[RING_TYPE][KEY_1] = ENTRY_FUNCTION_NAME;
 //      etc...
-// 5 since there are five standard ids for keywords: "foo", "f", "Foo", "F", "FOO".
-#define ENTRY_MAP_BULK_ASSIGN(RING_TYPE, ENTRY_FUNCTION, KEY_0, KEY_1, KEY_2, KEY_3, KEY_4) \
-    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_0, ENTRY_FUNCTION);                                 \
-    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_1, ENTRY_FUNCTION);                                 \
-    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_2, ENTRY_FUNCTION);                                 \
-    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_3, ENTRY_FUNCTION);                                 \
-    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_4, ENTRY_FUNCTION)
+// 5 since there are five standard ids for keywords: "foo", "f".
+#define ENTRY_MAP_BULK_ASSIGN(RING_TYPE, ENTRY_FUNCTION, KEY_0, KEY_1) \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_0, ENTRY_FUNCTION);            \
+    ENTRY_MAP_ASSIGNMENT(RING_TYPE, KEY_1, ENTRY_FUNCTION);
 
 using std::string;
 using std::pair;
@@ -43,51 +41,33 @@ using gdd::LoadError;
 AnimationProtocol::AnimationProtocol() : current_animation_(NULL), current_effect_(NULL), composing_(false) {
     //TODO: Make this map static maybe?
 
-    /*TODO: Nuke this commented code when you're sure the new ver. works.
-    //entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "number")   ] = &AnimationProtocol::NewEntry_EffectNumber;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "alpha")    ] = &AnimationProtocol::NewEntry_EffectAlpha;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "color")    ] = &AnimationProtocol::NewEntry_EffectColor;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "position") ] = &AnimationProtocol::NewEntry_EffectPosition;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "mirror")   ] = &AnimationProtocol::NewEntry_EffectMirror;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECT_RING, "scale")    ] = &AnimationProtocol::NewEntry_EffectSize;
-    entry_functions_[ pair<ParsingScope, GDDString>(EFFECentãT_RING, "rotation") ] = &AnimationProtocol::NewEntry_EffectRotation;
+    //ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectNumber  , "number"  , "n");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectAlpha   , "alpha"   , "a");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectColor   , "color"   , "c");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectPosition, "position", "p");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectMirror  , "mirror"  , "m");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectSize    , "size"    , "s");
+    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectRotation, "rotation", "r");
 
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "number")   ] = &AnimationProtocol::NewEntry_FrameNumber;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "alpha")    ] = &AnimationProtocol::NewEntry_FrameAlpha;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "color")    ] = &AnimationProtocol::NewEntry_FrameColor;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "position") ] = &AnimationProtocol::NewEntry_FramePosition;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "mirror")   ] = &AnimationProtocol::NewEntry_FrameMirror;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "size")     ] = &AnimationProtocol::NewEntry_FrameSize;
-    entry_functions_[ pair<ParsingScope, GDDString>(FRAME_RING, "rotation") ] = &AnimationProtocol::NewEntry_FrameRotation;
-    */
-
-    //ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectNumber  , "number"  , "n", "Number"  , "N", "NUMBER"  );
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectAlpha   , "alpha"   , "a", "Alpha"   , "A", "ALPHA"   );
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectColor   , "color"   , "c", "Color"   , "C", "COLOR"   );
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectPosition, "position", "p", "Position", "P", "POSITION");
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectMirror  , "mirror"  , "m", "Mirror"  , "M", "MIRROR"  );
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectSize    , "size"    , "s", "Size"    , "S", "SIZE"    );
-    ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectRotation, "rotation", "r", "Rotation", "R", "ROTATION");
-
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameNumber   , "number"  , "n", "Number"  , "N", "NUMBER"  );
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameAlpha    , "alpha"   , "a", "Alpha"   , "A", "ALPHA"   );
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameColor    , "color"   , "c", "Color"   , "C", "COLOR"   );
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FramePosition , "position", "p", "Position", "P", "POSITION");
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameMirror   , "mirror"  , "m", "Mirror"  , "M", "MIRROR"  );
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameSize     , "size"    , "s", "Size"    , "S", "SIZE"    );
-    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameRotation , "rotation", "r", "Rotation", "R", "ROTATION");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameNumber   , "number"  , "n");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameAlpha    , "alpha"   , "a");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameColor    , "color"   , "c");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FramePosition , "position", "p");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameMirror   , "mirror"  , "m");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameSize     , "size"    , "s");
+    ENTRY_MAP_BULK_ASSIGN(FRAME_RING , NewEntry_FrameRotation , "rotation", "r");
 }
 
 bool AnimationProtocol::NewDescription() {
     if (loader()->data()) {
         loader()->cleanData();
     }
-    loader()->newData(new AnimationSet);
+    loader()->newData(new action::AnimationSet);
     return true;
 }
 
 bool AnimationProtocol::NewData(const GDDString& data_name) {
-    loader()->data()->Add(data_name, current_animation_ = new Animation);
+    loader()->data()->Add(data_name, current_animation_ = new action::Animation);
     if(current_effect_) delete current_effect_;
     current_effect_ = new graphic::Modifier;
     //TODO: Verificar integridade da current_animation_ .
@@ -123,7 +103,7 @@ bool AnimationProtocol::NewRing(const GDDString& ring_typename) {
     }
     else if(ring_typename == "frame") {
         graphic::Modifier temp_modifier = *current_effect_;
-        current_animation_->push_back(new AnimationFrame(DEFAULT_FRAME, new graphic::Modifier(temp_modifier)));
+        current_animation_->push_back(new action::AnimationFrame(DEFAULT_FRAME, new graphic::Modifier(temp_modifier)));
 
         current_scope_ = FRAME_RING;
     }
@@ -142,8 +122,17 @@ bool AnimationProtocol::NewEntry(const GDDString& entry_name, const GDDArgs& ent
     * We don't need to check the scope here, the parser will throw a Syntax Error in case of bad scope,
     * or the protocol will throw a Load Error in the case of Invalid Ring
     */
-    ENTRY_METHOD(current_scope_, entry_name) (entry_args);
-    return true;
+    std::string lower_name = entry_name;
+    std::transform(lower_name.begin(), lower_name.end(), lower_name.begin(), ::tolower);
+
+    EntryFunction func = ENTRY_METHOD_PTR(current_scope_, lower_name);
+    if(func != NULL) {
+        return (this->*func)(entry_args);
+    } else {
+        string msg = "Unknown entry name '" + lower_name + "'.";
+        error(LoadError::INVALID_VALUE, msg);
+        return false;
+    }
 }
 
 bool AnimationProtocol::NewSimpleChain(const GDDString& ring_typename,
@@ -200,7 +189,9 @@ bool AnimationProtocol::NewEntry_EffectAlpha(const gdd::GDDArgs &args) {
     double new_alpha = (double)(atof(args[0].c_str()));
     new_alpha = std::min( std::max(new_alpha,0.0), 1.0 ); // new_alpha is of [0.0,1.0]
 
-    current_effect_->set_alpha(new_alpha);
+    Color c = current_effect_->color();
+    c.a = new_alpha;
+    current_effect_->set_color(c);
     return true;
 
 }
@@ -252,8 +243,8 @@ bool AnimationProtocol::NewEntry_EffectMirror(const gdd::GDDArgs &args) {
     Mirror new_mirror = MIRROR_NONE;
     char fst_mirror_id = '0', snd_mirror_id = '0';
     if(args.size() >= 1) {
-        fst_mirror_id = tolower(args[0].at(0));
-        if(args.size() >= 2) snd_mirror_id = tolower(args[1].at(0));
+        fst_mirror_id = static_cast<char>(tolower(args[0].at(0)));
+        if(args.size() >= 2) snd_mirror_id = static_cast<char>(tolower(args[1].at(0)));
     }
 
     if( fst_mirror_id == 'h' || snd_mirror_id == 'h' )
@@ -303,7 +294,7 @@ bool AnimationProtocol::NewEntry_FrameNumber(const gdd::GDDArgs &args) {
         return false;
     }
 
-    AnimationFrame* cur_frame
+    action::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
 
     cur_frame->set_frame(atoi(args[0].c_str()));
@@ -322,11 +313,13 @@ bool AnimationProtocol::NewEntry_FrameAlpha(const gdd::GDDArgs &args) {
     double new_alpha = (double)(atof(args[0].c_str()));
     new_alpha = std::min( std::max(new_alpha,0.0), 1.0 ); // new_alpha is of [0.0,1.0]
 
-    AnimationFrame* cur_frame
+    action::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
 
-    if (composing_) cur_frame->modifier()->ComposeAlpha(new_alpha);
-    else            cur_frame->modifier()->set_alpha(new_alpha);
+    Color c = cur_frame->modifier()->color();
+    if (composing_) c.a *= new_alpha;
+    else            c.a  = new_alpha;
+    cur_frame->modifier()->set_color(c);
     return true;
 
 }
@@ -346,7 +339,7 @@ bool AnimationProtocol::NewEntry_FrameColor(const gdd::GDDArgs &args) {
 
     Color c = Color(r/255.0, g/255.0, b/255.0);
 
-    AnimationFrame* cur_frame
+    action::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
     if (composing_) cur_frame->modifier()->ComposeColor(c);
     else            cur_frame->modifier()->set_color(c);
@@ -363,7 +356,7 @@ bool AnimationProtocol::NewEntry_FramePosition(const gdd::GDDArgs &args) {
 
     Vector2D new_pos = Vector2D( (double)(atof(args[0].c_str())), (double)(atof(args[1].c_str())) );
 
-    AnimationFrame* cur_frame
+    action::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
     if (composing_) cur_frame->modifier()->ComposeOffset(new_pos);
     else            cur_frame->modifier()->set_offset(new_pos);
@@ -384,8 +377,8 @@ bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
     Mirror new_mirror = MIRROR_NONE;
     char fst_mirror_id = '0', snd_mirror_id = '0';
     if(args.size() >= 1) {
-        fst_mirror_id = tolower(args[0].at(0));
-        if(args.size() >= 2) snd_mirror_id = tolower(args[1].at(0));
+        fst_mirror_id = static_cast<char>(tolower(args[0].at(0)));
+        if(args.size() >= 2) snd_mirror_id = static_cast<char>(tolower(args[1].at(0)));
     }
 
     if( fst_mirror_id == 'h' || snd_mirror_id == 'h' )
@@ -393,7 +386,7 @@ bool AnimationProtocol::NewEntry_FrameMirror(const gdd::GDDArgs &args) {
     if( fst_mirror_id == 'v' || snd_mirror_id == 'v' )
         new_mirror |= MIRROR_VFLIP;
 
-    AnimationFrame* cur_frame
+    action::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
     if (composing_) cur_frame->modifier()->ComposeMirror(new_mirror);
     else            cur_frame->modifier()->set_mirror(new_mirror);
@@ -410,7 +403,7 @@ bool AnimationProtocol::NewEntry_FrameSize(const gdd::GDDArgs &args) {
 
     Vector2D new_size = Vector2D( (double)(atof(args[0].c_str())), (double)(atof(args[1].c_str())) );
 
-    AnimationFrame* cur_frame
+    action::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
     if (composing_) cur_frame->modifier()->ComposeScale(new_size);
     else            cur_frame->modifier()->set_scale(new_size);
@@ -428,7 +421,7 @@ bool AnimationProtocol::NewEntry_FrameRotation(const gdd::GDDArgs &args) {
     double new_rot = (double)(atof(args[0].c_str()));
           new_rot *= DEG_TO_RAD_FACTOR;
 
-    AnimationFrame* cur_frame
+    action::AnimationFrame* cur_frame
         = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
     if (composing_) cur_frame->modifier()->ComposeRotation(new_rot);
     else            cur_frame->modifier()->set_rotation(new_rot);

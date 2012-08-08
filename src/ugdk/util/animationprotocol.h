@@ -10,10 +10,8 @@
 
 namespace ugdk {
 
-class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
-
+class AnimationProtocol : public gdd::DescriptionProtocol<action::AnimationSet> {
   public:
-
     enum ParsingScope {
         ANIMATION_DATA,
         FRAME_RING,
@@ -24,29 +22,22 @@ class AnimationProtocol : public gdd::DescriptionProtocol<AnimationSet> {
     virtual ~AnimationProtocol() { if(current_effect_) delete current_effect_; }
 
     bool NewDescription();
-
     bool NewData(const gdd::GDDString& data_name);
-
     bool NewProperty(const gdd::GDDString& property_name, const gdd::GDDArgs& property_args);
-
     bool NewRing(const gdd::GDDString& ring_typename);
-
     bool NewEntry(const gdd::GDDString& entry_name, const gdd::GDDArgs& entry_args);
-
     bool NewSimpleChain(const gdd::GDDString& ring_typename, const gdd::GDDArgs& ring_args);
 
   private:
-
-    Animation *current_animation_;
-
+    action::Animation *current_animation_;
     graphic::Modifier* current_effect_;
-
     ParsingScope current_scope_;
-
     bool composing_;
 
+    typedef bool (AnimationProtocol::*EntryFunction) (const gdd::GDDArgs&);
 
-    std::map< std::pair<ParsingScope, gdd::GDDString>, bool (AnimationProtocol::*) (const gdd::GDDArgs&) > entry_functions_;
+
+    std::map< std::pair<ParsingScope, gdd::GDDString>, EntryFunction > entry_functions_;
 
     bool NewEntry_EffectNumber(   const gdd::GDDArgs& ); //TODO: implement this function.
     bool NewEntry_EffectAlpha(    const gdd::GDDArgs& );

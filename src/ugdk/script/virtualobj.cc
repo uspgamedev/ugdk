@@ -15,8 +15,10 @@ VirtualObj VirtualObj::operator() (const list<VirtualObj>& args) const {
     for (it = args.begin(); it != args.end(); ++it) {
         // Wrappers of executed VObj (we) and of the VObjs passed as
         // arguments must be the same.
-        if (wrapper() != it->wrapper())
+        if (!*it || wrapper() != it->wrapper()) {
+            puts("FAIL");
             return VirtualObj();
+        }
         arglist.push_back(it->data_);
     }
     VirtualObj ret(data_->Execute(arglist));

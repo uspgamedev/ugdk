@@ -1,15 +1,20 @@
-
 #include <Python.h>
+
 #include <ugdk/script/languages/python/pythonwrapper.h>
+
+#include <string>
+#include <cstdlib>
+
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(memory)
+
+#include <ugdk/config/config.h>
 #include <ugdk/script/languages/python/pythondata.h>
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/languages/python/swigpyrun.h>
 #include <ugdk/util/pathmanager.h>   // Two includes just so that we can use the engine's PathManager in a
 #include <ugdk/base/engine.h>        // single line of code here. Not nice. =(
-#include <string>
-#include <memory>
-#include <cstdlib>
 
 namespace ugdk {
 namespace script {
@@ -18,116 +23,120 @@ namespace python {
 using std::tr1::shared_ptr;
 
 VirtualData::Ptr PythonWrapper::NewData() {
-	VirtualData::Ptr vdata( new PythonData(this, NULL, false) ); 
-	return vdata;
+    VirtualData::Ptr vdata( new PythonData(this, NULL, false) ); 
+    return vdata;
 }
 
 void PythonWrapper::ExecuteCode(const std::string& code) {
-	PyRun_SimpleString(code.c_str());
+    PyRun_SimpleString(code.c_str());
 }
 
 VirtualObj PythonWrapper::LoadModule(const std::string& name) {
     std::string dotted_name =
         SCRIPT_MANAGER()->ConvertPathToDottedNotation(name);
-	PyObject* module = PyImport_ImportModule(dotted_name.c_str()); //new ref
+    PyObject* module = PyImport_ImportModule(dotted_name.c_str()); //new ref
     if (module == NULL) {
-        printf("[Python] Error loading module: \"%s\" (python exception details below)\n", dotted_name.c_str());
+        fprintf(stderr, "[Python] Error loading module: '%s' (python exception details below)\n", dotted_name.c_str());
         PrintPythonExceptionDetails();
         return VirtualObj();
     }
-    printf("[Python] Loading module: %s\n", dotted_name.c_str());
-	VirtualData::Ptr vdata( new PythonData(this, module, true) ); //PythonData takes care of the ref.
-	return VirtualObj(vdata);
+#ifdef DEBUG
+    printf("[Python] Loaded module '%s'.\n", dotted_name.c_str());
+#endif
+    VirtualData::Ptr vdata( new PythonData(this, module, true) ); //PythonData takes care of the ref.
+    return VirtualObj(vdata);
 }
 
 /// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
 bool PythonWrapper::Initialize() {
-	Py_Initialize();
-	//TODO: Fix sys.path with our paths...
-    PyRun_SimpleString("import sys");
-    std::string command = "sys.path.append(\"" + PATH_MANAGER()->ResolvePath("scripts/") + "\")";
-    //std::string command = "sys.path.append(\"./\")";
-    PyRun_SimpleString(command.c_str());
+    Py_NoSiteFlag = 1;
+    Py_Initialize();
+
+    PyObject *path = PySys_GetObject("path");
+    PyList_Append(path, PyString_FromString(PATH_MANAGER()->ResolvePath("scripts/").c_str()));
+
+#ifdef UGDK_INSTALL_LOCATION
+    PyList_Append(path, PyString_FromString(UGDK_INSTALL_LOCATION "/" UGDK_BIGVERSION "/python"));
+#endif
+    const char* ugdk_dir = getenv("UGDK_DIR");
+    if(ugdk_dir) {
+        std::string fullpath = ugdk_dir;
+        fullpath += "/" UGDK_BIGVERSION "/python";
+        PyList_Append(path, PyString_FromString(fullpath.c_str()));
+    }
 
     std::vector<PythonModule>::iterator it;
     for (it = modules_.begin(); it != modules_.end(); ++it) {
         (*it->init_func())();
     }
-	return true;
+    return true;
 }
 
 /// Finalizes the LangWrapper, finalizing any language specific stuff.
 void PythonWrapper::Finalize() {
-	Py_Finalize();
+    Py_Finalize();
 }
 
 void PythonWrapper::PrintPythonExceptionDetails() {
-    PyObject *exc_type=NULL, *exc_value=NULL, *exc_tb=NULL, *arglist=NULL,
-             *traceback=NULL, *format=NULL, *errlist=NULL, *errstr=NULL;
+    if(PyErr_Occurred() == NULL) {
+        puts("No Exception.");
+        return;
+    }
+    PyObject *temp, *exc_typ, *exc_val, *exc_tb;
+    PyErr_Fetch(&exc_typ,&exc_val,&exc_tb);
+    PyErr_NormalizeException(&exc_typ,&exc_val,&exc_tb);
 
-    do {
-        PyErr_Fetch(&exc_type, &exc_value, &exc_tb);
-        /*value and tb can be null (no exception) :: we own ref to all of them*/
+    temp = PyObject_GetAttrString(exc_typ, "__name__");
+    if (temp != NULL) {
+        fprintf(stderr, "%s: ", PyString_AsString(temp));
+        Py_DECREF(temp);
+    }
+    Py_DECREF(exc_typ);
 
-        PyObject* arglist = PyTuple_New(3); //new ref
-	    if (arglist == NULL) {
-            printf("[Python] Error 1... Can't print exception details... >_<\n");
-            break;
+    if(exc_val != NULL) {
+        temp = PyObject_Str(exc_val);
+        if (temp != NULL) {
+            fprintf(stderr, "%s", PyString_AsString(temp));
+            Py_DECREF(temp);
         }
-        PyTuple_SetItem(arglist, 0, exc_type);   // PyTuple_SetItem
-        PyTuple_SetItem(arglist, 1, exc_value);  // steals the reference
-        PyTuple_SetItem(arglist, 2, exc_tb);	 // to the given item
+        Py_DECREF(exc_val);
+    }
 
-        /*It's kinda ugly to do this, but if we do not use traceback.format_exception
-          I would have a LOT of work to do here =P*/
-        traceback = PyImport_ImportModule("traceback");
-        if (traceback == NULL) {
-            printf("[Python] Error 2... Can't print exception details... >_<\n");
-            break;
-        }
-
-        format = PyObject_GetAttrString(traceback, "format_exception"); //return is new ref
-        if (format == NULL) {
-            printf("[Python] Error 3... Can't print exception details... >_<\n");
-            break;
-        }
-
-        errlist = PyObject_CallObject(format, arglist); //return is new ref
-        if (errlist == NULL) {
-            printf("[Python] Error 4... Can't print exception details... >_<\n");
-            break;
-        }
-
-        errstr = PyString_FromString("[Python] Exception Details:\n");
-        PyObject* errstr_part;
-        Py_ssize_t size = PyList_Size(errlist);
-        for (Py_ssize_t i=0; i<size; i++) {
-            errstr_part = PyList_GetItem(errlist, i); //borrowed reference
-            PyString_Concat(&errstr, errstr_part);
-        }
-
-        if (errstr == NULL) {
-            printf("[Python] Error 5... Can't print exception details... >_<\n");
-            break;
-        }
-
-        char* message = PyString_AsString(errstr);
-        printf("%s\n", message);
-
-    } while (0);
-
-    Py_XDECREF(arglist);
-    Py_XDECREF(traceback);
-    Py_XDECREF(format);
-    Py_XDECREF(errlist);
-    Py_XDECREF(errstr);
+    fprintf(stderr, "\n");
+    if(exc_tb == NULL) return;
     
-    /*///////////////////////////////////////
-    // what we do above in C++ is basically the following in Python:
-    PyRun_SimpleString("import sys, traceback");
-    PyRun_SimpleString("exc = sys.exc_info()");
-    PyRun_SimpleString("tb = traceback.format_exception(exc[0], exc[1], exc[2])");
-    PyRun_SimpleString("for s in tb:    print s");*/
+    PyObject *pName = PyString_FromString("traceback");
+    PyObject *pModule = PyImport_Import(pName);
+    Py_DECREF(pName);
+    
+    if(pModule == NULL) return;
+
+    PyObject *pFunc = PyObject_GetAttrString(pModule, "format_tb");
+    
+    if (pFunc && PyCallable_Check(pFunc)) {
+        PyObject *pArgs = PyTuple_New(1);
+        PyTuple_SetItem(pArgs, 0, exc_tb);
+
+        PyObject *pValue = PyObject_CallObject(pFunc, pArgs);
+        if (pValue != NULL) {
+            Py_ssize_t len = PyList_Size(pValue);
+            PyObject *t;
+            for (Py_ssize_t i = 0; i < len; i++) {
+                PyObject *tt = PyList_GetItem(pValue,i);
+                t = Py_BuildValue("(O)",tt);
+                
+                char *buffer;
+                if(!PyArg_ParseTuple(t,"s",&buffer)) break;
+
+                fputs(buffer, stderr);
+            }
+        }
+        Py_DECREF(pValue);
+        Py_DECREF(pArgs);
+    }
+    Py_DECREF(pFunc);
+
+    Py_DECREF(pModule);
 }
 
 }

@@ -1,12 +1,8 @@
 @echo off
-call "%VS100COMNTOOLS%vsvars32.bat"
 
-echo Running CMake for DEBUG
-cmake -DLINK_TYPE=STATIC -DBUILD_TYPE=DEBUG .
-msbuild ugdk_d.vcxproj /p:Configuration=Debug
+if not exist ugdk.vcxproj (cmake -DLINK_TYPE=STATIC .)
 
-echo Running CMake for RELEASE
-cmake -DLINK_TYPE=STATIC -DBUILD_TYPE=RELEASE .
-msbuild ugdk.vcxproj /p:Configuration=Release
+cmake --build . --target libugdk --config Debug
+cmake --build . --target libugdk --config Release
 
 pause

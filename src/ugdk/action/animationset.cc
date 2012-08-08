@@ -1,12 +1,14 @@
 #include <cstdarg>
 #include <cstdio>
 #include <ugdk/action/animationset.h>
+#include <ugdk/action/animation.h>
+#include <ugdk/action/animationframe.h>
 
 #define ANIMATION_BUFFER_SIZE 256
 
 namespace ugdk {
 
-using namespace std;
+namespace action {
 
 AnimationSet::AnimationSet () {}
 
@@ -22,17 +24,17 @@ void AnimationSet::Release() {
     }
 }
 
-Animation* AnimationSet::Get(size_t index) {
-    return index < indexed_sequences_.size()
+Animation* AnimationSet::Get(int index) {
+    return static_cast<size_t>(index) < indexed_sequences_.size()
         ? indexed_sequences_[index]
         : NULL;
 }
 
-void AnimationSet::Add(string name, Animation *sequence) {
+void AnimationSet::Add(const std::string& name, Animation *sequence) {
     sequences_[name] = sequence;
 }
 
-void AnimationSet::Add(string name, ...) {
+void AnimationSet::Add(const std::string& name, ...) {
     Animation *sequence = new Animation();
     va_list arg_list;
     va_start(arg_list, name);
@@ -46,21 +48,21 @@ void AnimationSet::Add(string name, ...) {
     this->Add(name, sequence);
 }
 
-Animation *AnimationSet::Search(std::string name) {
+Animation *AnimationSet::Search(const std::string& name) {
     SequenceMap::iterator it = sequences_.find(name);
     return it == sequences_.end()?
             NULL :
             it->second;
 }
 
-uint32 AnimationSet::MakeIndex(string name) {
+int AnimationSet::MakeIndex(const std::string& name) {
     Animation *sequence = this->Search(name);
     if (sequence == NULL) return -1;
     for (size_t i = 0; i < indexed_sequences_.size(); ++i)
         if (indexed_sequences_[i] == sequence)
-            return i;
+            return static_cast<int>(i);
     indexed_sequences_.push_back(sequence);
-    return static_cast<uint32>(indexed_sequences_.size()-1);
+    return static_cast<int>(indexed_sequences_.size()-1);
 }
 
 void AnimationSet::Print(FILE *out) {
@@ -76,4 +78,6 @@ void AnimationSet::Print(FILE *out) {
 	}
 }
 
-}
+} /* namespace action */
+
+} /* namespace ugdk */

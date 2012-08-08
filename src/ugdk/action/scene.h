@@ -1,14 +1,19 @@
 #ifndef UGDK_ACTION_SCENE_H_
 #define UGDK_ACTION_SCENE_H_
 
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 #include <list>
+#include <queue>
+#include <map>
+#include <ugdk/action.h>
 #include <ugdk/audio.h>
 #include <ugdk/graphic.h>
 #include <ugdk/base/types.h>
 
 namespace ugdk {
 
-class Entity;
+namespace action {
 
 /**
    @class Scene
@@ -21,18 +26,28 @@ class Entity;
 class Scene {
   public:
     Scene();
+      
     virtual ~Scene();
 
     /// Method called when this Scene arrives on the top of the Scene stack.
     virtual void Focus();
 
     /// Method called when this Scene leaves the top of the Scene stack.
-    virtual void DeFocus() {}
+    virtual void DeFocus();
 
     /// Adds an Entity to the scene.
-    void AddEntity(Entity *entity) { entities_.push_back(entity); };
+    void AddEntity(Entity *entity);
+
     /// Removes the specified Entity from the scene.
-    void RemoveEntity(Entity *entity) { entities_.remove(entity); };
+    void RemoveEntity(Entity *entity) { entities_.remove(entity); }
+
+    /// Will be added at the end of the 
+    void QueuedAddEntity(Entity *entity) { queued_entities_.push(entity); }
+
+    void RemoveAllEntities();
+
+    /// Adds a Task to the scene.
+    void AddTask(Task *task);
 
     /// Finishes the scene.
     void Finish() { End(); finished_ = true; }
@@ -41,7 +56,7 @@ class Scene {
     /**
        @param delta_t Time in seconds since last update
     */
-    virtual void Update(double delta_t);
+    void Update(double delta_t);
 
     /// Whether this scene stops the previous music even if wont play any music.
     void StopsPreviousMusic(bool set) { stops_previous_music_ = set; }
@@ -61,8 +76,15 @@ class Scene {
     /**@}
      */
 
-  protected:
+    void set_defocus_callback(std::tr1::function<void (Scene*)> defocus_callback) { 
+        defocus_callback_ = defocus_callback;
+    }
+    void set_focus_callback(std::tr1::function<void (Scene*)> focus_callback) { 
+        focus_callback_ = focus_callback;
+    }
 
+  protected:
+    
     /// Ends the scene activity.
     /** Note: do not release any resources in this method. */
     virtual void End();
@@ -74,6 +96,12 @@ class Scene {
     Music* background_music_;
 
   private:
+    void UpdateEntities(double delta_t);
+    void UpdateTasks(double delta_t);
+    void DeleteToBeRemovedEntities();
+    void DeleteFinishedTasks();
+    void FlushEntityQueue();
+
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;
 
@@ -81,10 +109,18 @@ class Scene {
     graphic::Node* interface_node_;
 
     std::list<Entity*> entities_;
+    std::queue<Entity*> queued_entities_;
+    std::tr1::function<void (Scene*)> defocus_callback_;
+    std::tr1::function<void (Scene*)> focus_callback_;
+
+    typedef std::map<int, std::list<Task*> > TasksContainer;
+    TasksContainer tasks_;
    
   friend class Engine;
 }; // class Scene.
 
-}
+} /* namespace action */
+
+} /* namespace ugdk */
 
 #endif /* UGDK_ACTION_SCENE_H_ */

@@ -1,5 +1,6 @@
 
 #include <cstdio>
+#include <string>
 
 #include <ugdk/script/languages/lua/datagear.h>
 #include <ugdk/script/languages/lua/auxlib.h>
@@ -12,6 +13,15 @@ namespace lua {
 
 /// Public:
 
+static void dumpstack (lua_State* L) {
+    LuaMsg("Dumping stack:\n");
+    for (int i = 1; i <= lua_gettop(L); i++) {
+        lua_getfield(L, LUA_GLOBALSINDEX, "print");
+        lua_pushvalue(L, i);
+        lua_call(L, 1, 0);
+    }
+}
+
 int DataGear::GenerateID(lua_State* L) {
     State L_(L);
 
@@ -22,8 +32,13 @@ int DataGear::GenerateID(lua_State* L) {
     if (!dtgear.PushDataTable())
         L_.pushinteger(LUA_NOREF);
     else {
-        L_.pushboolean(false);
-        DataID generated = L_.aux().ref(-2);
+        //DataID generated = L_.aux().ref(-2);
+        DataID generated = dtgear.idgen_.GenerateID();
+        if (generated != 0) {
+            L_.pushinteger(generated);
+            L_.pushboolean(false);
+            L_.settable(-3);
+        } else generated = LUA_NOREF;
         L_.settop(0);
         L_.pushinteger(generated);
     }
@@ -40,8 +55,17 @@ int DataGear::DestroyID(lua_State* L) {
     L_.settop(0);
 
     if (dtgear.PushDataTable()) {
-        L_.aux().unref(-1, id);
-        L_.pop(1);
+        //L_.aux().unref(-1, id);
+        //L_.pop(1);
+        DataID destroyed = dtgear.idgen_.ReleaseID(id);
+        if (destroyed != id)
+            LuaMsg("WARNING: Attempt to release Invalid lua data id.\n");
+        else {
+            L_.pushinteger(id);
+            L_.pushnil();
+            L_.settable(-3);
+            L_.settop(0);
+        }
     }
 
     return 0;
@@ -67,16 +91,17 @@ int DataGear::WrapData(lua_State* L) {
 int DataGear::UnwrapData(lua_State* L) {
     State L_(L);
 
-    L_.settop(3);
+    L_.settop(4);
     GETARG(L_, 1, DataGear, dtgear);
     DataID id = L_.aux().checkintteger(2);
     GETARGPTR(L_, 3, swig_type_info, type);
+    bool disown = (L_.aux().checkintteger(4) != 0);
     L_.settop(0);
 
     void *data = NULL; // dummy
 
     if (dtgear.GetData(id) &&
-        SWIG_IsOK(SWIG_ConvertPtr(L, -1, &data, type, 0))) {
+        SWIG_IsOK(SWIG_ConvertPtr(L, -1, &data, type, disown ? SWIG_POINTER_DISOWN : 0))) {
         L_.pushudata(data);
     } else L_.pushnil();
 
@@ -88,7 +113,7 @@ static DataID MakeID(DataGear& dtgear) {
     dtgear->pushcfunction(DataGear::GenerateID);
     dtgear->pushudata(&dtgear);
     dtgear->call(1,1);
-    DataID id = dtgear->tointeger(-1);
+    DataID id = static_cast<DataID>(dtgear->tointeger(-1));
     dtgear->pop(1);
     return id;
 }
@@ -181,6 +206,13 @@ int DataGear::Execute(lua_State* L) {
 
     // Pushes the function.
     dtgear.PushData(1, func_id);
+    if (!L_.isfunction(-1) && !L_.istable(-1)) {
+        return luaL_error(
+            L,
+            "WAT %d (%d) : %d",
+            func_id, buffer.size(), result_id
+        );
+    }
     // Pushes the arguments.
     for (DataBuffer::iterator it = buffer.begin(); it != buffer.end(); ++it)
         dtgear.PushData(1, *it);
@@ -217,6 +249,8 @@ int DataGear::GetField(lua_State* L) {
 
     // Pushes the container at index 2.
     dtgear.PushData(1, container_id);
+    if (L_.isnil(2))
+        return luaL_error(L, "Attempt to index a nil object.");
     // Pushes the key at index 3.
     dtgear.PushData(1, key_id);
     // Gets the field value in the container using the key. The key is poped and
@@ -224,7 +258,7 @@ int DataGear::GetField(lua_State* L) {
     L_.gettable(2);
 
     // Pops the field into the data table.
-    dtgear.PopData(1,value_id);
+    dtgear.PopData(1, value_id);
 
     return 0;
 }
@@ -309,7 +343,12 @@ int DataGear::DoFile(lua_State* L) {
     L_.call(0, 0);
     L_.getfenv(-1);   // getfenv(file)
 
-    LuaMsg("Environtment table successfully retrieved.\n");
+#ifdef DEBUG
+    std::string success_message = "Loaded module: '";
+    success_message += filename;
+    success_message += "'.\n";
+    LuaMsg(success_message.c_str());
+#endif
     dtgear.PopData(1, result_id);
 
     return 0;
@@ -366,7 +405,7 @@ bool DataGear::SetData (DataID id) {
 /// Private:
 
 bool DataGear::PushDataTable() {
-    L_.rawgeti(Constant::REGISTRYINDEX(), datatable_id_);
+    L_.getfield(Constant::REGISTRYINDEX(), "UGDK_LUA_DATATABLE");
     if (!L_.istable(-1)) {
         L_.pop(1);
         return false;

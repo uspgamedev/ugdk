@@ -1,43 +1,26 @@
+# Requires CMake 2.8 or newer.
+cmake_minimum_required (VERSION 2.8)
 
-# Recquires CMake 2.6 or newer.
-cmake_minimum_required (VERSION 2.6)
-
-# General definitions.
 project (ugdk CXX C)
-set (FRAMEWORK_NAME UGDK)
-set (FRAMEWORK_RELEASENAME ugdk)
-set (FRAMEWORK_DEBUGNAME ugdk_d)
-set (FRAMEWORK_VERSION 0.3.0)
+set (FRAMEWORK_VERSION_MAJOR 0)
+set (FRAMEWORK_VERSION_MINOR 4)
+set (FRAMEWORK_VERSION_PATCH 0)
+set (FRAMEWORK_BIGVERSION ${FRAMEWORK_VERSION_MAJOR}.${FRAMEWORK_VERSION_MINOR})
+set (FRAMEWORK_VERSION ${FRAMEWORK_BIGVERSION}.${FRAMEWORK_VERSION_PATCH})
+set (GROUP_NAME "USPGameDev Team")
+set (HOME_URL "http://uspgamedev.org/")
+set (CONTACT_MAIL "admin@uspgamedev.org")
+set (UGDK_INSTALL_LOCATION share/ugdk)
 
-# Some output.
-message ("=== ${FRAMEWORK_NAME} version ${FRAMEWORK_VERSION} ===")
+message ("=== UGDK version ${FRAMEWORK_VERSION} ===")
 
-# If the user did not define the parameteres, use default values.
-if (NOT BUILD_TYPE)
-    message ("-- No build type was defined, choosing default value: RELEASE")
-    set (BUILD_TYPE RELEASE)
-else (NOT BUILD_TYPE)
-    message ("-- Build type: ${BUILD_TYPE}")
-endif (NOT BUILD_TYPE)
+option(UGDK_STATICLIB "Set to ON to build UGDK with static linking." ON)
+option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
+option(UGDK_LUA_BINDINGS "Set to ON to enable Lua as one of the languages to create bindings." ON)
+option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
 
-if (NOT LINK_TYPE)
-    message ("-- No link type was defined, choosing default value: STATIC")
-    set (LINK_TYPE STATIC)
-else (NOT LINK_TYPE)
-    message ("-- Link type: ${LINK_TYPE}")
-endif (NOT LINK_TYPE)
-
-if (${BUILD_TYPE} STREQUAL RELEASE)
-    set (FRAMEWORK_BUILDNAME ${FRAMEWORK_RELEASENAME})
-elseif (${BUILD_TYPE} STREQUAL DEBUG)
-    set (FRAMEWORK_BUILDNAME ${FRAMEWORK_DEBUGNAME})
-	set (FRAMEWORK_NAME "${FRAMEWORK_NAME} (DEBUG)")
-else ()
-    message (FATAL_ERROR ">>> Unknown build type ${BUILD_TYPE}.")
-endif ()
-
-if ((NOT (${LINK_TYPE} STREQUAL STATIC)) AND (NOT (${LINK_TYPE} STREQUAL SHARED)))
-    message (FATAL_ERROR ">>> Unknown link type ${LINK_TYPE}.")
+if(NOT UGDK_STATICLIB)
+    set(BUILD_SHARED_LIBS True)
 endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -64,30 +47,24 @@ include (${SRC_DIR}/pyramidworks_module_list.cmake)
 include (${SRC_DIR}/lua_src_list.cmake)
 include (${SRC_DIR}/py_src_list.cmake)
 
-# #define's que voce queira incluir na compilacao
-# separe por espacos
-set (DEFS "" CACHE STRING "#define's que voce queira incluir na compilacao; separe por espacos")
-if (WIN32)
-    set (DEFS "${DEFS} WIN32")
-endif (WIN32)
-
-# CFLAGS: flags que voce queira enviar ao compilador
 # LDFLAGS: flags que voce queira enviar ao ligador
-set (CFLAGS "" CACHE STRING "flags enviadas ao compilador")
 set (LDFLAGS "" CACHE STRING "flags enviadas ao linker")
-if (UNIX OR MINGW)
-    # se for o g++ para *nix ou o MinGW para Windows:
-    set (CFLAGS "${CFLAGS} -Wall -ansi -O3 -U_FORTIFY_SOURCE -msse2")
-    if (${BUILD_TYPE} STREQUAL DEBUG)
-        set (CFLAGS "${CFLAGS} -g")
-    endif (${BUILD_TYPE} STREQUAL DEBUG)
-endif (UNIX OR MINGW)
-
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	set (LDFLAGS "${LDFLAGS} -mmacosx-version-min=10.5")
+    LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
 endif ()
 
-# ${UGDK_SRC} esta' definido?
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+if (UNIX OR MINGW)
+    # se for o g++ para *nix ou o MinGW para Windows:
+    add_definitions(-Wall -ansi -U_FORTIFY_SOURCE -msse2)
+elseif (MSVC) 
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /DBOOST_HAS_TR1_TUPLE /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast /MP)
+endif ()
+if(WIN32)
+    add_definitions(-DWIN32)
+endif()
+
+# ${UGDK_SRC} está definido?
 if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT UGDK_SRC)
@@ -111,114 +88,131 @@ include_directories(${SDLTTF_INCLUDE_DIR})
 find_package(SDL_image REQUIRED)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
-find_package(Boost 1.48.0 REQUIRED)
-include_directories("${Boost_INCLUDE_DIRS}/boost/tr1/tr1")
-include_directories(${Boost_INCLUDE_DIRS})
+if (UGDK_CREATE_BINDINGS)
+    ugdk_setup_package (SWIG)
+    if (SWIG_FOUND)
+        if (UGDK_LUA_BINDINGS)
+            ugdk_setup_package (Lua51)
+        endif (UGDK_LUA_BINDINGS)
+        
+        if (UGDK_PYTHON_BINDINGS)
+            ugdk_setup_package (PythonLibs)
+        endif (UGDK_PYTHON_BINDINGS)
+    endif (SWIG_FOUND)
+endif (UGDK_CREATE_BINDINGS)
 
-ugdk_setup_package (SWIG)
-if (SWIG_FOUND)
-  ugdk_setup_package (Lua51)
-  ugdk_setup_package (PythonLibs)
-endif (SWIG_FOUND)
-
-if (${BUILD_TYPE} STREQUAL DEBUG)
-  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -DDEBUG")
-endif (${BUILD_TYPE} STREQUAL DEBUG)
-
-# pre-processor: #define's
-if (MSVC)
-  foreach (d ${DEFS})
-    set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D${d}")
-  endforeach (d)
-  
-  set (CFLAGS_EXTRA "${CFLAGS_EXTRA} /D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast")
-  
-else (MSVC)
-  foreach (d ${DEFS})
-    set (CFLAGS_EXTRA "${CFLAGS_EXTRA} -D${d}")
-  endforeach (d)
-endif  (MSVC)
-
-include_directories ("src/kits")
 include_directories ("externals/opengl")
 
-if (${LINK_TYPE} STREQUAL STATIC)
-    add_library (${FRAMEWORK_BUILDNAME} STATIC ${UGDK_SRC} ${GENERATED_SRC})
-elseif (${LINK_TYPE} STREQUAL SHARED)
-    add_library (${FRAMEWORK_BUILDNAME} SHARED ${UGDK_SRC} ${GENERATED_SRC})
-endif (${LINK_TYPE} STREQUAL STATIC)
 
+##########################################
+# Package Configuration
+
+set (CPACK_GENERATOR DEB)
+set (CPACK_PACKAGE_DESCRIPTION_FILE README.txt)
+set (CPACK_PACKAGE_NAME libugdk)
+set (CPACK_PACKAGE_VENDOR ${GROUP_NAME})
+set (CPACK_PACKAGE_CONTACT "${GROUP_NAME} <${CONTACT_MAIL}>")
+set (CPACK_PACKAGE_INSTALL_REGISTRY_KEY "ugdk")
+set (CPACK_PACKAGE_VERSION_MAJOR ${FRAMEWORK_VERSION_MAJOR})
+set (CPACK_PACKAGE_VERSION_MINOR ${FRAMEWORK_VERSION_MINOR})
+set (CPACK_PACKAGE_VERSION_PATCH ${FRAMEWORK_VERSION_PATCH})
+set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "USP Game Development Kit, a framework for developing 2d games.")
+set (CPACK_DEBIAN_PACKAGE_NAME "libugdk${FRAMEWORK_BIGVERSION}")
+set (CPACK_DEBIAN_PACKAGE_HOMEPAGE ${HOME_URL})
+set (CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2, libsdl-mixer1.2-dev, libsdl-ttf2.0-0, lua5.1, python2.6")
+set (DEBIAN_PACKAGE_BUILDS_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2-dev, libsdl-mixer1.2-dev, libsdl-ttf2.0-dev, swig2.0, lua5.1-dev, python2.6-dev, cmake")
+set (CPACK_NSIS_CONTACT ${CONTACT_MAIL})
+set (CPACK_NSIS_DISPLAY_NAME "USP Game Development Kit")
+set (CPACK_NSIS_PACKAGE_HOMEPAGE ${HOME_URL})
+set (CPACK_RPM_PACKAGE_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
+set (CPACK_RPM_PACKAGE_URL ${HOME_URL})
+
+include (CPack)
+
+#
+##########################################
+
+# Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
+# Code found on http://stackoverflow.com/questions/7747857/in-cmake-how-do-i-work-around-the-debug-and-release-directories-visual-studio-2
+
+# First for the generic no-config case (e.g. with mingw)
+set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR} )
+set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR} )
+set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR} )
+# Second, for multi-config builds (e.g. msvc)
+foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+
+add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
+    set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
 endif (CMAKE_COMPILER_IS_GNUCXX)
 if (MINGW)
-	set (EXTRA_LIBRARIES mingw32 ${EXTRA_LIBRARIES})
+    set (EXTRA_LIBRARIES mingw32 ${EXTRA_LIBRARIES})
 endif (MINGW)
 if (WIN32)
-	set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
+    set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
 endif (WIN32)
 
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR})
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR})
-if (WIN32)
-	set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${LIB_DIR})
-endif (WIN32)
 
-if (PYTHONLIBS_FOUND)
-  include (cmake/asteroids.cmake)
-endif (PYTHONLIBS_FOUND)
+# We could use LINK_PUBLIC here, but it's a new feature in cmake 2.8.7, so we'd rather not require the newest version.
 
-target_link_libraries (${FRAMEWORK_BUILDNAME}
-					   ${EXTRA_LIBRARIES}
-					   ${SDL_LIBRARY}
-					   ${SDLMIXER_LIBRARY}
-					   ${SDLTTF_LIBRARY}
-					   ${SDLIMAGE_LIBRARY}
-					   ${OPENGL_LIBRARIES}
-             ${UGDK_LIBRARIES})
-             #${LUA_LIBRARIES}
-             #${PYTHON_FINAL_LIB})
+target_link_libraries (libugdk
+                       ${EXTRA_LIBRARIES}
+                       ${SDL_LIBRARY}
+                       ${SDLMIXER_LIBRARY}
+                       ${SDLTTF_LIBRARY}
+                       ${SDLIMAGE_LIBRARY}
+                       ${OPENGL_LIBRARIES}
+                       ${UGDK_LIBRARIES})
 
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES LINK_FLAGS "${LDFLAGS}")
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES COMPILE_FLAGS "${CFLAGS} ${CFLAGS_EXTRA}")
-set_target_properties (${FRAMEWORK_BUILDNAME} PROPERTIES PROJECT_NAME "${FRAMEWORK_NAME}")
+target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
+                       ${EXTRA_LIBRARIES}
+                       ${SDL_LIBRARY}
+                       ${SDLMIXER_LIBRARY}
+                       ${SDLTTF_LIBRARY}
+                       ${SDLIMAGE_LIBRARY}
+                       ${OPENGL_LIBRARIES}
+                       ${UGDK_LIBRARIES})
+                      
+set_target_properties (libugdk PROPERTIES 
+    LINK_FLAGS "${LDFLAGS}"
+    PROJECT_NAME UGDK
+    OUTPUT_NAME ugdk${FRAMEWORK_BIGVERSION}
+    OUTPUT_NAME_DEBUG ugdk${FRAMEWORK_BIGVERSION}-dbg
+    SOVERSION ${FRAMEWORK_VERSION_PATCH}
+    VERSION ${FRAMEWORK_VERSION}
+)
 
-# Installing on *nix
-#if (UNIX)
-#   set (FRAMEWORK_INSTALL_DIR "/usr/lib/${FRAMEWORK_BUILDNAME}")
-# 
-#   install (CODE "message (\"Installing ${GAME_NAME} ${GAME_VERSION}... Make sure you have root privileges.\")")
-# 
-#   if (LINK_TYPE EQUAL STATIC)
-#       install (TARGETS ${FRAMEWORK_BUILDNAME} LIBRARY DESTINATION ${FRAMEWORK_INSTALL_DIR})
-#   elseif (LINK_TYPE EQUAL SHARED)
-#       install (TARGETS ${FRAMEWORK_BUILDNAME} ARCHIVE DESTINATION ${FRAMEWORK_INSTALL_DIR})
-#   else ()
-#      message (FATAL_ERROR "")
-#
-  #install ( FILES license.txt readme.html DESTINATION ${GAME_INSTALL_DIR})
-  #install ( DIRECTORY config images levels licenses musics quests samples screenshots themes languages DESTINATION ${GAME_INSTALL_DIR} PATTERN ".svn" EXCLUDE)
-  # install ( DIRECTORY data DESTINATION ${GAME_INSTALL_DIR} PATTERN ".svn" EXCLUDE)
-  #
-  # install ( CODE "message (\"Creating files at ${GAME_FINAL_DIR}...\")")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"cmake\" \"-E\" \"copy\" \"${GAME_INSTALL_DIR}/${GAME_UNIXNAME}\" \"${GAME_FINAL_DIR}/${GAME_UNIXNAME}\")")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"mkdir\" \"$ENV{HOME}/.horus_eye\")")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"chmod\" \"777\" \"$ENV{HOME}/.horus_eye\")")
-  #install ( CODE "set (USER_GROUP \"\")")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"id\" \"-g\" OUTPUT_VARIABLE USER_GROUP)")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"chown\" \"$ENV{USER}:${USER_GROUP}\" \"$ENV{HOME}/.horus_eye\")")
-  #install ( CODE "EXECUTE_PROCESS(COMMAND \"echo\" \"-n\" \"${GAME_INSTALL_DIR}/\" OUTPUT_FILE \"$ENV{HOME}/.horus_eye/rootpath.txt\")")
+add_subdirectory (test)
 
-  #install ( CODE "message (\"Done! Please run ${GAME_UNIXNAME} to start ${GAME_NAME}.\")")
-  #endif  (UNIX)
+if (UNIX AND PYTHONLIBS_FOUND)
+    set (UGDK_INSTALL_LOCATION_DEFINE "#define UGDK_INSTALL_LOCATION \"/usr/${UGDK_INSTALL_LOCATION}\"")
+endif (UNIX AND PYTHONLIBS_FOUND)
 
-  #set (USER_HOME "$ENV{HOME}")
+
+set(UGDK_EXTERNAL_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src;${SDL_INCLUDE_DIR};${SDLTTF_INCLUDE_DIR} CACHE STRING "UGDK include directories" FORCE)
 
 CONFIGURE_FILE(
     "${SRC_DIR}/ugdk/config/config.h.in"
     "${SRC_DIR}/ugdk/config/config.h"
 )
 
+install(TARGETS libugdk
+    DESTINATION lib
+#    CONFIGURATIONS Release
+)
 
+install(DIRECTORY src/ugdk src/pyramidworks DESTINATION include/ugdk${FRAMEWORK_BIGVERSION} FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
+
+if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
+    install(DIRECTORY src/generated/ 
+            DESTINATION ${UGDK_INSTALL_LOCATION}/${FRAMEWORK_BIGVERSION}/python/ugdk
+            FILES_MATCHING PATTERN "*.py")
+endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
 

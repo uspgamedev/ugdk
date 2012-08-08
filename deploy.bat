@@ -6,9 +6,8 @@
 
 echo Copying static library files...
 
-xcopy lib\Release\ugdk.lib deploy\lib\ /q /k /y > nul
-xcopy lib\Debug\ugdk_d.lib deploy\lib\ /q /k /y > nul
-xcopy lib\Debug\ugdk_d.pdb deploy\lib\ /q /k /y > nul
+xcopy lib\ugdk*.lib deploy\lib\ /q /k /y > nul
+xcopy lib\ugdk*.pdb deploy\lib\ /q /k /y > nul
 
 echo Copying header files...
 

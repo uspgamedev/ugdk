@@ -1,9 +1,11 @@
+#include <ugdk/action/task.h>
 #include <ugdk/util/intervalkdtree.h>
 
 #include "collisionmanager.h"
 
 #include "pyramidworks/collision/collisionclass.h"
 #include "pyramidworks/collision/collisionobject.h"
+#include "pyramidworks/collision/collisionlogic.h"
 
 namespace pyramidworks {
 namespace collision {
@@ -32,6 +34,31 @@ void CollisionManager::Generate(const std::string &name, const std::string &pare
 #ifdef DEBUG
     colclass->set_name(name);
 #endif
+}
+
+class HandleCollisionTask : public ugdk::action::Task {
+  public:
+    HandleCollisionTask(const std::set<const CollisionObject*>& s) : objects_(s) {}
+
+    void operator()(double dt) {
+        std::vector<CollisionInstance> collision_list;
+    
+        std::set<const CollisionObject*>::const_iterator i;
+        for (i = objects_.begin(); i != objects_.end(); ++i)
+            (*i)->SearchCollisions(collision_list);
+
+        std::vector<CollisionInstance>::iterator it;
+        for(it = collision_list.begin(); it != collision_list.end(); ++it) {
+            it->first->Handle(it->second);
+        }
+    }
+
+  protected:
+    const std::set<const CollisionObject*>& objects_;
+};
+
+ugdk::action::Task* CollisionManager::GenerateHandleCollisionTask() {
+    return new HandleCollisionTask(active_objects_);
 }
 
 } // namespace collision

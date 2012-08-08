@@ -13,10 +13,6 @@ class Sprite;
 class SolidRectangle;
 class TexturedRectangle;
 
-// Spritesheets
-class Spritesheet;
-class FlexibleSpritesheet;
-
 // Extra
 class Font;
 class Image;
@@ -24,6 +20,7 @@ class Light;
 class Modifier;
 class Node;
 class Texture;
+class Spritesheet;
 
 // Managers
 class TextManager;

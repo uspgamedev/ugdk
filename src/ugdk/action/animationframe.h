@@ -1,5 +1,5 @@
-#ifndef HORUSEYE_FRAMEWORK_ANIMATION_FRAME_H_
-#define HORUSEYE_FRAMEWORK_ANIMATION_FRAME_H_
+#ifndef UGDK_ACTION_ANIMATIONFRAME_H_
+#define UGDK_ACTION_ANIMATIONFRAME_H_
 
 #include <vector>
 #include <string>
@@ -9,9 +9,10 @@
 
 namespace ugdk {
 
+namespace action {
+
 class Observer;
 class AnimationSet;
-
 
 /*
  * Represents the visual behavior information of a sprite in a single game frame.
@@ -58,7 +59,10 @@ class Animation : public std::vector<AnimationFrame*> {
 
 };
 
-}
-#endif
+} /* namespace action */
+
+} /* namespace ugdk */
+
+#endif /* UGDK_ACTION_ANIMATIONFRAME_H_ */
 
 

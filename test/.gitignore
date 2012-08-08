@@ -1,1 +1,5 @@
-script_customtest
+*.exe
+lib/
+*.pdb
+*.ilk
+/test

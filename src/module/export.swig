@@ -14,9 +14,9 @@
 %include "ugdk/script/type.h"
 
 #ifdef SWIGPYTHON
-	#define CURRENT_LANG ugdk::script::LANG(Python)
+    #define CURRENT_LANG ugdk::script::LANG(Python)
 #elif SWIGLUA
-	#define CURRENT_LANG ugdk::script::LANG(Lua)
+    #define CURRENT_LANG ugdk::script::LANG(Lua)
 /* Else not used on purpose, so that some shit happens when someone tries to use
    this for any non-supported language.*/
 #endif
@@ -41,27 +41,31 @@
 /*confirm_exports should use the target language to somehow call the
   RegisterType_* functions in the module passing the return value
   from the GetNull_* functions as argument.*/
-%define confirm_exports(modname)
+
 #ifdef SWIGLUA
+%define confirm_exports(modname)
 %luacode {
-print "Hey there!"
 for k,v in pairs(modname) do
   m = string.match(k, "RegisterType_(.+)")
-  print(k,v)
   if m then
-    print "Something may be registered."
     v(modname["GetNull_"..m]())
   end
 end
 }
+%init {
+    SWIG_Lua_get_class_registry(L);
+    lua_setglobal(L, "swig");
+}
+%enddef
 #elif SWIGPYTHON
+%define confirm_exports(modname)
 %pythoncode {
-print "Python modname confirm exports!"
 module = __import__(__name__)
 for key,value in module.__dict__.items():
-	if key.startswith("RegisterType_"):
-		arg = module.__dict__["GetNull_"+key[13:] ]()
-		value(arg)
+    if key.startswith("RegisterType_"):
+        arg = module.__dict__["GetNull_"+key[13:] ]()
+        value(arg)
 }
-#endif
 %enddef
+#endif
+

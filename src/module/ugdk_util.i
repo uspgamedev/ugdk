@@ -6,7 +6,6 @@
 
 %{
 
-#include <ugdk/util/animationparser.h>
 #include <ugdk/util/animationprotocol.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/uncopyable.h>
@@ -22,9 +21,8 @@
 %import(module="ugdk_gdd") <ugdk/util/gdd/abstractloader.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 
-%template(DescriptionProtocol_AnimationSet) ugdk::gdd::DescriptionProtocol<ugdk::AnimationSet>;
+%template(DescriptionProtocol_AnimationSet) ugdk::gdd::DescriptionProtocol<ugdk::action::AnimationSet>;
 
-%include <ugdk/util/animationparser.h>
 %include <ugdk/util/animationprotocol.h>
 %include <ugdk/util/pathmanager.h>
 %include <ugdk/util/uncopyable.h>
@@ -34,8 +32,17 @@
 %include <ugdk/util/intervalkdtree.h>
 
 
+%template(Box2D) ugdk::ikdtree::Box<2>;
+%inline %{
+static ugdk::ikdtree::Box<2> CreateBox2D(double a1, double a2, double b1, double b2) {
+    double min[2] = { a1, a2 };
+    double max[2] = { b1, b2 };
+    return ugdk::ikdtree::Box<2>(min, max);
+}
+%}
+%template(Box3D) ugdk::ikdtree::Box<3>;
+
 namespace ugdk {
-	export_class(AnimationParser)
 	export_class(PathManager)
 	export_class(AnimationProtocol)
 	export_class(LanguageWord)

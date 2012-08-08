@@ -7,7 +7,6 @@ SET(UGDK_MODULE_SRC
     ugdk_graphic.i 
     ugdk_input.i 
     ugdk_math.i 
-    ugdk_spritesheet.i 
     ugdk_time.i 
     ugdk_util.i 
 )

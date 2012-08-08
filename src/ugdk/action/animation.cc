@@ -1,8 +1,11 @@
 #include <ugdk/action/animation.h>
 #include <ugdk/action/observer.h>
 #include <ugdk/action/animationset.h>
+#include <ugdk/action/animationframe.h>
 
 namespace ugdk {
+
+namespace action{
 
 #define ANIMATION_BUFFER_SIZE 256
 
@@ -13,7 +16,19 @@ AnimationManager::AnimationManager(double fps, AnimationSet *set)
 
 AnimationManager::~AnimationManager() {}
 
-int AnimationManager::GetFrame() {
+double AnimationManager::fps() const { 
+    return 1.0/(period_scaling_factor_*current_animation_->period());
+}
+
+double AnimationManager::period() const { 
+    return period_scaling_factor_*current_animation_->period();
+}
+
+unsigned int AnimationManager::n_frames() const { 
+    return static_cast<unsigned int>(current_animation_->size());
+}
+
+int AnimationManager::GetFrame() const{
     if (current_animation_) {
         AnimationFrame *frame = current_animation_->at(current_frame_);
         if (frame)
@@ -23,7 +38,13 @@ int AnimationManager::GetFrame() {
     else return default_frame_;
 }
 
-void AnimationManager::Select(std::string name) {
+const graphic::Modifier* AnimationManager::get_current_modifier() const {
+    return current_animation_
+            ? current_animation_->at(current_frame_)->modifier()
+            : NULL;
+}
+
+void AnimationManager::Select(const std::string& name) {
     if (animation_set_) {
         Animation *new_frames = animation_set_->Search(name);
         if (current_animation_ != new_frames) {
@@ -56,14 +77,23 @@ void AnimationManager::Update(double delta_t) {
 }
 
 void AnimationManager::AddObserver(Observer* observer) {
-    observers.push_back(observer);
+    observers_.push_back(observer);
+}
+
+void AnimationManager::AddTickFunction(std::tr1::function<void (void)> tick) {
+    ticks_.push_back(tick);
 }
 
 void AnimationManager::NotifyAllObservers() {
-    for (int i = 0; i < (int)observers.size(); ++i) {
-        observers[i]->Tick();
+    for (int i = 0; i < (int)observers_.size(); ++i) {
+        observers_[i]->Tick();
     }
+    for(std::vector< std::tr1::function<void (void)> >::iterator it = ticks_.begin();
+        it != ticks_.end(); ++it)
+        (*it)();
 }
+
+} /* namespace action*/
 
 } /* namespace ugdk */
 

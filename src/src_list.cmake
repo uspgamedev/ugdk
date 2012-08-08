@@ -3,7 +3,9 @@ SET(UGDK_SRC
     ./src/pyramidworks/collision/collisionmanager.cc 
     ./src/pyramidworks/collision/collisionobject.cc 
     ./src/pyramidworks/geometry/circle.cc 
+    ./src/pyramidworks/geometry/convexpolygon.cc 
     ./src/pyramidworks/geometry/rect.cc 
+    ./src/pyramidworks/modules.cc 
     ./src/ugdk/action/animation.cc 
     ./src/ugdk/action/animationset.cc 
     ./src/ugdk/action/scene.cc 
@@ -20,22 +22,25 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/light.cc 
     ./src/ugdk/graphic/modifier.cc 
     ./src/ugdk/graphic/node.cc 
-    ./src/ugdk/graphic/spritesheet/fixedspritesheet.cc 
-    ./src/ugdk/graphic/spritesheet/flexiblespritesheet.cc 
+    ./src/ugdk/graphic/spritesheet.cc 
     ./src/ugdk/graphic/textmanager.cc 
     ./src/ugdk/graphic/texture.cc 
     ./src/ugdk/graphic/videomanager.cc 
     ./src/ugdk/input/inputmanager.cc 
     ./src/ugdk/math/frame.cc 
+    ./src/ugdk/math/integer2D.cc 
     ./src/ugdk/math/vector2D.cc 
     ./src/ugdk/modules.cc 
     ./src/ugdk/script/scriptmanager.cc 
     ./src/ugdk/script/virtualobj.cc 
     ./src/ugdk/time/timeaccumulator.cc 
     ./src/ugdk/time/timemanager.cc 
-    ./src/ugdk/util/animationparser.cc 
+    ./src/ugdk/ui/button.cc 
+    ./src/ugdk/ui/menu.cc 
+    ./src/ugdk/ui/uielement.cc 
     ./src/ugdk/util/animationprotocol.cc 
     ./src/ugdk/util/gdd/reader.cc 
+    ./src/ugdk/util/idgenerator.cc 
     ./src/ugdk/util/language.cc 
     ./src/ugdk/util/languagemanager.cc 
     ./src/ugdk/util/pathmanager.cc 

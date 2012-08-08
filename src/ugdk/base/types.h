@@ -19,13 +19,25 @@ typedef int32_t int32;
 typedef int64_t int64;
 
 typedef uint8 Mirror;
-static const Mirror MIRROR_NONE   = 0;
-static const Mirror MIRROR_HFLIP  = 1;
-static const Mirror MIRROR_VFLIP  = 2;
-static const Mirror MIRROR_HVFLIP = 3;
+static const Mirror MIRROR_NONE     = 0;
+static const Mirror MIRROR_HFLIP    = 1;
+static const Mirror MIRROR_VFLIP    = 2;
+static const Mirror MIRROR_HVFLIP   = 3;
+
+namespace enums {
+namespace mirroraxis {
+enum MirrorAxis {
+    HORZ = 0,
+    DIAG_UP = 45,
+    VERT = 90,
+    DIAG_DOWN = 135
+};
+}
+}
 
 typedef struct Color {
-    explicit Color(double _r = 1.0, double _g = 1.0, double _b = 1.0, double _a = 1.0)
+    Color() : r(1.0), g(1.0), b(1.0), a(1.0) {}
+    explicit Color(double _r, double _g, double _b, double _a = 1.0)
           : r(_r), g(_g), b(_b), a(_a) {}
     explicit Color(uint32 hex_val, double _a = 1.0) :
         r(((hex_val & 0xFF0000) >> 16) / 255.0),
@@ -33,10 +45,24 @@ typedef struct Color {
         b(((hex_val & 0x0000FF)      ) / 255.0),
         a(_a) {}
 
-	union {
+    union {
         struct { double r, g, b, a; };
         struct { double val[4];  };
     };
+
+    void Compose(const Color& rhs) {
+        r *= rhs.r;
+        g *= rhs.g;
+        b *= rhs.b;
+        a *= rhs.a;
+    }
+
+    Color&  operator*=(const Color& rhs) { Compose(rhs); return *this; }
+    Color   operator*(const Color& rhs) const {
+        Color result(rhs);
+        result *= *this;
+        return result;
+    }
     
     double get_r() const { return r; }
     double get_g() const { return g; }

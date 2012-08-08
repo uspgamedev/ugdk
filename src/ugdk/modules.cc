@@ -6,7 +6,7 @@
 #include <ugdk/script/languages/lua/luawrapper.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
 
-#define UGDK_MODULES_NUM 11
+#define UGDK_MODULES_NUM 10
 
 #define UGDK_MODULES_LIST(ACTION) \
     ACTION(action) \
@@ -16,7 +16,6 @@
     ACTION(graphic) \
     ACTION(input) \
     ACTION(math) \
-    ACTION(spritesheet) \
     ACTION(time) \
     ACTION(util) \
     ACTION(gdd)
@@ -60,22 +59,19 @@ using script::python::PyInitFunction;
 
 #undef UGDKPYTHON_LIST_ITEM
 
-static const char* SUCCESS_MSG[2] = {
-    "Failed to register module",
-    "Successfully registered module"
-};
-
 template <class wrapper_t, class init_func_t>
 static void RegisterModules(wrapper_t* wrapper,
                             const Module<init_func_t> modules[],
                             const char* lang_name) {
-    for (size_t i = 0; i < UGDK_MODULES_NUM; ++i)
-        printf(
-            "[%s] %s \"%s\".\n",
-            lang_name,
-            SUCCESS_MSG[wrapper->RegisterModule(modules[i])],
-            modules[i].name().c_str()
-        );
+    for (size_t i = 0; i < UGDK_MODULES_NUM; ++i) {
+        if(!wrapper->RegisterModule(modules[i])) {
+            fprintf(stderr, "[%s] Load module '%s': >>ERROR<<\n", lang_name, modules[i].name().c_str());
+        } else {
+#ifdef DEBUG
+            fprintf(stderr, "[%s] Load module '%s': ok\n", lang_name, modules[i].name().c_str());
+#endif
+        }
+    }
 }
 
 void RegisterLuaModules(script::lua::LuaWrapper* wrapper) {

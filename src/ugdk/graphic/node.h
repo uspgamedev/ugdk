@@ -25,7 +25,8 @@ class Node {
     ~Node();
 
     /// Pushes the modifier to the VideoManager, renders 
-    void Render(double dt);
+    void Update(double dt);
+    void Render() const;
     void RenderLight() const;
 
     void set_drawable(Drawable* drawable) { drawable_ = drawable; }
@@ -42,10 +43,10 @@ class Node {
           bool   active()      const { return   active_; }
           double zindex()      const { return   zindex_; }
 
-    void AddChild(Node *child) {
-        if(child->parent_) child->parent_->RemoveChild(child);
-        childs_.push_back(child);
-        child->parent_ = this;
+    void AddChild(Node *new_child) {
+        if(new_child->parent_) new_child->parent_->RemoveChild(new_child);
+        childs_.push_back(new_child);
+        new_child->parent_ = this;
         must_sort_ = true;
     }
     void RemoveChild(Node *child);

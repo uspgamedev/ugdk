@@ -1,12 +1,18 @@
 
-#ifndef HORUSEYE_FRAMEWORK_VECTOR2D_H_
-#define HORUSEYE_FRAMEWORK_VECTOR2D_H_
+#ifndef UGDK_MATH_VECTOR2D_H_
+#define UGDK_MATH_VECTOR2D_H_
+
+#include <ugdk/base/types.h>
 
 #ifdef SWIG
 #pragma SWIG nowarn=312
 #endif
 
 namespace ugdk {
+
+namespace math {
+class Integer2D;
+} // namespace math
 
 // 2 dimension vectors, using doubles.
 class Vector2D {
@@ -20,14 +26,17 @@ class Vector2D {
     /** Create the vector (x,y) with x = val and y = val being val a constant
     *  @param val is a constant
     */
-    explicit Vector2D(double val) : x(val), y(val) {}
+    explicit Vector2D(double value) : x(value), y(value) {}
 
     /// Initializes both fields with given values.
     /** Create the vector (x,y) with x = x-value and y = y-value
     *  @param x is the x-value argument
     *  @param y is the y-value argument
     */
-    Vector2D(double x, double y) : x(x), y(y) {}
+    Vector2D(double _x, double _y) : x(_x), y(_y) {}
+
+    /// Copy constructor from Integer2D.
+    Vector2D(const ugdk::math::Integer2D& int2d);
 
     ~Vector2D() { }
 
@@ -85,6 +94,18 @@ class Vector2D {
     *  @see Angle
     */
     Vector2D Rotate(const double angle) const;
+    
+    /// Mirrors this Vector2D (in-place) by the "axis" axis. Include types.h and use "using namespace ugdk::enums".
+    /** @param axis Either mirroraxis::HORZ, mirroraxis::VERT, mirroraxis::DIAG_UP, or mirroraxis::DIAG_DOWN.
+     *  @see Mirrored
+     */
+    void Mirror(const ugdk::enums::mirroraxis::MirrorAxis axis);
+    
+    /// Returns a new Vector2D, mirrored by the "axis" axis. Include types.h and use "using namespace ugdk::enums".
+    /** @param axis Either mirroraxis::HORZ, mirroraxis::VERT, mirroraxis::DIAG_UP, or mirroraxis::DIAG_DOWN.
+     *  @see Mirror
+     */
+    Vector2D Mirrored(const ugdk::enums::mirroraxis::MirrorAxis axis) const;
 
     /// Returns a new vector which is this vector scaled coordinate by coordinate with "scale".
     /** The resulting scaled vector is (this->x * scale.x, this->y * scale.y).
@@ -156,6 +177,15 @@ class Vector2D {
         return a.Rotate(angle);
     }
 
+
+	/// Compares this vector to the given vector, return True if they are equivalent.
+		/** Two vectors are equivalent if the coordinates are equal.
+        *  @return True if vectors are equivalent.
+        */
+	bool operator==(const Vector2D &rhs) {
+		return x==rhs.x && y==rhs.y;
+	}
+
     // TODO document and revise
     Vector2D& operator+=(const Vector2D &other);
     
@@ -209,4 +239,4 @@ Vector2D operator*(const double  &scalar, const Vector2D &right);
 
 }  // namespace ugdk
 
-#endif  // HORUSEYE_FRAMEWORK_VECTOR2D_H_
+#endif  // UGDK_MATH_VECTOR2D_H_

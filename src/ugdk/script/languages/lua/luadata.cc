@@ -1,6 +1,7 @@
 
 #include <algorithm>
-#include <functional>
+#include <ugdk/portable/tr1.h>
+#include FROM_TR1(functional)
 
 #include <ugdk/script/languages/lua/luadata.h>
 #include <ugdk/script/languages/lua/datagear.h>
@@ -19,11 +20,12 @@ LuaData::~LuaData() {
             .NoResult();
 }
 
-void* LuaData::Unwrap(const VirtualType& type) const {
+void* LuaData::Unwrap(const VirtualType& type, bool disown) const {
     return wrapper_->data_gear()
         .SafeCall(DataGear::UnwrapData)
         .Arg(id_)
         .Arg(type.FromLang(LANG(Lua)))
+        .Arg(static_cast<int>(disown))
         .GetResult<UData>(NULL);
 }
 
@@ -140,6 +142,7 @@ VirtualData::Ptr LuaData::Execute(const vector<Ptr>& args) {
 }
 
 VirtualData::Ptr LuaData::GetAttribute(Ptr key) {
+    wrapper_->CleanBuffer();
     key->AddToBuffer();
     return wrapper_->OperateBuffer(id_, DataGear::GetField);
 }
@@ -148,6 +151,14 @@ VirtualData::Ptr LuaData::SetAttribute(Ptr key, Ptr value) {
     key->AddToBuffer();
     value->AddToBuffer();
     return wrapper_->OperateBuffer(id_, DataGear::SetField);
+}
+
+void LuaData::UnsafePopValue() {
+    wrapper_->data_gear().SetData(id_);
+}
+
+void LuaData::UnsafePushValue() {
+    wrapper_->data_gear().GetData(id_);
 }
 
 void LuaData::AddToBuffer() {

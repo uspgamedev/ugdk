@@ -3,6 +3,7 @@
 
 %include <module/export.swig>
 %include <module/ownership.swig>
+%include <module/widetypes.swig>
 %include "std_string.i"
 %include "std_vector.i"
 %include "std_map.i"
@@ -27,6 +28,7 @@
 %ignore ugdk::graphic::Texture::CreateFromSurface(SDL_Surface* data);
 %ignore ugdk::graphic::VideoManager::PushAndApplyModifier(const Modifier& apply);
 %ignore ugdk::graphic::Font::GetLetterSize(wchar_t letter);
+%ignore ugdk::graphic::SpritesheetData::frames() const;
 
 %newobject ugdk::graphic::Font::GetLetterSize(wchar_t letter);
 %newobject ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);
@@ -38,13 +40,9 @@
 %newobject ugdk::graphic::Texture::CreateFromFile(const std::string& filepath);
 %newobject ugdk::graphic::Texture::CreateRawTexture(int texture_width, int texture_height);
 
-%rename(ComposeNew) ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);;
+%rename(ComposeNew) ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);
+%rename(GetTextWithFont) ugdk::graphic::TextManager::GetText(const std::wstring& text, const std::string& font, int width = -1);
 
-/*
-graphic::Node has several methods that steals the ownership of the object
-so that might give us trouble in the future...
-check SWIG %delobject directive
-*/
 
 %include <ugdk/graphic/drawable.h>
 
@@ -56,10 +54,13 @@ check SWIG %delobject directive
 %include <ugdk/graphic/font.h>
 %include <ugdk/graphic/light.h>
 %include <ugdk/graphic/modifier.h>
+enable_disown(ugdk::graphic::Node* new_child)
 enable_disown(ugdk::graphic::Drawable* drawable)
 %include <ugdk/graphic/node.h>
 disable_disown(ugdk::graphic::Drawable* drawable)
+disable_disown(ugdk::graphic::Node* new_child)
 %include <ugdk/graphic/spritesheet.h>
+
 %include <ugdk/graphic/textmanager.h>
 %include <ugdk/graphic/videomanager.h>
 

@@ -11,7 +11,6 @@
 #include <ugdk/input/inputmanager.h>
 #include <ugdk/time/timemanager.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/util/animationparser.h>
 #include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
 
@@ -40,15 +39,15 @@ bool Engine::Initialize(const Configuration& configuration) {
     path_manager_     = new           PathManager(configuration.base_path);
     resource_manager_ = new base::ResourceManager();
     language_manager_ = new       LanguageManager(configuration.default_language);
-	
-	std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";
+    
+    std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";
 
     video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, icon_path);
     audio_manager_->Initialize();
      text_manager_->Initialize();
 
-	if (!SCRIPT_MANAGER()->Initialize())
-	    puts("Failed to initialize script manager.");
+    if (!SCRIPT_MANAGER()->Initialize())
+        puts("Failed to initialize script manager.");
 
     scene_list_.clear();
 
@@ -60,12 +59,12 @@ bool Engine::Initialize(const Configuration& configuration) {
 }
 
 void Engine::DeleteFinishedScenes() {
-    std::list<Scene*> to_delete;
-    for(std::list<Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it)
+    std::list<action::Scene*> to_delete;
+    for(std::list<action::Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it)
         if((*it)->finished())
             to_delete.push_front(*it);
 
-    for(std::list<Scene*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it) {
+    for(std::list<action::Scene*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it) {
         delete (*it);
         scene_list_.remove(*it);
     }
@@ -77,7 +76,7 @@ void Engine::Run() {
     Key key;
     SDL_Event event;
     double delta_t, total_fps = 0;
-    Scene* current_top_scene = NULL;
+    action::Scene* current_top_scene = NULL;
 
     quit_ = false;
     while(!quit_) {
@@ -133,7 +132,7 @@ void Engine::Run() {
 
             // Sends the scene list to the videomanager, who handles everything 
             // needed to draw
-            video_manager_->Render(scene_list_, delta_t);
+            video_manager_->Render(scene_list_);
 
             ++frames_since_reset_;
             total_fps += 1.0/delta_t;
@@ -144,7 +143,7 @@ void Engine::Run() {
             }
         }
     }
-    for(std::list<Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it) {
+    for(std::list<action::Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it) {
         (*it)->Finish();
         delete (*it);
     }
@@ -158,8 +157,8 @@ void Engine::Release() {
     audio_manager()->Release();
     delete audio_manager_;
 
-	text_manager_->Release();
-	delete text_manager_;
+    text_manager_->Release();
+    delete text_manager_;
 
     video_manager()->Release();
     delete video_manager_;
@@ -172,11 +171,11 @@ void Engine::Release() {
     SDL_Quit();
 }
 
-void Engine::PushScene(Scene* scene) {
+void Engine::PushScene(action::Scene* scene) {
     scene_list_.push_back(scene);
 }
 
-Scene* Engine::CurrentScene() const {
+action::Scene* Engine::CurrentScene() const {
     return scene_list_.empty() ? NULL : scene_list_.back();
 }
 

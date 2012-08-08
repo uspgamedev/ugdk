@@ -1,5 +1,6 @@
 #include "rect.h"
 #include "circle.h"
+#include "convexpolygon.h"
 #include <cmath>
 #include <ugdk/util/intervalkdtree.h>
 
@@ -112,6 +113,10 @@ bool Rect::Intersects (const ugdk::Vector2D& rect_pos, const Circle *circle, con
 
 bool Rect::Intersects (const ugdk::Vector2D& this_pos, const GeometricShape *obj, const ugdk::Vector2D& that_pos) const {
     return obj->Intersects(that_pos, this, this_pos);
+}
+
+bool Rect::Intersects(const ugdk::Vector2D& this_pos, const  ConvexPolygon *obj, const ugdk::Vector2D& that_pos) const {
+	return obj->Intersects(that_pos, this, this_pos);
 }
 
 ugdk::ikdtree::Box<2> Rect::GetBoundingBox(const ugdk::Vector2D& thispos) const {

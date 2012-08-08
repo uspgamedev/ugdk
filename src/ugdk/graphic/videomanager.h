@@ -29,7 +29,7 @@ class VideoManager {
 
     bool Initialize(const std::string& title, const Vector2D& size, bool fullscreen, const std::string& icon);
     bool Release();
-    void Render(std::list<Scene*>&, double dt);
+    void Render(const std::list<action::Scene*>&);
 
     // Configuration
     bool ChangeResolution(const Vector2D& size, bool fullscreen);
@@ -47,9 +47,7 @@ class VideoManager {
     void PushAndApplyModifier(const Modifier*);
     void PushAndApplyModifier(const Modifier& apply) { PushAndApplyModifier(&apply); }
     bool PopModifier();
-    const Modifier& CurrentModifier() const {
-        return (modifiers_.empty()) ? Modifier::IDENTITY : modifiers_.top(); 
-    }
+    const Modifier& CurrentModifier() const;
 
   private:
     Vector2D video_size_;
@@ -71,7 +69,7 @@ class VideoManager {
 
     void InitializeLight();
 
-    void MergeLights(std::list<Scene*>& scene_list);
+    void mergeLights(const std::list<action::Scene*>& scene_list);
     void BlendLightIntoBuffer();
 
     void ClearModiferStack();

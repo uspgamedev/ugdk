@@ -8,7 +8,6 @@ namespace ugdk {
 
 class AudioManager;
 
-// Musica
 /**@class Music
  *Note: This class cannot be directly instantiated. Please use AudioManager's LoadMusic.
  *@see AudioManager
@@ -18,11 +17,11 @@ class Music {
     /// Plays this music once.
     void Play();
 
-    /// Plays this music the given number of times.
-    void Play(int loops);
-
     /// Plays this music until told to stop.
     void PlayForever();
+
+    /// Plays this music the given number of times.
+    void Play(int loops);
 
     /// Stops playing this music.
     void Stop();

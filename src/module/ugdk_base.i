@@ -2,6 +2,7 @@
 
 %include <module/export.swig>
 %include <module/ownership.swig>
+%include <module/proxy.swig>
 %include "std_string.i"
 %include "std_map.i"
 
@@ -19,7 +20,10 @@
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/util/languageword.h>
 
+#include <module/ugdk/action/sceneproxy.h>
+
 %}
+
 
 %include <ugdk/base/resourcecontainer.h> //class template
 
@@ -27,9 +31,9 @@ enable_disown(ugdk::graphic::Texture* val)
 %template(ResourceContainer_Texture) ugdk::base::ResourceContainer<ugdk::graphic::Texture*>;
 disable_disown(ugdk::graphic::Texture* val)
 
-enable_disown(ugdk::AnimationSet* val)
-%template(ResourceContainer_AnimationSet) ugdk::base::ResourceContainer<ugdk::AnimationSet*>;
-disable_disown(ugdk::AnimationSet* val)
+enable_disown(ugdk::action::AnimationSet* val)
+%template(ResourceContainer_AnimationSet) ugdk::base::ResourceContainer<ugdk::action::AnimationSet*>;
+disable_disown(ugdk::action::AnimationSet* val)
 
 enable_disown(ugdk::graphic::Spritesheet* val)
 %template(ResourceContainer_Spritesheet) ugdk::base::ResourceContainer<ugdk::graphic::Spritesheet*>;
@@ -46,6 +50,8 @@ disable_disown(ugdk::LanguageWord* val)
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_util") <ugdk/util.h>
+
+proxy_class(ugdk::action::Scene)
 
 %include <ugdk/base/types.h>
 %include <ugdk/base/configuration.h>

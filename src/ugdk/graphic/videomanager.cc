@@ -10,7 +10,6 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/graphic/spritesheet/flexiblespritesheet.h>
 #include <ugdk/util/pathmanager.h>
 
 // VSync
@@ -47,13 +46,13 @@ static Vector2D default_resolution(800.0, 600.0);
 bool VideoManager::Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon) {
     modifiers_.empty();
     title_ = title;
-	
+    
     // Set window title.
     SDL_WM_SetCaption(title.c_str(), (icon.length() > 0) ? icon.c_str() : NULL );
-	
+    
     if(icon.length() > 0)
         SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
-	
+    
     if(ChangeResolution(size, fullscreen) == false)
         if(ChangeResolution(default_resolution, false) == false) {
             /* TODO: insert error message here. */
@@ -135,7 +134,7 @@ void VideoManager::SetVSync(const bool active) {
 #endif
 }
 
-void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
+void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
     // Lights are simply added together.
     glBlendFunc(GL_ONE, GL_ONE);
 
@@ -143,7 +142,7 @@ void VideoManager::MergeLights(std::list<Scene*>& scene_list) {
     glDrawBuffer(GL_BACK);
     glReadBuffer(GL_BACK);
 
-    for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->RenderLight();
 
@@ -189,19 +188,19 @@ void VideoManager::BlendLightIntoBuffer() {
 }
 
 // Desenha backbuffer na tela
-void VideoManager::Render(std::list<Scene*>& scene_list, double dt) {
+void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     if(settings_.light_system)
-        MergeLights(scene_list);
+        mergeLights(scene_list);
 
     // Usual blend function for drawing RGBA images.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Draw all the sprites from all scenes.
-    for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->Render(dt);
+            (*it)->content_node()->Render();
 
     // Using the light texture, merge it into the screen.
     if(settings_.light_system)
@@ -209,9 +208,9 @@ void VideoManager::Render(std::list<Scene*>& scene_list, double dt) {
 
     // Draw all interface layers, with the usual RGBA blend.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    for(std::list<Scene*>::iterator it = scene_list.begin(); it != scene_list.end(); ++it)
+    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->interface_node()->Render(dt);
+            (*it)->interface_node()->Render();
 
 
     // Swap the buffers to show the backbuffer to the user.
@@ -228,11 +227,11 @@ static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ell
                                  screen->format->Rmask, screen->format->Gmask,
                                  screen->format->Bmask, screen->format->Amask);
     if(temp == NULL)
-        return false;
+        return NULL;
     SDL_Surface *data = SDL_DisplayFormatAlpha(temp);
     SDL_FreeSurface(temp);
     if(data == NULL)
-        return false;
+        return NULL;
 
     Vector2D origin = size * 0.5;
 
@@ -278,7 +277,7 @@ void VideoManager::InitializeLight() {
 }
 
 void VideoManager::PushAndApplyModifier(const Modifier* apply) {
-    Modifier top = (modifiers_.empty()) ? Modifier::IDENTITY : modifiers_.top();
+    Modifier top = CurrentModifier();
 
     if(apply->flags() & Modifier::HAS_COLOR) top.ComposeColor(apply);
     top.ComposeMirror(apply);
@@ -304,15 +303,14 @@ void VideoManager::PushAndApplyModifier(const Modifier* apply) {
         double s = sin(apply->rotation()), c = cos(apply->rotation());
 
         // Builds the full transformation matrix all at once.
-        double M[16] = {  sx*c, sy*s, 0.0, 0.0, // First column
-                        -sx*s, sy*c, 0.0, 0.0,
-                         0.0, 0.0, 1.0, 0.0,
-                           tx,   ty, 0.0, 1.0 };
+        double M[16] = { sx*c, -sx*s, 0.0, 0.0, // First column
+                         sy*s,  sy*c, 0.0, 0.0,
+                          0.0,   0.0, 1.0, 0.0,
+                           tx,    ty, 0.0, 1.0 };
 
-        //glTranslated(apply->offset().x, apply->offset().y, 0.0);
-        //glScalef(apply->scale().x, apply->scale().y, 0.0);
-        //glRotatef(apply->rotation() * 57.2957795, 0.0, 0.0, 1.0);
-
+        //glTranslated(tx, ty, 0.0);
+        //glRotated(apply->rotation() * 57.2957795, 0.0, 0.0, 1.0);
+        //glScaled(sx, sy, 0.0);
         glMultMatrixd(M);
     }
 
@@ -324,6 +322,11 @@ bool VideoManager::PopModifier() {
     modifiers_.pop();
     glPopMatrix();
     return true;
+}
+
+const Modifier& VideoManager::CurrentModifier() const {
+    static Modifier IDENTITY;
+    return (modifiers_.empty()) ? IDENTITY : modifiers_.top(); 
 }
 
 void VideoManager::ClearModiferStack() {
