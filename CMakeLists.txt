@@ -10,6 +10,7 @@ set (FRAMEWORK_VERSION ${FRAMEWORK_BIGVERSION}.${FRAMEWORK_VERSION_PATCH})
 set (GROUP_NAME "USPGameDev Team")
 set (HOME_URL "http://uspgamedev.org/")
 set (CONTACT_MAIL "admin@uspgamedev.org")
+set (UGDK_INSTALL_LOCATION share/ugdk)
 
 message ("=== UGDK version ${FRAMEWORK_VERSION} ===")
 
@@ -190,6 +191,11 @@ set_target_properties (libugdk PROPERTIES
 
 add_subdirectory (test)
 
+if (UNIX AND PYTHONLIBS_FOUND)
+    set (UGDK_INSTALL_LOCATION_DEFINE "#define UGDK_INSTALL_LOCATION \"/usr/${UGDK_INSTALL_LOCATION}\"")
+endif (UNIX AND PYTHONLIBS_FOUND)
+
+
 set(UGDK_EXTERNAL_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src;${SDL_INCLUDE_DIR};${SDLTTF_INCLUDE_DIR} CACHE STRING "UGDK include directories" FORCE)
 
 CONFIGURE_FILE(
@@ -205,13 +211,8 @@ install(TARGETS libugdk
 install(DIRECTORY src/ugdk src/pyramidworks DESTINATION include/ugdk${FRAMEWORK_BIGVERSION} FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
 
 if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
-    FILE(STRINGS "${PYTHON_INCLUDE_DIR}/patchlevel.h" python_version_str
-         REGEX "^#define[ \t]+PY_VERSION[ \t]+\"[^\"]+\"")
-    STRING(REGEX REPLACE "^#define[ \t]+PY_VERSION[ \t]+\"([0-9].[0-9])[^\"]*\".*" "\\1"
-           PYTHON_VERSION "${python_version_str}")
-    UNSET(python_version_str)
     install(DIRECTORY src/generated/ 
-            DESTINATION lib/python${PYTHON_VERSION}/dist-packages/
+            DESTINATION ${UGDK_INSTALL_LOCATION}/${FRAMEWORK_BIGVERSION}/python/ugdk
             FILES_MATCHING PATTERN "*.py")
 endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
 
