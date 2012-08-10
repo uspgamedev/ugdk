@@ -97,6 +97,9 @@ class DataGear : public BaseGear, private ugdk::util::Uncopyable {
     // [-1,+0]
     bool SetData (DataID id);
 
+    // [-0,+0]
+    bool HasValue (DataID id);
+
   private:
 
     //DataID datatable_id_;
