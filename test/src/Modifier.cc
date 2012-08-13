@@ -34,5 +34,19 @@ TEST(Modifier, Compose) {
         EXPECT_EQ(m1.offset().y, comp.offset().y);
     }
 
+    {
+        Modifier mx(Vector2D(10.0, 0.0));
+        Modifier rot;
+        rot.set_rotation(PI/4.0);
+
+        Modifier result1 = rot * mx;
+        EXPECT_EQ(7.0710678118654755, result1.offset().x);
+        EXPECT_EQ(7.0710678118654746, result1.offset().y);
+
+        Modifier result2 = rot * mx * mx;
+        EXPECT_EQ(14.142135623730951, result2.offset().x);
+        EXPECT_EQ(14.142135623730949, result2.offset().y);
+    }
+
     // TODO: more tests
 }
