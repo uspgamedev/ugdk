@@ -11,7 +11,9 @@ namespace graphic {
 Modifier::Modifier() : offset_(), scale_(1.0, 1.0), rotation_(0.0) {}
 
 void Modifier::Compose(const Modifier& rhs) {
-
+    offset_ += rhs.offset_.Rotate(rotation_).Scale(scale_);
+    rotation_ += rhs.rotation_;
+    scale_ = scale_.Scale(rhs.scale_); 
 }
 
 void Modifier::AsMatrix4x4(double M[16]) const {

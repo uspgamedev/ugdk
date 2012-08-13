@@ -181,32 +181,13 @@ void Spritesheet::createList(GLuint id, Texture* texture, const ugdk::math::Vect
 }
 
 void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot) const {
-    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
-    if(!mod.visible()) return;
-
     bool popmatrix = false;
-    if(mod.mirror() != MIRROR_NONE || hotspot.NormOne() > 1.0e-6) {
+    if(hotspot.NormOne() > 1.0e-6) {
         glPushMatrix();
-        // TODO: combine the matrices
-
-        // hotspot
         glTranslated(-hotspot.x, -hotspot.y, 0.0);
-
-        // horizontal flip
-        if(mod.mirror() & MIRROR_HFLIP) {
-            glScalef(-1.0, 1.0, 1.0);
-        }
-
-        // vertical flip
-        if(mod.mirror() & MIRROR_VFLIP) {
-            glScalef(1.0, -1.0, 1.0);
-        }
         popmatrix = true;
     }
-    glColor4dv(mod.color().val);
-
     glCallList(lists_base_ + frame_number);
-
     if(popmatrix) glPopMatrix();
 }
 

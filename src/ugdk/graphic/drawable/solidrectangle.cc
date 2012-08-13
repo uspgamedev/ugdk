@@ -17,26 +17,11 @@ SolidRectangle::~SolidRectangle() {}
 void SolidRectangle::Update(double dt) {}
 
 void SolidRectangle::Draw() const {
-    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
-    if(!mod.visible()) return;
-
     ugdk::math::Vector2D origin, target(size_);
-
-    if(mod.mirror() & MIRROR_HFLIP) { // Horizontal flip
-        origin.x = target.x;
-        target.x = 0.0;
-    }
-    if(mod.mirror() & MIRROR_VFLIP) { // Vertical flip
-        origin.y = target.y;
-        target.y = 0.0;
-    }
-
     origin -= hotspot_;
     target -= hotspot_;
 
-    Color color(mod.color().r * color_.r, mod.color().g * color_.g, mod.color().b * color_.b, mod.color().a * color_.a);
-
-    glColor4dv(color.val);
+    glColor4dv(color_.val);
 
     glDisable(GL_TEXTURE_2D);
     glBegin( GL_QUADS ); { //Start quad

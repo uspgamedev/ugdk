@@ -22,24 +22,10 @@ TexturedRectangle::~TexturedRectangle() {}
 void TexturedRectangle::Update(double dt) {}
 
 void TexturedRectangle::Draw() const {
-    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
-    if(!mod.visible()) return;
-
     ugdk::math::Vector2D origin, target(size_);
-
-    if(mod.mirror() & MIRROR_HFLIP) { // Horizontal flip
-        origin.x = target.x;
-        target.x = 0.0;
-    }
-    if(mod.mirror() & MIRROR_VFLIP) { // Vertical flip
-        origin.y = target.y;
-        target.y = 0.0;
-    }
 
     origin -= hotspot_;
     target -= hotspot_;
-
-    glColor4dv(mod.color().val);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture_->gltexture());

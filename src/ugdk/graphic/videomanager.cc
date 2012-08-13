@@ -281,40 +281,10 @@ void VideoManager::InitializeLight() {
 void VideoManager::PushAndApplyModifier(const Modifier* apply) {
     Modifier top = CurrentModifier();
 
-    if(apply->flags() & Modifier::HAS_COLOR) top.ComposeColor(apply);
-    top.ComposeMirror(apply);
-    top.ComposeVisible(apply);
-
     glPushMatrix();
-
-    if(apply->flags() & Modifier::HAS_TRANSFORMATION) {
-        // Calculates the translation
-        double tx, ty;
-        if(apply->flags() & Modifier::TRUNCATES_WHEN_APPLIED) {
-            tx = std::floor(apply->offset().x);
-            ty = std::floor(apply->offset().y);
-        } else {
-            tx = apply->offset().x;
-            ty = apply->offset().y;
-        }
-
-        // Calculates the scale
-        double sx = apply->scale().x, sy = apply->scale().y;
-
-        // Calculates the rotation
-        double s = sin(apply->rotation()), c = cos(apply->rotation());
-
-        // Builds the full transformation matrix all at once.
-        double M[16] = { sx*c, -sx*s, 0.0, 0.0, // First column
-                         sy*s,  sy*c, 0.0, 0.0,
-                          0.0,   0.0, 1.0, 0.0,
-                           tx,    ty, 0.0, 1.0 };
-
-        //glTranslated(tx, ty, 0.0);
-        //glRotated(apply->rotation() * 57.2957795, 0.0, 0.0, 1.0);
-        //glScaled(sx, sy, 0.0);
-        glMultMatrixd(M);
-    }
+    double M[16];
+    apply->AsMatrix4x4(M);
+    glMultMatrixd(M);
 
     modifiers_.push(top);
 }
