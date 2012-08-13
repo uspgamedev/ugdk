@@ -1,6 +1,7 @@
-#ifndef HORUSEYE_FRAMEWORK_DRAWABLE_H_
-#define HORUSEYE_FRAMEWORK_DRAWABLE_H_
+#ifndef UGDK_GRAPHIC_DRAWABLE_H_
+#define UGDK_GRAPHIC_DRAWABLE_H_
 
+#include <ugdk/graphic.h>
 #include <ugdk/math/vector2D.h>
 
 namespace ugdk {

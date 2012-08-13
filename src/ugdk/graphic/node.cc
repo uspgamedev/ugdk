@@ -1,13 +1,15 @@
+#include "node.h"
+
 #include <algorithm>
 #include <cfloat>
 #include <cmath>
+#include "SDL_opengl.h"
+
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/light.h>
-#include "node.h"
-
 
 namespace ugdk {
 namespace graphic {
@@ -17,7 +19,6 @@ bool Node::CompareByZIndex(const Node *a, const Node *b) {
 }
 
 Node::~Node() {
-    if(modifier_) delete modifier_;
     if(drawable_) delete drawable_;
     if(light_)    delete light_;
 
@@ -42,37 +43,46 @@ void Node::Update(double dt) {
         (*it)->Update(dt);
 }
 
-void Node::Render() const {
+void Node::Render(const Modifier& parent) const {
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
-    Modifier* modifier = modifier_;
-    if(modifier) VIDEO_MANAGER()->PushAndApplyModifier(modifier);
+    Modifier compose = parent * modifier_;
 
-    if(drawable_) drawable_->Draw();
+    if(drawable_) {
+        double M[16];
+        compose.AsMatrix4x4(M);
+
+        glPushMatrix();
+        glMultMatrixd(M);
+        drawable_->Draw();
+        glPopMatrix();
+    }
 
     NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
-        (*it)->Render();
-    
-    if(modifier) VIDEO_MANAGER()->PopModifier();
+        (*it)->Render(compose);
 }
 
-void Node::RenderLight() const {
+void Node::RenderLight(const Modifier& parent) const {
     if(!active_) return;
     if(childs_.empty() && !light_) return; // optimization!
+    
+    Modifier compose = parent * modifier_;
 
-    Modifier* modifier = modifier_;
-    if(modifier) VIDEO_MANAGER()->PushAndApplyModifier(modifier);
+    if(light_) {
+        double M[16];
+        compose.AsMatrix4x4(M);
 
-    if(light_)
+        glPushMatrix();
+        glMultMatrixd(M);
         light_->Draw();
+        glPopMatrix();
+    }
 
     NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
-        (*it)->RenderLight();
-    
-    if(modifier) VIDEO_MANAGER()->PopModifier();
+        (*it)->RenderLight(compose);
 }
 
 void Node::set_zindex(const double zindex) {

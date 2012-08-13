@@ -13,9 +13,8 @@ class Node {
   public:
     typedef std::vector<Node*> NodeSet;
 
-    Node(Drawable* drawable = NULL, Modifier* modifier = NULL) 
-        :   modifier_(modifier), 
-            drawable_(drawable),
+    Node(Drawable* drawable = NULL) 
+        :   drawable_(drawable),
             light_(NULL),
             active_(true),
             zindex_(0.0),
@@ -26,16 +25,16 @@ class Node {
 
     /// Pushes the modifier to the VideoManager, renders 
     void Update(double dt);
-    void Render() const;
-    void RenderLight() const;
+    void Render(const Modifier&) const;
+    void RenderLight(const Modifier& parent) const;
 
     void set_drawable(Drawable* drawable) { drawable_ = drawable; }
     void set_light(Light* light)          {    light_ =    light; }
     void set_active(const bool active)    {   active_ =   active; }
     void set_zindex(const double zindex);
     
-          Modifier* modifier() { return (modifier_ != NULL) ? modifier_ : (modifier_ = new Modifier); }
-    const Modifier* modifier() const { return modifier_; }
+          Modifier& modifier()       { return modifier_; }
+    const Modifier& modifier() const { return modifier_; }
           Drawable* drawable()       { return drawable_; }
     const Drawable* drawable() const { return drawable_; }
           Light* light()             { return    light_; }
@@ -56,7 +55,7 @@ class Node {
     void SortChildren();
 
   private:
-    Modifier* modifier_;
+    Modifier modifier_;
     Drawable* drawable_;
     Light* light_;
     bool active_;
