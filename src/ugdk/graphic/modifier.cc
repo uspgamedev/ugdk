@@ -1,5 +1,4 @@
-#include <sstream>
-#include <algorithm>
+#include <cstring>
 #include <cmath>
 
 #include <ugdk/graphic/modifier.h>
