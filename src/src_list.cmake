@@ -39,6 +39,7 @@ SET(UGDK_SRC
     ./src/ugdk/ui/menu.cc 
     ./src/ugdk/ui/uielement.cc 
     ./src/ugdk/util/animationprotocol.cc 
+    ./src/ugdk/util/gdd/descriptionprotocolbase.cc 
     ./src/ugdk/util/gdd/reader.cc 
     ./src/ugdk/util/idgenerator.cc 
     ./src/ugdk/util/language.cc 

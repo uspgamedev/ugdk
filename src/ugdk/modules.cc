@@ -6,7 +6,7 @@
 #include <ugdk/script/languages/lua/luawrapper.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
 
-#define UGDK_MODULES_NUM 10
+#define UGDK_MODULES_NUM 9
 
 #define UGDK_MODULES_LIST(ACTION) \
     ACTION(action) \
@@ -17,8 +17,7 @@
     ACTION(input) \
     ACTION(math) \
     ACTION(time) \
-    ACTION(util) \
-    ACTION(gdd)
+    ACTION(util)
 
 /// WHAT WIZARDY IS THIS!?
 

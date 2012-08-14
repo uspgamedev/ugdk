@@ -23,10 +23,6 @@ class AnimationProtocol : public gdd::DescriptionProtocol<action::AnimationSet> 
 
     bool NewDescription();
     bool NewData(const gdd::GDDString& data_name);
-    bool NewProperty(const gdd::GDDString& property_name, const gdd::GDDArgs& property_args);
-    bool NewRing(const gdd::GDDString& ring_typename);
-    bool NewEntry(const gdd::GDDString& entry_name, const gdd::GDDArgs& entry_args);
-    bool NewSimpleChain(const gdd::GDDString& ring_typename, const gdd::GDDArgs& ring_args);
 
   private:
     action::Animation *current_animation_;
@@ -34,45 +30,24 @@ class AnimationProtocol : public gdd::DescriptionProtocol<action::AnimationSet> 
     ParsingScope current_scope_;
     bool composing_;
 
-    typedef bool (AnimationProtocol::*EntryFunction) (const gdd::GDDArgs&);
+    bool NewProperty_Fps(double);
+    bool NewProperty_Compose(void);
+    
+    bool NewRing_Effect(void);
+    bool NewRing_Frame(void);
 
+    bool NewEntry_Number(int); //TODO: implement this function.
+    bool NewEntry_Alpha(double);
+    bool NewEntry_Color(std::string);
+    bool NewEntry_Position(double, double);
+    bool NewEntry_Mirror(std::string);
+    bool NewEntry_Size(double, double);
+    bool NewEntry_Rotation(double);
 
-    std::map< std::pair<ParsingScope, gdd::GDDString>, EntryFunction > entry_functions_;
-
-    bool NewEntry_EffectNumber(   const gdd::GDDArgs& ); //TODO: implement this function.
-    bool NewEntry_EffectAlpha(    const gdd::GDDArgs& );
-    bool NewEntry_EffectColor(    const gdd::GDDArgs& );
-    bool NewEntry_EffectPosition( const gdd::GDDArgs& );
-    bool NewEntry_EffectMirror(   const gdd::GDDArgs& );
-    bool NewEntry_EffectSize(     const gdd::GDDArgs& );
-    bool NewEntry_EffectRotation( const gdd::GDDArgs& );
-
-    bool NewEntry_FrameNumber(   const gdd::GDDArgs& );
-    bool NewEntry_FrameAlpha(    const gdd::GDDArgs& );
-    bool NewEntry_FrameColor(    const gdd::GDDArgs& );
-    bool NewEntry_FramePosition( const gdd::GDDArgs& );
-    bool NewEntry_FrameMirror(   const gdd::GDDArgs& );
-    bool NewEntry_FrameSize(     const gdd::GDDArgs& );
-    bool NewEntry_FrameRotation( const gdd::GDDArgs& );
-
-
-    const bool arg_is_not_doubleing(const gdd::GDDString&) {
-        //TODO: Implement this.
-        return false;
-    }
-    const bool arg_is_not_integer(const gdd::GDDString&) {
-        //TODO: Implement this.
-        return false;
-    }
     const bool arg_is_not_hexadecimal(const gdd::GDDString&) {
         //TODO: Implement this.
         return false;
     }
-    const bool arg_is_not_flip_axis(const gdd::GDDString&) {
-        //TODO: Implement this.
-        return false;
-    }
-
 };
 
 } /* namespace ugdk */
