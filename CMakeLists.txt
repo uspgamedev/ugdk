@@ -18,6 +18,7 @@ message ("=== UGDK version ${FRAMEWORK_VERSION} ===")
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
+option(UGDK_BUILD_TESTS "Set to ON to enable building tests." ON)
 option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
 option(UGDK_LUA_BINDINGS "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
@@ -188,7 +189,9 @@ set_target_properties (libugdk PROPERTIES
     VERSION ${FRAMEWORK_VERSION}
 )
 
-add_subdirectory (test)
+if(UGDK_BUILD_TESTS)
+    add_subdirectory (test)
+endif(UGDK_BUILD_TESTS)
 
 if (UNIX AND PYTHONLIBS_FOUND)
     set (UGDK_INSTALL_LOCATION_DEFINE "#define UGDK_INSTALL_LOCATION \"/usr/${UGDK_INSTALL_LOCATION}\"")
