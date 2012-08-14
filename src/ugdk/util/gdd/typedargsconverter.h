@@ -106,7 +106,7 @@ bool validate_types(const GDDArgs& args) {
 template <typename T1, typename T2, typename T3, typename T4, typename T5>
 class TypedArgsConverter : public ArgsConverter {
     typedef function<bool (T1, T2, T3, T4, T5)> Func;
-    static const int num_args = 5;
+    static const size_t num_args = 5;
   public:
     TypedArgsConverter(Func function) : function_(function) {}
     
@@ -125,7 +125,7 @@ class TypedArgsConverter : public ArgsConverter {
 template <typename T1, typename T2, typename T3, typename T4>
 class TypedArgsConverter<T1, T2, T3, T4, void> : public ArgsConverter {
     typedef function<bool (T1, T2, T3, T4)> Func;
-    static const int num_args = 4;
+    static const size_t num_args = 4;
   public:
     TypedArgsConverter(Func function) : function_(function) {}
     
@@ -144,7 +144,7 @@ class TypedArgsConverter<T1, T2, T3, T4, void> : public ArgsConverter {
 template <typename T1, typename T2, typename T3>
 class TypedArgsConverter<T1, T2, T3, void, void> : public ArgsConverter {
     typedef function<bool (T1, T2, T3)> Func;
-    static const int num_args = 3;
+    static const size_t num_args = 3;
   public:
     TypedArgsConverter(Func function) : function_(function) {}
     
@@ -163,7 +163,7 @@ class TypedArgsConverter<T1, T2, T3, void, void> : public ArgsConverter {
 template <typename T1, typename T2>
 class TypedArgsConverter<T1, T2, void, void, void> : public ArgsConverter {
     typedef function<bool (T1, T2)> Func;
-    static const int num_args = 2;
+    static const size_t num_args = 2;
   public:
     TypedArgsConverter(Func function) : function_(function) {}
     
@@ -182,7 +182,7 @@ class TypedArgsConverter<T1, T2, void, void, void> : public ArgsConverter {
 template <typename T1>
 class TypedArgsConverter<T1, void, void, void, void> : public ArgsConverter {
     typedef function<bool (T1)> Func;
-    static const int num_args = 1;
+    static const size_t num_args = 1;
   public:
     TypedArgsConverter(Func function) : function_(function) {}
     
@@ -201,7 +201,7 @@ class TypedArgsConverter<T1, void, void, void, void> : public ArgsConverter {
 template <> // THIS ONE IS DIFFERENT
 class TypedArgsConverter<void, void, void, void, void> : public ArgsConverter {
     typedef function<bool (void)> Func;
-    static const int num_args = 0;
+    static const size_t num_args = 0;
   public:
     TypedArgsConverter(Func function) : function_(function) {}
     
