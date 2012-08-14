@@ -87,27 +87,11 @@ include_directories(${SDLTTF_INCLUDE_DIR})
 find_package(SDL_image REQUIRED)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
-if (UGDK_CREATE_BINDINGS)
-    ugdk_setup_package (SWIG)
-    if (SWIG_FOUND)
-        if (UGDK_LUA_BINDINGS)
-            ugdk_setup_package (Lua51)
-        endif (UGDK_LUA_BINDINGS)
-        
-        if (UGDK_PYTHON_BINDINGS)
-            ugdk_setup_package (PythonLibs)
-        endif (UGDK_PYTHON_BINDINGS)
-    endif (SWIG_FOUND)
-endif (UGDK_CREATE_BINDINGS)
-
-include_directories ("externals/opengl")
-
-
 ##########################################
 # Package Configuration
 
 set (CPACK_GENERATOR DEB)
-set (CPACK_PACKAGE_DESCRIPTION_FILE README.txt)
+set (CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/README.txt)
 set (CPACK_PACKAGE_NAME libugdk)
 set (CPACK_PACKAGE_VENDOR ${GROUP_NAME})
 set (CPACK_PACKAGE_CONTACT "${GROUP_NAME} <${CONTACT_MAIL}>")
@@ -130,6 +114,22 @@ include (CPack)
 
 #
 ##########################################
+
+if (UGDK_CREATE_BINDINGS)
+    ugdk_setup_package (SWIG)
+    if (SWIG_FOUND)
+        if (UGDK_LUA_BINDINGS)
+            ugdk_setup_package (Lua51)
+        endif (UGDK_LUA_BINDINGS)
+        
+        if (UGDK_PYTHON_BINDINGS)
+            ugdk_setup_package (PythonLibs)
+        endif (UGDK_PYTHON_BINDINGS)
+    endif (SWIG_FOUND)
+endif (UGDK_CREATE_BINDINGS)
+
+include_directories ("externals/opengl")
+
 
 # Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
 # Code found on http://stackoverflow.com/questions/7747857/in-cmake-how-do-i-work-around-the-debug-and-release-directories-visual-studio-2
