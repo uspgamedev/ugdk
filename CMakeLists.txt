@@ -14,14 +14,13 @@ set (UGDK_INSTALL_LOCATION share/ugdk)
 
 message ("=== UGDK version ${FRAMEWORK_VERSION} ===")
 
-option(UGDK_STATICLIB "Set to ON to build UGDK with static linking." ON)
+# BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
+# make it prominent in the GUI.
+option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
+
 option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
 option(UGDK_LUA_BINDINGS "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
-
-if(NOT UGDK_STATICLIB)
-    set(BUILD_SHARED_LIBS True)
-endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     SET (CHECKMAC "#define ISMAC")

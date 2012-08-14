@@ -5,9 +5,6 @@
 # ctest.  You can select which tests to run using 'ctest -R regex'.
 # For more options, run 'ctest --help'.
 
-# BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
-# make it prominent in the GUI.
-option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
 # When other libraries are using a shared version of runtime libraries,
 # Google Test also has to use one.
@@ -17,9 +14,7 @@ option(
   ON)
 
 option(gtest_build_tests "Build all of gtest's own tests." OFF)
-
 option(gtest_build_samples "Build gtest's sample programs." OFF)
-
 option(gtest_disable_pthreads "Disable uses of pthreads in gtest." OFF)
 
 # Defines pre_project_set_up_hermetic_build() and set_up_hermetic_build().
@@ -88,4 +83,4 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 
-cxx_executable(test src "gtest_main;libugdk")
+cxx_executable(ugdk_test src "gtest_main;libugdk")
