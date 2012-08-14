@@ -8,8 +8,8 @@ before_script:
 
 script:
   - cmake . $OPTIONS
-  - make test 
-  - ./test/test
+  - make ugdk_test 
+  - ./test/ugdk_test
 
 notifications:
   email:

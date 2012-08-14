@@ -2,4 +2,4 @@
 lib/
 *.pdb
 *.ilk
-/test
+/ugdk_test
