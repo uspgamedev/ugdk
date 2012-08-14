@@ -49,8 +49,7 @@ CONFIGURE_FILE(
 #set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
 
 include (${SRC_DIR}/src_list.cmake)
-include (${SRC_DIR}/ugdk_module_list.cmake)
-include (${SRC_DIR}/pyramidworks_module_list.cmake)
+include (${SRC_DIR}/module_list.cmake)
 include (${SRC_DIR}/lua_src_list.cmake)
 include (${SRC_DIR}/py_src_list.cmake)
 

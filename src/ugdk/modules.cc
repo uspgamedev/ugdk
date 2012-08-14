@@ -6,28 +6,30 @@
 #include <ugdk/script/languages/lua/luawrapper.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
 
-#define UGDK_MODULES_NUM 9
+#define UGDK_MODULES_NUM 11
 
 #define UGDK_MODULES_LIST(ACTION) \
-    ACTION(action) \
-    ACTION(audio) \
-    ACTION(base) \
-    ACTION(drawable) \
-    ACTION(graphic) \
-    ACTION(input) \
-    ACTION(math) \
-    ACTION(time) \
-    ACTION(util)
+    ACTION(pyramidworks_collision) \
+    ACTION(pyramidworks_geometry) \
+    ACTION(ugdk_action) \
+    ACTION(ugdk_audio) \
+    ACTION(ugdk_base) \
+    ACTION(ugdk_drawable) \
+    ACTION(ugdk_graphic) \
+    ACTION(ugdk_input) \
+    ACTION(ugdk_math) \
+    ACTION(ugdk_time) \
+    ACTION(ugdk_util)
 
 /// WHAT WIZARDY IS THIS!?
 
 extern "C" {
-#define UGDKLUA_DECLARE_INIT(name) extern int luaopen_ugdk_##name(lua_State*);
+#define UGDKLUA_DECLARE_INIT(name) extern int luaopen_##name(lua_State*);
 
     UGDK_MODULES_LIST(UGDKLUA_DECLARE_INIT)
 
 #undef UGDKLUA_DECLARE_INIT
-#define UGDKPYTHON_DECLARE_INIT(name) extern void init_ugdk_##name(void);
+#define UGDKPYTHON_DECLARE_INIT(name) extern void init_##name(void);
 
     UGDK_MODULES_LIST(UGDKPYTHON_DECLARE_INIT)
 
@@ -41,7 +43,7 @@ using script::Module;
 using script::python::PyInitFunction;
 
 #define UGDKLUA_LIST_ITEM(name) \
-    script::Module<lua_CFunction>("ugdk."#name, luaopen_ugdk_##name),
+    script::Module<lua_CFunction>("ugdk."#name, luaopen_##name),
 
     static const Module<lua_CFunction> LUA_MODULES[UGDK_MODULES_NUM] = {
         UGDK_MODULES_LIST(UGDKLUA_LIST_ITEM)
@@ -50,7 +52,7 @@ using script::python::PyInitFunction;
 #undef UGDKLUA_LIST_ITEM
 
 #define UGDKPYTHON_LIST_ITEM(name) \
-    Module<PyInitFunction>("_ugdk_"#name, init_ugdk_##name),
+    Module<PyInitFunction>("_ugdk_"#name, init_##name),
 
     static const Module<PyInitFunction> PYTHON_MODULES[UGDK_MODULES_NUM] = {
         UGDK_MODULES_LIST(UGDKPYTHON_LIST_ITEM)
