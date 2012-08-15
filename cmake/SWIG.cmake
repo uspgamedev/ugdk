@@ -22,15 +22,21 @@ endmacro (ugdk_add_scriptlang lang)
 
 if (SWIG_FOUND)
 
-  include (cmake/UseSWIG.cmake)
+    include (cmake/UseSWIG.cmake)
+
+    # Is UGDK_MODULE_SRC defined?
+    if (NOT UGDK_MODULE_SRC)
+        message (FATAL_ERROR "Variable UGDK_MODULE_SRC not defined! Please do so in the file src/module_list.cmake!")
+    endif (NOT UGDK_MODULE_SRC)
+
+    set_source_files_properties (${UGDK_MODULE_SRC} PROPERTIES CPLUSPLUS ON)
+    set_source_files_properties (${UGDK_MODULE_SRC} PROPERTIES SWIG_FLAGS "")
   
-  # Is UGDK_MODULE_SRC defined?
-  if (NOT UGDK_MODULE_SRC)
-      message (FATAL_ERROR "Variable UGDK_MODULE_SRC not defined! Please do so in the file src/module_list.cmake!")
-  endif (NOT UGDK_MODULE_SRC)
-  
-  set_source_files_properties (${UGDK_MODULE_SRC} PROPERTIES CPLUSPLUS ON)
-  set_source_files_properties (${UGDK_MODULE_SRC} PROPERTIES SWIG_FLAGS "")
+    list(LENGTH UGDK_MODULE_SRC UGDK_MODULES_NUM)
+    foreach(it ${UGDK_MODULE_SRC})
+        get_filename_component(val ${it} NAME_WE)
+        set(UGDK_MODULES_LIST "${UGDK_MODULES_LIST} \\\n    ACTION(LANG, ${val})")
+    endforeach()
   
 else (SWIG_FOUND)
 

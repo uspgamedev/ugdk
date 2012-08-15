@@ -121,7 +121,8 @@ include (CPack)
 
 #
 ##########################################
-
+set(UGDK_LANGUAGES_LIST "")
+set(UGDK_MODULES_LIST "")
 if (UGDK_CREATE_BINDINGS)
     ugdk_setup_package (SWIG)
     if (SWIG_FOUND)
@@ -202,7 +203,6 @@ endif(UGDK_BUILD_TESTS)
 if (UNIX AND PYTHONLIBS_FOUND)
     set (UGDK_INSTALL_LOCATION_DEFINE "#define UGDK_INSTALL_LOCATION \"/usr/${UGDK_INSTALL_LOCATION}\"")
 endif (UNIX AND PYTHONLIBS_FOUND)
-
 
 set(UGDK_EXTERNAL_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src;${SDL_INCLUDE_DIR};${SDLTTF_INCLUDE_DIR} CACHE STRING "UGDK include directories" FORCE)
 

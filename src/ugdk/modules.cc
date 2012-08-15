@@ -1,27 +1,10 @@
 #include <cstdio>
 
+#include <ugdk/config/config.h>
 #include <ugdk/script/module.h>
 
 #include <ugdk/script/languages/lua/luawrapper.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
-
-#define UGDK_MODULES_NUM 11
-#define UGDK_MODULES_LIST(LANG, ACTION) \
-    ACTION(LANG, pyramidworks_collision) \
-    ACTION(LANG, pyramidworks_geometry) \
-    ACTION(LANG, ugdk_action) \
-    ACTION(LANG, ugdk_audio) \
-    ACTION(LANG, ugdk_base) \
-    ACTION(LANG, ugdk_drawable) \
-    ACTION(LANG, ugdk_graphic) \
-    ACTION(LANG, ugdk_input) \
-    ACTION(LANG, ugdk_math) \
-    ACTION(LANG, ugdk_time) \
-    ACTION(LANG, ugdk_util)
-
-#define UGDK_LANGUAGES_LIST(ACTION) \
-    UGDK_MODULES_LIST(LUA, ACTION) \
-    UGDK_MODULES_LIST(PYTHON, ACTION)
 
 /// WHAT WIZARDY IS THIS!?
 
