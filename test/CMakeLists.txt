@@ -84,5 +84,5 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 cxx_executable(ugdk_test src "gtest_main;libugdk")
 
-add_executable(ugdk_script_test script_test.cc)
+add_executable(ugdk_script_test EXCLUDE_FROM_ALL script_test.cc)
 target_link_libraries(ugdk_script_test libugdk)

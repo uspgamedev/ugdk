@@ -47,7 +47,7 @@ UGDK_MODULES_LIST(PYTHON, MODULE_INIT_DECLARTION)
 namespace ugdk {
 
 #define MODULE_ITEM(LANG, name)    \
-    ::ugdk::script::Module<##LANG##_inittype>(##LANG##_MODULE_NAME(name), ##LANG##_INIT_FUNCTION_NAME(name)),
+    ::ugdk::script::Module<LANG##_inittype>(LANG##_MODULE_NAME(name), LANG##_INIT_FUNCTION_NAME(name)),
 
 #define DECLARE_MODULES(LANG) \
 static const script::Module<LANG##_inittype> LANG##_MODULES[UGDK_MODULES_NUM] = { \

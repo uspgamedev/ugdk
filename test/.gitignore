@@ -4,3 +4,4 @@ lib/
 *.ilk
 /ugdk_test
 /*.dll
+ugdk_script_test
