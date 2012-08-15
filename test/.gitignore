@@ -3,3 +3,4 @@ lib/
 *.pdb
 *.ilk
 /ugdk_test
+/*.dll

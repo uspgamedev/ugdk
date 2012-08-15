@@ -23,17 +23,21 @@
 
 /// WHAT WIZARDY IS THIS!?
 
-extern "C" {
-#define UGDKLUA_DECLARE_INIT(name) extern int luaopen_##name(lua_State*);
+#define    LUA_INIT_FUNCTION_NAME(name) luaopen_##name
+#define PYTHON_INIT_FUNCTION_NAME(name) init_##name
 
-    UGDK_MODULES_LIST(UGDKLUA_DECLARE_INIT)
+#define    LUA_INIT_FUNCTION_SIGNATURE(name) int LUA_INIT_FUNCTION_NAME(name)(lua_State*)
+#define PYTHON_INIT_FUNCTION_SIGNATURE(name) void PYTHON_INIT_FUNCTION_NAME(name)(void)
+
+extern "C" {
+
+#define UGDKLUA_DECLARE_INIT(name)    extern    LUA_INIT_FUNCTION_SIGNATURE(name);
+#define UGDKPYTHON_DECLARE_INIT(name) extern PYTHON_INIT_FUNCTION_SIGNATURE(name);
+
+UGDK_MODULES_LIST(UGDKLUA_DECLARE_INIT)
+UGDK_MODULES_LIST(UGDKPYTHON_DECLARE_INIT)
 
 #undef UGDKLUA_DECLARE_INIT
-#define UGDKPYTHON_DECLARE_INIT(name) extern void init_##name(void);
-
-    UGDK_MODULES_LIST(UGDKPYTHON_DECLARE_INIT)
-
-
 #undef UGDKPYTHON_DECLARE_INIT
 }
 
@@ -42,17 +46,21 @@ namespace ugdk {
 using script::Module;
 using script::python::PyInitFunction;
 
-#define UGDKLUA_LIST_ITEM(name) \
-    script::Module<lua_CFunction>("ugdk."#name, luaopen_##name),
+typedef lua_CFunction LUA_inittype;
+typedef PyInitFunction PYTHON_inittype;
 
-    static const Module<lua_CFunction> LUA_MODULES[UGDK_MODULES_NUM] = {
+#define UGDKLUA_LIST_ITEM(name) \
+    Module<LUA_inittype>(#name, LUA_INIT_FUNCTION_NAME(name)),
+
+    static const Module<LUA_inittype> LUA_MODULES[UGDK_MODULES_NUM] = {
         UGDK_MODULES_LIST(UGDKLUA_LIST_ITEM)
     };
 
 #undef UGDKLUA_LIST_ITEM
+    //Module<PYTHON_inittype>("ugdk."#name, PYTHON_INIT_FUNCTION_NAME(name)),
 
 #define UGDKPYTHON_LIST_ITEM(name) \
-    Module<PyInitFunction>("_ugdk_"#name, init_##name),
+    Module<PyInitFunction>(#name, init_##name),
 
     static const Module<PyInitFunction> PYTHON_MODULES[UGDK_MODULES_NUM] = {
         UGDK_MODULES_LIST(UGDKPYTHON_LIST_ITEM)
