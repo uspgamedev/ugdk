@@ -3,9 +3,7 @@
 FILES=`find ./src/ugdk/ ./src/pyramidworks/ -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" -not -path "*/script/languages/*" | sort`
 LUA_FILES=`find ./src/ugdk/script/languages/lua -name "*.cc" -o -name "*.h" | sort`
 PYTHON_FILES=`find ./src/ugdk/script/languages/python -name *.cc -o -name "*.h" | sort`
-cd src/module
-MODULES=`find -name "ugdk_*.i" -o -name "pyramidworks_*.i" | sort -h`
-cd ../..
+MODULES=`find src/module -name "ugdk_*.i" -o -name "pyramidworks_*.i" | sort -h`
 
 echo "SET(UGDK_SRC " > ./src/src_list.cmake
 for f in $FILES; do
