@@ -3,7 +3,7 @@ print "starting wassup.py"
 import sys
 
 #try:
-from ugdk.ugdk_math import Vector2D
+from ugdk_math import Vector2D
 #except:
 #    exc = sys.exc_info()
 #    import traceback
