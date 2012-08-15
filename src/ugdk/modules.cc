@@ -6,15 +6,20 @@
 #include <ugdk/script/languages/lua/luawrapper.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
 
-/// WHAT WIZARDY IS THIS!?
-
 #define    LUA_INIT_FUNCTION_NAME(name) luaopen_##name
 #define PYTHON_INIT_FUNCTION_NAME(name) init_##name
 
 #define    LUA_INIT_FUNCTION_SIGNATURE(name) int LUA_INIT_FUNCTION_NAME(name)(lua_State*)
 #define PYTHON_INIT_FUNCTION_SIGNATURE(name) void PYTHON_INIT_FUNCTION_NAME(name)(void)
 
-#define    LUA_MODULE_NAME(name) #name
+inline std::string LuaNameConversion(const std::string& name) {
+    std::string result = name;
+    for(size_t i = 0; i < result.size(); ++i)
+        if(result[i] == '_') result[i] = '.';
+    return result;
+}
+
+#define    LUA_MODULE_NAME(name) LuaNameConversion(#name)
 #define PYTHON_MODULE_NAME(name) "_" #name
 
 typedef lua_CFunction LUA_inittype;
@@ -22,9 +27,7 @@ typedef ugdk::script::python::PyInitFunction PYTHON_inittype;
 
 extern "C" {
 #define MODULE_INIT_DECLARTION(LANG, NAME) extern LANG##_INIT_FUNCTION_SIGNATURE(NAME);
-
-UGDK_MODULES_LIST(   LUA, MODULE_INIT_DECLARTION)
-UGDK_MODULES_LIST(PYTHON, MODULE_INIT_DECLARTION)
+UGDK_LANGUAGES_LIST(MODULE_INIT_DECLARTION)
 }
 
 namespace ugdk {
