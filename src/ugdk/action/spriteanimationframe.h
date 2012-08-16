@@ -1,8 +1,11 @@
-#ifndef UGDK_ACTION_ANIMATIONFRAME_H_
-#define UGDK_ACTION_ANIMATIONFRAME_H_
+#ifndef UGDK_ACTION_SPRITEANIMATIONFRAME_H_
+#define UGDK_ACTION_SPRITEANIMATIONFRAME_H_
 
 #include <vector>
 #include <string>
+
+#include <ugdk/action/animationmanager.h>
+
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 
@@ -14,14 +17,14 @@ namespace action {
 /*
  * Represents the visual behavior information of a sprite in a single game frame.
  */
-class AnimationFrame {
+class SpriteAnimationFrame {
   /*
    * frame_: the index of the spritesheet frame that should be rendered.
    * modifier_: a pointer to the Modifier object describing the visual modifiers that
    *            should be applied to the rendered sprite.
    */
   public:
-    AnimationFrame(int frame, graphic::Modifier *modifier = NULL)
+    SpriteAnimationFrame(int frame, graphic::Modifier *modifier = NULL)
         : frame_(frame), modifier_(modifier) {}
 
     int frame() const { return frame_; }
@@ -36,12 +39,13 @@ class AnimationFrame {
 /*
  * Is a complex of a vector with a sequence of frame indexes, and a fixed period/fps.
  */
-class Animation : public std::vector<AnimationFrame*> {
+class SpriteAnimation : public std::vector<SpriteAnimationFrame*>, public virtual Animation {
   /*
    * period_: the inverse of the animation's fps.
    */
   public:
-    Animation() : std::vector<AnimationFrame*>(), period_(DEFAULT_PERIOD) {}
+    typedef SpriteAnimationFrame Frame;
+    SpriteAnimation() : std::vector<SpriteAnimationFrame*>(), period_(DEFAULT_PERIOD) {}
 
     /* try to use period() instead whenever you can */
     double fps() const { return 1.0/period_; }

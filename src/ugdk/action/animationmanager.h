@@ -8,12 +8,19 @@
 
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
-#include <ugdk/action/animationframe.h> // FIXME: not necessary.
 
 #define DEFAULT_PERIOD 0.1
 
 namespace ugdk {
 namespace action {
+
+class Animation {
+public:
+    virtual double period() const = 0;
+    virtual size_t size() const = 0;
+protected:
+    Animation() {}
+};
 
 /*TODO
  * Represents a sprite's current animation.
@@ -31,46 +38,36 @@ namespace action {
  */
 class AnimationManager {
   public:
-    AnimationManager(AnimationSet *set);
-    ~AnimationManager();
+    AnimationManager();
+    virtual ~AnimationManager();
 
-    void set_slowdown_factor(const double factor) { period_scaling_factor_ = factor; }
-    //Note: try to use set_slowdown_factor() instead whenever you can.
-    void set_speedup_factor(const double factor) { set_slowdown_factor(1.0/factor); }
+    void set_current_animation(const Animation* animation);
+    const Animation* current_animation() const { return current_animation_; }
+    int current_animation_frame_index() const { return current_frame_; }
 
-    //Note: try to use period() instead whenever you can.
-    double    fps() const;
-    double period() const;
-    unsigned int n_frames() const;
+    void Update(double dt);
 
-    int GetFrame() const;
-    void set_default_frame(int default_frame) { default_frame_ = default_frame; }
-    const graphic::Modifier* get_current_modifier() const;
-    void Select(const std::string& name);
-    void Select(int index);
-    void Update(double delta_t);
+    /// Add a observer object to the animation
+    /** Given an observer object, the function include this in the animation manager
+    *  @param *observer is a pointer to the observer object
+    */
     void AddObserver(Observer* observer);
+
     void AddTickFunction(std::tr1::function<void (void)> tick);
 
   private:
-    double period_scaling_factor_;
-
-    Animation *current_animation_;
-    AnimationSet *animation_set_;
+    const Animation *current_animation_;
     int current_frame_;
-    int default_frame_;
     double elapsed_time_;
 
     std::vector<Observer *> observers_;
     std::vector< std::tr1::function<void (void)> > ticks_;
-    void NotifyAllObservers();
-
+    void notifyAllObservers();
 };
 
 } /* namespace action */
-
 } /* namespace ugdk */
 
-#endif /* UGDK_ACTION_ANIMATION_H_ */
+#endif /* UGDK_ACTION_ANIMATIONMANAGER_H_ */
 
 

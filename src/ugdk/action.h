@@ -1,14 +1,16 @@
 #ifndef UGDK_ACTION_H_
 #define UGDK_ACTION_H_
 
-#include <ugdk/util.h>
-
 namespace ugdk {
 namespace action {
 
-class Animation;
 class AnimationManager;
-typedef ::ugdk::util::IndexableTable<ugdk::action::Animation*> AnimationSet;
+template<class T>
+class SpecializedAnimationManager;
+
+class SpriteAnimationFrame;
+class SpriteAnimation;
+
 class Scene;
 class Entity;
 class Observer;
