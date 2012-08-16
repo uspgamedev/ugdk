@@ -1,5 +1,5 @@
-#ifndef UGDK_ACTION_ANIMATION_H_
-#define UGDK_ACTION_ANIMATION_H_
+#ifndef UGDK_ACTION_ANIMATIONMANAGER_H_
+#define UGDK_ACTION_ANIMATIONMANAGER_H_
 
 #include <vector>
 #include <string>

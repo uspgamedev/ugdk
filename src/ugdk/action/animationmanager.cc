@@ -1,4 +1,5 @@
-#include <ugdk/action/animation.h>
+#include <ugdk/action/animationmanager.h>
+
 #include <ugdk/action/observer.h>
 #include <ugdk/action/animationset.h>
 #include <ugdk/action/animationframe.h>

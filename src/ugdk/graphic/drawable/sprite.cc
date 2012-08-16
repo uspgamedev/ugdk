@@ -4,7 +4,7 @@
 #include <ugdk/base/resourcemanager.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/action/animation.h>
+#include <ugdk/action/animationmanager.h>
 
 namespace ugdk {
 namespace graphic {

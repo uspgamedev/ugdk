@@ -4,7 +4,7 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/drawable.h>
-#include <ugdk/action/animation.h>
+#include <ugdk/action/animationmanager.h>
 
 namespace ugdk {
 namespace graphic {
