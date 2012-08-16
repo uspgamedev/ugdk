@@ -39,23 +39,27 @@ class SpriteAnimationFrame {
 /*
  * Is a complex of a vector with a sequence of frame indexes, and a fixed period/fps.
  */
-class SpriteAnimation : public std::vector<SpriteAnimationFrame*>, public virtual Animation {
+class SpriteAnimation : public virtual Animation {
   /*
    * period_: the inverse of the animation's fps.
    */
   public:
     typedef SpriteAnimationFrame Frame;
-    SpriteAnimation() : std::vector<SpriteAnimationFrame*>(), period_(DEFAULT_PERIOD) {}
+    SpriteAnimation() : period_(DEFAULT_PERIOD) {}
 
     /* try to use period() instead whenever you can */
     double fps() const { return 1.0/period_; }
     double period() const { return period_; }
+    size_t size() const { return animation_frames_.size(); }
+    Frame* at(size_t i) const { return animation_frames_.at(i); }
+    void push_back(Frame* f) { animation_frames_.push_back(f); }
 
     /* try to use set_period() instead whenever you can */
     void set_fps(const double fps) { period_ = 1.0/fps; }
     void set_period(const double period) { period_ = period; }
 
   private:
+    std::vector<Frame*> animation_frames_;
     double period_;
 
 };
