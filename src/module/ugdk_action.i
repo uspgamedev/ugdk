@@ -8,8 +8,7 @@
 %{
 
 #include <ugdk/action/animationmanager.h>
-#include <ugdk/action/animationset.h>
-#include <ugdk/action/animationframe.h>
+//#include <ugdk/action/animationframe.h>
 #include <ugdk/action/task.h>
 #include <ugdk/action/entity.h>
 #include <ugdk/action/observer.h>
@@ -39,9 +38,8 @@ proxy_class(ugdk::action::Task)
 %ignore ugdk::action::Scene::interface_node() const;
 %ignore ugdk::action::Entity::OnSceneAdd(Scene* scene);
 
-%include <ugdk/action/animationframe.h>
 %include <ugdk/action/animationmanager.h>
-%include <ugdk/action/animationset.h>
+//%include <ugdk/action/animationframe.h>
 %include <ugdk/action/task.h>
 %include <ugdk/action/entity.h>
 %include <ugdk/action/observer.h>
@@ -49,9 +47,8 @@ proxy_class(ugdk::action::Task)
 
 namespace ugdk {
 namespace action { 
-    export_class(Animation)
-    export_class(AnimationFrame)
-    export_class(AnimationSet)
+    //export_class(Animation)
+    //export_class(AnimationFrame)
     export_class(AnimationManager)
     export_class(Entity)
     export_class(Observer)

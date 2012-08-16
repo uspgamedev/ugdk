@@ -4,9 +4,10 @@
 namespace ugdk {
 namespace action {
 
-class AnimationManager;
+class MediaPlayer;
+
 template<class T>
-class SpecializedAnimationManager;
+class AnimationPlayer;
 
 class SpriteAnimationFrame;
 class SpriteAnimation;

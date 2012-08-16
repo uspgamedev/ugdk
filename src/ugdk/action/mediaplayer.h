@@ -1,5 +1,5 @@
-#ifndef UGDK_ACTION_ANIMATIONMANAGER_H_
-#define UGDK_ACTION_ANIMATIONMANAGER_H_
+#ifndef UGDK_ACTION_MEDIAPLAYER_H_
+#define UGDK_ACTION_MEDIAPLAYER_H_
 
 #include <vector>
 #include <string>
@@ -13,14 +13,6 @@
 
 namespace ugdk {
 namespace action {
-
-class Animation {
-public:
-    virtual double period() const = 0;
-    virtual size_t size() const = 0;
-protected:
-    Animation() {}
-};
 
 /*TODO
  * Represents a sprite's current animation.
@@ -36,16 +28,13 @@ protected:
  * to access any of the animations it requires, as long as these are all properly registered
  * in the AnimationSet object given to the AnimationManager object.
  */
-class AnimationManager {
+
+class MediaPlayer {
   public:
-    AnimationManager();
-    virtual ~AnimationManager();
+    MediaPlayer();
+    virtual ~MediaPlayer();
 
-    void set_current_animation(const Animation* animation);
-    const Animation* current_animation() const { return current_animation_; }
-    int current_animation_frame_index() const { return current_frame_; }
-
-    void Update(double dt);
+    virtual void Update(double dt) = 0;
 
     /// Add a observer object to the animation
     /** Given an observer object, the function include this in the animation manager
@@ -55,19 +44,17 @@ class AnimationManager {
 
     void AddTickFunction(std::tr1::function<void (void)> tick);
 
-  private:
-    const Animation *current_animation_;
-    int current_frame_;
-    double elapsed_time_;
+  protected:
+    void notifyAllObservers();
 
+  private:
     std::vector<Observer *> observers_;
     std::vector< std::tr1::function<void (void)> > ticks_;
-    void notifyAllObservers();
 };
 
 } /* namespace action */
 } /* namespace ugdk */
 
-#endif /* UGDK_ACTION_ANIMATIONMANAGER_H_ */
+#endif /* UGDK_ACTION_MEDIAPLAYER_H_ */
 
 
