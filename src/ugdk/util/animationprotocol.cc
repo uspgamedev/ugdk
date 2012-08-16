@@ -2,7 +2,7 @@
 #include <string>
 #include <algorithm>
 #include <ugdk/util/animationprotocol.h>
-#include <ugdk/action/animationframe.h>
+#include <ugdk/action/spriteanimationframe.h>
 
 #define DEFAULT_FRAME 0
 #define DEG_TO_RAD_FACTOR 0.00872664626
@@ -67,12 +67,12 @@ bool AnimationProtocol::NewDescription() {
     if (loader()->data()) {
         loader()->cleanData();
     }
-    loader()->newData(new action::AnimationSet);
+    loader()->newData(new SpriteAnimationTable());
     return true;
 }
 
 bool AnimationProtocol::NewData(const GDDString& data_name) {
-    loader()->data()->Add(data_name, current_animation_ = new action::Animation);
+    loader()->data()->Add(data_name, current_animation_ = new action::SpriteAnimation);
     if(current_effect_) delete current_effect_;
     current_effect_ = new graphic::Modifier;
     //TODO: Verificar integridade da current_animation_ .

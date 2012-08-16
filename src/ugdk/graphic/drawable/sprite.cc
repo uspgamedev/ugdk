@@ -10,6 +10,8 @@
 namespace ugdk {
 namespace graphic {
 
+using action::SpriteAnimationManager;
+
 Sprite::Sprite(const Spritesheet *spritesheet, SpriteAnimationManager *manager) 
     : spritesheet_(spritesheet), animation_manager_(manager) {}
 

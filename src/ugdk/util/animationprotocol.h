@@ -3,13 +3,15 @@
 
 #include <map>
 #include <utility>
-#include <ugdk/action/animationset.h>
+#include <ugdk/action.h>
+#include <ugdk/util/indexabletable.h>
 #include <ugdk/util/gdd/descriptionprotocol.h>
 #include <ugdk/graphic/modifier.h>
 
 namespace ugdk {
 
-class AnimationProtocol : public gdd::DescriptionProtocol<action::AnimationSet> {
+typedef util::IndexableTable<ugdk::action::SpriteAnimation*, 16> SpriteAnimationTable; 
+class AnimationProtocol : public gdd::DescriptionProtocol< SpriteAnimationTable > {
   public:
     enum ParsingScope {
         ANIMATION_DATA,
@@ -24,7 +26,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol<action::AnimationSet> 
     bool NewData(const gdd::GDDString& data_name);
 
   private:
-    action::Animation *current_animation_;
+    action::SpriteAnimation *current_animation_;
     graphic::Modifier* current_effect_;
     ParsingScope current_scope_;
     bool composing_;
