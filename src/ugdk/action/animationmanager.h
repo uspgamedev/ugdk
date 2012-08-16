@@ -30,9 +30,8 @@ namespace action {
  * in the AnimationSet object given to the AnimationManager object.
  */
 class AnimationManager {
-
   public:
-    AnimationManager(double fps, AnimationSet *set);/*TODO: remove fps*/
+    AnimationManager(AnimationSet *set);
     ~AnimationManager();
 
     void set_slowdown_factor(const double factor) { period_scaling_factor_ = factor; }

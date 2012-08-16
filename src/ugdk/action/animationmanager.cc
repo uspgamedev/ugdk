@@ -10,7 +10,7 @@ namespace action{
 
 #define ANIMATION_BUFFER_SIZE 256
 
-AnimationManager::AnimationManager(double fps, AnimationSet *set)
+AnimationManager::AnimationManager(AnimationSet *set)
     : period_scaling_factor_(1.0), current_animation_(NULL), animation_set_(set),
       current_frame_(0), default_frame_(0) {}
 

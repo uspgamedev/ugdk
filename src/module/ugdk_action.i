@@ -7,7 +7,7 @@
 
 %{
 
-#include <ugdk/action/animation.h>
+#include <ugdk/action/animationmanager.h>
 #include <ugdk/action/animationset.h>
 #include <ugdk/action/animationframe.h>
 #include <ugdk/action/task.h>
@@ -40,7 +40,7 @@ proxy_class(ugdk::action::Task)
 %ignore ugdk::action::Entity::OnSceneAdd(Scene* scene);
 
 %include <ugdk/action/animationframe.h>
-%include <ugdk/action/animation.h>
+%include <ugdk/action/animationmanager.h>
 %include <ugdk/action/animationset.h>
 %include <ugdk/action/task.h>
 %include <ugdk/action/entity.h>
