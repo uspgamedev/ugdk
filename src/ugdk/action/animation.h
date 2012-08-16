@@ -5,19 +5,15 @@
 #include <string>
 #include <ugdk/portable/tr1.h>
 #include FROM_TR1(functional)
+
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/action/animationframe.h> // FIXME: not necessary.
 
-
 #define DEFAULT_PERIOD 0.1
 
 namespace ugdk {
-
 namespace action {
-
-class Observer;
-class AnimationSet;
 
 /*TODO
  * Represents a sprite's current animation.

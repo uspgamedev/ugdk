@@ -3,16 +3,13 @@
 
 #include <vector>
 #include <string>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/action.h>
+#include <ugdk/graphic.h>
 
 #define DEFAULT_PERIOD 0.1
 
 namespace ugdk {
-
 namespace action {
-
-class Observer;
-class AnimationSet;
 
 /*
  * Represents the visual behavior information of a sprite in a single game frame.
