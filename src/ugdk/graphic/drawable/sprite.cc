@@ -37,7 +37,8 @@ void Sprite::Update(double delta_t) {
 }
 
 void Sprite::Draw() const {
-    if(spritesheet_ && animation_player_) {
+    if(!spritesheet_) return;
+    if(animation_player_) {
         const action::SpriteAnimationFrame* animation_frame = 
             current_animation_frame();
 
@@ -45,6 +46,8 @@ void Sprite::Draw() const {
         if(animation_mod) VIDEO_MANAGER()->PushAndApplyModifier(animation_mod);
         spritesheet_->Draw(animation_frame->frame(), hotspot_);
         if(animation_mod) VIDEO_MANAGER()->PopModifier();
+    } else {
+        spritesheet_->Draw(0, hotspot_);
     }
 }
 
@@ -53,7 +56,7 @@ const ugdk::math::Vector2D& Sprite::size() const {
 }
     
 const action::SpriteAnimationFrame* Sprite::current_animation_frame() const {
-    return animation_player_->current_animation_frame();
+    return animation_player_ ? animation_player_->current_animation_frame() : NULL;
 }
     
 const action::SpriteAnimationPlayer* Sprite::animation_player() const { 
@@ -61,11 +64,11 @@ const action::SpriteAnimationPlayer* Sprite::animation_player() const {
 }
 
 void Sprite::Select(const std::string& name) {
-    animation_player_->Select(name);
+    if(animation_player_) animation_player_->Select(name);
 }
 
 void Sprite::Select(int index) {
-    animation_player_->Select(index);
+    if(animation_player_) animation_player_->Select(index);
 }
 
 }  // namespace graphic

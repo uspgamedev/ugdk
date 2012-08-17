@@ -51,9 +51,11 @@ public:
 
 private:
     void set_current_animation(T* anim) {
-        current_animation_ = anim;
-        current_frame_ = 0;
-        elapsed_time_ = 0.0;
+        if(anim != current_animation_) {
+            current_animation_ = anim;
+            current_frame_ = 0;
+            elapsed_time_ = 0.0;
+        }
     }
 
     const T* current_animation_;
