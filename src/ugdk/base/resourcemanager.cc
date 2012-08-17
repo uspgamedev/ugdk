@@ -56,9 +56,9 @@ graphic::Spritesheet* ResourceManager::GetSpritesheetFromTag    (const std::stri
     return RESOURCE_MANAGER()->spritesheet_container().Load(tag, tag);
 }
 
-/*action::AnimationSet*         ResourceManager::GetAnimationSetFromFile  (const std::string& file) {
-    return RESOURCE_MANAGER()->animation_loader().Load(file, file);
-}*/
+action::SpriteAnimationTable* ResourceManager::GetSpriteAnimationTableFromFile(const std::string& file) {
+    return RESOURCE_MANAGER()->spriteanimation_loader().Load(file, file);
+}
 
 graphic::Text*        ResourceManager::CreateTextFromLanguageTag(const std::string& tag) {
     ugdk::LanguageWord* word = RESOURCE_MANAGER()->word_container().Find(tag);

@@ -33,11 +33,11 @@ Sprite::~Sprite() {
 }
 
 void Sprite::Update(double delta_t) {
-    animation_player_->Update(delta_t);
+    if(animation_player_) animation_player_->Update(delta_t);
 }
 
 void Sprite::Draw() const {
-    if(spritesheet_) {
+    if(spritesheet_ && animation_player_) {
         const action::SpriteAnimationFrame* animation_frame = 
             current_animation_frame();
 
@@ -58,6 +58,14 @@ const action::SpriteAnimationFrame* Sprite::current_animation_frame() const {
     
 const action::SpriteAnimationPlayer* Sprite::animation_player() const { 
     return animation_player_;
+}
+
+void Sprite::Select(const std::string& name) {
+    animation_player_->Select(name);
+}
+
+void Sprite::Select(int index) {
+    animation_player_->Select(index);
 }
 
 }  // namespace graphic

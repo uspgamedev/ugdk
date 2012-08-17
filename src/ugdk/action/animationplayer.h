@@ -51,7 +51,7 @@ public:
 
 private:
     void set_current_animation(T* anim) {
-        current_animation_ = animation;
+        current_animation_ = anim;
         current_frame_ = 0;
         elapsed_time_ = 0.0;
     }

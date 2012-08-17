@@ -10,8 +10,6 @@
 #include <ugdk/graphic/drawable.h>
 
 namespace ugdk {
-namespace action {
-}
 namespace graphic {
 
 class Sprite : public Drawable {
