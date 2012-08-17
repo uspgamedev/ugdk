@@ -42,10 +42,25 @@ TEST(IndexableTable, DeleteElements) {
     EXPECT_EQ(0, count);
 }
 
+TEST(IndexableTable, Id) {
+    int *a = new int, *b = new int;
+    IndexableTable<int*> table;
+    table.Add("first", a);
+    table.Add("second", b);
+    
+    int id1 = table.MakeIndex("first");
+    int id2 = table.MakeIndex("second");
+    EXPECT_EQ(-1, table.MakeIndex("third"));
+    
+    EXPECT_EQ(a, table.Get(id1));
+    EXPECT_EQ(b, table.Get(id2));
+}
+
 TEST(IndexableTable, InvalidOperation) {
     {
         IndexableTable<int*> table;
         table.Add("null", NULL);
+        EXPECT_FALSE(table.ReleaseIndex(5));
     }
 }
 
