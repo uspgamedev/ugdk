@@ -1,7 +1,7 @@
 #include <ugdk/graphic/drawable/sprite.h>
 
 #include <ugdk/base/engine.h>
-//#include <ugdk/base/resourcemanager.h>
+#include <ugdk/base/resourcemanager.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/action/spriteanimationframe.h>
@@ -15,21 +15,18 @@ using action::SpriteAnimationPlayer;
 Sprite::Sprite(const Spritesheet *spritesheet, SpriteAnimationPlayer *player) 
     : spritesheet_(spritesheet), animation_player_(player) {}
 
-/*
-Sprite::Sprite(const std::string& spritesheet_tag, SpriteAnimationManager* manager)
+Sprite::Sprite(const std::string& spritesheet_tag, SpriteAnimationPlayer* manager)
     : spritesheet_(base::ResourceManager::GetSpritesheetFromTag(spritesheet_tag)), 
-      animation_manager_(manager) {}
+      animation_player_(manager) {}
 
-/*
 Sprite::Sprite(const std::string& spritesheet_tag, const std::string& animation_set_tag) 
     : spritesheet_(base::ResourceManager::GetSpritesheetFromTag(spritesheet_tag)),
-      animation_manager_(new action::AnimationManager(
-             base::ResourceManager::GetAnimationSetFromFile(animation_set_tag))) {}
+      animation_player_(new action::SpriteAnimationPlayer(
+             base::ResourceManager::GetSpriteAnimationTableFromFile(animation_set_tag))) {}
 
 Sprite::Sprite(const Spritesheet *spritesheet, const std::string& animation_set_tag)
-  : spritesheet_(spritesheet), animation_manager_(new action::AnimationManager(
-                  base::ResourceManager::GetAnimationSetFromFile(animation_set_tag))) {}
-                  */
+  : spritesheet_(spritesheet), animation_player_(new action::SpriteAnimationPlayer(
+                  base::ResourceManager::GetSpriteAnimationTableFromFile(animation_set_tag))) {}
  
 Sprite::~Sprite() {
     if (animation_player_) delete animation_player_;
