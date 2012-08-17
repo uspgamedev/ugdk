@@ -4,8 +4,8 @@
 #include <ugdk/portable/tr1.h>
 
 #include <string>
+#include <vector>
 #include FROM_TR1(unordered_map)
-#include FROM_TR1(array)
 
 #include <ugdk/util/idgenerator.h>
 
@@ -19,11 +19,14 @@ template<class T, int IndexSize>
 class IndexableTable<T*, IndexSize> {
 private:
     typedef typename std::tr1::unordered_map<std::string, T*> Table;
-    typedef typename std::tr1::array<T*, IndexSize> IndexArray;
+    typedef typename Table::iterator TableIterator;
+    typedef typename Table::const_iterator TableConstIterator;
+
+    typedef typename std::vector<T*> IndexArray;
   public:
-    IndexableTable() : index_generator_(0, IndexSize - 1, -1) { indexes_.fill(NULL); }
+    IndexableTable() : index_generator_(0, IndexSize - 1, -1), indexes_(IndexSize, NULL) {}
     ~IndexableTable() {
-        for(Table::iterator it = data_.begin(); it != data_.end(); ++it)
+        for(TableIterator it = data_.begin(); it != data_.end(); ++it)
             if(it->second) delete it->second;
     }
 
@@ -31,7 +34,7 @@ private:
 
     /** @return False if element don't exist, true otherwise. */
     bool Remove(const std::string& name) {
-        Table::iterator it = data_.find(name);
+        TableIterator it = data_.find(name);
         if(it == data_.end()) return false;
         T* val = it->second;
         data_.erase(it);
@@ -42,7 +45,7 @@ private:
 
     /// Searches for the element with the given name.
     T* Search(const std::string& name) const { 
-        Table::const_iterator it = data_.find(name);
+        TableConstIterator it = data_.find(name);
         return (it != data_.end()) ? it->second : NULL;
     }
     
@@ -58,7 +61,7 @@ private:
         T* val = Search(name);
         if(!val) return index_generator_.error_value();
         int id = index_generator_.GenerateID();
-        if(id != index_generator_.error_value()) 
+        if(id != index_generator_.error_value())
             indexes_[id] = val;
         return id;
     }
