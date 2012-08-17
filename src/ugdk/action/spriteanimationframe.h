@@ -4,8 +4,6 @@
 #include <vector>
 #include <string>
 
-#include <ugdk/action/animationmanager.h>
-
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 

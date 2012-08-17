@@ -17,7 +17,7 @@ public:
     AnimationPlayer(const util::IndexableTable<T*> *table)
         : table_(table) {}
 
-    ~SpecializedAnimationManager() {}
+    ~AnimationPlayer() {}
 
     const T* current_animation() const { return current_animation_; }
 
@@ -27,7 +27,7 @@ public:
         return current()->At(index);
     }
 
-    void AnimationManager::Update(double dt) {
+    void Update(double dt) {
         if (!current_animation_) return;
         elapsed_time_ += dt;
         if (elapsed_time_ >= current_animation_->period()) {

@@ -10,14 +10,14 @@
 
 namespace ugdk {
 namespace action {
-typedef ugdk::action::SpecializedAnimationManager<ugdk::action::SpriteAnimation> SpriteAnimationManager;
+typedef ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimation> SpriteAnimationPlayer;
 }
 namespace graphic {
 
 class Sprite : public Drawable {
   public:
-    Sprite(const Spritesheet *spritesheet, action::SpriteAnimationManager *manager = NULL);
-    explicit Sprite(const std::string& spritesheet_tag, action::SpriteAnimationManager *manager = NULL);
+    Sprite(const Spritesheet *spritesheet, action::SpriteAnimationPlayer *manager = NULL);
+    explicit Sprite(const std::string& spritesheet_tag, action::SpriteAnimationPlayer *manager = NULL);
     //explicit Sprite(const std::string& spritesheet_tag, const std::string& animation_set_tag);
     //explicit Sprite(const Spritesheet *spritesheet, const std::string& animation_set_tag);
     virtual ~Sprite();
@@ -26,11 +26,14 @@ class Sprite : public Drawable {
     void Draw() const;
     const ugdk::math::Vector2D& size() const;
 
-    const action::SpriteAnimationManager* animation_manager() { return animation_manager_; }
+    const action::SpriteAnimationFrame* current_animation_frame() const;
+    const action::SpriteAnimationPlayer* animation_player() const;
+    void Select(const std::string& name);
+    void Select(int index);
        
   private:
     const Spritesheet *spritesheet_;
-    action::SpriteAnimationManager *animation_manager_;
+    action::SpriteAnimationPlayer *animation_player_;
 };
 
 }  // namespace graphic
