@@ -1,7 +1,6 @@
 
 #include <ugdk/base/resourcemanager.h>
 
-#include <ugdk/action/animationset.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/base/genericcontainer.h>
 #include <ugdk/graphic/spritesheet.h>
@@ -31,12 +30,10 @@ bool type_info_cmp(const std::type_info* a, const std::type_info* b) {
 namespace ugdk {
 namespace base {
 
-typedef gdd::CachedLoader<action::AnimationSet> AnimationLoader;
-
 ResourceManager::ResourceManager() : containers_(type_info_cmp) {
     add_container(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile));
     add_container(new GenericContainer<graphic::Spritesheet*>(graphic::CreateSpritesheetFromTag));
-    add_container(new AnimationLoader(new AnimationProtocol));
+//    add_container(new AnimationLoader(new AnimationProtocol));
     add_container(new GenericContainer<LanguageWord*>(NullLoad<LanguageWord>));
 }
 
@@ -58,9 +55,9 @@ graphic::Spritesheet* ResourceManager::GetSpritesheetFromTag    (const std::stri
     return RESOURCE_MANAGER()->spritesheet_container().Load(tag, tag);
 }
 
-action::AnimationSet*         ResourceManager::GetAnimationSetFromFile  (const std::string& file) {
+/*action::AnimationSet*         ResourceManager::GetAnimationSetFromFile  (const std::string& file) {
     return RESOURCE_MANAGER()->animation_loader().Load(file, file);
-}
+}*/
 
 graphic::Text*        ResourceManager::CreateTextFromLanguageTag(const std::string& tag) {
     ugdk::LanguageWord* word = RESOURCE_MANAGER()->word_container().Find(tag);

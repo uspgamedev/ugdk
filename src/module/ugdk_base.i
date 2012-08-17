@@ -15,7 +15,7 @@
 //#include <ugdk/base/genericcontainer.h>
 #include <ugdk/base/resourcemanager.h>
 
-#include <ugdk/action/animationset.h>
+//#include <ugdk/action/animationset.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/util/languageword.h>
@@ -31,9 +31,9 @@ enable_disown(ugdk::graphic::Texture* val)
 %template(ResourceContainer_Texture) ugdk::base::ResourceContainer<ugdk::graphic::Texture*>;
 disable_disown(ugdk::graphic::Texture* val)
 
-enable_disown(ugdk::action::AnimationSet* val)
-%template(ResourceContainer_AnimationSet) ugdk::base::ResourceContainer<ugdk::action::AnimationSet*>;
-disable_disown(ugdk::action::AnimationSet* val)
+//enable_disown(ugdk::action::AnimationSet* val)
+//%template(ResourceContainer_AnimationSet) ugdk::base::ResourceContainer<ugdk::action::AnimationSet*>;
+//disable_disown(ugdk::action::AnimationSet* val)
 
 enable_disown(ugdk::graphic::Spritesheet* val)
 %template(ResourceContainer_Spritesheet) ugdk::base::ResourceContainer<ugdk::graphic::Spritesheet*>;
