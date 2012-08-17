@@ -24,7 +24,7 @@ private:
     IndexableTable() : index_generator_(0, IndexSize - 1, -1) { indexes_.fill(NULL); }
     ~IndexableTable() {
         for(Table::iterator it = data_.begin(); it != data_.end(); ++it)
-            delete it->second;
+            if(it->second) delete it->second;
     }
 
     void Add(const std::string& name, T* element) { data_[name] = element; }
@@ -36,7 +36,7 @@ private:
         T* val = it->second;
         data_.erase(it);
         removeIndexes(val);
-        delete val;
+        if(val) delete val;
         return true;
     }
 

@@ -7,7 +7,7 @@ using ugdk::util::IndexableTable;
 
 TEST(IndexableTable, MapMethods) {
     int *a = new int, *b = new int, *c = new int;
-	IndexableTable<int*> table;
+    IndexableTable<int*> table;
     table.Add("first", a);
     table.Add("second", b);
     
@@ -40,6 +40,13 @@ TEST(IndexableTable, DeleteElements) {
         EXPECT_EQ(2, count);
     }
     EXPECT_EQ(0, count);
+}
+
+TEST(IndexableTable, InvalidOperation) {
+    {
+        IndexableTable<int*> table;
+        table.Add("null", NULL);
+    }
 }
 
 }
