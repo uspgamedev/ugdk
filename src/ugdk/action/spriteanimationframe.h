@@ -42,18 +42,17 @@ class SpriteAnimation {
     typedef SpriteAnimationFrame Frame;
     SpriteAnimation() : period_(DEFAULT_PERIOD) {}
     
-    double period() const { return period_; }
-    size_t size() const { return animation_frames_.size(); }
-
     /* try to use period() instead whenever you can */
     double fps() const { return 1.0/period_; }
-    Frame* At(size_t i) const { return animation_frames_.at(i); }
-
-    void Add(Frame* f) { animation_frames_.push_back(f); }
+    double period() const { return period_; }
+    size_t size() const { return animation_frames_.size(); }
 
     /* try to use set_period() instead whenever you can */
     void set_fps(const double fps) { period_ = 1.0/fps; }
     void set_period(const double period) { period_ = period; }
+   
+    Frame* At(size_t i) const { return animation_frames_.at(i); }
+    void Add(Frame* f) { animation_frames_.push_back(f); }
 
   private:
     std::vector<Frame*> animation_frames_;

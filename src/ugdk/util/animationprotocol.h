@@ -4,14 +4,14 @@
 #include <map>
 #include <utility>
 #include <ugdk/action.h>
+#include <ugdk/action/spritetypes.h>
 #include <ugdk/util/indexabletable.h>
 #include <ugdk/util/gdd/descriptionprotocol.h>
 #include <ugdk/graphic/modifier.h>
 
 namespace ugdk {
 
-typedef util::IndexableTable<ugdk::action::SpriteAnimation*, 16> SpriteAnimationTable; 
-class AnimationProtocol : public gdd::DescriptionProtocol< SpriteAnimationTable > {
+class AnimationProtocol : public gdd::DescriptionProtocol< action::SpriteAnimationTable > {
   public:
     enum ParsingScope {
         ANIMATION_DATA,

@@ -67,7 +67,7 @@ bool AnimationProtocol::NewDescription() {
     if (loader()->data()) {
         loader()->cleanData();
     }
-    loader()->newData(new SpriteAnimationTable());
+    loader()->newData(new action::SpriteAnimationTable());
     return true;
 }
 

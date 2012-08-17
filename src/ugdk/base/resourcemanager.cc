@@ -1,6 +1,7 @@
 
 #include <ugdk/base/resourcemanager.h>
 
+#include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/base/genericcontainer.h>
 #include <ugdk/graphic/spritesheet.h>
@@ -33,7 +34,7 @@ namespace base {
 ResourceManager::ResourceManager() : containers_(type_info_cmp) {
     add_container(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile));
     add_container(new GenericContainer<graphic::Spritesheet*>(graphic::CreateSpritesheetFromTag));
-//    add_container(new AnimationLoader(new AnimationProtocol));
+    add_container(new gdd::CachedLoader<action::SpriteAnimationTable>(new AnimationProtocol));
     add_container(new GenericContainer<LanguageWord*>(NullLoad<LanguageWord>));
 }
 

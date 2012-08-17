@@ -5,12 +5,12 @@
 
 #include <ugdk/math/vector2D.h>
 #include <ugdk/action.h>
+#include <ugdk/action/spritetypes.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/drawable.h>
 
 namespace ugdk {
 namespace action {
-typedef ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimation> SpriteAnimationPlayer;
 }
 namespace graphic {
 
