@@ -7,6 +7,7 @@
 #include <vector>
 #include FROM_TR1(unordered_map)
 
+#include <ugdk/util.h>
 #include <ugdk/util/idgenerator.h>
 
 namespace ugdk {
