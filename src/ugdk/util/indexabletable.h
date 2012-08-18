@@ -24,7 +24,7 @@ private:
 
     typedef typename std::vector<T*> IndexArray;
   public:
-    IndexableTable() : index_generator_(0, IndexSize - 1, -1), indexes_(IndexSize, NULL) {}
+    IndexableTable() : index_generator_(0, IndexSize - 1, -1), indexes_(IndexSize, static_cast<T*>(NULL)) {}
     ~IndexableTable() {
         for(TableIterator it = data_.begin(); it != data_.end(); ++it)
             if(it->second) delete it->second;
