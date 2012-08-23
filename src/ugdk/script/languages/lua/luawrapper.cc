@@ -80,7 +80,9 @@ VirtualData::Ptr LuaWrapper::OperateBuffer(const DataID operand_id,
         DeleteDataID(result_id);
         return VirtualData::Ptr();
     }
-    return VirtualData::Ptr(new LuaData(this, result_id));
+    return data_gear_->HasValue(result_id)
+        ? VirtualData::Ptr(new LuaData(this, result_id))
+        : VirtualData::Ptr();
 }
 
 DataID LuaWrapper::NewDataID() {
@@ -108,7 +110,9 @@ VirtualData::Ptr LuaWrapper::LoadChunk(const string& chunk,
         DeleteDataID(result_id);
         return VirtualData::Ptr();
     }
-    return VirtualData::Ptr(new LuaData(this, result_id));
+    return data_gear_->HasValue(result_id)
+        ? VirtualData::Ptr(new LuaData(this, result_id))
+        : VirtualData::Ptr();
 }
 
 } /* namespace lua */

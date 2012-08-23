@@ -4,7 +4,7 @@ cmake_minimum_required (VERSION 2.8)
 project (ugdk CXX C)
 set (FRAMEWORK_VERSION_MAJOR 0)
 set (FRAMEWORK_VERSION_MINOR 4)
-set (FRAMEWORK_VERSION_PATCH 0)
+set (FRAMEWORK_VERSION_PATCH 1)
 set (FRAMEWORK_BIGVERSION ${FRAMEWORK_VERSION_MAJOR}.${FRAMEWORK_VERSION_MINOR})
 set (FRAMEWORK_VERSION ${FRAMEWORK_BIGVERSION}.${FRAMEWORK_VERSION_PATCH})
 set (GROUP_NAME "USPGameDev Team")
@@ -119,8 +119,8 @@ set (CPACK_PACKAGE_VERSION_PATCH ${FRAMEWORK_VERSION_PATCH})
 set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "USP Game Development Kit, a framework for developing 2d games.")
 set (CPACK_DEBIAN_PACKAGE_NAME "libugdk${FRAMEWORK_BIGVERSION}")
 set (CPACK_DEBIAN_PACKAGE_HOMEPAGE ${HOME_URL})
-set (CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2, libsdl-mixer1.2-dev, libsdl-ttf2.0-0, lua5.1, python2.6")
-set (DEBIAN_PACKAGE_BUILDS_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2-dev, libsdl-mixer1.2-dev, libsdl-ttf2.0-dev, swig2.0, lua5.1-dev, python2.6-dev, cmake")
+set (CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2, libsdl-mixer1.2-dev, libsdl-ttf2.0-0, lua5.1, python (>= 2.6)")
+set (DEBIAN_PACKAGE_BUILDS_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2-dev, libsdl-mixer1.2-dev, libsdl-ttf2.0-dev, swig2.0, lua5.1-dev, python-dev (>= 2.6), cmake")
 set (CPACK_NSIS_CONTACT ${CONTACT_MAIL})
 set (CPACK_NSIS_DISPLAY_NAME "USP Game Development Kit")
 set (CPACK_NSIS_PACKAGE_HOMEPAGE ${HOME_URL})
@@ -212,7 +212,7 @@ install(DIRECTORY src/ugdk src/pyramidworks DESTINATION include/ugdk${FRAMEWORK_
 
 if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
     install(DIRECTORY src/generated/ 
-            DESTINATION ${UGDK_INSTALL_LOCATION}/${FRAMEWORK_BIGVERSION}/python/ugdk
+            DESTINATION ${UGDK_INSTALL_LOCATION}/${FRAMEWORK_BIGVERSION}/python
             FILES_MATCHING PATTERN "*.py")
 endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
 
