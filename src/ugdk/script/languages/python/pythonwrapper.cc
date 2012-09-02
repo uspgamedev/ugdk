@@ -13,6 +13,7 @@
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/languages/python/swigpyrun.h>
+#include <ugdk/script/languages/python/modules.h>
 #include <ugdk/util/pathmanager.h>   // Two includes just so that we can use the engine's PathManager in a
 #include <ugdk/base/engine.h>        // single line of code here. Not nice. =(
 
@@ -49,7 +50,9 @@ VirtualObj PythonWrapper::LoadModule(const std::string& name) {
 
 /// Initializes the LangWrapper (that is, the language's API. Returns bool telling if (true=) no problems occured.
 bool PythonWrapper::Initialize() {
+#ifdef WIN32
     Py_NoSiteFlag = 1;
+#endif
     Py_Initialize();
 
     PyObject *path = PySys_GetObject("path");
@@ -64,6 +67,8 @@ bool PythonWrapper::Initialize() {
         fullpath += "/" UGDK_BIGVERSION "/python";
         PyList_Append(path, PyString_FromString(fullpath.c_str()));
     }
+
+    RegisterModules(this);
 
     std::vector<PythonModule>::iterator it;
     for (it = modules_.begin(); it != modules_.end(); ++it) {

@@ -7,6 +7,7 @@
 #include <ugdk/script/languages/lua/luadata.h>
 #include <ugdk/script/languages/lua/bootstrapgear.h>
 #include <ugdk/script/languages/lua/datagear.h>
+#include <ugdk/script/languages/lua/modules.h>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/util/pathmanager.h>
@@ -23,6 +24,7 @@ using std::vector;
 
 bool LuaWrapper::Initialize() {
     if (data_gear_) return true;
+    RegisterModules(this);
     BootstrapGear btgear;
     do {
         if (!btgear.Initialize(modules_)) break;
