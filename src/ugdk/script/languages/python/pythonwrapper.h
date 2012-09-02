@@ -26,7 +26,7 @@ namespace python {
 
 class PythonWrapper : public PythonWrapperBase {
   public:
-    PythonWrapper() : PythonWrapperBase("py", LANG(Python)) {}
+    PythonWrapper() : PythonWrapperBase("py", LANG(Python), "Python") {}
     virtual ~PythonWrapper() {}
 
     virtual VirtualData::Ptr NewData();

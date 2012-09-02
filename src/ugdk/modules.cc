@@ -32,17 +32,16 @@ DECLARE_MODULES(PYTHON);
 
 template <class init_func_t>
 static void RegisterModules(script::LangWrapper* wrapper_base,
-                            const script::Module<init_func_t> modules[],
-                            const char* lang_name) {
+                            const script::Module<init_func_t> modules[]) {
 
     script::InheritableLangWrapper<init_func_t>* wrapper = 
         dynamic_cast<script::InheritableLangWrapper<init_func_t>*>(wrapper_base);
     for (size_t i = 0; i < UGDK_MODULES_NUM; ++i) {
         if(!wrapper->RegisterModule(modules[i])) {
-            fprintf(stderr, "[%s] Load module '%s': >>ERROR<<\n", lang_name, modules[i].name().c_str());
+            fprintf(stderr, "[%s] Load module '%s': >>ERROR<<\n", wrapper->lang_name().c_str(), modules[i].name().c_str());
         } else {
 #ifdef DEBUG
-            fprintf(stderr, "[%s] Load module '%s': ok\n", lang_name, modules[i].name().c_str());
+            fprintf(stderr, "[%s] Load module '%s': ok\n", wrapper->lang_name().c_str(), modules[i].name().c_str());
 #endif
         }
     }
@@ -50,13 +49,13 @@ static void RegisterModules(script::LangWrapper* wrapper_base,
 
 void RegisterLuaModules(script::lua::LuaWrapper* wrapper) {
 #ifdef UGDK_USING_LUA
-    RegisterModules(wrapper, UGDK_LUA_MODULES, "Lua");
+    RegisterModules(wrapper, UGDK_LUA_MODULES);
 #endif
 }
 
 void RegisterPythonModules(script::python::PythonWrapper* wrapper) {
 #ifdef UGDK_USING_PYTHON
-    RegisterModules(wrapper, UGDK_PYTHON_MODULES, "Python");
+    RegisterModules(wrapper, UGDK_PYTHON_MODULES);
 #endif
 }
 
