@@ -9,9 +9,9 @@ using std::tr1::unordered_set;
 
 IDGenerator::IDGenerator(int min_id, int max_id, int error_value) :
     current_id_(min_id),
-	  min_id_(min_id),
-	  max_id_(max_id),
-	  error_value_(error_value)  {
+      min_id_(min_id),
+      max_id_(max_id),
+      error_value_(error_value)  {
 #ifdef DEBUG
     if ( min_id > max_id ) {
       printf("UGDK - IdGenerator\n");
