@@ -35,34 +35,37 @@ static void InitScripts() {
 #endif
 }
 
-static void LuaTests() {
-    SCRIPT_MANAGER()->LoadModule("main");
+static bool LuaTests() {
+    return SCRIPT_MANAGER()->LoadModule("main").valid();
 }
 
-static void PythonTests() {
+static bool PythonTests() {
     VirtualObj wassup = SCRIPT_MANAGER()->LoadModule("wassup");
+    if(!wassup) return false;
+    if(!wassup["supimpa"]) return false;
 
     VirtualObj::List args;
     args.push_back(wassup["vecx"]);
-    wassup["supimpa"](args);
+    return wassup["supimpa"](args).valid();
 }
 
 int main(int argc, char **argv) {
     ugdk::Configuration config;
     config.base_path = "data/";
+    
     InitScripts();
     
     Engine* eng = Engine::reference();
     eng->Initialize(config);
 
 #ifdef UGDK_USING_LUA
-    LuaTests();
+    if(!LuaTests()) puts("LUA FAILED!");
 #endif
 
 #ifdef UGDK_USING_PYTHON
     PyObject *path = PySys_GetObject("path");
     PyList_Append(path, PyString_FromString("../src/generated"));
-    PythonTests();
+    if(!PythonTests()) puts("PYTHON FAILED!");
 #endif
     
     eng->Run();
