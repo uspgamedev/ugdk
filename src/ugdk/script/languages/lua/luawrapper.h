@@ -17,15 +17,6 @@ class DataGear;
 class LuaData;
 typedef ugdk::script::InheritableLangWrapper<lua_CFunction> LuaWrapperBase;
 
-}
-
-#define LUA_INIT_FUNCTION_NAME(name) luaopen_##name
-#define LUA_INIT_FUNCTION_SIGNATURE(name) int LUA_INIT_FUNCTION_NAME(name)(lua_State*)
-#define LUA_MODULE_NAME(name) ugdk::script::lua::NameConversion(#name)
-typedef lua_CFunction LUA_inittype;
-
-namespace lua {
-
 class LuaWrapper: public LuaWrapperBase {
 
   public:

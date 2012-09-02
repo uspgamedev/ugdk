@@ -7,6 +7,7 @@
 
 #include <ugdk/script/languages/lua/luawrapper.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
+#include <ugdk/script/languages/lua/modules.h>
 
 #define MODULE_INIT_DECLARTION(LANG, NAME) extern LANG##_INIT_FUNCTION_SIGNATURE(NAME);
 #define DECLARE_MODULE_INITS(LANG) \
@@ -29,6 +30,16 @@ UGDK_LANGUAGES_LIST(DECLARE_MODULE_INITS)
 UGDK_LANGUAGES_LIST(DECLARE_MODULES)
 
 namespace ugdk {
+
+static int AddLuaScripts(const std::vector< ::ugdk::script::Module< ::ugdk::script::LUA_inittype > >& modules ) {
+    std::vector< ::ugdk::script::Module< ::ugdk::script::LUA_inittype > >::const_iterator it;
+    for(it = modules.begin(); it != modules.end(); ++it) {
+        ugdk::script::lua::AddModule(*it);
+    }
+    return 0;
+}
+
+int LUA_SCRIPTS_ADDED = AddLuaScripts(UGDK_LUA_MODULES);
 
 template <class init_func_t>
 static void RegisterModules(::ugdk::script::LangWrapper* wrapper_base,

@@ -29,8 +29,13 @@ template <class T>
 UData AsUData(const T* p) {
     return AsUData(const_cast<T*>(p));
 }
-
 } /* namespace lua */
+
+#define LUA_INIT_FUNCTION_NAME(name) luaopen_##name
+#define LUA_INIT_FUNCTION_SIGNATURE(name) int LUA_INIT_FUNCTION_NAME(name)(lua_State*)
+#define LUA_MODULE_NAME(name) ugdk::script::lua::NameConversion(#name)
+typedef lua_CFunction LUA_inittype;
+
 } /* namespace script */
 } /* namespace ugdk */
 

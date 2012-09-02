@@ -11,6 +11,9 @@ class VirtualObj;
 
 template <class loader_t> class InheritableLangWrapper;
 
+template <class loader_t>
+class Module;
+
 // Managers
 class ScriptManager;
 
