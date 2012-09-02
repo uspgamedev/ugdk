@@ -23,13 +23,13 @@ static void InitScripts() {
 #ifdef UGDK_USING_LUA
     LangWrapper* lua_wrapper = new ugdk::script::lua::LuaWrapper();
     ugdk::RegisterLuaModules(lua_wrapper);
-    SCRIPT_MANAGER()->Register("Lua", lua_wrapper);
+    SCRIPT_MANAGER()->Register(lua_wrapper);
 #endif
     
 #ifdef UGDK_USING_PYTHON
     LangWrapper* python_wrapper = new ugdk::script::python::PythonWrapper();
     ugdk::RegisterPythonModules(python_wrapper);
-    SCRIPT_MANAGER()->Register("Python", python_wrapper);
+    SCRIPT_MANAGER()->Register(python_wrapper);
 #endif
 }
 

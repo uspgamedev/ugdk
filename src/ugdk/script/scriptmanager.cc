@@ -43,9 +43,9 @@ void ScriptManager::Finalize() {
     wrappers_.clear();
 }
 
-void ScriptManager::Register(const string& name, LangWrapper* wrapper) {
-    if (wrappers_.count(name)) return;
-    wrappers_[name] = wrapper;
+void ScriptManager::Register(LangWrapper* wrapper) {
+    if (wrappers_.count(wrapper->lang_name())) return;
+    wrappers_[wrapper->lang_name()] = wrapper;
 }
 
 LangWrapper* ScriptManager::GetWrapper(const string& name) {
