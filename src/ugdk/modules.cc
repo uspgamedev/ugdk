@@ -30,10 +30,13 @@ DECLARE_MODULES(PYTHON);
 #endif
 
 
-template <class wrapper_t, class init_func_t>
-static void RegisterModules(wrapper_t* wrapper,
+template <class init_func_t>
+static void RegisterModules(script::LangWrapper* wrapper_base,
                             const script::Module<init_func_t> modules[],
                             const char* lang_name) {
+
+    script::InheritableLangWrapper<init_func_t>* wrapper = 
+        dynamic_cast<script::InheritableLangWrapper<init_func_t>*>(wrapper_base);
     for (size_t i = 0; i < UGDK_MODULES_NUM; ++i) {
         if(!wrapper->RegisterModule(modules[i])) {
             fprintf(stderr, "[%s] Load module '%s': >>ERROR<<\n", lang_name, modules[i].name().c_str());
