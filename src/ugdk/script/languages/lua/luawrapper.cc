@@ -115,6 +115,13 @@ VirtualData::Ptr LuaWrapper::LoadChunk(const string& chunk,
         : VirtualData::Ptr();
 }
 
+std::string NameConversion(const std::string& name) {
+    std::string result = name;
+    for(size_t i = 0; i < result.size(); ++i)
+        if(result[i] == '_') result[i] = '.';
+    return result;
+}
+
 } /* namespace lua */
 } /* namespace script */
 } /* namespace ugdk */

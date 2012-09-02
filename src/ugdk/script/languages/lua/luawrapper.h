@@ -77,6 +77,8 @@ class LuaWrapper: public LuaWrapperBase {
 
 };
 
+std::string NameConversion(const std::string& name);
+
 } /* namespace lua */
 } /* namespace script */
 } /* namespace ugdk */

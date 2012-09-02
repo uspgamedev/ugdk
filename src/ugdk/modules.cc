@@ -6,23 +6,14 @@
 #include <ugdk/script/languages/lua/luawrapper.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
 
-#define    LUA_INIT_FUNCTION_NAME(name) luaopen_##name
-#define PYTHON_INIT_FUNCTION_NAME(name) init_##name
-
-#define    LUA_INIT_FUNCTION_SIGNATURE(name) int LUA_INIT_FUNCTION_NAME(name)(lua_State*)
-#define PYTHON_INIT_FUNCTION_SIGNATURE(name) void PYTHON_INIT_FUNCTION_NAME(name)(void)
-
-inline std::string LuaNameConversion(const std::string& name) {
-    std::string result = name;
-    for(size_t i = 0; i < result.size(); ++i)
-        if(result[i] == '_') result[i] = '.';
-    return result;
-}
-
-#define    LUA_MODULE_NAME(name) LuaNameConversion(#name)
-#define PYTHON_MODULE_NAME(name) "_" #name
-
+#define LUA_INIT_FUNCTION_NAME(name) luaopen_##name
+#define LUA_INIT_FUNCTION_SIGNATURE(name) int LUA_INIT_FUNCTION_NAME(name)(lua_State*)
+#define LUA_MODULE_NAME(name) ugdk::script::lua::NameConversion(#name)
 typedef lua_CFunction LUA_inittype;
+
+#define PYTHON_INIT_FUNCTION_NAME(name) init_##name
+#define PYTHON_INIT_FUNCTION_SIGNATURE(name) void PYTHON_INIT_FUNCTION_NAME(name)(void)
+#define PYTHON_MODULE_NAME(name) "_" #name
 typedef ugdk::script::python::PyInitFunction PYTHON_inittype;
 
 extern "C" {
