@@ -14,7 +14,7 @@ if (PYTHONLIBS_FOUND)
         LIST(APPEND UGDK_LIBRARIES ${PYTHON_LIBRARIES})
     endif()
     
-    set(UGDK_LANGUAGES_LIST "${UGDK_LANGUAGES_LIST}\\\n    UGDK_MODULES_LIST(PYTHON, ACTION)")
+    set(UGDK_LANGUAGES_LIST "${UGDK_LANGUAGES_LIST} \\\n    ACTION(PYTHON)")
     
     message ("-- Python modules added.")
     
