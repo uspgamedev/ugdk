@@ -36,7 +36,7 @@ static void RegisterModules(::ugdk::script::LangWrapper* wrapper_base,
     
     if(wrapper_base == NULL) return;
     ::ugdk::script::InheritableLangWrapper<init_func_t>* wrapper = 
-        dynamic_cast<::ugdk::script::InheritableLangWrapper<init_func_t>*>(wrapper_base);
+        dynamic_cast< ::ugdk::script::InheritableLangWrapper<init_func_t>* >(wrapper_base);
     if(wrapper == NULL) {
         fprintf(stderr, "Wrapper of language '%s' is incompatible with modules of type '%s'\n", 
             wrapper_base->lang_name().c_str(), typeid(init_func_t).name());
