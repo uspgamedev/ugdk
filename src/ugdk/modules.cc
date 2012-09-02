@@ -40,8 +40,13 @@ static const script::Module<LANG##_inittype> LANG##_MODULES[UGDK_MODULES_NUM] = 
     UGDK_MODULES_LIST(LANG, MODULE_ITEM) \
 }
 
+#ifdef UGDK_USING_LUA
 DECLARE_MODULES(   LUA);
+#endif
+
+#ifdef UGDK_USING_PYTHON
 DECLARE_MODULES(PYTHON);
+#endif
 
 
 template <class wrapper_t, class init_func_t>
@@ -60,11 +65,15 @@ static void RegisterModules(wrapper_t* wrapper,
 }
 
 void RegisterLuaModules(script::lua::LuaWrapper* wrapper) {
+#ifdef UGDK_USING_LUA
     RegisterModules(wrapper, LUA_MODULES, "Lua");
+#endif
 }
 
 void RegisterPythonModules(script::python::PythonWrapper* wrapper) {
+#ifdef UGDK_USING_PYTHON
     RegisterModules(wrapper, PYTHON_MODULES, "Python");
+#endif
 }
 
 } /* namespace ugdk */

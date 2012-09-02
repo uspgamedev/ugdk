@@ -1,4 +1,8 @@
+#include <ugdk/config/config.h>
+
+#ifdef UGDK_USING_PYTHON
 #include <Python.h>
+#endif
 
 #include <cstdlib>
 
@@ -11,19 +15,36 @@
 #include <ugdk/script/languages/python/pythonwrapper.h>
 
 using ugdk::Engine;
+using ugdk::script::VirtualObj;
 
 static void InitScripts() {
+#ifdef UGDK_USING_LUA
     using ugdk::script::lua::LuaWrapper;
-    using ugdk::script::python::PythonWrapper;
 
-    //inicializando lua
     LuaWrapper* lua_wrapper = new LuaWrapper();
     ugdk::RegisterLuaModules(lua_wrapper);
     SCRIPT_MANAGER()->Register("Lua", lua_wrapper);
+#endif
     
+#ifdef UGDK_USING_PYTHON
+    using ugdk::script::python::PythonWrapper;
+
     PythonWrapper* python_wrapper = new PythonWrapper();
     ugdk::RegisterPythonModules(python_wrapper);
     SCRIPT_MANAGER()->Register("Python", python_wrapper);
+#endif
+}
+
+static void LuaTests() {
+    SCRIPT_MANAGER()->LoadModule("main");
+}
+
+static void PythonTests() {
+    VirtualObj wassup = SCRIPT_MANAGER()->LoadModule("wassup");
+
+    VirtualObj::List args;
+    args.push_back(wassup["vecx"]);
+    wassup["supimpa"](args);
 }
 
 int main(int argc, char **argv) {
@@ -34,19 +55,15 @@ int main(int argc, char **argv) {
     Engine* eng = Engine::reference();
     eng->Initialize(config);
 
+#ifdef UGDK_USING_LUA
+    LuaTests();
+#endif
+
+#ifdef UGDK_USING_PYTHON
     PyObject *path = PySys_GetObject("path");
     PyList_Append(path, PyString_FromString("../src/generated"));
-    
-    using ugdk::script::VirtualObj;
-    {
-        VirtualObj wassup = SCRIPT_MANAGER()->LoadModule("wassup");
-
-        VirtualObj::List args;
-        args.push_back(wassup["vecx"]);
-        wassup["supimpa"](args);
-    }
-    SCRIPT_MANAGER()->LoadModule("main");
-    
+    PythonTests();
+#endif
     
     eng->Run();
     eng->Release();

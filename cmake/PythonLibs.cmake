@@ -4,6 +4,8 @@ find_package (PythonLibs 2.6)
 if (PYTHONLIBS_FOUND)
     include_directories (${PYTHON_INCLUDE_DIRS})
     ugdk_add_scriptlang (python)
+    
+    set(UGDK_USING_PYTHON True)
 
     LIST(APPEND UGDK_SRC ${UGDK_PYTHON_SRC}) 
     if(PYTHON_DEBUG_LIBRARY AND (CMAKE_VERSION VERSION_LESS "2.8.8"))

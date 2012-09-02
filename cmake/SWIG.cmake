@@ -37,6 +37,8 @@ if (SWIG_FOUND)
         get_filename_component(val ${it} NAME_WE)
         set(UGDK_MODULES_LIST "${UGDK_MODULES_LIST} \\\n    ACTION(LANG, ${val})")
     endforeach()
+    
+    set(UGDK_USING_SWIG True)
   
 else (SWIG_FOUND)
 
