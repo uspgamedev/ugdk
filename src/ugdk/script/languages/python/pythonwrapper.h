@@ -15,6 +15,14 @@ typedef void (*PyInitFunction)(void);
 typedef ugdk::script::Module<PyInitFunction> PythonModule;
 typedef ugdk::script::InheritableLangWrapper<PyInitFunction> PythonWrapperBase;
 
+}
+
+#define PYTHON_INIT_FUNCTION_NAME(name) init_##name
+#define PYTHON_INIT_FUNCTION_SIGNATURE(name) void PYTHON_INIT_FUNCTION_NAME(name)(void)
+#define PYTHON_MODULE_NAME(name) "_" #name
+typedef ugdk::script::python::PyInitFunction PYTHON_inittype;
+
+namespace python {
 
 class PythonWrapper : public PythonWrapperBase {
   public:
