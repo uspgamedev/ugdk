@@ -402,6 +402,15 @@ bool DataGear::SetData (DataID id) {
     return true;
 }
 
+bool DataGear::HasValue (DataID id) {
+    if (!PushDataTable()) return false;
+    // DataTable is at local index 1;
+    L_.rawgeti(-1, id);     // [DT, DT.id]
+    bool has_value = !L_.isnil(-1);
+    L_.pop(2);              // []
+    return has_value;
+}
+
 /// Private:
 
 bool DataGear::PushDataTable() {

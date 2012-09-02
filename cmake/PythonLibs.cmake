@@ -6,11 +6,11 @@ if (PYTHONLIBS_FOUND)
     ugdk_add_scriptlang (python)
 
     LIST(APPEND UGDK_SRC ${UGDK_PYTHON_SRC}) 
-    if(PYTHON_DEBUG_LIBRARY)
+    if(PYTHON_DEBUG_LIBRARY AND (CMAKE_VERSION VERSION_LESS "2.8.8"))
         LIST(APPEND UGDK_LIBRARIES optimized;${PYTHON_LIBRARIES};debug;${PYTHON_DEBUG_LIBRARY})
-    else(PYTHON_DEBUG_LIBRARY)
+    else()
         LIST(APPEND UGDK_LIBRARIES ${PYTHON_LIBRARIES})
-    endif(PYTHON_DEBUG_LIBRARY)
+    endif()
   
     message ("-- Python modules added.")
     
