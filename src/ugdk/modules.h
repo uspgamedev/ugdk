@@ -10,13 +10,13 @@ namespace ugdk {
 /**
  ** @param wrapper - The wrapper used to register the modules.
  */
-void RegisterLuaModules(script::lua::LuaWrapper* wrapper);
+void RegisterLuaModules(script::LangWrapper* wrapper);
 
 /// Loads all UGDK's Python modules using the given wrapper.
 /**
  ** @param wrapper - The wrapper used to register the modules.
  */
-void RegisterPythonModules(script::python::PythonWrapper* wrapper);
+void RegisterPythonModules(script::LangWrapper* wrapper);
 
 }
 

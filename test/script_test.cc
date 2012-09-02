@@ -18,18 +18,16 @@ using ugdk::Engine;
 using ugdk::script::VirtualObj;
 
 static void InitScripts() {
-#ifdef UGDK_USING_LUA
-    using ugdk::script::lua::LuaWrapper;
+    using ugdk::script::LangWrapper;
 
-    LuaWrapper* lua_wrapper = new LuaWrapper();
+#ifdef UGDK_USING_LUA
+    LangWrapper* lua_wrapper = new ugdk::script::lua::LuaWrapper();
     ugdk::RegisterLuaModules(lua_wrapper);
     SCRIPT_MANAGER()->Register("Lua", lua_wrapper);
 #endif
     
 #ifdef UGDK_USING_PYTHON
-    using ugdk::script::python::PythonWrapper;
-
-    PythonWrapper* python_wrapper = new PythonWrapper();
+    LangWrapper* python_wrapper = new ugdk::script::python::PythonWrapper();
     ugdk::RegisterPythonModules(python_wrapper);
     SCRIPT_MANAGER()->Register("Python", python_wrapper);
 #endif

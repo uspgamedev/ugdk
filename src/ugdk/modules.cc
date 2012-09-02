@@ -54,13 +54,13 @@ static void RegisterModules(::ugdk::script::LangWrapper* wrapper_base,
     }
 }
 
-void RegisterLuaModules(script::lua::LuaWrapper* wrapper) {
+void RegisterLuaModules(script::LangWrapper* wrapper) {
 #ifdef UGDK_USING_LUA
     RegisterModules(wrapper, UGDK_LUA_MODULES);
 #endif
 }
 
-void RegisterPythonModules(script::python::PythonWrapper* wrapper) {
+void RegisterPythonModules(script::LangWrapper* wrapper) {
 #ifdef UGDK_USING_PYTHON
     RegisterModules(wrapper, UGDK_PYTHON_MODULES);
 #endif
