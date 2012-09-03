@@ -1,8 +1,10 @@
 #include <ugdk/script/languages/python/modules.h>
 
 #include <vector>
+#include <cstdio>
 
 #include <ugdk/script/module.h>
+#include <ugdk/script/languages/python/pythonwrapper.h>
 
 namespace ugdk {
 namespace script {

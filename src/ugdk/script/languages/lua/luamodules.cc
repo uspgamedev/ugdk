@@ -1,6 +1,7 @@
 #include <ugdk/script/languages/lua/modules.h>
 
 #include <vector>
+#include <cstdio>
 
 #include <ugdk/script/module.h>
 #include <ugdk/script/languages/lua/luawrapper.h>
