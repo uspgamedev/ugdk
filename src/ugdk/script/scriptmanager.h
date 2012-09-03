@@ -6,6 +6,11 @@
 
 #include <ugdk/script.h>
 
+#ifdef MODULE_AUTO_LOAD
+#define FORCE_LOAD_MODULE(x) void force_link_function_##x(void) { extern int x##_MODULES_HEARTBEAT; x##_MODULES_HEARTBEAT = 1; }
+MODULE_AUTO_LOAD(FORCE_LOAD_MODULE)
+#endif
+
 namespace ugdk {
 
 namespace script {
