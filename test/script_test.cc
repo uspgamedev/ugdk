@@ -8,23 +8,12 @@
 
 #include "SDL.h"
 #include <ugdk/base/engine.h>
+#include <ugdk/script.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>
-#include <ugdk/script/languages/lua/luawrapper.h>
-#include <ugdk/script/languages/lua/modules.h>
-#include <ugdk/script/languages/python/pythonwrapper.h>
 
 using ugdk::Engine;
 using ugdk::script::VirtualObj;
-
-static void InitScripts() {
-#ifdef UGDK_USING_LUA
-    SCRIPT_MANAGER()->Register(new ugdk::script::lua::LuaWrapper());
-#endif
-#ifdef UGDK_USING_PYTHON
-    SCRIPT_MANAGER()->Register(new ugdk::script::python::PythonWrapper());
-#endif
-}
 
 static bool LuaTests() {
     return SCRIPT_MANAGER()->LoadModule("main").valid();
@@ -40,14 +29,11 @@ static bool PythonTests() {
     return wassup["supimpa"](args).valid();
 }
 
-void pog();
-
 int main(int argc, char **argv) {
-    pog();
     ugdk::Configuration config;
     config.base_path = "data/";
     
-    InitScripts();
+    ugdk::script::InitScripts();
     
     Engine* eng = Engine::reference();
     eng->Initialize(config);

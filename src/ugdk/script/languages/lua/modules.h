@@ -8,7 +8,7 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
-void AddModule(const Module<LUA_inittype> &);
+void AddModule(const Module<inittype> &);
 
 void RegisterModules(LuaWrapper* wrapper);
 

@@ -9,14 +9,14 @@ namespace ugdk {
 namespace script {
 namespace lua {
 
-typedef std::vector< Module<LUA_inittype> > LuaModuleList;
+typedef std::vector< Module<inittype> > LuaModuleList;
 
 static LuaModuleList& get_module_list() {
     static LuaModuleList lua_modules;
     return lua_modules;
 }
 
-void AddModule(const Module<LUA_inittype> & module) {
+void AddModule(const Module<inittype> & module) {
     get_module_list().push_back(module);
 }
 

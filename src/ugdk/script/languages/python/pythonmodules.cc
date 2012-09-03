@@ -8,14 +8,14 @@ namespace ugdk {
 namespace script {
 namespace python {
 
-typedef std::vector< Module<PYTHON_inittype> > PythonModuleList;
+typedef std::vector< Module<inittype> > PythonModuleList;
 
 static PythonModuleList& get_module_list() {
     static PythonModuleList lua_modules;
     return lua_modules;
 }
 
-void AddModule(const Module<PYTHON_inittype> & module) {
+void AddModule(const Module<inittype> & module) {
     get_module_list().push_back(module);
 }
 

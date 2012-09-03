@@ -8,7 +8,7 @@ namespace ugdk {
 namespace script {
 namespace python {
 
-void AddModule(const Module<PYTHON_inittype> &);
+void AddModule(const Module<inittype> &);
 
 void RegisterModules(PythonWrapper* wrapper);
 

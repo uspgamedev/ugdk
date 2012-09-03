@@ -1,9 +1,10 @@
+#include <ugdk/script/scriptmanager.h>
 
 #include <cstdio>
 #include <algorithm>
+
 #include <ugdk/base/engine.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/langwrapper.h>
 #include <ugdk/script/virtualobj.h>
 
@@ -99,7 +100,6 @@ std::string ScriptManager::ConvertDottedNotationToPath(const std::string& dotted
     replace(path.begin(), path.end(), '.', '/');
     return path;
 }
-
 
 }
 }

@@ -4,6 +4,9 @@
 namespace ugdk {
 namespace script {
 
+// Functions
+void InitScripts();
+
 // Public classes
 class LangWrapper;
 class VirtualData;
