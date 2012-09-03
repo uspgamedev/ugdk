@@ -9,7 +9,6 @@ if (LUA51_FOUND)
   ugdk_add_scriptlang (lua)
   
   set(UGDK_LUA_ENABLED True)
-  set(UGDK_LANGUAGES_LIST "${UGDK_LANGUAGES_LIST} \\\n    ACTION(LUA)")
 
   message ("-- Lua5.1 modules added.")
     

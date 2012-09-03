@@ -31,13 +31,28 @@ if (SWIG_FOUND)
 
     set_source_files_properties (${UGDK_MODULE_SRC} PROPERTIES CPLUSPLUS ON)
     set_source_files_properties (${UGDK_MODULE_SRC} PROPERTIES SWIG_FLAGS "")
-  
-    foreach(it ${UGDK_MODULE_SRC})
-        get_filename_component(val ${it} NAME_WE)
-        set(UGDK_MODULES_LIST "${UGDK_MODULES_LIST} \\\n    ACTION(LANG, ${val})")
-    endforeach()
     
     set(UGDK_SWIG_ENABLED True)
+  
+    set(MODULES_LIST "")
+    foreach(it ${UGDK_MODULE_SRC})
+        get_filename_component(val ${it} NAME_WE)
+        set(MODULES_LIST "${MODULES_LIST} \\\n    ACTION(LANG, ${val})")
+    endforeach()
+    
+    set(LANGUAGES_LIST "")
+    foreach(it ${UGDK_LANGUAGES_LIST})
+        ugdk_setup_package (${it})
+        string(TOUPPER ${it} itUPPER)
+        if(UGDK_${itUPPER}_ENABLED)
+            set(LANGUAGES_LIST "${LANGUAGES_LIST} \\\n    ACTION(${itUPPER})")
+        endif()
+        message(${it})
+    endforeach()
+    
+    set(MODULES_NAME UGDK)
+    set(GENERATED_SRC ${GENERATED_SRC} modules.cc)
+    configure_file(${CMAKE_CURRENT_LIST_DIR}/modules.cc.in modules.cc)
   
 else (SWIG_FOUND)
 
