@@ -14,10 +14,10 @@ namespace ugdk {
 namespace script {
 
 void InitScripts() {
-#ifdef UGDK_USING_LUA
+#ifdef UGDK_LUA_ENABLED
     SCRIPT_MANAGER()->Register(new ugdk::script::lua::LuaWrapper());
 #endif
-#ifdef UGDK_USING_PYTHON
+#ifdef UGDK_PYTHON_ENABLED
     SCRIPT_MANAGER()->Register(new ugdk::script::python::PythonWrapper());
 #endif
 }

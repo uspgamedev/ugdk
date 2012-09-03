@@ -37,7 +37,7 @@ if (SWIG_FOUND)
         set(UGDK_MODULES_LIST "${UGDK_MODULES_LIST} \\\n    ACTION(LANG, ${val})")
     endforeach()
     
-    set(UGDK_USING_SWIG True)
+    set(UGDK_SWIG_ENABLED True)
   
 else (SWIG_FOUND)
 
