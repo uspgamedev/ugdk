@@ -5,6 +5,11 @@
 #include <ugdk/script/languages/lua/luawrapper.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
 
+void force_link_function_ugdk_internal(void) { 
+    extern int UGDK_MODULES_HEARTBEAT; 
+    UGDK_MODULES_HEARTBEAT = 1;
+}
+
 namespace ugdk {
 namespace script {
 

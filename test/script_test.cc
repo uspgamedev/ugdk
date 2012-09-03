@@ -6,8 +6,6 @@
 
 #include <cstdlib>
 
-#define MODULE_AUTO_LOAD(ACTION) ACTION(UGDK)
-
 #include "SDL.h"
 #include <ugdk/base/engine.h>
 #include <ugdk/script.h>
