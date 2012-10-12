@@ -11,6 +11,7 @@ using namespace ugdk::enums;
 using mirroraxis::MirrorAxis;
 
 namespace ugdk {
+namespace math {
 
 Vector2D::Vector2D(const ugdk::math::Integer2D& int2d)
   : x(static_cast<double>(int2d.x)), y(static_cast<double>(int2d.y)) {}
@@ -101,4 +102,5 @@ Vector2D operator*(const double  &scalar, const Vector2D &right) {
     return Vector2D::Multiply(right, scalar);
 }
 
-}  // namespace ugdk
+} // namespace math
+} // namespace ugdk

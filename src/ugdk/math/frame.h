@@ -1,7 +1,8 @@
-#ifndef HORUSEYE_FRAMEWORK_FRAME_H_
-#define HORUSEYE_FRAMEWORK_FRAME_H_
+#ifndef UGDK_MATH_FRAME_H_
+#define UGDK_MATH_FRAME_H_
 
 namespace ugdk {
+namespace math {
 
 // Representa um quadro (retangulo) na tela e/ou numa imagem.
 // Util para trabalhar com animacoes, detectar colisoes
@@ -71,6 +72,7 @@ class Frame {
     double left_, top_, right_, bottom_;
 };
 
-}  // namespace ugdk
+} // namespace math
+} // namespace ugdk
 
-#endif  // HORUSEYE_FRAMEWORK_FRAME_H_
+#endif  // UGDK_MATH_FRAME_H_

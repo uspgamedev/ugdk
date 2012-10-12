@@ -1,6 +1,7 @@
 #include <ugdk/math/frame.h>
 
 namespace ugdk {
+namespace math {
 
 // Devolve true se houver colisao entre
 // 'frame' e este retangulo
@@ -16,4 +17,5 @@ bool Frame::Collides(const Frame& frame) const {
     return false;
 }
 
+}  // namespace math
 }  // namespace ugdk
