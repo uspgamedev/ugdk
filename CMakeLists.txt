@@ -38,6 +38,8 @@ ENDIF ()
 set (SRC_DIR src)
 set (LIB_DIR lib)
 
+set(FRAMEWORK_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
+
 #set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
 #set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
 
@@ -203,6 +205,11 @@ set(UGDK_EXTERNAL_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src;${SDL_INCLUDE_DIR};${SD
 CONFIGURE_FILE(
     "${SRC_DIR}/ugdk/config/config.h.in"
     "${SRC_DIR}/ugdk/config/config.h"
+)
+
+CONFIGURE_FILE(
+    "doxystuff/Doxyfile.in"
+    "doxystuff/Doxyfile"
 )
 
 install(TARGETS libugdk
