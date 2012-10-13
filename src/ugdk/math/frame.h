@@ -18,8 +18,7 @@ namespace math {
 //        +------------------+
 //                        (right,bottom)
 
-/** @class math::Frame.
-    @brief Represents a frame on the screen or an image.
+/** @brief Represents a frame on the screen or an image.
 
     Represents a rectangular frame on the screen or an image.
     Useful for working with animations, collision detection, etc.
