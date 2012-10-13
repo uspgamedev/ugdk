@@ -8,6 +8,7 @@
 #include <ugdk/audio/music.h>
 
 namespace ugdk {
+namespace audio {
 
 AudioManager::AudioManager() {
 }
@@ -79,5 +80,6 @@ Music* AudioManager::CurrentMusic() const {
     return Music::playing_music_;
 }
 
-}  // namespace ugdk
+} // namespace audio
+} // namespace ugdk
 

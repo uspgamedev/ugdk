@@ -34,7 +34,7 @@ class Engine {
     /// Returns a reference to the Audio Manager.
     /** @see AudioManager
      */
-    AudioManager *audio_manager() { return audio_manager_; }
+    audio::AudioManager *audio_manager() { return audio_manager_; }
 
     /// Returns a reference to the Video Manager.
     /** @see VideoManager
@@ -123,7 +123,7 @@ class Engine {
     void DeleteFinishedScenes();
     static Engine         *    reference_;
 
-             AudioManager *   audio_manager_;
+    audio::  AudioManager *   audio_manager_;
     graphic::VideoManager *   video_manager_;
     graphic:: TextManager *    text_manager_;
     input::  InputManager *   input_manager_;

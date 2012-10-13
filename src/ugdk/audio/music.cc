@@ -3,6 +3,7 @@
 #include <ugdk/audio/music.h>
 
 namespace ugdk {
+namespace audio {
 
 Music* Music::playing_music_(NULL);
 
@@ -76,5 +77,6 @@ void Music::UpdateVolume(double vol) {
     Mix_VolumeMusic( int( vol * double(MIX_MAX_VOLUME) ) );
 }
 
-}  // namespace ugdk
+} // namespace audio
+} // namespace ugdk
 

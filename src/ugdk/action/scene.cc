@@ -51,7 +51,7 @@ void Scene::Focus() {
             background_music_->Unpause();
 
     } else if(stops_previous_music_) {
-        Music* current_music = AUDIO_MANAGER()->CurrentMusic();
+        audio::Music* current_music = AUDIO_MANAGER()->CurrentMusic();
         if(current_music != NULL)
             current_music->Stop();
     }

@@ -9,6 +9,7 @@
 #define AUDIO_MANAGER() ugdk::Engine::reference()->audio_manager()
 
 namespace ugdk {
+namespace audio {
 
 // Gerenciador de audio
 class AudioManager {
@@ -53,6 +54,7 @@ class AudioManager {
     void ReleaseMusics();
 };
 
-}  // namespace ugdk
+} // namespace audio
+} // namespace ugdk
 
 #endif

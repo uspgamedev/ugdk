@@ -22,15 +22,17 @@ return a new object sometimes, and the AudioManager
 %include <ugdk/audio/sample.h>
 %include <ugdk/audio/music.h>
 
-//%template(SampleMap) std::map<std::string, ugdk::Sample*>;
-//%template(MusicMap) std::map<std::string, ugdk::Music*>;
+//%template(SampleMap) std::map<std::string, ugdk::audio::Sample*>;
+//%template(MusicMap) std::map<std::string, ugdk::audio::Music*>;
 
 %include <ugdk/audio/audiomanager.h>
 
 namespace ugdk {
+namespace audio {
     export_class(Sample)
     export_class(Music)
     export_class(AudioManager)
+}
 }
  
 confirm_exports(ugdk_audio)

@@ -71,8 +71,8 @@ class Scene {
           graphic::Node* interface_node()       { return interface_node_; }
     const graphic::Node* interface_node() const { return interface_node_; }
 
-    Music* background_music() const { return background_music_; }
-    void set_background_music(Music* music) { background_music_ = music; }
+    audio::Music* background_music() const { return background_music_; }
+    void set_background_music(audio::Music* music) { background_music_ = music; }
     /**@}
      */
 
@@ -93,7 +93,7 @@ class Scene {
     bool finished_;
 
     /// The background music when this scene is on top.
-    Music* background_music_;
+    audio::Music* background_music_;
 
   private:
     void UpdateEntities(double delta_t);

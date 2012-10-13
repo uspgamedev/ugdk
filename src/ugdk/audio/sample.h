@@ -4,9 +4,10 @@
 #include <string>
 #include "SDL_mixer.h"
 
-namespace ugdk {
+#include <ugdk/audio.h>
 
-class AudioManager;
+namespace ugdk {
+namespace audio {
 
 /**@class Sample
  * Note: It isn't possible to instantiate a Sample directly.
@@ -51,6 +52,7 @@ class Sample {
   friend class AudioManager;
 };
 
-}  // namespace ugdk
+} // namespace audio
+} // namespace ugdk
 
 #endif

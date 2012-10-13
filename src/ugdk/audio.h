@@ -2,6 +2,7 @@
 #define UGDK_AUDIO_H_
 
 namespace ugdk {
+namespace audio {
 
 class Music;
 class Sample;
@@ -9,6 +10,7 @@ class Sample;
 // Managers
 class AudioManager;
 
-}  // namespace ugdk
+} // namespace audio
+} // namespace ugdk
 
 #endif

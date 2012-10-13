@@ -3,6 +3,7 @@
 #include <ugdk/audio/sample.h>
 
 namespace ugdk {
+namespace audio {
 
 Sample::Sample(const std::string& filepath) : data_(NULL), channel_(-1), volume_(1.0) {
     data_ = Mix_LoadWAV(filepath.c_str());
@@ -49,4 +50,5 @@ double Sample::Volume() {
     return volume_;
 }
 
-}  // namespace ugdk
+} // namespace audio
+} // namespace ugdk

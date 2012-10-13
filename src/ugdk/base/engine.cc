@@ -34,7 +34,7 @@ bool Engine::Initialize(const Configuration& configuration) {
     video_manager_    = new graphic::VideoManager();
     input_manager_    = new input::  InputManager();
     time_manager_     = new time::    TimeManager();
-    audio_manager_    = new          AudioManager();
+    audio_manager_    = new audio::  AudioManager();
     text_manager_     = new graphic:: TextManager();
     path_manager_     = new           PathManager(configuration.base_path);
     resource_manager_ = new base::ResourceManager();

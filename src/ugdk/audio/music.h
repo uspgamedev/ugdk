@@ -4,9 +4,10 @@
 #include <string>
 #include "SDL_mixer.h"
 
-namespace ugdk {
+#include <ugdk/audio.h>
 
-class AudioManager;
+namespace ugdk {
+namespace audio {
 
 /**@class Music
  *Note: This class cannot be directly instantiated. Please use AudioManager's LoadMusic.
@@ -58,6 +59,7 @@ class Music {
   friend class AudioManager;
 };
 
-}  // namespace ugdk
+} // namespace audio
+} // namespace ugdk
 
 #endif
