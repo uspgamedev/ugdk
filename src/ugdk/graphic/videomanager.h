@@ -12,9 +12,6 @@
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/modifier.h>
 
-using std::string;
-using std::map;
-
 #define VIDEO_MANAGER() (ugdk::Engine::reference()->video_manager())
 
 namespace ugdk {

@@ -38,6 +38,8 @@ static void InitializeExtensions() {
 namespace ugdk {
 namespace graphic {
 
+using std::string;
+
 static ugdk::math::Vector2D default_resolution(800.0, 600.0);
 
 // Inicializa o gerenciador de video, definindo uma
