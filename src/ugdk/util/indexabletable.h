@@ -13,7 +13,7 @@
 namespace ugdk {
 namespace util {
 
-template<class T, int IndexSize = 16>
+template<class T, int IndexSize>
 class IndexableTable { private: IndexableTable() {} };
 
 template<class T, int IndexSize>

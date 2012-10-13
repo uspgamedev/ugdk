@@ -10,7 +10,7 @@ class Language;
 class LanguageManager;
 class LanguageWord;
 class PathManager;
-    
+   
 namespace ikdtree {
     template <class T, int DIMENSIONS>
     class IntervalKDTree;
@@ -23,6 +23,14 @@ namespace ikdtree {
     
     template <class T, int DIMENSIONS>
     class Item;
+}
+
+
+namespace util {
+
+template<class T, int IndexSize = 16>
+class IndexableTable;
+
 }
 
 //}  // namespace util

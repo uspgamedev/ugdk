@@ -19,16 +19,16 @@ SET(UGDK_SRC
     ./src/pyramidworks/modules.cc 
     ./src/pyramidworks/modules.h 
     ./src/ugdk/action.h 
-    ./src/ugdk/action/animation.cc 
-    ./src/ugdk/action/animation.h 
-    ./src/ugdk/action/animationframe.h 
-    ./src/ugdk/action/animationset.cc 
-    ./src/ugdk/action/animationset.h 
+    ./src/ugdk/action/animationplayer.h 
     ./src/ugdk/action/entity.h 
     ./src/ugdk/action/generictask.h 
+    ./src/ugdk/action/mediaplayer.cc 
+    ./src/ugdk/action/mediaplayer.h 
     ./src/ugdk/action/observer.h 
     ./src/ugdk/action/scene.cc 
     ./src/ugdk/action/scene.h 
+    ./src/ugdk/action/spriteanimationframe.h 
+    ./src/ugdk/action/spritetypes.h 
     ./src/ugdk/action/task.h 
     ./src/ugdk/audio.h 
     ./src/ugdk/audio/audiomanager.cc 

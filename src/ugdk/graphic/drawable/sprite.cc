@@ -4,50 +4,71 @@
 #include <ugdk/base/resourcemanager.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/action/animation.h>
+#include <ugdk/action/spriteanimationframe.h>
+#include <ugdk/action/animationplayer.h>
 
 namespace ugdk {
 namespace graphic {
 
-Sprite::Sprite(const Spritesheet *spritesheet, action::AnimationSet *set) 
-    : spritesheet_(spritesheet), animation_manager_(new action::AnimationManager(10, set)) {}/*TODO: MANO TEM UM 10 NO MEU CÓDIGO */
+using action::SpriteAnimationPlayer;
 
+Sprite::Sprite(const Spritesheet *spritesheet, SpriteAnimationPlayer *player) 
+    : spritesheet_(spritesheet), animation_player_(player) {}
 
-Sprite::Sprite(const std::string& spritesheet_tag, action::AnimationSet *set)
+Sprite::Sprite(const std::string& spritesheet_tag, SpriteAnimationPlayer* manager)
     : spritesheet_(base::ResourceManager::GetSpritesheetFromTag(spritesheet_tag)), 
-      animation_manager_(new action::AnimationManager(10, set)) {}/*TODO: MANO TEM OUTRO 10 NO MEU CÓDIGO */
+      animation_player_(manager) {}
 
 Sprite::Sprite(const std::string& spritesheet_tag, const std::string& animation_set_tag) 
     : spritesheet_(base::ResourceManager::GetSpritesheetFromTag(spritesheet_tag)),
-      animation_manager_(new action::AnimationManager(10,
-             base::ResourceManager::GetAnimationSetFromFile(animation_set_tag))) {}/*TODO: MANO TEM MAIS UM 10 NO MEU CÓDIGO */
-
+      animation_player_(new action::SpriteAnimationPlayer(
+             base::ResourceManager::GetSpriteAnimationTableFromFile(animation_set_tag))) {}
 
 Sprite::Sprite(const Spritesheet *spritesheet, const std::string& animation_set_tag)
-  : spritesheet_(spritesheet), animation_manager_(new action::AnimationManager(10,
-                  base::ResourceManager::GetAnimationSetFromFile(animation_set_tag))) {}/*TODO: MANO TEM... Ah, voce entendeu */
+  : spritesheet_(spritesheet), animation_player_(new action::SpriteAnimationPlayer(
+                  base::ResourceManager::GetSpriteAnimationTableFromFile(animation_set_tag))) {}
  
 Sprite::~Sprite() {
-    if (animation_manager_) delete animation_manager_;
+    if (animation_player_) delete animation_player_;
 }
 
 void Sprite::Update(double delta_t) {
-    animation_manager_->Update(delta_t);
+    if(animation_player_) animation_player_->Update(delta_t);
 }
 
 void Sprite::Draw() const {
-    if(spritesheet_) {
-        int frame_number = animation_manager_->GetFrame();
+    if(!spritesheet_) return;
+    if(animation_player_) {
+        const action::SpriteAnimationFrame* animation_frame = 
+            current_animation_frame();
 
-        const Modifier *animation_mod = animation_manager_->get_current_modifier();
+        const Modifier *animation_mod = animation_frame->modifier(); 
         if(animation_mod) VIDEO_MANAGER()->PushAndApplyModifier(animation_mod);
-        spritesheet_->Draw(frame_number, hotspot_);
+        spritesheet_->Draw(animation_frame->frame(), hotspot_);
         if(animation_mod) VIDEO_MANAGER()->PopModifier();
+    } else {
+        spritesheet_->Draw(0, hotspot_);
     }
 }
 
 const ugdk::math::Vector2D& Sprite::size() const {
-    return spritesheet_->frame_size(animation_manager_->GetFrame()); // TODO: requires some info from the spritesheet
+    return spritesheet_->frame_size(current_animation_frame()->frame()); // TODO: requires some info from the spritesheet
+}
+    
+const action::SpriteAnimationFrame* Sprite::current_animation_frame() const {
+    return animation_player_ ? animation_player_->current_animation_frame() : NULL;
+}
+    
+const action::SpriteAnimationPlayer* Sprite::animation_player() const { 
+    return animation_player_;
+}
+
+void Sprite::Select(const std::string& name) {
+    if(animation_player_) animation_player_->Select(name);
+}
+
+void Sprite::Select(int index) {
+    if(animation_player_) animation_player_->Select(index);
 }
 
 }  // namespace graphic

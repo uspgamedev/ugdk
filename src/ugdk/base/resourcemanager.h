@@ -4,6 +4,7 @@
 #include <typeinfo>
 #include <map>
 #include <ugdk/action.h>
+#include <ugdk/action/spritetypes.h>
 #include <ugdk/base/resourcecontainer.h>
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
@@ -18,11 +19,11 @@ class ResourceManager {
     ResourceManager();
     ~ResourceManager();
     
-    static graphic::Texture*     GetTextureFromTag        (const std::string& tag);
-    static graphic::Texture*     GetTextureFromFile       (const std::string& file);
-    static graphic::Spritesheet* GetSpritesheetFromTag    (const std::string& tag);
-    static action::AnimationSet*         GetAnimationSetFromFile  (const std::string& file);
-    static graphic::Text*        CreateTextFromLanguageTag(const std::string& tag);
+    static graphic::Texture*                GetTextureFromTag        (const std::string& tag);
+    static graphic::Texture*                GetTextureFromFile       (const std::string& file);
+    static graphic::Spritesheet*            GetSpritesheetFromTag    (const std::string& tag);
+    static action::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
+    static graphic::Text*                   CreateTextFromLanguageTag(const std::string& tag);
 
     // Generic Methods
     template <class T>
@@ -37,11 +38,10 @@ class ResourceManager {
         return *container;
     }
 
-    // Retro-compatibility
-    ResourceContainer<graphic::Texture*>&     texture_container()     { return get_container<graphic::Texture*>();     }
-    ResourceContainer<graphic::Spritesheet*>& spritesheet_container() { return get_container<graphic::Spritesheet*>(); }
-    ResourceContainer<action::AnimationSet*>&         animation_loader()      { return get_container<action::AnimationSet*>();         }
-    ResourceContainer<LanguageWord*>&         word_container()        { return get_container<LanguageWord*>();         }
+    ResourceContainer<graphic::Texture*>&               texture_container()     { return get_container<graphic::Texture*>();     }
+    ResourceContainer<graphic::Spritesheet*>&           spritesheet_container() { return get_container<graphic::Spritesheet*>(); }
+    ResourceContainer<action::SpriteAnimationTable*>&   spriteanimation_loader(){ return get_container<action::SpriteAnimationTable*>(); }
+    ResourceContainer<LanguageWord*>&                   word_container()        { return get_container<LanguageWord*>();         }
     
   private:
     typedef std::map<const std::type_info*, ResourceContainerBase*, 

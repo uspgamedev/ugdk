@@ -4,9 +4,14 @@
 namespace ugdk {
 namespace action {
 
-class Animation;
-class AnimationManager;
-class AnimationSet;
+class MediaPlayer;
+
+template<class T>
+class AnimationPlayer;
+
+class SpriteAnimationFrame;
+class SpriteAnimation;
+
 class Scene;
 class Entity;
 class Observer;
