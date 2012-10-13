@@ -4,6 +4,8 @@
 
 #include <string>
 
+#include <ugdk/script.h>
+
 #include <ugdk/script/defs.h>
 #include <ugdk/script/type.h>
 #include <ugdk/script/virtualdata.h>
@@ -11,9 +13,6 @@
 
 namespace ugdk {
 namespace script {
-
-class VirtualObj;
-template <class loader_t> class InheritableLangWrapper;
 
 class LangWrapper {
 

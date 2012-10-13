@@ -14,8 +14,12 @@ class PathManager;
 namespace ikdtree {
     template <class T, int DIMENSIONS>
     class IntervalKDTree;
+    
     template <int DIMENSIONS>
     class Box;
+    
+    template <class T, int DIMENSIONS>
+    class Item;
 }
 
 //}  // namespace util

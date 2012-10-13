@@ -12,6 +12,8 @@
  *  This section contains generic SWIG labels for method/variable
  *  declarations/attributes, and other compiler dependent labels.
  * ----------------------------------------------------------------------------- */
+ 
+/// @cond DOXYGEN_IGNORE_GENERATED
 
 /* template workaround for compilers that cannot correctly implement the C++ standard */
 #ifndef SWIGTEMPLATEDISAMBIGUATOR
@@ -2944,3 +2946,5 @@ SWIG_MangledTypeQuery(const char *name) {
 }
 
 #endif
+
+/// @endcond

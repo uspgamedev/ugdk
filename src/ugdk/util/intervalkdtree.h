@@ -11,18 +11,11 @@
 #include <iostream>
 #endif
 
+#include <ugdk/util.h>
+
 namespace ugdk {
 
 namespace ikdtree {
-
-template <int DIMENSIONS>
-class Box;
-
-template <class T, int DIMENSIONS>
-class Node;
-
-template <class T, int DIMENSIONS>
-class Item;
 
 typedef double Coordinate;
 

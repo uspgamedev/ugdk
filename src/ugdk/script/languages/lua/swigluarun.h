@@ -5,13 +5,15 @@
  * This file is not intended to be easily readable and contains a number of 
  * coding conventions designed to improve portability and efficiency. Do not make
  * changes to this file unless you know what you are doing--modify the SWIG 
- * interface file instead. 
+ * interface file instead.
  * ----------------------------------------------------------------------------- */
 
 /* -----------------------------------------------------------------------------
  *  This section contains generic SWIG labels for method/variable
  *  declarations/attributes, and other compiler dependent labels.
  * ----------------------------------------------------------------------------- */
+ 
+/// @cond DOXYGEN_IGNORE_GENERATED
 
 /* template workaround for compilers that cannot correctly implement the C++ standard */
 #ifndef SWIGTEMPLATEDISAMBIGUATOR
@@ -1544,3 +1546,5 @@ SWIG_MangledTypeQuery(const char *name) {
 }
 
 #endif
+
+/// @endcond

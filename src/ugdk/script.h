@@ -1,4 +1,4 @@
-
+1
 #ifndef UGDK_SCRIPT_H_
 #define UGDK_SCRIPT_H_
 
@@ -9,6 +9,8 @@ namespace script {
 class LangWrapper;
 class VirtualData;
 class VirtualObj;
+
+template <class loader_t> class InheritableLangWrapper;
 
 // Managers
 class ScriptManager;
