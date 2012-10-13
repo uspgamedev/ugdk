@@ -7,7 +7,6 @@
 #include FROM_TR1(functional)
 
 #include <ugdk/action.h>
-#include <ugdk/graphic.h>
 
 #define DEFAULT_PERIOD 0.1
 

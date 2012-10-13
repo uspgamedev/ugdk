@@ -2,6 +2,7 @@
 #define UGDK_ACTION_ANIMATIONPLAYER_H_
 
 #include <string>
+#include <cassert>
 
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
@@ -15,7 +16,7 @@ template<class T>
 class AnimationPlayer : public MediaPlayer {
 public:
     AnimationPlayer(const util::IndexableTable<T*> *table)
-        : table_(table) {}
+        : table_(table) { assert(table_); }
 
     ~AnimationPlayer() {}
 
@@ -49,13 +50,17 @@ public:
         set_current_animation(table_->Get(index));
     }
 
+    /// Restarts the current animation from the first frame.
+    void RestartAnimation() {
+        current_frame_ = 0;
+        elapsed_time_ = 0.0;
+    }
+
 private:
     void set_current_animation(T* anim) {
-        if(anim != current_animation_) {
-            current_animation_ = anim;
-            current_frame_ = 0;
-            elapsed_time_ = 0.0;
-        }
+        if(anim != current_animation_)
+            RestartAnimation();
+        current_animation_ = anim;
     }
 
     const T* current_animation_;

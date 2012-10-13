@@ -13,6 +13,7 @@
 #include <ugdk/action/observer.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/action/spriteanimationframe.h>
+#include <ugdk/action/spritetypes.h>
 
 #include <module/ugdk/action/observerproxy.h>
 #include <module/ugdk/action/entityproxy.h>
@@ -41,6 +42,7 @@ proxy_class(ugdk::action::Task)
 %include <ugdk/action/entity.h>
 %include <ugdk/action/observer.h>
 %include <ugdk/action/scene.h>
+%include <ugdk/action/spritetypes.h>
 
 namespace ugdk {
 namespace action { 
@@ -51,9 +53,8 @@ namespace action {
     export_class(Observer)
     export_class(Scene)
     export_class(Task)
-
-	export_class(SpriteAnimation)
-	export_class(SpriteAnimationFrame)
+    export_class(SpriteAnimation)
+    export_class(SpriteAnimationFrame)
 }
 }
 
