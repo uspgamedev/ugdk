@@ -13,8 +13,8 @@ class Light {
     Light();
 	~Light() {}
 
-    const Vector2D& dimension() const { return dimension_; }
-	void set_dimension(const Vector2D& dimension) { dimension_ = dimension; }
+    const ugdk::math::Vector2D& dimension() const { return dimension_; }
+	void set_dimension(const ugdk::math::Vector2D& dimension) { dimension_ = dimension; }
 
     const Color& color() const { return color_; }
     void set_color(const Color& color) { color_ = color; }
@@ -22,7 +22,7 @@ class Light {
 	void Draw();
 
   private:
-	Vector2D dimension_;
+	ugdk::math::Vector2D dimension_;
     Color color_;
 };
 

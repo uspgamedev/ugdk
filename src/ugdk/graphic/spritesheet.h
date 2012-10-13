@@ -29,9 +29,9 @@ class SpritesheetData {
   public:
     struct SpritesheetFrame {
         PixelSurface* surface;
-        Vector2D hotspot;
+        ugdk::math::Vector2D hotspot;
 
-        SpritesheetFrame(PixelSurface* _surface, const Vector2D& _hotspot)
+        SpritesheetFrame(PixelSurface* _surface, const ugdk::math::Vector2D& _hotspot)
             : surface(_surface), hotspot(_hotspot) {}
     };
 
@@ -41,13 +41,13 @@ class SpritesheetData {
     ~SpritesheetData();
     
     /// Adds a new frame to the frame list.
-    void AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot, size_t file = 0);
+    void AddFrame(int topleft_x, int topleft_y, int width, int height, const ugdk::math::Vector2D& hotspot, size_t file = 0);
     
     /// Adds frames of equal size, all with the same hotspot.
-    void FillWithFramesize(int width, int height, const Vector2D& hotspot, size_t file = 0);
+    void FillWithFramesize(int width, int height, const ugdk::math::Vector2D& hotspot, size_t file = 0);
 
     /// Calls FillWithFramesize for all files.
-    void FillWithFramesizeFromAllFiles(int width, int height, const Vector2D& hotspot);
+    void FillWithFramesizeFromAllFiles(int width, int height, const ugdk::math::Vector2D& hotspot);
 
     /// Getter for the frame data.
     const std::list<SpritesheetFrame>& frames() const { return frames_; }
@@ -67,19 +67,19 @@ class Spritesheet {
         return frame_sizes_.size();
     }
 
-    const Vector2D& frame_size(size_t frame_number) const;
+    const ugdk::math::Vector2D& frame_size(size_t frame_number) const;
 
     /** Draws at position, a draw_size square with the given frame_number
         modified by mirror and both the image and given color and alpha. */
-    void Draw(int frame_number, const Vector2D& hotspot) const;
+    void Draw(int frame_number, const ugdk::math::Vector2D& hotspot) const;
 
   private:
-    void createList(GLuint id, Texture* texture, const Vector2D& hotspot);
+    void createList(GLuint id, Texture* texture, const ugdk::math::Vector2D& hotspot);
 
     GLuint lists_base_;
 
     std::vector<Texture*> frames_;
-    std::vector<Vector2D> frame_sizes_;
+    std::vector<ugdk::math::Vector2D> frame_sizes_;
 };
 
 Spritesheet* CreateSpritesheetFromTag(const std::string&);

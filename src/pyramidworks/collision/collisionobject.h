@@ -69,10 +69,10 @@ class CollisionObject {
     void set_shape(geometry::GeometricShape* shape);
 
     /// TODO document
-    ugdk::Vector2D absolute_position() const { return position_ + offset_; }
+    ugdk::math::Vector2D absolute_position() const { return position_ + offset_; }
 
     /// TODO document
-    void MoveTo(const ugdk::Vector2D& position);
+    void MoveTo(const ugdk::math::Vector2D& position);
 
     /// Wrapper to shape()->GetBoundingBox(absolute_position())
     ugdk::ikdtree::Box<2> GetBoundingBox() const;
@@ -83,8 +83,8 @@ class CollisionObject {
     // Data that is sent to CollisionLogic::Handle
     void *data_;
 
-    ugdk::Vector2D position_;
-    ugdk::Vector2D offset_;
+    ugdk::math::Vector2D position_;
+    ugdk::math::Vector2D offset_;
 
     CollisionClass* collision_class_;
     geometry::GeometricShape* shape_;

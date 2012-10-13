@@ -22,13 +22,13 @@ class Text : public Drawable {
     void Update(double dt);
     void Draw() const;
 
-    virtual const Vector2D& size() const;
+    virtual const ugdk::math::Vector2D& size() const;
 
   private:
     Font* font_;
     std::vector<std::wstring> message_;
 
-    Vector2D size_;
+    ugdk::math::Vector2D size_;
     double line_height_;
     std::vector<double> line_width_;
 };

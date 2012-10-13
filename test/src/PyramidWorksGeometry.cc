@@ -6,7 +6,7 @@
 #include <pyramidworks/geometry/convexpolygon.h>
 #include <vector>
 
-using ugdk::Vector2D;
+using ugdk::math::Vector2D;
 using std::vector;
 using namespace pyramidworks::geometry;
 

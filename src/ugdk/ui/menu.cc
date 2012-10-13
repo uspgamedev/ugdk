@@ -36,7 +36,7 @@ private:
     Menu* menu_;
 };
 
-Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
+Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
   : node_(new graphic::Node()),
     owner_scene_(NULL),
     focused_element_(NULL),
@@ -58,7 +58,7 @@ Menu::~Menu() {
 
 void Menu::Update(double dt) {
     input::InputManager* input = INPUT_MANAGER();
-    Vector2D mouse_pos = input->GetMousePosition();
+    ugdk::math::Vector2D mouse_pos = input->GetMousePosition();
     if((mouse_pos - last_mouse_position_).NormOne() > 10e-10) {
         std::vector<UIElement *> *intersecting_uielements = GetMouseCollision();
         if(intersecting_uielements->size() > 0)
@@ -105,11 +105,11 @@ void Menu::PositionSelectionDrawables() {
            size_x = focused_element_->node()->drawable()->size().x;
     if(option_node_[0]) {
         double draw0_x = option_node_[0]->drawable()->hotspot().x;
-        option_node_[0]->modifier()->set_offset(Vector2D(-focus_x - draw0_x, 0.0));
+        option_node_[0]->modifier()->set_offset(ugdk::math::Vector2D(-focus_x - draw0_x, 0.0));
     }
     if(option_node_[1]) {
         double draw1_x = option_node_[1]->drawable()->hotspot().x;
-        option_node_[1]->modifier()->set_offset(Vector2D(size_x - focus_x + draw1_x, 0.0));
+        option_node_[1]->modifier()->set_offset(ugdk::math::Vector2D(size_x - focus_x + draw1_x, 0.0));
     }
 }
 
@@ -123,7 +123,7 @@ void Menu::FinishScene() const {
 }
 
 std::vector<UIElement *>* Menu::GetMouseCollision() {
-    Vector2D mouse_pos = INPUT_MANAGER()->GetMousePosition();
+    ugdk::math::Vector2D mouse_pos = INPUT_MANAGER()->GetMousePosition();
     double min_coords[2], max_coords[2];
     min_coords[0] = mouse_pos.x - 0.5;
     min_coords[1] = mouse_pos.y - 0.5;
@@ -139,7 +139,7 @@ void Menu::InteractWithFocused() {
         focused_element_->Interact();
 }
 
-void Menu::CheckInteraction(const Vector2D &mouse_pos) {
+void Menu::CheckInteraction(const ugdk::math::Vector2D &mouse_pos) {
     std::vector<UIElement *>* intersecting_uielements = GetMouseCollision();
     if(intersecting_uielements->size() > 0)
         (*intersecting_uielements)[0]->Interact();

@@ -96,7 +96,7 @@ void CollisionObject::set_shape(geometry::GeometricShape* shape) {
     if(is_active_) this->collision_class_->RefreshObject(this);
 }
 
-void CollisionObject::MoveTo(const ugdk::Vector2D& position) {
+void CollisionObject::MoveTo(const ugdk::math::Vector2D& position) {
     position_ = position;
     if(is_active_) this->collision_class_->RefreshObject(this);
 }

@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include <ugdk/math/vector2D.h>
 
-using namespace ugdk;
+using ugdk::math::Vector2D;
 using namespace ugdk::enums;
 
 #define PI 3.1415926535897932384626433832795

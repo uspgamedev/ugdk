@@ -19,7 +19,7 @@ Font::Font(Texture** letters, int fontsize, char ident, bool fancy)
                  TEX_COORD_FOUR[]  = { 0.0, 1.0 };
 
 	id_ = glGenLists(MAX_UNICODE_CODE);
-	Vector2D blank;
+	ugdk::math::Vector2D blank;
 	for(unsigned int i = 0; i < MAX_UNICODE_CODE; i++) {
 		if(letters_[i] == NULL)
 			continue;
@@ -63,14 +63,14 @@ Font::~Font() {
 }
 
 /*FUCKYOU ANSI
-Vector2D Font::GetLetterSize(unsigned char letter) {
-	if(letters_[letter] == NULL) return Vector2D(0,0);
+ugdk::math::Vector2D Font::GetLetterSize(unsigned char letter) {
+	if(letters_[letter] == NULL) return ugdk::math::Vector2D(0,0);
 	return letters_[letter]->render_size() * (size_ * 0.01);
 }*/
 
-Vector2D Font::GetLetterSize(wchar_t letter) {
-	if(letters_[letter] == NULL) return Vector2D(0,0);
-    return Vector2D(letters_[letter]->width() * (size_ * 0.01), letters_[letter]->height() * (size_ * 0.01));
+ugdk::math::Vector2D Font::GetLetterSize(wchar_t letter) {
+	if(letters_[letter] == NULL) return ugdk::math::Vector2D(0,0);
+    return ugdk::math::Vector2D(letters_[letter]->width() * (size_ * 0.01), letters_[letter]->height() * (size_ * 0.01));
 }
 
 }  // namespace graphic

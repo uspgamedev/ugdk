@@ -9,20 +9,20 @@ namespace graphic {
 
 class SolidRectangle : public Shape {
   public:
-    SolidRectangle(const Vector2D& size);
+    SolidRectangle(const ugdk::math::Vector2D& size);
     ~SolidRectangle();
 
     void Update(double dt);
     void Draw() const;
 
-    const Vector2D& size() const { return size_; }
-    void set_size(const Vector2D& size) { size_ = size; }
+    const ugdk::math::Vector2D& size() const { return size_; }
+    void set_size(const ugdk::math::Vector2D& size) { size_ = size; }
 
     const Color& color() const { return color_; }
     void set_color(const Color& color) { color_ = color; }
 
   private:
-    Vector2D size_;
+    ugdk::math::Vector2D size_;
     Color color_;
 };
 

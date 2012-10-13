@@ -12,7 +12,7 @@ namespace geometry {
 
 using namespace ugdk;
 
-bool Rect::Intersects (const ugdk::Vector2D& thispos, const Rect *rect, const ugdk::Vector2D& otherpos) const {
+bool Rect::Intersects (const ugdk::math::Vector2D& thispos, const Rect *rect, const ugdk::math::Vector2D& otherpos) const {
     if( (thispos.x - half_width_  > otherpos.x + rect->half_width_ ) ||
         (thispos.x + half_width_  < otherpos.x - rect->half_width_ ) ||
         (thispos.y - half_height_ > otherpos.y + rect->half_height_) ||
@@ -22,10 +22,10 @@ bool Rect::Intersects (const ugdk::Vector2D& thispos, const Rect *rect, const ug
         return true;
 }
 
-bool Rect::Intersects (const ugdk::Vector2D& rect_pos, const Circle *circle, const ugdk::Vector2D& circ_pos) const {
+bool Rect::Intersects (const ugdk::math::Vector2D& rect_pos, const Circle *circle, const ugdk::math::Vector2D& circ_pos) const {
 
-    Vector2D distance = circ_pos - rect_pos,
-             abs_dist = Vector2D(fabs(distance.x),fabs(distance.y));
+    ugdk::math::Vector2D distance = circ_pos - rect_pos,
+             abs_dist = ugdk::math::Vector2D(fabs(distance.x),fabs(distance.y));
     
     double radius = circle->radius();
 
@@ -56,12 +56,12 @@ bool Rect::Intersects (const ugdk::Vector2D& rect_pos, const Circle *circle, con
     // From now on, we'll treat only corner collisions.
 
     // First, find the offending corner.
-    Vector2D corner = Vector2D(rect_left,rect_down);
+    ugdk::math::Vector2D corner = ugdk::math::Vector2D(rect_left,rect_down);
     if( circ_pos.x > rect_right ) corner.x = rect_right;
     if( circ_pos.y > rect_up    ) corner.y = rect_up;
 
     // Now find the important distance.
-    Vector2D circ_to_corner = corner - circ_pos;
+    ugdk::math::Vector2D circ_to_corner = corner - circ_pos;
     double le_important_dist_sqr = circ_to_corner.LengthSquared();
 
     // Now, check if the circle is too far away from the corner.
@@ -79,9 +79,9 @@ bool Rect::Intersects (const ugdk::Vector2D& rect_pos, const Circle *circle, con
         fabs(distance.y) <= circle->radius() + half_height_)
         return true;
 
-    Vector2D to_vert(half_width_, half_height_);
+    ugdk::math::Vector2D to_vert(half_width_, half_height_);
 
-    Vector2D circminuspos = circ_pos - (offset() + this->position());
+    ugdk::math::Vector2D circminuspos = circ_pos - (offset() + this->position());
     distance = circminuspos - to_vert;
     if (distance.x > 0 && distance.y > 0 &&
         distance.length() <= circle->radius())
@@ -111,18 +111,18 @@ bool Rect::Intersects (const ugdk::Vector2D& rect_pos, const Circle *circle, con
 }
 
 
-bool Rect::Intersects (const ugdk::Vector2D& this_pos, const GeometricShape *obj, const ugdk::Vector2D& that_pos) const {
+bool Rect::Intersects (const ugdk::math::Vector2D& this_pos, const GeometricShape *obj, const ugdk::math::Vector2D& that_pos) const {
     return obj->Intersects(that_pos, this, this_pos);
 }
 
-bool Rect::Intersects(const ugdk::Vector2D& this_pos, const  ConvexPolygon *obj, const ugdk::Vector2D& that_pos) const {
+bool Rect::Intersects(const ugdk::math::Vector2D& this_pos, const  ConvexPolygon *obj, const ugdk::math::Vector2D& that_pos) const {
 	return obj->Intersects(that_pos, this, this_pos);
 }
 
-ugdk::ikdtree::Box<2> Rect::GetBoundingBox(const ugdk::Vector2D& thispos) const {
-    Vector2D thisposmin(thispos.x - half_width_,
+ugdk::ikdtree::Box<2> Rect::GetBoundingBox(const ugdk::math::Vector2D& thispos) const {
+    ugdk::math::Vector2D thisposmin(thispos.x - half_width_,
                         thispos.y - half_height_);
-    Vector2D thisposmax(thispos.x + half_width_,
+    ugdk::math::Vector2D thisposmax(thispos.x + half_width_,
                         thispos.y + half_height_);
     return ugdk::ikdtree::Box<2>(thisposmin.val, thisposmax.val);
 }

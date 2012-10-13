@@ -10,7 +10,7 @@
 namespace ugdk {
 namespace graphic {
 
-SolidRectangle::SolidRectangle(const Vector2D& size) : size_(size) {}
+SolidRectangle::SolidRectangle(const ugdk::math::Vector2D& size) : size_(size) {}
 
 SolidRectangle::~SolidRectangle() {}
     
@@ -20,7 +20,7 @@ void SolidRectangle::Draw() const {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
     if(!mod.visible()) return;
 
-    Vector2D origin, target(size_);
+    ugdk::math::Vector2D origin, target(size_);
 
     if(mod.mirror() & MIRROR_HFLIP) { // Horizontal flip
         origin.x = target.x;

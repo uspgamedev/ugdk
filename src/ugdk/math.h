@@ -3,11 +3,12 @@
 
 namespace ugdk {
 namespace math {
+
 class Integer2D;
-}
 class Frame;
 class Vector2D;
 
-}  // namespace ugdk
+} // namespace math
+} // namespace ugdk
 
 #endif

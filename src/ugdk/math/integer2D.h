@@ -1,16 +1,14 @@
-
 #ifndef UGDK_MATH_INTEGER2D_H_
 #define UGDK_MATH_INTEGER2D_H_
 
 #include <ugdk/base/types.h>
+#include <ugdk/math.h>
 
 #ifdef SWIG
 #pragma SWIG nowarn=312
 #endif
 
 namespace ugdk {
-
-class Vector2D;
 
 namespace math {
 
@@ -39,8 +37,8 @@ class Integer2D {
     */
     Integer2D(int _x, int _y) : x(_x), y(_y) {}
 
-    /// Copy constructor from Vector2D.
-    Integer2D(const ugdk::Vector2D& vec2d);
+    /// Copy constructor from ugdk::math::Vector2D.
+    Integer2D(const ugdk::math::Vector2D& vec2d);
 
     ~Integer2D() { }
 

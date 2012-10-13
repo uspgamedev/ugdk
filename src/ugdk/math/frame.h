@@ -1,7 +1,8 @@
-#ifndef HORUSEYE_FRAMEWORK_FRAME_H_
-#define HORUSEYE_FRAMEWORK_FRAME_H_
+#ifndef UGDK_MATH_FRAME_H_
+#define UGDK_MATH_FRAME_H_
 
 namespace ugdk {
+namespace math {
 
 // Representa um quadro (retangulo) na tela e/ou numa imagem.
 // Util para trabalhar com animacoes, detectar colisoes
@@ -17,7 +18,7 @@ namespace ugdk {
 //        +------------------+
 //                        (right,bottom)
 
-/** @class Frame.
+/** @class math::Frame.
     @brief Represents a frame on the screen or an image.
 
     Represents a rectangular frame on the screen or an image.
@@ -65,12 +66,13 @@ class Frame {
     // Devolve true se houver colisao entre
     // 'frame' e este retangulo.
     /// Returns whether this frame and the other frame are colliding.
-    bool Collides(const Frame& frame) const;
+    bool Collides(const math::Frame& frame) const;
 
   private:
     double left_, top_, right_, bottom_;
 };
 
-}  // namespace ugdk
+} // namespace math
+} // namespace ugdk
 
-#endif  // HORUSEYE_FRAMEWORK_FRAME_H_
+#endif  // UGDK_MATH_FRAME_H_

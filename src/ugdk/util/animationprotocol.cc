@@ -164,7 +164,7 @@ bool AnimationProtocol::NewEntry_Color(std::string arg) {
     return true;
 }
 bool AnimationProtocol::NewEntry_Position(double x, double y) {
-    Vector2D new_pos(x, y);
+    ugdk::math::Vector2D new_pos(x, y);
     if(current_scope_ == FRAME_RING) {
         action::AnimationFrame* cur_frame
             = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
@@ -197,7 +197,7 @@ bool AnimationProtocol::NewEntry_Mirror(std::string arg) {
     return true;
 }
 bool AnimationProtocol::NewEntry_Size(double x, double y) {
-    Vector2D new_size(x, y);
+    ugdk::math::Vector2D new_size(x, y);
     if(current_scope_ == FRAME_RING) {
         action::AnimationFrame* cur_frame
             = current_animation_->at(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH

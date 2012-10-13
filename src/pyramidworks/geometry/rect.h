@@ -22,11 +22,11 @@ class Rect : public GeometricShape {
     /** @return A double. */
     double height() const { return 2*half_height_; }
 
-    bool Intersects(const ugdk::Vector2D& this_pos, const GeometricShape *obj, const ugdk::Vector2D& that_pos) const;
-    bool Intersects(const ugdk::Vector2D& this_pos, const           Rect *obj, const ugdk::Vector2D& that_pos) const;
-    bool Intersects(const ugdk::Vector2D& this_pos, const         Circle *obj, const ugdk::Vector2D& that_pos) const;
-	bool Intersects(const ugdk::Vector2D& this_pos, const  ConvexPolygon *obj, const ugdk::Vector2D& that_pos) const;
-    ugdk::ikdtree::Box<2> GetBoundingBox(const ugdk::Vector2D& position) const;
+    bool Intersects(const ugdk::math::Vector2D& this_pos, const GeometricShape *obj, const ugdk::math::Vector2D& that_pos) const;
+    bool Intersects(const ugdk::math::Vector2D& this_pos, const           Rect *obj, const ugdk::math::Vector2D& that_pos) const;
+    bool Intersects(const ugdk::math::Vector2D& this_pos, const         Circle *obj, const ugdk::math::Vector2D& that_pos) const;
+	bool Intersects(const ugdk::math::Vector2D& this_pos, const  ConvexPolygon *obj, const ugdk::math::Vector2D& that_pos) const;
+    ugdk::ikdtree::Box<2> GetBoundingBox(const ugdk::math::Vector2D& position) const;
 
   private:
     double half_width_, half_height_;

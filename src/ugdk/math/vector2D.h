@@ -3,16 +3,14 @@
 #define UGDK_MATH_VECTOR2D_H_
 
 #include <ugdk/base/types.h>
+#include <ugdk/math.h>
 
 #ifdef SWIG
 #pragma SWIG nowarn=312
 #endif
 
 namespace ugdk {
-
 namespace math {
-class Integer2D;
-} // namespace math
 
 // 2 dimension vectors, using doubles.
 class Vector2D {
@@ -237,6 +235,7 @@ class Vector2D {
     */
 Vector2D operator*(const double  &scalar, const Vector2D &right);
 
+}  // namespace math
 }  // namespace ugdk
 
 #endif  // UGDK_MATH_VECTOR2D_H_

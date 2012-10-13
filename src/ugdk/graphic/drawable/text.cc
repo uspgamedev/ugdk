@@ -14,14 +14,14 @@ namespace graphic {
 
 using ugdk::Color;
 
-static Vector2D GetStringSize(const std::wstring& string, Font* font) {
+static ugdk::math::Vector2D GetStringSize(const std::wstring& string, Font* font) {
     double width = 0, height = font->GetLetterSize(L'\n').y;
     for(size_t i = 0; i < string.length(); i++) {
-        const Vector2D letter_size = font->GetLetterSize(string[i]);
+        const ugdk::math::Vector2D letter_size = font->GetLetterSize(string[i]);
         width += letter_size.x;
         height = std::max(height, letter_size.y);
     }
-    return Vector2D(width, height);
+    return ugdk::math::Vector2D(width, height);
 }
 
 Text::Text(const std::wstring& message, Font *font) : font_(font) {
@@ -44,7 +44,7 @@ void Text::SetMessage(const std::wstring& message) {
 void Text::SetMessage(const std::vector<std::wstring>& message) {
     std::vector<std::wstring>::const_iterator it;
     for(it = message.begin(); it != message.end(); ++it) {
-        Vector2D line_size = GetStringSize(*it, font_);
+        ugdk::math::Vector2D line_size = GetStringSize(*it, font_);
         line_height_ = std::max(line_size.y, line_height_);
 
         size_.x = std::max(size_.x, line_size.x);
@@ -56,7 +56,7 @@ void Text::SetMessage(const std::vector<std::wstring>& message) {
     message_ = message;
 }
 
-const Vector2D& Text::size() const {
+const ugdk::math::Vector2D& Text::size() const {
     return size_;
 }
 

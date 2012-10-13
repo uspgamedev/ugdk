@@ -38,12 +38,12 @@ static void InitializeExtensions() {
 namespace ugdk {
 namespace graphic {
 
-static Vector2D default_resolution(800.0, 600.0);
+static ugdk::math::Vector2D default_resolution(800.0, 600.0);
 
 // Inicializa o gerenciador de video, definindo uma
 // resolucao para o programa. Retorna true em caso de
 // sucesso.
-bool VideoManager::Initialize(const string& title, const Vector2D& size, bool fullscreen, const string& icon) {
+bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& size, bool fullscreen, const string& icon) {
     modifiers_.empty();
     title_ = title;
     
@@ -76,7 +76,7 @@ bool VideoManager::Initialize(const string& title, const Vector2D& size, bool fu
 
 // Changes the resolution to the requested value.
 // Returns true on success.
-bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
+bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fullscreen) {
     Uint32 flags = SDL_OPENGL;
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     if(fullscreen) flags |= SDL_FULLSCREEN;
@@ -110,7 +110,7 @@ bool VideoManager::ChangeResolution(const Vector2D& size, bool fullscreen) {
 
     video_size_ = size;
     settings_.fullscreen = fullscreen;
-    virtual_bounds_ = Frame(0, 0, video_size_.x, video_size_.y);
+    virtual_bounds_ = math::Frame(0, 0, video_size_.x, video_size_.y);
 
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
     InitializeLight();
@@ -218,7 +218,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ellipse_coef) {
+static SDL_Surface* CreateLightSurface(const ugdk::math::Vector2D& size, const ugdk::math::Vector2D& ellipse_coef) {
     int width = static_cast<int>(size.x);
     int height = static_cast<int>(size.y);
     SDL_Surface *screen = SDL_GetVideoSurface();
@@ -233,7 +233,7 @@ static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ell
     if(data == NULL)
         return NULL;
 
-    Vector2D origin = size * 0.5;
+    ugdk::math::Vector2D origin = size * 0.5;
 
     // Locks the surface so we can manage the pixel data.
     SDL_LockSurface(data);
@@ -243,10 +243,10 @@ static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ell
             Uint8 alpha = 0;
 
             // Formulae to detect if the point is inside the ellipse.
-            Vector2D dist = Vector2D(j + 0.0, i + 0.0) - origin;
+            ugdk::math::Vector2D dist = ugdk::math::Vector2D(j + 0.0, i + 0.0) - origin;
             dist.x /= ellipse_coef.x;
             dist.y /= ellipse_coef.y;
-            double distance = Vector2D::InnerProduct(dist, dist);
+            double distance = ugdk::math::Vector2D::InnerProduct(dist, dist);
             if(distance <= 1)
                 alpha = static_cast<Uint8>(SDL_ALPHA_OPAQUE * exp(-distance * LN255));
             pixels[i * width + j] = SDL_MapRGBA(data->format, alpha, alpha, alpha, alpha);
@@ -257,7 +257,7 @@ static SDL_Surface* CreateLightSurface(const Vector2D& size, const Vector2D& ell
 }
 
 void VideoManager::InitializeLight() {
-    Vector2D light_size(32.0, 32.0);
+    ugdk::math::Vector2D light_size(32.0, 32.0);
     if(light_texture_ != NULL) delete light_texture_;
 
     SDL_Surface* light_surface = CreateLightSurface(light_size * 2.0, light_size);

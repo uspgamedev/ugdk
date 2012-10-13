@@ -19,9 +19,9 @@
 
 %import <module/ugdk_util.i>
 
-%newobject pyramidworks::geometry::Circle::GetBoundingBox(const ugdk::Vector2D& position) const;
-%newobject pyramidworks::geometry::Rect::GetBoundingBox(const ugdk::Vector2D& position) const;
-%newobject pyramidworks::geometry::ConvexPolygon::GetBoundingBox(const ugdk::Vector2D& position) const;
+%newobject pyramidworks::geometry::Circle::GetBoundingBox(const ugdk::math::Vector2D& position) const;
+%newobject pyramidworks::geometry::Rect::GetBoundingBox(const ugdk::math::Vector2D& position) const;
+%newobject pyramidworks::geometry::ConvexPolygon::GetBoundingBox(const ugdk::math::Vector2D& position) const;
 
 %include <pyramidworks/geometry.h>
 %include <pyramidworks/geometry/geometricshape.h>

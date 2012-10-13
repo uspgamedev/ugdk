@@ -33,7 +33,7 @@ class Modifier {
      * @param color The color filter.
      * @param alpha The alpha value for the image.
      */
-    Modifier(const Vector2D& _offset, const Vector2D _scale = Vector2D(1.0, 1.0),
+    Modifier(const ugdk::math::Vector2D& _offset, const ugdk::math::Vector2D _scale = ugdk::math::Vector2D(1.0, 1.0),
              double _rotation = 0.0, Mirror _mirror = MIRROR_NONE, const Color _color = WHITE, bool _visible = true) :
         
         offset_(_offset), scale_(_scale), rotation_(_rotation), mirror_(_mirror), 
@@ -46,8 +46,8 @@ class Modifier {
     /**@name Getters and Setters
      *@{
      */
-    const Vector2D& offset()    const { return   offset_; }
-    const Vector2D& scale()     const { return    scale_; }
+    const ugdk::math::Vector2D& offset()    const { return   offset_; }
+    const ugdk::math::Vector2D& scale()     const { return    scale_; }
     double          rotation()  const { return rotation_; }
     const Mirror&   mirror()    const { return   mirror_; }
     const Color&    color()     const { return    color_; }
@@ -55,8 +55,8 @@ class Modifier {
     bool            visible()   const { return  visible_; }
 
     // Setters.
-    void set_offset(const Vector2D& _offset) { offset_ = _offset; flags_ |= HAS_TRANSFORMATION; }
-    void set_scale(const Vector2D& _scale)   { scale_  = _scale;  flags_ |= HAS_TRANSFORMATION; }
+    void set_offset(const ugdk::math::Vector2D& _offset) { offset_ = _offset; flags_ |= HAS_TRANSFORMATION; }
+    void set_scale(const ugdk::math::Vector2D& _scale)   { scale_  = _scale;  flags_ |= HAS_TRANSFORMATION; }
     /// Adjusts rotation to use the [0,2PI] space and sets it to the Modifier.
     void set_rotation(const double rotation);
     /// Assigns MIRROR_NONE in case of an invalid argument.
@@ -69,8 +69,8 @@ class Modifier {
     /**@name Component composers.
      *@{
      */
-    void ComposeOffset(const Vector2D& _offset) { offset_  += _offset;  flags_ |= HAS_TRANSFORMATION;}
-    void ComposeScale(const Vector2D& _scale)   { scale_.x *= _scale.x;
+    void ComposeOffset(const ugdk::math::Vector2D& _offset) { offset_  += _offset;  flags_ |= HAS_TRANSFORMATION;}
+    void ComposeScale(const ugdk::math::Vector2D& _scale)   { scale_.x *= _scale.x;
                                                   scale_.y *= _scale.y; 
                                                   flags_ |= HAS_TRANSFORMATION; }
 
@@ -101,7 +101,7 @@ class Modifier {
 
   private:
     // Attributes
-    Vector2D        offset_,
+    ugdk::math::Vector2D        offset_,
                     scale_;
     double          rotation_;
     Mirror          mirror_;

@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include <ugdk/math/integer2D.h>
 
-using namespace ugdk;
 using ugdk::math::Integer2D;
 
 TEST(Integer2D, Constructor) {

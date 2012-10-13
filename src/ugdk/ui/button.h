@@ -13,7 +13,7 @@ namespace ui {
 typedef std::tr1::function<void (const Button *)> ButtonCallback;
 class Button : public UIElement {
   public:
-    Button(const Vector2D& top_left, graphic::Drawable* drawable, const ButtonCallback& function);
+    Button(const ugdk::math::Vector2D& top_left, graphic::Drawable* drawable, const ButtonCallback& function);
     ~Button();
 
     void Interact() const { if(function_) function_(this); }
@@ -21,7 +21,7 @@ class Button : public UIElement {
 
   private:
     ButtonCallback function_;
-    Vector2D top_left_;
+    ugdk::math::Vector2D top_left_;
 };
 
 } // namespace ui

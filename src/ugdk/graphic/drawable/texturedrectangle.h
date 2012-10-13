@@ -11,17 +11,17 @@ namespace graphic {
 class TexturedRectangle : public Shape {
   public:
     TexturedRectangle(Texture* texture);
-    TexturedRectangle(Texture* texture, const Vector2D& size);
+    TexturedRectangle(Texture* texture, const ugdk::math::Vector2D& size);
     ~TexturedRectangle();
 
     void Update(double dt);
     void Draw() const;
 
-    const Vector2D& size() const { return size_; }
-    void set_size(const Vector2D& size) { size_ = size; }
+    const ugdk::math::Vector2D& size() const { return size_; }
+    void set_size(const ugdk::math::Vector2D& size) { size_ = size; }
 
   private:
-    Vector2D size_;
+    ugdk::math::Vector2D size_;
     Texture* texture_;
 };
 

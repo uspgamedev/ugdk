@@ -46,7 +46,7 @@ void Sprite::Draw() const {
     }
 }
 
-const Vector2D& Sprite::size() const {
+const ugdk::math::Vector2D& Sprite::size() const {
     return spritesheet_->frame_size(animation_manager_->GetFrame()); // TODO: requires some info from the spritesheet
 }
 

@@ -7,22 +7,22 @@
 namespace pyramidworks {
 namespace geometry {
 
-using ugdk::Vector2D;
+using ugdk::math::Vector2D;
 
-ConvexPolygon::ConvexPolygon(const std::vector<ugdk::Vector2D>& vertices) : GeometricShape(), vertices_(vertices) {
+ConvexPolygon::ConvexPolygon(const std::vector<ugdk::math::Vector2D>& vertices) : GeometricShape(), vertices_(vertices) {
 	calculateSize();
 }
 
-bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const ConvexPolygon *polygon, const ugdk::Vector2D& otherpos) const {
+bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const ConvexPolygon *polygon, const ugdk::math::Vector2D& otherpos) const {
 	return ! checkAxisSeparation(vertices_, this_pos, polygon->vertices_, otherpos);
 }
 
-bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Rect *rect, const ugdk::Vector2D& otherpos) const {
-	std::vector<Vector2D> rect_vertices;
-	Vector2D v1 (-rect->width()/2.0, -rect->height()/2.0);
-	Vector2D v2 ( rect->width()/2.0, -rect->height()/2.0);
-	Vector2D v3 (-rect->width()/2.0,  rect->height()/2.0);
-	Vector2D v4 ( rect->width()/2.0,  rect->height()/2.0);
+bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const Rect *rect, const ugdk::math::Vector2D& otherpos) const {
+	std::vector<ugdk::math::Vector2D> rect_vertices;
+	ugdk::math::Vector2D v1 (-rect->width()/2.0, -rect->height()/2.0);
+	ugdk::math::Vector2D v2 ( rect->width()/2.0, -rect->height()/2.0);
+	ugdk::math::Vector2D v3 (-rect->width()/2.0,  rect->height()/2.0);
+	ugdk::math::Vector2D v4 ( rect->width()/2.0,  rect->height()/2.0);
 	rect_vertices.push_back(v1);
 	rect_vertices.push_back(v2);
 	rect_vertices.push_back(v3);
@@ -31,10 +31,10 @@ bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Rect *rect
 	return ! checkAxisSeparation(vertices_, this_pos, rect_vertices, otherpos);
 }
 
-bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Circle *circle, const ugdk::Vector2D& circ_pos) const {
+bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const Circle *circle, const ugdk::math::Vector2D& circ_pos) const {
 	double R = circle->radius(), AC_edge_angle, BC_edge_angle;
 	size_t p2;
-	Vector2D A, B, edge, edgeNormal, AC;
+	ugdk::math::Vector2D A, B, edge, edgeNormal, AC;
 	bool isCircleInside = true;
 	bool isProjInEdge;
 	/* For each edge in the convex polygon, check if the center of the circle is "inside" the polygon. 
@@ -70,14 +70,14 @@ bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const Circle *ci
 	return isCircleInside;
 }
 
-bool ConvexPolygon::Intersects (const ugdk::Vector2D& this_pos, const GeometricShape *obj, const ugdk::Vector2D& that_pos) const {
+bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const GeometricShape *obj, const ugdk::math::Vector2D& that_pos) const {
     return obj->Intersects(that_pos, this, this_pos);
 }
 
-ugdk::ikdtree::Box<2> ConvexPolygon::GetBoundingBox(const ugdk::Vector2D& thispos) const {
-    Vector2D thisposmin(thispos.x - bbox_half_width_,
+ugdk::ikdtree::Box<2> ConvexPolygon::GetBoundingBox(const ugdk::math::Vector2D& thispos) const {
+    ugdk::math::Vector2D thisposmin(thispos.x - bbox_half_width_,
                         thispos.y - bbox_half_height_);
-    Vector2D thisposmax(thispos.x + bbox_half_width_,
+    ugdk::math::Vector2D thisposmax(thispos.x + bbox_half_width_,
                         thispos.y + bbox_half_height_);
     return ugdk::ikdtree::Box<2>(thisposmin.val, thisposmax.val);
 }
@@ -92,15 +92,15 @@ void ConvexPolygon::calculateSize() {
 	}
 }
 
-bool ConvexPolygon::checkAxisSeparation(const std::vector<ugdk::Vector2D>& obj1, const ugdk::Vector2D& obj1pos,
-										const std::vector<ugdk::Vector2D>& obj2, const ugdk::Vector2D& obj2pos) const {
+bool ConvexPolygon::checkAxisSeparation(const std::vector<ugdk::math::Vector2D>& obj1, const ugdk::math::Vector2D& obj1pos,
+										const std::vector<ugdk::math::Vector2D>& obj2, const ugdk::math::Vector2D& obj2pos) const {
 	size_t i, p2;
 	/* For each edge in the obj1 polygon, we check if that edge is a separating axis between the two polygons. */
 	for (i = 0; i < obj1.size(); i++) {
 		p2 = i + 1;
 		if (p2 >= obj1.size())	p2 = 0;
 
-		/* obj1 and obj2 Vector2Ds are in local coordinates relative to that polygon - so add the polygon position to the
+		/* obj1 and obj2 ugdk::math::Vector2Ds are in local coordinates relative to that polygon - so add the polygon position to the
 		   obj1 vectors we are passing to the separating axis edge test. */
 		if (axisSeparationTest(obj1[i]+obj1pos, obj1[p2]+obj1pos, obj1pos, obj2, obj2pos))
 			return true;
@@ -119,10 +119,10 @@ bool ConvexPolygon::checkAxisSeparation(const std::vector<ugdk::Vector2D>& obj1,
 	return false;
 }
 
-bool ConvexPolygon::axisSeparationTest(const ugdk::Vector2D& p1, const ugdk::Vector2D& p2, const ugdk::Vector2D& ref,
-									   const std::vector<ugdk::Vector2D>& obj, const ugdk::Vector2D& obj2pos) const {
-	Vector2D edge = p2 - p1;
-	Vector2D edgeNormal (-edge.y, edge.x);
+bool ConvexPolygon::axisSeparationTest(const ugdk::math::Vector2D& p1, const ugdk::math::Vector2D& p2, const ugdk::math::Vector2D& ref,
+									   const std::vector<ugdk::math::Vector2D>& obj, const ugdk::math::Vector2D& obj2pos) const {
+	ugdk::math::Vector2D edge = p2 - p1;
+	ugdk::math::Vector2D edgeNormal (-edge.y, edge.x);
 
 	/* Store the side of the reference point in the given polygon (obj1) relative to the given edge (p2-p1) to check against. */
 	bool ref_side = insideSameSpace(edgeNormal, (ref - p1));
@@ -142,7 +142,7 @@ bool ConvexPolygon::axisSeparationTest(const ugdk::Vector2D& p1, const ugdk::Vec
 	return true;
 }
 
-bool ConvexPolygon::insideSameSpace(const ugdk::Vector2D& line, const ugdk::Vector2D& point) const {
+bool ConvexPolygon::insideSameSpace(const ugdk::math::Vector2D& line, const ugdk::math::Vector2D& point) const {
 	return (line * point) > 0;
 }
 
