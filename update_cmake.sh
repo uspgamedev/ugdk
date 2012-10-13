@@ -1,8 +1,8 @@
 #!/bin/bash
 
-FILES=`find ./src/ugdk/ ./src/pyramidworks/ -name *.cc -not -path "*/script/languages/*" | sort`
-LUA_FILES=`find ./src/ugdk/script/languages/lua -name *.cc | sort`
-PYTHON_FILES=`find ./src/ugdk/script/languages/python -name *.cc | sort`
+FILES=`find ./src/ugdk/ ./src/pyramidworks/ -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" -not -path "*/script/languages/*" | sort`
+LUA_FILES=`find ./src/ugdk/script/languages/lua -name "*.cc" -o -name "*.h" | sort`
+PYTHON_FILES=`find ./src/ugdk/script/languages/python -name *.cc -o -name "*.h" | sort`
 cd src/module
 UGDK_MODULES=`find | grep -o "[^/]*ugdk_.*\.\(i\)$" | sort`
 PYRAMIDWORKS_MODULES=`find | grep -o "[^/]*pyramidworks_.*\.\(i\)$" | sort`

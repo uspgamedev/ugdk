@@ -7,11 +7,12 @@
 %{
 
 #include <ugdk/math/vector2D.h>
+#include <ugdk/math/integer2D.h>
 #include <ugdk/math/frame.h>
 
 %}
 
-%ignore ugdk::math::Vector2D::Rotate(ugdk::math::Vector2D &a, double angle);
+%ignore ugdk::math::Vector2D::Rotate(Vector2D &a, double angle);
 %ignore ugdk::math::operator*(const double  &scalar, const ugdk::math::Vector2D &right);
 
 %newobject ugdk::math::Vector2D::Normalize() const;
@@ -30,11 +31,14 @@
 %include <ugdk/math/vector2D.h>
 %template(Vector2DList) std::vector<ugdk::math::Vector2D>;
 
+%include <ugdk/math/integer2D.h>
+
 %include <ugdk/math/frame.h>
 
 namespace ugdk {
 namespace math {
     export_class(Vector2D)
+    export_class(Integer2D)
     export_class(Frame)
 }
 }
