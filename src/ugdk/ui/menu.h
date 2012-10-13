@@ -27,7 +27,7 @@ typedef std::map<input::Key, MenuCallback > InputCallbacks;
 class Menu: public action::Entity {
   typedef ikdtree::IntervalKDTree<UIElement*, 2> ObjectTree;
   public:
-    Menu(const ikdtree::Box<2>& tree_bounding_box, const Vector2D& offset, const graphic::Drawable::HookPoint& hook = graphic::Drawable::TOP_LEFT);
+    Menu(const ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook = graphic::Drawable::TOP_LEFT);
     ~Menu();
 
     void Update(double dt);
@@ -58,7 +58,7 @@ class Menu: public action::Entity {
     const static MenuCallback INTERACT_MENU;
     
   private:
-    void CheckInteraction(const Vector2D& mouse_pos);
+    void CheckInteraction(const ugdk::math::Vector2D& mouse_pos);
     void InteractWithFocused();
     void SelectUIElement(UIElement* target);
     void FocusNextElement(int offset);
@@ -67,7 +67,7 @@ class Menu: public action::Entity {
     graphic::Node* node_;
     graphic::Node* option_node_[2];
     action::Scene* owner_scene_;
-    Vector2D last_mouse_position_;
+    ugdk::math::Vector2D last_mouse_position_;
     UIElement* focused_element_;
     std::list< UIElement* > uielements_;
     ObjectTree* objects_tree_;

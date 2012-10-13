@@ -5,6 +5,8 @@
 namespace ugdk {
 namespace input {
 
+using math::Vector2D;
+
 InputManager::InputManager() {
     SDL_GetKeyState(&kbsize_);
     keystate_now_ = new bool[kbsize_];

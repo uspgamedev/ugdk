@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include <ugdk/graphic/modifier.h>
 
-using ugdk::Vector2D;
+using ugdk::math::Vector2D;
 using ugdk::Color;
 using ugdk::graphic::Modifier;
 

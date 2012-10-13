@@ -27,21 +27,21 @@ class VideoManager {
     VideoManager() : settings_(false, false, false), light_buffer_(NULL), light_texture_(NULL) {}
     ~VideoManager() {}
 
-    bool Initialize(const std::string& title, const Vector2D& size, bool fullscreen, const std::string& icon);
+    bool Initialize(const std::string& title, const ugdk::math::Vector2D& size, bool fullscreen, const std::string& icon);
     bool Release();
     void Render(const std::list<action::Scene*>&);
 
     // Configuration
-    bool ChangeResolution(const Vector2D& size, bool fullscreen);
+    bool ChangeResolution(const ugdk::math::Vector2D& size, bool fullscreen);
     void SetVSync(const bool active);
     void SetLightSystem(const bool active) { settings_.light_system = active; }
 
     // Getters
-    Vector2D video_size() const { return video_size_; }
+    ugdk::math::Vector2D video_size() const { return video_size_; }
     bool fullscreen() const { return settings_.fullscreen; }
     const std::string& title() const { return title_; }
     const Texture* light_texture() const { return light_texture_; }
-    Frame virtual_bounds() const { return virtual_bounds_; }
+    math::Frame virtual_bounds() const { return virtual_bounds_; }
 
     // Modifier stack
     void PushAndApplyModifier(const Modifier*);
@@ -50,8 +50,8 @@ class VideoManager {
     const Modifier& CurrentModifier() const;
 
   private:
-    Vector2D video_size_;
-    Frame virtual_bounds_;
+    ugdk::math::Vector2D video_size_;
+    math::Frame virtual_bounds_;
     std::string title_;
 
     struct Settings {

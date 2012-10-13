@@ -18,7 +18,7 @@ namespace math {
 //        +------------------+
 //                        (right,bottom)
 
-/** @class Frame.
+/** @class math::Frame.
     @brief Represents a frame on the screen or an image.
 
     Represents a rectangular frame on the screen or an image.
@@ -66,7 +66,7 @@ class Frame {
     // Devolve true se houver colisao entre
     // 'frame' e este retangulo.
     /// Returns whether this frame and the other frame are colliding.
-    bool Collides(const Frame& frame) const;
+    bool Collides(const math::Frame& frame) const;
 
   private:
     double left_, top_, right_, bottom_;

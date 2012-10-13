@@ -236,9 +236,6 @@ class Vector2D {
 Vector2D operator*(const double  &scalar, const Vector2D &right);
 
 }  // namespace math
-
-using namespace math;
-
 }  // namespace ugdk
 
 #endif  // UGDK_MATH_VECTOR2D_H_

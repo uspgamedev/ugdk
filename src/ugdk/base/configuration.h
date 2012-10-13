@@ -10,7 +10,7 @@ typedef struct Configuration {
     std::string        base_path;
     std::string      window_icon;
     std::string     window_title;
-    Vector2D         window_size;
+    ugdk::math::Vector2D         window_size;
     bool              fullscreen;
     std::string default_language;
 

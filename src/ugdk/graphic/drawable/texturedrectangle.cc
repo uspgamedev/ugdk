@@ -14,7 +14,7 @@ namespace graphic {
 TexturedRectangle::TexturedRectangle(Texture* texture) 
     : size_(static_cast<double>(texture->width()), static_cast<double>(texture->height())), texture_(texture) {}
 
-TexturedRectangle::TexturedRectangle(Texture* texture, const Vector2D& size) 
+TexturedRectangle::TexturedRectangle(Texture* texture, const ugdk::math::Vector2D& size) 
     : size_(size), texture_(texture) {}
 
 TexturedRectangle::~TexturedRectangle() {}
@@ -25,7 +25,7 @@ void TexturedRectangle::Draw() const {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
     if(!mod.visible()) return;
 
-    Vector2D origin, target(size_);
+    ugdk::math::Vector2D origin, target(size_);
 
     if(mod.mirror() & MIRROR_HFLIP) { // Horizontal flip
         origin.x = target.x;

@@ -69,7 +69,7 @@ class Engine {
     LanguageManager* language_manager() { return language_manager_; }
 
     /// Returns the window dimensions.
-    Vector2D window_size();
+    ugdk::math::Vector2D window_size();
 
     /** @name Engine Management
      ** @{

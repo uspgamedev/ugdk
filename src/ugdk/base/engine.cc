@@ -23,7 +23,7 @@ using namespace input;
 
 Engine* Engine::reference_ = NULL;
 
-Vector2D Engine::window_size() {
+ugdk::math::Vector2D Engine::window_size() {
     return video_manager_->video_size();
 }
 

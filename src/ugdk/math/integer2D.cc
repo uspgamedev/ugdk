@@ -16,7 +16,7 @@ namespace math {
 
 static int absolute_value(int v) { return std::max(v, -v); }
 
-Integer2D::Integer2D(const ugdk::Vector2D& vec2d)
+Integer2D::Integer2D(const ugdk::math::Vector2D& vec2d)
   : x(static_cast<int>(vec2d.x)), y(static_cast<int>(vec2d.y)) {}
 
 // Returns the norm-1.

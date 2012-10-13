@@ -95,7 +95,7 @@ SpritesheetData::~SpritesheetData() {
         delete it->surface;
 }
 
-void SpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int height, const Vector2D& hotspot, size_t file) {
+void SpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int height, const ugdk::math::Vector2D& hotspot, size_t file) {
     if(file >= file_data_.size() || file_data_[file]->surface == NULL) return;
     
     SDL_Surface* surface = createBaseSurface(width, height);
@@ -104,7 +104,7 @@ void SpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int heig
     frames_.push_back(SpritesheetFrame(new PixelSurface(surface), hotspot));
 }
 
-void SpritesheetData::FillWithFramesize(int width, int height, const Vector2D& hotspot, size_t file) {
+void SpritesheetData::FillWithFramesize(int width, int height, const ugdk::math::Vector2D& hotspot, size_t file) {
     if(file >= file_data_.size() || file_data_[file]->surface == NULL) return;
 
     for(int y = 0; y + height <= file_data_[file]->surface->h; y += height) {
@@ -114,7 +114,7 @@ void SpritesheetData::FillWithFramesize(int width, int height, const Vector2D& h
     }
 }
     
-void SpritesheetData::FillWithFramesizeFromAllFiles(int width, int height, const Vector2D& hotspot) {
+void SpritesheetData::FillWithFramesizeFromAllFiles(int width, int height, const ugdk::math::Vector2D& hotspot) {
     for(size_t i = 0; i < file_data_.size(); ++i)
         FillWithFramesize(width, height, hotspot, i);
 }
@@ -130,7 +130,7 @@ Spritesheet::Spritesheet(const SpritesheetData& data) {
         Texture* texture = Texture::CreateFromSurface(it->surface->surface);
         createList(id, texture, it->hotspot);
         frames_.push_back(texture);
-        frame_sizes_.push_back(Vector2D(static_cast<double>(texture->width()), static_cast<double>(texture->height())));
+        frame_sizes_.push_back(ugdk::math::Vector2D(static_cast<double>(texture->width()), static_cast<double>(texture->height())));
     }
 }
 
@@ -143,16 +143,16 @@ Spritesheet::~Spritesheet() {
         delete *it;
 }
 
-const Vector2D& Spritesheet::frame_size(size_t frame_number) const {
-    static const Vector2D invalid_size(0.0, 0.0);
+const ugdk::math::Vector2D& Spritesheet::frame_size(size_t frame_number) const {
+    static const ugdk::math::Vector2D invalid_size(0.0, 0.0);
     return frame_number < frame_sizes_.size() ? frame_sizes_[frame_number] : invalid_size;
 }
 
-void Spritesheet::createList(GLuint id, Texture* texture, const Vector2D& hotspot) {
+void Spritesheet::createList(GLuint id, Texture* texture, const ugdk::math::Vector2D& hotspot) {
     if(texture == NULL) return;
     glColor3f(1.0, 1.0, 1.0);
 
-    Vector2D origin, target(static_cast<double>(texture->width()), static_cast<double>(texture->height()));
+    ugdk::math::Vector2D origin, target(static_cast<double>(texture->width()), static_cast<double>(texture->height()));
     origin -= hotspot;
     target -= hotspot;
 
@@ -180,7 +180,7 @@ void Spritesheet::createList(GLuint id, Texture* texture, const Vector2D& hotspo
     } glEndList();
 }
 
-void Spritesheet::Draw(int frame_number, const Vector2D& hotspot) const {
+void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot) const {
     const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
     if(!mod.visible()) return;
 
@@ -231,7 +231,7 @@ Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
         VirtualObj::Vector fill = data["fill"].value<VirtualObj::Vector>();
         int width = fill[0].value<int>();
         int height = fill[1].value<int>();
-        Vector2D* hotspot = fill[2].value<Vector2D*>();
+        ugdk::math::Vector2D* hotspot = fill[2].value<ugdk::math::Vector2D*>();
         int file = (fill.size() >= 4) ? fill[4].value<int>() : 0;
         sprite_data.FillWithFramesize(width, height, *hotspot, file);
     }
@@ -243,7 +243,7 @@ Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
             int top_left_y = frame[1].value<int>();
             int width = frame[2].value<int>();
             int height = frame[3].value<int>();
-            Vector2D* hotspot = frame[4].value<Vector2D*>();
+            ugdk::math::Vector2D* hotspot = frame[4].value<ugdk::math::Vector2D*>();
             int file = (frame.size() >= 6) ? frame[5].value<int>() : 0;
             sprite_data.AddFrame(top_left_x, top_left_y, width, height, *hotspot, file);
         }

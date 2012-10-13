@@ -19,7 +19,7 @@ class Sprite : public Drawable {
 
     void Update(double dt);
     void Draw() const;
-    const Vector2D& size() const;
+    const ugdk::math::Vector2D& size() const;
     
     /// Change the current animation to a new animation from the previously selected AnimationSet.
     /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/

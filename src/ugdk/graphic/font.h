@@ -20,7 +20,7 @@ class Font {
 	~Font();
 	int id() { return id_; }
 	IdentType ident() { return ident_; }
-	Vector2D GetLetterSize(wchar_t letter);
+	ugdk::math::Vector2D GetLetterSize(wchar_t letter);
 	bool IsFancy() { return fancy_;}
 
   private:
