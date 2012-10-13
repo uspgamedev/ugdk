@@ -19,6 +19,9 @@ namespace ikdtree {
     class Box;
     
     template <class T, int DIMENSIONS>
+    class Node;
+    
+    template <class T, int DIMENSIONS>
     class Item;
 }
 
