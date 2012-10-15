@@ -47,7 +47,6 @@ if (SWIG_FOUND)
         if(UGDK_${itUPPER}_ENABLED)
             set(LANGUAGES_LIST "${LANGUAGES_LIST} \\\n    ACTION(${itUPPER})")
         endif()
-        message(${it})
     endforeach()
     
     set(MODULES_NAME UGDK)
