@@ -13,13 +13,14 @@
 #include <ugdk/input/inputmanager.h>
 #include <ugdk/util/intervalkdtree.h>
 
+using std::tr1::mem_fn;
 using std::tr1::placeholders::_1;
 
 namespace ugdk {
 namespace ui {
 
-const MenuCallback Menu::FINISH_MENU(&Menu::FinishScene);
-const MenuCallback Menu::INTERACT_MENU(&Menu::InteractWithFocused);
+const MenuCallback Menu::FINISH_MENU(mem_fn(&Menu::FinishScene));
+const MenuCallback Menu::INTERACT_MENU(mem_fn(&Menu::InteractWithFocused));
 
 class CallbackCheckTask : public action::Task {
 public:

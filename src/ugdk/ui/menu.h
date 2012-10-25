@@ -35,7 +35,7 @@ class Menu: public action::Entity {
 
     std::vector<UIElement *>* GetMouseCollision();
 
-    void AddCallback(input::Key key, MenuCallback callback) {
+    void AddCallback(input::Key key, const MenuCallback& callback) {
         input_callbacks_[key] = callback;
     }
     void SetOptionDrawable(graphic::Drawable* option_graphic, int index = 0) {
