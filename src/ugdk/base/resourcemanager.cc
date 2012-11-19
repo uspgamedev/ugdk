@@ -34,7 +34,7 @@ namespace base {
 ResourceManager::ResourceManager() : containers_(type_info_cmp) {
     add_container(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile));
     add_container(new GenericContainer<graphic::Spritesheet*>(graphic::CreateSpritesheetFromTag));
-    add_container(new gdd::CachedLoader<action::SpriteAnimationTable>(new AnimationProtocol));
+    add_container(new GenericContainer<action::SpriteAnimationTable*>(action::LoadSpriteAnimationTableFromFile));
     add_container(new GenericContainer<LanguageWord*>(NullLoad<LanguageWord>));
 }
 
