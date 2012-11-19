@@ -28,6 +28,7 @@ SET(UGDK_SRC
     ./src/ugdk/action/scene.cc 
     ./src/ugdk/action/scene.h 
     ./src/ugdk/action/spriteanimationframe.h 
+    ./src/ugdk/action/spritetypes.cc 
     ./src/ugdk/action/spritetypes.h 
     ./src/ugdk/action/task.h 
     ./src/ugdk/audio.h 
@@ -136,22 +137,15 @@ SET(UGDK_SRC
     ./src/ugdk/util.h 
     ./src/ugdk/util/animationprotocol.cc 
     ./src/ugdk/util/animationprotocol.h 
-    ./src/ugdk/util/gdd/abstractloader.h 
-    ./src/ugdk/util/gdd/cachedloader.h 
-    ./src/ugdk/util/gdd/cachedloader.tcc 
-    ./src/ugdk/util/gdd/cachedloader.th 
     ./src/ugdk/util/gdd/descriptionprotocol.h 
     ./src/ugdk/util/gdd/descriptionprotocolbase.cc 
     ./src/ugdk/util/gdd/descriptionprotocolbase.h 
+    ./src/ugdk/util/gdd/loader.h 
+    ./src/ugdk/util/gdd/parser.cc 
     ./src/ugdk/util/gdd/parser.h 
-    ./src/ugdk/util/gdd/parser.tcc 
-    ./src/ugdk/util/gdd/parser.th 
     ./src/ugdk/util/gdd/parserutility.h 
     ./src/ugdk/util/gdd/reader.cc 
     ./src/ugdk/util/gdd/reader.h 
-    ./src/ugdk/util/gdd/simpleloader.h 
-    ./src/ugdk/util/gdd/simpleloader.tcc 
-    ./src/ugdk/util/gdd/simpleloader.th 
     ./src/ugdk/util/gdd/typeconverter.h 
     ./src/ugdk/util/gdd/typedargsconverter.h 
     ./src/ugdk/util/gdd/types.h 

@@ -2,7 +2,6 @@
 #define UGDK_UTIL_DESCRIPTIONPROTOCOL_H_
 
 #include <ugdk/util/gdd/types.h>
-#include <ugdk/util/gdd/loader.h>
 #include <ugdk/util/gdd/descriptionprotocolbase.h>
 
 namespace ugdk {
@@ -13,17 +12,12 @@ class DescriptionProtocol : public DescriptionProtocolBase {
   public:
     virtual ~DescriptionProtocol() {}
 
-    void set_loader(Loader<T> *loader) { loader_ = loader; }
-    Loader<T>* loader() const { return loader_; }
-
     virtual bool NewDescription() = 0;
     virtual bool NewData(const GDDString& data_name) = 0;
+    virtual T* FinalizeDescription();
 
   protected:
-    DescriptionProtocol() : loader_(NULL) {}
-
-  private:
-    Loader<T>   *loader_;
+    DescriptionProtocol() {}
 
 };
 
