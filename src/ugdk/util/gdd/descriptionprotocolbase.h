@@ -9,7 +9,6 @@
 #include <ugdk/portable/tr1.h>
 #include FROM_TR1(functional)
 
-#include <ugdk/util/gdd/abstractloader.h>
 #include <ugdk/util/gdd/types.h>
 #include <ugdk/util/gdd/typedargsconverter.h>
 

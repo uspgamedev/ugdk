@@ -8,7 +8,6 @@
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/animationprotocol.h>
 #include <ugdk/util/languageword.h>
-#include <ugdk/util/gdd/cachedloader.h>
 
 #ifdef DEBUG
 #include <cstdio>

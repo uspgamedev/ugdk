@@ -17,7 +17,7 @@
 
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_gdd") <ugdk/util/gdd/descriptionprotocol.h>
-%import(module="ugdk_gdd") <ugdk/util/gdd/abstractloader.h>
+%import(module="ugdk_gdd") <ugdk/util/gdd/loader.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 
 %include <ugdk/util/pathmanager.h>

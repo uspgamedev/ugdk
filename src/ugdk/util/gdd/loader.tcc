@@ -1,16 +1,14 @@
-
-#include <ugdk/util/gdd/simpleloader.th>
+#include <ugdk/util/gdd/loader.th>
 #include <ugdk/util/gdd/parser.h>
 
 namespace ugdk {
-
 namespace gdd {
 
 using std::string;
 
 template <class T>
-T* SimpleLoader<T>::Load(const string& gddfile_path) {
-    Parser<T> parser(AbstractLoader<T>::protocol());
+T* Loader<T>::Load(const string& gddfile_path) {
+    Parser<T> parser(protocol_);
     switch(parser.Parse(gddfile_path)) {
       case ParseStatus::OK:
         return loaded_data_;
@@ -29,5 +27,4 @@ T* SimpleLoader<T>::Load(const string& gddfile_path) {
 }
 
 } /* namespace gdd */
-
 } /* namespace ugdk */
