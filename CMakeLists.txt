@@ -65,11 +65,8 @@ if (UNIX OR MINGW)
     # se for o g++ para *nix ou o MinGW para Windows:
     add_definitions(-Wall -ansi -U_FORTIFY_SOURCE -msse2)
 elseif (MSVC) 
-    add_definitions(/D_CRT_SECURE_NO_WARNINGS /DBOOST_ALL_NO_LIB /DBOOST_HAS_TR1_TUPLE /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /arch:SSE2 /fp:fast /MP)
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
 endif ()
-if(WIN32)
-    add_definitions(-DWIN32)
-endif()
 
 # ${UGDK_SRC} está definido?
 if (NOT UGDK_SRC)
