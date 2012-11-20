@@ -19,7 +19,7 @@ using std::vector;
 ParseStatus::Type Parser::Parse(const string& gddfile_path) {
     Reader read(gddfile_path);
     if (!read.Begin()) {
-        fprintf(stderr, "Could not open file \"%s\"\n", gddfile_path.c_str());
+        fprintf(stderr, "Could not open file '%s'\n", read.file_path().c_str());
         return ParseStatus::FILE_NOT_FOUND;
     }
     ASSERT_PARSE(loader()->NewDescription(), NO_MSG, ParseStatus::LOAD_ERROR);

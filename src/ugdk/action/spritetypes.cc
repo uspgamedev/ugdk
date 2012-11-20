@@ -2,6 +2,7 @@
 
 #include <ugdk/util/animationprotocol.h>
 #include <ugdk/util/gdd/loader.h>
+#include <ugdk/action/spriteanimationframe.h>
 
 namespace ugdk {
 namespace action {

@@ -34,7 +34,7 @@
 // Prints an empty field error, where the field is of type 'type'.
 #define ERR_EMPTY_FIELD(read, type) \
     fprintf(stderr, \
-            "%s:%u: syntax error: %s name must not be empty.\n", \
+            "%s:%u: syntax error: '%s' must not be empty.\n", \
             read.file_path().c_str(), \
             (unsigned)(read.line()), \
             type)

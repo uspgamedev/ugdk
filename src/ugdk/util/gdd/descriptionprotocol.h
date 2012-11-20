@@ -14,7 +14,7 @@ class DescriptionProtocol : public DescriptionProtocolBase {
 
     virtual bool NewDescription() = 0;
     virtual bool NewData(const GDDString& data_name) = 0;
-    virtual T* FinalizeDescription();
+    virtual T* FinalizeDescription() = 0;
 
   protected:
     DescriptionProtocol() {}

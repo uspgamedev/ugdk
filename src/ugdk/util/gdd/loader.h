@@ -18,20 +18,13 @@ class Loader {
 
     T* Load(const std::string& gddfile_path) {
         Parser parser(protocol_);
-        switch(parser.Parse(gddfile_path)) {
-          case ParseStatus::OK: 
-            break;
-          case ParseStatus::FILE_NOT_FOUND:
-            fputs("NOT FILE", stderr);
-            break;
-          case ParseStatus::SYNTAX_ERROR:
-            fputs("NOT SYNTAX", stderr);
-            break;
-          case ParseStatus::LOAD_ERROR:
-            fputs("NOT LOAD", stderr);
-            break;
+        ParseStatus::Type status = parser.Parse(gddfile_path);
+        T* result = protocol_->FinalizeDescription();
+        if(status != ParseStatus::OK) {
+            delete result;
+            return NULL;
         }
-        return protocol_->FinalizeDescription();
+        return result;
     }
 
   private:
