@@ -1,11 +1,9 @@
 #ifndef UGDK_UTIL_INDEXABLETABLE_H_
 #define UGDK_UTIL_INDEXABLETABLE_H_
 
-#include <ugdk/portable/tr1.h>
-
 #include <string>
 #include <vector>
-#include FROM_TR1(unordered_map)
+#include <unordered_map>
 
 #include <ugdk/util.h>
 #include <ugdk/util/idgenerator.h>
@@ -19,7 +17,7 @@ class IndexableTable { private: IndexableTable() {} };
 template<class T, int IndexSize>
 class IndexableTable<T*, IndexSize> {
 private:
-    typedef typename std::tr1::unordered_map<std::string, T*> Table;
+    typedef typename std::unordered_map<std::string, T*> Table;
     typedef typename Table::iterator TableIterator;
     typedef typename Table::const_iterator TableConstIterator;
 

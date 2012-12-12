@@ -2,9 +2,9 @@
 #define UGDK_UI_MENU_H_
 
 #include <string>
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(functional)
+#include <functional>
 #include <map>
+
 #include <ugdk/math/vector2D.h>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
@@ -21,7 +21,7 @@ namespace ugdk {
 namespace ui {
 //typedef std::list<const UIElement *> UICollisionList;
     
-typedef std::tr1::function<void (Menu*)> MenuCallback;
+typedef std::function<void (Menu*)> MenuCallback;
 typedef std::map<input::Key, MenuCallback > InputCallbacks;
 
 class Menu: public action::Entity {

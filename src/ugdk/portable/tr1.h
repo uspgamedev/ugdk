@@ -1,4 +1,3 @@
-
 #ifndef UGDK_PORTABLE_TR1_H_
 #define UGDK_PORTABLE_TR1_H_
 

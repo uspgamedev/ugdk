@@ -12,9 +12,9 @@ namespace ugdk {
 
 using std::string;
 using std::pair;
-using std::tr1::bind;
-using std::tr1::function;
-using namespace std::tr1::placeholders;
+using std::bind;
+using std::function;
+using namespace std::placeholders;
 
 using gdd::GDDString;
 using gdd::GDDArgs;

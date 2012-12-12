@@ -1,15 +1,11 @@
-
 #ifndef UGDK_SCRIPT_VIRTUALDATA_H_
 #define UGDK_SCRIPT_VIRTUALDATA_H_
-
-#include <ugdk/portable/tr1.h>
-
-#include FROM_TR1(memory)
 
 #include <vector>
 #include <list>
 #include <map>
-#include FROM_TR1(functional)
+#include <memory>
+#include <functional>
 
 #include <ugdk/base/types.h>
 #include <ugdk/script/type.h>
@@ -23,12 +19,12 @@ class VirtualData;
 namespace std {
 
 template <>
-struct less<std::tr1::shared_ptr<ugdk::script::VirtualData> > :
-binary_function <std::tr1::shared_ptr<ugdk::script::VirtualData>,
-                 std::tr1::shared_ptr<ugdk::script::VirtualData>,
+struct less<std::shared_ptr<ugdk::script::VirtualData> > :
+binary_function <std::shared_ptr<ugdk::script::VirtualData>,
+                 std::shared_ptr<ugdk::script::VirtualData>,
                  bool> {
-    bool operator() (const std::tr1::shared_ptr<ugdk::script::VirtualData>& x,
-                     const std::tr1::shared_ptr<ugdk::script::VirtualData>& y)
+    bool operator() (const std::shared_ptr<ugdk::script::VirtualData>& x,
+                     const std::shared_ptr<ugdk::script::VirtualData>& y)
         const
         {return x.get()<y.get();}
 };
@@ -43,13 +39,13 @@ class VirtualObj;
 class LangWrapper;
 
 /// Abstract class representing virtual script data.
-class VirtualData : public std::tr1::enable_shared_from_this<VirtualData> {
+class VirtualData : public std::enable_shared_from_this<VirtualData> {
 
   public:
 
-    typedef std::tr1::shared_ptr<VirtualData>       Ptr;
-    typedef std::tr1::shared_ptr<const VirtualData> ConstPtr;
-    typedef std::tr1::weak_ptr<VirtualData>         WeakPtr;
+    typedef std::shared_ptr<VirtualData>       Ptr;
+    typedef std::shared_ptr<const VirtualData> ConstPtr;
+    typedef std::weak_ptr<VirtualData>         WeakPtr;
     typedef std::vector<Ptr>                        Vector;
     typedef std::list<Ptr>                          List;
     typedef std::map<Ptr, Ptr>                      Map;

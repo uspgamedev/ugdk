@@ -1,18 +1,18 @@
 #ifndef PYRAMIDWORKS_COLLISION_GENERICCOLLISIONLOGIC_H_
 #define PYRAMIDWORKS_COLLISION_GENERICCOLLISIONLOGIC_H_
 
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(functional)
+
+#include <functional>
 #include <pyramidworks/collision/collisionlogic.h>
 
 namespace pyramidworks {
 namespace collision {
 
 /// \class GenericCollisionLogic genericcollisionlogic.h "pyramidworks/collision/genericcollisionlogic.h"
-/// CollisionLogic implementation using std::tr1::function.
+/// CollisionLogic implementation using std::function.
 class GenericCollisionLogic : public CollisionLogic {
   public:
-    GenericCollisionLogic(std::tr1::function<void (void*)> func)
+    GenericCollisionLogic(std::function<void (void*)> func)
         : func_(func) {}
     ~GenericCollisionLogic() {}
 
@@ -23,7 +23,7 @@ class GenericCollisionLogic : public CollisionLogic {
     }
 
   private:
-    std::tr1::function<void (void*)> func_;
+    std::function<void (void*)> func_;
 };
 
 } // namespace collision

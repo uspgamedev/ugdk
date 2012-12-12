@@ -13,8 +13,8 @@
 #include <ugdk/input/inputmanager.h>
 #include <ugdk/util/intervalkdtree.h>
 
-using std::tr1::mem_fn;
-using std::tr1::placeholders::_1;
+using std::mem_fn;
+using std::placeholders::_1;
 
 namespace ugdk {
 namespace ui {
@@ -46,7 +46,7 @@ Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vec
       node_->modifier()->set_offset(offset);
       option_node_[0] = NULL;
       option_node_[1] = NULL;
-      //std::tr1::function<bool (double)> func = std::tr1::bind(&CheckMouse, this, _1);
+      //std::function<bool (double)> func = std::bind(&CheckMouse, this, _1);
       //this->AddTask(new action::GenericTask(func));
       //this->AddTask(new CallbackCheckTask(this));
 }

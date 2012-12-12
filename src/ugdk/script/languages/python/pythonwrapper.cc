@@ -4,9 +4,7 @@
 
 #include <string>
 #include <cstdlib>
-
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(memory)
+#include <memory>
 
 #include <ugdk/config/config.h>
 #include <ugdk/script/languages/python/pythondata.h>
@@ -20,7 +18,7 @@ namespace ugdk {
 namespace script {
 namespace python {
 
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 
 VirtualData::Ptr PythonWrapper::NewData() {
     VirtualData::Ptr vdata( new PythonData(this, NULL, false) ); 

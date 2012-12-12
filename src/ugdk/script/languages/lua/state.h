@@ -2,13 +2,9 @@
 #ifndef UGDK_SCRIPT_LUA_STATE_H_
 #define UGDK_SCRIPT_LUA_STATE_H_
 
-//#include <ugdk/portable/tr1.h>
-
 #include <cstdlib>
 #include <cstdio>
-
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(functional)
+#include <functional>
 
 #include <ugdk/script/languages/lua/header.h>
 #include <ugdk/script/languages/lua/defs.h>
@@ -97,7 +93,7 @@ class State {
     void call (int nargs, int nres) { lua_call(L_, nargs, nres); }
     const Constant pcall (int nargs, int nres, int errfunc) {
         return Constant(
-            std::tr1::bind(lua_pcall, L_, nargs, nres, errfunc)
+            std::bind(lua_pcall, L_, nargs, nres, errfunc)
         );
     }
 
