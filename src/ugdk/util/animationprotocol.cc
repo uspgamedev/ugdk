@@ -1,7 +1,8 @@
+#include <ugdk/util/animationprotocol.h>
 
 #include <string>
 #include <algorithm>
-#include <ugdk/util/animationprotocol.h>
+#include <cassert>
 #include <ugdk/action/spriteanimationframe.h>
 
 #define DEFAULT_FRAME 0
@@ -19,7 +20,8 @@ using gdd::GDDString;
 using gdd::GDDArgs;
 using gdd::LoadError;
 
-AnimationProtocol::AnimationProtocol() : current_animation_(NULL), current_effect_(NULL), composing_(false) {
+AnimationProtocol::AnimationProtocol() 
+    : current_description_(NULL), current_animation_(NULL), current_effect_(NULL), composing_(false) {
     //TODO: Make this map static maybe?
 
     //ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectNumber  , "number"  , "n");
@@ -64,19 +66,23 @@ AnimationProtocol::AnimationProtocol() : current_animation_(NULL), current_effec
 }
 
 bool AnimationProtocol::NewDescription() {
-    if (loader()->data()) {
-        loader()->cleanData();
-    }
-    loader()->newData(new action::SpriteAnimationTable());
+    if(current_description_ != NULL) return false;
+    current_description_ = new action::SpriteAnimationTable();
     return true;
 }
 
 bool AnimationProtocol::NewData(const GDDString& data_name) {
-    loader()->data()->Add(data_name, current_animation_ = new action::SpriteAnimation);
+    current_description_->Add(data_name, current_animation_ = new action::SpriteAnimation);
     if(current_effect_) delete current_effect_;
     current_effect_ = new graphic::Modifier;
     //TODO: Verificar integridade da current_animation_ .
     return true;
+}
+    
+action::SpriteAnimationTable* AnimationProtocol::FinalizeDescription() {
+    action::SpriteAnimationTable* result = current_description_;
+    current_description_ = NULL;
+    return result;
 }
     
 bool AnimationProtocol::NewProperty_Fps(double fps) {

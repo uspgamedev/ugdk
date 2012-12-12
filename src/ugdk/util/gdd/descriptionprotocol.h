@@ -12,17 +12,12 @@ class DescriptionProtocol : public DescriptionProtocolBase {
   public:
     virtual ~DescriptionProtocol() {}
 
-    void set_loader(AbstractLoader<T> *loader) { loader_ = loader; }
-    AbstractLoader<T>* loader() const { return loader_; }
-
     virtual bool NewDescription() = 0;
     virtual bool NewData(const GDDString& data_name) = 0;
+    virtual T* FinalizeDescription() = 0;
 
   protected:
-    DescriptionProtocol() : loader_(NULL) {}
-
-  private:
-    AbstractLoader<T>   *loader_;
+    DescriptionProtocol() {}
 
 };
 

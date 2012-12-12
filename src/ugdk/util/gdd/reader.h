@@ -1,5 +1,3 @@
-
-
 #ifndef UGDK_UTIL_GDD_READER_H_
 #define UGDK_UTIL_GDD_READER_H_
 
@@ -10,13 +8,10 @@
 #include <ugdk/util/gdd/parserutility.h>
 
 namespace ugdk {
-
 namespace gdd {
 
 class Reader {
-
   public:
-
     Reader(FILE *file) : file_path_("<unknown>"), file_(file), line_(1) {}
 
     Reader(const std::string &file_path);

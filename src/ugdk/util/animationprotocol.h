@@ -24,8 +24,10 @@ class AnimationProtocol : public gdd::DescriptionProtocol< action::SpriteAnimati
 
     bool NewDescription();
     bool NewData(const gdd::GDDString& data_name);
+    action::SpriteAnimationTable* FinalizeDescription();
 
   private:
+    action::SpriteAnimationTable* current_description_;
     action::SpriteAnimation *current_animation_;
     graphic::Modifier* current_effect_;
     ParsingScope current_scope_;

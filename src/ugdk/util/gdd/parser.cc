@@ -1,13 +1,13 @@
+#include <ugdk/util/gdd/parser.h>
 
-#include <ugdk/util/gdd/parser.th>
-#include <ugdk/util/gdd/parserutility.h>
 #include <cstdio>
 #include <cctype>
 #include <string>
 #include <vector>
 
-namespace ugdk {
+#include <ugdk/util/gdd/parserutility.h>
 
+namespace ugdk {
 namespace gdd {
 
 using std::string;
@@ -16,19 +16,17 @@ using std::vector;
 #define ASSERT_CHUNK(status, parseChunk, reader) \
     ASSERT_PARSE(((status = parseChunk(reader)) == ParseStatus::OK), NO_MSG, status)
 
-template <class T>
-ParseStatus::Type Parser<T>::Parse(const string& gddfile_path) {
+ParseStatus::Type Parser::Parse(const string& gddfile_path) {
     Reader read(gddfile_path);
     if (!read.Begin()) {
-        fprintf(stderr, "Could not open file \"%s\"\n", gddfile_path.c_str());
+        fprintf(stderr, "Could not open file '%s'\n", read.file_path().c_str());
         return ParseStatus::FILE_NOT_FOUND;
     }
     ASSERT_PARSE(loader()->NewDescription(), NO_MSG, ParseStatus::LOAD_ERROR);
     return doParse(read);
 }
 
-template <class T>
-ParseStatus::Type Parser<T>::doParse(Reader &read) {
+ParseStatus::Type Parser::doParse(Reader &read) {
     ParseStatus::Type   status;
     int                 token = 0;
     while ((token = read.Next()) != EOF)
@@ -66,9 +64,7 @@ ParseStatus::Type Parser<T>::doParse(Reader &read) {
     return ParseStatus::OK;
 }
 
-
-template <class T>
-ParseStatus::Type Parser<T>::parseDataName(Reader &read) {
+ParseStatus::Type Parser::parseDataName(Reader &read) {
     GDDString data_name;
 
     ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD(read, "data"), ParseStatus::SYNTAX_ERROR);
@@ -77,8 +73,7 @@ ParseStatus::Type Parser<T>::parseDataName(Reader &read) {
     return ParseStatus::OK;
 }
 
-template <class T>
-ParseStatus::Type Parser<T>::parseSimpleChain(Reader &read) {
+ParseStatus::Type Parser::parseSimpleChain(Reader &read) {
     GDDString   segment_type;
     GDDArgs     values;
 
@@ -95,8 +90,7 @@ ParseStatus::Type Parser<T>::parseSimpleChain(Reader &read) {
     return ParseStatus::OK;
 }
 
-template <class T>
-ParseStatus::Type Parser<T>::parseProperty(Reader &read) {
+ParseStatus::Type Parser::parseProperty(Reader &read) {
     GDDString   property_name;
     GDDArgs     values;
 
@@ -107,8 +101,7 @@ ParseStatus::Type Parser<T>::parseProperty(Reader &read) {
     return ParseStatus::OK;
 }
 
-template <class T>
-ParseStatus::Type Parser<T>::parseEntry(Reader &read) {
+ParseStatus::Type Parser::parseEntry(Reader &read) {
     GDDString   entry_type;
     GDDArgs     values;
 
@@ -119,8 +112,7 @@ ParseStatus::Type Parser<T>::parseEntry(Reader &read) {
     return ParseStatus::OK;
 }
 
-template <class T>
-ParseStatus::Type Parser<T>::parseRing(Reader &read) {
+ParseStatus::Type Parser::parseRing(Reader &read) {
     GDDString   ring_type;
 
     ASSERT_PARSE(read.UntilNextTag(), ERR_EMPTY_FIELD(read, "ring"), ParseStatus::SYNTAX_ERROR);
@@ -132,5 +124,4 @@ ParseStatus::Type Parser<T>::parseRing(Reader &read) {
 
 
 } /* namespace gdd */
-
 } /* namespace ugdk */
