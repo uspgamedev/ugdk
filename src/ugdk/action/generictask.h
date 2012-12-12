@@ -11,11 +11,11 @@ namespace action {
 class GenericTask : public Task {
   typedef Task super;
   protected:
-    std::tr1::function<bool (double)> function_;
+    std::function<bool (double)> function_;
   public:
-    GenericTask(std::tr1::function<bool (double)> func)  : function_(func) {}
+    GenericTask(std::function<bool (double)> func)  : function_(func) {}
 
-    GenericTask(std::tr1::function<bool (double)> func, int priority) 
+    GenericTask(std::function<bool (double)> func, int priority) 
         : Task(priority), function_(func) {}
 
     void operator()(double dt) {
