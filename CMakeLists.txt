@@ -49,8 +49,7 @@ CONFIGURE_FILE(
 #set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
 
 include (${SRC_DIR}/src_list.cmake)
-include (${SRC_DIR}/ugdk_module_list.cmake)
-include (${SRC_DIR}/pyramidworks_module_list.cmake)
+include (${SRC_DIR}/module_list.cmake)
 include (${SRC_DIR}/lua_src_list.cmake)
 include (${SRC_DIR}/py_src_list.cmake)
 
@@ -119,18 +118,15 @@ include (CPack)
 
 #
 ##########################################
-
+set(UGDK_LANGUAGES_LIST "")
 if (UGDK_CREATE_BINDINGS)
-    ugdk_setup_package (SWIG)
-    if (SWIG_FOUND)
-        if (UGDK_LUA_BINDINGS)
-            ugdk_setup_package (Lua51)
-        endif (UGDK_LUA_BINDINGS)
-        
-        if (UGDK_PYTHON_BINDINGS)
-            ugdk_setup_package (PythonLibs)
-        endif (UGDK_PYTHON_BINDINGS)
-    endif (SWIG_FOUND)
+    if (UGDK_LUA_BINDINGS)
+        list(APPEND UGDK_LANGUAGES_LIST Lua)
+    endif()
+    if (UGDK_PYTHON_BINDINGS)
+        list(APPEND UGDK_LANGUAGES_LIST Python)
+    endif()
+    ugdk_setup_package(SWIG)
 endif (UGDK_CREATE_BINDINGS)
 
 include_directories ("externals/opengl")
@@ -200,7 +196,6 @@ endif(UGDK_BUILD_TESTS)
 if (UNIX AND PYTHONLIBS_FOUND)
     set (UGDK_INSTALL_LOCATION_DEFINE "#define UGDK_INSTALL_LOCATION \"/usr/${UGDK_INSTALL_LOCATION}\"")
 endif (UNIX AND PYTHONLIBS_FOUND)
-
 
 set(UGDK_EXTERNAL_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src;${SDL_INCLUDE_DIR};${SDLTTF_INCLUDE_DIR} CACHE STRING "UGDK include directories" FORCE)
 

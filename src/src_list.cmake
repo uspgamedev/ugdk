@@ -16,8 +16,6 @@ SET(UGDK_SRC
     ./src/pyramidworks/geometry/geometricshape.h 
     ./src/pyramidworks/geometry/rect.cc 
     ./src/pyramidworks/geometry/rect.h 
-    ./src/pyramidworks/modules.cc 
-    ./src/pyramidworks/modules.h 
     ./src/ugdk/action.h 
     ./src/ugdk/action/animationplayer.h 
     ./src/ugdk/action/entity.h 
@@ -46,7 +44,6 @@ SET(UGDK_SRC
     ./src/ugdk/base/resourcemanager.cc 
     ./src/ugdk/base/resourcemanager.h 
     ./src/ugdk/base/types.h 
-    ./src/ugdk/config/config.h 
     ./src/ugdk/graphic.h 
     ./src/ugdk/graphic/drawable.h 
     ./src/ugdk/graphic/drawable/shape.h 
@@ -85,34 +82,11 @@ SET(UGDK_SRC
     ./src/ugdk/math/integer2D.h 
     ./src/ugdk/math/vector2D.cc 
     ./src/ugdk/math/vector2D.h 
-    ./src/ugdk/modules.cc 
-    ./src/ugdk/modules.h 
     ./src/ugdk/portable/tr1.h 
     ./src/ugdk/script.h 
     ./src/ugdk/script/baseproxy.h 
     ./src/ugdk/script/defs.h 
-    ./src/ugdk/script/languages/lua/auxlib.h 
-    ./src/ugdk/script/languages/lua/basegear.cc 
-    ./src/ugdk/script/languages/lua/basegear.h 
-    ./src/ugdk/script/languages/lua/bootstrapgear.cc 
-    ./src/ugdk/script/languages/lua/bootstrapgear.h 
-    ./src/ugdk/script/languages/lua/datagear.cc 
-    ./src/ugdk/script/languages/lua/datagear.h 
-    ./src/ugdk/script/languages/lua/defs.h 
-    ./src/ugdk/script/languages/lua/header.h 
-    ./src/ugdk/script/languages/lua/luadata.cc 
-    ./src/ugdk/script/languages/lua/luadata.h 
-    ./src/ugdk/script/languages/lua/luawrapper.cc 
-    ./src/ugdk/script/languages/lua/luawrapper.h 
-    ./src/ugdk/script/languages/lua/native/traceback.h 
-    ./src/ugdk/script/languages/lua/primitive.h 
-    ./src/ugdk/script/languages/lua/state.h 
-    ./src/ugdk/script/languages/lua/swigluarun.h 
-    ./src/ugdk/script/languages/python/pythondata.cc 
-    ./src/ugdk/script/languages/python/pythondata.h 
-    ./src/ugdk/script/languages/python/pythonwrapper.cc 
-    ./src/ugdk/script/languages/python/pythonwrapper.h 
-    ./src/ugdk/script/languages/python/swigpyrun.h 
+    ./src/ugdk/script/initscripts.cc 
     ./src/ugdk/script/langwrapper.h 
     ./src/ugdk/script/module.h 
     ./src/ugdk/script/scriptmanager.cc 
