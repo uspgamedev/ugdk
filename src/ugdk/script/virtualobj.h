@@ -143,32 +143,35 @@ class VirtualObj {
 
     template<typename R, typename ...Args>
     std::function<R (Args...)> to_function() {
-        return [this](Args... args) -> R {
-            List list;
-            fill_list(list, wrapper(), args...);
-            return (*this)(list).value<R>();
+        VirtualData::Ptr data = data_;
+        return [data](Args... args) -> R {
+            VirtualData::Vector arguments;
+            CreateArgumentsVector(arguments, data->wrapper(), args...);
+            return VirtualPrimitive<R>::value(data->Execute(arguments), false);
         };
     }
 
     template<typename ...Args>
     VirtualObj call(Args... args) {
-        List list;
-        fill_list(list, wrapper(), args...);
-        return (*this)(list);
+        VirtualData::Vector arguments;
+        CreateArgumentsVector(arguments, wrapper(), args...);
+        return VirtualObj(data_->Execute(arguments));
     }
 
   private:
-    void fill_list(List& l, LangWrapper* wrapper) {}
-
-    template<typename T, typename ...Args>
-    void fill_list(List& l, LangWrapper* wrapper, T t, Args... args) {
-        l.emplace_back(wrapper, t);
-        fill_list(l, wrapper, args...);
-    }
-
     VirtualData::Ptr data_;
 
 };
+
+inline void CreateArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper) {}
+
+template<typename T, typename ...Args>
+void CreateArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, T t, Args... args) {
+    VirtualData::Ptr val = wrapper->NewData();
+    VirtualPrimitive<T>::set_value(val, t);
+    v.push_back(val);
+    CreateArgumentsVector(v, wrapper, args...);
+}
 
 template <class T, class U>
 T ConvertSequence (const U& data_seq) {

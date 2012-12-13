@@ -19,7 +19,7 @@ static bool LuaTests() {
     VirtualObj main = SCRIPT_MANAGER()->LoadModule("main");
     if(!main) return false;
     auto f = main["soma"].to_function<int, int, int>();
-
+    assert(f(13, 25) == 38);
     return main["soma"].call(3, 8).value<int>() == 11;
 }
 
