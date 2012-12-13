@@ -12,8 +12,6 @@
 namespace ugdk {
 namespace action {
 
-typedef std::function<bool (double)> Task;
-
 /**
    @class Scene
    @brief A game scene, or screen.
@@ -95,12 +93,6 @@ class Scene {
     audio::Music* background_music_;
 
   private:
-    void UpdateEntities(double delta_t);
-    void UpdateTasks(double delta_t);
-    void DeleteToBeRemovedEntities();
-    void DeleteFinishedTasks();
-    void FlushEntityQueue();
-
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;
 

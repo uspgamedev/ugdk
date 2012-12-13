@@ -41,7 +41,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
     void RemoveActiveObject(const CollisionObject* obj) { active_objects_.erase(obj); }
 
     /// Warning: this task depends on resources from this object. Do not use it after this object is destroyed.
-    ugdk::action::Task* GenerateHandleCollisionTask();
+    ugdk::action::Task GenerateHandleCollisionTask();
     
   private:
     const ugdk::ikdtree::Box<2> tree_bounding_box_;
