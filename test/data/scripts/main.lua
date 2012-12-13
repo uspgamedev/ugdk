@@ -11,6 +11,10 @@ function ls(t)
   end
 end
 
+function soma(a, b)
+    return a + b
+end
+
 print = print
 
 v = ugdk_math.Vector2D(1,2)

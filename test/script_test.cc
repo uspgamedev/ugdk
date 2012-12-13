@@ -16,7 +16,12 @@ using ugdk::Engine;
 using ugdk::script::VirtualObj;
 
 static bool LuaTests() {
-    return SCRIPT_MANAGER()->LoadModule("main").valid();
+    VirtualObj main = SCRIPT_MANAGER()->LoadModule("main");
+    if(!main) return false;
+    auto soma = main["soma"];
+    auto f = soma.to_function<int, int, int>();
+
+    return f(3, 8) == 11;
 }
 
 static bool PythonTests() {
