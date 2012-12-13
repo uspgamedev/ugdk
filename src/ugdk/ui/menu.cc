@@ -5,7 +5,6 @@
 #include <ugdk/ui/menu.h>
 #include <ugdk/ui/uielement.h>
 
-#include <ugdk/action/generictask.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/drawable.h>
@@ -22,16 +21,17 @@ namespace ui {
 const MenuCallback Menu::FINISH_MENU(mem_fn(&Menu::FinishScene));
 const MenuCallback Menu::INTERACT_MENU(mem_fn(&Menu::InteractWithFocused));
 
-class CallbackCheckTask : public action::Task {
+class CallbackCheckTask {
 public:
     CallbackCheckTask(Menu* menu) : menu_(menu) {}
-    void operator()(double dt) {
+    bool operator()(double dt) {
         input::InputManager* input = INPUT_MANAGER();
         const InputCallbacks& callbacks = menu_->input_callbacks();
         for(InputCallbacks::const_iterator it = callbacks.begin(); it != callbacks.end(); ++it) {
             if(input->KeyPressed(it->first))
                 it->second(menu_);
         }
+        return true;
     }
 private:
     Menu* menu_;
@@ -116,7 +116,7 @@ void Menu::PositionSelectionDrawables() {
 
 void Menu::OnSceneAdd(action::Scene* scene) {
     owner_scene_ = scene;
-    scene->AddTask(new CallbackCheckTask(this));
+    scene->AddTask(CallbackCheckTask(this));
 }
 
 void Menu::FinishScene() const {

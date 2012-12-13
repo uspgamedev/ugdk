@@ -1,18 +1,15 @@
 #ifndef UGDK_ACTION_SCENE_H_
 #define UGDK_ACTION_SCENE_H_
 
-
 #include <functional>
 #include <list>
 #include <queue>
-#include <map>
 #include <ugdk/action.h>
 #include <ugdk/audio.h>
 #include <ugdk/graphic.h>
 #include <ugdk/base/types.h>
 
 namespace ugdk {
-
 namespace action {
 
 /**
@@ -47,7 +44,7 @@ class Scene {
     void RemoveAllEntities();
 
     /// Adds a Task to the scene.
-    void AddTask(Task *task);
+    void AddTask(const Task& task, int priority = 0);
 
     /// Finishes the scene.
     void Finish() { End(); finished_ = true; }
@@ -96,12 +93,6 @@ class Scene {
     audio::Music* background_music_;
 
   private:
-    void UpdateEntities(double delta_t);
-    void UpdateTasks(double delta_t);
-    void DeleteToBeRemovedEntities();
-    void DeleteFinishedTasks();
-    void FlushEntityQueue();
-
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;
 
@@ -113,8 +104,16 @@ class Scene {
     std::function<void (Scene*)> defocus_callback_;
     std::function<void (Scene*)> focus_callback_;
 
-    typedef std::map<int, std::list<Task*> > TasksContainer;
-    TasksContainer tasks_;
+    struct OrderedTask {
+        OrderedTask(int p, const Task& t) : priority(p), task(t) {}
+
+        int priority;
+        Task task;
+
+        bool operator< (const OrderedTask& other) const { return priority < other.priority; }
+        bool operator()(double dt) { return task(dt); }
+    };
+    std::list<OrderedTask> tasks_;
    
   friend class Engine;
 }; // class Scene.
