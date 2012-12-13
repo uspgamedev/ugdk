@@ -21,7 +21,6 @@ SET(UGDK_SRC
     ./src/ugdk/action.h 
     ./src/ugdk/action/animationplayer.h 
     ./src/ugdk/action/entity.h 
-    ./src/ugdk/action/generictask.h 
     ./src/ugdk/action/mediaplayer.cc 
     ./src/ugdk/action/mediaplayer.h 
     ./src/ugdk/action/observer.h 
@@ -30,7 +29,6 @@ SET(UGDK_SRC
     ./src/ugdk/action/spriteanimationframe.h 
     ./src/ugdk/action/spritetypes.cc 
     ./src/ugdk/action/spritetypes.h 
-    ./src/ugdk/action/task.h 
     ./src/ugdk/audio.h 
     ./src/ugdk/audio/audiomanager.cc 
     ./src/ugdk/audio/audiomanager.h 

@@ -3,43 +3,68 @@
 #include <ugdk/action/scene.h>
 
 #include <ugdk/action/entity.h>
-#include <ugdk/action/task.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/audio/audiomanager.h>
 #include <ugdk/audio/music.h>
 #include <ugdk/graphic/node.h>
 
 namespace ugdk {
-
 namespace action {
 
-static bool entityIsToBeRemoved (const Entity* value) {
+using std::list;
+
+/*static bool entityIsToBeRemoved (const Entity* value) {
     bool is_dead = value->to_be_removed();
     if (is_dead)
         delete value;
     return is_dead;
+}*/
+
+Scene::Scene() 
+  : finished_(false), 
+    background_music_(NULL), 
+    stops_previous_music_(true), 
+    content_node_(new graphic::Node), 
+    interface_node_(new graphic::Node) {
+
+        // Update entities
+        tasks_.emplace_back(0, [&](double dt) {  
+            for(auto it : entities_) it->Update(dt);
+            return true;
+        });
+
+        // Remove to be deleted entities
+        tasks_.emplace_back(100, [&](double dt) {  
+            entities_.remove_if([](Entity* e){ 
+                bool is_dead = e->to_be_removed();
+                if (is_dead) delete e;
+                return is_dead;
+            });
+            return true;
+        });
+
+        // Update nodes
+        tasks_.emplace_back(200, [&](double dt) {  
+            content_node_->Update(dt);
+            interface_node_->Update(dt);
+            return true;
+        });
+
+        // Flush add queue
+        tasks_.emplace_back(300, [&](double dt) {  
+            while(!queued_entities_.empty()) {
+                Entity* e = queued_entities_.front();
+                this->AddEntity(e);
+                queued_entities_.pop();
+            }
+            return true;
+        });
 }
-
-static bool taskIsFinished (const Task* value) {
-    bool is_dead = value->finished();
-    if (is_dead)
-        delete value;
-    return is_dead;
-}
-
-
-using namespace std;
-
-Scene::Scene() : finished_(false), background_music_(NULL), stops_previous_music_(true), 
-    content_node_(new graphic::Node), interface_node_(new graphic::Node) {}
 
 Scene::~Scene() {
     //RemoveAllEntities(); Play safe... TODO: activate this and refactor users!
     delete content_node_;
     delete interface_node_;
-    for(TasksContainer::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
-        for(std::list<Task*>::iterator j = it->second.begin(); j != it->second.end(); ++j)
-            delete (*j);
 }
 
 void Scene::Focus() {
@@ -73,18 +98,12 @@ void Scene::RemoveAllEntities() {
     entities_.clear();
 }
 
-void Scene::AddTask(Task *task) {
-    tasks_[task->priority()].push_back(task);
+void Scene::AddTask(const Task& task, int priority) {
+    tasks_.merge(list<OrderedTask>(1, OrderedTask(priority, task)));
 }
 
-void Scene::Update(double delta_t) {
-    UpdateEntities(delta_t);
-    UpdateTasks(delta_t);
-    content_node()->Update(delta_t);
-    interface_node()->Update(delta_t);
-    DeleteToBeRemovedEntities();
-    DeleteFinishedTasks();
-    FlushEntityQueue();
+void Scene::Update(double dt) {
+    tasks_.remove_if([dt](OrderedTask& otask) { return otask.task(dt); });
 }
 
 void Scene::End() {
@@ -92,34 +111,5 @@ void Scene::End() {
         background_music_->Pause();
 }
 
-void Scene::UpdateEntities(double delta_t) {
-    for(std::list<Entity*>::iterator it = entities_.begin(); it != entities_.end(); ++it)
-        (*it)->Update(delta_t);
-}
-
-void Scene::UpdateTasks(double delta_t) {
-    for(TasksContainer::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
-        for(std::list<Task*>::iterator j = it->second.begin(); j != it->second.end(); ++j)
-            (**j)(delta_t);
-}
-
-void Scene::DeleteToBeRemovedEntities() {
-    entities_.remove_if(entityIsToBeRemoved);
-}
-
-void Scene::DeleteFinishedTasks() {
-    for(TasksContainer::iterator it = tasks_.begin(); it != tasks_.end(); ++it)
-        it->second.remove_if(taskIsFinished);
-}
-
-void Scene::FlushEntityQueue() {
-    while(!queued_entities_.empty()) {
-        Entity* e = queued_entities_.front();
-        AddEntity(e);
-        queued_entities_.pop();
-    }
-}
-
 } /* namespace action */
-
 } /* namespace ugdk */
