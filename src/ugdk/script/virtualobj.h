@@ -141,7 +141,23 @@ class VirtualObj {
         return data_->unsafe_data();
     }
 
+    template<typename R, typename ...Args>
+    std::function<R (Args...)> to_function() {
+        return [this](Args... args) -> R {
+            List list;
+            fill_list(list, wrapper(), args...);
+            return (*this)(list).value<R>();
+        };
+    }
+
   private:
+    void fill_list(List& l, LangWrapper* wrapper) {}
+
+    template<typename T, typename ...Args>
+    void fill_list(List& l, LangWrapper* wrapper, T t, Args... args) {
+        l.emplace_back(wrapper, t);
+        fill_list(l, wrapper, args...);
+    }
 
     VirtualData::Ptr data_;
 
