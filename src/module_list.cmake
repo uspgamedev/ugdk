@@ -1,0 +1,13 @@
+SET(UGDK_MODULE_SRC 
+    src/module/pyramidworks_collision.i 
+    src/module/pyramidworks_geometry.i 
+    src/module/ugdk_action.i 
+    src/module/ugdk_audio.i 
+    src/module/ugdk_base.i 
+    src/module/ugdk_drawable.i 
+    src/module/ugdk_graphic.i 
+    src/module/ugdk_input.i 
+    src/module/ugdk_math.i 
+    src/module/ugdk_time.i 
+    src/module/ugdk_util.i 
+)

@@ -1,4 +1,3 @@
-
 #ifndef UGDK_SCRIPT_MODULE_H_
 #define UGDK_SCRIPT_MODULE_H_
 

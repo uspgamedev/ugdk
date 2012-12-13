@@ -39,6 +39,7 @@ class LangWrapper {
     virtual VirtualObj LoadModule(const std::string& name) = 0;
 
     const LangID lang_id () { return lang_id_; }
+    const std::string& lang_name() const { return lang_name_; }
 
   protected:
 
@@ -49,10 +50,12 @@ class LangWrapper {
 
     const std::string file_extension_;
     const LangID      lang_id_;
+    const std::string lang_name_;
 
-    LangWrapper(const std::string& file_extension, const LangID id) :
+    LangWrapper(const std::string& file_extension, const LangID id, const std::string& name) :
         file_extension_(file_extension),
-        lang_id_(id) {}
+        lang_id_(id),
+        lang_name_(name) {}
 
     LangWrapper& operator=(const LangWrapper& rhs);
 
@@ -103,8 +106,8 @@ class InheritableLangWrapper : public LangWrapper {
 
     std::vector< Module<loader_t> > modules_;
 
-    InheritableLangWrapper(const std::string& file_extension, const LangID id) :
-        LangWrapper(file_extension, id) {}
+    InheritableLangWrapper(const std::string& file_extension, const LangID id, const std::string& name) :
+        LangWrapper(file_extension, id, name) {}
 
 };
 

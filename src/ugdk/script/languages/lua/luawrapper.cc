@@ -7,6 +7,7 @@
 #include <ugdk/script/languages/lua/luadata.h>
 #include <ugdk/script/languages/lua/bootstrapgear.h>
 #include <ugdk/script/languages/lua/datagear.h>
+#include <ugdk/script/languages/lua/modules.h>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/util/pathmanager.h>
@@ -23,6 +24,7 @@ using std::vector;
 
 bool LuaWrapper::Initialize() {
     if (data_gear_) return true;
+    RegisterModules(this);
     BootstrapGear btgear;
     do {
         if (!btgear.Initialize(modules_)) break;
@@ -113,6 +115,13 @@ VirtualData::Ptr LuaWrapper::LoadChunk(const string& chunk,
     return data_gear_->HasValue(result_id)
         ? VirtualData::Ptr(new LuaData(this, result_id))
         : VirtualData::Ptr();
+}
+
+std::string NameConversion(const std::string& name) {
+    std::string result = name;
+    for(size_t i = 0; i < result.size(); ++i)
+        if(result[i] == '_') result[i] = '.';
+    return result;
 }
 
 } /* namespace lua */

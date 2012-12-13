@@ -4,12 +4,18 @@
 namespace ugdk {
 namespace script {
 
+// Functions
+void InitScripts();
+
 // Public classes
 class LangWrapper;
 class VirtualData;
 class VirtualObj;
 
 template <class loader_t> class InheritableLangWrapper;
+
+template <class loader_t>
+class Module;
 
 // Managers
 class ScriptManager;
