@@ -150,6 +150,13 @@ class VirtualObj {
         };
     }
 
+    template<typename R, typename ...Args>
+    R call(Args... args) {
+        List list;
+        fill_list(list, wrapper(), args...);
+        return (*this)(list).value<R>();
+    }
+
   private:
     void fill_list(List& l, LangWrapper* wrapper) {}
 
