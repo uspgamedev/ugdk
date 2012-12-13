@@ -18,10 +18,9 @@ using ugdk::script::VirtualObj;
 static bool LuaTests() {
     VirtualObj main = SCRIPT_MANAGER()->LoadModule("main");
     if(!main) return false;
-    auto soma = main["soma"];
-    auto f = soma.to_function<int, int, int>();
+    auto f = main["soma"].to_function<int, int, int>();
 
-    return f(3, 8) == 11;
+    return main["soma"].call(3, 8).value<int>() == 11;
 }
 
 static bool PythonTests() {
