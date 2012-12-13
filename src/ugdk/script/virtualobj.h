@@ -41,14 +41,16 @@ class VirtualObj {
     /** Attempting to use any method in a virtual object created this way will
      ** result in a segmentation fault.
      */
-    explicit VirtualObj() :
-        data_() {}
+    explicit VirtualObj() : data_() {}
 
-    explicit VirtualObj(VirtualData::Ptr data) :
-        data_(data) {}
+    explicit VirtualObj(VirtualData::Ptr data) : data_(data) {}
 
-    explicit VirtualObj(LangWrapper* wrapper) :
-        data_(wrapper->NewData()) {}
+    explicit VirtualObj(LangWrapper* wrapper) : data_(wrapper->NewData()) {}
+
+    template <class T>
+    explicit VirtualObj(LangWrapper* wrapper, T val) : data_(wrapper->NewData()) {
+        set_value<T>(val);
+    }
 
     ~VirtualObj() {}
 
@@ -82,6 +84,7 @@ class VirtualObj {
     }
 
     VirtualObj operator() (const List& args = List()) const;
+    VirtualObj operator() (const VirtualObj& arg) const;
 
     VirtualObj attribute(const VirtualObj& key) const {
         return VirtualObj(data_->GetAttribute(key.data_));
@@ -138,7 +141,30 @@ class VirtualObj {
         return data_->unsafe_data();
     }
 
+    template<typename R, typename ...Args>
+    std::function<R (Args...)> to_function() {
+        return [this](Args... args) -> R {
+            List list;
+            fill_list(list, wrapper(), args...);
+            return (*this)(list).value<R>();
+        };
+    }
+
+    template<typename ...Args>
+    VirtualObj call(Args... args) {
+        List list;
+        fill_list(list, wrapper(), args...);
+        return (*this)(list);
+    }
+
   private:
+    void fill_list(List& l, LangWrapper* wrapper) {}
+
+    template<typename T, typename ...Args>
+    void fill_list(List& l, LangWrapper* wrapper, T t, Args... args) {
+        l.emplace_back(wrapper, t);
+        fill_list(l, wrapper, args...);
+    }
 
     VirtualData::Ptr data_;
 
@@ -186,18 +212,12 @@ inline VirtualObj::Map VirtualObj::value<VirtualObj::Map>(bool disown) const {
 
 class Bind {
   public:
-    Bind(VirtualObj& obj, const std::string& method_name) :
-        obj_(obj),
-        method_name_(obj.wrapper()) {
-        method_name_.set_value(method_name.c_str());
-    }
-    VirtualObj operator() () const {
-        std::list<VirtualObj> args;
-        return obj_[method_name_]((obj_, args)); 
-    }
-    VirtualObj operator() (std::list<VirtualObj>& args) const {
-        return obj_[method_name_]((obj_, args));
-    }
+    Bind(VirtualObj& obj, const std::string& method_name);
+
+    VirtualObj operator() () const;
+    VirtualObj operator() (const VirtualObj& arg) const;
+    VirtualObj operator() (std::list<VirtualObj>& args) const;
+
   private:
     Bind& operator=(Bind&); // Bind cannot be copied.
 
