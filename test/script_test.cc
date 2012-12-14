@@ -18,8 +18,10 @@ using ugdk::script::VirtualObj;
 static bool LuaTests() {
     VirtualObj main = SCRIPT_MANAGER()->LoadModule("main");
     if(!main) return false;
+    VirtualObj val = main["integer"];
     auto f = main["soma"].to_function<int, int, int>();
     assert(f(13, 25) == 38);
+    assert(main["soma"].call(3, val).value<int>() == 45);
     return main["soma"].call(3, 8).value<int>() == 11;
 }
 

@@ -146,7 +146,7 @@ class VirtualObj {
         VirtualData::Ptr data = data_;
         return [data](Args... args) -> R {
             VirtualData::Vector arguments;
-            CreateArgumentsVector(arguments, data->wrapper(), args...);
+            createArgumentsVector(arguments, data->wrapper(), args...);
             return VirtualPrimitive<R>::value(data->Execute(arguments), false);
         };
     }
@@ -154,24 +154,33 @@ class VirtualObj {
     template<typename ...Args>
     VirtualObj call(Args... args) {
         VirtualData::Vector arguments;
-        CreateArgumentsVector(arguments, wrapper(), args...);
+        createArgumentsVector(arguments, wrapper(), args...);
         return VirtualObj(data_->Execute(arguments));
     }
 
   private:
+    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper) { return true; }
+
+    template<typename T, typename ...Args>
+    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, T t, Args... args) {
+        VirtualData::Ptr val = wrapper->NewData();
+        VirtualPrimitive<T>::set_value(val, t);
+        v.push_back(val);
+        return createArgumentsVector(v, wrapper, args...);
+    }
+
+    template<typename ...Args>
+    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, VirtualObj t, Args... args) {
+        if(t.wrapper() != wrapper) return false;
+        v.push_back(t.data_);
+        return createArgumentsVector(v, wrapper, args...);
+    }
+
     VirtualData::Ptr data_;
 
 };
 
-inline void CreateArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper) {}
 
-template<typename T, typename ...Args>
-void CreateArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, T t, Args... args) {
-    VirtualData::Ptr val = wrapper->NewData();
-    VirtualPrimitive<T>::set_value(val, t);
-    v.push_back(val);
-    CreateArgumentsVector(v, wrapper, args...);
-}
 
 template <class T, class U>
 T ConvertSequence (const U& data_seq) {
