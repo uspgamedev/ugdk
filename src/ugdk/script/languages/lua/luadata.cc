@@ -25,7 +25,7 @@ void* LuaData::Unwrap(const VirtualType& type, bool disown) const {
         .Arg(id_)
         .Arg(type.FromLang(LANG(Lua)))
         .Arg(static_cast<int>(disown))
-        .GetResult<UData>(NULL);
+        .GetResult<UData>(nullptr);
 }
 
 template <class T>
@@ -37,7 +37,7 @@ T UnwrapPrimitive(LuaWrapper* wrapper, const DataID id, const T default_value) {
 }
 
 const char* LuaData::UnwrapString() const {
-    return UnwrapPrimitive<const char*>(wrapper_, id_, NULL);
+    return UnwrapPrimitive<const char*>(wrapper_, id_, nullptr);
 }
 
 bool LuaData::UnwrapBoolean() const {

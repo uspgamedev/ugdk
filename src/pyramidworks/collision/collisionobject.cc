@@ -17,8 +17,8 @@ namespace collision {
 CollisionObject::CollisionObject(CollisionManager* manager, void *data) 
     :   manager_(manager),
         data_(data),
-        collision_class_(NULL),
-        shape_(NULL),
+        collision_class_(nullptr),
+        shape_(nullptr),
         is_active_(false) {}
 
 CollisionObject::~CollisionObject() {
@@ -30,7 +30,7 @@ CollisionObject::~CollisionObject() {
     if(is_active_)
         StopColliding();
 
-    if(shape_ != NULL)
+    if(shape_ != nullptr)
         delete shape_;
 }
 
@@ -46,22 +46,22 @@ void CollisionObject::SearchCollisions(std::vector<CollisionInstance> &collision
 }
 
 bool CollisionObject::IsColliding(const CollisionObject* obj) const {
-    if(this->shape_ == NULL || obj->shape_ == NULL) return false;
+    if(this->shape_ == nullptr || obj->shape_ == nullptr) return false;
     return this->shape_->Intersects(absolute_position(), obj->shape_, obj->absolute_position());
 }
 
 void CollisionObject::AddCollisionLogic(const std::string& colclass, CollisionLogic* logic) {
     const CollisionClass* collision_class = manager_->Get(colclass);
     CollisionLogic *query = known_collisions_[collision_class];
-    if( query != NULL ) delete query;
+    if( query != nullptr ) delete query;
     known_collisions_[collision_class] = logic;
 }
 
 void CollisionObject::InitializeCollisionClass(const std::string& colclass) {
     CollisionClass* collision_class = manager_->Get(colclass);
 #ifdef DEBUG
-    if(collision_class_ != NULL) fprintf(stderr, "Pyramidworks - CollisionObject Fatal Error: Changing the collision_class of.\n");
-    if(collision_class == NULL) fprintf(stderr, "Pyramidworks - CollisionObject Warning: Initializing the collision_class with NULL.\n");
+    if(collision_class_ != nullptr) fprintf(stderr, "Pyramidworks - CollisionObject Fatal Error: Changing the collision_class of.\n");
+    if(collision_class == nullptr) fprintf(stderr, "Pyramidworks - CollisionObject Warning: Initializing the collision_class with nullptr.\n");
 #endif
     collision_class_ = collision_class;
 }
@@ -69,9 +69,9 @@ void CollisionObject::InitializeCollisionClass(const std::string& colclass) {
 void CollisionObject::StartColliding() {
     if(is_active_) return;
 #ifdef DEBUG
-    if(collision_class_ == NULL) fprintf(stderr, "Pyramidworks - CollisionObject Warning: StartColliding called with an object with NULL collision_class.\n");
-    if(shape_ == NULL) {
-        fprintf(stderr, "Pyramidworks - CollisionObject Error: StartColliding called with an object with NULL shape.\n");
+    if(collision_class_ == nullptr) fprintf(stderr, "Pyramidworks - CollisionObject Warning: StartColliding called with an object with nullptr collision_class.\n");
+    if(shape_ == nullptr) {
+        fprintf(stderr, "Pyramidworks - CollisionObject Error: StartColliding called with an object with nullptr shape.\n");
         return;
     }
 #endif
@@ -83,7 +83,7 @@ void CollisionObject::StartColliding() {
 void CollisionObject::StopColliding() {
     if(!is_active_) return;
 #ifdef DEBUG
-    if(collision_class_ == NULL) fprintf(stderr, "Pyramidworks - CollisionObject Warning: StopColliding called with an object with NULL collision_class.\n");
+    if(collision_class_ == nullptr) fprintf(stderr, "Pyramidworks - CollisionObject Warning: StopColliding called with an object with nullptr collision_class.\n");
 #endif
     collision_class_->RemoveObject(this);
     manager_->RemoveActiveObject(this);

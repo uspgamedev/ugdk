@@ -10,7 +10,7 @@
 namespace ugdk {
 namespace ui {
 
-UIElement::UIElement() : owner_(NULL), node_(new graphic::Node) {}
+UIElement::UIElement() : owner_(nullptr), node_(new graphic::Node) {}
 
 UIElement::~UIElement() { delete node_; }
 

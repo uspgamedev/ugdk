@@ -24,7 +24,7 @@ class Reader {
 
     bool Begin() {
         file_ = fopen(file_path_.c_str(), "r");
-        return file_ != NULL;
+        return file_ != nullptr;
     }
 
     int Next() {

@@ -56,7 +56,7 @@ const ugdk::math::Vector2D& Sprite::size() const {
 }
     
 const action::SpriteAnimationFrame* Sprite::current_animation_frame() const {
-    return animation_player_ ? animation_player_->current_animation_frame() : NULL;
+    return animation_player_ ? animation_player_->current_animation_frame() : nullptr;
 }
     
 const action::SpriteAnimationPlayer* Sprite::animation_player() const { 

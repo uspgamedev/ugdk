@@ -13,7 +13,7 @@ namespace graphic {
 
 class TextManager {
   public:
-    TextManager() : current_font_(NULL) {}
+    TextManager() : current_font_(nullptr) {}
     ~TextManager();
 
     bool Initialize();

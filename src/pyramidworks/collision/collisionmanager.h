@@ -31,7 +31,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
     }
 
     /// Returns a CollisionClass of the asked name.
-    /** Searches for a CollisionClass with the given name, returning NULL is none is found.
+    /** Searches for a CollisionClass with the given name, returning nullptr is none is found.
       * @param name The name to search for.
       * @return A pointer to a CollisionClass. */
     CollisionClass* Get(const std::string &name) { return cache_[name]; }

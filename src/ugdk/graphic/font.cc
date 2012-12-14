@@ -21,7 +21,7 @@ Font::Font(Texture** letters, int fontsize, char ident, bool fancy)
 	id_ = glGenLists(MAX_UNICODE_CODE);
 	ugdk::math::Vector2D blank;
 	for(unsigned int i = 0; i < MAX_UNICODE_CODE; i++) {
-		if(letters_[i] == NULL)
+		if(letters_[i] == nullptr)
 			continue;
 		glNewList(id_ + i, GL_COMPILE);
             double targetx = letters_[i]->width()  * size_ * 0.01;
@@ -64,12 +64,12 @@ Font::~Font() {
 
 /*FUCKYOU ANSI
 ugdk::math::Vector2D Font::GetLetterSize(unsigned char letter) {
-	if(letters_[letter] == NULL) return ugdk::math::Vector2D(0,0);
+	if(letters_[letter] == nullptr) return ugdk::math::Vector2D(0,0);
 	return letters_[letter]->render_size() * (size_ * 0.01);
 }*/
 
 ugdk::math::Vector2D Font::GetLetterSize(wchar_t letter) {
-	if(letters_[letter] == NULL) return ugdk::math::Vector2D(0,0);
+	if(letters_[letter] == nullptr) return ugdk::math::Vector2D(0,0);
     return ugdk::math::Vector2D(letters_[letter]->width() * (size_ * 0.01), letters_[letter]->height() * (size_ * 0.01));
 }
 

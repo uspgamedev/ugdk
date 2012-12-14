@@ -117,7 +117,7 @@ class Engine {
     /// Stops the engine and clears the scene list.
     void quit() { quit_ = true; }
 
-    ~Engine() { reference_ = NULL; }
+    ~Engine() { reference_ = nullptr; }
 
   private:
     void DeleteFinishedScenes();
@@ -137,14 +137,14 @@ class Engine {
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 
 	Engine() :
-        audio_manager_(NULL),
-	    video_manager_(NULL),
-        text_manager_(NULL),
-        input_manager_(NULL),
-        time_manager_(NULL),
-		path_manager_(NULL),
-        resource_manager_(NULL), 
-        language_manager_(NULL) {}
+        audio_manager_(nullptr),
+	    video_manager_(nullptr),
+        text_manager_(nullptr),
+        input_manager_(nullptr),
+        time_manager_(nullptr),
+		path_manager_(nullptr),
+        resource_manager_(nullptr), 
+        language_manager_(nullptr) {}
 };
 
 } // namespace ugdk

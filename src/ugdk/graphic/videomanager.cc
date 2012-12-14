@@ -19,7 +19,7 @@
     #include <gl/GL.h>
     #include "wglext.h"
     typedef BOOL (APIENTRY *PFNWGLSWAPINTERVALFARPROC)( int );
-    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = NULL;
+    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = nullptr;
 #endif
 
 static void InitializeExtensions() {
@@ -50,10 +50,10 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
     title_ = title;
     
     // Set window title.
-    SDL_WM_SetCaption(title.c_str(), (icon.length() > 0) ? icon.c_str() : NULL );
+    SDL_WM_SetCaption(title.c_str(), (icon.length() > 0) ? icon.c_str() : nullptr );
     
     if(icon.length() > 0)
-        SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
+        SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), nullptr);
     
     if(ChangeResolution(size, fullscreen) == false)
         if(ChangeResolution(default_resolution, false) == false) {
@@ -83,7 +83,7 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     if(fullscreen) flags |= SDL_FULLSCREEN;
 
-    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == NULL)
+    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == nullptr)
         return false;
       
     SetVSync(settings_.vsync);
@@ -132,7 +132,7 @@ void VideoManager::SetVSync(const bool active) {
     settings_.vsync = active;
     //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
 #ifdef WIN32
-    if(wglSwapIntervalEXT != NULL) wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
+    if(wglSwapIntervalEXT != nullptr) wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
 #endif
 }
 
@@ -228,12 +228,12 @@ static SDL_Surface* CreateLightSurface(const ugdk::math::Vector2D& size, const u
     SDL_Surface *temp = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, screen->format->BitsPerPixel,
                                  screen->format->Rmask, screen->format->Gmask,
                                  screen->format->Bmask, screen->format->Amask);
-    if(temp == NULL)
-        return NULL;
+    if(temp == nullptr)
+        return nullptr;
     SDL_Surface *data = SDL_DisplayFormatAlpha(temp);
     SDL_FreeSurface(temp);
-    if(data == NULL)
-        return NULL;
+    if(data == nullptr)
+        return nullptr;
 
     ugdk::math::Vector2D origin = size * 0.5;
 
@@ -260,13 +260,13 @@ static SDL_Surface* CreateLightSurface(const ugdk::math::Vector2D& size, const u
 
 void VideoManager::InitializeLight() {
     ugdk::math::Vector2D light_size(32.0, 32.0);
-    if(light_texture_ != NULL) delete light_texture_;
+    if(light_texture_ != nullptr) delete light_texture_;
 
     SDL_Surface* light_surface = CreateLightSurface(light_size * 2.0, light_size);
     light_texture_ = Texture::CreateFromSurface(light_surface);
     SDL_FreeSurface(light_surface);
 
-    if(light_buffer_ != NULL) delete light_buffer_;
+    if(light_buffer_ != nullptr) delete light_buffer_;
     light_buffer_ = Texture::CreateRawTexture(static_cast<int>(video_size_.x), static_cast<int>(video_size_.y));
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );

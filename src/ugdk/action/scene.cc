@@ -22,7 +22,7 @@ using std::list;
 
 Scene::Scene() 
   : finished_(false), 
-    background_music_(NULL), 
+    background_music_(nullptr), 
     stops_previous_music_(true), 
     content_node_(new graphic::Node), 
     interface_node_(new graphic::Node) {
@@ -69,7 +69,7 @@ Scene::~Scene() {
 
 void Scene::Focus() {
     if(focus_callback_) focus_callback_(this);
-    if(background_music_ != NULL) { 
+    if(background_music_ != nullptr) { 
         if(!background_music_->IsPlaying())
             background_music_->PlayForever();
         else
@@ -77,7 +77,7 @@ void Scene::Focus() {
 
     } else if(stops_previous_music_) {
         audio::Music* current_music = AUDIO_MANAGER()->CurrentMusic();
-        if(current_music != NULL)
+        if(current_music != nullptr)
             current_music->Stop();
     }
 }
@@ -107,7 +107,7 @@ void Scene::Update(double dt) {
 }
 
 void Scene::End() {
-    if(background_music_ != NULL)
+    if(background_music_ != nullptr)
         background_music_->Pause();
 }
 

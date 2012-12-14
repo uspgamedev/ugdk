@@ -22,7 +22,7 @@ class SpriteAnimationFrame {
    *            should be applied to the rendered sprite.
    */
   public:
-    SpriteAnimationFrame(int frame, graphic::Modifier *modifier = NULL)
+    SpriteAnimationFrame(int frame, graphic::Modifier *modifier = nullptr)
         : frame_(frame), modifier_(modifier) {}
 
     int frame() const { return frame_; }

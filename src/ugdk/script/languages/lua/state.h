@@ -27,7 +27,7 @@ class State {
 
     operator lua_State*() const { return L_; }
 
-    void close() { lua_close(L_); L_ = NULL; }
+    void close() { lua_close(L_); L_ = nullptr; }
 
     AuxLib& aux() { return auxlib_; }
 

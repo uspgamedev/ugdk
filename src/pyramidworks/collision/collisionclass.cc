@@ -12,7 +12,7 @@ namespace collision {
 CollisionClass::~CollisionClass() {delete objects_tree_;}
 
 CollisionClass::CollisionClass(const ugdk::ikdtree::Box<2>& tree_bounding_box) 
-  : parent_(NULL),
+  : parent_(nullptr),
     objects_tree_(new ObjectTree(tree_bounding_box,5)) {}
 
 const CollisionObjectList CollisionClass::FindCollidingObjects(

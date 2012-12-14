@@ -21,7 +21,7 @@ namespace ugdk {
 namespace graphic {
 
 static SDL_Surface* createBaseSurface(Uint32 width, Uint32 height) {
-    SDL_Surface* surface = NULL;
+    SDL_Surface* surface = nullptr;
     Uint32 rmask, gmask, bmask, amask;
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
     rmask = 0xff000000;
@@ -69,8 +69,8 @@ SpritesheetData::SpritesheetData(const std::string& filename) {
     std::string filepath = PATH_MANAGER()->ResolvePath(filename);
     file_data_.push_back(new PixelSurface(filepath));
 #ifdef DEBUG
-    if(file_data_.back()->surface == NULL)
-        fprintf(stderr, "SpritesheetData - NULL received when loading \"%s\"\n", filepath.c_str());
+    if(file_data_.back()->surface == nullptr)
+        fprintf(stderr, "SpritesheetData - nullptr received when loading \"%s\"\n", filepath.c_str());
 #endif
 }
 
@@ -80,8 +80,8 @@ SpritesheetData::SpritesheetData(const std::list<std::string>& filenames) {
         std::string filepath = PATH_MANAGER()->ResolvePath(*it);
         file_data_.push_back(new PixelSurface(filepath));
 #ifdef DEBUG
-        if(file_data_.back()->surface == NULL)
-            fprintf(stderr, "SpritesheetData - NULL received when loading \"%s\"\n", filepath.c_str());
+        if(file_data_.back()->surface == nullptr)
+            fprintf(stderr, "SpritesheetData - nullptr received when loading \"%s\"\n", filepath.c_str());
 #endif
     }
 }
@@ -96,7 +96,7 @@ SpritesheetData::~SpritesheetData() {
 }
 
 void SpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int height, const ugdk::math::Vector2D& hotspot, size_t file) {
-    if(file >= file_data_.size() || file_data_[file]->surface == NULL) return;
+    if(file >= file_data_.size() || file_data_[file]->surface == nullptr) return;
     
     SDL_Surface* surface = createBaseSurface(width, height);
     extractPartOfSurface(file_data_[file]->surface, surface, topleft_x, topleft_y, width, height);
@@ -105,7 +105,7 @@ void SpritesheetData::AddFrame(int topleft_x, int topleft_y, int width, int heig
 }
 
 void SpritesheetData::FillWithFramesize(int width, int height, const ugdk::math::Vector2D& hotspot, size_t file) {
-    if(file >= file_data_.size() || file_data_[file]->surface == NULL) return;
+    if(file >= file_data_.size() || file_data_[file]->surface == nullptr) return;
 
     for(int y = 0; y + height <= file_data_[file]->surface->h; y += height) {
         for(int x = 0; x + width <= file_data_[file]->surface->w; x += width) {
@@ -149,7 +149,7 @@ const ugdk::math::Vector2D& Spritesheet::frame_size(size_t frame_number) const {
 }
 
 void Spritesheet::createList(GLuint id, Texture* texture, const ugdk::math::Vector2D& hotspot) {
-    if(texture == NULL) return;
+    if(texture == nullptr) return;
     glColor3f(1.0, 1.0, 1.0);
 
     ugdk::math::Vector2D origin, target(static_cast<double>(texture->width()), static_cast<double>(texture->height()));
@@ -212,10 +212,10 @@ void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot) co
 
 Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
     using script::VirtualObj;
-    if(tag.size() == 0) return NULL;
+    if(tag.size() == 0) return nullptr;
 
     VirtualObj data = SCRIPT_MANAGER()->LoadModule("spritesheets." + SCRIPT_MANAGER()->ConvertPathToDottedNotation(tag));
-    if(!data) return NULL;
+    if(!data) return nullptr;
 
     std::list<std::string> filenames;
     {

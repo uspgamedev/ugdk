@@ -22,7 +22,7 @@ class Loader {
         T* result = protocol_->FinalizeDescription();
         if(status != ParseStatus::OK) {
             delete result;
-            return NULL;
+            return nullptr;
         }
         return result;
     }

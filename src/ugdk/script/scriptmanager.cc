@@ -13,7 +13,7 @@ namespace script {
 
 using std::string;
 
-ScriptManager* ScriptManager::ref_ = NULL;
+ScriptManager* ScriptManager::ref_ = nullptr;
 
 ScriptManager::ScriptManager() {
     // TODO Auto-generated constructor stub
@@ -50,7 +50,7 @@ void ScriptManager::Register(LangWrapper* wrapper) {
 }
 
 LangWrapper* ScriptManager::GetWrapper(const string& name) {
-    if (!wrappers_.count(name))	return NULL;
+    if (!wrappers_.count(name))	return nullptr;
     return wrappers_[name];
 }
 

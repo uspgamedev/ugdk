@@ -25,7 +25,7 @@ DataGear* BootstrapGear::NextGear() {
     L_.newtable();
     L_.setfield(Constant::REGISTRYINDEX(), "UGDK_LUA_DATATABLE");
     //int datatable_id = L_.aux().ref(Constant::REGISTRYINDEX());
-    //return datatable_id == LUA_NOREF ? NULL : new DataGear(L_, datatable_id);
+    //return datatable_id == LUA_NOREF ? nullptr : new DataGear(L_, datatable_id);
     return new DataGear(L_);
 }
 

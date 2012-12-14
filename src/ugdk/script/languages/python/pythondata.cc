@@ -15,15 +15,15 @@ using std::shared_ptr;
 void* PythonData::Unwrap(const VirtualType& type, bool disown) const {
     void* pointer;
     int res = SWIG_ConvertPtrAndOwn(py_data_, &pointer, type.FromLang(LANG(Python)), 
-                                    disown ? SWIG_POINTER_DISOWN : 0, NULL);
+                                    disown ? SWIG_POINTER_DISOWN : 0, nullptr);
     if (SWIG_IsOK(res))
         return pointer;
-    return NULL;
+    return nullptr;
 }
 const char* PythonData::UnwrapString() const {
-    if (py_data_ == NULL) return "INVALID";
+    if (py_data_ == nullptr) return "INVALID";
     PyObject *temp = PyObject_Str(py_data_);
-    if(temp == NULL) return "INVALID";
+    if(temp == nullptr) return "INVALID";
     char* result = PyString_AsString(temp);
     Py_DECREF(temp);
     return result;
@@ -42,14 +42,14 @@ double PythonData::UnwrapNumber() const {
 template <class T>
 static T UnwrapSequence(PyObject* py_data_, PythonWrapper* wrapper_) {
     T seq = T();
-    if (py_data_ == NULL)   return seq;
+    if (py_data_ == nullptr)   return seq;
     if (!PySequence_Check(py_data_)) return seq;
 
     Py_ssize_t size = PySequence_Length(py_data_);
     PyObject* obj;
     PythonData* data;
     for (Py_ssize_t i = 0; i < size; i++) {
-        obj = PySequence_GetItem(py_data_, i); //returns new ref, NULL on failure
+        obj = PySequence_GetItem(py_data_, i); //returns new ref, nullptr on failure
         data = new PythonData(wrapper_, obj, true); //PythonData takes care of the new ref
         seq.push_back(  VirtualData::Ptr(data)  );
     }
@@ -65,22 +65,22 @@ VirtualData::List PythonData::UnwrapList() const {
 }
 VirtualData::Map PythonData::UnwrapMap() const {
     Map d = Map();
-    if (py_data_ == NULL)   return d;
+    if (py_data_ == nullptr)   return d;
     if (!PyMapping_Check(py_data_)) return d;
 
     PyObject* items_func = PyObject_GetAttrString(py_data_, "items"); //new ref
-    if (items_func == NULL) return d;
-    PyObject* items = PyObject_CallObject(items_func, NULL);  //new ref
+    if (items_func == nullptr) return d;
+    PyObject* items = PyObject_CallObject(items_func, nullptr);  //new ref
     Py_XDECREF(items_func);
     //PyObject* items = PyMapping_Items(py_data_); //items is new ref
-    if (items == NULL)   return d;    
+    if (items == nullptr)   return d;    
 
     Py_ssize_t size = PySequence_Length(items);
     PyObject *item, *key, *value;
     PythonData *key_data, *value_data;
     for (Py_ssize_t i = 0; i < size; i++) {
-        item = PySequence_GetItem(items, i); //returns new ref, NULL on failure
-        if (item == NULL)   continue;
+        item = PySequence_GetItem(items, i); //returns new ref, nullptr on failure
+        if (item == nullptr)   continue;
 
         key = PySequence_GetItem(item, 0);  //key -> new ref
         value = PySequence_GetItem(item, 1);  //value -> new ref
@@ -101,9 +101,9 @@ VirtualData::Map PythonData::UnwrapMap() const {
 
 /// Tries to wrap the given data with the given type into this object.
 void PythonData::Wrap(void* data, const VirtualType& type) {
-    if (py_data_ != NULL && own_ref_) {
+    if (py_data_ != nullptr && own_ref_) {
         Py_DECREF(py_data_);
-        py_data_ = NULL;
+        py_data_ = nullptr;
     }
 
     py_data_ = SWIG_NewInstanceObj(data, type.FromLang(LANG(Python)), 1);
@@ -113,10 +113,10 @@ void PythonData::Wrap(void* data, const VirtualType& type) {
 }
 
 void PythonData::WrapString(const char* str) {
-    if (str == NULL)    return;
-    if (py_data_ != NULL && own_ref_) {
+    if (str == nullptr)    return;
+    if (py_data_ != nullptr && own_ref_) {
         Py_DECREF(py_data_);
-        py_data_ = NULL;
+        py_data_ = nullptr;
     }
 
     py_data_ = PyString_FromString(str);
@@ -129,9 +129,9 @@ void PythonData::WrapBoolean(bool boolean) {
 }
 
 void PythonData::WrapInteger(int number) {
-    if (py_data_ != NULL && own_ref_) {
+    if (py_data_ != nullptr && own_ref_) {
         Py_DECREF(py_data_);
-        py_data_ = NULL;
+        py_data_ = nullptr;
     }
     
     py_data_ = PyInt_FromLong(static_cast<long>(number));
@@ -139,9 +139,9 @@ void PythonData::WrapInteger(int number) {
 }
 
 void PythonData::WrapNumber(double number) {
-    if (py_data_ != NULL && own_ref_) {
+    if (py_data_ != nullptr && own_ref_) {
         Py_DECREF(py_data_);
-        py_data_ = NULL;
+        py_data_ = nullptr;
     }
 
     py_data_ = PyFloat_FromDouble(number);
@@ -157,7 +157,7 @@ VirtualData::Ptr PythonData::Execute(const std::vector<Ptr>& args) {
     }
 
     PyObject* arglist = PyTuple_New(args.size()); //new ref
-    if (arglist == NULL) {
+    if (arglist == nullptr) {
         /*Some error occured... Py/C API doesn't specify what might cause the failure here...
            Most likely out of memory? */
         return VirtualData::Ptr();
@@ -182,8 +182,8 @@ VirtualData::Ptr PythonData::Execute(const std::vector<Ptr>& args) {
     }
 
     PyObject* result = PyObject_CallObject(py_data_, arglist); //return is new ref
-    /*If result = NULL, CallObject failed (somehow)*/
-    if (result == NULL) {
+    /*If result = nullptr, CallObject failed (somehow)*/
+    if (result == nullptr) {
         fprintf(stderr, "[Python] Error executing callable object (python exception details below)\n");
         wrapper_->PrintPythonExceptionDetails();
         return VirtualData::Ptr();

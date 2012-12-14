@@ -25,7 +25,7 @@ class BootstrapGear : public BaseGear {
   public:
 
     BootstrapGear() :
-        BaseGear(NULL) {}
+        BaseGear(nullptr) {}
 
     ~BootstrapGear() {}
 

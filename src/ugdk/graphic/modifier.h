@@ -83,12 +83,12 @@ class Modifier {
     void ComposeColor(const Color& color);
     void ComposeVisible(bool _visible) { visible_ = visible_ && _visible; }
     
-    void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeOffset(   mod2->offset_   ); }
-    void ComposeScale(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeScale(    mod2->scale_    ); }
-    void ComposeRotation( const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeRotation( mod2->rotation_ ); }
-    void ComposeMirror(   const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeMirror(   mod2->mirror_   ); }
-    void ComposeColor(    const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeColor(    mod2->color_    ); }
-    void ComposeVisible(  const Modifier* mod2 ) { if(mod2 == NULL) return; ComposeVisible(  mod2->visible_  ); }
+    void ComposeOffset(   const Modifier* mod2 ) { if(mod2 == nullptr) return; ComposeOffset(   mod2->offset_   ); }
+    void ComposeScale(    const Modifier* mod2 ) { if(mod2 == nullptr) return; ComposeScale(    mod2->scale_    ); }
+    void ComposeRotation( const Modifier* mod2 ) { if(mod2 == nullptr) return; ComposeRotation( mod2->rotation_ ); }
+    void ComposeMirror(   const Modifier* mod2 ) { if(mod2 == nullptr) return; ComposeMirror(   mod2->mirror_   ); }
+    void ComposeColor(    const Modifier* mod2 ) { if(mod2 == nullptr) return; ComposeColor(    mod2->color_    ); }
+    void ComposeVisible(  const Modifier* mod2 ) { if(mod2 == nullptr) return; ComposeVisible(  mod2->visible_  ); }
 
     /// Global composer and copy from pointer function.
     void Compose(const Modifier* mod2);

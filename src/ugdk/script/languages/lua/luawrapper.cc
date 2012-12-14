@@ -39,7 +39,7 @@ bool LuaWrapper::Initialize() {
 
 void LuaWrapper::Finalize() {
     delete data_gear_;
-    data_gear_ = NULL;
+    data_gear_ = nullptr;
 }
 
 VirtualData::Ptr LuaWrapper::NewData() {

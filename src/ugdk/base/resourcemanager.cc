@@ -20,7 +20,7 @@ static T* NullLoad(const std::string& filepath) {
 #ifdef DEBUG
     fprintf(stderr, "Warning: NullLoad<%s> called with path '%s'.", TOSTRING(T), filepath.c_str());
 #endif
-    return NULL;
+    return nullptr;
 }
 
 bool type_info_cmp(const std::type_info* a, const std::type_info* b) {
@@ -61,7 +61,7 @@ action::SpriteAnimationTable* ResourceManager::GetSpriteAnimationTableFromFile(c
 
 graphic::Text*        ResourceManager::CreateTextFromLanguageTag(const std::string& tag) {
     ugdk::LanguageWord* word = RESOURCE_MANAGER()->word_container().Find(tag);
-    return word ? word->GenerateText() : NULL;
+    return word ? word->GenerateText() : nullptr;
 }
 
 } // namespace base

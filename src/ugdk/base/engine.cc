@@ -21,7 +21,7 @@ namespace ugdk {
 using namespace graphic;
 using namespace input;
 
-Engine* Engine::reference_ = NULL;
+Engine* Engine::reference_ = nullptr;
 
 ugdk::math::Vector2D Engine::window_size() {
     return video_manager_->video_size();
@@ -52,10 +52,10 @@ bool Engine::Initialize(const Configuration& configuration) {
     scene_list_.clear();
 
     frames_since_reset_ = reported_fps_ = 0;
-    if(time_manager_ != NULL)
+    if(time_manager_ != nullptr)
         last_fps_report_ = time_manager_->TimeElapsed();
 
-    return (time_manager_ != NULL);
+    return (time_manager_ != nullptr);
 }
 
 void Engine::DeleteFinishedScenes() {
@@ -76,7 +76,7 @@ void Engine::Run() {
     Key key;
     SDL_Event event;
     double delta_t, total_fps = 0;
-    action::Scene* current_top_scene = NULL;
+    action::Scene* current_top_scene = nullptr;
 
     quit_ = false;
     while(!quit_) {
@@ -86,7 +86,7 @@ void Engine::Run() {
         }
         DeleteFinishedScenes();
 
-        if (CurrentScene() == NULL)
+        if (CurrentScene() == nullptr)
             quit();
         else if(current_top_scene != CurrentScene())
             (current_top_scene = CurrentScene())->Focus();
@@ -176,7 +176,7 @@ void Engine::PushScene(action::Scene* scene) {
 }
 
 action::Scene* Engine::CurrentScene() const {
-    return scene_list_.empty() ? NULL : scene_list_.back();
+    return scene_list_.empty() ? nullptr : scene_list_.back();
 }
 
 void Engine::PopScene() {

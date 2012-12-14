@@ -23,7 +23,7 @@ private:
 
     typedef typename std::vector<T*> IndexArray;
   public:
-    IndexableTable() : index_generator_(0, IndexSize - 1, -1), indexes_(IndexSize, static_cast<T*>(NULL)) {}
+    IndexableTable() : index_generator_(0, IndexSize - 1, -1), indexes_(IndexSize, static_cast<T*>(nullptr)) {}
     ~IndexableTable() {
         for(TableIterator it = data_.begin(); it != data_.end(); ++it)
             if(it->second) delete it->second;
@@ -45,7 +45,7 @@ private:
     /// Searches for the element with the given name.
     T* Search(const std::string& name) const { 
         TableConstIterator it = data_.find(name);
-        return (it != data_.end()) ? it->second : NULL;
+        return (it != data_.end()) ? it->second : nullptr;
     }
     
     /// Instant access to an element, using a pre-generated ID.
@@ -76,7 +76,7 @@ private:
     void removeIndexes(T* val) {
         for(int id = 0; id < static_cast<int>(indexes_.size()); ++id)
             if(indexes_[id] == val) {
-                indexes_[id] = NULL;
+                indexes_[id] = nullptr;
                 index_generator_.ReleaseID(id);
             }
     }

@@ -39,13 +39,13 @@ private:
 
 Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
   : node_(new graphic::Node()),
-    owner_scene_(NULL),
-    focused_element_(NULL),
+    owner_scene_(nullptr),
+    focused_element_(nullptr),
     objects_tree_(new ObjectTree(tree_bounding_box,5)),
     hook_(hook) {
       node_->modifier()->set_offset(offset);
-      option_node_[0] = NULL;
-      option_node_[1] = NULL;
+      option_node_[0] = nullptr;
+      option_node_[1] = nullptr;
       //std::function<bool (double)> func = std::bind(&CheckMouse, this, _1);
       //this->AddTask(new action::GenericTask(func));
       //this->AddTask(new CallbackCheckTask(this));
@@ -157,7 +157,7 @@ void Menu::AddObject(UIElement *obj) {
 }
 
 void Menu::RemoveObject(UIElement *obj) { 
-    obj->set_owner(NULL);
+    obj->set_owner(nullptr);
     objects_tree_->Remove(obj);
     node_->RemoveChild(obj->node());
     uielements_.remove(obj);

@@ -23,7 +23,7 @@ public:
     const T* current_animation() const { return current_animation_; }
 
     const typename T::Frame* current_animation_frame() const {
-        if(current_frame_ < 0 || current_frame_ >= current_animation()->size()) return NULL;
+        if(current_frame_ < 0 || current_frame_ >= current_animation()->size()) return nullptr;
         return current_animation()->At(current_frame_);
     }
 

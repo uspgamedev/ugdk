@@ -16,7 +16,7 @@ Modifier::Modifier() : offset_(), scale_(1.0, 1.0), rotation_(0.0),
 
 void Modifier::Compose(const Modifier* mod2) {
 
-    if(mod2 == NULL) return;
+    if(mod2 == nullptr) return;
 
     this->ComposeOffset(   mod2->offset_   );
     this->ComposeScale(    mod2->scale_    );
@@ -28,7 +28,7 @@ void Modifier::Compose(const Modifier* mod2) {
 }
 
 Modifier* Modifier::Compose(const Modifier* mod1, const Modifier* mod2) {
-    if(mod1 == NULL) return Copy(mod2);
+    if(mod1 == nullptr) return Copy(mod2);
 
     Modifier* mod = Copy(mod1);
     mod->Compose(mod2);
@@ -70,7 +70,7 @@ void Modifier::ComposeRotation(const double rotation) {
 }
 
 Modifier* Modifier::Copy(const Modifier* mod2) { 
-    if(mod2 == NULL) return NULL;
+    if(mod2 == nullptr) return nullptr;
     return new Modifier(*mod2);
 }
 

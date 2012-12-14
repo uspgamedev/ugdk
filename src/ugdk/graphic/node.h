@@ -13,13 +13,13 @@ class Node {
   public:
     typedef std::vector<Node*> NodeSet;
 
-    Node(Drawable* drawable = NULL, Modifier* modifier = NULL) 
+    Node(Drawable* drawable = nullptr, Modifier* modifier = nullptr) 
         :   modifier_(modifier), 
             drawable_(drawable),
-            light_(NULL),
+            light_(nullptr),
             active_(true),
             zindex_(0.0),
-            parent_(NULL),
+            parent_(nullptr),
             must_sort_(false) {}
 
     ~Node();
@@ -34,7 +34,7 @@ class Node {
     void set_active(const bool active)    {   active_ =   active; }
     void set_zindex(const double zindex);
     
-          Modifier* modifier() { return (modifier_ != NULL) ? modifier_ : (modifier_ = new Modifier); }
+          Modifier* modifier() { return (modifier_ != nullptr) ? modifier_ : (modifier_ = new Modifier); }
     const Modifier* modifier() const { return modifier_; }
           Drawable* drawable()       { return drawable_; }
     const Drawable* drawable() const { return drawable_; }
