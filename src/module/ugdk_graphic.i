@@ -10,7 +10,7 @@
 
 %{
 
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/font.h>
@@ -26,13 +26,13 @@
 %import(module="ugdk_math") <ugdk/math/frame.h>
 
 %ignore ugdk::graphic::Texture::CreateFromSurface(SDL_Surface* data);
-%ignore ugdk::graphic::VideoManager::PushAndApplyModifier(const Modifier& apply);
+%ignore ugdk::graphic::VideoManager::PushAndApplyModifier(const Geometry& apply);
 %ignore ugdk::graphic::Font::GetLetterSize(wchar_t letter);
 %ignore ugdk::graphic::SpritesheetData::frames() const;
 
 %newobject ugdk::graphic::Font::GetLetterSize(wchar_t letter);
-%newobject ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);
-%newobject ugdk::graphic::Modifier::Copy(const Modifier* mod2);
+%newobject ugdk::graphic::Geometry::Compose(const Geometry* mod1, const Geometry* mod2);
+%newobject ugdk::graphic::Geometry::Copy(const Geometry* mod2);
 %newobject ugdk::graphic::TextManager::GetText(const std::wstring& text);
 %newobject ugdk::graphic::TextManager::GetText(const std::wstring& text, const std::string& font, int width = -1);
 %newobject ugdk::graphic::TextManager::GetTextFromFile(const std:: string& path);
@@ -40,10 +40,10 @@
 %newobject ugdk::graphic::Texture::CreateFromFile(const std::string& filepath);
 %newobject ugdk::graphic::Texture::CreateRawTexture(int texture_width, int texture_height);
 
-%rename(ComposeNew) ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);
+%rename(ComposeNew) ugdk::graphic::Geometry::Compose(const Geometry* mod1, const Geometry* mod2);
 %rename(GetTextWithFont) ugdk::graphic::TextManager::GetText(const std::wstring& text, const std::string& font, int width = -1);
 
-%include <ugdk/graphic/modifier.h>
+%include <ugdk/graphic/geometry.h>
 
 %include <ugdk/graphic/drawable.h>
 
@@ -70,7 +70,7 @@ namespace graphic {
     export_class(Texture)
     export_class(Font)
     export_class(Light)
-    export_class(Modifier)
+    export_class(Geometry)
     export_class(Node)
     export_class(Spritesheet)
     export_class(TextManager)

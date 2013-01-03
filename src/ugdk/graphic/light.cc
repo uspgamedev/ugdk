@@ -13,7 +13,7 @@ namespace graphic {
 Light::Light() : color_() {
 }
 
-void Light::Draw(const Modifier& modifier) {
+void Light::Draw(const Geometry& modifier) {
 	const Texture* light_texture = VIDEO_MANAGER()->light_texture();
 
     glColor3d(color_.r, color_.g, color_.b);

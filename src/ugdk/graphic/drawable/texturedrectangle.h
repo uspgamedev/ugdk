@@ -15,7 +15,7 @@ class TexturedRectangle : public Shape {
     ~TexturedRectangle();
 
     void Update(double dt);
-    void Draw(const Modifier&) const;
+    void Draw(const Geometry&) const;
 
     const ugdk::math::Vector2D& size() const { return size_; }
     void set_size(const ugdk::math::Vector2D& size) { size_ = size; }

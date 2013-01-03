@@ -7,7 +7,7 @@
 
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/light.h>
 
@@ -43,11 +43,11 @@ void Node::Update(double dt) {
         (*it)->Update(dt);
 }
 
-void Node::Render(const Modifier& parent) const {
+void Node::Render(const Geometry& parent) const {
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
-    Modifier compose(parent);
+    Geometry compose(parent);
     compose.Compose(modifier_);
 
     if(drawable_)
@@ -58,11 +58,11 @@ void Node::Render(const Modifier& parent) const {
         (*it)->Render(compose);
 }
 
-void Node::RenderLight(const Modifier& parent) const {
+void Node::RenderLight(const Geometry& parent) const {
     if(!active_) return;
     if(childs_.empty() && !light_) return; // optimization!
     
-    Modifier compose(parent);
+    Geometry compose(parent);
     compose.Compose(modifier_);
 
     if(light_) 

@@ -8,7 +8,7 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/node.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/pathmanager.h>
 
@@ -146,7 +146,7 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
 
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->RenderLight(Modifier());
+            (*it)->content_node()->RenderLight(Geometry());
 
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
@@ -202,7 +202,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     // Draw all the sprites from all scenes.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->Render(Modifier());
+            (*it)->content_node()->Render(Geometry());
 
     // Using the light texture, merge it into the screen.
     if(settings_.light_system)
@@ -212,7 +212,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->interface_node()->Render(Modifier());
+            (*it)->interface_node()->Render(Geometry());
 
 
     // Swap the buffers to show the backbuffer to the user.
@@ -278,8 +278,8 @@ void VideoManager::InitializeLight() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void VideoManager::PushAndApplyModifier(const Modifier* apply) {
-    Modifier top = CurrentModifier();
+void VideoManager::PushAndApplyModifier(const Geometry* apply) {
+    Geometry top = CurrentModifier();
 
     glPushMatrix();
     double M[16];
@@ -296,8 +296,8 @@ bool VideoManager::PopModifier() {
     return true;
 }
 
-const Modifier& VideoManager::CurrentModifier() const {
-    static Modifier IDENTITY;
+const Geometry& VideoManager::CurrentModifier() const {
+    static Geometry IDENTITY;
     return (modifiers_.empty()) ? IDENTITY : modifiers_.top(); 
 }
 

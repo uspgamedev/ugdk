@@ -1,21 +1,19 @@
-#include <cstring>
+#include <ugdk/graphic/geometry.h>
+
 #include <cmath>
 
-#include <ugdk/graphic/modifier.h>
-
 namespace ugdk {
-
 namespace graphic {
 
-Modifier::Modifier() : offset_(), scale_(1.0, 1.0), rotation_(0.0) {}
+Geometry::Geometry() : offset_(), scale_(1.0, 1.0), rotation_(0.0) {}
 
-void Modifier::Compose(const Modifier& rhs) {
+void Geometry::Compose(const Geometry& rhs) {
     offset_ += rhs.offset_.Rotate(rotation_).Scale(scale_);
     rotation_ += rhs.rotation_;
     scale_ = scale_.Scale(rhs.scale_); 
 }
 
-void Modifier::AsMatrix4x4(double M[16]) const {
+void Geometry::AsMatrix4x4(double M[16]) const {
     double tx = offset_.x, ty = offset_.y;
     double sx = scale_.x, sy = scale_.y;
     double s = sin(rotation_), c = cos(rotation_);

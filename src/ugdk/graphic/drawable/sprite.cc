@@ -36,13 +36,13 @@ void Sprite::Update(double delta_t) {
     if(animation_player_) animation_player_->Update(delta_t);
 }
 
-void Sprite::Draw(const Modifier& modifier) const {
+void Sprite::Draw(const Geometry& modifier) const {
     if(!spritesheet_) return;
     if(animation_player_) {
         const action::SpriteAnimationFrame* animation_frame = 
             current_animation_frame();
 
-        Modifier compose(modifier);
+        Geometry compose(modifier);
         compose.Compose(animation_frame->modifier());
         spritesheet_->Draw(animation_frame->frame(), hotspot_, compose);
     } else {

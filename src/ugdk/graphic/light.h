@@ -19,7 +19,7 @@ class Light {
     const Color& color() const { return color_; }
     void set_color(const Color& color) { color_ = color; }
 
-	void Draw(const Modifier&);
+	void Draw(const Geometry&);
 
   private:
 	ugdk::math::Vector2D dimension_;

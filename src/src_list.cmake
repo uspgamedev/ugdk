@@ -59,8 +59,8 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/font.h 
     ./src/ugdk/graphic/light.cc 
     ./src/ugdk/graphic/light.h 
-    ./src/ugdk/graphic/modifier.cc 
-    ./src/ugdk/graphic/modifier.h 
+    ./src/ugdk/graphic/geometry.cc 
+    ./src/ugdk/graphic/geometry.h 
     ./src/ugdk/graphic/node.cc 
     ./src/ugdk/graphic/node.h 
     ./src/ugdk/graphic/spritesheet.cc 

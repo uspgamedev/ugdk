@@ -180,7 +180,7 @@ void Spritesheet::createList(GLuint id, Texture* texture, const ugdk::math::Vect
     } glEndList();
 }
 
-void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Modifier& modifier) const {
+void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry& modifier) const {
     glPushMatrix();
     double M[16];
     modifier.AsMatrix4x4(M);

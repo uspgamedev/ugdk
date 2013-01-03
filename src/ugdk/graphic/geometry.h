@@ -1,20 +1,19 @@
-#ifndef UGDK_GRAPHIC_MODIFIER_H_
-#define UGDK_GRAPHIC_MODIFIER_H_
+#ifndef UGDK_GRAPHIC_GEOMETRY_H_
+#define UGDK_GRAPHIC_GEOMETRY_H_
 
 #include <vector>
 #include <cstddef>
 #include <ugdk/math/vector2D.h>
-#include <ugdk/base/types.h>
 
 namespace ugdk {
 namespace graphic {
 
-class Modifier {
+class Geometry {
   public:
-    /// Creates an identity Modifier;
-    Modifier();
+    /// Creates an identity Geometry;
+    Geometry();
 
-    ///Creates a new Modifier object with the specified values. 
+    ///Creates a new Geometry object with the specified values. 
     /**
      * @param offset The offset of the image.
      * @param size The size modifiers for the image. X and Y values can be set
@@ -24,11 +23,11 @@ class Modifier {
      * @param mirror Mirrors the image. Can be MIRROR_NONE for no mirroring, 
      * MIRROR_HFLIP for horizontal mirroring or MIRROR_VFLIP for vetical mirroring.
      */
-    Modifier(const math::Vector2D& _offset, const math::Vector2D _scale = math::Vector2D(1.0, 1.0), double _rotation = 0.0) :
+    Geometry(const math::Vector2D& _offset, const math::Vector2D _scale = math::Vector2D(1.0, 1.0), double _rotation = 0.0) :
         offset_(_offset), scale_(_scale), rotation_(_rotation) {}
 
     // Destructor
-    ~Modifier() {}
+    ~Geometry() {}
 
     // Getters.
     /**@name Getters and Setters
@@ -45,15 +44,15 @@ class Modifier {
     /**@}
      */
 
-    void Compose(const Modifier&);
+    void Compose(const Geometry&);
 
-    Modifier& operator *= (const Modifier& rhs) {
+    Geometry& operator *= (const Geometry& rhs) {
         Compose(rhs);
         return *this;
     }
     
-    Modifier operator * (const Modifier& rhs) const {
-        Modifier result(*this);
+    Geometry operator * (const Geometry& rhs) const {
+        Geometry result(*this);
         result.Compose(rhs);
         return result;
     }

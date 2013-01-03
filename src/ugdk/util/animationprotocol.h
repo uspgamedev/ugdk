@@ -7,7 +7,7 @@
 #include <ugdk/action/spritetypes.h>
 #include <ugdk/util/indexabletable.h>
 #include <ugdk/util/gdd/descriptionprotocol.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 
 namespace ugdk {
 

@@ -4,6 +4,10 @@
 namespace ugdk {
 namespace graphic {
 
+// Data
+class Geometry;
+class VisualEffect;
+
 // Drawables
 class Drawable;
 class Shape;
@@ -17,7 +21,6 @@ class TexturedRectangle;
 class Font;
 class Image;
 class Light;
-class Modifier;
 class Node;
 class Texture;
 class Spritesheet;

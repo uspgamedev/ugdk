@@ -5,7 +5,7 @@
 
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 
 namespace ugdk {
 namespace graphic {
@@ -16,7 +16,7 @@ SolidRectangle::~SolidRectangle() {}
     
 void SolidRectangle::Update(double dt) {}
 
-void SolidRectangle::Draw(const Modifier& modifier) const {
+void SolidRectangle::Draw(const Geometry& modifier) const {
     ugdk::math::Vector2D origin, target(size_);
     origin -= hotspot_;
     target -= hotspot_;

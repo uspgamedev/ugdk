@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 
 namespace ugdk {
 namespace graphic {
@@ -25,16 +25,16 @@ class Node {
 
     /// Pushes the modifier to the VideoManager, renders 
     void Update(double dt);
-    void Render(const Modifier&) const;
-    void RenderLight(const Modifier& parent) const;
+    void Render(const Geometry&) const;
+    void RenderLight(const Geometry& parent) const;
 
     void set_drawable(Drawable* drawable) { drawable_ = drawable; }
     void set_light(Light* light)          {    light_ =    light; }
     void set_active(const bool active)    {   active_ =   active; }
     void set_zindex(const double zindex);
     
-          Modifier& modifier()       { return modifier_; }
-    const Modifier& modifier() const { return modifier_; }
+          Geometry& modifier()       { return modifier_; }
+    const Geometry& modifier() const { return modifier_; }
           Drawable* drawable()       { return drawable_; }
     const Drawable* drawable() const { return drawable_; }
           Light* light()             { return    light_; }
@@ -55,7 +55,7 @@ class Node {
     void SortChildren();
 
   private:
-    Modifier modifier_;
+    Geometry modifier_;
     Drawable* drawable_;
     Light* light_;
     bool active_;

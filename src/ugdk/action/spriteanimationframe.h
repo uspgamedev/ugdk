@@ -7,7 +7,7 @@
 #include <ugdk/base/types.h>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 
 #define DEFAULT_PERIOD 0.1
 
@@ -20,7 +20,7 @@ namespace action {
 class SpriteAnimationFrame {
   /*
    * frame_: the index of the spritesheet frame that should be rendered.
-   * modifier_: a pointer to the Modifier object describing the visual modifiers that
+   * modifier_: a pointer to the Geometry object describing the visual modifiers that
    *            should be applied to the rendered sprite.
    */
   public:
@@ -28,18 +28,18 @@ class SpriteAnimationFrame {
         : frame_(frame) {}
 
     int frame() const { return frame_; }
-    const graphic::Modifier& modifier() const { return modifier_; }
+    const graphic::Geometry& modifier() const { return modifier_; }
     const ugdk::Color& color() const { return color_; }
     ugdk::Mirror mirror() const { return mirror_; }
 
     void set_frame(const int frame) { frame_ = frame; }
-    graphic::Modifier& modifier() { return modifier_; }
+    graphic::Geometry& modifier() { return modifier_; }
     ugdk::Color& color() { return color_; }
     void set_mirror(const ugdk::Mirror& mirror) { mirror_ = mirror; }
 
   private:
     int frame_;
-    graphic::Modifier modifier_;
+    graphic::Geometry modifier_;
     ugdk::Color color_;
     ugdk::Mirror mirror_;
 };
