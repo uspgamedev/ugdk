@@ -21,7 +21,7 @@ class Sprite : public Drawable {
     virtual ~Sprite();
 
     void Update(double dt);
-    void Draw(const Geometry&) const;
+    void Draw(const Geometry&, const VisualEffect&) const;
     const ugdk::math::Vector2D& size() const;
 
     const action::SpriteAnimationFrame* current_animation_frame() const;

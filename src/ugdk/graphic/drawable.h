@@ -17,7 +17,7 @@ class Drawable {
     virtual ~Drawable() {};
 
     virtual void Update(double dt) = 0;
-    virtual void Draw(const Geometry&) const = 0;
+    virtual void Draw(const Geometry&, const VisualEffect&) const = 0;
     virtual const ugdk::math::Vector2D& size() const = 0;
 
     void set_hotspot(const ugdk::math::Vector2D& hotspot) { hotspot_ = hotspot; }

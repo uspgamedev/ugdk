@@ -13,6 +13,7 @@
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/visualeffect.h>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>
@@ -180,13 +181,13 @@ void Spritesheet::createList(GLuint id, Texture* texture, const ugdk::math::Vect
     } glEndList();
 }
 
-void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry& modifier) const {
+void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry& modifier, const VisualEffect& effect) const {
     glPushMatrix();
     double M[16];
     modifier.AsMatrix4x4(M);
     glLoadMatrixd(M);
     glTranslated(-hotspot.x, -hotspot.y, 0.0);
-
+    glColor4dv(effect.color().val);
     glCallList(lists_base_ + frame_number);
     glPopMatrix();
 }

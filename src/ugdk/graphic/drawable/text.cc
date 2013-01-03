@@ -6,6 +6,7 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/base/types.h>
 #include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/math/frame.h>
 #include <ugdk/graphic/font.h>
 
@@ -62,7 +63,7 @@ const ugdk::math::Vector2D& Text::size() const {
 
 void Text::Update(double dt) {}
 
-void Text::Draw(const Geometry& modifier) const {
+void Text::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     static Color FANCY_COLORS[3] = {
         Color(1.000000, 1.000000, 1.000000), // 255, 255, 255
         Color(0.831372, 0.666666, 0.000000), // 212, 170,   0
@@ -78,9 +79,6 @@ void Text::Draw(const Geometry& modifier) const {
     modifier.AsMatrix4x4(M);
     glLoadMatrixd(M);
     
-    // TODO: combine the hotspot and mirror matrices.
-
-    // Hotspot
     glTranslated(-hotspot_.x, -hotspot_.y, 0.0);
     
     int fancy_line_number = 0;
@@ -88,7 +86,10 @@ void Text::Draw(const Geometry& modifier) const {
     for(; fancy_line_number >= 0; fancy_line_number--) {
         glTranslated(-1.0, -1.0, 0);
         glPushMatrix();
-        glColor4dv(FANCY_COLORS[fancy_line_number].val);
+
+        Color color = effect.color() * FANCY_COLORS[fancy_line_number];
+        glColor4dv(color.val);
+
         for(size_t i = 0; i < message_.size(); ++i) {
             if(i != 0) glTranslated( 0.0, line_height_, 0.0);
             if(message_[i].length() > 0) {

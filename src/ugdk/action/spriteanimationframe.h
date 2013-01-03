@@ -4,10 +4,10 @@
 #include <vector>
 #include <string>
 
-#include <ugdk/base/types.h>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
 
 #define DEFAULT_PERIOD 0.1
 
@@ -29,17 +29,18 @@ class SpriteAnimationFrame {
 
     int frame() const { return frame_; }
     const graphic::Geometry& modifier() const { return modifier_; }
-    const ugdk::Color& color() const { return color_; }
+    const graphic::VisualEffect& effect() const { return effect_; }
     ugdk::Mirror mirror() const { return mirror_; }
 
     void set_frame(const int frame) { frame_ = frame; }
     graphic::Geometry& modifier() { return modifier_; }
-    ugdk::Color& color() { return color_; }
+    graphic::VisualEffect& effect() { return effect_; }
     void set_mirror(const ugdk::Mirror& mirror) { mirror_ = mirror; }
 
   private:
     int frame_;
     graphic::Geometry modifier_;
+    graphic::VisualEffect effect_;
     ugdk::Color color_;
     ugdk::Mirror mirror_;
 };

@@ -146,7 +146,7 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
 
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->RenderLight(Geometry());
+            (*it)->content_node()->RenderLight(Geometry(), VisualEffect());
 
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
@@ -202,7 +202,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     // Draw all the sprites from all scenes.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->Render(Geometry());
+            (*it)->content_node()->Render(Geometry(), VisualEffect());
 
     // Using the light texture, merge it into the screen.
     if(settings_.light_system)
@@ -212,7 +212,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->interface_node()->Render(Geometry());
+            (*it)->interface_node()->Render(Geometry(), VisualEffect());
 
 
     // Swap the buffers to show the backbuffer to the user.

@@ -9,7 +9,7 @@ namespace graphic {
 class VisualEffect {
   public:
     /// Creates an identity VisualEffect;
-    VisualEffect();
+    VisualEffect() {}
 
     ///Creates a new VisualEffect object with the specified values. 
     /**
@@ -30,7 +30,9 @@ class VisualEffect {
     /**@}
      */
 
-    void Compose(const VisualEffect&);
+    void Compose(const VisualEffect& other) {
+        color_.Compose(other.color_);
+    }
 
     VisualEffect& operator *= (const VisualEffect& rhs) { 
         Compose(rhs);

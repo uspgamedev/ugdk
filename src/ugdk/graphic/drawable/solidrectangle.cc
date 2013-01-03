@@ -6,6 +6,7 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
 
 namespace ugdk {
 namespace graphic {
@@ -16,7 +17,7 @@ SolidRectangle::~SolidRectangle() {}
     
 void SolidRectangle::Update(double dt) {}
 
-void SolidRectangle::Draw(const Geometry& modifier) const {
+void SolidRectangle::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     ugdk::math::Vector2D origin, target(size_);
     origin -= hotspot_;
     target -= hotspot_;
@@ -26,7 +27,8 @@ void SolidRectangle::Draw(const Geometry& modifier) const {
     glPushMatrix();
     glLoadMatrixd(M);
 
-    glColor4dv(color_.val);
+    Color color = effect.color() * color_;
+    glColor4dv(color.val);
 
     glDisable(GL_TEXTURE_2D);
     glBegin( GL_QUADS ); { //Start quad

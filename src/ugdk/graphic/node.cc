@@ -43,34 +43,38 @@ void Node::Update(double dt) {
         (*it)->Update(dt);
 }
 
-void Node::Render(const Geometry& parent) const {
+void Node::Render(const Geometry& parent, const VisualEffect& parent_effect) const {
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
     Geometry compose(parent);
     compose.Compose(geometry_);
 
+    VisualEffect compose_effect = (ignores_effect_) ? effect_ : (parent_effect * effect_);
+
     if(drawable_)
-        drawable_->Draw(compose);
+        drawable_->Draw(compose, compose_effect);
 
     NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
-        (*it)->Render(compose);
+        (*it)->Render(compose, compose_effect);
 }
 
-void Node::RenderLight(const Geometry& parent) const {
+void Node::RenderLight(const Geometry& parent, const VisualEffect& parent_effect) const {
     if(!active_) return;
     if(childs_.empty() && !light_) return; // optimization!
     
     Geometry compose(parent);
     compose.Compose(geometry_);
 
+    VisualEffect compose_effect = (ignores_effect_) ? effect_ : (parent_effect * effect_);
+
     if(light_) 
         light_->Draw(compose);
 
     NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
-        (*it)->RenderLight(compose);
+        (*it)->RenderLight(compose, compose_effect);
 }
 
 void Node::set_zindex(const double zindex) {

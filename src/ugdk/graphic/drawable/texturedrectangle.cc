@@ -6,6 +6,7 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/texture.h>
 
 namespace ugdk {
@@ -21,7 +22,7 @@ TexturedRectangle::~TexturedRectangle() {}
 
 void TexturedRectangle::Update(double dt) {}
 
-void TexturedRectangle::Draw(const Geometry& modifier) const {
+void TexturedRectangle::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     ugdk::math::Vector2D origin, target(size_);
 
     origin -= hotspot_;
@@ -39,6 +40,8 @@ void TexturedRectangle::Draw(const Geometry& modifier) const {
     modifier.AsMatrix4x4(M);
     glPushMatrix();
     glLoadMatrixd(M);
+
+    glColor4dv(effect.color().val);
 
     glBegin( GL_QUADS ); { //Start quad
         glTexCoord2dv(TEX_COORD_ONE);

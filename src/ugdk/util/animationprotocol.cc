@@ -133,12 +133,14 @@ bool AnimationProtocol::NewEntry_Alpha(double new_alpha) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
 
-        Color& c = cur_frame->color();
+        Color c = cur_frame->effect().color();
         if (composing_) c.a *= new_alpha;
         else            c.a  = new_alpha;
+        cur_frame->effect().set_color(c);
     } else {
-        Color& c = current_effect_->color();
+        Color c = current_effect_->effect().color();
         c.a = new_alpha;
+        current_effect_->effect();
     }
     return true;
 }
@@ -160,10 +162,10 @@ bool AnimationProtocol::NewEntry_Color(std::string arg) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-        if (composing_) cur_frame->color() *= c;
-        else            cur_frame->color() = c;
+        if (composing_) cur_frame->effect().set_color(cur_frame->effect().color() * c);
+        else            cur_frame->effect().set_color(c);
     } else {
-        current_effect_->color() = c;
+        current_effect_->effect().set_color(c);
     }
     return true;
 }
