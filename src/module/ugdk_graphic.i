@@ -11,6 +11,7 @@
 %{
 
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/font.h>
@@ -44,6 +45,7 @@
 %rename(GetTextWithFont) ugdk::graphic::TextManager::GetText(const std::wstring& text, const std::string& font, int width = -1);
 
 %include <ugdk/graphic/geometry.h>
+%include <ugdk/graphic/visualeffect.h>
 
 %include <ugdk/graphic/drawable.h>
 

@@ -1,8 +1,6 @@
 #ifndef UGDK_GRAPHIC_GEOMETRY_H_
 #define UGDK_GRAPHIC_GEOMETRY_H_
 
-#include <vector>
-#include <cstddef>
 #include <ugdk/math/vector2D.h>
 
 namespace ugdk {

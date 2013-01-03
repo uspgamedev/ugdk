@@ -4,6 +4,7 @@
 #include <vector>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
 
 namespace ugdk {
 namespace graphic {
@@ -33,8 +34,10 @@ class Node {
     void set_active(const bool active)    {   active_ =   active; }
     void set_zindex(const double zindex);
     
-          Geometry& modifier()       { return modifier_; }
-    const Geometry& modifier() const { return modifier_; }
+          Geometry& geometry()       { return geometry_; }
+    const Geometry& geometry() const { return geometry_; }
+          VisualEffect& effect()       { return effect_; }
+    const VisualEffect& effect() const { return effect_; }
           Drawable* drawable()       { return drawable_; }
     const Drawable* drawable() const { return drawable_; }
           Light* light()             { return    light_; }
@@ -55,7 +58,8 @@ class Node {
     void SortChildren();
 
   private:
-    Geometry modifier_;
+    Geometry geometry_;
+    VisualEffect effect_;
     Drawable* drawable_;
     Light* light_;
     bool active_;

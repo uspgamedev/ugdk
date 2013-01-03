@@ -1,6 +1,7 @@
 #include <ugdk/graphic/geometry.h>
 
 #include <cmath>
+#include <cstring>
 
 namespace ugdk {
 namespace graphic {

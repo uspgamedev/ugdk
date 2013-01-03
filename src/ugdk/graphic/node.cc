@@ -48,7 +48,7 @@ void Node::Render(const Geometry& parent) const {
     if(childs_.empty() && !drawable_) return; // optimization!
 
     Geometry compose(parent);
-    compose.Compose(modifier_);
+    compose.Compose(geometry_);
 
     if(drawable_)
         drawable_->Draw(compose);
@@ -63,7 +63,7 @@ void Node::RenderLight(const Geometry& parent) const {
     if(childs_.empty() && !light_) return; // optimization!
     
     Geometry compose(parent);
-    compose.Compose(modifier_);
+    compose.Compose(geometry_);
 
     if(light_) 
         light_->Draw(compose);
