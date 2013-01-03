@@ -20,7 +20,7 @@ class Text : public Drawable {
     void SetMessage(const std::vector<std::wstring>& message);
 
     void Update(double dt);
-    void Draw() const;
+    void Draw(const Modifier&) const;
 
     virtual const ugdk::math::Vector2D& size() const;
 

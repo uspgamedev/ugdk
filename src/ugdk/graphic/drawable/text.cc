@@ -62,7 +62,7 @@ const ugdk::math::Vector2D& Text::size() const {
 
 void Text::Update(double dt) {}
 
-void Text::Draw() const {
+void Text::Draw(const Modifier& modifier) const {
     static Color FANCY_COLORS[3] = {
         Color(1.000000, 1.000000, 1.000000), // 255, 255, 255
         Color(0.831372, 0.666666, 0.000000), // 212, 170,   0
@@ -74,6 +74,9 @@ void Text::Draw() const {
     glListBase(font_->id());
 
     glPushMatrix();
+    double M[16];
+    modifier.AsMatrix4x4(M);
+    glLoadMatrixd(M);
     
     // TODO: combine the hotspot and mirror matrices.
 

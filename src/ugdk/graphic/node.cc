@@ -47,17 +47,11 @@ void Node::Render(const Modifier& parent) const {
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
-    Modifier compose = parent * modifier_;
+    Modifier compose(parent);
+    compose.Compose(modifier_);
 
-    if(drawable_) {
-        double M[16];
-        compose.AsMatrix4x4(M);
-
-        glPushMatrix();
-        glMultMatrixd(M);
-        drawable_->Draw();
-        glPopMatrix();
-    }
+    if(drawable_)
+        drawable_->Draw(compose);
 
     NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
@@ -68,17 +62,11 @@ void Node::RenderLight(const Modifier& parent) const {
     if(!active_) return;
     if(childs_.empty() && !light_) return; // optimization!
     
-    Modifier compose = parent * modifier_;
+    Modifier compose(parent);
+    compose.Compose(modifier_);
 
-    if(light_) {
-        double M[16];
-        compose.AsMatrix4x4(M);
-
-        glPushMatrix();
-        glMultMatrixd(M);
-        light_->Draw();
-        glPopMatrix();
-    }
+    if(light_) 
+        light_->Draw(compose);
 
     NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)

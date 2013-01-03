@@ -13,7 +13,7 @@ class SolidRectangle : public Shape {
     ~SolidRectangle();
 
     void Update(double dt);
-    void Draw() const;
+    void Draw(const Modifier&) const;
 
     const ugdk::math::Vector2D& size() const { return size_; }
     void set_size(const ugdk::math::Vector2D& size) { size_ = size; }

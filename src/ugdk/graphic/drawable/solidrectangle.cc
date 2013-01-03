@@ -16,10 +16,15 @@ SolidRectangle::~SolidRectangle() {}
     
 void SolidRectangle::Update(double dt) {}
 
-void SolidRectangle::Draw() const {
+void SolidRectangle::Draw(const Modifier& modifier) const {
     ugdk::math::Vector2D origin, target(size_);
     origin -= hotspot_;
     target -= hotspot_;
+
+    double M[16];
+    modifier.AsMatrix4x4(M);
+    glPushMatrix();
+    glLoadMatrixd(M);
 
     glColor4dv(color_.val);
 
@@ -30,6 +35,8 @@ void SolidRectangle::Draw() const {
         glVertex2dv( target.val );
         glVertex2d(  origin.x, target.y );
     } glEnd();
+
+    glPopMatrix();
 }
 
 }  // namespace graphic

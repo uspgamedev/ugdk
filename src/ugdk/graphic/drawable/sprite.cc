@@ -36,18 +36,17 @@ void Sprite::Update(double delta_t) {
     if(animation_player_) animation_player_->Update(delta_t);
 }
 
-void Sprite::Draw() const {
+void Sprite::Draw(const Modifier& modifier) const {
     if(!spritesheet_) return;
     if(animation_player_) {
         const action::SpriteAnimationFrame* animation_frame = 
             current_animation_frame();
 
-        const Modifier& animation_mod = animation_frame->modifier(); 
-        VIDEO_MANAGER()->PushAndApplyModifier(animation_mod);
-        spritesheet_->Draw(animation_frame->frame(), hotspot_);
-        VIDEO_MANAGER()->PopModifier();
+        Modifier compose(modifier);
+        compose.Compose(animation_frame->modifier());
+        spritesheet_->Draw(animation_frame->frame(), hotspot_, compose);
     } else {
-        spritesheet_->Draw(0, hotspot_);
+        spritesheet_->Draw(0, hotspot_, modifier);
     }
 }
 

@@ -180,15 +180,15 @@ void Spritesheet::createList(GLuint id, Texture* texture, const ugdk::math::Vect
     } glEndList();
 }
 
-void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot) const {
-    bool popmatrix = false;
-    if(hotspot.NormOne() > 1.0e-6) {
-        glPushMatrix();
-        glTranslated(-hotspot.x, -hotspot.y, 0.0);
-        popmatrix = true;
-    }
+void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Modifier& modifier) const {
+    glPushMatrix();
+    double M[16];
+    modifier.AsMatrix4x4(M);
+    glLoadMatrixd(M);
+    glTranslated(-hotspot.x, -hotspot.y, 0.0);
+
     glCallList(lists_base_ + frame_number);
-    if(popmatrix) glPopMatrix();
+    glPopMatrix();
 }
 
 Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {

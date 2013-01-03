@@ -21,7 +21,7 @@ TexturedRectangle::~TexturedRectangle() {}
 
 void TexturedRectangle::Update(double dt) {}
 
-void TexturedRectangle::Draw() const {
+void TexturedRectangle::Draw(const Modifier& modifier) const {
     ugdk::math::Vector2D origin, target(size_);
 
     origin -= hotspot_;
@@ -31,9 +31,14 @@ void TexturedRectangle::Draw() const {
     glBindTexture(GL_TEXTURE_2D, texture_->gltexture());
 
     static double TEX_COORD_ONE[]   = { 0.0, 0.0 },
-                 TEX_COORD_TWO[]   = { 1.0, 0.0 },
-                 TEX_COORD_THREE[] = { 1.0, 1.0 },
-                 TEX_COORD_FOUR[]  = { 0.0, 1.0 };
+                  TEX_COORD_TWO[]   = { 1.0, 0.0 },
+                  TEX_COORD_THREE[] = { 1.0, 1.0 },
+                  TEX_COORD_FOUR[]  = { 0.0, 1.0 };
+    
+    double M[16];
+    modifier.AsMatrix4x4(M);
+    glPushMatrix();
+    glLoadMatrixd(M);
 
     glBegin( GL_QUADS ); { //Start quad
         glTexCoord2dv(TEX_COORD_ONE);
@@ -48,6 +53,8 @@ void TexturedRectangle::Draw() const {
         glTexCoord2dv(TEX_COORD_FOUR);
         glVertex2d(  origin.x, target.y );
     } glEnd();
+
+    glPopMatrix();
 }
 
 }  // namespace graphic

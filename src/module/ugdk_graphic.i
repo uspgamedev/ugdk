@@ -10,11 +10,11 @@
 
 %{
 
+#include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/light.h>
-#include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/textmanager.h>
@@ -43,6 +43,7 @@
 %rename(ComposeNew) ugdk::graphic::Modifier::Compose(const Modifier* mod1, const Modifier* mod2);
 %rename(GetTextWithFont) ugdk::graphic::TextManager::GetText(const std::wstring& text, const std::string& font, int width = -1);
 
+%include <ugdk/graphic/modifier.h>
 
 %include <ugdk/graphic/drawable.h>
 
@@ -53,7 +54,6 @@
 %include <ugdk/graphic/texture.h>
 %include <ugdk/graphic/font.h>
 %include <ugdk/graphic/light.h>
-%include <ugdk/graphic/modifier.h>
 enable_disown(ugdk::graphic::Node* new_child)
 enable_disown(ugdk::graphic::Drawable* drawable)
 %include <ugdk/graphic/node.h>
