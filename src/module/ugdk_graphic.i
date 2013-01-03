@@ -73,6 +73,7 @@ namespace graphic {
     export_class(Font)
     export_class(Light)
     export_class(Geometry)
+	export_class(VisualEffect)
     export_class(Node)
     export_class(Spritesheet)
     export_class(TextManager)
