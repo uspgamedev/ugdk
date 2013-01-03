@@ -2,6 +2,7 @@
 #define UGDK_GRAPHIC_NODE_H_
 
 #include <vector>
+#include <cstddef> // for NULL
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
