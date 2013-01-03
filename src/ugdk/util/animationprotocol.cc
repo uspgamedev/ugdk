@@ -65,6 +65,10 @@ AnimationProtocol::AnimationProtocol()
     RegisterBind(gdd::ENTRY, "r", &AnimationProtocol::NewEntry_Rotation, this);
 }
 
+AnimationProtocol::~AnimationProtocol() {
+    delete current_effect_;
+}
+
 bool AnimationProtocol::NewDescription() {
     if(current_description_ != NULL) return false;
     current_description_ = new action::SpriteAnimationTable();
@@ -73,9 +77,9 @@ bool AnimationProtocol::NewDescription() {
 
 bool AnimationProtocol::NewData(const GDDString& data_name) {
     current_description_->Add(data_name, current_animation_ = new action::SpriteAnimation);
-    if(current_effect_) delete current_effect_;
-    current_effect_ = new graphic::Modifier;
-    //TODO: Verificar integridade da current_animation_ .
+    delete current_effect_;
+    current_effect_ = new action::SpriteAnimationFrame(DEFAULT_FRAME);
+    //TODO: Verificar integridade da current_animation_
     return true;
 }
     
@@ -99,18 +103,14 @@ bool AnimationProtocol::NewProperty_Compose(void) {
 
 bool AnimationProtocol::NewRing_Effect(void) {
     if(!composing_) {
-        if(current_effect_) {
-            delete current_effect_;
-            current_effect_ = NULL;
-        }
-        current_effect_ = new graphic::Modifier();
+        delete current_effect_;
+        current_effect_ = new action::SpriteAnimationFrame(DEFAULT_FRAME);
     }
     current_scope_ = EFFECT_RING;
     return true;
 }
 bool AnimationProtocol::NewRing_Frame(void) {
-    graphic::Modifier temp_modifier = *current_effect_;
-    current_animation_->Add(new action::SpriteAnimationFrame(DEFAULT_FRAME, new graphic::Modifier(temp_modifier)));
+    current_animation_->Add(new action::SpriteAnimationFrame(*current_effect_));
     current_scope_ = FRAME_RING;
     return true;
 }
@@ -133,14 +133,12 @@ bool AnimationProtocol::NewEntry_Alpha(double new_alpha) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
 
-        Color c = cur_frame->modifier()->color();
+        Color& c = cur_frame->color();
         if (composing_) c.a *= new_alpha;
         else            c.a  = new_alpha;
-        cur_frame->modifier()->set_color(c);
     } else {
-        Color c = current_effect_->color();
+        Color& c = current_effect_->color();
         c.a = new_alpha;
-        current_effect_->set_color(c);
     }
     return true;
 }
@@ -162,10 +160,10 @@ bool AnimationProtocol::NewEntry_Color(std::string arg) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-        if (composing_) cur_frame->modifier()->ComposeColor(c);
-        else            cur_frame->modifier()->set_color(c);
+        if (composing_) cur_frame->color() *= c;
+        else            cur_frame->color() = c;
     } else {
-        current_effect_->set_color(c);
+        current_effect_->color() = c;
     }
     return true;
 }
@@ -174,10 +172,10 @@ bool AnimationProtocol::NewEntry_Position(double x, double y) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-        if (composing_) cur_frame->modifier()->ComposeOffset(new_pos);
-        else            cur_frame->modifier()->set_offset(new_pos);
+        if (composing_) cur_frame->modifier().set_offset(cur_frame->modifier().offset() + new_pos);
+        else            cur_frame->modifier().set_offset(new_pos);
     } else
-        current_effect_->set_offset(new_pos);
+        current_effect_->modifier().set_offset(new_pos);
     return true;
 
 }
@@ -196,8 +194,8 @@ bool AnimationProtocol::NewEntry_Mirror(std::string arg) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-        if (composing_) cur_frame->modifier()->ComposeMirror(new_mirror);
-        else            cur_frame->modifier()->set_mirror(new_mirror);
+        if (composing_) cur_frame->set_mirror(cur_frame->mirror() | new_mirror);
+        else            cur_frame->set_mirror(new_mirror);
     } else
         current_effect_->set_mirror(new_mirror);
     return true;
@@ -207,10 +205,10 @@ bool AnimationProtocol::NewEntry_Size(double x, double y) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-        if (composing_) cur_frame->modifier()->ComposeScale(new_size);
-        else            cur_frame->modifier()->set_scale(new_size);
+        if (composing_) cur_frame->modifier().set_scale(cur_frame->modifier().scale().Scale(new_size));
+        else            cur_frame->modifier().set_scale(new_size);
     } else
-        current_effect_->set_scale(new_size);
+        current_effect_->modifier().set_scale(new_size);
     return true;
 
 }
@@ -219,10 +217,10 @@ bool AnimationProtocol::NewEntry_Rotation(double new_rot) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-        if (composing_) cur_frame->modifier()->ComposeRotation(new_rot);
-        else            cur_frame->modifier()->set_rotation(new_rot);
+        if (composing_) cur_frame->modifier().set_rotation(cur_frame->modifier().rotation() + new_rot);
+        else            cur_frame->modifier().set_rotation(new_rot);
     } else 
-        current_effect_->set_rotation(new_rot);
+        current_effect_->modifier().set_rotation(new_rot);
     return true;
 }
 } /* namespace ugdk */

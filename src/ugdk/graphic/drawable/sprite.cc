@@ -42,10 +42,10 @@ void Sprite::Draw() const {
         const action::SpriteAnimationFrame* animation_frame = 
             current_animation_frame();
 
-        const Modifier *animation_mod = animation_frame->modifier(); 
-        if(animation_mod) VIDEO_MANAGER()->PushAndApplyModifier(animation_mod);
+        const Modifier& animation_mod = animation_frame->modifier(); 
+        VIDEO_MANAGER()->PushAndApplyModifier(animation_mod);
         spritesheet_->Draw(animation_frame->frame(), hotspot_);
-        if(animation_mod) VIDEO_MANAGER()->PopModifier();
+        VIDEO_MANAGER()->PopModifier();
     } else {
         spritesheet_->Draw(0, hotspot_);
     }
