@@ -12,7 +12,7 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 
 #include <ugdk/script/scriptmanager.h>

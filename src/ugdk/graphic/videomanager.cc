@@ -1,9 +1,9 @@
-#include <ugdk/config/config.h>
-#include "SDL_opengl.h"
-#include "SDL_image.h"
+#include <ugdk/graphic/videomanager.h>
+
 #include <cmath>
 
-#include <ugdk/graphic/videomanager.h>
+#include "SDL_opengl.h"
+#include "SDL_image.h"
 
 #include <ugdk/base/engine.h>
 #include <ugdk/action/scene.h>
@@ -46,7 +46,6 @@ static ugdk::math::Vector2D default_resolution(800.0, 600.0);
 // resolucao para o programa. Retorna true em caso de
 // sucesso.
 bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& size, bool fullscreen, const string& icon) {
-    modifiers_.empty();
     title_ = title;
     
     // Set window title.
@@ -97,7 +96,6 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
 
     //Initialize modelview matrix
     glMatrixMode( GL_MODELVIEW );
-    ClearModiferStack();
     glLoadIdentity();
 
     // This hint can improve the speed of texturing when perspective- correct texture coordinate interpolation isn't needed, such as when using a glOrtho() projection.
@@ -276,33 +274,6 @@ void VideoManager::InitializeLight() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (GLsizei) video_size_.x, 
         (GLsizei) video_size_.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void VideoManager::PushAndApplyModifier(const Geometry* apply) {
-    Geometry top = CurrentModifier();
-
-    glPushMatrix();
-    double M[16];
-    apply->AsMatrix4x4(M);
-    glMultMatrixd(M);
-
-    modifiers_.push(top);
-}
-
-bool VideoManager::PopModifier() {
-    if(modifiers_.empty()) return false;
-    modifiers_.pop();
-    glPopMatrix();
-    return true;
-}
-
-const Geometry& VideoManager::CurrentModifier() const {
-    static Geometry IDENTITY;
-    return (modifiers_.empty()) ? IDENTITY : modifiers_.top(); 
-}
-
-void VideoManager::ClearModiferStack() {
-    while(PopModifier());
 }
 
 }  // namespace graphic

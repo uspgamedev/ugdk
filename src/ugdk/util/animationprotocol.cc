@@ -174,10 +174,10 @@ bool AnimationProtocol::NewEntry_Position(double x, double y) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-        if (composing_) cur_frame->modifier().set_offset(cur_frame->modifier().offset() + new_pos);
-        else            cur_frame->modifier().set_offset(new_pos);
+        if (composing_) cur_frame->geometry().set_offset(cur_frame->geometry().offset() + new_pos);
+        else            cur_frame->geometry().set_offset(new_pos);
     } else
-        current_effect_->modifier().set_offset(new_pos);
+        current_effect_->geometry().set_offset(new_pos);
     return true;
 
 }
@@ -207,10 +207,10 @@ bool AnimationProtocol::NewEntry_Size(double x, double y) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-        if (composing_) cur_frame->modifier().set_scale(cur_frame->modifier().scale().Scale(new_size));
-        else            cur_frame->modifier().set_scale(new_size);
+        if (composing_) cur_frame->geometry().set_scale(cur_frame->geometry().scale().Scale(new_size));
+        else            cur_frame->geometry().set_scale(new_size);
     } else
-        current_effect_->modifier().set_scale(new_size);
+        current_effect_->geometry().set_scale(new_size);
     return true;
 
 }
@@ -219,10 +219,10 @@ bool AnimationProtocol::NewEntry_Rotation(double new_rot) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame* cur_frame
             = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-        if (composing_) cur_frame->modifier().set_rotation(cur_frame->modifier().rotation() + new_rot);
-        else            cur_frame->modifier().set_rotation(new_rot);
+        if (composing_) cur_frame->geometry().set_rotation(cur_frame->geometry().rotation() + new_rot);
+        else            cur_frame->geometry().set_rotation(new_rot);
     } else 
-        current_effect_->modifier().set_rotation(new_rot);
+        current_effect_->geometry().set_rotation(new_rot);
     return true;
 }
 } /* namespace ugdk */

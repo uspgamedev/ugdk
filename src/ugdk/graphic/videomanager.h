@@ -2,15 +2,12 @@
 #define UGDK_GRAPHIC_VIDEOMANAGER_H_
 
 #include <string>
-#include <map>
 #include <list>
-#include <stack>
 #include <ugdk/base/types.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/frame.h>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/geometry.h>
 
 #define VIDEO_MANAGER() (ugdk::Engine::reference()->video_manager())
 
@@ -40,12 +37,6 @@ class VideoManager {
     const Texture* light_texture() const { return light_texture_; }
     math::Frame virtual_bounds() const { return virtual_bounds_; }
 
-    // Geometry stack
-    void PushAndApplyModifier(const Geometry*);
-    void PushAndApplyModifier(const Geometry& apply) { PushAndApplyModifier(&apply); }
-    bool PopModifier();
-    const Geometry& CurrentModifier() const;
-
   private:
     ugdk::math::Vector2D video_size_;
     math::Frame virtual_bounds_;
@@ -59,8 +50,6 @@ class VideoManager {
         Settings(bool fs, bool vs, bool light) : fullscreen(fs), vsync(vs), light_system(light) {}
     } settings_;
 
-    std::stack<Geometry> modifiers_;
-
     Texture* light_buffer_;
     Texture* light_texture_;
 
@@ -68,9 +57,6 @@ class VideoManager {
 
     void mergeLights(const std::list<action::Scene*>& scene_list);
     void BlendLightIntoBuffer();
-
-    void ClearModiferStack();
-
 };
 
 }  // namespace graphic

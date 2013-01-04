@@ -44,7 +44,7 @@ void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
             current_animation_frame();
 
         Geometry compose(modifier);
-        compose.Compose(animation_frame->modifier());
+        compose.Compose(animation_frame->geometry());
         VisualEffect compose_effect(effect);
         compose_effect.Compose(animation_frame->effect());
 

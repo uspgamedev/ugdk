@@ -5,7 +5,7 @@
 
 #include <ugdk/base/engine.h>
 #include <ugdk/base/types.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/math/frame.h>
 #include <ugdk/graphic/font.h>
