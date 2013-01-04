@@ -8,7 +8,7 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/node.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/pathmanager.h>
 
@@ -146,7 +146,7 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
 
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->RenderLight();
+            (*it)->content_node()->RenderLight(Geometry(), VisualEffect());
 
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
@@ -202,7 +202,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     // Draw all the sprites from all scenes.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->Render();
+            (*it)->content_node()->Render(Geometry(), VisualEffect());
 
     // Using the light texture, merge it into the screen.
     if(settings_.light_system)
@@ -212,7 +212,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->interface_node()->Render();
+            (*it)->interface_node()->Render(Geometry(), VisualEffect());
 
 
     // Swap the buffers to show the backbuffer to the user.
@@ -278,43 +278,13 @@ void VideoManager::InitializeLight() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void VideoManager::PushAndApplyModifier(const Modifier* apply) {
-    Modifier top = CurrentModifier();
-
-    if(apply->flags() & Modifier::HAS_COLOR) top.ComposeColor(apply);
-    top.ComposeMirror(apply);
-    top.ComposeVisible(apply);
+void VideoManager::PushAndApplyModifier(const Geometry* apply) {
+    Geometry top = CurrentModifier();
 
     glPushMatrix();
-
-    if(apply->flags() & Modifier::HAS_TRANSFORMATION) {
-        // Calculates the translation
-        double tx, ty;
-        if(apply->flags() & Modifier::TRUNCATES_WHEN_APPLIED) {
-            tx = std::floor(apply->offset().x);
-            ty = std::floor(apply->offset().y);
-        } else {
-            tx = apply->offset().x;
-            ty = apply->offset().y;
-        }
-
-        // Calculates the scale
-        double sx = apply->scale().x, sy = apply->scale().y;
-
-        // Calculates the rotation
-        double s = sin(apply->rotation()), c = cos(apply->rotation());
-
-        // Builds the full transformation matrix all at once.
-        double M[16] = { sx*c, -sx*s, 0.0, 0.0, // First column
-                         sy*s,  sy*c, 0.0, 0.0,
-                          0.0,   0.0, 1.0, 0.0,
-                           tx,    ty, 0.0, 1.0 };
-
-        //glTranslated(tx, ty, 0.0);
-        //glRotated(apply->rotation() * 57.2957795, 0.0, 0.0, 1.0);
-        //glScaled(sx, sy, 0.0);
-        glMultMatrixd(M);
-    }
+    double M[16];
+    apply->AsMatrix4x4(M);
+    glMultMatrixd(M);
 
     modifiers_.push(top);
 }
@@ -326,8 +296,8 @@ bool VideoManager::PopModifier() {
     return true;
 }
 
-const Modifier& VideoManager::CurrentModifier() const {
-    static Modifier IDENTITY;
+const Geometry& VideoManager::CurrentModifier() const {
+    static Geometry IDENTITY;
     return (modifiers_.empty()) ? IDENTITY : modifiers_.top(); 
 }
 

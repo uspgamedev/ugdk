@@ -5,7 +5,8 @@
 
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/texture.h>
 
 namespace ugdk {
@@ -21,33 +22,26 @@ TexturedRectangle::~TexturedRectangle() {}
 
 void TexturedRectangle::Update(double dt) {}
 
-void TexturedRectangle::Draw() const {
-    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
-    if(!mod.visible()) return;
-
+void TexturedRectangle::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     ugdk::math::Vector2D origin, target(size_);
-
-    if(mod.mirror() & MIRROR_HFLIP) { // Horizontal flip
-        origin.x = target.x;
-        target.x = 0.0;
-    }
-    if(mod.mirror() & MIRROR_VFLIP) { // Vertical flip
-        origin.y = target.y;
-        target.y = 0.0;
-    }
 
     origin -= hotspot_;
     target -= hotspot_;
-
-    glColor4dv(mod.color().val);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture_->gltexture());
 
     static double TEX_COORD_ONE[]   = { 0.0, 0.0 },
-                 TEX_COORD_TWO[]   = { 1.0, 0.0 },
-                 TEX_COORD_THREE[] = { 1.0, 1.0 },
-                 TEX_COORD_FOUR[]  = { 0.0, 1.0 };
+                  TEX_COORD_TWO[]   = { 1.0, 0.0 },
+                  TEX_COORD_THREE[] = { 1.0, 1.0 },
+                  TEX_COORD_FOUR[]  = { 0.0, 1.0 };
+    
+    double M[16];
+    modifier.AsMatrix4x4(M);
+    glPushMatrix();
+    glLoadMatrixd(M);
+
+    glColor4dv(effect.color().val);
 
     glBegin( GL_QUADS ); { //Start quad
         glTexCoord2dv(TEX_COORD_ONE);
@@ -62,6 +56,8 @@ void TexturedRectangle::Draw() const {
         glTexCoord2dv(TEX_COORD_FOUR);
         glVertex2d(  origin.x, target.y );
     } glEnd();
+
+    glPopMatrix();
 }
 
 }  // namespace graphic

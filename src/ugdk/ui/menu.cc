@@ -43,7 +43,7 @@ Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vec
     focused_element_(NULL),
     objects_tree_(new ObjectTree(tree_bounding_box,5)),
     hook_(hook) {
-      node_->modifier()->set_offset(offset);
+      node_->geometry().set_offset(offset);
       option_node_[0] = NULL;
       option_node_[1] = NULL;
       //std::tr1::function<bool (double)> func = std::tr1::bind(&CheckMouse, this, _1);
@@ -106,11 +106,11 @@ void Menu::PositionSelectionDrawables() {
            size_x = focused_element_->node()->drawable()->size().x;
     if(option_node_[0]) {
         double draw0_x = option_node_[0]->drawable()->hotspot().x;
-        option_node_[0]->modifier()->set_offset(ugdk::math::Vector2D(-focus_x - draw0_x, 0.0));
+        option_node_[0]->geometry().set_offset(ugdk::math::Vector2D(-focus_x - draw0_x, 0.0));
     }
     if(option_node_[1]) {
         double draw1_x = option_node_[1]->drawable()->hotspot().x;
-        option_node_[1]->modifier()->set_offset(ugdk::math::Vector2D(size_x - focus_x + draw1_x, 0.0));
+        option_node_[1]->geometry().set_offset(ugdk::math::Vector2D(size_x - focus_x + draw1_x, 0.0));
     }
 }
 

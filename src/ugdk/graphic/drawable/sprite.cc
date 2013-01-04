@@ -4,6 +4,7 @@
 #include <ugdk/base/resourcemanager.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/action/animationplayer.h>
 
@@ -36,18 +37,18 @@ void Sprite::Update(double delta_t) {
     if(animation_player_) animation_player_->Update(delta_t);
 }
 
-void Sprite::Draw() const {
+void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     if(!spritesheet_) return;
     if(animation_player_) {
         const action::SpriteAnimationFrame* animation_frame = 
             current_animation_frame();
 
-        const Modifier *animation_mod = animation_frame->modifier(); 
-        if(animation_mod) VIDEO_MANAGER()->PushAndApplyModifier(animation_mod);
-        spritesheet_->Draw(animation_frame->frame(), hotspot_);
-        if(animation_mod) VIDEO_MANAGER()->PopModifier();
+        Geometry compose(modifier);
+        compose.Compose(animation_frame->modifier());
+        VisualEffect compose_effect(effect);
+        spritesheet_->Draw(animation_frame->frame(), hotspot_, compose, compose_effect);
     } else {
-        spritesheet_->Draw(0, hotspot_);
+        spritesheet_->Draw(0, hotspot_, modifier, effect);
     }
 }
 

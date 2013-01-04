@@ -13,6 +13,7 @@
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/visualeffect.h>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>
@@ -180,34 +181,15 @@ void Spritesheet::createList(GLuint id, Texture* texture, const ugdk::math::Vect
     } glEndList();
 }
 
-void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot) const {
-    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
-    if(!mod.visible()) return;
-
-    bool popmatrix = false;
-    if(mod.mirror() != MIRROR_NONE || hotspot.NormOne() > 1.0e-6) {
-        glPushMatrix();
-        // TODO: combine the matrices
-
-        // hotspot
-        glTranslated(-hotspot.x, -hotspot.y, 0.0);
-
-        // horizontal flip
-        if(mod.mirror() & MIRROR_HFLIP) {
-            glScalef(-1.0, 1.0, 1.0);
-        }
-
-        // vertical flip
-        if(mod.mirror() & MIRROR_VFLIP) {
-            glScalef(1.0, -1.0, 1.0);
-        }
-        popmatrix = true;
-    }
-    glColor4dv(mod.color().val);
-
+void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry& modifier, const VisualEffect& effect) const {
+    glPushMatrix();
+    double M[16];
+    modifier.AsMatrix4x4(M);
+    glLoadMatrixd(M);
+    glTranslated(-hotspot.x, -hotspot.y, 0.0);
+    glColor4dv(effect.color().val);
     glCallList(lists_base_ + frame_number);
-
-    if(popmatrix) glPopMatrix();
+    glPopMatrix();
 }
 
 Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {

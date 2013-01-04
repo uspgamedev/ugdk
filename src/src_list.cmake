@@ -57,10 +57,10 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/drawable/texturedrectangle.h 
     ./src/ugdk/graphic/font.cc 
     ./src/ugdk/graphic/font.h 
+    ./src/ugdk/graphic/geometry.cc 
+    ./src/ugdk/graphic/geometry.h 
     ./src/ugdk/graphic/light.cc 
     ./src/ugdk/graphic/light.h 
-    ./src/ugdk/graphic/modifier.cc 
-    ./src/ugdk/graphic/modifier.h 
     ./src/ugdk/graphic/node.cc 
     ./src/ugdk/graphic/node.h 
     ./src/ugdk/graphic/spritesheet.cc 
@@ -71,6 +71,7 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/texture.h 
     ./src/ugdk/graphic/videomanager.cc 
     ./src/ugdk/graphic/videomanager.h 
+    ./src/ugdk/graphic/visualeffect.h 
     ./src/ugdk/input.h 
     ./src/ugdk/input/inputmanager.cc 
     ./src/ugdk/input/inputmanager.h 

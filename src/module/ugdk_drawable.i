@@ -25,6 +25,8 @@
 %import(module="ugdk_graphic") <ugdk/graphic/drawable.h>
 %import(module="ugdk_graphic") <ugdk/graphic/spritesheet.h>
 %import(module="ugdk_graphic") <ugdk/graphic/texture.h>
+%import(module="ugdk_graphic") <ugdk/graphic/geometry.h>
+%import(module="ugdk_graphic") <ugdk/graphic/visualeffect.h>
 
 %ignore ugdk::graphic::Text::SetMessage(const std::vector<std::wstring>& message);
 

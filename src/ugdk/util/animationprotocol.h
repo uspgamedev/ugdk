@@ -7,7 +7,7 @@
 #include <ugdk/action/spritetypes.h>
 #include <ugdk/util/indexabletable.h>
 #include <ugdk/util/gdd/descriptionprotocol.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 
 namespace ugdk {
 
@@ -20,7 +20,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol< action::SpriteAnimati
     };
 
     AnimationProtocol();
-    virtual ~AnimationProtocol() { if(current_effect_) delete current_effect_; }
+    virtual ~AnimationProtocol();
 
     bool NewDescription();
     bool NewData(const gdd::GDDString& data_name);
@@ -29,7 +29,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol< action::SpriteAnimati
   private:
     action::SpriteAnimationTable* current_description_;
     action::SpriteAnimation *current_animation_;
-    graphic::Modifier* current_effect_;
+    action::SpriteAnimationFrame* current_effect_;
     ParsingScope current_scope_;
     bool composing_;
 

@@ -2,8 +2,10 @@
 #define UGDK_GRAPHIC_NODE_H_
 
 #include <vector>
+#include <cstddef> // for NULL
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
 
 namespace ugdk {
 namespace graphic {
@@ -13,11 +15,11 @@ class Node {
   public:
     typedef std::vector<Node*> NodeSet;
 
-    Node(Drawable* drawable = NULL, Modifier* modifier = NULL) 
-        :   modifier_(modifier), 
-            drawable_(drawable),
+    Node(Drawable* drawable = NULL) 
+        :   drawable_(drawable),
             light_(NULL),
             active_(true),
+            ignores_effect_(false),
             zindex_(0.0),
             parent_(NULL),
             must_sort_(false) {}
@@ -26,22 +28,26 @@ class Node {
 
     /// Pushes the modifier to the VideoManager, renders 
     void Update(double dt);
-    void Render() const;
-    void RenderLight() const;
+    void Render(const Geometry&, const VisualEffect&) const;
+    void RenderLight(const Geometry& parent, const VisualEffect&) const;
 
-    void set_drawable(Drawable* drawable) { drawable_ = drawable; }
-    void set_light(Light* light)          {    light_ =    light; }
-    void set_active(const bool active)    {   active_ =   active; }
+    void set_drawable(Drawable* drawable)  { drawable_ = drawable; }
+    void set_light(Light* light)           {    light_ =    light; }
+    void set_active(const bool active)     {   active_ =   active; }
+    void set_ignores_effect(const bool on) {   ignores_effect_ = on; }
     void set_zindex(const double zindex);
     
-          Modifier* modifier() { return (modifier_ != NULL) ? modifier_ : (modifier_ = new Modifier); }
-    const Modifier* modifier() const { return modifier_; }
-          Drawable* drawable()       { return drawable_; }
-    const Drawable* drawable() const { return drawable_; }
-          Light* light()             { return    light_; }
-    const Light* light()       const { return    light_; }
-          bool   active()      const { return   active_; }
-          double zindex()      const { return   zindex_; }
+          Geometry& geometry()          { return geometry_; }
+    const Geometry& geometry()    const { return geometry_; }
+          VisualEffect& effect()        { return effect_; }
+    const VisualEffect& effect()  const { return effect_; }
+          Drawable* drawable()          { return drawable_; }
+    const Drawable* drawable()    const { return drawable_; }
+          Light* light()                { return    light_; }
+    const Light* light()          const { return    light_; }
+          bool   active()         const { return   active_; }
+          bool   ignores_effect() const { return   ignores_effect_; }
+          double zindex()         const { return   zindex_; }
 
     void AddChild(Node *new_child) {
         if(new_child->parent_) new_child->parent_->RemoveChild(new_child);
@@ -56,10 +62,12 @@ class Node {
     void SortChildren();
 
   private:
-    Modifier* modifier_;
+    Geometry geometry_;
+    VisualEffect effect_;
     Drawable* drawable_;
     Light* light_;
     bool active_;
+    bool ignores_effect_;
     double zindex_;
 
     NodeSet childs_;

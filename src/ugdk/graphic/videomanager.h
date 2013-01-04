@@ -10,7 +10,7 @@
 #include <ugdk/math/frame.h>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 
 #define VIDEO_MANAGER() (ugdk::Engine::reference()->video_manager())
 
@@ -40,11 +40,11 @@ class VideoManager {
     const Texture* light_texture() const { return light_texture_; }
     math::Frame virtual_bounds() const { return virtual_bounds_; }
 
-    // Modifier stack
-    void PushAndApplyModifier(const Modifier*);
-    void PushAndApplyModifier(const Modifier& apply) { PushAndApplyModifier(&apply); }
+    // Geometry stack
+    void PushAndApplyModifier(const Geometry*);
+    void PushAndApplyModifier(const Geometry& apply) { PushAndApplyModifier(&apply); }
     bool PopModifier();
-    const Modifier& CurrentModifier() const;
+    const Geometry& CurrentModifier() const;
 
   private:
     ugdk::math::Vector2D video_size_;
@@ -59,7 +59,7 @@ class VideoManager {
         Settings(bool fs, bool vs, bool light) : fullscreen(fs), vsync(vs), light_system(light) {}
     } settings_;
 
-    std::stack<Modifier> modifiers_;
+    std::stack<Geometry> modifiers_;
 
     Texture* light_buffer_;
     Texture* light_texture_;

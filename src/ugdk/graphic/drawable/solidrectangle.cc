@@ -5,7 +5,8 @@
 
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
 
 namespace ugdk {
 namespace graphic {
@@ -16,26 +17,17 @@ SolidRectangle::~SolidRectangle() {}
     
 void SolidRectangle::Update(double dt) {}
 
-void SolidRectangle::Draw() const {
-    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
-    if(!mod.visible()) return;
-
+void SolidRectangle::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     ugdk::math::Vector2D origin, target(size_);
-
-    if(mod.mirror() & MIRROR_HFLIP) { // Horizontal flip
-        origin.x = target.x;
-        target.x = 0.0;
-    }
-    if(mod.mirror() & MIRROR_VFLIP) { // Vertical flip
-        origin.y = target.y;
-        target.y = 0.0;
-    }
-
     origin -= hotspot_;
     target -= hotspot_;
 
-    Color color(mod.color().r * color_.r, mod.color().g * color_.g, mod.color().b * color_.b, mod.color().a * color_.a);
+    double M[16];
+    modifier.AsMatrix4x4(M);
+    glPushMatrix();
+    glLoadMatrixd(M);
 
+    Color color = effect.color() * color_;
     glColor4dv(color.val);
 
     glDisable(GL_TEXTURE_2D);
@@ -45,6 +37,8 @@ void SolidRectangle::Draw() const {
         glVertex2dv( target.val );
         glVertex2d(  origin.x, target.y );
     } glEnd();
+
+    glPopMatrix();
 }
 
 }  // namespace graphic
