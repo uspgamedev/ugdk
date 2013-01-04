@@ -140,7 +140,7 @@ bool AnimationProtocol::NewEntry_Alpha(double new_alpha) {
     } else {
         Color c = current_effect_->effect().color();
         c.a = new_alpha;
-        current_effect_->effect();
+        current_effect_->effect().set_color(c);
     }
     return true;
 }
