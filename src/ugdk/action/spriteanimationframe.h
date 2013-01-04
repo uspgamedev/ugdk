@@ -41,7 +41,6 @@ class SpriteAnimationFrame {
     int frame_;
     graphic::Geometry modifier_;
     graphic::VisualEffect effect_;
-    ugdk::Color color_;
     ugdk::Mirror mirror_;
 };
 

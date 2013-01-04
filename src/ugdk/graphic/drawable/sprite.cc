@@ -46,6 +46,8 @@ void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
         Geometry compose(modifier);
         compose.Compose(animation_frame->modifier());
         VisualEffect compose_effect(effect);
+        compose_effect.Compose(animation_frame->effect());
+
         spritesheet_->Draw(animation_frame->frame(), hotspot_, compose, compose_effect);
     } else {
         spritesheet_->Draw(0, hotspot_, modifier, effect);
