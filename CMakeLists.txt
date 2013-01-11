@@ -109,6 +109,7 @@ include_directories(${SDLIMAGE_INCLUDE_DIR})
 
 find_package(GLEW 1.5 QUIET)
 if(NOT GLEW_FOUND)
+    message("-- GLEW not found, using included source.")
     add_library(glew STATIC EXCLUDE_FROM_ALL "externals/glew/src/glew.c")
     add_definitions(-DGLEW_STATIC)
 
