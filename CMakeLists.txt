@@ -119,8 +119,6 @@ else(NOT GLEW_FOUND)
     set(EXTERNAL_GLEW_LIBRARY ${GLEW_LIBRARY})
 endif(NOT GLEW_FOUND)
 
-include_directories ("externals/opengl")
-
 ##########################################
 # Package Configuration
 

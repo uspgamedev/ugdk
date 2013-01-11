@@ -2,6 +2,9 @@
 
 #include <cmath>
 
+#include "GL/glew.h"
+#include "GL/wglew.h"
+#define NO_SDL_GLEXT
 #include "SDL_opengl.h"
 #include "SDL_image.h"
 
@@ -11,27 +14,6 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/pathmanager.h>
-
-// VSync
-//TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
-#ifdef WIN32
-    // VSync
-    #include <gl/GL.h>
-    #include "wglext.h"
-    typedef BOOL (APIENTRY *PFNWGLSWAPINTERVALFARPROC)( int );
-    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = NULL;
-#endif
-
-static void InitializeExtensions() {
-    static bool initialized = false;
-    if(initialized) return;
-    
-    initialized = true;
-#ifdef WIN32
-    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC) wglGetProcAddress( "wglSwapIntervalEXT" );
-#endif
-}
-
 
 #define LN255 5.5412635451584261462455391880218
 
@@ -60,12 +42,11 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
             return false;
         }
     
-    InitializeExtensions();
-
-    /*GLenum err = glewInit();
+    GLenum err = glewInit();
     if (GLEW_OK != err) {
+        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
         // TODO: check errors with glew
-    }*/
+    }
     
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
@@ -128,9 +109,10 @@ bool VideoManager::Release() {
 
 void VideoManager::SetVSync(const bool active) {
     settings_.vsync = active;
-    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
+    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions.
 #ifdef WIN32
-    if(wglSwapIntervalEXT != NULL) wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
+    if(WGL_EXT_swap_control)
+        wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
 #endif
 }
 
