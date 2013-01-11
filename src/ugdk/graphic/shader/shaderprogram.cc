@@ -5,7 +5,7 @@
 #define NO_SDL_GLEXT
 #include "SDL_opengl.h"
 
-#include "Shader.h"
+#include <ugdk/graphic/shader/shader.h>
 
 namespace ugdk {
 namespace graphic {
