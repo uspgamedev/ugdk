@@ -63,6 +63,10 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/light.h 
     ./src/ugdk/graphic/node.cc 
     ./src/ugdk/graphic/node.h 
+    ./src/ugdk/graphic/shader/shader.cc 
+    ./src/ugdk/graphic/shader/shader.h 
+    ./src/ugdk/graphic/shader/shaderprogram.cc 
+    ./src/ugdk/graphic/shader/shaderprogram.h 
     ./src/ugdk/graphic/spritesheet.cc 
     ./src/ugdk/graphic/spritesheet.h 
     ./src/ugdk/graphic/textmanager.cc 

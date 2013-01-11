@@ -29,6 +29,11 @@ class Spritesheet;
 class TextManager;
 class VideoManager;
 
+namespace shader {
+class Shader;
+class ShaderProgram;
+}
+
 }  // namespace graphic
 }  // namespace ugdk
 
