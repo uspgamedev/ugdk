@@ -3,10 +3,11 @@
 #include <cmath>
 
 #include "GL/glew.h"
-#include "GL/wglew.h"
+#ifdef _WIN32
+#   include "GL/wglew.h"
+#endif
 #define NO_SDL_GLEXT
 #include "SDL_opengl.h"
-#include "SDL_image.h"
 
 #include <ugdk/base/engine.h>
 #include <ugdk/action/scene.h>
@@ -110,7 +111,7 @@ bool VideoManager::Release() {
 void VideoManager::SetVSync(const bool active) {
     settings_.vsync = active;
     //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions.
-#ifdef WIN32
+#ifdef _WIN32
     if(WGL_EXT_swap_control)
         wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
 #endif
