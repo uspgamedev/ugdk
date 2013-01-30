@@ -47,7 +47,7 @@ class AnimationProtocol : public gdd::DescriptionProtocol< action::SpriteAnimati
     bool NewEntry_Size(double, double);
     bool NewEntry_Rotation(double);
 
-    const bool arg_is_not_hexadecimal(const gdd::GDDString&) {
+    bool arg_is_not_hexadecimal(const gdd::GDDString&) {
         //TODO: Implement this.
         return false;
     }

@@ -38,7 +38,7 @@ class Geometry {
     // Setters.
     void set_offset(const math::Vector2D& _offset) { offset_ = _offset; }
     void set_scale(const math::Vector2D& _scale)   { scale_  = _scale;  }
-    void set_rotation(double rotation) { rotation_ = rotation; }
+    void set_rotation(double _rotation) { rotation_ = _rotation; }
     /**@}
      */
 

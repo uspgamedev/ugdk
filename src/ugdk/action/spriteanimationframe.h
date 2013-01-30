@@ -24,18 +24,18 @@ class SpriteAnimationFrame {
    *            should be applied to the rendered sprite.
    */
   public:
-    SpriteAnimationFrame(int frame)
-        : frame_(frame) {}
+    SpriteAnimationFrame(int _frame)
+        : frame_(_frame) {}
 
     int frame() const { return frame_; }
     const graphic::Geometry& geometry() const { return geometry_; }
     const graphic::VisualEffect& effect() const { return effect_; }
     ugdk::Mirror mirror() const { return mirror_; }
 
-    void set_frame(const int frame) { frame_ = frame; }
+    void set_frame(int _frame) { frame_ = _frame; }
     graphic::Geometry& geometry() { return geometry_; }
     graphic::VisualEffect& effect() { return effect_; }
-    void set_mirror(const ugdk::Mirror& mirror) { mirror_ = mirror; }
+    void set_mirror(const ugdk::Mirror& _mirror) { mirror_ = _mirror; }
 
   private:
     int frame_;
@@ -58,8 +58,8 @@ class SpriteAnimation {
     size_t size() const { return animation_frames_.size(); }
 
     /* try to use set_period() instead whenever you can */
-    void set_fps(const double fps) { period_ = 1.0/fps; }
-    void set_period(const double period) { period_ = period; }
+    void set_fps(double _fps) { period_ = 1.0/_fps; }
+    void set_period(double _period) { period_ = _period; }
    
     Frame* At(size_t i) const { return animation_frames_.at(i); }
     void Add(Frame* f) { animation_frames_.push_back(f); }

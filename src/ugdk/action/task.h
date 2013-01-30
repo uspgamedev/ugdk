@@ -9,7 +9,7 @@ namespace action {
 class Task : public util::Uncopyable {
   public:
     Task() : finished_(false), priority_(0) {}
-    Task(int priority) : finished_(false), priority_(priority) {}
+    Task(int _priority) : finished_(false), priority_(_priority) {}
     virtual ~Task() {}
 
     virtual void operator()(double dt) = 0;

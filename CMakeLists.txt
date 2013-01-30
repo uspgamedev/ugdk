@@ -62,7 +62,23 @@ endif ()
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 if (UNIX OR MINGW)
     # se for o g++ para *nix ou o MinGW para Windows:
-    add_definitions(-Wall -ansi -U_FORTIFY_SOURCE -msse2)
+    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2)
+    add_definitions(-Wall
+# TODO: would like these but they produce overwhelming amounts of warnings
+#       -Wextra
+#       -Wmissing-field-initializers
+#       -Wswitch-default
+#       -Wfloat-equal
+#       -Wconversion
+#       -Wzero-as-null-pointer-constant
+        -Wtype-limits
+        -Wsign-compare
+        -Wignored-qualifiers
+        -Wuninitialized
+        #-Wshadow
+        -Wlogical-op
+        -Winit-self)
+
 elseif (MSVC) 
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
 endif ()

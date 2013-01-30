@@ -15,8 +15,8 @@ class VisualEffect {
     /**
      * @param color The color.
      */
-    VisualEffect(const ugdk::Color& color) :
-        color_(color) {}
+    VisualEffect(const ugdk::Color& _color) :
+        color_(_color) {}
 
     ~VisualEffect() {}
 

@@ -15,8 +15,8 @@ class Node {
   public:
     typedef std::vector<Node*> NodeSet;
 
-    Node(Drawable* drawable = NULL) 
-        :   drawable_(drawable),
+    Node(Drawable* _drawable = NULL) 
+        :   drawable_(_drawable),
             light_(NULL),
             active_(true),
             ignores_effect_(false),
@@ -31,10 +31,10 @@ class Node {
     void Render(const Geometry&, const VisualEffect&) const;
     void RenderLight(const Geometry& parent, const VisualEffect&) const;
 
-    void set_drawable(Drawable* drawable)  { drawable_ = drawable; }
-    void set_light(Light* light)           {    light_ =    light; }
-    void set_active(const bool active)     {   active_ =   active; }
-    void set_ignores_effect(const bool on) {   ignores_effect_ = on; }
+    void set_drawable(Drawable* _drawable)  { drawable_ = _drawable; }
+    void set_light(Light* _light)           {    light_ =    _light; }
+    void set_active(const bool _active)     {   active_ =   _active; }
+    void set_ignores_effect(const bool _on) {   ignores_effect_ = _on; }
     void set_zindex(const double zindex);
     
           Geometry& geometry()          { return geometry_; }

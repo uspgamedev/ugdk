@@ -119,12 +119,12 @@ class Node : public Box<DIMENSIONS> {
 
 template <class T, int DIMENSIONS>
 IntervalKDTree<T, DIMENSIONS>::IntervalKDTree (
-                                    const Box<DIMENSIONS>& tree_bounding_box,
-                                    unsigned int max_elements_per_leaf) :
-    max_elements_per_leaf_(max_elements_per_leaf), 
-    tree_bounding_box_(tree_bounding_box), 
+                                    const Box<DIMENSIONS>& _tree_bounding_box,
+                                    unsigned int _max_elements_per_leaf) :
+    max_elements_per_leaf_(_max_elements_per_leaf), 
+    tree_bounding_box_(_tree_bounding_box), 
     container_items_() {
-        root_ = new Node<T, DIMENSIONS>(this, NULL, 0, tree_bounding_box);
+        root_ = new Node<T, DIMENSIONS>(this, NULL, 0, _tree_bounding_box);
 #ifdef DEBUG
     max_height_ = 0;
 #endif
@@ -280,8 +280,8 @@ bool Box<DIMENSIONS>::Intersects (const Box *box) const {
 // Item Implementation
 
 template <class T, int DIMENSIONS>
-Item<T, DIMENSIONS>::Item (Box<DIMENSIONS> bounding_box, T element) :
-    super (bounding_box), element_(element) {}
+Item<T, DIMENSIONS>::Item (Box<DIMENSIONS> bounding_box, T _element) :
+    super (bounding_box), element_(_element) {}
 
 template <class T, int DIMENSIONS>
 Item<T, DIMENSIONS>::~Item () {}
@@ -292,8 +292,8 @@ Node<T, DIMENSIONS>* Item<T, DIMENSIONS>::container_node () {
 }
 
 template <class T, int DIMENSIONS>
-void Item<T, DIMENSIONS>::set_container_node (Node<T, DIMENSIONS> *container_node) {
-    container_node_ = container_node;
+void Item<T, DIMENSIONS>::set_container_node (Node<T, DIMENSIONS> *_container_node) {
+    container_node_ = _container_node;
 }
 
 template <class T, int DIMENSIONS>
