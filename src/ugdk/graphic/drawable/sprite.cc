@@ -48,14 +48,14 @@ void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
         VisualEffect compose_effect(effect);
         compose_effect.Compose(animation_frame->effect());
 
-        spritesheet_->Draw(animation_frame->frame(), hotspot_, compose, compose_effect);
+        spritesheet_->Draw(animation_frame->spritesheet_frame(), hotspot_, compose, compose_effect);
     } else {
         spritesheet_->Draw(0, hotspot_, modifier, effect);
     }
 }
 
 const ugdk::math::Vector2D& Sprite::size() const {
-    return spritesheet_->frame_size(current_animation_frame()->frame()); // TODO: requires some info from the spritesheet
+    return spritesheet_->frame_size(current_animation_frame()->spritesheet_frame()); // TODO: requires some info from the spritesheet
 }
     
 const action::SpriteAnimationFrame* Sprite::current_animation_frame() const {

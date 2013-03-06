@@ -118,7 +118,7 @@ bool AnimationProtocol::NewRing_Frame(void) {
 bool AnimationProtocol::NewEntry_Number(int frame) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame* cur_frame = current_animation_->At(current_animation_->size() - 1); // Current Frame. YEEEAAAHHHHHHH
-        cur_frame->set_frame(frame);
+        cur_frame->set_spritesheet_frame(frame);
         return true;
     } else {
         /* TODO: implement the else */

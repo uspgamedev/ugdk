@@ -24,21 +24,21 @@ class SpriteAnimationFrame {
    *            should be applied to the rendered sprite.
    */
   public:
-    SpriteAnimationFrame(int _frame)
-        : frame_(_frame) {}
+    SpriteAnimationFrame(int spritesheet_frame)
+        : spritesheet_frame_(spritesheet_frame) {}
 
-    int frame() const { return frame_; }
+    int spritesheet_frame() const { return spritesheet_frame_; }
     const graphic::Geometry& geometry() const { return geometry_; }
     const graphic::VisualEffect& effect() const { return effect_; }
     ugdk::Mirror mirror() const { return mirror_; }
 
-    void set_frame(int _frame) { frame_ = _frame; }
+    void set_spritesheet_frame(int frame) { spritesheet_frame_ = frame; }
     graphic::Geometry& geometry() { return geometry_; }
     graphic::VisualEffect& effect() { return effect_; }
     void set_mirror(const ugdk::Mirror& _mirror) { mirror_ = _mirror; }
 
   private:
-    int frame_;
+    int spritesheet_frame_;
     graphic::Geometry geometry_;
     graphic::VisualEffect effect_;
     ugdk::Mirror mirror_;
