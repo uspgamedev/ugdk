@@ -22,11 +22,11 @@ Sprite::Sprite(const std::string& spritesheet_tag, SpriteAnimationPlayer* manage
 
 Sprite::Sprite(const std::string& spritesheet_tag, const std::string& animation_set_tag) 
     : spritesheet_(base::ResourceManager::GetSpritesheetFromTag(spritesheet_tag)),
-      animation_player_(new action::SpriteAnimationPlayer(
+      animation_player_(new action::AnimationTablePlayer<ugdk::action::SpriteAnimation>(
              base::ResourceManager::GetSpriteAnimationTableFromFile(animation_set_tag))) {}
 
 Sprite::Sprite(const Spritesheet *spritesheet, const std::string& animation_set_tag)
-  : spritesheet_(spritesheet), animation_player_(new action::SpriteAnimationPlayer(
+  : spritesheet_(spritesheet), animation_player_(new action::AnimationTablePlayer<ugdk::action::SpriteAnimation>(
                   base::ResourceManager::GetSpriteAnimationTableFromFile(animation_set_tag))) {}
  
 Sprite::~Sprite() {
@@ -64,14 +64,6 @@ const action::SpriteAnimationFrame* Sprite::current_animation_frame() const {
     
 const action::SpriteAnimationPlayer* Sprite::animation_player() const { 
     return animation_player_;
-}
-
-void Sprite::Select(const std::string& name) {
-    if(animation_player_) animation_player_->Select(name);
-}
-
-void Sprite::Select(int index) {
-    if(animation_player_) animation_player_->Select(index);
 }
 
 }  // namespace graphic

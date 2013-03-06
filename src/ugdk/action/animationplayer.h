@@ -14,11 +14,15 @@ namespace action {
 
 template<class T>
 class AnimationPlayer : public MediaPlayer {
-public:
-    AnimationPlayer(const util::IndexableTable<T*> *table)
-        : table_(table) { assert(table_); }
+  public:
+    AnimationPlayer() : current_animation_(NULL), current_frame_(0), elapsed_time_(0.0) {}
+    // TODO: a user defined current_animation_ may leak
 
-    ~AnimationPlayer() {}
+    void set_current_animation(T* anim) {
+        if(anim != current_animation_)
+            RestartAnimation();
+        current_animation_ = anim;
+    }
 
     const T* current_animation() const { return current_animation_; }
 
@@ -38,6 +42,26 @@ public:
         }
     }
 
+    /// Restarts the current animation from the first frame.
+    void RestartAnimation() {
+        current_frame_ = 0;
+        elapsed_time_ = 0.0;
+    }
+
+  private:
+    const T* current_animation_;
+    int current_frame_;
+    double elapsed_time_;
+};
+
+template<class T>
+class AnimationTablePlayer : public AnimationPlayer<T> {
+  public:
+    AnimationTablePlayer(const util::IndexableTable<T*> *table)
+        : table_(table) { assert(table_); }
+
+    ~AnimationTablePlayer() {}
+
     /// Change the current animation to a new animation from the previously selected AnimationSet.
     /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/
     void Select(const std::string& name) {
@@ -50,23 +74,7 @@ public:
         set_current_animation(table_->Get(index));
     }
 
-    /// Restarts the current animation from the first frame.
-    void RestartAnimation() {
-        current_frame_ = 0;
-        elapsed_time_ = 0.0;
-    }
-
-private:
-    void set_current_animation(T* anim) {
-        if(anim != current_animation_)
-            RestartAnimation();
-        current_animation_ = anim;
-    }
-
-    const T* current_animation_;
-    int current_frame_;
-    double elapsed_time_;
-
+  private:
     const util::IndexableTable<T*> *table_;
 };
 

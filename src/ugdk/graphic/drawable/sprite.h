@@ -26,8 +26,6 @@ class Sprite : public Drawable {
 
     const action::SpriteAnimationFrame* current_animation_frame() const;
     const action::SpriteAnimationPlayer* animation_player() const;
-    void Select(const std::string& name);
-    void Select(int index);
        
   private:
     const Spritesheet *spritesheet_;
