@@ -4,6 +4,7 @@
 #include <string>
 #include <ugdk/action.h>
 #include <ugdk/util.h>
+#include <ugdk/action/spriteanimationframe.h>
 
 namespace ugdk {
 namespace action {

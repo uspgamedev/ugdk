@@ -47,10 +47,12 @@ void Node::Render(const Geometry& parent, const VisualEffect& parent_effect) con
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
+    VisualEffect compose_effect = (ignores_effect_) ? effect_ : (parent_effect * effect_);
+    if(!compose_effect.visible())
+        return;
+
     Geometry compose(parent);
     compose.Compose(geometry_);
-
-    VisualEffect compose_effect = (ignores_effect_) ? effect_ : (parent_effect * effect_);
 
     if(drawable_)
         drawable_->Draw(compose, compose_effect);
@@ -63,11 +65,13 @@ void Node::Render(const Geometry& parent, const VisualEffect& parent_effect) con
 void Node::RenderLight(const Geometry& parent, const VisualEffect& parent_effect) const {
     if(!active_) return;
     if(childs_.empty() && !light_) return; // optimization!
+
+    VisualEffect compose_effect = (ignores_effect_) ? effect_ : (parent_effect * effect_);
+    if(!compose_effect.visible())
+        return;
     
     Geometry compose(parent);
     compose.Compose(geometry_);
-
-    VisualEffect compose_effect = (ignores_effect_) ? effect_ : (parent_effect * effect_);
 
     if(light_) 
         light_->Draw(compose);
