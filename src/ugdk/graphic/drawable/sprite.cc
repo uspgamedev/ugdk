@@ -22,11 +22,11 @@ Sprite::Sprite(const std::string& spritesheet_tag, SpriteAnimationPlayer* manage
 
 Sprite::Sprite(const std::string& spritesheet_tag, const std::string& animation_set_tag) 
     : spritesheet_(base::ResourceManager::GetSpritesheetFromTag(spritesheet_tag)),
-      animation_player_(new action::AnimationTablePlayer<ugdk::action::SpriteAnimation>(
+      animation_player_(new action::SpriteTableAnimationPlayer(
              base::ResourceManager::GetSpriteAnimationTableFromFile(animation_set_tag))) {}
 
 Sprite::Sprite(const Spritesheet *spritesheet, const std::string& animation_set_tag)
-  : spritesheet_(spritesheet), animation_player_(new action::AnimationTablePlayer<ugdk::action::SpriteAnimation>(
+  : spritesheet_(spritesheet), animation_player_(new action::SpriteTableAnimationPlayer(
                   base::ResourceManager::GetSpriteAnimationTableFromFile(animation_set_tag))) {}
  
 Sprite::~Sprite() {

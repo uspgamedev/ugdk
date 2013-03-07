@@ -9,6 +9,9 @@ class MediaPlayer;
 template<class T>
 class AnimationPlayer;
 
+template<class T>
+class TableAnimationPlayer;
+
 class SpriteAnimationFrame;
 class SpriteAnimation;
 

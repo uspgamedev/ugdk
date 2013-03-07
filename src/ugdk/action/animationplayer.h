@@ -55,12 +55,12 @@ class AnimationPlayer : public MediaPlayer {
 };
 
 template<class T>
-class AnimationTablePlayer : public AnimationPlayer<T> {
+class TableAnimationPlayer : public AnimationPlayer<T> {
   public:
-    AnimationTablePlayer(const util::IndexableTable<T*> *table)
+    TableAnimationPlayer(const util::IndexableTable<T*> *table)
         : table_(table) { assert(table_); }
 
-    ~AnimationTablePlayer() {}
+    ~TableAnimationPlayer() {}
 
     /// Change the current animation to a new animation from the previously selected AnimationSet.
     /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/
