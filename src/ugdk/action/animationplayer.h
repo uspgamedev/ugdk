@@ -65,13 +65,13 @@ class TableAnimationPlayer : public AnimationPlayer<T> {
     /// Change the current animation to a new animation from the previously selected AnimationSet.
     /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/
     void Select(const std::string& name) {
-        set_current_animation(table_->Search(name));
+        this->set_current_animation(table_->Search(name));
     }
 
     /// Change the current animation to a new animation from the previo2usly selected AnimationSet.
     /**Given a animation index (a integer), the function changes the current animation to a new animation of AnimationSet*/
     void Select(int index) {
-        set_current_animation(table_->Get(index));
+        this->set_current_animation(table_->Get(index));
     }
 
   private:
