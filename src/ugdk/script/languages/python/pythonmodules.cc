@@ -13,8 +13,8 @@ namespace python {
 typedef std::vector< Module<inittype> > PythonModuleList;
 
 static PythonModuleList& get_module_list() {
-    static PythonModuleList lua_modules;
-    return lua_modules;
+    static PythonModuleList modules;
+    return modules;
 }
 
 void AddModule(const Module<inittype> & module) {

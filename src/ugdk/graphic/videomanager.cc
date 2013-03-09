@@ -36,19 +36,13 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
     
     if(icon.length() > 0)
         SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
-    
+       
     if(ChangeResolution(size, fullscreen) == false)
         if(ChangeResolution(default_resolution, false) == false) {
             /* TODO: insert error message here. */
             return false;
         }
-    
-    GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
-        // TODO: check errors with glew
-    }
-    
+        
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
     /*if(GLEW_ARB_framebuffer_object) {
@@ -67,6 +61,12 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == NULL)
         return false;
       
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {
+        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
+        return false;
+    }
+
     SetVSync(settings_.vsync);
         
     //Set projection
