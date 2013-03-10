@@ -22,6 +22,7 @@
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 %import(module="ugdk_base") <ugdk/base/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_action") <ugdk/action/spritetypes.h>
 %import(module="ugdk_graphic") <ugdk/graphic/geometry.h>
 %import(module="ugdk_graphic") <ugdk/graphic/visualeffect.h>
 %import(module="ugdk_graphic") <ugdk/graphic/drawable.h>

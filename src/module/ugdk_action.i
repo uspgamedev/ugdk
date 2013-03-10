@@ -12,6 +12,7 @@
 #include <ugdk/action/entity.h>
 #include <ugdk/action/observer.h>
 #include <ugdk/action/scene.h>
+#include <ugdk/action/animationplayer.h>
 #include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/action/spritetypes.h>
 
@@ -26,6 +27,7 @@
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_audio") <ugdk/audio.h>
 %import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_util") <ugdk/util.h>
 %import(module="ugdk_util") <ugdk/util/uncopyable.h>
 
 proxy_class(ugdk::action::Observer)
@@ -42,12 +44,15 @@ proxy_class(ugdk::action::Task)
 %include <ugdk/action/entity.h>
 %include <ugdk/action/observer.h>
 %include <ugdk/action/scene.h>
+%include <ugdk/action/animationplayer.h>
+%include <ugdk/action/spriteanimationframe.h>
 %include <ugdk/action/spritetypes.h>
+
+%template(SpriteAnimationPlayer) ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimation>;
+%template(SpriteAnimationTable) ugdk::util::IndexableTable<ugdk::action::SpriteAnimation*, 16>;
 
 namespace ugdk {
 namespace action { 
-    //export_class(Animation)
-    //export_class(AnimationFrame)
     export_class(MediaPlayer)
     export_class(Entity)
     export_class(Observer)
