@@ -9,14 +9,14 @@ namespace graphic {
 class VisualEffect {
   public:
     /// Creates an identity VisualEffect;
-    VisualEffect() {}
+    VisualEffect() : visible_(true) {}
 
     ///Creates a new VisualEffect object with the specified values. 
     /**
      * @param color The color.
      */
-    VisualEffect(const ugdk::Color& _color) :
-        color_(_color) {}
+    VisualEffect(const ugdk::Color& color, bool _visible = true) :
+        color_(color), visible_(_visible) {}
 
     ~VisualEffect() {}
 
@@ -25,13 +25,16 @@ class VisualEffect {
      *@{
      */
     const ugdk::Color& color() const { return color_; }
+    bool visible() const { return visible_; }
 
     void set_color(const ugdk::Color& _color) { color_ = _color; }
+    void set_visible(bool _visible) { visible_ = _visible; }
     /**@}
      */
 
     void Compose(const VisualEffect& other) {
         color_.Compose(other.color_);
+        visible_ = visible_ && other.visible_;
     }
 
     VisualEffect& operator *= (const VisualEffect& rhs) { 
@@ -47,6 +50,7 @@ class VisualEffect {
 
   private:
     ugdk::Color color_;
+    bool visible_;
 };
 
 }  // namespace graphic

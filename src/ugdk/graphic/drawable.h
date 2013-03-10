@@ -14,7 +14,7 @@ class Drawable {
         LEFT,           CENTER,     RIGHT,
         BOTTOM_LEFT,    BOTTOM,     BOTTOM_RIGHT
     };
-    virtual ~Drawable() {};
+    virtual ~Drawable() {}
 
     virtual void Update(double dt) = 0;
     virtual void Draw(const Geometry&, const VisualEffect&) const = 0;

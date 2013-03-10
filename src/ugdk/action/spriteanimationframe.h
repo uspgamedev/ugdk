@@ -24,21 +24,26 @@ class SpriteAnimationFrame {
    *            should be applied to the rendered sprite.
    */
   public:
-    SpriteAnimationFrame(int _frame)
-        : frame_(_frame) {}
+    SpriteAnimationFrame(int spritesheet_frame)
+        : spritesheet_frame_(spritesheet_frame), mirror_(0) {}
 
-    int frame() const { return frame_; }
+    int spritesheet_frame() const { return spritesheet_frame_; }
     const graphic::Geometry& geometry() const { return geometry_; }
     const graphic::VisualEffect& effect() const { return effect_; }
     ugdk::Mirror mirror() const { return mirror_; }
 
-    void set_frame(int _frame) { frame_ = _frame; }
+    void set_spritesheet_frame(int frame) { spritesheet_frame_ = frame; }
     graphic::Geometry& geometry() { return geometry_; }
     graphic::VisualEffect& effect() { return effect_; }
     void set_mirror(const ugdk::Mirror& _mirror) { mirror_ = _mirror; }
 
+    static const SpriteAnimationFrame& DEFAULT() {
+        static SpriteAnimationFrame default_frame(0);
+        return default_frame;
+    }
+
   private:
-    int frame_;
+    int spritesheet_frame_;
     graphic::Geometry geometry_;
     graphic::VisualEffect effect_;
     ugdk::Mirror mirror_;
@@ -61,7 +66,7 @@ class SpriteAnimation {
     void set_fps(double _fps) { period_ = 1.0/_fps; }
     void set_period(double _period) { period_ = _period; }
    
-    Frame* At(size_t i) const { return animation_frames_.at(i); }
+    const Frame& At(size_t i) const { return *animation_frames_.at(i); }
     void Add(Frame* f) { animation_frames_.push_back(f); }
 
   private:

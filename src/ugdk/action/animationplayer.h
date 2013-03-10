@@ -14,16 +14,24 @@ namespace action {
 
 template<class T>
 class AnimationPlayer : public MediaPlayer {
-public:
-    AnimationPlayer(const util::IndexableTable<T*> *table)
-        : table_(table) { assert(table_); }
+  public:
+    AnimationPlayer(const util::IndexableTable<T*> *table) 
+        : current_animation_(NULL), current_frame_(0), elapsed_time_(0.0), table_(table) {
+        // TODO: a user defined current_animation_ may leak
+    }
 
-    ~AnimationPlayer() {}
+    void set_current_animation(T* anim) {
+        if(anim != current_animation_)
+            RestartAnimation();
+        current_animation_ = anim;
+    }
 
     const T* current_animation() const { return current_animation_; }
 
-    const typename T::Frame* current_animation_frame() const {
-        if(current_frame_ < 0 || current_frame_ >= static_cast<int>(current_animation()->size())) return NULL;
+    const typename T::Frame& current_animation_frame() const {
+        if(!current_animation() || current_frame_ < 0 || 
+           current_frame_ >= static_cast<int>(current_animation()->size()))
+            return T::Frame::DEFAULT();
         return current_animation()->At(current_frame_);
     }
 
@@ -38,35 +46,30 @@ public:
         }
     }
 
-    /// Change the current animation to a new animation from the previously selected AnimationSet.
-    /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/
-    void Select(const std::string& name) {
-        set_current_animation(table_->Search(name));
-    }
-
-    /// Change the current animation to a new animation from the previo2usly selected AnimationSet.
-    /**Given a animation index (a integer), the function changes the current animation to a new animation of AnimationSet*/
-    void Select(int index) {
-        set_current_animation(table_->Get(index));
-    }
-
     /// Restarts the current animation from the first frame.
     void RestartAnimation() {
         current_frame_ = 0;
         elapsed_time_ = 0.0;
     }
 
-private:
-    void set_current_animation(T* anim) {
-        if(anim != current_animation_)
-            RestartAnimation();
-        current_animation_ = anim;
+    /// Change the current animation to a new animation from the previously selected AnimationSet.
+    /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/
+    void Select(const std::string& name) {
+        if(table_)
+            this->set_current_animation(table_->Search(name));
     }
 
+    /// Change the current animation to a new animation from the previo2usly selected AnimationSet.
+    /**Given a animation index (a integer), the function changes the current animation to a new animation of AnimationSet*/
+    void Select(int index) {
+        if(table_)
+            this->set_current_animation(table_->Get(index));
+    }
+
+  private:
     const T* current_animation_;
     int current_frame_;
     double elapsed_time_;
-
     const util::IndexableTable<T*> *table_;
 };
 
