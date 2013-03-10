@@ -36,22 +36,22 @@ void Sprite::Update(double delta_t) {
 
 void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     if(!spritesheet_) return;
-    const action::SpriteAnimationFrame* animation_frame = 
-        current_animation_frame();
+    const action::SpriteAnimationFrame& animation_frame(current_animation_frame());
 
     Geometry compose(modifier);
-    compose.Compose(animation_frame->geometry());
+    compose.Compose(animation_frame.geometry());
     VisualEffect compose_effect(effect);
-    compose_effect.Compose(animation_frame->effect());
+    compose_effect.Compose(animation_frame.effect());
 
-    spritesheet_->Draw(animation_frame->spritesheet_frame(), hotspot_, compose, compose_effect);
+    spritesheet_->Draw(animation_frame.spritesheet_frame(), hotspot_, compose, compose_effect);
 }
 
 const ugdk::math::Vector2D& Sprite::size() const {
-    return spritesheet_->frame_size(current_animation_frame()->spritesheet_frame()); // TODO: requires some info from the spritesheet
+    return spritesheet_->frame_size(current_animation_frame().spritesheet_frame());
+        // TODO: requires some info from the spritesheet
 }
     
-const action::SpriteAnimationFrame* Sprite::current_animation_frame() const {
+const action::SpriteAnimationFrame& Sprite::current_animation_frame() const {
     return animation_player_.current_animation_frame();
 }
     

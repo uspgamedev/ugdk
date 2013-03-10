@@ -16,8 +16,9 @@ template<class T>
 class AnimationPlayer : public MediaPlayer {
   public:
     AnimationPlayer(const util::IndexableTable<T*> *table) 
-        : current_animation_(NULL), current_frame_(0), elapsed_time_(0.0), table_(table) {}
-    // TODO: a user defined current_animation_ may leak
+        : current_animation_(NULL), current_frame_(0), elapsed_time_(0.0), table_(table) {
+        // TODO: a user defined current_animation_ may leak
+    }
 
     void set_current_animation(T* anim) {
         if(anim != current_animation_)
@@ -27,8 +28,10 @@ class AnimationPlayer : public MediaPlayer {
 
     const T* current_animation() const { return current_animation_; }
 
-    const typename T::Frame* current_animation_frame() const {
-        if(current_frame_ < 0 || current_frame_ >= static_cast<int>(current_animation()->size())) return NULL;
+    const typename T::Frame& current_animation_frame() const {
+        if(!current_animation() || current_frame_ < 0 || 
+           current_frame_ >= static_cast<int>(current_animation()->size()))
+            return T::Frame::DEFAULT();
         return current_animation()->At(current_frame_);
     }
 

@@ -37,6 +37,11 @@ class SpriteAnimationFrame {
     graphic::VisualEffect& effect() { return effect_; }
     void set_mirror(const ugdk::Mirror& _mirror) { mirror_ = _mirror; }
 
+    static const SpriteAnimationFrame& DEFAULT() {
+        static SpriteAnimationFrame default_frame(0);
+        return default_frame;
+    }
+
   private:
     int spritesheet_frame_;
     graphic::Geometry geometry_;
@@ -61,7 +66,7 @@ class SpriteAnimation {
     void set_fps(double _fps) { period_ = 1.0/_fps; }
     void set_period(double _period) { period_ = _period; }
    
-    Frame* At(size_t i) const { return animation_frames_.at(i); }
+    const Frame& At(size_t i) const { return *animation_frames_.at(i); }
     void Add(Frame* f) { animation_frames_.push_back(f); }
 
   private:
