@@ -47,6 +47,7 @@ proxy_class(ugdk::action::Task)
 %include <ugdk/action/animationplayer.h>
 %include <ugdk/action/spriteanimationframe.h>
 %include <ugdk/action/spritetypes.h>
+%include <ugdk/util/indexabletable.h>
 
 %template(SpriteAnimationPlayer) ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimation>;
 %template(SpriteAnimationTable) ugdk::util::IndexableTable<ugdk::action::SpriteAnimation*, 16>;
