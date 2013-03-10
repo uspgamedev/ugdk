@@ -4,6 +4,7 @@
 %include <module/export.swig>
 %include <module/proxy.swig>
 %include "std_vector.i"
+%include "std_string.i"
 
 %{
 
