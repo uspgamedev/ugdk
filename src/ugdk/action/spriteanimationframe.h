@@ -25,7 +25,7 @@ class SpriteAnimationFrame {
    */
   public:
     SpriteAnimationFrame(int spritesheet_frame)
-        : spritesheet_frame_(spritesheet_frame) {}
+        : spritesheet_frame_(spritesheet_frame), mirror_(0) {}
 
     int spritesheet_frame() const { return spritesheet_frame_; }
     const graphic::Geometry& geometry() const { return geometry_; }

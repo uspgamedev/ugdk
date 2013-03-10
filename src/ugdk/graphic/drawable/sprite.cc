@@ -40,6 +40,12 @@ void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
 
     Geometry compose(modifier);
     compose.Compose(animation_frame.geometry());
+    ugdk::math::Vector2D scale(compose.scale());
+    if(animation_frame.mirror() & ugdk::MIRROR_HFLIP)
+        scale.x *= -1;
+    if(animation_frame.mirror() & ugdk::MIRROR_VFLIP)
+        scale.y *= -1;
+    compose.set_scale(scale);
     VisualEffect compose_effect(effect);
     compose_effect.Compose(animation_frame.effect());
 
