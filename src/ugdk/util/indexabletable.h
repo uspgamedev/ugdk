@@ -13,11 +13,11 @@
 namespace ugdk {
 namespace util {
 
-template<class T, int IndexSize>
+template<class T>
 class IndexableTable { private: IndexableTable() {} };
 
-template<class T, int IndexSize>
-class IndexableTable<T*, IndexSize> {
+template<class T>
+class IndexableTable<T*> {
 private:
     typedef typename std::tr1::unordered_map<std::string, T*> Table;
     typedef typename Table::iterator TableIterator;
@@ -25,7 +25,11 @@ private:
 
     typedef typename std::vector<T*> IndexArray;
   public:
-    IndexableTable() : index_generator_(0, IndexSize - 1, -1), indexes_(IndexSize, static_cast<T*>(NULL)) {}
+    static const int MAX_NUM_INDEX = 1024;
+
+    IndexableTable(int expected_size = 16) : index_generator_(0, MAX_NUM_INDEX - 1, -1) {
+        indexes_.reserve(expected_size);
+    }
     ~IndexableTable() {
         for(TableIterator it = data_.begin(); it != data_.end(); ++it)
             if(it->second) delete it->second;
@@ -62,8 +66,11 @@ private:
         T* val = Search(name);
         if(!val) return index_generator_.error_value();
         int id = index_generator_.GenerateID();
-        if(id != index_generator_.error_value())
+        if(id != index_generator_.error_value()) {
+            if(id >= indexes_.size())
+                indexes_.resize(id + 1);
             indexes_[id] = val;
+        }
         return id;
     }
 
