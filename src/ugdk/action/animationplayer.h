@@ -15,7 +15,8 @@ namespace action {
 template<class T>
 class AnimationPlayer : public MediaPlayer {
   public:
-    AnimationPlayer() : current_animation_(NULL), current_frame_(0), elapsed_time_(0.0) {}
+    AnimationPlayer(const util::IndexableTable<T*> *table) 
+        : current_animation_(NULL), current_frame_(0), elapsed_time_(0.0), table_(table) {}
     // TODO: a user defined current_animation_ may leak
 
     void set_current_animation(T* anim) {
@@ -48,33 +49,24 @@ class AnimationPlayer : public MediaPlayer {
         elapsed_time_ = 0.0;
     }
 
-  private:
-    const T* current_animation_;
-    int current_frame_;
-    double elapsed_time_;
-};
-
-template<class T>
-class TableAnimationPlayer : public AnimationPlayer<T> {
-  public:
-    TableAnimationPlayer(const util::IndexableTable<T*> *table)
-        : table_(table) { assert(table_); }
-
-    ~TableAnimationPlayer() {}
-
     /// Change the current animation to a new animation from the previously selected AnimationSet.
     /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/
     void Select(const std::string& name) {
-        this->set_current_animation(table_->Search(name));
+        if(table_)
+            this->set_current_animation(table_->Search(name));
     }
 
     /// Change the current animation to a new animation from the previo2usly selected AnimationSet.
     /**Given a animation index (a integer), the function changes the current animation to a new animation of AnimationSet*/
     void Select(int index) {
-        this->set_current_animation(table_->Get(index));
+        if(table_)
+            this->set_current_animation(table_->Get(index));
     }
 
   private:
+    const T* current_animation_;
+    int current_frame_;
+    double elapsed_time_;
     const util::IndexableTable<T*> *table_;
 };
 

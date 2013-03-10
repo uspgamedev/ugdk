@@ -10,7 +10,6 @@ namespace ugdk {
 namespace action {
 
 typedef ::ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimation> SpriteAnimationPlayer;
-typedef ::ugdk::action::TableAnimationPlayer<ugdk::action::SpriteAnimation> SpriteTableAnimationPlayer;
 typedef ::ugdk::util::IndexableTable<ugdk::action::SpriteAnimation*, 16> SpriteAnimationTable;
 
 action::SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepath);
