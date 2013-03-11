@@ -8,6 +8,8 @@ namespace ugdk {
 namespace graphic {
 namespace shader {
 
+ShaderProgram& MYSHADER();
+
 class ShaderProgram {
 public:
     ShaderProgram();

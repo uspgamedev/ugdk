@@ -15,6 +15,7 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/pathmanager.h>
+#include <ugdk/graphic/shader/shaderprogram.h>
 
 #define LN255 5.5412635451584261462455391880218
 
@@ -42,6 +43,8 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
             /* TODO: insert error message here. */
             return false;
         }
+
+    glUseProgram(ugdk::graphic::shader::MYSHADER().id());
         
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
