@@ -35,6 +35,7 @@ void Sprite::Update(double delta_t) {
 }
 
 void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
+    return;
     if(!spritesheet_) return;
     const action::SpriteAnimationFrame& animation_frame(current_animation_frame());
 

@@ -35,27 +35,28 @@ shader::ShaderProgram* MYSHADER() {
 
 #define NEW_LINE "\n"
         vertex_shader.CompileSource(
-        "#version 120" NEW_LINE
+"#version 330 core" NEW_LINE
 
-        "varying vec2 texture_coordinate;" NEW_LINE
-        "varying vec4 colors;" NEW_LINE
+"layout (location = 0) in vec2 position;" NEW_LINE
+"layout (location = 1) in vec2 vertexUV;" NEW_LINE
+"out vec2 UV;" NEW_LINE
+"uniform mat4 geometry_matrix;" NEW_LINE
 
-        "void main(void) { " NEW_LINE
-            "gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;" NEW_LINE
-            "texture_coordinate = vec2(gl_MultiTexCoord0);" NEW_LINE
-            "colors = gl_Color;" NEW_LINE
-        "}");
+"void main(void) { " NEW_LINE
+	"gl_Position = geometry_matrix * vec4(position, 0, 0);" NEW_LINE
+    "UV = vertexUV;" NEW_LINE
+"}");
 
         fragment_shader.CompileSource(
-        "#version 120" NEW_LINE
+"#version 330 core" NEW_LINE
 
-        "varying vec2 texture_coordinate;" NEW_LINE
-        "varying vec4 colors;" NEW_LINE
-        "uniform sampler2D texture_id;" NEW_LINE
+"out vec4 outputColor;" NEW_LINE
+"in vec2 UV;" NEW_LINE
+"uniform sampler2D texture_id;" NEW_LINE
 
-        "void main(void) {" NEW_LINE
-        "   gl_FragColor = texture2D(texture_id, texture_coordinate) * colors;" NEW_LINE
-        "}");
+"void main(void) {" NEW_LINE
+"   outputColor = texture(texture_id, UV) + vec4(0.2, 0.2, 0.2, 0.2);" NEW_LINE
+"}");
 
         myprogram = new shader::ShaderProgram;
 

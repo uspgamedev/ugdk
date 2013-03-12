@@ -2,6 +2,7 @@
 #include "GL/glew.h"
 #define NO_SDL_GLEXT
 #include "SDL_opengl.h"
+#include <cassert>
 
 #include <ugdk/graphic/drawable/texturedrectangle.h>
 
@@ -10,6 +11,7 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/texture.h>
+#include <ugdk/graphic/shader/shaderprogram.h>
 
 namespace ugdk {
 namespace graphic {
@@ -17,16 +19,23 @@ namespace graphic {
 TexturedRectangle::TexturedRectangle(Texture* texture) 
     :   size_(static_cast<double>(texture->width()), static_cast<double>(texture->height())), 
         texture_(texture) {
-    //glGenBuffers(1, &position_buffer_);
+
+    glGenVertexArrays(1, &vertex_array_);
+    glGenBuffers(1, &position_buffer_);
+    glGenBuffers(1, &texture_buffer_);
 }
 
 TexturedRectangle::TexturedRectangle(Texture* texture, const ugdk::math::Vector2D& size) 
     : size_(size), texture_(texture) {
-    //glGenBuffers(1, &position_buffer_);
+    glGenVertexArrays(1, &vertex_array_);
+    glGenBuffers(1, &position_buffer_);
+    glGenBuffers(1, &texture_buffer_);
 }
 
 TexturedRectangle::~TexturedRectangle() {
-    //glDeleteBuffers(1, &position_buffer_);
+    glDeleteVertexArrays(1, &vertex_array_);
+    glDeleteBuffers(1, &position_buffer_);
+    glDeleteBuffers(1, &texture_buffer_);
 }
 
 void TexturedRectangle::Update(double dt) {}
@@ -36,9 +45,6 @@ void TexturedRectangle::Draw(const Geometry& modifier, const VisualEffect& effec
 
     origin -= hotspot_;
     target -= hotspot_;
-
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture_->gltexture());
 
     const double vertexPositions[] = {
         origin.x, origin.y,
@@ -54,33 +60,49 @@ void TexturedRectangle::Draw(const Geometry& modifier, const VisualEffect& effec
         0.0f, 1.0f
     };
 
-    //glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_DYNAMIC_DRAW);
-    //glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
-    //glEnableVertexAttribArray(0);
-    //glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
-    //glDisableVertexAttribArray(0);
+    GLuint vertexbuffer;
+    glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, texture_buffer_);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(texturePositions), texturePositions, GL_STATIC_DRAW);
+
+
+    glBindVertexArray(position_buffer_);
 
     double M[16];
     modifier.AsMatrix4x4(M);
-    glPushMatrix();
-    glLoadMatrixd(M);
+    float Mf[16];
+    for(int i = 0; i < 16; ++i)
+        Mf[i] = float(M[i]);
 
     glColor4dv(effect.color().val);
 
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    GLuint shaderid = VIDEO_MANAGER()->default_shader()->id();
+    GLuint matrixpos = glGetUniformLocation(shaderid, "geometry_matrix"),
+           texturepod = glGetUniformLocation(shaderid, "texture_id");
 
-    glVertexPointer(2, GL_DOUBLE, 2*sizeof(*vertexPositions), vertexPositions);
-    glTexCoordPointer(2, GL_FLOAT, 2*sizeof(*texturePositions), texturePositions);
+    glUniformMatrix4fv(matrixpos, 1, GL_FALSE, Mf);
+
+    glEnable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0 + 0);
+    glBindTexture(GL_TEXTURE_2D, texture_->gltexture());
+    //glBindSampler(0, linearFiltering);
+    glUniform1i(texturepod, 0); // Texture unit 0 is for drawable texture
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
+    glVertexAttribPointer(0, 2, GL_DOUBLE, GL_FALSE, 0, 0);
+
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, texture_buffer_);
+    glVertexAttribPointer(1, 2, GL_FLOAT , GL_FALSE, 0, 0);
 
     glDrawArrays(GL_QUADS, 0, 4);
+    
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
 
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-
-    glPopMatrix();
+    glBindVertexArray(0);
 }
 
 }  // namespace graphic
