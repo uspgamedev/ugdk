@@ -1,10 +1,14 @@
 #include <ugdk/config/config.h>
+#include "GL/glew.h"
+#define NO_SDL_GLEXT
 #include "SDL_opengl.h"
 
 #include <ugdk/graphic/drawable/text.h>
+#include <ugdk/graphic/shader/shaderprogram.h>
 
 #include <ugdk/base/engine.h>
 #include <ugdk/base/types.h>
+#include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/math/frame.h>
@@ -71,6 +75,7 @@ void Text::Draw(const Geometry& modifier, const VisualEffect& effect) const {
         
     Font::IdentType ident = font_->ident();
 
+    glUseProgram(0);
     glEnable(GL_TEXTURE_2D);
     glListBase(font_->id());
 
@@ -115,6 +120,7 @@ void Text::Draw(const Geometry& modifier, const VisualEffect& effect) const {
         glPopMatrix();
     }
     glPopMatrix();
+    glUseProgram(VIDEO_MANAGER()->default_shader()->id());
 }
 
 }  // namespace graphic

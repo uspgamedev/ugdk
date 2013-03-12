@@ -36,6 +36,7 @@ class VideoManager {
     const std::string& title() const { return title_; }
     const Texture* light_texture() const { return light_texture_; }
     math::Frame virtual_bounds() const { return virtual_bounds_; }
+    shader::ShaderProgram* default_shader() { return default_shader_; }
 
   private:
     ugdk::math::Vector2D video_size_;
