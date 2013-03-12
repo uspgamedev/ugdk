@@ -80,7 +80,6 @@ void TexturedRectangle::Draw(const Geometry& modifier, const VisualEffect& effec
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
 
-
     glPopMatrix();
 }
 
