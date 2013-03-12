@@ -23,6 +23,7 @@ class TexturedRectangle : public Shape {
   private:
     ugdk::math::Vector2D size_;
     Texture* texture_;
+    //unsigned int position_buffer_;
 };
 
 }  // namespace graphic

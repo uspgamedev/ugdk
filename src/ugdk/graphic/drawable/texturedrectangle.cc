@@ -1,4 +1,6 @@
 #include <ugdk/config/config.h>
+#include "GL/glew.h"
+#define NO_SDL_GLEXT
 #include "SDL_opengl.h"
 
 #include <ugdk/graphic/drawable/texturedrectangle.h>
@@ -13,12 +15,19 @@ namespace ugdk {
 namespace graphic {
 
 TexturedRectangle::TexturedRectangle(Texture* texture) 
-    : size_(static_cast<double>(texture->width()), static_cast<double>(texture->height())), texture_(texture) {}
+    :   size_(static_cast<double>(texture->width()), static_cast<double>(texture->height())), 
+        texture_(texture) {
+    //glGenBuffers(1, &position_buffer_);
+}
 
 TexturedRectangle::TexturedRectangle(Texture* texture, const ugdk::math::Vector2D& size) 
-    : size_(size), texture_(texture) {}
+    : size_(size), texture_(texture) {
+    //glGenBuffers(1, &position_buffer_);
+}
 
-TexturedRectangle::~TexturedRectangle() {}
+TexturedRectangle::~TexturedRectangle() {
+    //glDeleteBuffers(1, &position_buffer_);
+}
 
 void TexturedRectangle::Update(double dt) {}
 
@@ -31,11 +40,28 @@ void TexturedRectangle::Draw(const Geometry& modifier, const VisualEffect& effec
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, texture_->gltexture());
 
-    static double TEX_COORD_ONE[]   = { 0.0, 0.0 },
-                  TEX_COORD_TWO[]   = { 1.0, 0.0 },
-                  TEX_COORD_THREE[] = { 1.0, 1.0 },
-                  TEX_COORD_FOUR[]  = { 0.0, 1.0 };
-    
+    const float vertexPositions[] = {
+        origin.x, origin.y, 0.0f, 1.0f,
+        target.x, origin.y, 0.0f, 1.0f,
+        target.x, target.y, 0.0f, 1.0f,
+        origin.x, target.y, 0.0f, 1.0f,
+    };
+
+    static const float texturePositions[] = {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+    };
+
+    //glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
+    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_DYNAMIC_DRAW);
+    //glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
+    //glEnableVertexAttribArray(0);
+    //glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    //glDisableVertexAttribArray(0);
+
     double M[16];
     modifier.AsMatrix4x4(M);
     glPushMatrix();
@@ -43,19 +69,17 @@ void TexturedRectangle::Draw(const Geometry& modifier, const VisualEffect& effec
 
     glColor4dv(effect.color().val);
 
-    glBegin( GL_QUADS ); { //Start quad
-        glTexCoord2dv(TEX_COORD_ONE);
-        glVertex2dv( origin.val );
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-        glTexCoord2dv(TEX_COORD_TWO);
-        glVertex2d(  target.x, origin.y );
+    glVertexPointer(4, GL_FLOAT, 4*sizeof(float), vertexPositions);
+    glTexCoordPointer(2, GL_FLOAT, 2*sizeof(float), texturePositions);
 
-        glTexCoord2dv(TEX_COORD_THREE);
-        glVertex2dv( target.val );
+    glDrawArrays(GL_QUADS, 0, 4);
 
-        glTexCoord2dv(TEX_COORD_FOUR);
-        glVertex2d(  origin.x, target.y );
-    } glEnd();
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+
 
     glPopMatrix();
 }
