@@ -1,6 +1,7 @@
 #include <ugdk/graphic/videomanager.h>
 
 #include <cmath>
+#include <cassert>
 
 #include "GL/glew.h"
 #ifdef _WIN32
@@ -15,6 +16,7 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/pathmanager.h>
+#include <ugdk/graphic/shader/shader.h>
 #include <ugdk/graphic/shader/shaderprogram.h>
 
 #define LN255 5.5412635451584261462455391880218
@@ -25,6 +27,46 @@ namespace graphic {
 using std::string;
 
 static ugdk::math::Vector2D default_resolution(800.0, 600.0);
+
+shader::ShaderProgram* MYSHADER() {
+    static shader::ShaderProgram* myprogram = NULL;
+    if(!myprogram) {
+        shader::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
+
+#define NEW_LINE "\n"
+        vertex_shader.CompileSource(
+        "#version 120" NEW_LINE
+
+        "varying vec2 texture_coordinate;" NEW_LINE
+        "varying vec4 colors;" NEW_LINE
+
+        "void main(void) { " NEW_LINE
+            "gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;" NEW_LINE
+            "texture_coordinate = vec2(gl_MultiTexCoord0);" NEW_LINE
+            "colors = gl_Color;" NEW_LINE
+        "}");
+
+        fragment_shader.CompileSource(
+        "#version 120" NEW_LINE
+
+        "varying vec2 texture_coordinate;" NEW_LINE
+        "varying vec4 colors;" NEW_LINE
+        "uniform sampler2D texture_id;" NEW_LINE
+
+        "void main(void) {" NEW_LINE
+        "   gl_FragColor = texture2D(texture_id, texture_coordinate) * colors;" NEW_LINE
+        "}");
+
+        myprogram = new shader::ShaderProgram;
+
+        myprogram->AttachShader(vertex_shader);
+        myprogram->AttachShader(fragment_shader);
+
+        bool status = myprogram->SetupProgram();
+        assert(status);
+    }
+    return myprogram;
+}
 
 // Inicializa o gerenciador de video, definindo uma
 // resolucao para o programa. Retorna true em caso de
@@ -44,7 +86,9 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
             return false;
         }
 
-    glUseProgram(ugdk::graphic::shader::MYSHADER().id());
+    default_shader_ = MYSHADER();
+
+    glUseProgram(default_shader_->id());
         
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
