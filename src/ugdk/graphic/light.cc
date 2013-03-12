@@ -27,24 +27,30 @@ void Light::Draw(const Geometry& modifier) {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, light_texture->gltexture());
 
-    static double TEX_COORD_ONE[]   = { 0.0, 0.0 },
-                 TEX_COORD_TWO[]   = { 1.0, 0.0 },
-                 TEX_COORD_THREE[] = { 1.0, 1.0 },
-                 TEX_COORD_FOUR[]  = { 0.0, 1.0 };
+    const double vertexPositions[] = {
+        -dimension_.x, -dimension_.y,
+         dimension_.x, -dimension_.y,
+         dimension_.x,  dimension_.y,
+        -dimension_.x,  dimension_.y,
+    };
 
-	glBegin( GL_QUADS ); { //Start quad
-        glTexCoord2dv(TEX_COORD_ONE);
-        glVertex2d( -dimension_.x, -dimension_.y );
+    static const float texturePositions[] = {
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f
+    };
+    
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-        glTexCoord2dv(TEX_COORD_TWO);
-        glVertex2d(  dimension_.x, -dimension_.y );
+    glVertexPointer(2, GL_DOUBLE, 2*sizeof(*vertexPositions), vertexPositions);
+    glTexCoordPointer(2, GL_FLOAT, 2*sizeof(*texturePositions), texturePositions);
 
-        glTexCoord2dv(TEX_COORD_THREE);
-        glVertex2dv( dimension_.val );
+    glDrawArrays(GL_QUADS, 0, 4);
 
-        glTexCoord2dv(TEX_COORD_FOUR);
-        glVertex2d( -dimension_.x,  dimension_.y );
-    } glEnd();
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
 
     glPopMatrix();
 }

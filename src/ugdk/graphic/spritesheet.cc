@@ -155,11 +155,11 @@ void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, co
     origin -= hotspot + frames_[frame_number].hotspot;
     target -= hotspot + frames_[frame_number].hotspot;
 
-    const float vertexPositions[] = {
-        origin.x, origin.y, 0.0f, 1.0f,
-        target.x, origin.y, 0.0f, 1.0f,
-        target.x, target.y, 0.0f, 1.0f,
-        origin.x, target.y, 0.0f, 1.0f,
+    const double vertexPositions[] = {
+        origin.x, origin.y,
+        target.x, origin.y,
+        target.x, target.y,
+        origin.x, target.y,
     };
 
     static const float texturePositions[] = {
@@ -174,8 +174,8 @@ void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, co
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-    glVertexPointer(4, GL_FLOAT, 4*sizeof(float), vertexPositions);
-    glTexCoordPointer(2, GL_FLOAT, 2*sizeof(float), texturePositions);
+    glVertexPointer(2, GL_DOUBLE, 2*sizeof(*vertexPositions), vertexPositions);
+    glTexCoordPointer(2, GL_FLOAT, 2*sizeof(*texturePositions), texturePositions);
 
     glDrawArrays(GL_QUADS, 0, 4);
 

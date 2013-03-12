@@ -23,11 +23,11 @@ void SolidRectangle::Draw(const Geometry& modifier, const VisualEffect& effect) 
     origin -= hotspot_;
     target -= hotspot_;
     
-    const float vertexPositions[] = {
-        origin.x, origin.y, 0.0f, 1.0f,
-        target.x, origin.y, 0.0f, 1.0f,
-        target.x, target.y, 0.0f, 1.0f,
-        origin.x, target.y, 0.0f, 1.0f,
+    const double vertexPositions[] = {
+        origin.x, origin.y,
+        target.x, origin.y,
+        target.x, target.y,
+        origin.x, target.y,
     };
 
     double M[16];
@@ -41,7 +41,7 @@ void SolidRectangle::Draw(const Geometry& modifier, const VisualEffect& effect) 
     glDisable(GL_TEXTURE_2D);
     glEnableClientState(GL_VERTEX_ARRAY);
 
-    glVertexPointer(4, GL_FLOAT, 4*sizeof(float), vertexPositions);
+    glVertexPointer(2, GL_DOUBLE, 2*sizeof(*vertexPositions), vertexPositions);
 
     glDrawArrays(GL_QUADS, 0, 4);
 
