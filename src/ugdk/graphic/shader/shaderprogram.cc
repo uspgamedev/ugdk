@@ -19,6 +19,10 @@ ShaderProgram::~ShaderProgram() {
     glDeleteProgram(id_);
 }
 
+unsigned int ShaderProgram::UniformLocation(const std::string& name) const{
+    return glGetUniformLocation(id(), name.c_str());
+}
+
 bool ShaderProgram::IsValid() const {
     return glIsProgram(id_) == GL_TRUE;
 }

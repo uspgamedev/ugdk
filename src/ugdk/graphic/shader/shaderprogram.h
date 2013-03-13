@@ -1,6 +1,7 @@
 #ifndef UGDK_GRAPHIC_SHADER_SHADERPROGRAM_H_
 #define UGDK_GRAPHIC_SHADER_SHADERPROGRAM_H_
 
+#include <string>
 #include <ugdk/base/types.h>
 #include <ugdk/graphic.h>
 
@@ -14,7 +15,8 @@ public:
     ~ShaderProgram();
 
     unsigned int id() const { return id_; }
-
+    
+    unsigned int UniformLocation(const std::string& name) const;
     bool IsValid() const;
     void AttachShader(const Shader& shader);
     bool SetupProgram();
