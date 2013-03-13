@@ -15,7 +15,8 @@ public:
     ~ShaderProgram();
 
     unsigned int id() const { return id_; }
-    
+    unsigned int matrix_location() const { return matrix_location_; }
+
     unsigned int UniformLocation(const std::string& name) const;
     bool IsValid() const;
     void AttachShader(const Shader& shader);
@@ -23,6 +24,7 @@ public:
 
   private:
     unsigned int id_;
+    unsigned int matrix_location_;
 };
 
 } // namespace ugdk

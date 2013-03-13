@@ -44,6 +44,8 @@ bool ShaderProgram::SetupProgram() {
         glGetProgramInfoLog(id_, infoLogLength, NULL, strInfoLog);
         fprintf(stderr, "Linker failure: %s\n", strInfoLog);
         delete[] strInfoLog;
+    } else {
+        matrix_location_ = UniformLocation("geometry_matrix");
     }
     return status == GL_TRUE;
 }
