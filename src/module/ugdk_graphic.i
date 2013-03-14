@@ -20,9 +20,6 @@
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/opengl/shader.h>
-#include <ugdk/graphic/opengl/shaderprogram.h>
-#include <ugdk/graphic/opengl/vertexbuffer.h>
 
 %}
 
@@ -56,6 +53,7 @@
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_drawable") <ugdk/graphic/drawable/text.h> //this needs to go after the include drawable.h
 
+%include <ugdk/graphic.h>
 %include <ugdk/graphic/texture.h>
 %include <ugdk/graphic/font.h>
 %include <ugdk/graphic/light.h>
@@ -65,9 +63,6 @@ enable_disown(ugdk::graphic::Drawable* drawable)
 disable_disown(ugdk::graphic::Drawable* drawable)
 disable_disown(ugdk::graphic::Node* new_child)
 %include <ugdk/graphic/spritesheet.h>
-
-%include <ugdk/graphic/shader/shader.h>
-%include <ugdk/graphic/shader/shaderprogram.h>
 
 %include <ugdk/graphic/textmanager.h>
 %include <ugdk/graphic/videomanager.h>
@@ -84,10 +79,6 @@ namespace graphic {
     export_class(Spritesheet)
     export_class(TextManager)
     export_class(VideoManager)
-	namespace opengl {
-		export_class(Shader)
-		export_class(ShaderProgram)
-	}
 }
 }
 

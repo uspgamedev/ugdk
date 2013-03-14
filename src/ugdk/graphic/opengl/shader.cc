@@ -43,7 +43,7 @@ bool Shader::CompileSource(const char* source) {
 }
 
 bool Shader::CompileFile(const std::string& file) {
-    std::ifstream in(file, std::ios::in | std::ios::binary);
+    std::ifstream in(file.c_str(), std::ios::in | std::ios::binary);
     if(!in) return false;
     std::ostringstream contents;
     contents << in.rdbuf();
