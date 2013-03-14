@@ -21,6 +21,7 @@ public:
 
     GLuint UniformLocation(const std::string& name) const;
     void SendGeometry(const ugdk::graphic::Geometry&) const;
+    void SendTexture(GLint slot, const Texture* texture) const;
 
     bool IsValid() const;
     void AttachShader(const Shader& shader);
@@ -31,6 +32,7 @@ public:
     static GLuint on_use_;
     GLuint id_;
     GLuint matrix_location_;
+    GLuint texture_location_;
 };
 
 } // namespace opengl

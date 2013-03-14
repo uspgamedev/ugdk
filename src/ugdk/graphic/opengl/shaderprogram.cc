@@ -3,6 +3,7 @@
 #include <cstdio>
 
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/opengl/shader.h>
 
 namespace ugdk {
@@ -26,6 +27,13 @@ void ShaderProgram::SendGeometry(const ugdk::graphic::Geometry& geometry) const 
     float M[16];
     geometry.AsMatrix4x4(M);
     glUniformMatrix4fv(matrix_location_, 1, GL_FALSE, M);
+}
+    
+void ShaderProgram::SendTexture(GLint slot, const Texture* texture) const {
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D + slot, texture->gltexture());
+    // Set our "myTextureSampler" sampler to user Texture Unit 0
+    glUniform1i(texture_location_, slot);
 }
 
 bool ShaderProgram::IsValid() const {
@@ -51,6 +59,7 @@ bool ShaderProgram::SetupProgram() {
         delete[] strInfoLog;
     } else {
         matrix_location_ = UniformLocation("geometry_matrix");
+        texture_location_ = UniformLocation("drawable_texture");
     }
     return status == GL_TRUE;
 }
