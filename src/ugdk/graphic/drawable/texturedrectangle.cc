@@ -69,11 +69,8 @@ void TexturedRectangle::Draw(const Geometry& modifier, const VisualEffect& effec
 
     glBindVertexArray(position_buffer_);
 
-    double M[16];
-    modifier.AsMatrix4x4(M);
     float Mf[16];
-    for(int i = 0; i < 16; ++i)
-        Mf[i] = float(M[i]);
+    modifier.AsMatrix4x4(Mf);
 
     glColor4dv(effect.color().val);
 

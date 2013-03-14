@@ -14,15 +14,13 @@ void Geometry::Compose(const Geometry& rhs) {
     scale_ = scale_.Scale(rhs.scale_); 
 }
 
-void Geometry::AsMatrix4x4(double M[16]) const {
-    double tx = offset_.x, ty = offset_.y;
-    double sx = scale_.x, sy = scale_.y;
+void Geometry::AsMatrix4x4(float M[16]) const {
     double s = sin(rotation_), c = cos(rotation_);
 
-    double R[16] = { sx*c, -sx*s, 0.0, 0.0, // First column
-                     sy*s,  sy*c, 0.0, 0.0,
-                      0.0,   0.0, 1.0, 0.0,
-                       tx,    ty, 0.0, 1.0 };
+    float R[16] = { float(scale_.x*c), -float(scale_.x*s), 0.0f, 0.0f, // First column
+                    float(scale_.y*s),  float(scale_.y*c), 0.0f, 0.0f,
+                          0.0f,        0.0f, 1.0f, 0.0f,
+                    float(offset_.x),   float(offset_.y), 0.0f, 1.0f };
     //glTranslated(tx, ty, 0.0);
     //glRotated(apply->rotation() * 57.2957795, 0.0, 0.0, 1.0);
     //glScaled(sx, sy, 0.0);

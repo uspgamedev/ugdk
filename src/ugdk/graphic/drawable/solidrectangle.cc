@@ -30,10 +30,10 @@ void SolidRectangle::Draw(const Geometry& modifier, const VisualEffect& effect) 
         origin.x, target.y,
     };
 
-    double M[16];
+    float M[16];
     modifier.AsMatrix4x4(M);
     glPushMatrix();
-    glLoadMatrixd(M);
+    glLoadMatrixf(M);
 
     Color color = effect.color() * color_;
     glColor4dv(color.val);

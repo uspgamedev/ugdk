@@ -146,9 +146,9 @@ const ugdk::math::Vector2D& Spritesheet::frame_size(size_t frame_number) const {
 
 void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry& modifier, const VisualEffect& effect) const {
     glPushMatrix();
-    double M[16];
+    float M[16];
     modifier.AsMatrix4x4(M);
-    glLoadMatrixd(M);
+    glLoadMatrixf(M);
     glColor4dv(effect.color().val);
 
     ugdk::math::Vector2D origin, target(frames_[frame_number].size);

@@ -19,10 +19,10 @@ void Light::Draw(const Geometry& modifier) {
 
     glColor3d(color_.r, color_.g, color_.b);
     
-    double M[16];
+    float M[16];
     modifier.AsMatrix4x4(M);
     glPushMatrix();
-    glLoadMatrixd(M);
+    glLoadMatrixf(M);
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, light_texture->gltexture());
