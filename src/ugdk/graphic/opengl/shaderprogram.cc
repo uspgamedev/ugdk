@@ -1,16 +1,15 @@
 #include <ugdk/graphic/opengl/shaderprogram.h>
 
 #include <cstdio>
-#include <cassert>
-#include "GL/glew.h"
-#define NO_SDL_GLEXT
-#include "SDL_opengl.h"
 
+#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/opengl/shader.h>
 
 namespace ugdk {
 namespace graphic {
 namespace opengl {
+
+GLuint ShaderProgram::on_use_ = 0;
 
 ShaderProgram::ShaderProgram() : id_(0) {
     id_ = glCreateProgram();
@@ -19,8 +18,14 @@ ShaderProgram::~ShaderProgram() {
     glDeleteProgram(id_);
 }
 
-unsigned int ShaderProgram::UniformLocation(const std::string& name) const{
+GLuint ShaderProgram::UniformLocation(const std::string& name) const{
     return glGetUniformLocation(id(), name.c_str());
+}
+
+void ShaderProgram::SendGeometry(const ugdk::graphic::Geometry& geometry) const {
+    float M[16];
+    geometry.AsMatrix4x4(M);
+    glUniformMatrix4fv(matrix_location_, 1, GL_FALSE, M);
 }
 
 bool ShaderProgram::IsValid() const {
@@ -50,6 +55,11 @@ bool ShaderProgram::SetupProgram() {
     return status == GL_TRUE;
 }
 
+void ShaderProgram::Use() const {
+    if(on_use_ == id_) return;
+    on_use_ = id_;
+    glUseProgram(id_);
+}
 
 } // namespace ugdk
 } // namespace graphic

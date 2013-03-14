@@ -1,7 +1,8 @@
 #ifndef UGDK_GRAPHIC_OPENGL_SHADER_H_
 #define UGDK_GRAPHIC_OPENGL_SHADER_H_
 
-#include <ugdk/base/types.h>
+#include "GL/glew.h"
+#define NO_SDL_GLEXT
 
 namespace ugdk {
 namespace graphic {
@@ -9,16 +10,16 @@ namespace opengl {
 
 class Shader {
   public:
-    Shader(unsigned int shaderType);
+    Shader(GLuint shaderType);
     ~Shader();
 
-    unsigned int id() const { return id_; }
+    GLuint id() const { return id_; }
 
     bool CompileSource(const char* source);
 
   protected:
-    unsigned int id_;
-    unsigned int type_;
+    GLuint id_;
+    GLuint type_;
 };
 
 } // namespace ugdk

@@ -1,9 +1,6 @@
 #include <ugdk/graphic/opengl/shader.h>
 
 #include <cstdio>
-#include "GL/glew.h"
-#define NO_SDL_GLEXT
-#include "SDL_opengl.h"
 
 namespace ugdk {
 namespace graphic {

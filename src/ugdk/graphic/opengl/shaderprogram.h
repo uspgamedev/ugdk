@@ -2,7 +2,9 @@
 #define UGDK_GRAPHIC_OPENGL_SHADERPROGRAM_H_
 
 #include <string>
-#include <ugdk/base/types.h>
+#include "GL/glew.h"
+#define NO_SDL_GLEXT
+
 #include <ugdk/graphic.h>
 
 namespace ugdk {
@@ -14,17 +16,21 @@ public:
     ShaderProgram();
     ~ShaderProgram();
 
-    unsigned int id() const { return id_; }
-    unsigned int matrix_location() const { return matrix_location_; }
+    GLuint id() const { return id_; }
+    GLuint matrix_location() const { return matrix_location_; }
 
-    unsigned int UniformLocation(const std::string& name) const;
+    GLuint UniformLocation(const std::string& name) const;
+    void SendGeometry(const ugdk::graphic::Geometry&) const;
+
     bool IsValid() const;
     void AttachShader(const Shader& shader);
     bool SetupProgram();
+    void Use() const;
 
   private:
-    unsigned int id_;
-    unsigned int matrix_location_;
+    static GLuint on_use_;
+    GLuint id_;
+    GLuint matrix_location_;
 };
 
 } // namespace ugdk
