@@ -18,7 +18,7 @@ static GLuint calculate_used_attrib(VertexType type) {
     case VERTEX: return 0;
     case TEXTURE: return 1;
     case COLOR: return 2;
-    default: return ~0;
+    default: return ~0U;
     }
 }
 

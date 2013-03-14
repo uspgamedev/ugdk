@@ -35,27 +35,32 @@ opengl::ShaderProgram* MYSHADER() {
 
 #define NEW_LINE "\n"
         vertex_shader.CompileSource(
-"#version 330 core" NEW_LINE
-
-"layout (location = 0) in vec2 position;" NEW_LINE
-"layout (location = 1) in vec2 vertexUV;" NEW_LINE
-"out vec2 UV;" NEW_LINE
-"uniform mat4 geometry_matrix;" NEW_LINE
-
-"void main(void) { " NEW_LINE
-	"gl_Position = geometry_matrix * vec4(position, 0, 0);" NEW_LINE
-    "UV = vertexUV;" NEW_LINE
+"#version 330 core" "\n"
+// Input vertex data, different for all executions of this shader.
+"layout(location = 0) in vec2 vertexPosition_modelspace;" "\n"
+"layout(location = 1) in vec2 vertexUV;" "\n"
+// Output data ; will be interpolated for each fragment.
+"out vec2 UV;" "\n"
+// Values that stay constant for the whole mesh.
+"uniform mat4 geometry_matrix;" "\n"
+"void main() {" "\n"
+	// Output position of the vertex, in clip space : MVP * position
+"	gl_Position =  geometry_matrix * vec4(vertexPosition_modelspace,0,1);" "\n"
+	// UV of the vertex. No special space for this one.
+"	UV = vertexUV;" "\n"
 "}");
 
         fragment_shader.CompileSource(
-"#version 330 core" NEW_LINE
-
-"out vec4 outputColor;" NEW_LINE
-"in vec2 UV;" NEW_LINE
-"uniform sampler2D texture_id;" NEW_LINE
-
-"void main(void) {" NEW_LINE
-"   outputColor = texture(texture_id, UV) + vec4(0.2, 0.2, 0.2, 0.2);" NEW_LINE
+"#version 330 core" "\n"
+// Interpolated values from the vertex shaders
+"in vec2 UV;" "\n"
+// Ouput data
+"out vec4 color;" "\n"
+// Values that stay constant for the whole mesh.
+"uniform sampler2D drawable_texture;" "\n"
+"void main() {" "\n"
+	// Output color = color of the texture at the specified UV
+"	color = texture2D( drawable_texture, UV );" "\n"
 "}");
 
         myprogram = new opengl::ShaderProgram;
@@ -88,8 +93,6 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
         }
 
     default_shader_ = MYSHADER();
-
-    glUseProgram(default_shader_->id());
         
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
