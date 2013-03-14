@@ -32,6 +32,7 @@ class VideoManager;
 namespace opengl {
 class Shader;
 class ShaderProgram;
+class VertexBuffer;
 }  // namespace opengl
 
 }  // namespace graphic

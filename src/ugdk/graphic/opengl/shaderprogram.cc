@@ -5,12 +5,22 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/opengl/shader.h>
+#include <ugdk/graphic/opengl/vertexbuffer.h>
 
 namespace ugdk {
 namespace graphic {
 namespace opengl {
 
 GLuint ShaderProgram::on_use_ = 0;
+
+static GLuint calculate_used_attrib(VertexType type) {
+    switch(type) {
+    case VERTEX: return 0;
+    case TEXTURE: return 1;
+    case COLOR: return 2;
+    default: return ~0;
+    }
+}
 
 ShaderProgram::ShaderProgram() : id_(0) {
     id_ = glCreateProgram();
@@ -34,6 +44,22 @@ void ShaderProgram::SendTexture(GLint slot, const Texture* texture) const {
     glBindTexture(GL_TEXTURE_2D + slot, texture->gltexture());
     // Set our "myTextureSampler" sampler to user Texture Unit 0
     glUniform1i(texture_location_, slot);
+}
+
+GLuint ShaderProgram::SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size) const {
+    VertexBuffer::Bind bind(*buffer);
+
+    GLuint used_attrib(calculate_used_attrib(type));
+    glEnableVertexAttribArray(used_attrib);
+    glVertexAttribPointer(
+        used_attrib,        // attribute. No particular reason for 0, but must match the layout in the shader.
+        size,               // size
+        GL_FLOAT,           // type
+        GL_FALSE,           // normalized?
+        0,                  // stride
+        buffer->getPointer(offset) // array buffer offset
+    );
+    return used_attrib;
 }
 
 bool ShaderProgram::IsValid() const {

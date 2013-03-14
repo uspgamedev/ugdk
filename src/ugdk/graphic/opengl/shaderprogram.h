@@ -11,8 +11,12 @@ namespace ugdk {
 namespace graphic {
 namespace opengl {
 
+enum VertexType {
+    VERTEX, TEXTURE, COLOR
+};
+
 class ShaderProgram {
-public:
+  public:
     ShaderProgram();
     ~ShaderProgram();
 
@@ -22,6 +26,7 @@ public:
     GLuint UniformLocation(const std::string& name) const;
     void SendGeometry(const ugdk::graphic::Geometry&) const;
     void SendTexture(GLint slot, const Texture* texture) const;
+    GLuint SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2) const;
 
     bool IsValid() const;
     void AttachShader(const Shader& shader);
