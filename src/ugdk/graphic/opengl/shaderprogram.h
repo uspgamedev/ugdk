@@ -33,8 +33,8 @@ public:
     GLuint matrix_location_;
 };
 
-} // namespace ugdk
-} // namespace graphic
 } // namespace opengl
+} // namespace graphic
+} // namespace ugdk
 
 #endif // UGDK_GRAPHIC_SHADER_SHADERPROGRAM_H_

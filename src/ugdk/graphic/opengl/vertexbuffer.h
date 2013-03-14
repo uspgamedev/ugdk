@@ -28,12 +28,9 @@
 // OpenGL
 #include "GL/glew.h"
 
-namespace love
-{
-namespace graphics
-{
-namespace opengl
-{
+namespace ugdk {
+namespace graphic {
+namespace opengl {
 	/**
 	 * VertexBuffer is an abstraction over VBOs (Vertex Buffer Objecys), which
 	 * falls back to regular vertex arrays if VBOs are not supported.
@@ -315,8 +312,8 @@ namespace opengl
 		GLenum mapped_access;
 	};
 
-} // opengl
-} // graphics
-} // love
+} // namespace opengl
+} // namespace graphic
+} // namespace ugdk
 
 #endif // LOVE_GRAPHICS_OPENGL_SPRITE_BATCH_H

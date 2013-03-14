@@ -61,6 +61,6 @@ void ShaderProgram::Use() const {
     glUseProgram(id_);
 }
 
-} // namespace ugdk
-} // namespace graphic
 } // namespace opengl
+} // namespace graphic
+} // namespace ugdk

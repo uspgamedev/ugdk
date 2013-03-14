@@ -51,6 +51,6 @@ bool Shader::CompileFile(const std::string& file) {
     return CompileSource(contents.str());
 }
 
-} // namespace ugdk
+} // namespace opengl
 } // namespace graphic
-} // namespace opengl 
+} // namespace ugdk

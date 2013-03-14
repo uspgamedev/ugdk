@@ -18,7 +18,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 **/
 
-#include "VertexBuffer.h"
+#include "vertexbuffer.h"
 
 #include "Exception.h"
 //#include <common/config.h>
@@ -26,12 +26,9 @@
 #include <cstdlib>
 #include <cstring>
 
-namespace love
-{
-namespace graphics
-{
-namespace opengl
-{
+namespace ugdk {
+namespace graphic {
+namespace opengl {
 	// VertexBuffer
 
 	VertexBuffer *VertexBuffer::Create(size_t size, GLenum target, GLenum usage)
@@ -227,6 +224,6 @@ namespace opengl
 		vbo = 0;
 	}
 
-} // opengl
-} // graphics
-} // love
+} // namespace opengl
+} // namespace graphic
+} // namespace ugdk
