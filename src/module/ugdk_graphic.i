@@ -20,8 +20,9 @@
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/shader/shader.h>
-#include <ugdk/graphic/shader/shaderprogram.h>
+#include <ugdk/graphic/opengl/shader.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/vertexbuffer.h>
 
 %}
 
@@ -83,7 +84,7 @@ namespace graphic {
     export_class(Spritesheet)
     export_class(TextManager)
     export_class(VideoManager)
-	namespace shader {
+	namespace opengl {
 		export_class(Shader)
 		export_class(ShaderProgram)
 	}

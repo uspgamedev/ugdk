@@ -116,6 +116,16 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     }
 
     SetVSync(settings_.vsync);
+
+    // We want the following properties to our display:
+    //   (0;0) is the top-left corner of the screen
+    //   (w;h) is the bottom-right corner of the screen
+    // Since by default, (0;0) is the center of the screen, with (-1;1) being 
+    // the top-left and (1;-1) the bottom-right, we must do the following:
+    //   - Offset it by (-1,1), correcting the origin
+    //   - Invert the y-axis, so it grows in the direction we expect
+    //   - Scale down by the (2/w;2/h), so it goes up to what we expect.
+    initial_geometry_ = Geometry(math::Vector2D(-1.0, 1.0), math::Vector2D(2.0/size.x, -2.0/size.y));
         
     //Set projection
     glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
@@ -140,7 +150,6 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
 
     video_size_ = size;
     settings_.fullscreen = fullscreen;
-    virtual_bounds_ = math::Frame(0, 0, video_size_.x, video_size_.y);
 
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
     InitializeLight();
@@ -231,7 +240,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     // Draw all the sprites from all scenes.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->Render(Geometry(), VisualEffect());
+            (*it)->content_node()->Render(initial_geometry_, VisualEffect());
 
     // Using the light texture, merge it into the screen.
     if(settings_.light_system)
