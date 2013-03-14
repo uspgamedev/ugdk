@@ -20,13 +20,26 @@ class ShaderProgram {
     ShaderProgram();
     ~ShaderProgram();
 
+    class BufferDataLocation {
+      public:
+        BufferDataLocation(const BufferDataLocation&);
+        ~BufferDataLocation();
+      
+      private:
+        BufferDataLocation(VertexType);
+        BufferDataLocation operator=(const BufferDataLocation&);
+
+        GLuint location_;
+        friend class ShaderProgram;
+    };
+
     GLuint id() const { return id_; }
     GLuint matrix_location() const { return matrix_location_; }
 
     GLuint UniformLocation(const std::string& name) const;
     void SendGeometry(const ugdk::graphic::Geometry&) const;
     void SendTexture(GLint slot, const Texture* texture) const;
-    GLuint SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2) const;
+    ShaderProgram::BufferDataLocation SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2) const;
 
     bool IsValid() const;
     void AttachShader(const Shader& shader);

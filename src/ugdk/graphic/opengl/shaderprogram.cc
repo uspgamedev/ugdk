@@ -13,13 +13,32 @@ namespace opengl {
 
 GLuint ShaderProgram::on_use_ = 0;
 
-static GLuint calculate_used_attrib(VertexType type) {
+ShaderProgram::BufferDataLocation::BufferDataLocation(VertexType type) {
     switch(type) {
-    case VERTEX: return 0;
-    case TEXTURE: return 1;
-    case COLOR: return 2;
-    default: return ~0U;
+    case VERTEX: 
+        location_ = 0; break;
+    case TEXTURE:
+        location_ = 1; break;
+    case COLOR:
+        location_ = 2; break;
+    default:
+        location_ = ~0U;
     }
+    if(location_ != ~0U) {
+        glEnableVertexAttribArray(location_);
+    }
+}
+
+ShaderProgram::BufferDataLocation::BufferDataLocation(const BufferDataLocation& other) {
+    location_ = other.location_;
+    const_cast<BufferDataLocation&>(other).location_ = ~0U;
+}
+
+ShaderProgram::BufferDataLocation::~BufferDataLocation() {
+    if(location_ != ~0U) {
+        glDisableVertexAttribArray(location_);
+    }
+    location_ = ~0U;
 }
 
 ShaderProgram::ShaderProgram() : id_(0) {
@@ -46,20 +65,19 @@ void ShaderProgram::SendTexture(GLint slot, const Texture* texture) const {
     glUniform1i(texture_location_, slot);
 }
 
-GLuint ShaderProgram::SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size) const {
+ShaderProgram::BufferDataLocation ShaderProgram::SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size) const {
     VertexBuffer::Bind bind(*buffer);
 
-    GLuint used_attrib(calculate_used_attrib(type));
-    glEnableVertexAttribArray(used_attrib);
+    BufferDataLocation location(type);
     glVertexAttribPointer(
-        used_attrib,        // attribute. No particular reason for 0, but must match the layout in the shader.
+        location.location_, // attribute. No particular reason for 0, but must match the layout in the shader.
         size,               // size
         GL_FLOAT,           // type
         GL_FALSE,           // normalized?
         0,                  // stride
         buffer->getPointer(offset) // array buffer offset
     );
-    return used_attrib;
+    return location;
 }
 
 bool ShaderProgram::IsValid() const {
