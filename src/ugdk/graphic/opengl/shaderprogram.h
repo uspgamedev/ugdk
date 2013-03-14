@@ -1,5 +1,5 @@
-#ifndef UGDK_GRAPHIC_SHADER_SHADERPROGRAM_H_
-#define UGDK_GRAPHIC_SHADER_SHADERPROGRAM_H_
+#ifndef UGDK_GRAPHIC_OPENGL_SHADERPROGRAM_H_
+#define UGDK_GRAPHIC_OPENGL_SHADERPROGRAM_H_
 
 #include <string>
 #include <ugdk/base/types.h>
@@ -7,7 +7,7 @@
 
 namespace ugdk {
 namespace graphic {
-namespace shader {
+namespace opengl {
 
 class ShaderProgram {
 public:
@@ -29,6 +29,6 @@ public:
 
 } // namespace ugdk
 } // namespace graphic
-} // namespace shader
+} // namespace opengl
 
 #endif // UGDK_GRAPHIC_SHADER_SHADERPROGRAM_H_

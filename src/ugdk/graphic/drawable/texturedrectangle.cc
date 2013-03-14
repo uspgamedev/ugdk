@@ -11,7 +11,7 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/graphic/shader/shaderprogram.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
 
 namespace ugdk {
 namespace graphic {

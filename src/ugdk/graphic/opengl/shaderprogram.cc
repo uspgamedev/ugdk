@@ -1,4 +1,4 @@
-#include <ugdk/graphic/shader/shaderprogram.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
 
 #include <cstdio>
 #include <cassert>
@@ -6,11 +6,11 @@
 #define NO_SDL_GLEXT
 #include "SDL_opengl.h"
 
-#include <ugdk/graphic/shader/shader.h>
+#include <ugdk/graphic/opengl/shader.h>
 
 namespace ugdk {
 namespace graphic {
-namespace shader {
+namespace opengl {
 
 ShaderProgram::ShaderProgram() : id_(0) {
     id_ = glCreateProgram();
@@ -53,4 +53,4 @@ bool ShaderProgram::SetupProgram() {
 
 } // namespace ugdk
 } // namespace graphic
-} // namespace shader
+} // namespace opengl

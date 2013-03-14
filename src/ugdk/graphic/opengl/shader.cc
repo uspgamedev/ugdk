@@ -1,4 +1,4 @@
-#include <ugdk/graphic/shader/shader.h>
+#include <ugdk/graphic/opengl/shader.h>
 
 #include <cstdio>
 #include "GL/glew.h"
@@ -7,7 +7,7 @@
 
 namespace ugdk {
 namespace graphic {
-namespace shader {
+namespace opengl {
 
 Shader::Shader(GLenum shaderType) : id_(0), type_(shaderType) {
     id_ = glCreateShader(shaderType);
@@ -45,4 +45,4 @@ bool Shader::CompileSource(const char* source) {
 
 } // namespace ugdk
 } // namespace graphic
-} // namespace shader
+} // namespace opengl 

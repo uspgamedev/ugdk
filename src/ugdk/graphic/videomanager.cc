@@ -16,8 +16,8 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/graphic/shader/shader.h>
-#include <ugdk/graphic/shader/shaderprogram.h>
+#include <ugdk/graphic/opengl/shader.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
 
 #define LN255 5.5412635451584261462455391880218
 
@@ -28,10 +28,10 @@ using std::string;
 
 static ugdk::math::Vector2D default_resolution(800.0, 600.0);
 
-shader::ShaderProgram* MYSHADER() {
-    static shader::ShaderProgram* myprogram = NULL;
+opengl::ShaderProgram* MYSHADER() {
+    static opengl::ShaderProgram* myprogram = NULL;
     if(!myprogram) {
-        shader::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
+        opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
 #define NEW_LINE "\n"
         vertex_shader.CompileSource(
@@ -58,7 +58,7 @@ shader::ShaderProgram* MYSHADER() {
 "   outputColor = texture(texture_id, UV) + vec4(0.2, 0.2, 0.2, 0.2);" NEW_LINE
 "}");
 
-        myprogram = new shader::ShaderProgram;
+        myprogram = new opengl::ShaderProgram;
 
         myprogram->AttachShader(vertex_shader);
         myprogram->AttachShader(fragment_shader);

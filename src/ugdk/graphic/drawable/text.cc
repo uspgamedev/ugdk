@@ -4,7 +4,7 @@
 #include "SDL_opengl.h"
 
 #include <ugdk/graphic/drawable/text.h>
-#include <ugdk/graphic/shader/shaderprogram.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
 
 #include <ugdk/base/engine.h>
 #include <ugdk/base/types.h>

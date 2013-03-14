@@ -29,10 +29,10 @@ class Spritesheet;
 class TextManager;
 class VideoManager;
 
-namespace shader {
+namespace opengl {
 class Shader;
 class ShaderProgram;
-}
+}  // namespace opengl
 
 }  // namespace graphic
 }  // namespace ugdk
