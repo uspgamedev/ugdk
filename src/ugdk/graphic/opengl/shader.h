@@ -1,6 +1,7 @@
 #ifndef UGDK_GRAPHIC_OPENGL_SHADER_H_
 #define UGDK_GRAPHIC_OPENGL_SHADER_H_
 
+#include <string>
 #include "GL/glew.h"
 #define NO_SDL_GLEXT
 
@@ -16,6 +17,10 @@ class Shader {
     GLuint id() const { return id_; }
 
     bool CompileSource(const char* source);
+    bool CompileSource(const std::string& source) {
+        return CompileSource(source.c_str());
+    }
+    bool CompileFile(const std::string& file);
 
   protected:
     GLuint id_;

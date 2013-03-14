@@ -1,6 +1,8 @@
 #include <ugdk/graphic/opengl/shader.h>
 
 #include <cstdio>
+#include <fstream>
+#include <sstream>
 
 namespace ugdk {
 namespace graphic {
@@ -38,6 +40,15 @@ bool Shader::CompileSource(const char* source) {
         delete[] strInfoLog;
     }
     return status == GL_TRUE;
+}
+
+bool Shader::CompileFile(const std::string& file) {
+    std::ifstream in(file, std::ios::in | std::ios::binary);
+    if(!in) return false;
+    std::ostringstream contents;
+    contents << in.rdbuf();
+    in.close();
+    return CompileSource(contents.str());
 }
 
 } // namespace ugdk
