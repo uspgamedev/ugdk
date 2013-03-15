@@ -137,7 +137,7 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     glMatrixMode( GL_PROJECTION );
 
     glLoadIdentity();
-    glOrtho( 0, size.x, size.y, 0, -1, 1 );
+    //glOrtho( 0, size.x, size.y, 0, -1, 1 );
 
     //Initialize modelview matrix
     glMatrixMode( GL_MODELVIEW );
@@ -255,7 +255,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->interface_node()->Render(Geometry(), VisualEffect());
+            (*it)->interface_node()->Render(initial_geometry_, VisualEffect());
 
 
     // Swap the buffers to show the backbuffer to the user.
