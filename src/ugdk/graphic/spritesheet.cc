@@ -1,3 +1,5 @@
+#include <GL/glew.h>
+#define NO_SDL_GLEXT
 #include <iostream>
 #include <cstring>
 #include <cmath>
@@ -12,9 +14,12 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/util/pathmanager.h>
+#include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/vertexbuffer.h>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>
@@ -123,6 +128,8 @@ void SpritesheetData::FillWithFramesizeFromAllFiles(int width, int height, const
 
 Spritesheet::Spritesheet(const SpritesheetData& data) {
     const std::list<SpritesheetData::SpritesheetFrame>& frames = data.frames();
+    vertexbuffer_ = createBuffer();
+    uvbuffer_ = createBuffer();
 
     std::list<SpritesheetData::SpritesheetFrame>::const_iterator it;
     GLuint id;
@@ -144,46 +151,43 @@ const ugdk::math::Vector2D& Spritesheet::frame_size(size_t frame_number) const {
     return frame_number < frames_.size() ? frames_[frame_number].size : invalid_size;
 }
 
-void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry& modifier, const VisualEffect& effect) const {
-    glPushMatrix();
-    float M[16];
-    modifier.AsMatrix4x4(M);
-    glLoadMatrixf(M);
-    glColor4dv(effect.color().val);
+void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry& geometry, const VisualEffect& effect) const {
+    // Use our shader
+    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
 
-    ugdk::math::Vector2D origin, target(frames_[frame_number].size);
-    origin -= hotspot + frames_[frame_number].hotspot;
-    target -= hotspot + frames_[frame_number].hotspot;
+    // Send our transformation to the currently bound shader, 
+    // in the "MVP" uniform
+    shader_use.SendGeometry(geometry * Geometry(-(hotspot + frames_[frame_number].hotspot), frames_[frame_number].size));
 
-    const double vertexPositions[] = {
-        origin.x, origin.y,
-        target.x, origin.y,
-        target.x, target.y,
-        origin.x, target.y,
-    };
+    // Bind our texture in Texture Unit 0
+    shader_use.SendTexture(0, frames_[frame_number].texture);
 
-    static const float texturePositions[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        1.0f, 1.0f,
-        0.0f, 1.0f
-    };
+    // 1rst attribute buffer : vertices
+    shader_use.SendVertexBuffer(vertexbuffer_, opengl::VERTEX, 0);
 
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, frames_[frame_number].texture->gltexture());
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    // 2nd attribute buffer : UVs
+    shader_use.SendVertexBuffer(uvbuffer_, opengl::TEXTURE, 0);
 
-    glVertexPointer(2, GL_DOUBLE, 2*sizeof(*vertexPositions), vertexPositions);
-    glTexCoordPointer(2, GL_FLOAT, 2*sizeof(*texturePositions), texturePositions);
-
-    glDrawArrays(GL_QUADS, 0, 4);
-
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-
-    glPopMatrix();
+    // Draw the triangle !
+    glDrawArrays(GL_QUADS, 0, 4); // 12*3 indices starting at 0 -> 12 triangles
 }
+
+opengl::VertexBuffer* Spritesheet::createBuffer() {
+    static const GLfloat buffer_data[] = { 
+        0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+    };
+    opengl::VertexBuffer* buffer = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+    {
+        opengl::VertexBuffer::Bind bind(*buffer);
+        opengl::VertexBuffer::Mapper mapper(*buffer);
+
+        GLfloat *indices = static_cast<GLfloat*>(mapper.get());
+        if (indices)
+            memcpy(indices, buffer_data, sizeof(buffer_data));
+    }
+    return buffer;
+}
+
 
 Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
     using script::VirtualObj;
