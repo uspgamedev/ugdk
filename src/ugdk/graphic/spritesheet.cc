@@ -159,6 +159,8 @@ void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, co
     // in the "MVP" uniform
     shader_use.SendGeometry(geometry * Geometry(-(hotspot + frames_[frame_number].hotspot), frames_[frame_number].size));
 
+    shader_use.SendEffect(effect);
+
     // Bind our texture in Texture Unit 0
     shader_use.SendTexture(0, frames_[frame_number].texture);
 

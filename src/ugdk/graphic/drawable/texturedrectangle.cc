@@ -27,13 +27,14 @@ TexturedRectangle::~TexturedRectangle() {
     delete uvbuffer_;
 }
 
-void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect&) const {
+void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     // Use our shader
     opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
     shader_use.SendGeometry(geometry * Geometry(math::Vector2D(-hotspot_), size_));
+    shader_use.SendEffect(effect);
 
     // Bind our texture in Texture Unit 0
     shader_use.SendTexture(0, texture_);

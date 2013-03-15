@@ -27,6 +27,7 @@ class ShaderProgram {
         ~Use();
     
         void SendGeometry(const ugdk::graphic::Geometry&);
+        void SendEffect(const ugdk::graphic::VisualEffect&);
         void SendTexture(GLint slot, const Texture* texture);
         void SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2);
 
@@ -46,6 +47,7 @@ class ShaderProgram {
   private:
     GLuint id_;
     GLuint matrix_location_;
+    GLuint color_location_;
     GLuint texture_location_;
 };
 

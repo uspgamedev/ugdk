@@ -58,6 +58,8 @@ namespace opengl {
 		 */
 		static VertexBuffer *Create(size_t size, GLenum target, GLenum usage);
 
+        static VertexBuffer *CreateDefault();
+
 		/**
 		 * Constructor.
 		 *

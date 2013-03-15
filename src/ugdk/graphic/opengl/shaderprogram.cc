@@ -3,6 +3,7 @@
 #include <cstdio>
 
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/opengl/Exception.h>
 #include <ugdk/graphic/opengl/shader.h>
@@ -42,6 +43,11 @@ void ShaderProgram::Use::SendGeometry(const ugdk::graphic::Geometry& geometry) {
     float M[16];
     geometry.AsMatrix4x4(M);
     glUniformMatrix4fv(program_->matrix_location_, 1, GL_FALSE, M);
+}
+        
+void ShaderProgram::Use::SendEffect(const ugdk::graphic::VisualEffect& effect) {
+    const Color& c = effect.color();
+    glUniform4f(program_->color_location_, c.r, c.g, c.b, c.a);
 }
     
 void ShaderProgram::Use::SendTexture(GLint slot, const Texture* texture) {
@@ -103,6 +109,7 @@ bool ShaderProgram::SetupProgram() {
     } else {
         matrix_location_ = UniformLocation("geometry_matrix");
         texture_location_ = UniformLocation("drawable_texture");
+        color_location_ = UniformLocation("effect_color");
     }
     glBindAttribLocation(id_, 0, "vertexPosition");
     glBindAttribLocation(id_, 1, "vertexUV");

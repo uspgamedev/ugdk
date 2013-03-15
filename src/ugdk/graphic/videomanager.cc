@@ -60,9 +60,10 @@ opengl::ShaderProgram* MYSHADER() {
 // Ouput data
 // Values that stay constant for the whole mesh.
 "uniform sampler2D drawable_texture;" "\n"
+"uniform vec4 effect_color;" "\n"
 "void main() {" "\n"
 	// Output color = color of the texture at the specified UV
-"	gl_FragColor = texture2D( drawable_texture, UV );" "\n"
+"	gl_FragColor = texture2D( drawable_texture, UV ) * effect_color;" "\n"
 "}");
 
         myprogram = new opengl::ShaderProgram;
@@ -189,7 +190,7 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
 
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->RenderLight(Geometry(), VisualEffect());
+            (*it)->content_node()->RenderLight(initial_geometry_, VisualEffect());
 
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
@@ -216,17 +217,17 @@ void VideoManager::BlendLightIntoBuffer() {
     glBlendFunc(GL_ZERO, GL_SRC_COLOR);
 
     glBegin( GL_QUADS );
-        glTexCoord2d(         0.0,          1.0 );
-        glVertex2d(           0.0,          0.0 );
+        glTexCoord2d( 0.0, 0.0 );
+        glVertex2d(  -1.0,-1.0 );
 
-        glTexCoord2d(         1.0,          1.0 );
-        glVertex2d(  video_size_.x,          0.0 );
+        glTexCoord2d( 1.0, 0.0 );
+        glVertex2d(   1.0,-1.0 );
 
-        glTexCoord2d(         1.0,          0.0 );
-        glVertex2d(  video_size_.x, video_size_.y );
+        glTexCoord2d( 1.0, 1.0 );
+        glVertex2d(   1.0, 1.0 );
 
-        glTexCoord2d(         0.0,          0.0 );
-        glVertex2d(           0.0, video_size_.y );
+        glTexCoord2d( 0.0, 1.0 );
+        glVertex2d(  -1.0, 1.0 );
     glEnd();
 
     glPopMatrix();

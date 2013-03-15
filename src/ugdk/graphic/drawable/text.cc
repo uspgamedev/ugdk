@@ -75,7 +75,6 @@ void Text::Draw(const Geometry& modifier, const VisualEffect& effect) const {
         
     Font::IdentType ident = font_->ident();
 
-    glUseProgram(0);
     glEnable(GL_TEXTURE_2D);
     glListBase(font_->id());
 
@@ -120,7 +119,6 @@ void Text::Draw(const Geometry& modifier, const VisualEffect& effect) const {
         glPopMatrix();
     }
     glPopMatrix();
-    glUseProgram(VIDEO_MANAGER()->default_shader()->id());
 }
 
 }  // namespace graphic

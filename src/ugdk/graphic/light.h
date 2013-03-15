@@ -24,6 +24,8 @@ class Light {
   private:
 	ugdk::math::Vector2D dimension_;
     Color color_;
+    opengl::VertexBuffer* vertexbuffer_;
+    opengl::VertexBuffer* uvbuffer_;
 };
 
 }  // namespace graphic

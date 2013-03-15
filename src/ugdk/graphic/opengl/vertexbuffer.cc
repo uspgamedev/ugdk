@@ -44,6 +44,22 @@ namespace opengl {
 			return new VertexArray(size, target, usage);
 		}
 	}
+    VertexBuffer *VertexBuffer::CreateDefault() {
+        static const GLfloat buffer_data[] = { 
+            0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+        };
+        opengl::VertexBuffer* buffer = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+        {
+            opengl::VertexBuffer::Bind bind(*buffer);
+            opengl::VertexBuffer::Mapper mapper(*buffer);
+
+            GLfloat *indices = static_cast<GLfloat*>(mapper.get());
+            if (indices)
+                memcpy(indices, buffer_data, sizeof(buffer_data));
+        }
+        return buffer;
+    }
+
 
 	VertexBuffer::VertexBuffer(size_t size, GLenum target, GLenum usage)
 		: size(size)

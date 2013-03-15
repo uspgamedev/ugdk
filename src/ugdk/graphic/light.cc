@@ -1,3 +1,5 @@
+#include <GL/glew.h>
+#define NO_SDL_GLEXT
 #include <ugdk/config/config.h>
 #include "SDL_opengl.h"
 
@@ -7,52 +9,38 @@
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/vertexbuffer.h>
 
 namespace ugdk {
 namespace graphic {
 
 Light::Light() : color_() {
+    vertexbuffer_ = opengl::VertexBuffer::CreateDefault();
+    uvbuffer_ = opengl::VertexBuffer::CreateDefault();
 }
 
-void Light::Draw(const Geometry& modifier) {
-	const Texture* light_texture = VIDEO_MANAGER()->light_texture();
+void Light::Draw(const Geometry& geometry) {
+    // Use our shader
+    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
 
-    glColor3d(color_.r, color_.g, color_.b);
-    
-    float M[16];
-    modifier.AsMatrix4x4(M);
-    glPushMatrix();
-    glLoadMatrixf(M);
+    // Send our transformation to the currently bound shader, 
+    // in the "MVP" uniform
+    shader_use.SendGeometry(geometry * Geometry(-dimension_, 2*dimension_));
+    shader_use.SendEffect(VisualEffect(color_));
 
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, light_texture->gltexture());
+    // Bind our texture in Texture Unit 0
+    shader_use.SendTexture(0, VIDEO_MANAGER()->light_texture());
 
-    const double vertexPositions[] = {
-        -dimension_.x, -dimension_.y,
-         dimension_.x, -dimension_.y,
-         dimension_.x,  dimension_.y,
-        -dimension_.x,  dimension_.y,
-    };
+    // 1rst attribute buffer : vertices
+    shader_use.SendVertexBuffer(vertexbuffer_, opengl::VERTEX, 0);
 
-    static const float texturePositions[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        1.0f, 1.0f,
-        0.0f, 1.0f
-    };
-    
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    // 2nd attribute buffer : UVs
+    shader_use.SendVertexBuffer(uvbuffer_, opengl::TEXTURE, 0);
 
-    glVertexPointer(2, GL_DOUBLE, 2*sizeof(*vertexPositions), vertexPositions);
-    glTexCoordPointer(2, GL_FLOAT, 2*sizeof(*texturePositions), texturePositions);
-
-    glDrawArrays(GL_QUADS, 0, 4);
-
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-
-    glPopMatrix();
+    // Draw the triangle !
+    glDrawArrays(GL_QUADS, 0, 4); // 12*3 indices starting at 0 -> 12 triangles
 }
 
 }  // namespace graphic
