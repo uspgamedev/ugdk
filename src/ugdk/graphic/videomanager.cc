@@ -35,32 +35,34 @@ opengl::ShaderProgram* MYSHADER() {
 
 #define NEW_LINE "\n"
         vertex_shader.CompileSource(
-"#version 330 core" "\n"
+"#version 120" "\n"
+"#define in attribute" "\n"
+"#define out varying" "\n"
 // Input vertex data, different for all executions of this shader.
-"layout(location = 0) in vec2 vertexPosition_modelspace;" "\n"
-"layout(location = 1) in vec2 vertexUV;" "\n"
+"in vec2 vertexPosition;" "\n"
+"in vec2 vertexUV;" "\n"
 // Output data ; will be interpolated for each fragment.
 "out vec2 UV;" "\n"
 // Values that stay constant for the whole mesh.
 "uniform mat4 geometry_matrix;" "\n"
 "void main() {" "\n"
 	// Output position of the vertex, in clip space : MVP * position
-"	gl_Position =  geometry_matrix * vec4(vertexPosition_modelspace,0,1);" "\n"
+"	gl_Position =  geometry_matrix * vec4(vertexPosition,0,1);" "\n"
 	// UV of the vertex. No special space for this one.
 "	UV = vertexUV;" "\n"
 "}");
 
         fragment_shader.CompileSource(
-"#version 330 core" "\n"
+"#version 120" "\n"
+"#define in varying" "\n"
 // Interpolated values from the vertex shaders
 "in vec2 UV;" "\n"
 // Ouput data
-"out vec4 color;" "\n"
 // Values that stay constant for the whole mesh.
 "uniform sampler2D drawable_texture;" "\n"
 "void main() {" "\n"
 	// Output color = color of the texture at the specified UV
-"	color = texture2D( drawable_texture, UV );" "\n"
+"	gl_FragColor = texture2D( drawable_texture, UV );" "\n"
 "}");
 
         myprogram = new opengl::ShaderProgram;

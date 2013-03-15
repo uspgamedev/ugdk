@@ -105,6 +105,8 @@ bool ShaderProgram::SetupProgram() {
         matrix_location_ = UniformLocation("geometry_matrix");
         texture_location_ = UniformLocation("drawable_texture");
     }
+    glBindAttribLocation(id_, 0, "vertexPosition");
+    glBindAttribLocation(id_, 1, "vertexUV");
     return status == GL_TRUE;
 }
 
