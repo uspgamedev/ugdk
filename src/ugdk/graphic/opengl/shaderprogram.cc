@@ -4,6 +4,7 @@
 
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
+#include <ugdk/graphic/opengl/Exception.h>
 #include <ugdk/graphic/opengl/shader.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 
@@ -11,35 +12,61 @@ namespace ugdk {
 namespace graphic {
 namespace opengl {
 
-GLuint ShaderProgram::on_use_ = 0;
+const ShaderProgram* ShaderProgram::Use::active_program_ = NULL;
 
-ShaderProgram::BufferDataLocation::BufferDataLocation(VertexType type) {
+GLuint get_vertextype_location(VertexType type) {
     switch(type) {
-    case VERTEX: 
-        location_ = 0; break;
-    case TEXTURE:
-        location_ = 1; break;
-    case COLOR:
-        location_ = 2; break;
-    default:
-        location_ = ~0U;
-    }
-    if(location_ != ~0U) {
-        glEnableVertexAttribArray(location_);
+    case VERTEX:  return 0;
+    case TEXTURE: return 1;
+    case COLOR:   return 2;
+    default:      return ~0U;
     }
 }
 
-ShaderProgram::BufferDataLocation::BufferDataLocation(const BufferDataLocation& other) {
-    location_ = other.location_;
-    const_cast<BufferDataLocation&>(other).location_ = ~0U;
+ShaderProgram::Use::Use(const ShaderProgram* program) : program_(program) {
+    if(active_program_)
+        throw love::Exception("There's already a shader program in use.");
+    active_program_ = program;
+    glUseProgram(program->id_);
 }
 
-ShaderProgram::BufferDataLocation::~BufferDataLocation() {
-    if(location_ != ~0U) {
-        glDisableVertexAttribArray(location_);
+ShaderProgram::Use::~Use() {
+    for(std::list<GLuint>::const_iterator it = active_attributes_.begin(); it != active_attributes_.end(); ++it) {
+        glDisableVertexAttribArray(*it);
     }
-    location_ = ~0U;
+    active_program_ = NULL;
+    glUseProgram(0);
 }
+
+void ShaderProgram::Use::SendGeometry(const ugdk::graphic::Geometry& geometry) {
+    float M[16];
+    geometry.AsMatrix4x4(M);
+    glUniformMatrix4fv(program_->matrix_location_, 1, GL_FALSE, M);
+}
+    
+void ShaderProgram::Use::SendTexture(GLint slot, const Texture* texture) {
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D + slot, texture->gltexture());
+    // Set our "myTextureSampler" sampler to user Texture Unit 0
+    glUniform1i(program_->texture_location_, slot);
+}
+
+void ShaderProgram::Use::SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size) {
+    VertexBuffer::Bind bind(*buffer);
+
+    GLuint location = get_vertextype_location(type);
+    glEnableVertexAttribArray(location);
+    glVertexAttribPointer(
+        location,           // attribute. No particular reason for 0, but must match the layout in the shader.
+        size,               // size
+        GL_FLOAT,           // type
+        GL_FALSE,           // normalized?
+        0,                  // stride
+        buffer->getPointer(offset) // array buffer offset
+    );
+    this->active_attributes_.push_back(location);
+}
+
 
 ShaderProgram::ShaderProgram() : id_(0) {
     id_ = glCreateProgram();
@@ -50,34 +77,6 @@ ShaderProgram::~ShaderProgram() {
 
 GLuint ShaderProgram::UniformLocation(const std::string& name) const{
     return glGetUniformLocation(id(), name.c_str());
-}
-
-void ShaderProgram::SendGeometry(const ugdk::graphic::Geometry& geometry) const {
-    float M[16];
-    geometry.AsMatrix4x4(M);
-    glUniformMatrix4fv(matrix_location_, 1, GL_FALSE, M);
-}
-    
-void ShaderProgram::SendTexture(GLint slot, const Texture* texture) const {
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D + slot, texture->gltexture());
-    // Set our "myTextureSampler" sampler to user Texture Unit 0
-    glUniform1i(texture_location_, slot);
-}
-
-ShaderProgram::BufferDataLocation ShaderProgram::SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size) const {
-    VertexBuffer::Bind bind(*buffer);
-
-    BufferDataLocation location(type);
-    glVertexAttribPointer(
-        location.location_, // attribute. No particular reason for 0, but must match the layout in the shader.
-        size,               // size
-        GL_FLOAT,           // type
-        GL_FALSE,           // normalized?
-        0,                  // stride
-        buffer->getPointer(offset) // array buffer offset
-    );
-    return location;
 }
 
 bool ShaderProgram::IsValid() const {
@@ -108,12 +107,6 @@ bool ShaderProgram::SetupProgram() {
     glBindAttribLocation(id_, 0, "vertexPosition");
     glBindAttribLocation(id_, 1, "vertexUV");
     return status == GL_TRUE;
-}
-
-void ShaderProgram::Use() const {
-    if(on_use_ == id_) return;
-    on_use_ = id_;
-    glUseProgram(id_);
 }
 
 } // namespace opengl

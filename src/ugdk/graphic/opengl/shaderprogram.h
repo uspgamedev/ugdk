@@ -2,6 +2,7 @@
 #define UGDK_GRAPHIC_OPENGL_SHADERPROGRAM_H_
 
 #include <string>
+#include <list>
 #include "GL/glew.h"
 #define NO_SDL_GLEXT
 
@@ -20,34 +21,29 @@ class ShaderProgram {
     ShaderProgram();
     ~ShaderProgram();
 
-    class BufferDataLocation {
+    class Use {
       public:
-        BufferDataLocation(const BufferDataLocation&);
-        ~BufferDataLocation();
-      
-      private:
-        BufferDataLocation(VertexType);
-        BufferDataLocation operator=(const BufferDataLocation&);
+        Use(const ShaderProgram* program);
+        ~Use();
+    
+        void SendGeometry(const ugdk::graphic::Geometry&);
+        void SendTexture(GLint slot, const Texture* texture);
+        void SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2);
 
-        GLuint location_;
-        friend class ShaderProgram;
+      private:
+        static const ShaderProgram* active_program_;
+        const ShaderProgram* program_;
+        std::list<GLuint> active_attributes_;
     };
 
     GLuint id() const { return id_; }
-    GLuint matrix_location() const { return matrix_location_; }
-
     GLuint UniformLocation(const std::string& name) const;
-    void SendGeometry(const ugdk::graphic::Geometry&) const;
-    void SendTexture(GLint slot, const Texture* texture) const;
-    ShaderProgram::BufferDataLocation SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2) const;
 
     bool IsValid() const;
     void AttachShader(const Shader& shader);
     bool SetupProgram();
-    void Use() const;
 
   private:
-    static GLuint on_use_;
     GLuint id_;
     GLuint matrix_location_;
     GLuint texture_location_;
