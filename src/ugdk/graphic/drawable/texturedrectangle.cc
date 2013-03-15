@@ -1,105 +1,67 @@
-#include <ugdk/config/config.h>
-#include "GL/glew.h"
+#include <GL/glew.h>
 #define NO_SDL_GLEXT
-#include "SDL_opengl.h"
-#include <cassert>
-
 #include <ugdk/graphic/drawable/texturedrectangle.h>
 
 #include <ugdk/base/engine.h>
-#include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/geometry.h>
-#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/texture.h>
+#include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/vertexbuffer.h>
+#include <ugdk/math/integer2D.h>
 
 namespace ugdk {
 namespace graphic {
 
-TexturedRectangle::TexturedRectangle(Texture* texture) 
-    :   size_(static_cast<double>(texture->width()), static_cast<double>(texture->height())), 
-        texture_(texture) {
-
-    glGenVertexArrays(1, &vertex_array_);
-    glGenBuffers(1, &position_buffer_);
-    glGenBuffers(1, &texture_buffer_);
+Rectangle::Rectangle(Texture* texture) : size_(math::Integer2D(texture->width(), texture->height())), texture_(texture) {
+    vertexbuffer_ = createBuffer();
+    uvbuffer_ = createBuffer();
 }
 
-TexturedRectangle::TexturedRectangle(Texture* texture, const ugdk::math::Vector2D& size) 
-    : size_(size), texture_(texture) {
-    glGenVertexArrays(1, &vertex_array_);
-    glGenBuffers(1, &position_buffer_);
-    glGenBuffers(1, &texture_buffer_);
+Rectangle::Rectangle(Texture* texture, const math::Vector2D& _size) : size_(_size), texture_(texture) {
+    vertexbuffer_ = createBuffer();
+    uvbuffer_ = createBuffer();
 }
 
-TexturedRectangle::~TexturedRectangle() {
-    glDeleteVertexArrays(1, &vertex_array_);
-    glDeleteBuffers(1, &position_buffer_);
-    glDeleteBuffers(1, &texture_buffer_);
+Rectangle::~Rectangle() {
+    delete vertexbuffer_;
+    delete uvbuffer_;
 }
 
-void TexturedRectangle::Update(double dt) {}
+void Rectangle::Draw(const Geometry& geometry, const VisualEffect&) const {
+    // Use our shader
+    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
 
-void TexturedRectangle::Draw(const Geometry& modifier, const VisualEffect& effect) const {
-    ugdk::math::Vector2D origin, target(size_);
+    // Send our transformation to the currently bound shader, 
+    // in the "MVP" uniform
+    shader_use.SendGeometry(geometry * Geometry(math::Vector2D(), size_));
 
-    origin -= hotspot_;
-    target -= hotspot_;
+    // Bind our texture in Texture Unit 0
+    shader_use.SendTexture(0, texture_);
 
-    const double vertexPositions[] = {
-        origin.x, origin.y,
-        target.x, origin.y,
-        target.x, target.y,
-        origin.x, target.y,
+    // 1rst attribute buffer : vertices
+    shader_use.SendVertexBuffer(vertexbuffer_, opengl::VERTEX, 0);
+
+    // 2nd attribute buffer : UVs
+    shader_use.SendVertexBuffer(uvbuffer_, opengl::TEXTURE, 0);
+
+    // Draw the triangle !
+    glDrawArrays(GL_QUADS, 0, 4); // 12*3 indices starting at 0 -> 12 triangles
+}
+
+opengl::VertexBuffer* Rectangle::createBuffer() {
+    static const GLfloat buffer_data[] = { 
+        0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
     };
+    opengl::VertexBuffer* buffer = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+    {
+        opengl::VertexBuffer::Bind bind(*buffer);
+        opengl::VertexBuffer::Mapper mapper(*buffer);
 
-    static const float texturePositions[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        1.0f, 1.0f,
-        0.0f, 1.0f
-    };
-
-    GLuint vertexbuffer;
-    glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPositions), vertexPositions, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, texture_buffer_);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(texturePositions), texturePositions, GL_STATIC_DRAW);
-
-
-    glBindVertexArray(position_buffer_);
-
-    float Mf[16];
-    modifier.AsMatrix4x4(Mf);
-
-    glColor4dv(effect.color().val);
-
-    GLuint shaderid = VIDEO_MANAGER()->default_shader()->id();
-    GLuint matrixpos = glGetUniformLocation(shaderid, "geometry_matrix"),
-           texturepod = glGetUniformLocation(shaderid, "texture_id");
-
-    glUniformMatrix4fv(matrixpos, 1, GL_FALSE, Mf);
-
-    glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0 + 0);
-    glBindTexture(GL_TEXTURE_2D, texture_->gltexture());
-    //glBindSampler(0, linearFiltering);
-    glUniform1i(texturepod, 0); // Texture unit 0 is for drawable texture
-
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
-    glVertexAttribPointer(0, 2, GL_DOUBLE, GL_FALSE, 0, 0);
-
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, texture_buffer_);
-    glVertexAttribPointer(1, 2, GL_FLOAT , GL_FALSE, 0, 0);
-
-    glDrawArrays(GL_QUADS, 0, 4);
-    
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-
-    glBindVertexArray(0);
+        GLfloat *indices = static_cast<GLfloat*>(mapper.get());
+        if (indices)
+            memcpy(indices, buffer_data, sizeof(buffer_data));
+    }
+    return buffer;
 }
 
 }  // namespace graphic
