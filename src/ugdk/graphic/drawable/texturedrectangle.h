@@ -7,11 +7,11 @@
 namespace ugdk {
 namespace graphic {
 
-class Rectangle : public Drawable {
+class TexturedRectangle : public Drawable {
   public:
-    Rectangle(Texture* texture);
-    Rectangle(Texture* texture, const math::Vector2D& _size);
-    ~Rectangle();
+    TexturedRectangle(Texture* texture);
+    TexturedRectangle(Texture* texture, const math::Vector2D& _size);
+    ~TexturedRectangle();
 
     void Update(double dt) {}
     void Draw(const Geometry& geometry, const VisualEffect&) const;
@@ -28,7 +28,6 @@ class Rectangle : public Drawable {
     opengl::VertexBuffer* vertexbuffer_;
     opengl::VertexBuffer* uvbuffer_;
 };
-typedef Rectangle TexturedRectangle;
 
 }  // namespace graphic
 }  // namespace ugdk

@@ -12,28 +12,28 @@
 namespace ugdk {
 namespace graphic {
 
-Rectangle::Rectangle(Texture* texture) : size_(math::Integer2D(texture->width(), texture->height())), texture_(texture) {
+TexturedRectangle::TexturedRectangle(Texture* texture) : size_(math::Integer2D(texture->width(), texture->height())), texture_(texture) {
     vertexbuffer_ = createBuffer();
     uvbuffer_ = createBuffer();
 }
 
-Rectangle::Rectangle(Texture* texture, const math::Vector2D& _size) : size_(_size), texture_(texture) {
+TexturedRectangle::TexturedRectangle(Texture* texture, const math::Vector2D& _size) : size_(_size), texture_(texture) {
     vertexbuffer_ = createBuffer();
     uvbuffer_ = createBuffer();
 }
 
-Rectangle::~Rectangle() {
+TexturedRectangle::~TexturedRectangle() {
     delete vertexbuffer_;
     delete uvbuffer_;
 }
 
-void Rectangle::Draw(const Geometry& geometry, const VisualEffect&) const {
+void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect&) const {
     // Use our shader
     opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
-    shader_use.SendGeometry(geometry * Geometry(math::Vector2D(), size_));
+    shader_use.SendGeometry(geometry * Geometry(math::Vector2D(-hotspot_), size_));
 
     // Bind our texture in Texture Unit 0
     shader_use.SendTexture(0, texture_);
@@ -48,7 +48,7 @@ void Rectangle::Draw(const Geometry& geometry, const VisualEffect&) const {
     glDrawArrays(GL_QUADS, 0, 4); // 12*3 indices starting at 0 -> 12 triangles
 }
 
-opengl::VertexBuffer* Rectangle::createBuffer() {
+opengl::VertexBuffer* TexturedRectangle::createBuffer() {
     static const GLfloat buffer_data[] = { 
         0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
     };
