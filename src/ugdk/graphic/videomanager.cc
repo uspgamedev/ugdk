@@ -12,11 +12,11 @@
 
 #include <ugdk/base/engine.h>
 #include <ugdk/action/scene.h>
+#include <ugdk/graphic/defaultshaders.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/graphic/opengl/shader.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 
 #define LN255 5.5412635451584261462455391880218
@@ -27,55 +27,6 @@ namespace graphic {
 using std::string;
 
 static ugdk::math::Vector2D default_resolution(800.0, 600.0);
-
-opengl::ShaderProgram* MYSHADER() {
-    static opengl::ShaderProgram* myprogram = NULL;
-    if(!myprogram) {
-        opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
-
-#define NEW_LINE "\n"
-        vertex_shader.CompileSource(
-"#version 120" "\n"
-"#define in attribute" "\n"
-"#define out varying" "\n"
-// Input vertex data, different for all executions of this shader.
-"in vec2 vertexPosition;" "\n"
-"in vec2 vertexUV;" "\n"
-// Output data ; will be interpolated for each fragment.
-"out vec2 UV;" "\n"
-// Values that stay constant for the whole mesh.
-"uniform mat4 geometry_matrix;" "\n"
-"void main() {" "\n"
-	// Output position of the vertex, in clip space : MVP * position
-"	gl_Position =  geometry_matrix * vec4(vertexPosition,0,1);" "\n"
-	// UV of the vertex. No special space for this one.
-"	UV = vertexUV;" "\n"
-"}");
-
-        fragment_shader.CompileSource(
-"#version 120" "\n"
-"#define in varying" "\n"
-// Interpolated values from the vertex shaders
-"in vec2 UV;" "\n"
-// Ouput data
-// Values that stay constant for the whole mesh.
-"uniform sampler2D drawable_texture;" "\n"
-"uniform vec4 effect_color;" "\n"
-"void main() {" "\n"
-	// Output color = color of the texture at the specified UV
-"	gl_FragColor = texture2D( drawable_texture, UV ) * effect_color;" "\n"
-"}");
-
-        myprogram = new opengl::ShaderProgram;
-
-        myprogram->AttachShader(vertex_shader);
-        myprogram->AttachShader(fragment_shader);
-
-        bool status = myprogram->SetupProgram();
-        assert(status);
-    }
-    return myprogram;
-}
 
 // Inicializa o gerenciador de video, definindo uma
 // resolucao para o programa. Retorna true em caso de
@@ -95,7 +46,7 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
             return false;
         }
 
-    default_shader_ = MYSHADER();
+    default_shader_ = InterfaceShader();
         
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
@@ -191,7 +142,7 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->RenderLight(initial_geometry_, VisualEffect());
-
+    
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, (GLsizei) video_size_.x, (GLsizei) video_size_.y);
