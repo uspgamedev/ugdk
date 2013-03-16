@@ -55,7 +55,7 @@ class Geometry {
         return result;
     }
 
-    void AsMatrix4x4(double M[16]) const;
+    void AsMatrix4x4(float M[16]) const;
 
   private:
     // Attributes

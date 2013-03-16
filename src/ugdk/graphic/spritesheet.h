@@ -64,7 +64,7 @@ class Spritesheet {
     virtual ~Spritesheet();
 
     size_t frame_count() const {
-        return frame_sizes_.size();
+        return frames_.size();
     }
 
     const ugdk::math::Vector2D& frame_size(size_t frame_number) const;
@@ -74,12 +74,18 @@ class Spritesheet {
     void Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry&, const VisualEffect&) const;
 
   private:
-    void createList(GLuint id, Texture* texture, const ugdk::math::Vector2D& hotspot);
+    opengl::VertexBuffer* createBuffer();
+    struct Frame {
+        Frame(Texture* _tex, const math::Vector2D& _size, const math::Vector2D& _hotspot)
+            : texture(_tex), size(_size), hotspot(_hotspot) {}
 
-    GLuint lists_base_;
+        Texture* texture;
+        math::Vector2D size, hotspot;
+    };
 
-    std::vector<Texture*> frames_;
-    std::vector<ugdk::math::Vector2D> frame_sizes_;
+    std::vector<Frame> frames_;
+    opengl::VertexBuffer* vertexbuffer_;
+    opengl::VertexBuffer* uvbuffer_;
 };
 
 Spritesheet* CreateSpritesheetFromTag(const std::string&);

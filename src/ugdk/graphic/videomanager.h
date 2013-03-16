@@ -8,6 +8,7 @@
 #include <ugdk/math/frame.h>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
+#include <ugdk/graphic/geometry.h>
 
 #define VIDEO_MANAGER() (ugdk::Engine::reference()->video_manager())
 
@@ -18,7 +19,7 @@ class VideoManager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : settings_(false, false, false), light_buffer_(NULL), light_texture_(NULL) {}
+    VideoManager() : settings_(false, false, false), light_buffer_(NULL), light_texture_(NULL), default_shader_(NULL) {}
     ~VideoManager() {}
 
     bool Initialize(const std::string& title, const ugdk::math::Vector2D& size, bool fullscreen, const std::string& icon);
@@ -35,11 +36,10 @@ class VideoManager {
     bool fullscreen() const { return settings_.fullscreen; }
     const std::string& title() const { return title_; }
     const Texture* light_texture() const { return light_texture_; }
-    math::Frame virtual_bounds() const { return virtual_bounds_; }
+    opengl::ShaderProgram* default_shader() { return default_shader_; }
 
   private:
     ugdk::math::Vector2D video_size_;
-    math::Frame virtual_bounds_;
     std::string title_;
 
     struct Settings {
@@ -52,6 +52,8 @@ class VideoManager {
 
     Texture* light_buffer_;
     Texture* light_texture_;
+    opengl::ShaderProgram* default_shader_;
+    Geometry initial_geometry_;
 
     void InitializeLight();
 

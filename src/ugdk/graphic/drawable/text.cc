@@ -1,10 +1,14 @@
 #include <ugdk/config/config.h>
+#include "GL/glew.h"
+#define NO_SDL_GLEXT
 #include "SDL_opengl.h"
 
 #include <ugdk/graphic/drawable/text.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
 
 #include <ugdk/base/engine.h>
 #include <ugdk/base/types.h>
+#include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/math/frame.h>
@@ -75,9 +79,9 @@ void Text::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     glListBase(font_->id());
 
     glPushMatrix();
-    double M[16];
+    float M[16];
     modifier.AsMatrix4x4(M);
-    glLoadMatrixd(M);
+    glLoadMatrixf(M);
     
     glTranslated(-hotspot_.x, -hotspot_.y, 0.0);
     

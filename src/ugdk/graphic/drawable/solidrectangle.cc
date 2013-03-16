@@ -19,24 +19,33 @@ void SolidRectangle::Update(double dt) {}
 
 void SolidRectangle::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     ugdk::math::Vector2D origin, target(size_);
+    
     origin -= hotspot_;
     target -= hotspot_;
+    
+    const double vertexPositions[] = {
+        origin.x, origin.y,
+        target.x, origin.y,
+        target.x, target.y,
+        origin.x, target.y,
+    };
 
-    double M[16];
+    float M[16];
     modifier.AsMatrix4x4(M);
     glPushMatrix();
-    glLoadMatrixd(M);
+    glLoadMatrixf(M);
 
     Color color = effect.color() * color_;
     glColor4dv(color.val);
-
+    
     glDisable(GL_TEXTURE_2D);
-    glBegin( GL_QUADS ); { //Start quad
-        glVertex2dv( origin.val );
-        glVertex2d(  target.x, origin.y );
-        glVertex2dv( target.val );
-        glVertex2d(  origin.x, target.y );
-    } glEnd();
+    glEnableClientState(GL_VERTEX_ARRAY);
+
+    glVertexPointer(2, GL_DOUBLE, 2*sizeof(*vertexPositions), vertexPositions);
+
+    glDrawArrays(GL_QUADS, 0, 4);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
 
     glPopMatrix();
 }

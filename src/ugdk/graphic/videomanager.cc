@@ -1,9 +1,14 @@
 #include <ugdk/graphic/videomanager.h>
 
 #include <cmath>
+#include <cassert>
 
+#include "GL/glew.h"
+#ifdef _WIN32
+#   include "GL/wglew.h"
+#endif
+#define NO_SDL_GLEXT
 #include "SDL_opengl.h"
-#include "SDL_image.h"
 
 #include <ugdk/base/engine.h>
 #include <ugdk/action/scene.h>
@@ -11,27 +16,8 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/pathmanager.h>
-
-// VSync
-//TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
-#ifdef WIN32
-    // VSync
-    #include <gl/GL.h>
-    #include "wglext.h"
-    typedef BOOL (APIENTRY *PFNWGLSWAPINTERVALFARPROC)( int );
-    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = NULL;
-#endif
-
-static void InitializeExtensions() {
-    static bool initialized = false;
-    if(initialized) return;
-    
-    initialized = true;
-#ifdef WIN32
-    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC) wglGetProcAddress( "wglSwapIntervalEXT" );
-#endif
-}
-
+#include <ugdk/graphic/opengl/shader.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
 
 #define LN255 5.5412635451584261462455391880218
 
@@ -41,6 +27,55 @@ namespace graphic {
 using std::string;
 
 static ugdk::math::Vector2D default_resolution(800.0, 600.0);
+
+opengl::ShaderProgram* MYSHADER() {
+    static opengl::ShaderProgram* myprogram = NULL;
+    if(!myprogram) {
+        opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
+
+#define NEW_LINE "\n"
+        vertex_shader.CompileSource(
+"#version 120" "\n"
+"#define in attribute" "\n"
+"#define out varying" "\n"
+// Input vertex data, different for all executions of this shader.
+"in vec2 vertexPosition;" "\n"
+"in vec2 vertexUV;" "\n"
+// Output data ; will be interpolated for each fragment.
+"out vec2 UV;" "\n"
+// Values that stay constant for the whole mesh.
+"uniform mat4 geometry_matrix;" "\n"
+"void main() {" "\n"
+	// Output position of the vertex, in clip space : MVP * position
+"	gl_Position =  geometry_matrix * vec4(vertexPosition,0,1);" "\n"
+	// UV of the vertex. No special space for this one.
+"	UV = vertexUV;" "\n"
+"}");
+
+        fragment_shader.CompileSource(
+"#version 120" "\n"
+"#define in varying" "\n"
+// Interpolated values from the vertex shaders
+"in vec2 UV;" "\n"
+// Ouput data
+// Values that stay constant for the whole mesh.
+"uniform sampler2D drawable_texture;" "\n"
+"uniform vec4 effect_color;" "\n"
+"void main() {" "\n"
+	// Output color = color of the texture at the specified UV
+"	gl_FragColor = texture2D( drawable_texture, UV ) * effect_color;" "\n"
+"}");
+
+        myprogram = new opengl::ShaderProgram;
+
+        myprogram->AttachShader(vertex_shader);
+        myprogram->AttachShader(fragment_shader);
+
+        bool status = myprogram->SetupProgram();
+        assert(status);
+    }
+    return myprogram;
+}
 
 // Inicializa o gerenciador de video, definindo uma
 // resolucao para o programa. Retorna true em caso de
@@ -53,20 +88,15 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
     
     if(icon.length() > 0)
         SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
-    
+       
     if(ChangeResolution(size, fullscreen) == false)
         if(ChangeResolution(default_resolution, false) == false) {
             /* TODO: insert error message here. */
             return false;
         }
-    
-    InitializeExtensions();
 
-    /*GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        // TODO: check errors with glew
-    }*/
-    
+    default_shader_ = MYSHADER();
+        
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
     /*if(GLEW_ARB_framebuffer_object) {
@@ -85,14 +115,30 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == NULL)
         return false;
       
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {
+        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
+        return false;
+    }
+
     SetVSync(settings_.vsync);
+
+    // We want the following properties to our display:
+    //   (0;0) is the top-left corner of the screen
+    //   (w;h) is the bottom-right corner of the screen
+    // Since by default, (0;0) is the center of the screen, with (-1;1) being 
+    // the top-left and (1;-1) the bottom-right, we must do the following:
+    //   - Offset it by (-1,1), correcting the origin
+    //   - Invert the y-axis, so it grows in the direction we expect
+    //   - Scale down by the (2/w;2/h), so it goes up to what we expect.
+    initial_geometry_ = Geometry(math::Vector2D(-1.0, 1.0), math::Vector2D(2.0/size.x, -2.0/size.y));
         
     //Set projection
     glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
     glMatrixMode( GL_PROJECTION );
 
     glLoadIdentity();
-    glOrtho( 0, size.x, size.y, 0, -1, 1 );
+    //glOrtho( 0, size.x, size.y, 0, -1, 1 );
 
     //Initialize modelview matrix
     glMatrixMode( GL_MODELVIEW );
@@ -110,7 +156,6 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
 
     video_size_ = size;
     settings_.fullscreen = fullscreen;
-    virtual_bounds_ = math::Frame(0, 0, video_size_.x, video_size_.y);
 
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
     InitializeLight();
@@ -128,9 +173,10 @@ bool VideoManager::Release() {
 
 void VideoManager::SetVSync(const bool active) {
     settings_.vsync = active;
-    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
-#ifdef WIN32
-    if(wglSwapIntervalEXT != NULL) wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
+    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions.
+#ifdef _WIN32
+    if(WGL_EXT_swap_control)
+        wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
 #endif
 }
 
@@ -144,7 +190,7 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
 
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->RenderLight(Geometry(), VisualEffect());
+            (*it)->content_node()->RenderLight(initial_geometry_, VisualEffect());
 
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
@@ -171,17 +217,17 @@ void VideoManager::BlendLightIntoBuffer() {
     glBlendFunc(GL_ZERO, GL_SRC_COLOR);
 
     glBegin( GL_QUADS );
-        glTexCoord2d(         0.0,          1.0 );
-        glVertex2d(           0.0,          0.0 );
+        glTexCoord2d( 0.0, 0.0 );
+        glVertex2d(  -1.0,-1.0 );
 
-        glTexCoord2d(         1.0,          1.0 );
-        glVertex2d(  video_size_.x,          0.0 );
+        glTexCoord2d( 1.0, 0.0 );
+        glVertex2d(   1.0,-1.0 );
 
-        glTexCoord2d(         1.0,          0.0 );
-        glVertex2d(  video_size_.x, video_size_.y );
+        glTexCoord2d( 1.0, 1.0 );
+        glVertex2d(   1.0, 1.0 );
 
-        glTexCoord2d(         0.0,          0.0 );
-        glVertex2d(           0.0, video_size_.y );
+        glTexCoord2d( 0.0, 1.0 );
+        glVertex2d(  -1.0, 1.0 );
     glEnd();
 
     glPopMatrix();
@@ -200,7 +246,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     // Draw all the sprites from all scenes.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->Render(Geometry(), VisualEffect());
+            (*it)->content_node()->Render(initial_geometry_, VisualEffect());
 
     // Using the light texture, merge it into the screen.
     if(settings_.light_system)
@@ -210,7 +256,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->interface_node()->Render(Geometry(), VisualEffect());
+            (*it)->interface_node()->Render(initial_geometry_, VisualEffect());
 
 
     // Swap the buffers to show the backbuffer to the user.

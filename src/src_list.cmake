@@ -63,6 +63,14 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/light.h 
     ./src/ugdk/graphic/node.cc 
     ./src/ugdk/graphic/node.h 
+    ./src/ugdk/graphic/opengl/Exception.cc 
+    ./src/ugdk/graphic/opengl/Exception.h 
+    ./src/ugdk/graphic/opengl/shader.cc 
+    ./src/ugdk/graphic/opengl/shader.h 
+    ./src/ugdk/graphic/opengl/shaderprogram.cc 
+    ./src/ugdk/graphic/opengl/shaderprogram.h 
+    ./src/ugdk/graphic/opengl/vertexbuffer.cc 
+    ./src/ugdk/graphic/opengl/vertexbuffer.h 
     ./src/ugdk/graphic/spritesheet.cc 
     ./src/ugdk/graphic/spritesheet.h 
     ./src/ugdk/graphic/textmanager.cc 
