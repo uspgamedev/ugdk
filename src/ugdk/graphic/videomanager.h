@@ -58,7 +58,6 @@ class VideoManager {
     void InitializeLight();
 
     void mergeLights(const std::list<action::Scene*>& scene_list);
-    void BlendLightIntoBuffer();
 };
 
 }  // namespace graphic

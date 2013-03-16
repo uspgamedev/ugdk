@@ -154,57 +154,30 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void VideoManager::BlendLightIntoBuffer() {
-    // BIND DA LIGHT TEXTURE. IT'S SO AWESOME
-    glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
-
-    glPushMatrix();
-    glLoadIdentity();
-
-    // TODO: check why the hell when using 
-    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // Sometimes a light sets the entire scene to that color.
-
-    glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-
-    glBegin( GL_QUADS );
-        glTexCoord2d( 0.0, 0.0 );
-        glVertex2d(  -1.0,-1.0 );
-
-        glTexCoord2d( 1.0, 0.0 );
-        glVertex2d(   1.0,-1.0 );
-
-        glTexCoord2d( 1.0, 1.0 );
-        glVertex2d(   1.0, 1.0 );
-
-        glTexCoord2d( 0.0, 1.0 );
-        glVertex2d(  -1.0, 1.0 );
-    glEnd();
-
-    glPopMatrix();
-}
-
 // Desenha backbuffer na tela
 void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
-    if(settings_.light_system)
+    if(settings_.light_system) {
+        default_shader_ = InterfaceShader();
         mergeLights(scene_list);
+    }
 
     // Usual blend function for drawing RGBA images.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+    if(settings_.light_system) {
+        default_shader_ = LightSystemShader();
+        opengl::ShaderProgram::Use shader_use(default_shader_);
+        shader_use.SendTexture(1, light_buffer_, default_shader_->UniformLocation("light_texture"));
+    }
     // Draw all the sprites from all scenes.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->Render(initial_geometry_, VisualEffect());
 
-    // Using the light texture, merge it into the screen.
-    if(settings_.light_system)
-        BlendLightIntoBuffer();
-
     // Draw all interface layers, with the usual RGBA blend.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    default_shader_ = InterfaceShader();
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->interface_node()->Render(initial_geometry_, VisualEffect());

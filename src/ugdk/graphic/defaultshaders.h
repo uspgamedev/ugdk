@@ -7,6 +7,7 @@ namespace ugdk {
 namespace graphic {
 
 opengl::ShaderProgram* InterfaceShader();
+opengl::ShaderProgram* LightSystemShader();
 
 }  // namespace graphic
 }  // namespace ugdk
