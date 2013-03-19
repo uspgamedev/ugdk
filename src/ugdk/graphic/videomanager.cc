@@ -16,7 +16,6 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 
 #define LN255 5.5412635451584261462455391880218
@@ -100,6 +99,7 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //If there was any errors
     if( glGetError() != GL_NO_ERROR )
@@ -161,27 +161,28 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     if(settings_.light_system) {
         default_shader_ = InterfaceShader();
         mergeLights(scene_list);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    // Usual blend function for drawing RGBA images.
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // Change the shader to the LightSystem shader, and bind the light texture.
     if(settings_.light_system) {
         default_shader_ = LightSystemShader();
         opengl::ShaderProgram::Use shader_use(default_shader_);
         shader_use.SendTexture(1, light_buffer_, default_shader_->UniformLocation("light_texture"));
     }
+
     // Draw all the sprites from all scenes.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->Render(initial_geometry_, VisualEffect());
 
+    if(settings_.light_system) {
+        default_shader_ = InterfaceShader();
+    }
     // Draw all interface layers, with the usual RGBA blend.
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    default_shader_ = InterfaceShader();
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->interface_node()->Render(initial_geometry_, VisualEffect());
-
 
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapBuffers();
