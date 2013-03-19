@@ -16,28 +16,38 @@
 namespace ugdk {
 namespace graphic {
 
-Light::Light() : color_() {
-    vertexbuffer_ = opengl::VertexBuffer::CreateDefault();
-    uvbuffer_ = opengl::VertexBuffer::CreateDefault();
+Light::Light() : color_(), dimension_(1.0, 1.0) {
+    static const GLfloat buffer_data[] = { 
+        -1.0f,-1.0f, 
+         1.0f,-1.0f, 
+         1.0f, 1.0f, 
+        -1.0f, 1.0f
+    };
+    vertexbuffer_ = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+    {
+        opengl::VertexBuffer::Bind bind(*vertexbuffer_);
+        opengl::VertexBuffer::Mapper mapper(*vertexbuffer_);
+
+        GLfloat *indices = static_cast<GLfloat*>(mapper.get());
+        if (indices)
+            memcpy(indices, buffer_data, sizeof(buffer_data));
+    }
+}
+
+Light::~Light() {
+    delete vertexbuffer_;
 }
 
 void Light::Draw(const Geometry& geometry) {
     // Use our shader
-    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
+    opengl::ShaderProgram* shader = VIDEO_MANAGER()->default_shader();
+    opengl::ShaderProgram::Use shader_use(shader);
 
-    // Send our transformation to the currently bound shader, 
-    // in the "MVP" uniform
-    shader_use.SendGeometry(geometry * Geometry(-dimension_, 2*dimension_));
+    shader_use.SendGeometry(geometry * Geometry(math::Vector2D(), dimension_));
     shader_use.SendEffect(VisualEffect(color_));
-
-    // Bind our texture in Texture Unit 0
-    shader_use.SendTexture(0, VIDEO_MANAGER()->light_texture());
 
     // 1rst attribute buffer : vertices
     shader_use.SendVertexBuffer(vertexbuffer_, opengl::VERTEX, 0);
-
-    // 2nd attribute buffer : UVs
-    shader_use.SendVertexBuffer(uvbuffer_, opengl::TEXTURE, 0);
 
     // Draw the triangle !
     glDrawArrays(GL_QUADS, 0, 4); // 12*3 indices starting at 0 -> 12 triangles

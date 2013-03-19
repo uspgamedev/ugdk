@@ -12,11 +12,10 @@
 
 #include <ugdk/base/engine.h>
 #include <ugdk/action/scene.h>
+#include <ugdk/graphic/defaultshaders.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/util/pathmanager.h>
-#include <ugdk/graphic/opengl/shader.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 
 #define LN255 5.5412635451584261462455391880218
@@ -27,55 +26,6 @@ namespace graphic {
 using std::string;
 
 static ugdk::math::Vector2D default_resolution(800.0, 600.0);
-
-opengl::ShaderProgram* MYSHADER() {
-    static opengl::ShaderProgram* myprogram = NULL;
-    if(!myprogram) {
-        opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
-
-#define NEW_LINE "\n"
-        vertex_shader.CompileSource(
-"#version 120" "\n"
-"#define in attribute" "\n"
-"#define out varying" "\n"
-// Input vertex data, different for all executions of this shader.
-"in vec2 vertexPosition;" "\n"
-"in vec2 vertexUV;" "\n"
-// Output data ; will be interpolated for each fragment.
-"out vec2 UV;" "\n"
-// Values that stay constant for the whole mesh.
-"uniform mat4 geometry_matrix;" "\n"
-"void main() {" "\n"
-	// Output position of the vertex, in clip space : MVP * position
-"	gl_Position =  geometry_matrix * vec4(vertexPosition,0,1);" "\n"
-	// UV of the vertex. No special space for this one.
-"	UV = vertexUV;" "\n"
-"}");
-
-        fragment_shader.CompileSource(
-"#version 120" "\n"
-"#define in varying" "\n"
-// Interpolated values from the vertex shaders
-"in vec2 UV;" "\n"
-// Ouput data
-// Values that stay constant for the whole mesh.
-"uniform sampler2D drawable_texture;" "\n"
-"uniform vec4 effect_color;" "\n"
-"void main() {" "\n"
-	// Output color = color of the texture at the specified UV
-"	gl_FragColor = texture2D( drawable_texture, UV ) * effect_color;" "\n"
-"}");
-
-        myprogram = new opengl::ShaderProgram;
-
-        myprogram->AttachShader(vertex_shader);
-        myprogram->AttachShader(fragment_shader);
-
-        bool status = myprogram->SetupProgram();
-        assert(status);
-    }
-    return myprogram;
-}
 
 // Inicializa o gerenciador de video, definindo uma
 // resolucao para o programa. Retorna true em caso de
@@ -95,7 +45,7 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
             return false;
         }
 
-    default_shader_ = MYSHADER();
+    default_shader_ = InterfaceShader();
         
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
@@ -149,6 +99,7 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //If there was any errors
     if( glGetError() != GL_NO_ERROR )
@@ -158,7 +109,7 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     settings_.fullscreen = fullscreen;
 
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
-    InitializeLight();
+    initializeLight();
     return true;
 }
 
@@ -191,7 +142,7 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->RenderLight(initial_geometry_, VisualEffect());
-
+    
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, (GLsizei) video_size_.x, (GLsizei) video_size_.y);
@@ -203,113 +154,42 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void VideoManager::BlendLightIntoBuffer() {
-    // BIND DA LIGHT TEXTURE. IT'S SO AWESOME
-    glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
-
-    glPushMatrix();
-    glLoadIdentity();
-
-    // TODO: check why the hell when using 
-    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // Sometimes a light sets the entire scene to that color.
-
-    glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-
-    glBegin( GL_QUADS );
-        glTexCoord2d( 0.0, 0.0 );
-        glVertex2d(  -1.0,-1.0 );
-
-        glTexCoord2d( 1.0, 0.0 );
-        glVertex2d(   1.0,-1.0 );
-
-        glTexCoord2d( 1.0, 1.0 );
-        glVertex2d(   1.0, 1.0 );
-
-        glTexCoord2d( 0.0, 1.0 );
-        glVertex2d(  -1.0, 1.0 );
-    glEnd();
-
-    glPopMatrix();
-}
-
 // Desenha backbuffer na tela
 void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
-    if(settings_.light_system)
+    if(settings_.light_system) {
+        default_shader_ = LightShader();
         mergeLights(scene_list);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
 
-    // Usual blend function for drawing RGBA images.
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // Change the shader to the LightSystem shader, and bind the light texture.
+    if(settings_.light_system) {
+        default_shader_ = LightSystemShader();
+        opengl::ShaderProgram::Use shader_use(default_shader_);
+        shader_use.SendTexture(1, light_buffer_, default_shader_->UniformLocation("light_texture"));
+    }
 
     // Draw all the sprites from all scenes.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->Render(initial_geometry_, VisualEffect());
 
-    // Using the light texture, merge it into the screen.
-    if(settings_.light_system)
-        BlendLightIntoBuffer();
-
+    if(settings_.light_system) {
+        default_shader_ = InterfaceShader();
+    }
     // Draw all interface layers, with the usual RGBA blend.
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->interface_node()->Render(initial_geometry_, VisualEffect());
-
 
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapBuffers();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-static SDL_Surface* CreateLightSurface(const ugdk::math::Vector2D& size, const ugdk::math::Vector2D& ellipse_coef) {
-    int width = static_cast<int>(size.x);
-    int height = static_cast<int>(size.y);
-    SDL_Surface *screen = SDL_GetVideoSurface();
-
-    SDL_Surface *temp = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, screen->format->BitsPerPixel,
-                                 screen->format->Rmask, screen->format->Gmask,
-                                 screen->format->Bmask, screen->format->Amask);
-    if(temp == NULL)
-        return NULL;
-    SDL_Surface *data = SDL_DisplayFormatAlpha(temp);
-    SDL_FreeSurface(temp);
-    if(data == NULL)
-        return NULL;
-
-    ugdk::math::Vector2D origin = size * 0.5;
-
-    // Locks the surface so we can manage the pixel data.
-    SDL_LockSurface(data);
-    Uint32 *pixels = static_cast<Uint32*>(data->pixels);
-    for (int i = 0; i < height; ++i) {
-        for (int j = 0; j < width; ++j) {
-            Uint8 alpha = 0;
-
-            // Formulae to detect if the point is inside the ellipse.
-            ugdk::math::Vector2D dist = ugdk::math::Vector2D(j + 0.0, i + 0.0) - origin;
-            dist.x /= ellipse_coef.x;
-            dist.y /= ellipse_coef.y;
-            double distance = ugdk::math::Vector2D::InnerProduct(dist, dist);
-            if(distance <= 1)
-                alpha = static_cast<Uint8>(SDL_ALPHA_OPAQUE * exp(-distance * LN255));
-            pixels[i * width + j] = SDL_MapRGBA(data->format, alpha, alpha, alpha, alpha);
-        }
-    }
-    SDL_UnlockSurface(data);
-    return data;
-}
-
-void VideoManager::InitializeLight() {
-    ugdk::math::Vector2D light_size(32.0, 32.0);
-    if(light_texture_ != NULL) delete light_texture_;
-
-    SDL_Surface* light_surface = CreateLightSurface(light_size * 2.0, light_size);
-    light_texture_ = Texture::CreateFromSurface(light_surface);
-    SDL_FreeSurface(light_surface);
-
+void VideoManager::initializeLight() {
     if(light_buffer_ != NULL) delete light_buffer_;
     light_buffer_ = Texture::CreateRawTexture(static_cast<int>(video_size_.x), static_cast<int>(video_size_.y));
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());

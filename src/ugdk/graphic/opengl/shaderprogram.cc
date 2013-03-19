@@ -49,12 +49,15 @@ void ShaderProgram::Use::SendEffect(const ugdk::graphic::VisualEffect& effect) {
     const Color& c = effect.color();
     glUniform4f(program_->color_location_, c.r, c.g, c.b, c.a);
 }
-    
+
 void ShaderProgram::Use::SendTexture(GLint slot, const Texture* texture) {
+    SendTexture(slot, texture, program_->texture_location_);
+}
+    
+void ShaderProgram::Use::SendTexture(GLint slot, const Texture* texture, GLuint location) {
     glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D + slot, texture->gltexture());
-    // Set our "myTextureSampler" sampler to user Texture Unit 0
-    glUniform1i(program_->texture_location_, slot);
+    glBindTexture(GL_TEXTURE_2D, texture->gltexture());
+    glUniform1i(location, slot);
 }
 
 void ShaderProgram::Use::SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size) {
