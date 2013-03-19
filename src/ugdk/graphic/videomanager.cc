@@ -109,7 +109,7 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     settings_.fullscreen = fullscreen;
 
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
-    InitializeLight();
+    initializeLight();
     return true;
 }
 
@@ -189,52 +189,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-static SDL_Surface* CreateLightSurface(const ugdk::math::Vector2D& size, const ugdk::math::Vector2D& ellipse_coef) {
-    int width = static_cast<int>(size.x);
-    int height = static_cast<int>(size.y);
-    SDL_Surface *screen = SDL_GetVideoSurface();
-
-    SDL_Surface *temp = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, screen->format->BitsPerPixel,
-                                 screen->format->Rmask, screen->format->Gmask,
-                                 screen->format->Bmask, screen->format->Amask);
-    if(temp == NULL)
-        return NULL;
-    SDL_Surface *data = SDL_DisplayFormatAlpha(temp);
-    SDL_FreeSurface(temp);
-    if(data == NULL)
-        return NULL;
-
-    ugdk::math::Vector2D origin = size * 0.5;
-
-    // Locks the surface so we can manage the pixel data.
-    SDL_LockSurface(data);
-    Uint32 *pixels = static_cast<Uint32*>(data->pixels);
-    for (int i = 0; i < height; ++i) {
-        for (int j = 0; j < width; ++j) {
-            Uint8 alpha = 0;
-
-            // Formulae to detect if the point is inside the ellipse.
-            ugdk::math::Vector2D dist = ugdk::math::Vector2D(j + 0.0, i + 0.0) - origin;
-            dist.x /= ellipse_coef.x;
-            dist.y /= ellipse_coef.y;
-            double distance = ugdk::math::Vector2D::InnerProduct(dist, dist);
-            if(distance <= 1)
-                alpha = static_cast<Uint8>(SDL_ALPHA_OPAQUE * exp(-distance * LN255));
-            pixels[i * width + j] = SDL_MapRGBA(data->format, alpha, alpha, alpha, alpha);
-        }
-    }
-    SDL_UnlockSurface(data);
-    return data;
-}
-
-void VideoManager::InitializeLight() {
-    ugdk::math::Vector2D light_size(32.0, 32.0);
-    if(light_texture_ != NULL) delete light_texture_;
-
-    SDL_Surface* light_surface = CreateLightSurface(light_size * 2.0, light_size);
-    light_texture_ = Texture::CreateFromSurface(light_surface);
-    SDL_FreeSurface(light_surface);
-
+void VideoManager::initializeLight() {
     if(light_buffer_ != NULL) delete light_buffer_;
     light_buffer_ = Texture::CreateRawTexture(static_cast<int>(video_size_.x), static_cast<int>(video_size_.y));
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());

@@ -19,7 +19,7 @@ class VideoManager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : settings_(false, false, false), light_buffer_(NULL), light_texture_(NULL), default_shader_(NULL) {}
+    VideoManager() : settings_(false, false, false), light_buffer_(NULL), default_shader_(NULL) {}
     ~VideoManager() {}
 
     bool Initialize(const std::string& title, const ugdk::math::Vector2D& size, bool fullscreen, const std::string& icon);
@@ -35,7 +35,6 @@ class VideoManager {
     ugdk::math::Vector2D video_size() const { return video_size_; }
     bool fullscreen() const { return settings_.fullscreen; }
     const std::string& title() const { return title_; }
-    const Texture* light_texture() const { return light_texture_; }
     opengl::ShaderProgram* default_shader() { return default_shader_; }
 
   private:
@@ -51,12 +50,10 @@ class VideoManager {
     } settings_;
 
     Texture* light_buffer_;
-    Texture* light_texture_;
     opengl::ShaderProgram* default_shader_;
     Geometry initial_geometry_;
 
-    void InitializeLight();
-
+    void initializeLight();
     void mergeLights(const std::list<action::Scene*>& scene_list);
 };
 

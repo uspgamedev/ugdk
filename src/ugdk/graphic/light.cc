@@ -45,7 +45,6 @@ void Light::Draw(const Geometry& geometry) {
 
     shader_use.SendGeometry(geometry * Geometry(math::Vector2D(), dimension_));
     shader_use.SendEffect(VisualEffect(color_));
-    glUniform2f(shader->UniformLocation("ellipse_dimension"), dimension_.x, dimension_.y);
 
     // 1rst attribute buffer : vertices
     shader_use.SendVertexBuffer(vertexbuffer_, opengl::VERTEX, 0);
