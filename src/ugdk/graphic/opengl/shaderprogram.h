@@ -25,12 +25,25 @@ class ShaderProgram {
       public:
         Use(const ShaderProgram* program);
         ~Use();
+
+        void SendUniform(const std::string& name, float t1) {
+            glUniform1f(program_->UniformLocation(name), t1);
+        }
+        void SendUniform(const std::string& name, float t1, float t2) {
+            glUniform2f(program_->UniformLocation(name), t1, t2);
+        }
+        void SendUniform(const std::string& name, float t1, float t2, float t3) {
+            glUniform3f(program_->UniformLocation(name), t1, t2, t3);
+        }
+        void SendUniform(const std::string& name, float t1, float t2, float t3, float t4) {
+            glUniform4f(program_->UniformLocation(name), t1, t2, t3, t4);
+        }
     
         void SendGeometry(const ugdk::graphic::Geometry&);
         void SendEffect(const ugdk::graphic::VisualEffect&);
         void SendTexture(GLint slot, const Texture* texture);
         void SendTexture(GLint slot, const Texture* texture, GLuint location);
-        void SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2);
+        void SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2);
 
       private:
         static const ShaderProgram* active_program_;

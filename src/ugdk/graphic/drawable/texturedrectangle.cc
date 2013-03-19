@@ -13,18 +13,16 @@ namespace ugdk {
 namespace graphic {
 
 TexturedRectangle::TexturedRectangle(Texture* texture) : size_(math::Integer2D(texture->width(), texture->height())), texture_(texture) {
-    vertexbuffer_ = createBuffer();
-    uvbuffer_ = createBuffer();
+    vertexbuffer_ = opengl::VertexBuffer::CreateDefault();
+    uvbuffer_ = opengl::VertexBuffer::CreateDefault();
 }
 
 TexturedRectangle::TexturedRectangle(Texture* texture, const math::Vector2D& _size) : size_(_size), texture_(texture) {
-    vertexbuffer_ = createBuffer();
-    uvbuffer_ = createBuffer();
+    vertexbuffer_ = opengl::VertexBuffer::CreateDefault();
+    uvbuffer_ = opengl::VertexBuffer::CreateDefault();
 }
 
 TexturedRectangle::~TexturedRectangle() {
-    delete vertexbuffer_;
-    delete uvbuffer_;
 }
 
 void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effect) const {
@@ -47,22 +45,6 @@ void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effec
 
     // Draw the triangle !
     glDrawArrays(GL_QUADS, 0, 4); // 12*3 indices starting at 0 -> 12 triangles
-}
-
-opengl::VertexBuffer* TexturedRectangle::createBuffer() {
-    static const GLfloat buffer_data[] = { 
-        0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
-    };
-    opengl::VertexBuffer* buffer = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-    {
-        opengl::VertexBuffer::Bind bind(*buffer);
-        opengl::VertexBuffer::Mapper mapper(*buffer);
-
-        GLfloat *indices = static_cast<GLfloat*>(mapper.get());
-        if (indices)
-            memcpy(indices, buffer_data, sizeof(buffer_data));
-    }
-    return buffer;
 }
 
 }  // namespace graphic

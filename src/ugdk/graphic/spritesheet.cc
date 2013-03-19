@@ -128,8 +128,8 @@ void SpritesheetData::FillWithFramesizeFromAllFiles(int width, int height, const
 
 Spritesheet::Spritesheet(const SpritesheetData& data) {
     const std::list<SpritesheetData::SpritesheetFrame>& frames = data.frames();
-    vertexbuffer_ = createBuffer();
-    uvbuffer_ = createBuffer();
+    vertexbuffer_ = opengl::VertexBuffer::CreateDefault();
+    uvbuffer_ = opengl::VertexBuffer::CreateDefault();
 
     std::list<SpritesheetData::SpritesheetFrame>::const_iterator it;
     GLuint id;
@@ -173,23 +173,6 @@ void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, co
     // Draw the triangle !
     glDrawArrays(GL_QUADS, 0, 4); // 12*3 indices starting at 0 -> 12 triangles
 }
-
-opengl::VertexBuffer* Spritesheet::createBuffer() {
-    static const GLfloat buffer_data[] = { 
-        0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
-    };
-    opengl::VertexBuffer* buffer = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-    {
-        opengl::VertexBuffer::Bind bind(*buffer);
-        opengl::VertexBuffer::Mapper mapper(*buffer);
-
-        GLfloat *indices = static_cast<GLfloat*>(mapper.get());
-        if (indices)
-            memcpy(indices, buffer_data, sizeof(buffer_data));
-    }
-    return buffer;
-}
-
 
 Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
     using script::VirtualObj;

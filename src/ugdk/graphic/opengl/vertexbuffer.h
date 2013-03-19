@@ -58,7 +58,7 @@ namespace opengl {
 		 */
 		static VertexBuffer *Create(size_t size, GLenum target, GLenum usage);
 
-        static VertexBuffer *CreateDefault();
+        static const VertexBuffer *CreateDefault();
 
 		/**
 		 * Constructor.
@@ -121,12 +121,12 @@ namespace opengl {
 		 *
 		 * @param target GL_ARRAY_BUFFER or GL_ELEMENT_ARRAY_BUFFER.
 		 */
-		virtual void bind() = 0;
+		virtual void bind() const = 0;
 
 		/**
 		 * Unbind a prevously bound VertexBuffer.
 		 */
-		virtual void unbind() = 0;
+		virtual void unbind() const = 0;
 
 		/**
 		 * Fill a portion of the buffer with data.
@@ -158,7 +158,7 @@ namespace opengl {
 			/**
 			 * Bind a VertexBuffer.
 			 */
-			Bind(VertexBuffer &buf)
+			Bind(const VertexBuffer &buf)
 				: buf(buf)
 			{ buf.bind(); }
 
@@ -172,7 +172,7 @@ namespace opengl {
             void operator=(const Bind&);
 
 			// VertexBuffer to work on.
-			VertexBuffer &buf;
+			const VertexBuffer &buf;
 		};
 
 		class Mapper
@@ -239,8 +239,8 @@ namespace opengl {
 		// Implements VertexBuffer.
 		virtual void *map();
 		virtual void unmap();
-		virtual void bind();
-		virtual void unbind();
+		virtual void bind() const;
+		virtual void unbind() const;
 		virtual void fill(size_t offset, size_t size, const void *data);
 		virtual const void *getPointer(size_t offset) const ;
 
@@ -273,8 +273,8 @@ namespace opengl {
 		// Implements VertexBuffer.
 		virtual void *map();
 		virtual void unmap();
-		virtual void bind();
-		virtual void unbind();
+		virtual void bind() const;
+		virtual void unbind() const;
 		virtual void fill(size_t offset, size_t size, const void *data);
 		virtual const void *getPointer(size_t offset) const ;
 

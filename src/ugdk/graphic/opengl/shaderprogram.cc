@@ -60,7 +60,7 @@ void ShaderProgram::Use::SendTexture(GLint slot, const Texture* texture, GLuint 
     glUniform1i(location, slot);
 }
 
-void ShaderProgram::Use::SendVertexBuffer(VertexBuffer* buffer, VertexType type, size_t offset, GLint size) {
+void ShaderProgram::Use::SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size) {
     VertexBuffer::Bind bind(*buffer);
 
     GLuint location = get_vertextype_location(type);

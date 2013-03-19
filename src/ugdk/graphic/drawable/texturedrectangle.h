@@ -21,12 +21,10 @@ class TexturedRectangle : public Drawable {
     }
 
   private:
-    opengl::VertexBuffer* createBuffer();
-
     ugdk::math::Vector2D size_;
     Texture* texture_;
-    opengl::VertexBuffer* vertexbuffer_;
-    opengl::VertexBuffer* uvbuffer_;
+    const opengl::VertexBuffer* vertexbuffer_;
+    const opengl::VertexBuffer* uvbuffer_;
 };
 
 }  // namespace graphic

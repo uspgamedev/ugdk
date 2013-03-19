@@ -74,7 +74,6 @@ class Spritesheet {
     void Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry&, const VisualEffect&) const;
 
   private:
-    opengl::VertexBuffer* createBuffer();
     struct Frame {
         Frame(Texture* _tex, const math::Vector2D& _size, const math::Vector2D& _hotspot)
             : texture(_tex), size(_size), hotspot(_hotspot) {}
@@ -84,8 +83,8 @@ class Spritesheet {
     };
 
     std::vector<Frame> frames_;
-    opengl::VertexBuffer* vertexbuffer_;
-    opengl::VertexBuffer* uvbuffer_;
+    const opengl::VertexBuffer* vertexbuffer_;
+    const opengl::VertexBuffer* uvbuffer_;
 };
 
 Spritesheet* CreateSpritesheetFromTag(const std::string&);

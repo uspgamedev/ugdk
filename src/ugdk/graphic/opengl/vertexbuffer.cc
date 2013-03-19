@@ -44,11 +44,13 @@ namespace opengl {
 			return new VertexArray(size, target, usage);
 		}
 	}
-    VertexBuffer *VertexBuffer::CreateDefault() {
+    const VertexBuffer *VertexBuffer::CreateDefault() {
+        static opengl::VertexBuffer* buffer = NULL;
         static const GLfloat buffer_data[] = { 
             0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
         };
-        opengl::VertexBuffer* buffer = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+        if(buffer) return buffer;
+        buffer = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
         {
             opengl::VertexBuffer::Bind bind(*buffer);
             opengl::VertexBuffer::Mapper mapper(*buffer);
@@ -94,11 +96,11 @@ namespace opengl {
 	{
 	}
 
-	void VertexArray::bind()
+	void VertexArray::bind() const
 	{
 	}
 
-	void VertexArray::unbind()
+	void VertexArray::unbind() const
 	{
 	}
 
@@ -156,12 +158,12 @@ namespace opengl {
 		mapped = 0;
 	}
 
-	void VBO::bind()
+	void VBO::bind() const
 	{
 		glBindBufferARB(getTarget(), vbo);
 	}
 
-	void VBO::unbind()
+	void VBO::unbind() const
 	{
 		glBindBufferARB(getTarget(), 0);
 	}
