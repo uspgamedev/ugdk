@@ -159,7 +159,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     if(settings_.light_system) {
-        default_shader_ = InterfaceShader();
+        default_shader_ = LightShader();
         mergeLights(scene_list);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }

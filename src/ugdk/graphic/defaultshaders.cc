@@ -111,5 +111,49 @@ opengl::ShaderProgram* LightSystemShader() {
     return myprogram;
 }
 
+opengl::ShaderProgram* LightShader() {
+    static opengl::ShaderProgram* myprogram = NULL;
+    if(!myprogram) {
+        opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
+
+        vertex_shader.CompileSource(
+"#version 120" "\n"
+"#define in attribute" "\n"
+"#define out varying" "\n"
+// Input vertex data, different for all executions of this shader.
+"in vec2 vertexPosition;" "\n"
+// Output data ; will be interpolated for each fragment.
+"out vec2 lightPosition;" "\n"
+// Values that stay constant for the whole mesh.
+"uniform mat4 geometry_matrix;" "\n"
+"void main() {" "\n"
+	// Output position of the vertex, in clip space : MVP * position
+"	gl_Position =  geometry_matrix * vec4(vertexPosition,0,1);" "\n"
+"   lightPosition = vertexPosition;" "\n"
+"}");
+
+        fragment_shader.CompileSource(
+"#version 120" "\n"
+"#define in varying" "\n"
+// Interpolated values from the vertex shaders
+"in vec2 lightPosition;" "\n"
+// Ouput data
+// Values that stay constant for the whole mesh.
+"uniform vec4 effect_color;" "\n"
+"void main() {" "\n"
+	// Output color = color of the texture at the specified UV
+"	gl_FragColor = effect_color * exp(-5 * length(lightPosition));" "\n"
+"}");
+
+        myprogram = new opengl::ShaderProgram;
+
+        myprogram->AttachShader(vertex_shader);
+        myprogram->AttachShader(fragment_shader);
+
+        bool status = myprogram->SetupProgram();
+        assert(status);
+    }
+    return myprogram;
+}
 }  // namespace graphic
 }  // namespace ugdk
