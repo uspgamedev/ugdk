@@ -46,9 +46,11 @@ class ShaderProgram {
         void SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2);
 
       private:
+        static const int MAX_ATTRIBUTES = 4;
         static const ShaderProgram* active_program_;
         const ShaderProgram* program_;
-        std::list<GLuint> active_attributes_;
+        int last_attribute_;
+        GLuint active_attributes_[MAX_ATTRIBUTES];
     };
 
     GLuint id() const { return id_; }

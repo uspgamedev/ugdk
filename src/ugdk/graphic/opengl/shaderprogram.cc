@@ -24,7 +24,7 @@ GLuint get_vertextype_location(VertexType type) {
     }
 }
 
-ShaderProgram::Use::Use(const ShaderProgram* program) : program_(program) {
+ShaderProgram::Use::Use(const ShaderProgram* program) : program_(program), last_attribute_(0) {
     if(active_program_)
         throw love::Exception("There's already a shader program in use.");
     active_program_ = program;
@@ -32,9 +32,8 @@ ShaderProgram::Use::Use(const ShaderProgram* program) : program_(program) {
 }
 
 ShaderProgram::Use::~Use() {
-    for(std::list<GLuint>::const_iterator it = active_attributes_.begin(); it != active_attributes_.end(); ++it) {
-        glDisableVertexAttribArray(*it);
-    }
+    for(int i = 0; i < last_attribute_; ++i)
+        glDisableVertexAttribArray(active_attributes_[i]);
     active_program_ = NULL;
     glUseProgram(0);
 }
@@ -62,6 +61,10 @@ void ShaderProgram::Use::SendTexture(GLint slot, const Texture* texture, GLuint 
 
 void ShaderProgram::Use::SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size) {
     VertexBuffer::Bind bind(*buffer);
+#ifdef DEBUG
+    if(last_attribute_ >= MAX_ATTRIBUTES)
+        throw love::Exception("Max attributes used.");
+#endif
 
     GLuint location = get_vertextype_location(type);
     glEnableVertexAttribArray(location);
@@ -73,7 +76,7 @@ void ShaderProgram::Use::SendVertexBuffer(const VertexBuffer* buffer, VertexType
         0,                  // stride
         buffer->getPointer(offset) // array buffer offset
     );
-    this->active_attributes_.push_back(location);
+    active_attributes_[last_attribute_++] = location;
 }
 
 
