@@ -89,7 +89,6 @@ if (NOT UGDK_SRC)
 endif (NOT UGDK_SRC)
 
 include_directories ("src")
-include_directories ("externals/glm-0.9.4.2")
 include (cmake/ugdk.cmake)
 
 # Encontrando as bibliotecas necessarias:

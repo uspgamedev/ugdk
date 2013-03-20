@@ -45,6 +45,8 @@ SET(UGDK_SRC
     ./src/ugdk/base/resourcemanager.h 
     ./src/ugdk/base/types.h 
     ./src/ugdk/graphic.h 
+    ./src/ugdk/graphic/defaultshaders.cc 
+    ./src/ugdk/graphic/defaultshaders.h 
     ./src/ugdk/graphic/drawable.h 
     ./src/ugdk/graphic/drawable/shape.h 
     ./src/ugdk/graphic/drawable/solidrectangle.cc 
