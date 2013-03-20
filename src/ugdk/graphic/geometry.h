@@ -2,6 +2,7 @@
 #define UGDK_GRAPHIC_GEOMETRY_H_
 
 #include <ugdk/math/vector2D.h>
+#include <glm/glm.hpp>
 
 namespace ugdk {
 namespace graphic {
@@ -56,6 +57,7 @@ class Geometry {
     }
 
     void AsMatrix4x4(float M[16]) const;
+    glm::mat4 as_mat4() const;
 
   private:
     // Attributes
