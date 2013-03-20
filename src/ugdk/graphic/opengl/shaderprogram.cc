@@ -43,9 +43,7 @@ void ShaderProgram::Use::SendGeometry(const glm::mat4& mat) {
 }
 
 void ShaderProgram::Use::SendGeometry(const ugdk::graphic::Geometry& geometry) {
-    float M[16];
-    geometry.AsMatrix4x4(M);
-    glUniformMatrix4fv(program_->matrix_location_, 1, GL_FALSE, M);
+    glUniformMatrix4fv(program_->matrix_location_, 1, GL_FALSE, &geometry.AsMat4()[0][0]);
 }
         
 void ShaderProgram::Use::SendEffect(const ugdk::graphic::VisualEffect& effect) {

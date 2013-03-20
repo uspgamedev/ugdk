@@ -15,26 +15,13 @@ void Geometry::Compose(const Geometry& rhs) {
     scale_ = scale_.Scale(rhs.scale_); 
 }
 
-glm::mat4 Geometry::as_mat4() const {
+glm::mat4 Geometry::AsMat4() const {
     double s = sin(rotation_), c = cos(rotation_);
 
     return glm::mat4(float(scale_.x*c), -float(scale_.x*s), 0.0f, 0.0f, // First column
                      float(scale_.y*s),  float(scale_.y*c), 0.0f, 0.0f,
                             0.0f,         0.0f, 1.0f, 0.0f,
                      float(offset_.x),   float(offset_.y), 0.0f, 1.0f );
-}
-
-void Geometry::AsMatrix4x4(float M[16]) const {
-    double s = sin(rotation_), c = cos(rotation_);
-
-    float R[16] = { float(scale_.x*c), -float(scale_.x*s), 0.0f, 0.0f, // First column
-                    float(scale_.y*s),  float(scale_.y*c), 0.0f, 0.0f,
-                          0.0f,        0.0f, 1.0f, 0.0f,
-                    float(offset_.x),   float(offset_.y), 0.0f, 1.0f };
-    //glTranslated(tx, ty, 0.0);
-    //glRotated(apply->rotation() * 57.2957795, 0.0, 0.0, 1.0);
-    //glScaled(sx, sy, 0.0);
-    memcpy(M, R, sizeof(R));
 }
 
 }  // namespace graphic

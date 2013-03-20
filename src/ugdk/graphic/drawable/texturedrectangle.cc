@@ -30,7 +30,7 @@ TexturedRectangle::~TexturedRectangle() {
 
 void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     Geometry final_geometry(geometry * Geometry(math::Vector2D(-hotspot_), size_));
-    glm::mat4 mat = final_geometry.as_mat4();
+    glm::mat4 mat = final_geometry.AsMat4();
     glm::vec4 left = mat * glm::vec4(0.0, 0.0, 0.0, 1.0), right = mat * glm::vec4(1.0, 1.0, 0.0, 1.0);
 
     if(left.x > 1 || left.y > 1 || right.x < -1 || right.y < -1)

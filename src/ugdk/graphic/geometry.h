@@ -56,8 +56,7 @@ class Geometry {
         return result;
     }
 
-    void AsMatrix4x4(float M[16]) const;
-    glm::mat4 as_mat4() const;
+    glm::mat4 AsMat4() const;
 
   private:
     // Attributes
