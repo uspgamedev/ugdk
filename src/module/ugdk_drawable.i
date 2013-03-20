@@ -10,7 +10,6 @@
 %{
 
 #include <ugdk/graphic/drawable/shape.h>
-#include <ugdk/graphic/drawable/solidrectangle.h>
 #include <ugdk/graphic/drawable/sprite.h>
 #include <ugdk/graphic/drawable/text.h>
 #include <ugdk/graphic/drawable/texturedrectangle.h>
@@ -34,7 +33,6 @@
 proxy_class(ugdk::action::Observer)
 
 %include <ugdk/graphic/drawable/shape.h>
-%include <ugdk/graphic/drawable/solidrectangle.h>
 %include <ugdk/graphic/drawable/sprite.h>
 %include <ugdk/graphic/drawable/text.h>
 %include <ugdk/graphic/drawable/texturedrectangle.h>
@@ -46,7 +44,6 @@ namespace graphic {
     export_class(Text)
     export_class(Sprite)
     export_class(TexturedRectangle)
-    export_class(SolidRectangle)
 }
 }
 
