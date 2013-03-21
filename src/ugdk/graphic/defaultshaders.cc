@@ -128,8 +128,8 @@ opengl::ShaderProgram* LightShader() {
 "uniform mat4 geometry_matrix;" "\n"
 "void main() {" "\n"
 	// Output position of the vertex, in clip space : MVP * position
-"	gl_Position =  geometry_matrix * vec4(vertexPosition*2,0,1);" "\n"
-"   lightPosition = vertexPosition*2;" "\n"
+"	gl_Position =  geometry_matrix * vec4(vertexPosition*4,0,1);" "\n"
+"   lightPosition = vertexPosition*4;" "\n"
 "}");
 
         fragment_shader.CompileSource(
@@ -140,7 +140,7 @@ opengl::ShaderProgram* LightShader() {
 // Ouput data
 // Values that stay constant for the whole mesh.
 "uniform vec4 effect_color;" "\n"
-"uniform float decayment = 4.1;" "\n"
+"uniform float decayment = 2.4;" "\n"
 "uniform float minimum_radius = 0.05;" "\n"
 "void main() {" "\n"
 	// Output color = color of the texture at the specified UV
