@@ -10,11 +10,9 @@ class VisualEffect;
 
 // Drawables
 class Drawable;
-class Shape;
 
 class Text;
 class Sprite;
-class SolidRectangle;
 class TexturedRectangle;
 
 // Extra

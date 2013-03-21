@@ -2,7 +2,7 @@
 #define UGDK_GRAPHIC_DRAWABLE_TEXTUREDRECTANGLE_H_
 
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/drawable/shape.h>
+#include <ugdk/graphic/drawable.h>
 
 namespace ugdk {
 namespace graphic {

@@ -48,7 +48,6 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/defaultshaders.cc 
     ./src/ugdk/graphic/defaultshaders.h 
     ./src/ugdk/graphic/drawable.h 
-    ./src/ugdk/graphic/drawable/shape.h 
     ./src/ugdk/graphic/drawable/sprite.cc 
     ./src/ugdk/graphic/drawable/sprite.h 
     ./src/ugdk/graphic/drawable/text.cc 
