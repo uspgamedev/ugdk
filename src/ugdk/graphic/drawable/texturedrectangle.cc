@@ -32,9 +32,9 @@ void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effec
     Geometry final_geometry(geometry * Geometry(math::Vector2D(-hotspot_), size_));
     const glm::mat4& mat = final_geometry.AsMat4();
 
-    if(mat[3].x > 1 || mat[3].y > 1 || 
+    if(mat[3].x > 1 || mat[3].y < -1 || 
         mat[0].x + mat[1].x + mat[3].x < -1 || 
-        mat[0].y + mat[1].y + mat[3].y < -1)
+        mat[0].y + mat[1].y + mat[3].y > 1)
         return;
     // Use our shader
     opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
