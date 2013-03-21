@@ -152,12 +152,19 @@ const ugdk::math::Vector2D& Spritesheet::frame_size(size_t frame_number) const {
 }
 
 void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry& geometry, const VisualEffect& effect) const {
+    Geometry final_geometry(geometry * Geometry(math::Vector2D(-(hotspot + frames_[frame_number].hotspot)), frames_[frame_number].size));
+    const glm::mat4& mat = final_geometry.AsMat4();
+
+    if(mat[3].x > 1 || mat[3].y > 1 || 
+        mat[0].x + mat[1].x + mat[3].x < -1 || 
+        mat[0].y + mat[1].y + mat[3].y < -1)
+        return;
     // Use our shader
     opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
-    shader_use.SendGeometry(geometry * Geometry(-(hotspot + frames_[frame_number].hotspot), frames_[frame_number].size));
+    shader_use.SendGeometry(mat);
 
     shader_use.SendEffect(effect);
 
