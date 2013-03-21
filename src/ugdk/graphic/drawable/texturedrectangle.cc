@@ -30,10 +30,11 @@ TexturedRectangle::~TexturedRectangle() {
 
 void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     Geometry final_geometry(geometry * Geometry(math::Vector2D(-hotspot_), size_));
-    glm::mat4 mat = final_geometry.AsMat4();
-    glm::vec4 left = mat * glm::vec4(0.0, 0.0, 0.0, 1.0), right = mat * glm::vec4(1.0, 1.0, 0.0, 1.0);
+    const glm::mat4& mat = final_geometry.AsMat4();
 
-    if(left.x > 1 || left.y > 1 || right.x < -1 || right.y < -1)
+    if(mat[3].x > 1 || mat[3].y > 1 || 
+        mat[0].x + mat[1].x + mat[3].x < -1 || 
+        mat[0].y + mat[1].y + mat[3].y < -1)
         return;
     // Use our shader
     opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());

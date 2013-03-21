@@ -56,12 +56,13 @@ class Geometry {
         return result;
     }
 
-    glm::mat4 AsMat4() const;
+    const glm::mat4& AsMat4() const;
 
   private:
     // Attributes
     math::Vector2D offset_, scale_;
     double   rotation_;
+    glm::mat4 matrix_;
 };
 
 }  // namespace graphic
