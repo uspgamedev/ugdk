@@ -7,6 +7,7 @@
 #define NO_SDL_GLEXT
 
 #include <ugdk/graphic.h>
+#include <glm/glm.hpp>
 
 namespace ugdk {
 namespace graphic {
@@ -39,6 +40,7 @@ class ShaderProgram {
             glUniform4f(program_->UniformLocation(name), t1, t2, t3, t4);
         }
     
+        void SendGeometry(const glm::mat4&);
         void SendGeometry(const ugdk::graphic::Geometry&);
         void SendEffect(const ugdk::graphic::VisualEffect&);
         void SendTexture(GLint slot, const Texture* texture);

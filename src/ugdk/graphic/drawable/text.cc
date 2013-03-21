@@ -79,9 +79,7 @@ void Text::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     glListBase(font_->id());
 
     glPushMatrix();
-    float M[16];
-    modifier.AsMatrix4x4(M);
-    glLoadMatrixf(M);
+    glLoadMatrixf(&modifier.AsMat4()[0][0]);
     
     glTranslated(-hotspot_.x, -hotspot_.y, 0.0);
     

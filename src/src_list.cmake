@@ -45,10 +45,10 @@ SET(UGDK_SRC
     ./src/ugdk/base/resourcemanager.h 
     ./src/ugdk/base/types.h 
     ./src/ugdk/graphic.h 
+    ./src/ugdk/graphic/defaultshaders.cc 
+    ./src/ugdk/graphic/defaultshaders.h 
     ./src/ugdk/graphic/drawable.h 
     ./src/ugdk/graphic/drawable/shape.h 
-    ./src/ugdk/graphic/drawable/solidrectangle.cc 
-    ./src/ugdk/graphic/drawable/solidrectangle.h 
     ./src/ugdk/graphic/drawable/sprite.cc 
     ./src/ugdk/graphic/drawable/sprite.h 
     ./src/ugdk/graphic/drawable/text.cc 

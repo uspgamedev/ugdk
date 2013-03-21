@@ -2,6 +2,9 @@
 #define NO_SDL_GLEXT
 #include <ugdk/graphic/drawable/texturedrectangle.h>
 
+//#define GLM_SWIZZLE 
+#include <glm/glm.hpp>
+
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/videomanager.h>
@@ -11,7 +14,7 @@
 
 namespace ugdk {
 namespace graphic {
-
+    
 TexturedRectangle::TexturedRectangle(Texture* texture) : size_(math::Integer2D(texture->width(), texture->height())), texture_(texture) {
     vertexbuffer_ = opengl::VertexBuffer::CreateDefault();
     uvbuffer_ = opengl::VertexBuffer::CreateDefault();
@@ -26,12 +29,19 @@ TexturedRectangle::~TexturedRectangle() {
 }
 
 void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effect) const {
+    Geometry final_geometry(geometry * Geometry(math::Vector2D(-hotspot_), size_));
+    const glm::mat4& mat = final_geometry.AsMat4();
+
+    if(mat[3].x > 1 || mat[3].y > 1 || 
+        mat[0].x + mat[1].x + mat[3].x < -1 || 
+        mat[0].y + mat[1].y + mat[3].y < -1)
+        return;
     // Use our shader
     opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
-    shader_use.SendGeometry(geometry * Geometry(math::Vector2D(-hotspot_), size_));
+    shader_use.SendGeometry(mat);
     shader_use.SendEffect(effect);
 
     // Bind our texture in Texture Unit 0
