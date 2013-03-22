@@ -208,8 +208,10 @@ bool AnimationProtocol::NewEntry_Size(double x, double y) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame& cur_frame =
             const_cast<action::SpriteAnimationFrame&>(current_animation_->At(current_animation_->size() - 1));
-        if (composing_) cur_frame.geometry().set_scale(cur_frame.geometry().scale().Scale(new_size));
-        else            cur_frame.geometry().set_scale(new_size);
+        if (composing_) {
+            cur_frame.geometry() *= graphic::Geometry(math::Vector2D(), new_size);
+        } else
+            cur_frame.geometry().set_scale(new_size);
     } else
         current_effect_->geometry().set_scale(new_size);
     return true;
@@ -220,8 +222,10 @@ bool AnimationProtocol::NewEntry_Rotation(double new_rot) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame& cur_frame =
             const_cast<action::SpriteAnimationFrame&>(current_animation_->At(current_animation_->size() - 1));
-        if (composing_) cur_frame.geometry().set_rotation(cur_frame.geometry().rotation() + new_rot);
-        else            cur_frame.geometry().set_rotation(new_rot);
+        if (composing_) {
+            cur_frame.geometry() *= graphic::Geometry(math::Vector2D(), math::Vector2D(1.0), new_rot);
+        } else
+            cur_frame.geometry().set_rotation(new_rot);
     } else 
         current_effect_->geometry().set_rotation(new_rot);
     return true;
