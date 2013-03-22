@@ -33,8 +33,9 @@ class Geometry {
      *@{
      */
     const ugdk::math::Vector2D& offset()    const { return   offset_; }
+    /*
     const ugdk::math::Vector2D& scale()     const { return    scale_; }
-    double          rotation()  const { return rotation_; }
+    double          rotation()  const { return rotation_; }*/
 
     // Setters.
     void set_offset(const math::Vector2D& _offset) { offset_ = _offset; }
