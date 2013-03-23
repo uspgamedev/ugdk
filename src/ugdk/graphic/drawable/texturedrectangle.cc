@@ -29,9 +29,10 @@ TexturedRectangle::~TexturedRectangle() {
 }
 
 void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effect) const {
-    Geometry final_geometry(geometry * Geometry(math::Vector2D(-hotspot_), size_));
-    const glm::mat4& mat = final_geometry.AsMat4();
+    Geometry final_geometry(geometry);
+    final_geometry.Compose(Geometry(math::Vector2D(-hotspot_), size_));
 
+    const glm::mat4& mat = final_geometry.AsMat4();
     if(mat[3].x > 1 || mat[3].y < -1 || 
         mat[0].x + mat[1].x + mat[3].x < -1 || 
         mat[0].y + mat[1].y + mat[3].y > 1)

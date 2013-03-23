@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 #include <ugdk/math/vector2D.h>
 

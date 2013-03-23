@@ -41,10 +41,12 @@ void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     math::Vector2D mirror_scale(
             (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
             (animation_frame.mirror() & ugdk::MIRROR_VFLIP) ? -1.0 : 1.0);
-    Geometry compose(modifier * animation_frame.geometry() * Geometry(math::Vector2D(), mirror_scale));
-    VisualEffect compose_effect(effect * animation_frame.effect());
 
-    spritesheet_->Draw(animation_frame.spritesheet_frame(), hotspot_, compose, compose_effect);
+    spritesheet_->Draw(
+        animation_frame.spritesheet_frame(), 
+        hotspot_, 
+        modifier * animation_frame.geometry() * Geometry(math::Vector2D(), mirror_scale),
+        effect * animation_frame.effect());
 }
 
 const ugdk::math::Vector2D& Sprite::size() const {

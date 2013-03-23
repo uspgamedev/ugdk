@@ -47,9 +47,10 @@ void Node::Render(const Geometry& parent, const VisualEffect& parent_effect) con
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
-    VisualEffect compose_effect = (ignores_effect_) ? effect_ : (parent_effect * effect_);
-    if(!compose_effect.visible())
-        return;
+    VisualEffect compose_effect = (ignores_effect_) ? effect_ : parent_effect;
+    if(!ignores_effect_) compose_effect.Compose(effect_);
+    
+    if(!compose_effect.visible()) return;
 
     Geometry compose(parent);
     compose.Compose(geometry_);
