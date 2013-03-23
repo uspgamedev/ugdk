@@ -175,10 +175,10 @@ bool AnimationProtocol::NewEntry_Position(double x, double y) {
     if(current_scope_ == FRAME_RING) {
         action::SpriteAnimationFrame& cur_frame =
             const_cast<action::SpriteAnimationFrame&>(current_animation_->At(current_animation_->size() - 1));
-        if (composing_) cur_frame.geometry().set_offset(cur_frame.geometry().offset() + new_pos);
-        else            cur_frame.geometry().set_offset(new_pos);
+        if (composing_) cur_frame.geometry().ChangeOffset(cur_frame.geometry().offset() + new_pos);
+        else            cur_frame.geometry().ChangeOffset(new_pos);
     } else
-        current_effect_->geometry().set_offset(new_pos);
+        current_effect_->geometry().ChangeOffset(new_pos);
     return true;
 
 }
@@ -210,10 +210,13 @@ bool AnimationProtocol::NewEntry_Size(double x, double y) {
             const_cast<action::SpriteAnimationFrame&>(current_animation_->At(current_animation_->size() - 1));
         if (composing_) {
             cur_frame.geometry() *= graphic::Geometry(math::Vector2D(), new_size);
-        } else
-            cur_frame.geometry().set_scale(new_size);
-    } else
-        current_effect_->geometry().set_scale(new_size);
+        } else {
+            cur_frame.geometry() = graphic::Geometry(cur_frame.geometry().offset(), new_size, cur_frame.geometry().rotation());
+        }
+    } else {
+        graphic::Geometry& geo = current_effect_->geometry();
+        geo = graphic::Geometry(geo.offset(), new_size, geo.rotation());
+    }
     return true;
 
 }
@@ -225,9 +228,11 @@ bool AnimationProtocol::NewEntry_Rotation(double new_rot) {
         if (composing_) {
             cur_frame.geometry() *= graphic::Geometry(math::Vector2D(), math::Vector2D(1.0), new_rot);
         } else
-            cur_frame.geometry().set_rotation(new_rot);
-    } else 
-        current_effect_->geometry().set_rotation(new_rot);
+            cur_frame.geometry() = graphic::Geometry(cur_frame.geometry().offset(), cur_frame.geometry().CalculateScale(), new_rot);
+    } else {
+        graphic::Geometry& geo = current_effect_->geometry();
+        geo = graphic::Geometry(geo.offset(), geo.CalculateScale(), new_rot);
+    }
     return true;
 }
 } /* namespace ugdk */

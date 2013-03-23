@@ -12,7 +12,7 @@ Button::Button(const ugdk::math::Vector2D& top_left, graphic::Drawable* drawable
     function_(function),
     top_left_(top_left) {
         node_->set_drawable(drawable);
-        node_->geometry().set_offset(top_left_);
+        node_->geometry().ChangeOffset(top_left_);
 }
 
 Button::~Button() {

@@ -28,8 +28,7 @@ TEST(Geometry, Compose) {
 
     {
         Geometry mx(Vector2D(10.0, 0.0));
-        Geometry rot;
-        rot.set_rotation(PI/4.0);
+        Geometry rot(Vector2D(), Vector2D(1.0, 1.0), PI/4.0);
 
         Geometry result1 = rot * mx;
         glm::mat4 result1_mat = result1.AsMat4();

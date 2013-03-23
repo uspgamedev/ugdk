@@ -1,8 +1,10 @@
 #ifndef UGDK_GRAPHIC_GEOMETRY_H_
 #define UGDK_GRAPHIC_GEOMETRY_H_
 
-#include <ugdk/math/vector2D.h>
+#include <cmath>
 #include <glm/glm.hpp>
+
+#include <ugdk/math/vector2D.h>
 
 namespace ugdk {
 namespace graphic {
@@ -10,41 +12,45 @@ namespace graphic {
 class Geometry {
   public:
     /// Creates an identity Geometry;
-    Geometry();
+    Geometry() : rotation_(0.0), matrix_(1.0f) {}
 
     ///Creates a new Geometry object with the specified values. 
     /**
      * @param offset The offset of the image.
-     * @param size The size modifiers for the image. X and Y values can be set
+     * @param scale The size modifiers for the image. X and Y values can be set
      * independently.
-     * @param rotation Rotation angle in radians. 0 points to the right, increases in
+     * @param rot Rotation angle in radians. 0 points to the right, increases in
      * counterclockwise fashion.
-     * @param mirror Mirrors the image. Can be MIRROR_NONE for no mirroring, 
-     * MIRROR_HFLIP for horizontal mirroring or MIRROR_VFLIP for vetical mirroring.
      */
-    Geometry(const math::Vector2D& _offset, const math::Vector2D _scale = math::Vector2D(1.0, 1.0), double _rotation = 0.0) :
-        offset_(_offset), scale_(_scale), rotation_(_rotation) {}
+    Geometry(const math::Vector2D& offset, const math::Vector2D scale = math::Vector2D(1.0, 1.0), double rot = 0.0)
+    : rotation_(-rot),
+      matrix_(float(scale.x*cos(-rot)), -float(scale.x*sin(-rot)), 0.0f, 0.0f, // First column
+              float(scale.y*sin(-rot)),  float(scale.y*cos(-rot)), 0.0f, 0.0f,
+                                 0.0f,                     0.0f, 1.0f, 0.0f,
+                      float(offset.x),          float(offset.y), 0.0f, 1.0f) {}
 
     // Destructor
     ~Geometry() {}
 
-    // Getters.
-    /**@name Getters and Setters
-     *@{
-     */
-    const ugdk::math::Vector2D& offset()    const { return   offset_; }
-    /*
-    const ugdk::math::Vector2D& scale()     const { return    scale_; }
-    double          rotation()  const { return rotation_; }*/
+    double rotation() const { return rotation_; }
 
-    // Setters.
-    void set_offset(const math::Vector2D& _offset) { offset_ = _offset; }
-    void set_scale(const math::Vector2D& _scale)   { scale_  = _scale;  }
-    void set_rotation(double _rotation) { rotation_ = _rotation; }
-    /**@}
-     */
+    /// Calculates by how much this Geometry translates the rendering.
+    ugdk::math::Vector2D offset() const { 
+        return math::Vector2D(matrix_[3].x, matrix_[3].y);
+    }
 
-    void Compose(const Geometry&);
+    void set_offset(const ugdk::math::Vector2D& _offset) {
+        ChangeOffset(_offset);
+    }
+
+    void ChangeOffset(const math::Vector2D& _offset) {
+        matrix_[3] = glm::vec4(_offset.x, _offset.y, 0.0, 1.0);
+    }
+
+    void Compose(const Geometry& other) {
+        rotation_ += other.rotation_;
+        matrix_ *= other.matrix_;
+    }
 
     Geometry& operator *= (const Geometry& rhs) {
         Compose(rhs);
@@ -57,12 +63,20 @@ class Geometry {
         return result;
     }
 
-    const glm::mat4& AsMat4() const;
+    const glm::mat4& AsMat4() const {
+        return matrix_;
+    }
+
+    math::Vector2D CalculateScale() const {
+        double c = cos(rotation_);
+        if(c > 0.5)
+            return math::Vector2D( matrix_[0].x / cos(rotation_), matrix_[1].y / cos(rotation_));
+        else
+            return math::Vector2D(-matrix_[1].x / sin(rotation_), matrix_[0].y / sin(rotation_));
+    }
 
   private:
-    // Attributes
-    math::Vector2D offset_, scale_;
-    double   rotation_;
+    double rotation_;
     glm::mat4 matrix_;
 };
 
