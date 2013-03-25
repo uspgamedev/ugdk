@@ -141,8 +141,9 @@ class VirtualObj {
         return data_->unsafe_data();
     }
 
+#ifdef UGDK_USING_VARIADIC
     template<typename R, typename ...Args>
-    std::function<R (Args...)> to_function() {
+    std::function<R (Args...)> AsFunction() {
         VirtualData::Ptr data = data_;
         return [data](Args... args) -> R {
             VirtualData::Vector arguments;
@@ -152,13 +153,15 @@ class VirtualObj {
     }
 
     template<typename ...Args>
-    VirtualObj call(Args... args) {
+    VirtualObj Call(Args... args) {
         VirtualData::Vector arguments;
         createArgumentsVector(arguments, wrapper(), args...);
         return VirtualObj(data_->Execute(arguments));
     }
+#endif
 
   private:
+#ifdef UGDK_USING_VARIADIC
     static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper) { return true; }
 
     template<typename T, typename ...Args>
@@ -175,6 +178,7 @@ class VirtualObj {
         v.push_back(t.data_);
         return createArgumentsVector(v, wrapper, args...);
     }
+#endif
 
     VirtualData::Ptr data_;
 
