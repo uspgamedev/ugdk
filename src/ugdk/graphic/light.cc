@@ -1,3 +1,5 @@
+#include <GL/glew.h>
+#define NO_SDL_GLEXT
 #include <ugdk/config/config.h>
 #include "SDL_opengl.h"
 
@@ -6,39 +8,49 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/texture.h>
+#include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/vertexbuffer.h>
 
 namespace ugdk {
 namespace graphic {
 
-Light::Light() : color_() {
+Light::Light() : color_(), dimension_(1.0, 1.0) {
+    static const GLfloat buffer_data[] = { 
+        -1.0f,-1.0f, 
+         1.0f,-1.0f, 
+         1.0f, 1.0f, 
+        -1.0f, 1.0f
+    };
+    vertexbuffer_ = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+    {
+        opengl::VertexBuffer::Bind bind(*vertexbuffer_);
+        opengl::VertexBuffer::Mapper mapper(*vertexbuffer_);
+
+        GLfloat *indices = static_cast<GLfloat*>(mapper.get());
+        if (indices)
+            memcpy(indices, buffer_data, sizeof(buffer_data));
+    }
 }
 
-void Light::Draw() {
-	const Texture* light_texture = VIDEO_MANAGER()->light_texture();
+Light::~Light() {
+    delete vertexbuffer_;
+}
 
-    glColor3d(color_.r, color_.g, color_.b);
+void Light::Draw(const Geometry& geometry) {
+    // Use our shader
+    opengl::ShaderProgram* shader = VIDEO_MANAGER()->default_shader();
+    opengl::ShaderProgram::Use shader_use(shader);
 
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, light_texture->gltexture());
+    shader_use.SendGeometry(geometry * Geometry(math::Vector2D(), dimension_));
+    shader_use.SendEffect(VisualEffect(color_));
 
-    static double TEX_COORD_ONE[]   = { 0.0, 0.0 },
-                 TEX_COORD_TWO[]   = { 1.0, 0.0 },
-                 TEX_COORD_THREE[] = { 1.0, 1.0 },
-                 TEX_COORD_FOUR[]  = { 0.0, 1.0 };
+    // 1rst attribute buffer : vertices
+    shader_use.SendVertexBuffer(vertexbuffer_, opengl::VERTEX, 0);
 
-	glBegin( GL_QUADS ); { //Start quad
-        glTexCoord2dv(TEX_COORD_ONE);
-        glVertex2d( -dimension_.x, -dimension_.y );
-
-        glTexCoord2dv(TEX_COORD_TWO);
-        glVertex2d(  dimension_.x, -dimension_.y );
-
-        glTexCoord2dv(TEX_COORD_THREE);
-        glVertex2dv( dimension_.val );
-
-        glTexCoord2dv(TEX_COORD_FOUR);
-        glVertex2d( -dimension_.x,  dimension_.y );
-    } glEnd();
+    // Draw the triangle !
+    glDrawArrays(GL_QUADS, 0, 4); // 12*3 indices starting at 0 -> 12 triangles
 }
 
 }  // namespace graphic

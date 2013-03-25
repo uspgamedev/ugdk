@@ -1,37 +1,22 @@
-#include <ugdk/config/config.h>
-#include "SDL_opengl.h"
-#include "SDL_image.h"
-#include <cmath>
-
 #include <ugdk/graphic/videomanager.h>
+
+#include <cmath>
+#include <cassert>
+
+#include "GL/glew.h"
+#ifdef _WIN32
+#   include "GL/wglew.h"
+#endif
+#define NO_SDL_GLEXT
+#include "SDL_opengl.h"
 
 #include <ugdk/base/engine.h>
 #include <ugdk/action/scene.h>
+#include <ugdk/graphic/defaultshaders.h>
 #include <ugdk/graphic/node.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/util/pathmanager.h>
-
-// VSync
-//TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
-#ifdef WIN32
-    // VSync
-    #include <gl/GL.h>
-    #include "wglext.h"
-    typedef BOOL (APIENTRY *PFNWGLSWAPINTERVALFARPROC)( int );
-    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = nullptr;
-#endif
-
-static void InitializeExtensions() {
-    static bool initialized = false;
-    if(initialized) return;
-    
-    initialized = true;
-#ifdef WIN32
-    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC) wglGetProcAddress( "wglSwapIntervalEXT" );
-#endif
-}
-
+#include <ugdk/graphic/opengl/shaderprogram.h>
 
 #define LN255 5.5412635451584261462455391880218
 
@@ -46,28 +31,22 @@ static ugdk::math::Vector2D default_resolution(800.0, 600.0);
 // resolucao para o programa. Retorna true em caso de
 // sucesso.
 bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& size, bool fullscreen, const string& icon) {
-    modifiers_.empty();
     title_ = title;
     
     // Set window title.
-    SDL_WM_SetCaption(title.c_str(), (icon.length() > 0) ? icon.c_str() : nullptr );
+    SDL_WM_SetCaption(title.c_str(), (icon.length() > 0) ? icon.c_str() : NULL );
     
     if(icon.length() > 0)
-        SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), nullptr);
-    
+        SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
+       
     if(ChangeResolution(size, fullscreen) == false)
         if(ChangeResolution(default_resolution, false) == false) {
             /* TODO: insert error message here. */
             return false;
         }
-    
-    InitializeExtensions();
 
-    /*GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        // TODO: check errors with glew
-    }*/
-    
+    default_shader_ = InterfaceShader();
+        
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
     /*if(GLEW_ARB_framebuffer_object) {
@@ -83,21 +62,36 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     if(fullscreen) flags |= SDL_FULLSCREEN;
 
-    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == nullptr)
+    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == NULL)
         return false;
       
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {
+        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
+        return false;
+    }
+
     SetVSync(settings_.vsync);
+
+    // We want the following properties to our display:
+    //   (0;0) is the top-left corner of the screen
+    //   (w;h) is the bottom-right corner of the screen
+    // Since by default, (0;0) is the center of the screen, with (-1;1) being 
+    // the top-left and (1;-1) the bottom-right, we must do the following:
+    //   - Offset it by (-1,1), correcting the origin
+    //   - Invert the y-axis, so it grows in the direction we expect
+    //   - Scale down by the (2/w;2/h), so it goes up to what we expect.
+    initial_geometry_ = Geometry(math::Vector2D(-1.0, 1.0), math::Vector2D(2.0/size.x, -2.0/size.y));
         
     //Set projection
     glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
     glMatrixMode( GL_PROJECTION );
 
     glLoadIdentity();
-    glOrtho( 0, size.x, size.y, 0, -1, 1 );
+    //glOrtho( 0, size.x, size.y, 0, -1, 1 );
 
     //Initialize modelview matrix
     glMatrixMode( GL_MODELVIEW );
-    ClearModiferStack();
     glLoadIdentity();
 
     // This hint can improve the speed of texturing when perspective- correct texture coordinate interpolation isn't needed, such as when using a glOrtho() projection.
@@ -105,6 +99,7 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 
     glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     //If there was any errors
     if( glGetError() != GL_NO_ERROR )
@@ -112,10 +107,9 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
 
     video_size_ = size;
     settings_.fullscreen = fullscreen;
-    virtual_bounds_ = math::Frame(0, 0, video_size_.x, video_size_.y);
 
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
-    InitializeLight();
+    initializeLight();
     return true;
 }
 
@@ -130,9 +124,10 @@ bool VideoManager::Release() {
 
 void VideoManager::SetVSync(const bool active) {
     settings_.vsync = active;
-    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions. 
-#ifdef WIN32
-    if(wglSwapIntervalEXT != nullptr) wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
+    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions.
+#ifdef _WIN32
+    if(WGL_EXT_swap_control)
+        wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
 #endif
 }
 
@@ -146,8 +141,8 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
 
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->RenderLight();
-
+            (*it)->content_node()->RenderLight(initial_geometry_, VisualEffect());
+    
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, (GLsizei) video_size_.x, (GLsizei) video_size_.y);
@@ -159,114 +154,43 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void VideoManager::BlendLightIntoBuffer() {
-    // BIND DA LIGHT TEXTURE. IT'S SO AWESOME
-    glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
-
-    glPushMatrix();
-    glLoadIdentity();
-
-    // TODO: check why the hell when using 
-    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // Sometimes a light sets the entire scene to that color.
-
-    glBlendFunc(GL_ZERO, GL_SRC_COLOR);
-
-    glBegin( GL_QUADS );
-        glTexCoord2d(         0.0,          1.0 );
-        glVertex2d(           0.0,          0.0 );
-
-        glTexCoord2d(         1.0,          1.0 );
-        glVertex2d(  video_size_.x,          0.0 );
-
-        glTexCoord2d(         1.0,          0.0 );
-        glVertex2d(  video_size_.x, video_size_.y );
-
-        glTexCoord2d(         0.0,          0.0 );
-        glVertex2d(           0.0, video_size_.y );
-    glEnd();
-
-    glPopMatrix();
-}
-
 // Desenha backbuffer na tela
 void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
-    if(settings_.light_system)
+    if(settings_.light_system) {
+        default_shader_ = LightShader();
         mergeLights(scene_list);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
 
-    // Usual blend function for drawing RGBA images.
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // Change the shader to the LightSystem shader, and bind the light texture.
+    if(settings_.light_system) {
+        default_shader_ = LightSystemShader();
+        opengl::ShaderProgram::Use shader_use(default_shader_);
+        shader_use.SendTexture(1, light_buffer_, default_shader_->UniformLocation("light_texture"));
+    }
 
     // Draw all the sprites from all scenes.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->content_node()->Render();
+            (*it)->content_node()->Render(initial_geometry_, VisualEffect());
 
-    // Using the light texture, merge it into the screen.
-    if(settings_.light_system)
-        BlendLightIntoBuffer();
-
+    if(settings_.light_system) {
+        default_shader_ = InterfaceShader();
+    }
     // Draw all interface layers, with the usual RGBA blend.
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
-            (*it)->interface_node()->Render();
-
+            (*it)->interface_node()->Render(initial_geometry_, VisualEffect());
 
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapBuffers();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-static SDL_Surface* CreateLightSurface(const ugdk::math::Vector2D& size, const ugdk::math::Vector2D& ellipse_coef) {
-    int width = static_cast<int>(size.x);
-    int height = static_cast<int>(size.y);
-    SDL_Surface *screen = SDL_GetVideoSurface();
-
-    SDL_Surface *temp = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, screen->format->BitsPerPixel,
-                                 screen->format->Rmask, screen->format->Gmask,
-                                 screen->format->Bmask, screen->format->Amask);
-    if(temp == nullptr)
-        return nullptr;
-    SDL_Surface *data = SDL_DisplayFormatAlpha(temp);
-    SDL_FreeSurface(temp);
-    if(data == nullptr)
-        return nullptr;
-
-    ugdk::math::Vector2D origin = size * 0.5;
-
-    // Locks the surface so we can manage the pixel data.
-    SDL_LockSurface(data);
-    Uint32 *pixels = static_cast<Uint32*>(data->pixels);
-    for (int i = 0; i < height; ++i) {
-        for (int j = 0; j < width; ++j) {
-            Uint8 alpha = 0;
-
-            // Formulae to detect if the point is inside the ellipse.
-            ugdk::math::Vector2D dist = ugdk::math::Vector2D(j + 0.0, i + 0.0) - origin;
-            dist.x /= ellipse_coef.x;
-            dist.y /= ellipse_coef.y;
-            double distance = ugdk::math::Vector2D::InnerProduct(dist, dist);
-            if(distance <= 1)
-                alpha = static_cast<Uint8>(SDL_ALPHA_OPAQUE * exp(-distance * LN255));
-            pixels[i * width + j] = SDL_MapRGBA(data->format, alpha, alpha, alpha, alpha);
-        }
-    }
-    SDL_UnlockSurface(data);
-    return data;
-}
-
-void VideoManager::InitializeLight() {
-    ugdk::math::Vector2D light_size(32.0, 32.0);
-    if(light_texture_ != nullptr) delete light_texture_;
-
-    SDL_Surface* light_surface = CreateLightSurface(light_size * 2.0, light_size);
-    light_texture_ = Texture::CreateFromSurface(light_surface);
-    SDL_FreeSurface(light_surface);
-
-    if(light_buffer_ != nullptr) delete light_buffer_;
+void VideoManager::initializeLight() {
+    if(light_buffer_ != NULL) delete light_buffer_;
     light_buffer_ = Texture::CreateRawTexture(static_cast<int>(video_size_.x), static_cast<int>(video_size_.y));
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -276,63 +200,6 @@ void VideoManager::InitializeLight() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (GLsizei) video_size_.x, 
         (GLsizei) video_size_.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-void VideoManager::PushAndApplyModifier(const Modifier* apply) {
-    Modifier top = CurrentModifier();
-
-    if(apply->flags() & Modifier::HAS_COLOR) top.ComposeColor(apply);
-    top.ComposeMirror(apply);
-    top.ComposeVisible(apply);
-
-    glPushMatrix();
-
-    if(apply->flags() & Modifier::HAS_TRANSFORMATION) {
-        // Calculates the translation
-        double tx, ty;
-        if(apply->flags() & Modifier::TRUNCATES_WHEN_APPLIED) {
-            tx = std::floor(apply->offset().x);
-            ty = std::floor(apply->offset().y);
-        } else {
-            tx = apply->offset().x;
-            ty = apply->offset().y;
-        }
-
-        // Calculates the scale
-        double sx = apply->scale().x, sy = apply->scale().y;
-
-        // Calculates the rotation
-        double s = sin(apply->rotation()), c = cos(apply->rotation());
-
-        // Builds the full transformation matrix all at once.
-        double M[16] = { sx*c, -sx*s, 0.0, 0.0, // First column
-                         sy*s,  sy*c, 0.0, 0.0,
-                          0.0,   0.0, 1.0, 0.0,
-                           tx,    ty, 0.0, 1.0 };
-
-        //glTranslated(tx, ty, 0.0);
-        //glRotated(apply->rotation() * 57.2957795, 0.0, 0.0, 1.0);
-        //glScaled(sx, sy, 0.0);
-        glMultMatrixd(M);
-    }
-
-    modifiers_.push(top);
-}
-
-bool VideoManager::PopModifier() {
-    if(modifiers_.empty()) return false;
-    modifiers_.pop();
-    glPopMatrix();
-    return true;
-}
-
-const Modifier& VideoManager::CurrentModifier() const {
-    static Modifier IDENTITY;
-    return (modifiers_.empty()) ? IDENTITY : modifiers_.top(); 
-}
-
-void VideoManager::ClearModiferStack() {
-    while(PopModifier());
 }
 
 }  // namespace graphic

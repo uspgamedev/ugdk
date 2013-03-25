@@ -62,7 +62,23 @@ endif ()
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 if (UNIX OR MINGW)
     # se for o g++ para *nix ou o MinGW para Windows:
-    add_definitions(-Wall -ansi -U_FORTIFY_SOURCE -msse2 -std=c++0x -DUGDK_USING_VARIADIC)
+    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2 -std=c++0x -DUGDK_USING_VARIADIC)
+    add_definitions(-Wall
+# TODO: would like these but they produce overwhelming amounts of warnings
+#       -Wextra
+#       -Wmissing-field-initializers
+#       -Wswitch-default
+#       -Wfloat-equal
+#       -Wconversion
+#       -Wzero-as-null-pointer-constant
+        -Wtype-limits
+        -Wsign-compare
+        -Wignored-qualifiers
+        -Wuninitialized
+        #-Wshadow
+        -Wlogical-op
+        -Winit-self)
+
 elseif (MSVC) 
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
 endif ()
@@ -93,6 +109,19 @@ include_directories(${SDLTTF_INCLUDE_DIR})
 
 find_package(SDL_image REQUIRED)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
+
+find_package(GLEW 1.5 QUIET)
+if(NOT GLEW_FOUND)
+    message("-- GLEW not found, using included source.")
+    add_library(glew STATIC EXCLUDE_FROM_ALL "externals/glew/src/glew.c")
+    add_definitions(-DGLEW_STATIC)
+
+    include_directories("externals/glew/include")
+    set(EXTERNAL_GLEW_LIBRARY glew)
+else(NOT GLEW_FOUND)
+    include_directories(${GLEW_INCLUDE_DIR})
+    set(EXTERNAL_GLEW_LIBRARY ${GLEW_LIBRARY})
+endif(NOT GLEW_FOUND)
 
 ##########################################
 # Package Configuration
@@ -132,9 +161,6 @@ if (UGDK_CREATE_BINDINGS)
     ugdk_setup_package(SWIG)
 endif (UGDK_CREATE_BINDINGS)
 
-include_directories ("externals/opengl")
-
-
 # Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
 # Code found on http://stackoverflow.com/questions/7747857/in-cmake-how-do-i-work-around-the-debug-and-release-directories-visual-studio-2
 
@@ -172,6 +198,7 @@ target_link_libraries (libugdk
                        ${SDLTTF_LIBRARY}
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
+                       ${EXTERNAL_GLEW_LIBRARY}
                        ${UGDK_LIBRARIES})
 
 target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
@@ -181,6 +208,7 @@ target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES
                        ${SDLTTF_LIBRARY}
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
+                       ${EXTERNAL_GLEW_LIBRARY}
                        ${UGDK_LIBRARIES})
                       
 set_target_properties (libugdk PROPERTIES 

@@ -4,20 +4,21 @@
 namespace ugdk {
 namespace graphic {
 
+// Data
+class Geometry;
+class VisualEffect;
+
 // Drawables
 class Drawable;
-class Shape;
 
 class Text;
 class Sprite;
-class SolidRectangle;
 class TexturedRectangle;
 
 // Extra
 class Font;
 class Image;
 class Light;
-class Modifier;
 class Node;
 class Texture;
 class Spritesheet;
@@ -25,6 +26,12 @@ class Spritesheet;
 // Managers
 class TextManager;
 class VideoManager;
+
+namespace opengl {
+class Shader;
+class ShaderProgram;
+class VertexBuffer;
+}  // namespace opengl
 
 }  // namespace graphic
 }  // namespace ugdk

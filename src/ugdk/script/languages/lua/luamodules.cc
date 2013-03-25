@@ -13,8 +13,8 @@ namespace lua {
 typedef std::vector< Module<inittype> > LuaModuleList;
 
 static LuaModuleList& get_module_list() {
-    static LuaModuleList lua_modules;
-    return lua_modules;
+    static LuaModuleList modules;
+    return modules;
 }
 
 void AddModule(const Module<inittype> & module) {

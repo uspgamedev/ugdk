@@ -1,6 +1,7 @@
-#ifndef HORUSEYE_FRAMEWORK_DRAWABLE_H_
-#define HORUSEYE_FRAMEWORK_DRAWABLE_H_
+#ifndef UGDK_GRAPHIC_DRAWABLE_H_
+#define UGDK_GRAPHIC_DRAWABLE_H_
 
+#include <ugdk/graphic.h>
 #include <ugdk/math/vector2D.h>
 
 namespace ugdk {
@@ -13,13 +14,13 @@ class Drawable {
         LEFT,           CENTER,     RIGHT,
         BOTTOM_LEFT,    BOTTOM,     BOTTOM_RIGHT
     };
-    virtual ~Drawable() {};
+    virtual ~Drawable() {}
 
     virtual void Update(double dt) = 0;
-    virtual void Draw() const = 0;
+    virtual void Draw(const Geometry&, const VisualEffect&) const = 0;
     virtual const ugdk::math::Vector2D& size() const = 0;
 
-    void set_hotspot(const ugdk::math::Vector2D& hotspot) { hotspot_ = hotspot; }
+    void set_hotspot(const ugdk::math::Vector2D& _hotspot) { hotspot_ = _hotspot; }
     void set_hotspot(const HookPoint& hook) {
         switch(hook) {
         case TOP_LEFT    : hotspot_ = ugdk::math::Vector2D(           0.0,            0.0); break;
@@ -34,8 +35,8 @@ class Drawable {
         }
     }
 
-    const double       width() const { return size().x; }
-    const double      height() const { return size().y; }
+    double       width() const { return size().x; }
+    double      height() const { return size().y; }
     const ugdk::math::Vector2D& hotspot() const { return hotspot_; }
 
   protected:

@@ -1,28 +1,30 @@
 #ifndef UGDK_GRAPHIC_DRAWABLE_TEXTUREDRECTANGLE_H_
 #define UGDK_GRAPHIC_DRAWABLE_TEXTUREDRECTANGLE_H_
 
-#include <ugdk/base/types.h>
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/drawable/shape.h>
+#include <ugdk/graphic/drawable.h>
 
 namespace ugdk {
 namespace graphic {
 
-class TexturedRectangle : public Shape {
+class TexturedRectangle : public Drawable {
   public:
     TexturedRectangle(Texture* texture);
-    TexturedRectangle(Texture* texture, const ugdk::math::Vector2D& size);
+    TexturedRectangle(Texture* texture, const math::Vector2D& _size);
     ~TexturedRectangle();
 
-    void Update(double dt);
-    void Draw() const;
+    void Update(double dt) {}
+    void Draw(const Geometry& geometry, const VisualEffect&) const;
 
-    const ugdk::math::Vector2D& size() const { return size_; }
-    void set_size(const ugdk::math::Vector2D& size) { size_ = size; }
+    const ugdk::math::Vector2D& size() const {
+        return size_;
+    }
 
   private:
     ugdk::math::Vector2D size_;
     Texture* texture_;
+    const opengl::VertexBuffer* vertexbuffer_;
+    const opengl::VertexBuffer* uvbuffer_;
 };
 
 }  // namespace graphic

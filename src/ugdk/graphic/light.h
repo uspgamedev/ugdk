@@ -11,7 +11,7 @@ namespace graphic {
 class Light {
   public:
     Light();
-	~Light() {}
+	~Light();
 
     const ugdk::math::Vector2D& dimension() const { return dimension_; }
 	void set_dimension(const ugdk::math::Vector2D& dimension) { dimension_ = dimension; }
@@ -19,11 +19,12 @@ class Light {
     const Color& color() const { return color_; }
     void set_color(const Color& color) { color_ = color; }
 
-	void Draw();
+	void Draw(const Geometry&);
 
   private:
 	ugdk::math::Vector2D dimension_;
     Color color_;
+    opengl::VertexBuffer* vertexbuffer_;
 };
 
 }  // namespace graphic

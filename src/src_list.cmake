@@ -43,10 +43,9 @@ SET(UGDK_SRC
     ./src/ugdk/base/resourcemanager.h 
     ./src/ugdk/base/types.h 
     ./src/ugdk/graphic.h 
+    ./src/ugdk/graphic/defaultshaders.cc 
+    ./src/ugdk/graphic/defaultshaders.h 
     ./src/ugdk/graphic/drawable.h 
-    ./src/ugdk/graphic/drawable/shape.h 
-    ./src/ugdk/graphic/drawable/solidrectangle.cc 
-    ./src/ugdk/graphic/drawable/solidrectangle.h 
     ./src/ugdk/graphic/drawable/sprite.cc 
     ./src/ugdk/graphic/drawable/sprite.h 
     ./src/ugdk/graphic/drawable/text.cc 
@@ -55,12 +54,20 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/drawable/texturedrectangle.h 
     ./src/ugdk/graphic/font.cc 
     ./src/ugdk/graphic/font.h 
+    ./src/ugdk/graphic/geometry.cc 
+    ./src/ugdk/graphic/geometry.h 
     ./src/ugdk/graphic/light.cc 
     ./src/ugdk/graphic/light.h 
-    ./src/ugdk/graphic/modifier.cc 
-    ./src/ugdk/graphic/modifier.h 
     ./src/ugdk/graphic/node.cc 
     ./src/ugdk/graphic/node.h 
+    ./src/ugdk/graphic/opengl/Exception.cc 
+    ./src/ugdk/graphic/opengl/Exception.h 
+    ./src/ugdk/graphic/opengl/shader.cc 
+    ./src/ugdk/graphic/opengl/shader.h 
+    ./src/ugdk/graphic/opengl/shaderprogram.cc 
+    ./src/ugdk/graphic/opengl/shaderprogram.h 
+    ./src/ugdk/graphic/opengl/vertexbuffer.cc 
+    ./src/ugdk/graphic/opengl/vertexbuffer.h 
     ./src/ugdk/graphic/spritesheet.cc 
     ./src/ugdk/graphic/spritesheet.h 
     ./src/ugdk/graphic/textmanager.cc 
@@ -69,6 +76,7 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/texture.h 
     ./src/ugdk/graphic/videomanager.cc 
     ./src/ugdk/graphic/videomanager.h 
+    ./src/ugdk/graphic/visualeffect.h 
     ./src/ugdk/input.h 
     ./src/ugdk/input/inputmanager.cc 
     ./src/ugdk/input/inputmanager.h 

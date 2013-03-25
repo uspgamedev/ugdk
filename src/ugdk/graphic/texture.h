@@ -16,8 +16,8 @@ class Texture {
     static Texture* CreateRawTexture(int texture_width, int texture_height);
 
     GLuint gltexture() const { return gltexture_; }
-    const int width() const { return texture_width_; }
-    const int height() const { return texture_height_; }
+    int width() const { return texture_width_; }
+    int height() const { return texture_height_; }
 
   private:
     Texture(GLuint gltexture, int texture_width, int texture_height);

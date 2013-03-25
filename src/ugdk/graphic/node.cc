@@ -1,13 +1,15 @@
+#include "node.h"
+
 #include <algorithm>
 #include <cfloat>
 #include <cmath>
+#include "SDL_opengl.h"
+
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/modifier.h>
+#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/light.h>
-#include "node.h"
-
 
 namespace ugdk {
 namespace graphic {
@@ -17,7 +19,6 @@ bool Node::CompareByZIndex(const Node *a, const Node *b) {
 }
 
 Node::~Node() {
-    if(modifier_) delete modifier_;
     if(drawable_) delete drawable_;
     if(light_)    delete light_;
 
@@ -42,37 +43,43 @@ void Node::Update(double dt) {
         (*it)->Update(dt);
 }
 
-void Node::Render() const {
+void Node::Render(const Geometry& parent, const VisualEffect& parent_effect) const {
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
-    Modifier* modifier = modifier_;
-    if(modifier) VIDEO_MANAGER()->PushAndApplyModifier(modifier);
+    VisualEffect compose_effect = (ignores_effect_) ? effect_ : parent_effect;
+    if(!ignores_effect_) compose_effect.Compose(effect_);
+    
+    if(!compose_effect.visible()) return;
 
-    if(drawable_) drawable_->Draw();
+    Geometry compose(parent);
+    compose.Compose(geometry_);
+
+    if(drawable_)
+        drawable_->Draw(compose, compose_effect);
 
     NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
-        (*it)->Render();
-    
-    if(modifier) VIDEO_MANAGER()->PopModifier();
+        (*it)->Render(compose, compose_effect);
 }
 
-void Node::RenderLight() const {
+void Node::RenderLight(const Geometry& parent, const VisualEffect& parent_effect) const {
     if(!active_) return;
     if(childs_.empty() && !light_) return; // optimization!
 
-    Modifier* modifier = modifier_;
-    if(modifier) VIDEO_MANAGER()->PushAndApplyModifier(modifier);
+    VisualEffect compose_effect = (ignores_effect_) ? effect_ : (parent_effect * effect_);
+    if(!compose_effect.visible())
+        return;
+    
+    Geometry compose(parent);
+    compose.Compose(geometry_);
 
-    if(light_)
-        light_->Draw();
+    if(light_) 
+        light_->Draw(compose);
 
     NodeSet::const_iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it)
-        (*it)->RenderLight();
-    
-    if(modifier) VIDEO_MANAGER()->PopModifier();
+        (*it)->RenderLight(compose, compose_effect);
 }
 
 void Node::set_zindex(const double zindex) {

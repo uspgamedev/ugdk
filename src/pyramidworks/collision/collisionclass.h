@@ -16,7 +16,7 @@ class CollisionClass {
   public:
     ~CollisionClass();
     const CollisionClass* parent() const { return parent_; }
-    void set_parent(CollisionClass* parent) { parent_ = parent; }
+    void set_parent(CollisionClass* _parent) { parent_ = _parent; }
 
     const CollisionObjectList FindCollidingObjects(const CollisionObject *target) const;
 

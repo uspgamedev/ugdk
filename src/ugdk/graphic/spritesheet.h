@@ -64,22 +64,27 @@ class Spritesheet {
     virtual ~Spritesheet();
 
     size_t frame_count() const {
-        return frame_sizes_.size();
+        return frames_.size();
     }
 
     const ugdk::math::Vector2D& frame_size(size_t frame_number) const;
 
     /** Draws at position, a draw_size square with the given frame_number
         modified by mirror and both the image and given color and alpha. */
-    void Draw(int frame_number, const ugdk::math::Vector2D& hotspot) const;
+    void Draw(int frame_number, const ugdk::math::Vector2D& hotspot, const Geometry&, const VisualEffect&) const;
 
   private:
-    void createList(GLuint id, Texture* texture, const ugdk::math::Vector2D& hotspot);
+    struct Frame {
+        Frame(Texture* _tex, const math::Vector2D& _size, const math::Vector2D& _hotspot)
+            : texture(_tex), size(_size), hotspot(_hotspot) {}
 
-    GLuint lists_base_;
+        Texture* texture;
+        math::Vector2D size, hotspot;
+    };
 
-    std::vector<Texture*> frames_;
-    std::vector<ugdk::math::Vector2D> frame_sizes_;
+    std::vector<Frame> frames_;
+    const opengl::VertexBuffer* vertexbuffer_;
+    const opengl::VertexBuffer* uvbuffer_;
 };
 
 Spritesheet* CreateSpritesheetFromTag(const std::string&);

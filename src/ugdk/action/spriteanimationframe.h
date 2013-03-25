@@ -6,6 +6,8 @@
 
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
+#include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/visualeffect.h>
 
 #define DEFAULT_PERIOD 0.1
 
@@ -18,20 +20,33 @@ namespace action {
 class SpriteAnimationFrame {
   /*
    * frame_: the index of the spritesheet frame that should be rendered.
-   * modifier_: a pointer to the Modifier object describing the visual modifiers that
+   * geometry_: a pointer to the Geometry object describing the visual modifiers that
    *            should be applied to the rendered sprite.
    */
   public:
-    SpriteAnimationFrame(int frame, graphic::Modifier *modifier = nullptr)
-        : frame_(frame), modifier_(modifier) {}
+    SpriteAnimationFrame(int spritesheet_frame)
+        : spritesheet_frame_(spritesheet_frame), mirror_(0) {}
 
-    int frame() const { return frame_; }
-    graphic::Modifier *modifier() const { return modifier_; }
+    int spritesheet_frame() const { return spritesheet_frame_; }
+    const graphic::Geometry& geometry() const { return geometry_; }
+    const graphic::VisualEffect& effect() const { return effect_; }
+    ugdk::Mirror mirror() const { return mirror_; }
 
-    void set_frame(const int frame) { frame_ = frame; }
+    void set_spritesheet_frame(int frame) { spritesheet_frame_ = frame; }
+    graphic::Geometry& geometry() { return geometry_; }
+    graphic::VisualEffect& effect() { return effect_; }
+    void set_mirror(const ugdk::Mirror& _mirror) { mirror_ = _mirror; }
+
+    static const SpriteAnimationFrame& DEFAULT() {
+        static SpriteAnimationFrame default_frame(0);
+        return default_frame;
+    }
+
   private:
-    int frame_;
-    graphic::Modifier *modifier_;
+    int spritesheet_frame_;
+    graphic::Geometry geometry_;
+    graphic::VisualEffect effect_;
+    ugdk::Mirror mirror_;
 };
 
 /*
@@ -48,10 +63,10 @@ class SpriteAnimation {
     size_t size() const { return animation_frames_.size(); }
 
     /* try to use set_period() instead whenever you can */
-    void set_fps(const double fps) { period_ = 1.0/fps; }
-    void set_period(const double period) { period_ = period; }
+    void set_fps(double _fps) { period_ = 1.0/_fps; }
+    void set_period(double _period) { period_ = _period; }
    
-    Frame* At(size_t i) const { return animation_frames_.at(i); }
+    const Frame& At(size_t i) const { return *animation_frames_.at(i); }
     void Add(Frame* f) { animation_frames_.push_back(f); }
 
   private:

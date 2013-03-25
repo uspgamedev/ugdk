@@ -37,8 +37,8 @@ class Frame {
      @param right The right margin
      @param bottom The lower margin
   */
-    Frame(double left, double top, double right, double bottom) :
-        left_(left), top_(top), right_(right), bottom_(bottom) { }
+    Frame(double _left, double _top, double _right, double _bottom) :
+        left_(_left), top_(_top), right_(_right), bottom_(_bottom) { }
     ~Frame() { }
 
     // Utilidades inline
@@ -52,14 +52,15 @@ class Frame {
     */
     /**@{
      */
+    void set_left(double _left) { left_ = _left; }
+    void set_top(double _top) { top_ = _top; }
+    void set_right(double _right) { right_ = _right; }
+    void set_bottom(double _bottom) { bottom_ = _bottom; }
+
     double left() const { return left_; }
-    void set_left(double left) { left_ = left; }
     double top() const { return top_; }
-    void set_top(double top) { top_ = top; }
     double right() const { return right_; }
-    void set_right(double right) { right_ = right; }
     double bottom() const { return bottom_; }
-    void set_bottom(double bottom) {bottom_ = bottom; }
     /** @}
      */
     // Devolve true se houver colisao entre

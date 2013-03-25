@@ -332,6 +332,13 @@ int DataGear::DoFile(lua_State* L) {
         return 0;
     }
 
+#ifdef DEBUG
+    std::string success_message = "Loaded module: '";
+    success_message += filename;
+    success_message += "'.\n";
+    LuaMsg(success_message.c_str());
+#endif
+
     L_.newtable();  // temp env table
     L_.newtable();  // temp env table's metatable
     L_.getfenv(-3);
@@ -343,12 +350,6 @@ int DataGear::DoFile(lua_State* L) {
     L_.call(0, 0);
     L_.getfenv(-1);   // getfenv(file)
 
-#ifdef DEBUG
-    std::string success_message = "Loaded module: '";
-    success_message += filename;
-    success_message += "'.\n";
-    LuaMsg(success_message.c_str());
-#endif
     dtgear.PopData(1, result_id);
 
     return 0;

@@ -28,7 +28,7 @@ namespace ikdtree {
 
 namespace util {
 
-template<class T, int IndexSize = 16>
+template<class T>
 class IndexableTable;
 
 }

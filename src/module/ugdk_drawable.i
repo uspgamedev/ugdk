@@ -9,8 +9,6 @@
 
 %{
 
-#include <ugdk/graphic/drawable/shape.h>
-#include <ugdk/graphic/drawable/solidrectangle.h>
 #include <ugdk/graphic/drawable/sprite.h>
 #include <ugdk/graphic/drawable/text.h>
 #include <ugdk/graphic/drawable/texturedrectangle.h>
@@ -22,6 +20,9 @@
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 %import(module="ugdk_base") <ugdk/base/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_action") <ugdk/action/spritetypes.h>
+%import(module="ugdk_graphic") <ugdk/graphic/geometry.h>
+%import(module="ugdk_graphic") <ugdk/graphic/visualeffect.h>
 %import(module="ugdk_graphic") <ugdk/graphic/drawable.h>
 %import(module="ugdk_graphic") <ugdk/graphic/spritesheet.h>
 %import(module="ugdk_graphic") <ugdk/graphic/texture.h>
@@ -30,8 +31,6 @@
 
 proxy_class(ugdk::action::Observer)
 
-%include <ugdk/graphic/drawable/shape.h>
-%include <ugdk/graphic/drawable/solidrectangle.h>
 %include <ugdk/graphic/drawable/sprite.h>
 %include <ugdk/graphic/drawable/text.h>
 %include <ugdk/graphic/drawable/texturedrectangle.h>
@@ -39,11 +38,9 @@ proxy_class(ugdk::action::Observer)
 
 namespace ugdk {
 namespace graphic {
-    export_class(Shape)
     export_class(Text)
     export_class(Sprite)
     export_class(TexturedRectangle)
-    export_class(SolidRectangle)
 }
 }
 

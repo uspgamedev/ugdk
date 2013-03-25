@@ -1,67 +1,61 @@
-#include <ugdk/config/config.h>
-#include "SDL_opengl.h"
-
+#include <GL/glew.h>
+#define NO_SDL_GLEXT
 #include <ugdk/graphic/drawable/texturedrectangle.h>
 
+//#define GLM_SWIZZLE 
+#include <glm/glm.hpp>
+
 #include <ugdk/base/engine.h>
-#include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/modifier.h>
 #include <ugdk/graphic/texture.h>
+#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/vertexbuffer.h>
+#include <ugdk/math/integer2D.h>
 
 namespace ugdk {
 namespace graphic {
+    
+TexturedRectangle::TexturedRectangle(Texture* texture) : size_(math::Integer2D(texture->width(), texture->height())), texture_(texture) {
+    vertexbuffer_ = opengl::VertexBuffer::CreateDefault();
+    uvbuffer_ = opengl::VertexBuffer::CreateDefault();
+}
 
-TexturedRectangle::TexturedRectangle(Texture* texture) 
-    : size_(static_cast<double>(texture->width()), static_cast<double>(texture->height())), texture_(texture) {}
+TexturedRectangle::TexturedRectangle(Texture* texture, const math::Vector2D& _size) : size_(_size), texture_(texture) {
+    vertexbuffer_ = opengl::VertexBuffer::CreateDefault();
+    uvbuffer_ = opengl::VertexBuffer::CreateDefault();
+}
 
-TexturedRectangle::TexturedRectangle(Texture* texture, const ugdk::math::Vector2D& size) 
-    : size_(size), texture_(texture) {}
+TexturedRectangle::~TexturedRectangle() {
+}
 
-TexturedRectangle::~TexturedRectangle() {}
+void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effect) const {
+    Geometry final_geometry(geometry);
+    final_geometry.Compose(Geometry(math::Vector2D(-hotspot_), size_));
 
-void TexturedRectangle::Update(double dt) {}
+    const glm::mat4& mat = final_geometry.AsMat4();
+    if(mat[3].x > 1 || mat[3].y < -1 || 
+        mat[0].x + mat[1].x + mat[3].x < -1 || 
+        mat[0].y + mat[1].y + mat[3].y > 1)
+        return;
+    // Use our shader
+    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
 
-void TexturedRectangle::Draw() const {
-    const Modifier& mod = VIDEO_MANAGER()->CurrentModifier();
-    if(!mod.visible()) return;
+    // Send our transformation to the currently bound shader, 
+    // in the "MVP" uniform
+    shader_use.SendGeometry(mat);
+    shader_use.SendEffect(effect);
 
-    ugdk::math::Vector2D origin, target(size_);
+    // Bind our texture in Texture Unit 0
+    shader_use.SendTexture(0, texture_);
 
-    if(mod.mirror() & MIRROR_HFLIP) { // Horizontal flip
-        origin.x = target.x;
-        target.x = 0.0;
-    }
-    if(mod.mirror() & MIRROR_VFLIP) { // Vertical flip
-        origin.y = target.y;
-        target.y = 0.0;
-    }
+    // 1rst attribute buffer : vertices
+    shader_use.SendVertexBuffer(vertexbuffer_, opengl::VERTEX, 0);
 
-    origin -= hotspot_;
-    target -= hotspot_;
+    // 2nd attribute buffer : UVs
+    shader_use.SendVertexBuffer(uvbuffer_, opengl::TEXTURE, 0);
 
-    glColor4dv(mod.color().val);
-
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, texture_->gltexture());
-
-    static double TEX_COORD_ONE[]   = { 0.0, 0.0 },
-                 TEX_COORD_TWO[]   = { 1.0, 0.0 },
-                 TEX_COORD_THREE[] = { 1.0, 1.0 },
-                 TEX_COORD_FOUR[]  = { 0.0, 1.0 };
-
-    glBegin( GL_QUADS ); { //Start quad
-        glTexCoord2dv(TEX_COORD_ONE);
-        glVertex2dv( origin.val );
-
-        glTexCoord2dv(TEX_COORD_TWO);
-        glVertex2d(  target.x, origin.y );
-
-        glTexCoord2dv(TEX_COORD_THREE);
-        glVertex2dv( target.val );
-
-        glTexCoord2dv(TEX_COORD_FOUR);
-        glVertex2d(  origin.x, target.y );
-    } glEnd();
+    // Draw the triangle !
+    glDrawArrays(GL_QUADS, 0, 4); // 12*3 indices starting at 0 -> 12 triangles
 }
 
 }  // namespace graphic
