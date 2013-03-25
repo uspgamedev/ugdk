@@ -34,10 +34,10 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
     title_ = title;
     
     // Set window title.
-    SDL_WM_SetCaption(title.c_str(), (icon.length() > 0) ? icon.c_str() : NULL );
+    SDL_WM_SetCaption(title.c_str(), (icon.length() > 0) ? icon.c_str() : nullptr );
     
     if(icon.length() > 0)
-        SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), NULL);
+        SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), nullptr);
        
     if(ChangeResolution(size, fullscreen) == false)
         if(ChangeResolution(default_resolution, false) == false) {
@@ -62,7 +62,7 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     if(fullscreen) flags |= SDL_FULLSCREEN;
 
-    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == NULL)
+    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == nullptr)
         return false;
       
     GLenum err = glewInit();
@@ -190,7 +190,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
 }
 
 void VideoManager::initializeLight() {
-    if(light_buffer_ != NULL) delete light_buffer_;
+    if(light_buffer_ != nullptr) delete light_buffer_;
     light_buffer_ = Texture::CreateRawTexture(static_cast<int>(video_size_.x), static_cast<int>(video_size_.y));
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );

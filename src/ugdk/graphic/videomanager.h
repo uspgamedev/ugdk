@@ -19,7 +19,7 @@ class VideoManager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : settings_(false, false, false), light_buffer_(NULL), default_shader_(NULL) {}
+    VideoManager() : settings_(false, false, false), light_buffer_(nullptr), default_shader_(nullptr) {}
     ~VideoManager() {}
 
     bool Initialize(const std::string& title, const ugdk::math::Vector2D& size, bool fullscreen, const std::string& icon);

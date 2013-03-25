@@ -47,7 +47,7 @@ static bool IsFont(char *str) {
     char* tmp = str;
     for(int i = 1; i<5/*font_def[i] != '\0'*/; ++i) {
         tmp = strchr(tmp, font_def[i]);
-        if(tmp == NULL) return false;
+        if(tmp == nullptr) return false;
     }
     return true;
 }
@@ -84,7 +84,7 @@ static void ReadFont(char* str) {
     }
     char *resp = strchr(buffer, ':');
            end = strchr(buffer + 1, '\n');
-    if(end != NULL) end[0] = '\0';
+    if(end != nullptr) end[0] = '\0';
 
     TEXT_MANAGER()->AddFont(name, resp + 1, font_size, ident, style);
 }
@@ -99,7 +99,7 @@ static bool IsWord(char* str) {
     char *tmp = str;
     for(int i = 1; i<5/*key_def[i] != '\0'*/; ++i) {
         tmp = strchr(tmp, key_def[i]);
-        if(tmp == NULL) return false;
+        if(tmp == nullptr) return false;
     }
     return true;
 }
@@ -123,7 +123,7 @@ static std::pair<LanguageWord*, std::string> ReadWord(char* str, bool from_file)
     // Value
     start = strchr(end + 1, key_def[4]);
     end =   strchr(end + 1, '\n');
-    if(end != NULL) end[0] = '\0';
+    if(end != nullptr) end[0] = '\0';
 
     if(from_file) {
         std::string filepath(start + 1);
@@ -169,7 +169,7 @@ static int title_type(char* str) {
 // Fills the map with the information on the given file
 bool Language::Load(const std::string& language_file) {
     FILE* file = fopen(PATH_MANAGER()->ResolvePath(language_file).c_str(), "r");
-    if(file == NULL)
+    if(file == nullptr)
         return false;
 
     char buffer_raw[STRING_LENGTH];

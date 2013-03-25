@@ -21,7 +21,7 @@ using gdd::GDDArgs;
 using gdd::LoadError;
 
 AnimationProtocol::AnimationProtocol() 
-    : current_description_(NULL), current_animation_(NULL), current_effect_(NULL), composing_(false) {
+    : current_description_(nullptr), current_animation_(nullptr), current_effect_(nullptr), composing_(false) {
     //TODO: Make this map static maybe?
 
     //ENTRY_MAP_BULK_ASSIGN(EFFECT_RING, NewEntry_EffectNumber  , "number"  , "n");
@@ -70,7 +70,7 @@ AnimationProtocol::~AnimationProtocol() {
 }
 
 bool AnimationProtocol::NewDescription() {
-    if(current_description_ != NULL) return false;
+    if(current_description_ != nullptr) return false;
     current_description_ = new action::SpriteAnimationTable();
     return true;
 }
@@ -85,7 +85,7 @@ bool AnimationProtocol::NewData(const GDDString& data_name) {
     
 action::SpriteAnimationTable* AnimationProtocol::FinalizeDescription() {
     action::SpriteAnimationTable* result = current_description_;
-    current_description_ = NULL;
+    current_description_ = nullptr;
     return result;
 }
     

@@ -17,7 +17,7 @@ Shader::~Shader() {
 }
 
 bool Shader::CompileSource(const char* source) {
-    glShaderSource(id_, 1, &source, NULL);
+    glShaderSource(id_, 1, &source, nullptr);
     glCompileShader(id_);
 
     GLint status;
@@ -27,9 +27,9 @@ bool Shader::CompileSource(const char* source) {
         glGetShaderiv(id_, GL_INFO_LOG_LENGTH, &infoLogLength);
 
         GLchar *strInfoLog = new GLchar[infoLogLength + 1];
-        glGetShaderInfoLog(id_, infoLogLength, NULL, strInfoLog);
+        glGetShaderInfoLog(id_, infoLogLength, nullptr, strInfoLog);
 
-        const char *strShaderType = NULL;
+        const char *strShaderType = nullptr;
         switch(type_) {
         case GL_VERTEX_SHADER: strShaderType = "vertex"; break;
         case GL_GEOMETRY_SHADER: strShaderType = "geometry"; break;

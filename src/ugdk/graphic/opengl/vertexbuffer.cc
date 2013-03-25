@@ -45,7 +45,7 @@ namespace opengl {
 		}
 	}
     const VertexBuffer *VertexBuffer::CreateDefault() {
-        static opengl::VertexBuffer* buffer = NULL;
+        static opengl::VertexBuffer* buffer = nullptr;
         static const GLfloat buffer_data[] = { 
             0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
         };

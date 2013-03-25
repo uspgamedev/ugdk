@@ -11,7 +11,7 @@ namespace ugdk {
 namespace graphic {
 
 opengl::ShaderProgram* InterfaceShader() {
-    static opengl::ShaderProgram* myprogram = NULL;
+    static opengl::ShaderProgram* myprogram = nullptr;
     if(!myprogram) {
         opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
@@ -59,7 +59,7 @@ opengl::ShaderProgram* InterfaceShader() {
 }
 
 opengl::ShaderProgram* LightSystemShader() {
-    static opengl::ShaderProgram* myprogram = NULL;
+    static opengl::ShaderProgram* myprogram = nullptr;
     if(!myprogram) {
         opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
@@ -112,7 +112,7 @@ opengl::ShaderProgram* LightSystemShader() {
 }
 
 opengl::ShaderProgram* LightShader() {
-    static opengl::ShaderProgram* myprogram = NULL;
+    static opengl::ShaderProgram* myprogram = nullptr;
     if(!myprogram) {
         opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
