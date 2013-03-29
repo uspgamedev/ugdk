@@ -144,12 +144,7 @@ class VirtualObj {
 #ifdef UGDK_USING_VARIADIC
     template<typename R, typename ...Args>
     std::function<R (Args...)> AsFunction() {
-        VirtualData::Ptr data = data_;
-        return [data](Args... args) -> R {
-            VirtualData::Vector arguments;
-            createArgumentsVector(arguments, data->wrapper(), args...);
-            return VirtualPrimitive<R>::value(data->Execute(arguments), false);
-        };
+        return CreateFunction<R, Args...>(data_);
     }
 
     template<typename ...Args>
@@ -177,6 +172,15 @@ class VirtualObj {
         if(t.wrapper() != wrapper) return false;
         v.push_back(t.data_);
         return createArgumentsVector(v, wrapper, args...);
+    }
+
+    template<typename R, typename ...Args>
+    static std::function<R (Args...)> CreateFunction(VirtualData::Ptr data) {
+        return [data](Args... args) -> R {
+            VirtualData::Vector arguments;
+            createArgumentsVector(arguments, data->wrapper(), args...);
+            return VirtualPrimitive<R>::value(data->Execute(arguments), false);
+        };
     }
 #endif
 

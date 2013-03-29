@@ -8,7 +8,7 @@ before_script:
 
 script:
   - cmake . $OPTIONS
-  - make ugdk_test 
+  - make ugdk_test && make ugdk_script_test
   - ./test/ugdk_test
 
 notifications:
