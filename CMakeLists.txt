@@ -111,6 +111,19 @@ include_directories(${SDLTTF_INCLUDE_DIR})
 find_package(SDL_image REQUIRED)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
+find_package(Freetype QUIET)
+if(NOT FREETYPE_FOUND)
+	message("-- Using built-in Freetype.")
+	add_subdirectory(externals/freetype)
+    set(UGDK_FREETYPE_INCLUDE_DIRS ${FREETYPE_EXTERNAL_INCLUDE_DIRS})
+    set(UGDK_FREETYPE_LIBRARY      ${FREETYPE_EXTERNAL_LIBRARY})
+else()
+	message("-- Found Freetype: ${FREETYPE_LIBRARIES}.")
+    set(UGDK_FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
+    set(UGDK_FREETYPE_LIBRARY      ${FREETYPE_LIBRARIES})
+endif()
+include_directories(${UGDK_FREETYPE_INCLUDE_DIRS})
+
 find_package(GLEW 1.5 QUIET)
 if(NOT GLEW_FOUND)
     message("-- GLEW not found, using included source.")
@@ -196,6 +209,7 @@ target_link_libraries (libugdk
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
+					   ${UGDK_FREETYPE_LIBRARY}
                        ${UGDK_LIBRARIES})
 
 target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
@@ -206,6 +220,7 @@ target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
+					   ${UGDK_FREETYPE_LIBRARY}
                        ${UGDK_LIBRARIES})
                       
 set_target_properties (libugdk PROPERTIES 
