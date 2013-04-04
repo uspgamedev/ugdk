@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 2.8)
 
 project (glew C)
 
+include_directories("include")
 add_definitions(-DGLEW_STATIC)
 add_library(glew STATIC EXCLUDE_FROM_ALL "src/glew.c")
 
