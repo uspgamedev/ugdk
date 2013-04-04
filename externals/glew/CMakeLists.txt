@@ -1,0 +1,15 @@
+# Requires CMake 2.8 or newer.
+cmake_minimum_required (VERSION 2.8)
+
+project (glew C)
+
+add_definitions(-DGLEW_STATIC)
+add_library(glew STATIC EXCLUDE_FROM_ALL "src/glew.c")
+
+set(GLEW_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include" CACHE PATH "" FORCE)
+set(GLEW_LIBRARY glew CACHE PATH ""  FORCE)
+
+set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
+set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+
+MARK_AS_ADVANCED(GLEW_INCLUDE_DIR GLEW_LIBRARY)
