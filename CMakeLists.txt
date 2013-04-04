@@ -14,6 +14,10 @@ set (UGDK_INSTALL_LOCATION share/ugdk)
 
 message ("=== UGDK version ${FRAMEWORK_VERSION} ===")
 
+IF(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
+	set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
+ENDIF()
+
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
