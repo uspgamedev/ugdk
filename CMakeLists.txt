@@ -110,15 +110,11 @@ include_directories(${SDLIMAGE_INCLUDE_DIR})
 find_package(GLEW 1.5 QUIET)
 if(NOT GLEW_FOUND)
     message("-- GLEW not found, using included source.")
-    add_library(glew STATIC EXCLUDE_FROM_ALL "externals/glew/src/glew.c")
-    add_definitions(-DGLEW_STATIC)
-
-    include_directories("externals/glew/include")
-    set(EXTERNAL_GLEW_LIBRARY glew)
-else(NOT GLEW_FOUND)
-    include_directories(${GLEW_INCLUDE_DIR})
-    set(EXTERNAL_GLEW_LIBRARY ${GLEW_LIBRARY})
+	add_subdirectory(externals/glew)
+	set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
+	set(GLEW_LIBRARIES ${GLEW_LIBRARY})
 endif(NOT GLEW_FOUND)
+include_directories(${GLEW_INCLUDE_DIRS})
 
 ##########################################
 # Package Configuration
@@ -195,7 +191,7 @@ target_link_libraries (libugdk
                        ${SDLTTF_LIBRARY}
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
-                       ${EXTERNAL_GLEW_LIBRARY}
+                       ${GLEW_LIBRARIES}
                        ${UGDK_LIBRARIES})
 
 target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
@@ -205,7 +201,7 @@ target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES
                        ${SDLTTF_LIBRARY}
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
-                       ${EXTERNAL_GLEW_LIBRARY}
+                       ${GLEW_LIBRARIES}
                        ${UGDK_LIBRARIES})
                       
 set_target_properties (libugdk PROPERTIES 
