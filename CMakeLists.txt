@@ -113,16 +113,14 @@ include_directories(${SDLIMAGE_INCLUDE_DIR})
 
 find_package(Freetype QUIET)
 if(NOT FREETYPE_FOUND)
-	message("-- Using built-in Freetype.")
+	message("-- Freetype not found, using included source.")
 	add_subdirectory(externals/freetype)
-    set(UGDK_FREETYPE_INCLUDE_DIRS ${FREETYPE_EXTERNAL_INCLUDE_DIRS})
-    set(UGDK_FREETYPE_LIBRARY      ${FREETYPE_EXTERNAL_LIBRARY})
+    set(FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIR})
+    set(FREETYPE_LIBRARIES    ${FREETYPE_LIBRARY})
 else()
 	message("-- Found Freetype: ${FREETYPE_LIBRARIES}.")
-    set(UGDK_FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIRS})
-    set(UGDK_FREETYPE_LIBRARY      ${FREETYPE_LIBRARIES})
 endif()
-include_directories(${UGDK_FREETYPE_INCLUDE_DIRS})
+include_directories(${FREETYPE_INCLUDE_DIRS})
 
 find_package(GLEW 1.5 QUIET)
 if(NOT GLEW_FOUND)
@@ -209,7 +207,7 @@ target_link_libraries (libugdk
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
-					   ${UGDK_FREETYPE_LIBRARY}
+					   ${FREETYPE_LIBRARIES}
                        ${UGDK_LIBRARIES})
 
 target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
@@ -220,7 +218,7 @@ target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
-					   ${UGDK_FREETYPE_LIBRARY}
+					   ${FREETYPE_LIBRARIES}
                        ${UGDK_LIBRARIES})
                       
 set_target_properties (libugdk PROPERTIES 

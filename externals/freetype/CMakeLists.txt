@@ -12,7 +12,7 @@ set(freetype_SOURCES
 	include/freetype/ftbbox.h
 	include/freetype/ftbdf.h
 	include/freetype/ftbitmap.h
-    include/freetype/ftbzip2.h
+	include/freetype/ftbzip2.h
 	include/freetype/ftcache.h
 	include/freetype/ftchapters.h
 	include/freetype/ftcid.h
@@ -66,7 +66,7 @@ set(freetype_SOURCES
 	src/base/fttype1.c
 	src/base/ftwinfnt.c
 	src/bdf/bdf.c
-    src/bzip2/ftbzip2.c
+	src/bzip2/ftbzip2.c
 	src/cache/ftcache.c
 	src/cff/cff.c
 	src/cid/type1cid.c
@@ -90,8 +90,8 @@ include_directories(include)
 add_definitions(-DFT2_BUILD_LIBRARY)
 add_library(freetype STATIC ${freetype_SOURCES})
 
-set(FREETYPE_EXTERNAL_INCLUDE_DIR_ft2build "${freetype_SOURCE_DIR}/include" CACHE PATH "" FORCE)
-set(FREETYPE_EXTERNAL_INCLUDE_DIR_freetype2 "${freetype_SOURCE_DIR}/include/freetype" CACHE PATH "" FORCE)
-set(FREETYPE_EXTERNAL_INCLUDE_DIRS "${FREETYPE_EXTERNAL_INCLUDE_DIR_ft2build};${FREETYPE_EXTERNAL_INCLUDE_DIR_freetype2}" CACHE PATH "" FORCE)
-set(FREETYPE_EXTERNAL_LIBRARY freetype CACHE STRING "" FORCE)
+set(FREETYPE_INCLUDE_DIR_ft2build "${freetype_SOURCE_DIR}/include" CACHE PATH "" FORCE)
+set(FREETYPE_INCLUDE_DIR_freetype2 "${freetype_SOURCE_DIR}/include/freetype" CACHE PATH "" FORCE)
+set(FREETYPE_INCLUDE_DIR "${FREETYPE_EXTERNAL_INCLUDE_DIR_ft2build};${FREETYPE_EXTERNAL_INCLUDE_DIR_freetype2}" CACHE PATH "" FORCE)
+set(FREETYPE_LIBRARY freetype CACHE STRING "" FORCE)
 MARK_AS_ADVANCED(FREETYPE_EXTERNAL_LIBRARY FREETYPE_EXTERNAL_INCLUDE_DIR FREETYPE_EXTERNAL_INCLUDE_DIR_freetype2 FREETYPE_EXTERNAL_INCLUDE_DIR_ft2build)
