@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////
 /// OpenGL Mathematics (glm.g-truc.net)
 ///
-/// Copyright (c) 2005 - 2012 G-Truc Creation (www.g-truc.net)
+/// Copyright (c) 2005 - 2013 G-Truc Creation (www.g-truc.net)
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
@@ -431,6 +431,20 @@ namespace detail
 	/// Returns the absolute value of a half-precision floating-point four dimensional vector
 	/// @see gtc_half_float
 	hvec4 abs(hvec4 const & x);
+
+	/// Selects which vector each returned component comes
+	/// from. For a component of <a> that is false, the
+	/// corresponding component of x is returned. For a
+	/// component of a that is true, the corresponding
+	/// component of y is returned. Components of x and y that
+	/// are not selected are allowed to be invalid floating point
+	/// values and will have no effect on the results. Thus, this
+	/// provides different functionality than
+	/// genType mix(genType x, genType y, genType(a))
+	/// where a is a Boolean vector.
+	///
+	/// @see gtc_half_float
+	half mix(half const & x, half const & y, bool const & a);
 
 	/// @}
 }// namespace glm
