@@ -78,3 +78,10 @@ TEST(Vector2D, Methods) {
         EXPECT_EQ(t.x, -7.2);
         EXPECT_EQ(t.y, -5.6); }
 }
+
+TEST(Vector2D, TypeSize) {
+    Vector2D v;
+    EXPECT_EQ(2*sizeof(double), sizeof(Vector2D));
+    EXPECT_TRUE(sizeof(v) == sizeof(v.x) + sizeof(v.y));
+    EXPECT_TRUE(sizeof(v) == sizeof(v.val));
+}
