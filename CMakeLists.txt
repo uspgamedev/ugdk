@@ -64,30 +64,6 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
 endif ()
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
-if (UNIX OR MINGW)
-    # se for o g++ para *nix ou o MinGW para Windows:
-    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2)
-    add_definitions(-Wall
-# TODO: would like these but they produce overwhelming amounts of warnings
-#       -Wextra
-#       -Wmissing-field-initializers
-#       -Wswitch-default
-#       -Wfloat-equal
-#       -Wconversion
-#       -Wzero-as-null-pointer-constant
-        -Wtype-limits
-        -Wsign-compare
-        -Wignored-qualifiers
-        -Wuninitialized
-        #-Wshadow
-        -Wlogical-op
-        -Winit-self)
-
-elseif (MSVC) 
-    add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
-endif ()
-
 # ${UGDK_SRC} está definido?
 if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
@@ -182,6 +158,33 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
+
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+if (UNIX OR MINGW)
+    # se for o g++ para *nix ou o MinGW para Windows:
+    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2)
+    add_definitions(-Wall
+# TODO: would like these but they produce overwhelming amounts of warnings
+#       -Wextra
+#       -Wmissing-field-initializers
+#       -Wswitch-default
+#       -Wfloat-equal
+#       -Wconversion
+#       -Wzero-as-null-pointer-constant
+        -Wtype-limits
+        -Wsign-compare
+        -Wignored-qualifiers
+        -Wuninitialized
+        #-Wshadow
+        -Wlogical-op
+        -Winit-self)
+
+elseif (MSVC) 
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
+endif ()
+
+# =============================
 add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
