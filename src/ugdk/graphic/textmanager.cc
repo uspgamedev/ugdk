@@ -1,11 +1,15 @@
+#include <ugdk/graphic/textmanager.h>
+
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
 #include <clocale>
 #include <cwchar>
+
+#include <freetype-gl++/texture-font.hpp>
+
 #include <ugdk/config/config.h>
 #include <ugdk/base/engine.h>
-#include <ugdk/graphic/textmanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/drawable/text.h>
@@ -104,8 +108,9 @@ void TextManager::AddFont(const std::string& name, const std::string& path, int 
         fprintf(stderr, "Loading new font tag: \"%s\"\n", name.c_str());
     #endif
     }
+    std::string fullpath = PATH_MANAGER()->ResolvePath(path);
 
-    fonts_[name] = current_font_ = new freetypeglxx::TextureFont(atlas_, path, size);
+    fonts_[name] = current_font_ = new freetypeglxx::TextureFont(atlas_, fullpath, size);
 }
 
 }  // namespace graphic

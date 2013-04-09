@@ -2,8 +2,10 @@
 #include "GL/glew.h"
 #define NO_SDL_GLEXT
 #include "SDL_opengl.h"
+#include <freetype-gl++/texture-font.hpp>
 
 #include <ugdk/graphic/drawable/text.h>
+
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 
@@ -87,7 +89,8 @@ void Text::SetMessage(const std::wstring& message) {
 }
 
 void Text::SetMessage(const std::vector<std::wstring>& message) {
-    delete vertex_buffer_;
+    SetMessage(message[0]);
+    /*delete vertex_buffer_;
     delete texture_buffer_;
     std::vector<std::wstring>::const_iterator it;
     for(it = message.begin(); it != message.end(); ++it) {
@@ -100,7 +103,7 @@ void Text::SetMessage(const std::vector<std::wstring>& message) {
         line_width_.push_back(line_size.x);
     }
     message_.clear();
-    message_ = message;
+    message_ = message;*/
 }
 
 const ugdk::math::Vector2D& Text::size() const {

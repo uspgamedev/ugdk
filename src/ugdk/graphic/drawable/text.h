@@ -6,7 +6,10 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/drawable.h>
-#include <freetype-gl++/texture-font.hpp>
+
+namespace freetypeglxx {
+    class TextureFont;
+}
 
 namespace ugdk {
 namespace graphic {

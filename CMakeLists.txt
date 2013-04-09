@@ -205,7 +205,7 @@ target_link_libraries (libugdk
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
-                       ${FREETYPE_LIBRARIES}
+                       ${FREETYPE_GLPP_LIBRARIES}
                        ${UGDK_LIBRARIES})
 
 target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
