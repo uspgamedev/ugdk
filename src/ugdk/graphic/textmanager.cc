@@ -4,8 +4,6 @@
 #include <clocale>
 #include <cwchar>
 #include <ugdk/config/config.h>
-#include "SDL_opengl.h"
-#include "SDL_ttf.h"
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/util/pathmanager.h>
@@ -24,37 +22,28 @@ namespace ugdk {
 namespace graphic {
 
 bool TextManager::Initialize() {
-    TTF_Init();
     setlocale (LC_ALL,"en_US.C-UTF-8");
+    atlas_ = new freetypeglxx::TextureAtlas(512, 512, 1);
     return true;
 }
 
-TextManager::~TextManager() {
-    TTF_Quit();
-}
+TextManager::~TextManager() {}
 
 bool TextManager::Release() {
-    map<std::string,Font*>::iterator font_it;
+    map<std::string,freetypeglxx::TextureFont*>::iterator font_it;
     for(font_it = fonts_.begin(); font_it != fonts_.end(); ++font_it)
         delete font_it->second;
     fonts_.clear();
-
-    map<std::string,Texture**>::iterator imgs_it;
-    for(imgs_it = font_images_.begin(); imgs_it != font_images_.end(); ++imgs_it) {
-        for(int i = 0; i < 65535; i++)
-            if(imgs_it->second[i] != NULL) {
-                delete imgs_it->second[i];
-            }
-        delete[] imgs_it->second;
-    }
-    font_images_.clear();
+    
+    delete atlas_;
+    atlas_ = NULL;
     return true;
 }
 
 Text* TextManager::GetText(const std::wstring& text, const std::string& fonttag, int width) {
     wstring subString;
     vector<wstring> lines;
-    Font *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
+    freetypeglxx::TextureFont *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
     int screensize = ((width == -1) ? static_cast<int>(VIDEO_MANAGER()->video_size().x) : width) - 200;
     int cur_width = 0, last_break = 0;
     for(unsigned int i = 0; i < text.length(); i++) {
@@ -65,7 +54,7 @@ Text* TextManager::GetText(const std::wstring& text, const std::string& fonttag,
             last_break = i + 1;
             cur_width = 0;
         } else {
-            cur_width += static_cast<int>(font->GetLetterSize(text[i]).x);
+            cur_width += font->GetGlyph(text[i])->width();
         }
     }
     if(cur_width > 0) {
@@ -102,29 +91,7 @@ Text* TextManager::GetTextFromFile(const std::string& path) {
     return GetTextFromFile(path, blank_font);
 }
 
-static Texture** LoadFontTexturesFromFile(const std::string& path) {
-    Texture** font_image = new Texture*[65535];
-    memset(font_image, 0, sizeof(*font_image)*65535);
-    TTF_Font *ttf_font = TTF_OpenFont( path.c_str(), 100 );
-    SDL_Color sdlcolor = { 255, 255, 255 };
-    uint16 str[2];
-    str[1] = '\0'; // End of string
-    unsigned int i = 0x20;
-    while(i < 256) {
-        // For each possible character in the extended ASCII table, render and store it.
-        // Could be improved to ignore non-renderable characters, like linefeed.
-        str[0] = (uint16)(i);
-        SDL_Surface *letter = TTF_RenderUNICODE_Blended( ttf_font, str, sdlcolor );
-        font_image[i] = Texture::CreateFromSurface(letter);
-        SDL_FreeSurface(letter);
 
-        i++;
-        if(i == 128)
-            i = 160;
-    }
-    TTF_CloseFont( ttf_font );
-    return font_image;
-}
 
 void TextManager::AddFont(const std::string& name, const std::string& path, int size, char ident, bool fancy) {
     if(fonts_.count(name) > 0) {
@@ -138,10 +105,7 @@ void TextManager::AddFont(const std::string& name, const std::string& path, int 
     #endif
     }
 
-    if(font_images_.count(path) == 0) // Given file not loaded, loading it.
-        font_images_[path] = LoadFontTexturesFromFile(PATH_MANAGER()->ResolvePath(path));
-
-    fonts_[name] = current_font_ = new Font(font_images_[path], size, ident, fancy);
+    fonts_[name] = current_font_ = new freetypeglxx::TextureFont(atlas_, path, size);
 }
 
 }  // namespace graphic

@@ -5,6 +5,7 @@
 
 #include <ugdk/graphic/drawable/text.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/vertexbuffer.h>
 
 #include <ugdk/base/engine.h>
 #include <ugdk/base/types.h>
@@ -19,34 +20,75 @@ namespace graphic {
 
 using ugdk::Color;
 
-static ugdk::math::Vector2D GetStringSize(const std::wstring& string, Font* font) {
-    double width = 0, height = font->GetLetterSize(L'\n').y;
+static ugdk::math::Vector2D GetStringSize(const std::wstring& string, freetypeglxx::TextureFont* font) {
+    double width = 0;
+    size_t height = font->GetGlyph(L'\n')->height();
     for(size_t i = 0; i < string.length(); i++) {
-        const ugdk::math::Vector2D letter_size = font->GetLetterSize(string[i]);
-        width += letter_size.x;
-        height = std::max(height, letter_size.y);
+        freetypeglxx::TextureGlyph* glyph = font->GetGlyph(string[i]);
+        width += glyph->width();
+        height = std::max(height, glyph->height());
     }
-    return ugdk::math::Vector2D(width, height);
+    return ugdk::math::Vector2D(width, static_cast<double>(height));
 }
 
-Text::Text(const std::wstring& message, Font *font) : font_(font) {
+Text::Text(const std::wstring& message, freetypeglxx::TextureFont *font) 
+    : font_(font), vertex_buffer_(NULL), texture_buffer_(NULL) {
     this->SetMessage(message);
 }
 
-Text::Text(const std::vector<std::wstring>& message, Font *font) : font_(font) {
+Text::Text(const std::vector<std::wstring>& message, freetypeglxx::TextureFont *font) 
+    : font_(font), vertex_buffer_(NULL), texture_buffer_(NULL) {
     this->SetMessage(message);
 }
 
 void Text::SetMessage(const std::wstring& message) {
+    delete vertex_buffer_;
+    delete texture_buffer_;
     message_.clear();
-    message_.push_back(message);
     size_ = GetStringSize(message, font_);
+
+    vertex_buffer_ = opengl::VertexBuffer::Create(message.size() * 4 * sizeof(math::Vector2D), 
+                                                    GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+    texture_buffer_= opengl::VertexBuffer::Create(message.size() * 4 * sizeof(math::Vector2D), 
+                                                    GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+
+    opengl::VertexBuffer::Bind bind_vertex(*vertex_buffer_), bind_texture(*texture_buffer_);
+    opengl::VertexBuffer::Mapper vertex_mapper(*vertex_buffer_), texture_mapper(*texture_buffer_);
+    math::Vector2D* vertex_data = static_cast<math::Vector2D*>(vertex_mapper.get());
+    math::Vector2D* texture_data = static_cast<math::Vector2D*>(texture_mapper.get());
+    math::Vector2D pen;
+    for(size_t i = 0; i < message.size(); ++i ) {
+        freetypeglxx::TextureGlyph* glyph = font_->GetGlyph(message[i]);
+        if(!glyph) continue;
+        int kerning = 0;
+        if(i > 0)
+            kerning = glyph->GetKerning( message[i-1] );
+        pen.x += kerning;
+        int x0  = (int)( pen.x + glyph->offset_x() );
+        int y0  = (int)( pen.y + glyph->offset_y() );
+        int x1  = (int)( x0 + glyph->width() );
+        int y1  = (int)( y0 - glyph->height() );
+        vertex_data[(i*4) + 0] = math::Vector2D(x0, y0);
+        vertex_data[(i*4) + 1] = math::Vector2D(x1, y0);
+        vertex_data[(i*4) + 2] = math::Vector2D(x1, y1);
+        vertex_data[(i*4) + 3] = math::Vector2D(x0, y1);
+        texture_data[(i*4) + 0] = math::Vector2D(glyph->s0(),glyph->t0());
+        texture_data[(i*4) + 1] = math::Vector2D(glyph->s1(),glyph->t0());
+        texture_data[(i*4) + 2] = math::Vector2D(glyph->s1(),glyph->t1());
+        texture_data[(i*4) + 3] = math::Vector2D(glyph->s0(),glyph->t1());
+        pen.x += glyph->advance_x();
+    }
+
+
+    message_.push_back(message);
     line_height_ = size_.y;
     line_width_.clear();
     line_width_.push_back(size_.x);
 }
 
 void Text::SetMessage(const std::vector<std::wstring>& message) {
+    delete vertex_buffer_;
+    delete texture_buffer_;
     std::vector<std::wstring>::const_iterator it;
     for(it = message.begin(); it != message.end(); ++it) {
         ugdk::math::Vector2D line_size = GetStringSize(*it, font_);
@@ -67,12 +109,35 @@ const ugdk::math::Vector2D& Text::size() const {
 
 void Text::Update(double dt) {}
 
-void Text::Draw(const Geometry& modifier, const VisualEffect& effect) const {
+void Text::Draw(const Geometry& geometry, const VisualEffect& effect) const {
+    Geometry final_geometry(geometry);
+    final_geometry.Compose(Geometry(math::Vector2D(-hotspot_)));
+
     static Color FANCY_COLORS[3] = {
         Color(1.000000, 1.000000, 1.000000), // 255, 255, 255
         Color(0.831372, 0.666666, 0.000000), // 212, 170,   0
         Color(0.333333, 0.266666, 0.000000)};//  85,  68,   0
         
+    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
+
+    // Send our transformation to the currently bound shader, 
+    // in the "MVP" uniform
+    shader_use.SendGeometry(final_geometry);
+    shader_use.SendEffect(effect);
+
+    // Bind our texture in Texture Unit 0
+    shader_use.SendTexture(0, font_->atlas()->id());
+
+    // 1rst attribute buffer : vertices
+    shader_use.SendVertexBuffer(vertex_buffer_, opengl::VERTEX, 0);
+
+    // 2nd attribute buffer : UVs
+    shader_use.SendVertexBuffer(texture_buffer_, opengl::TEXTURE, 0);
+
+    // Draw the triangle !
+    glDrawArrays(GL_QUADS, 0, message_[0].size()); // 12*3 indices starting at 0 -> 12 triangles
+
+    /*
     Font::IdentType ident = font_->ident();
 
     glEnable(GL_TEXTURE_2D);
@@ -116,7 +181,7 @@ void Text::Draw(const Geometry& modifier, const VisualEffect& effect) const {
         }
         glPopMatrix();
     }
-    glPopMatrix();
+    glPopMatrix();*/
 }
 
 }  // namespace graphic

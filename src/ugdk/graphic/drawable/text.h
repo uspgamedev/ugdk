@@ -4,7 +4,9 @@
 #include <vector>
 #include <string>
 #include <ugdk/math/vector2D.h>
+#include <ugdk/graphic.h>
 #include <ugdk/graphic/drawable.h>
+#include <freetype-gl++/texture-font.hpp>
 
 namespace ugdk {
 namespace graphic {
@@ -12,8 +14,8 @@ namespace graphic {
 class Font;
 class Text : public Drawable {
   public:
-    Text(const std::wstring& message, Font* font);
-    Text(const std::vector<std::wstring>& message, Font* font);
+    Text(const std::wstring& message, freetypeglxx::TextureFont* font);
+    Text(const std::vector<std::wstring>& message, freetypeglxx::TextureFont* font);
     ~Text() {}
 
     void SetMessage(const std::wstring& message);
@@ -25,7 +27,9 @@ class Text : public Drawable {
     virtual const ugdk::math::Vector2D& size() const;
 
   private:
-    Font* font_;
+    freetypeglxx::TextureFont* font_;
+    opengl::VertexBuffer* vertex_buffer_;
+    opengl::VertexBuffer* texture_buffer_;
     std::vector<std::wstring> message_;
 
     ugdk::math::Vector2D size_;
