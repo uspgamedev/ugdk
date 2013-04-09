@@ -26,6 +26,7 @@ option(UGDK_BUILD_TESTS "Set to ON to enable building tests." ON)
 option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
 option(UGDK_LUA_BINDINGS "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
+option(UGDK_INTERNAL_GLEW "Set to ON to use an internal GLEW instead of the system one." OFF)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     SET (CHECKMAC "#define ISMAC")
@@ -111,25 +112,22 @@ include_directories(${SDLTTF_INCLUDE_DIR})
 find_package(SDL_image REQUIRED)
 include_directories(${SDLIMAGE_INCLUDE_DIR})
 
-find_package(Freetype QUIET)
-if(NOT FREETYPE_FOUND)
-	message("-- Freetype not found, using included source.")
-	add_subdirectory(externals/freetype)
-    set(FREETYPE_INCLUDE_DIRS ${FREETYPE_INCLUDE_DIR})
-    set(FREETYPE_LIBRARIES    ${FREETYPE_LIBRARY})
-else()
-	message("-- Found Freetype: ${FREETYPE_LIBRARIES}.")
-endif()
-include_directories(${FREETYPE_INCLUDE_DIRS})
-
 find_package(GLEW 1.5 QUIET)
 if(NOT GLEW_FOUND)
-    message("-- GLEW not found, using included source.")
-	add_subdirectory(externals/glew)
-	set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
-	set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+    message("-- GLEW not found, forcing internal.")
+    set(UGDK_INTERNAL_GLEW ON CACHE BOOL "Set to ON to use the internal GLEW." FORCE)
 endif(NOT GLEW_FOUND)
+
+if(UGDK_INTERNAL_GLEW)
+    add_subdirectory(externals/glew)
+    set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
+    set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+endif(UGDK_INTERNAL_GLEW)
 include_directories(${GLEW_INCLUDE_DIRS})
+
+add_subdirectory(externals/freetype-glpp)
+include_directories("externals/freetype-glpp/include")
+set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
 
 ##########################################
 # Package Configuration
@@ -207,7 +205,7 @@ target_link_libraries (libugdk
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
-					   ${FREETYPE_LIBRARIES}
+                       ${FREETYPE_LIBRARIES}
                        ${UGDK_LIBRARIES})
 
 target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
@@ -218,7 +216,7 @@ target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
-					   ${FREETYPE_LIBRARIES}
+                       ${FREETYPE_GLPP_LIBRARIES}
                        ${UGDK_LIBRARIES})
                       
 set_target_properties (libugdk PROPERTIES 
