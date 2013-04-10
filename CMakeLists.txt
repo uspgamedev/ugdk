@@ -95,6 +95,7 @@ if(NOT GLEW_FOUND)
 endif(NOT GLEW_FOUND)
 
 if(UGDK_INTERNAL_GLEW)
+    add_definitions(-DGLEW_STATIC)
     add_subdirectory(externals/glew)
     set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
     set(GLEW_LIBRARIES ${GLEW_LIBRARY})

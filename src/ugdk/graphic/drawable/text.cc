@@ -1,10 +1,11 @@
+#include <ugdk/graphic/drawable/text.h>
+
 #include <ugdk/config/config.h>
 #include "GL/glew.h"
 #define NO_SDL_GLEXT
 #include "SDL_opengl.h"
 #include <freetype-gl++/texture-font.hpp>
-
-#include <ugdk/graphic/drawable/text.h>
+#include <freetype-gl++/vec234.hpp>
 
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
@@ -49,15 +50,16 @@ void Text::SetMessage(const std::wstring& message) {
     message_.clear();
     size_ = GetStringSize(message, font_);
 
-    vertex_buffer_ = opengl::VertexBuffer::Create(message.size() * 4 * sizeof(math::Vector2D), 
+    vertex_buffer_ = opengl::VertexBuffer::Create(message.size() * 4 * sizeof(freetypeglxx::vec2), 
                                                     GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-    texture_buffer_= opengl::VertexBuffer::Create(message.size() * 4 * sizeof(math::Vector2D), 
+    texture_buffer_= opengl::VertexBuffer::Create(message.size() * 4 * sizeof(freetypeglxx::vec2), 
                                                     GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
     opengl::VertexBuffer::Bind bind_vertex(*vertex_buffer_), bind_texture(*texture_buffer_);
     opengl::VertexBuffer::Mapper vertex_mapper(*vertex_buffer_), texture_mapper(*texture_buffer_);
-    math::Vector2D* vertex_data = static_cast<math::Vector2D*>(vertex_mapper.get());
-    math::Vector2D* texture_data = static_cast<math::Vector2D*>(texture_mapper.get());
+
+    freetypeglxx::vec2* vertex_data = static_cast<freetypeglxx::vec2*>(vertex_mapper.get());
+    freetypeglxx::vec2* texture_data = static_cast<freetypeglxx::vec2*>(texture_mapper.get());
     math::Vector2D pen;
     for(size_t i = 0; i < message.size(); ++i ) {
         freetypeglxx::TextureGlyph* glyph = font_->GetGlyph(message[i]);
@@ -70,17 +72,16 @@ void Text::SetMessage(const std::wstring& message) {
         int y0  = (int)( pen.y + glyph->offset_y() );
         int x1  = (int)( x0 + glyph->width() );
         int y1  = (int)( y0 - glyph->height() );
-        vertex_data[(i*4) + 0] = math::Vector2D(x0, y0);
-        vertex_data[(i*4) + 1] = math::Vector2D(x1, y0);
-        vertex_data[(i*4) + 2] = math::Vector2D(x1, y1);
-        vertex_data[(i*4) + 3] = math::Vector2D(x0, y1);
-        texture_data[(i*4) + 0] = math::Vector2D(glyph->s0(),glyph->t0());
-        texture_data[(i*4) + 1] = math::Vector2D(glyph->s1(),glyph->t0());
-        texture_data[(i*4) + 2] = math::Vector2D(glyph->s1(),glyph->t1());
-        texture_data[(i*4) + 3] = math::Vector2D(glyph->s0(),glyph->t1());
+        vertex_data[(i*4) + 0] = freetypeglxx::vec2(x0, y0);
+        vertex_data[(i*4) + 1] = freetypeglxx::vec2(x1, y0);
+        vertex_data[(i*4) + 2] = freetypeglxx::vec2(x1, y1);
+        vertex_data[(i*4) + 3] = freetypeglxx::vec2(x0, y1);
+        texture_data[(i*4) + 0] = freetypeglxx::vec2(glyph->s0(),glyph->t0());
+        texture_data[(i*4) + 1] = freetypeglxx::vec2(glyph->s1(),glyph->t0());
+        texture_data[(i*4) + 2] = freetypeglxx::vec2(glyph->s1(),glyph->t1());
+        texture_data[(i*4) + 3] = freetypeglxx::vec2(glyph->s0(),glyph->t1());
         pen.x += glyph->advance_x();
     }
-
 
     message_.push_back(message);
     line_height_ = size_.y;
@@ -138,7 +139,7 @@ void Text::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     shader_use.SendVertexBuffer(texture_buffer_, opengl::TEXTURE, 0);
 
     // Draw the triangle !
-    glDrawArrays(GL_QUADS, 0, message_[0].size()); // 12*3 indices starting at 0 -> 12 triangles
+    glDrawArrays(GL_QUADS, 0, message_[0].size() * 4); // 12*3 indices starting at 0 -> 12 triangles
 
     /*
     Font::IdentType ident = font_->ident();
