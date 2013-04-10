@@ -47,7 +47,7 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
 
     default_shader_ = InterfaceShader();
         
-    glClearColor( 0.0, 0.0, 0.0, 0.0 );
+    glClearColor( 1.0, 1.0, 1.0, 0.0 );
 
     /*if(GLEW_ARB_framebuffer_object) {
         glGenFramebuffersEXT(1, &light_buffer_id_);
@@ -199,6 +199,16 @@ void VideoManager::initializeLight() {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (GLsizei) video_size_.x, 
         (GLsizei) video_size_.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    unsigned char buffer[32*32*4];
+    for(int i = 0; i < 32*32*4; ++i) buffer[i] = 255;
+    if(white_texture_) delete white_texture_;
+    white_texture_ = Texture::CreateRawTexture(32, 32);
+    glBindTexture(GL_TEXTURE_2D, white_texture_->gltexture());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 32, 32, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

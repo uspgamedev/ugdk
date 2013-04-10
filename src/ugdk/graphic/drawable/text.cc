@@ -55,11 +55,6 @@ void Text::SetMessage(const std::wstring& message) {
     texture_buffer_= opengl::VertexBuffer::Create(message.size() * 4 * sizeof(freetypeglxx::vec2), 
                                                     GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
-    opengl::VertexBuffer::Bind bind_vertex(*vertex_buffer_), bind_texture(*texture_buffer_);
-    opengl::VertexBuffer::Mapper vertex_mapper(*vertex_buffer_), texture_mapper(*texture_buffer_);
-
-    freetypeglxx::vec2* vertex_data = static_cast<freetypeglxx::vec2*>(vertex_mapper.get());
-    freetypeglxx::vec2* texture_data = static_cast<freetypeglxx::vec2*>(texture_mapper.get());
     math::Vector2D pen;
     for(size_t i = 0; i < message.size(); ++i ) {
         freetypeglxx::TextureGlyph* glyph = font_->GetGlyph(message[i]);
@@ -72,14 +67,24 @@ void Text::SetMessage(const std::wstring& message) {
         int y0  = (int)( pen.y + glyph->offset_y() );
         int x1  = (int)( x0 + glyph->width() );
         int y1  = (int)( y0 - glyph->height() );
-        vertex_data[(i*4) + 0] = freetypeglxx::vec2(x0, y0);
-        vertex_data[(i*4) + 1] = freetypeglxx::vec2(x1, y0);
-        vertex_data[(i*4) + 2] = freetypeglxx::vec2(x1, y1);
-        vertex_data[(i*4) + 3] = freetypeglxx::vec2(x0, y1);
-        texture_data[(i*4) + 0] = freetypeglxx::vec2(glyph->s0(),glyph->t0());
-        texture_data[(i*4) + 1] = freetypeglxx::vec2(glyph->s1(),glyph->t0());
-        texture_data[(i*4) + 2] = freetypeglxx::vec2(glyph->s1(),glyph->t1());
-        texture_data[(i*4) + 3] = freetypeglxx::vec2(glyph->s0(),glyph->t1());
+        {
+            opengl::VertexBuffer::Bind bind(*vertex_buffer_);
+            freetypeglxx::vec2 points[4];
+            points[0] = freetypeglxx::vec2(x0, y0);
+            points[1] = freetypeglxx::vec2(x1, y0);
+            points[2] = freetypeglxx::vec2(x1, y1);
+            points[3] = freetypeglxx::vec2(x0, y1);
+            vertex_buffer_->fill((i * 4) * sizeof(freetypeglxx::vec2), sizeof(points), points);
+        }
+        {
+            opengl::VertexBuffer::Bind bind(*texture_buffer_);
+            freetypeglxx::vec2 points[4];
+            points[0] = freetypeglxx::vec2(glyph->s0(),glyph->t0());
+            points[1] = freetypeglxx::vec2(glyph->s1(),glyph->t0());
+            points[2] = freetypeglxx::vec2(glyph->s1(),glyph->t1());
+            points[3] = freetypeglxx::vec2(glyph->s0(),glyph->t1());
+            texture_buffer_->fill((i * 4) * sizeof(freetypeglxx::vec2), sizeof(points), points);
+        }
         pen.x += glyph->advance_x();
     }
 
@@ -115,7 +120,7 @@ void Text::Update(double dt) {}
 
 void Text::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     Geometry final_geometry(geometry);
-    final_geometry.Compose(Geometry(math::Vector2D(-hotspot_)));
+    final_geometry.Compose(Geometry(-hotspot_));
 
     static Color FANCY_COLORS[3] = {
         Color(1.000000, 1.000000, 1.000000), // 255, 255, 255
