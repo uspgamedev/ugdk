@@ -26,9 +26,12 @@ using ugdk::Color;
 static ugdk::math::Vector2D GetStringSize(const std::wstring& string, freetypeglxx::TextureFont* font) {
     double width = 0;
     size_t height = font->GetGlyph(L'\n')->height();
+    double kerning = 0;
     for(size_t i = 0; i < string.length(); i++) {
         freetypeglxx::TextureGlyph* glyph = font->GetGlyph(string[i]);
-        width += glyph->width();
+        if(i > 0)
+            kerning = glyph->GetKerning( string[i-1] );
+        width += kerning + glyph->advance_x();
         height = std::max(height, glyph->height());
     }
     return ugdk::math::Vector2D(width, static_cast<double>(height));
@@ -59,14 +62,16 @@ void Text::SetMessage(const std::wstring& message) {
     for(size_t i = 0; i < message.size(); ++i ) {
         freetypeglxx::TextureGlyph* glyph = font_->GetGlyph(message[i]);
         if(!glyph) continue;
-        int kerning = 0;
+        double kerning = 0;
         if(i > 0)
             kerning = glyph->GetKerning( message[i-1] );
         pen.x += kerning;
-        int x0  = (int)( pen.x + glyph->offset_x() );
-        int y0  = (int)( pen.y + glyph->offset_y() );
-        int x1  = (int)( x0 + glyph->width() );
-        int y1  = (int)( y0 - glyph->height() );
+        double x0  = pen.x + glyph->offset_x();
+        double y0  = pen.y + glyph->offset_y();
+        double x1  = x0 + glyph->width();
+        double y1  = y0 - glyph->height();
+        y0 = size_.y - y0;
+        y1 = size_.y - y1;
         {
             opengl::VertexBuffer::Bind bind(*vertex_buffer_);
             freetypeglxx::vec2 points[4];
