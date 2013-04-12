@@ -47,7 +47,7 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
 
     default_shader_ = InterfaceShader();
         
-    glClearColor( 1.0, 1.0, 1.0, 0.0 );
+    glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
     /*if(GLEW_ARB_framebuffer_object) {
         glGenFramebuffersEXT(1, &light_buffer_id_);

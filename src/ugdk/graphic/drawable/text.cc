@@ -9,6 +9,7 @@
 
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
+#include <ugdk/graphic/defaultshaders.h>
 
 #include <ugdk/base/engine.h>
 #include <ugdk/base/types.h>
@@ -132,7 +133,10 @@ void Text::Draw(const Geometry& geometry, const VisualEffect& effect) const {
         Color(0.831372, 0.666666, 0.000000), // 212, 170,   0
         Color(0.333333, 0.266666, 0.000000)};//  85,  68,   0
         
-    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
+    opengl::ShaderProgram::Use shader_use(
+        (VIDEO_MANAGER()->default_shader() == InterfaceShader()) 
+            ? InterfaceTextShader() 
+            : LightSystemTextShader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
