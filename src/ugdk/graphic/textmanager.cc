@@ -58,7 +58,7 @@ Text* TextManager::GetText(const std::wstring& text, const std::string& fonttag,
             last_break = i + 1;
             cur_width = 0;
         } else {
-            cur_width += font->GetGlyph(text[i])->width();
+            cur_width += font->GetGlyph(text[i])->advance_x();
         }
     }
     if(cur_width > 0) {
