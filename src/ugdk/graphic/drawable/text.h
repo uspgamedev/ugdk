@@ -33,11 +33,9 @@ class Text : public Drawable {
     freetypeglxx::TextureFont* font_;
     opengl::VertexBuffer* vertex_buffer_;
     opengl::VertexBuffer* texture_buffer_;
-    std::vector<std::wstring> message_;
 
     ugdk::math::Vector2D size_;
-    double line_height_;
-    std::vector<double> line_width_;
+    std::size_t num_letters_;
 };
 
 }  // namespace graphic
