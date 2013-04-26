@@ -1,5 +1,5 @@
-#ifndef HORUSEYE_FRAMEWORK_TEXT_H_
-#define HORUSEYE_FRAMEWORK_TEXT_H_
+#ifndef UGDK_GRAPHIC_DRAWABLE_TEXT_H_
+#define UGDK_GRAPHIC_DRAWABLE_TEXT_H_
 
 #include <vector>
 #include <string>
@@ -14,15 +14,12 @@ namespace freetypeglxx {
 namespace ugdk {
 namespace graphic {
 
-class Font;
 class Text : public Drawable {
   public:
     Text(const std::wstring& message, freetypeglxx::TextureFont* font);
-    Text(const std::vector<std::wstring>& message, freetypeglxx::TextureFont* font);
-    ~Text() {}
+    ~Text();
 
     void SetMessage(const std::wstring& message);
-    void SetMessage(const std::vector<std::wstring>& message);
 
     void Update(double dt);
     void Draw(const Geometry&, const VisualEffect&) const;
@@ -35,7 +32,7 @@ class Text : public Drawable {
     opengl::VertexBuffer* texture_buffer_;
 
     ugdk::math::Vector2D size_;
-    std::size_t num_letters_;
+    std::wstring message_;
 };
 
 }  // namespace graphic

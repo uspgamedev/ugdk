@@ -12,6 +12,7 @@ class VisualEffect;
 class Drawable;
 
 class Text;
+class MultiText;
 class Sprite;
 class TexturedRectangle;
 

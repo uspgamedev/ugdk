@@ -21,7 +21,7 @@ using std::wstring;
 class WordString : public LanguageWord {
   public:
     WordString(const std::wstring& text, const std::string& font) : LanguageWord(font), text_(text) {}
-    ugdk::graphic::Text* GenerateText() const {
+    ugdk::graphic::MultiText* GenerateText() const {
         return TEXT_MANAGER()->GetText(text_, font_);
     }
   private:
@@ -31,7 +31,7 @@ class WordString : public LanguageWord {
 class WordFile : public LanguageWord {
   public:
     WordFile(const std::string& filepath, const std::string& font) : LanguageWord(font), filepath_(filepath) {}
-    ugdk::graphic::Text* GenerateText() const {
+    ugdk::graphic::MultiText* GenerateText() const {
         return TEXT_MANAGER()->GetTextFromFile(filepath_, font_);
     }
   private:

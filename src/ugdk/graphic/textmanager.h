@@ -25,10 +25,10 @@ class TextManager {
     bool Initialize();
     bool Release();
 
-    Text* GetText(        const std::wstring& text);
-    Text* GetText(        const std::wstring& text, const std::string& font, int width = -1);
-    Text* GetTextFromFile(const std:: string& path);
-	Text* GetTextFromFile(const std:: string& path, const std::string& font, int width = -1);
+    MultiText* GetText(        const std::wstring& text);
+    MultiText* GetText(        const std::wstring& text, const std::string& font, int width = -1);
+    MultiText* GetTextFromFile(const std:: string& path);
+	MultiText* GetTextFromFile(const std:: string& path, const std::string& font, int width = -1);
 
 	void AddFont(const std::string& name, const std::string& path, int size, char ident, bool fancy);
 

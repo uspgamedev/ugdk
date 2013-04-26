@@ -1,6 +1,7 @@
 #include <ugdk/graphic/drawable/text.h>
 
 #include <ugdk/config/config.h>
+#include <algorithm>
 #include "GL/glew.h"
 #define NO_SDL_GLEXT
 #include "SDL_opengl.h"
@@ -31,72 +32,61 @@ Text::Text(const std::wstring& message, freetypeglxx::TextureFont *font)
     this->SetMessage(message);
 }
 
-Text::Text(const std::vector<std::wstring>& message, freetypeglxx::TextureFont *font) 
-    : font_(font), vertex_buffer_(NULL), texture_buffer_(NULL) {
-    this->SetMessage(message);
-}
-
-void Text::SetMessage(const vector<wstring>& longmessage) {
+Text::~Text() {
     delete vertex_buffer_;
     delete texture_buffer_;
-    size_ = math::Vector2D();
+    vertex_buffer_ = NULL;
+    texture_buffer_ = NULL;
+}
 
-    num_letters_ = 0;
-    for(vector<wstring>::const_iterator it = longmessage.begin(); it != longmessage.end(); ++it)
-        num_letters_ += it->size();
+void Text::SetMessage(const std::wstring& message) {
+    delete vertex_buffer_;
+    delete texture_buffer_;
+    message_ = message;
+    size_ = math::Vector2D(0, font_->height());
 
-    vertex_buffer_ = opengl::VertexBuffer::Create(num_letters_ * 4 * sizeof(freetypeglxx::vec2), 
+    vertex_buffer_ = opengl::VertexBuffer::Create(message_.size() * 4 * sizeof(freetypeglxx::vec2),
                                                     GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-    texture_buffer_= opengl::VertexBuffer::Create(num_letters_ * 4 * sizeof(freetypeglxx::vec2), 
+    texture_buffer_= opengl::VertexBuffer::Create(message_.size() * 4 * sizeof(freetypeglxx::vec2), 
                                                     GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
     math::Vector2D pen;
     size_t buffer_offset = 0;
-    for(vector<wstring>::const_iterator it = longmessage.begin(); it != longmessage.end(); ++it) {
-        const wstring& message = *it;
-        for(size_t i = 0; i < message.size(); ++i ) {
-            freetypeglxx::TextureGlyph* glyph = font_->GetGlyph(message[i]);
-            if(!glyph) continue;
-            double kerning = 0;
-            if(i > 0)
-                kerning = glyph->GetKerning( message[i-1] );
-            pen.x += kerning;
-            double x0  = pen.x + glyph->offset_x();
-            double y0  = glyph->offset_y();
-            double x1  = x0 + glyph->width();
-            double y1  = y0 - glyph->height();
-            y0 = pen.y + font_->height() - y0;
-            y1 = pen.y + font_->height() - y1;
-            {
-                opengl::VertexBuffer::Bind bind(*vertex_buffer_);
-                freetypeglxx::vec2 points[4];
-                points[0] = freetypeglxx::vec2(x0, y0);
-                points[1] = freetypeglxx::vec2(x1, y0);
-                points[2] = freetypeglxx::vec2(x1, y1);
-                points[3] = freetypeglxx::vec2(x0, y1);
-                vertex_buffer_->fill(buffer_offset * sizeof(freetypeglxx::vec2), sizeof(points), points);
-            }
-            {
-                opengl::VertexBuffer::Bind bind(*texture_buffer_);
-                freetypeglxx::vec2 points[4];
-                points[0] = freetypeglxx::vec2(glyph->s0(),glyph->t0());
-                points[1] = freetypeglxx::vec2(glyph->s1(),glyph->t0());
-                points[2] = freetypeglxx::vec2(glyph->s1(),glyph->t1());
-                points[3] = freetypeglxx::vec2(glyph->s0(),glyph->t1());
-                texture_buffer_->fill(buffer_offset * sizeof(freetypeglxx::vec2), sizeof(points), points);
-            }
-            pen.x += glyph->advance_x();
-            buffer_offset += 4;
+    for(size_t i = 0; i < message.size(); ++i ) {
+        freetypeglxx::TextureGlyph* glyph = font_->GetGlyph(message[i]);
+        if(!glyph) continue;
+        double kerning = 0;
+        if(i > 0)
+            kerning = glyph->GetKerning( message[i-1] );
+        pen.x += kerning;
+        double x0  = pen.x + glyph->offset_x();
+        double y0  = glyph->offset_y();
+        double x1  = x0 + glyph->width();
+        double y1  = y0 - glyph->height();
+        y0 = pen.y + font_->height() - y0;
+        y1 = pen.y + font_->height() - y1;
+        {
+            opengl::VertexBuffer::Bind bind(*vertex_buffer_);
+            freetypeglxx::vec2 points[4];
+            points[0] = freetypeglxx::vec2(x0, y0);
+            points[1] = freetypeglxx::vec2(x1, y0);
+            points[2] = freetypeglxx::vec2(x1, y1);
+            points[3] = freetypeglxx::vec2(x0, y1);
+            vertex_buffer_->fill(buffer_offset * sizeof(freetypeglxx::vec2), sizeof(points), points);
         }
-        size_.x = std::max(size_.x, pen.x);
-        pen.y += font_->height();
-        pen.x = 0.0;
+        {
+            opengl::VertexBuffer::Bind bind(*texture_buffer_);
+            freetypeglxx::vec2 points[4];
+            points[0] = freetypeglxx::vec2(glyph->s0(),glyph->t0());
+            points[1] = freetypeglxx::vec2(glyph->s1(),glyph->t0());
+            points[2] = freetypeglxx::vec2(glyph->s1(),glyph->t1());
+            points[3] = freetypeglxx::vec2(glyph->s0(),glyph->t1());
+            texture_buffer_->fill(buffer_offset * sizeof(freetypeglxx::vec2), sizeof(points), points);
+        }
+        pen.x += glyph->advance_x();
+        buffer_offset += 4;
     }
-    size_.y = pen.y;
-}
-
-void Text::SetMessage(const std::wstring& message) {
-    SetMessage(std::vector<std::wstring>(1, message));
+    size_.x = pen.x;
 }
 
 const ugdk::math::Vector2D& Text::size() const {
@@ -134,53 +124,7 @@ void Text::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     shader_use.SendVertexBuffer(texture_buffer_, opengl::TEXTURE, 0);
 
     // Draw the triangle !
-    glDrawArrays(GL_QUADS, 0, num_letters_ * 4); // 12*3 indices starting at 0 -> 12 triangles
-
-    /*
-    Font::IdentType ident = font_->ident();
-
-    glEnable(GL_TEXTURE_2D);
-    glListBase(font_->id());
-
-    glPushMatrix();
-    glLoadMatrixf(&modifier.AsMat4()[0][0]);
-    
-    glTranslated(-hotspot_.x, -hotspot_.y, 0.0);
-    
-    int fancy_line_number = 0;
-    if (font_->IsFancy()) fancy_line_number = 2;
-    for(; fancy_line_number >= 0; fancy_line_number--) {
-        glTranslated(-1.0, -1.0, 0);
-        glPushMatrix();
-
-        Color color = effect.color() * FANCY_COLORS[fancy_line_number];
-        glColor4dv(color.val);
-
-        for(size_t i = 0; i < message_.size(); ++i) {
-            if(i != 0) glTranslated( 0.0, line_height_, 0.0);
-            if(message_[i].length() > 0) {
-                glPushMatrix();
-                switch(ident) {
-                    case Font::CENTER:
-                        glTranslated((size_.x - this->line_width_[i])*0.5, 0.0, 0.0);
-                        break;
-                    case Font::RIGHT:
-                        glTranslated((size_.x - this->line_width_[i])*1.0, 0.0, 0.0);
-                        break;
-                    default:
-                        break;
-                }
-                #ifdef WIN32
-                    glCallLists(static_cast<GLsizei>(message_[i].length()), GL_SHORT, (GLshort *) message_[i].c_str());
-                #else
-                    glCallLists(static_cast<GLsizei>(message_[i].length()), GL_INT, (GLint *) message_[i].c_str());
-                #endif
-                glPopMatrix();
-            }
-        }
-        glPopMatrix();
-    }
-    glPopMatrix();*/
+    glDrawArrays(GL_QUADS, 0, message_.size() * 4); // 12*3 indices starting at 0 -> 12 triangles
 }
 
 }  // namespace graphic

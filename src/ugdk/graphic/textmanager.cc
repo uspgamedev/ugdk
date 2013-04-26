@@ -13,6 +13,7 @@
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/drawable/text.h>
+#include <ugdk/graphic/drawable/multitext.h>
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/utf8.h>
@@ -44,7 +45,7 @@ bool TextManager::Release() {
     return true;
 }
 
-Text* TextManager::GetText(const std::wstring& text, const std::string& fonttag, int width) {
+MultiText* TextManager::GetText(const std::wstring& text, const std::string& fonttag, int width) {
     wstring subString;
     vector<wstring> lines;
     freetypeglxx::TextureFont *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
@@ -65,15 +66,15 @@ Text* TextManager::GetText(const std::wstring& text, const std::string& fonttag,
         subString = text.substr(last_break, text.length());
         lines.push_back(subString);
     }
-    return new Text(lines, font);
+    return new MultiText(lines, font);
 }
 
-Text* TextManager::GetText(const std::wstring& text) {
+MultiText* TextManager::GetText(const std::wstring& text) {
     std::string blank_font;
     return GetText(text, blank_font);
 }
 
-Text* TextManager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
+MultiText* TextManager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
     std::string fullpath = PATH_MANAGER()->ResolvePath(path);
     FILE *txtFile = fopen(fullpath.c_str(), "r");
     if(txtFile == NULL) return NULL;
@@ -90,7 +91,7 @@ Text* TextManager::GetTextFromFile(const std::string& path, const std::string& f
     return GetText(output, font, width);
 }
 
-Text* TextManager::GetTextFromFile(const std::string& path) {
+MultiText* TextManager::GetTextFromFile(const std::string& path) {
     std::string blank_font;
     return GetTextFromFile(path, blank_font);
 }
