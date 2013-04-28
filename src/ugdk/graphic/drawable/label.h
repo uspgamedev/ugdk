@@ -14,7 +14,8 @@ class Label : public Drawable {
     Label(const std::wstring& message, Font* font);
     ~Label();
 
-    void SetMessage(const std::wstring& message);
+    /// This operation is slow.
+    void ChangeMessage(const std::wstring& message);
 
     void Update(double dt) {}
     void Draw(const Geometry&, const VisualEffect&) const;

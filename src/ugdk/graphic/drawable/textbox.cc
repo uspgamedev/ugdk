@@ -15,8 +15,8 @@ using std::list;
 using std::wstring;
 
 TextBox::TextBox(const std::wstring& message, double width, Font* font)
-    : font_(font), width_(width) {
-        SetMessage(message);
+    : font_(font), width_(width), ident_style_(LEFT) {
+        ChangeMessage(message);
 }
 
 TextBox::~TextBox() {
@@ -25,7 +25,7 @@ TextBox::~TextBox() {
     labels_.clear();
 }
 
-void TextBox::SetMessage(const std::wstring& message) {
+void TextBox::ChangeMessage(const std::wstring& message) {
     for(vector<Label*>::iterator it = labels_.begin(); it != labels_.end(); ++it)
         delete *it;
     labels_.clear();
@@ -44,7 +44,12 @@ void TextBox::SetMessage(const std::wstring& message) {
 void TextBox::Draw(const Geometry& geo, const VisualEffect& eff) const {
     double off_y = 0.0;
     for(vector<Label*>::const_iterator it = labels_.begin(); it != labels_.end(); ++it) {
-        (*it)->Draw(geo * Geometry(math::Vector2D(0.0, off_y) - hotspot_), eff);
+        double off_x = 0.0;
+        if(ident_style_ == CENTER)
+            off_x = (width_ - (*it)->width()) * 0.5;
+        else if(ident_style_ == RIGHT)
+            off_x = (width_ - (*it)->width()) * 1.0;
+        (*it)->Draw(geo * Geometry(math::Vector2D(off_x, off_y) - hotspot_), eff);
         off_y += (*it)->size().y;
     }
 }

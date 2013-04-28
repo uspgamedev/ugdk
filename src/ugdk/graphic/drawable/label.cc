@@ -29,7 +29,7 @@ using std::wstring;
 
 Label::Label(const std::wstring& message, Font *font) 
     : font_(font), vertex_buffer_(NULL), texture_buffer_(NULL) {
-    this->SetMessage(message);
+    this->ChangeMessage(message);
 }
 
 Label::~Label() {
@@ -39,7 +39,7 @@ Label::~Label() {
     texture_buffer_ = NULL;
 }
 
-void Label::SetMessage(const std::wstring& message) {
+void Label::ChangeMessage(const std::wstring& message) {
     delete vertex_buffer_;
     delete texture_buffer_;
     message_ = message;
