@@ -73,6 +73,9 @@ include_directories ("src")
 include (cmake/ugdk.cmake)
 
 # Encontrando as bibliotecas necessarias:
+
+find_package(Git)
+
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 
@@ -101,6 +104,11 @@ if(UGDK_INTERNAL_GLEW)
     set(GLEW_LIBRARIES ${GLEW_LIBRARY})
 endif(UGDK_INTERNAL_GLEW)
 include_directories(${GLEW_INCLUDE_DIRS})
+
+if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init
+                    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+endif(GIT_FOUND)
 
 add_subdirectory(externals/freetype-glpp)
 include_directories("externals/freetype-glpp/include")
