@@ -78,7 +78,6 @@ void TextBox::splitString(const wstring& message, list<wstring>& strings) {
 
 double TextBox::calculateWidth(const std::wstring& str, size_t max) {
     double width = 0.0;
-    size_t buffer_offset = 0;
     max = std::min(max, str.size());
     for(size_t i = 0; i < max; ++i ) {
         freetypeglxx::TextureGlyph* glyph = font_->freetype_font()->GetGlyph(str[i]);

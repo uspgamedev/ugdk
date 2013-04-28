@@ -97,11 +97,6 @@ void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     Geometry final_geometry(geometry);
     final_geometry.Compose(Geometry(-hotspot_));
 
-    static Color FANCY_COLORS[3] = {
-        Color(1.000000, 1.000000, 1.000000), // 255, 255, 255
-        Color(0.831372, 0.666666, 0.000000), // 212, 170,   0
-        Color(0.333333, 0.266666, 0.000000)};//  85,  68,   0
-        
     opengl::ShaderProgram::Use shader_use(
         (VIDEO_MANAGER()->default_shader() == InterfaceShader()) 
             ? InterfaceTextShader() 
