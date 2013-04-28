@@ -45,27 +45,8 @@ bool TextManager::Release() {
 }
 
 TextBox* TextManager::GetText(const std::wstring& text, const std::string& fonttag, int width) {
-    wstring subString;
-    vector<wstring> lines;
     Font *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
-    int screensize = ((width == -1) ? static_cast<int>(VIDEO_MANAGER()->video_size().x) : width) - 200;
-    int cur_width = 0, last_break = 0;
-    for(unsigned int i = 0; i < text.length(); i++) {
-        // Split text on newlines, or between words whenever the line is bigger than the screen.
-        if(text[i] == L'\n' || (text[i] == L' ' && cur_width > screensize)) {
-            subString = text.substr(last_break, i - last_break);
-            lines.push_back(subString);
-            last_break = i + 1;
-            cur_width = 0;
-        } else {
-            cur_width += font->freetype_font()->GetGlyph(text[i])->advance_x();
-        }
-    }
-    if(cur_width > 0) {
-        subString = text.substr(last_break, text.length());
-        lines.push_back(subString);
-    }
-    return new TextBox(lines, font);
+    return new TextBox(text, (width == -1) ? VIDEO_MANAGER()->video_size().x : width, font);
 }
 
 TextBox* TextManager::GetText(const std::wstring& text) {

@@ -2,6 +2,7 @@
 #define UGDK_GRAPHIC_DRAWABLE_TEXTBOX_H_
 
 #include <vector>
+#include <list>
 #include <string>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic.h>
@@ -16,21 +17,26 @@ namespace graphic {
 
 class TextBox : public Drawable {
   public:
-    TextBox(const std::vector<std::wstring>& message, Font* font);
+    TextBox(const std::wstring& message, double width, Font* font);
     ~TextBox();
 
-    void SetMessage(const std::vector<std::wstring>& message);
+    void SetMessage(const std::wstring& message);
 
     void Update(double dt) {}
     void Draw(const Geometry&, const VisualEffect&) const;
 
-    virtual const ugdk::math::Vector2D& size() const { return size_; }
+    double width() const { return width_; }
+    const ugdk::math::Vector2D& size() const { return size_; }
 
   private:
     Font* font_;
+    double width_;
     std::vector<Label*> labels_;
 
     ugdk::math::Vector2D size_;
+
+    void splitString(const std::wstring&, std::list<std::wstring>&);
+    double calculateWidth(const std::wstring&, size_t max);
 };
 
 }  // namespace graphic
