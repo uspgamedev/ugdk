@@ -30,7 +30,7 @@ class TextManager {
         return fonts_[name];
     }
 
-	void AddFont(const std::string& name, const std::string& path, int size, char ident, bool fancy);
+	void AddFont(const std::string& name, const std::string& path, double size);
 
   private:
     Font *current_font_;

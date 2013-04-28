@@ -9,6 +9,9 @@
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
 
+// Convenience for users.
+#include <ugdk/util/languageword.h>
+
 #define RESOURCE_MANAGER()  (ugdk::Engine::reference()->resource_manager())
 
 namespace ugdk {
@@ -23,7 +26,7 @@ class ResourceManager {
     static graphic::Texture*                GetTextureFromFile       (const std::string& file);
     static graphic::Spritesheet*            GetSpritesheetFromTag    (const std::string& tag);
     static action::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
-    static graphic::Drawable*               CreateTextFromLanguageTag(const std::string& tag);
+    static ugdk::LanguageWord*              GetLanguageWord(const std::string& tag);
 
     // Generic Methods
     template <class T>

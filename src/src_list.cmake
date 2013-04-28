@@ -141,6 +141,7 @@ SET(UGDK_SRC
     ./src/ugdk/util/language.h 
     ./src/ugdk/util/languagemanager.cc 
     ./src/ugdk/util/languagemanager.h 
+    ./src/ugdk/util/languageword.cc 
     ./src/ugdk/util/languageword.h 
     ./src/ugdk/util/pathmanager.cc 
     ./src/ugdk/util/pathmanager.h 

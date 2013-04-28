@@ -76,7 +76,7 @@ TextBox* TextManager::GetTextFromFile(const std::string& path) {
     return GetTextFromFile(path, blank_font);
 }
 
-void TextManager::AddFont(const std::string& name, const std::string& path, int size, char ident, bool fancy) {
+void TextManager::AddFont(const std::string& name, const std::string& path, double size) {
     if(fonts_.count(name) > 0) {
         delete fonts_[name];
     #ifdef DEBUG

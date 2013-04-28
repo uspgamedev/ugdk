@@ -8,11 +8,17 @@ namespace ugdk {
 
 class LanguageWord {
   public:
-    virtual ~LanguageWord() {}
-    virtual graphic::Drawable* GenerateText() const = 0;
+    LanguageWord(const std::wstring& text, const std::string& font) 
+        : text_(text), font_(font) {}
+    ~LanguageWord() {}
+
+    const std::wstring& text() const { return text_; }
     const std::string& font() const { return font_; }
+
+    graphic::Drawable* CreateLabel() const;
+
   protected:
-    LanguageWord(const std::string& font) : font_(font) {}
+    std::wstring text_;
     std::string font_;
 };
 
