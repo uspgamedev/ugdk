@@ -11,8 +11,8 @@ class VisualEffect;
 // Drawables
 class Drawable;
 
-class Text;
-class MultiText;
+class Label;
+class TextBox;
 class Sprite;
 class TexturedRectangle;
 

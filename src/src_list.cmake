@@ -48,12 +48,12 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/defaultshaders.cc 
     ./src/ugdk/graphic/defaultshaders.h 
     ./src/ugdk/graphic/drawable.h 
-    ./src/ugdk/graphic/drawable/multitext.cc 
-    ./src/ugdk/graphic/drawable/multitext.h 
+    ./src/ugdk/graphic/drawable/label.cc 
+    ./src/ugdk/graphic/drawable/label.h 
     ./src/ugdk/graphic/drawable/sprite.cc 
     ./src/ugdk/graphic/drawable/sprite.h 
-    ./src/ugdk/graphic/drawable/text.cc 
-    ./src/ugdk/graphic/drawable/text.h 
+    ./src/ugdk/graphic/drawable/textbox.cc 
+    ./src/ugdk/graphic/drawable/textbox.h 
     ./src/ugdk/graphic/drawable/texturedrectangle.cc 
     ./src/ugdk/graphic/drawable/texturedrectangle.h 
     ./src/ugdk/graphic/font.cc 

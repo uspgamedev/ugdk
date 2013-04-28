@@ -1,5 +1,5 @@
-#ifndef UGDK_GRAPHIC_DRAWABLE_MULTITEXT_H_
-#define UGDK_GRAPHIC_DRAWABLE_MULTITEXT_H_
+#ifndef UGDK_GRAPHIC_DRAWABLE_TEXTBOX_H_
+#define UGDK_GRAPHIC_DRAWABLE_TEXTBOX_H_
 
 #include <vector>
 #include <string>
@@ -14,10 +14,10 @@ namespace freetypeglxx {
 namespace ugdk {
 namespace graphic {
 
-class MultiText : public Drawable {
+class TextBox : public Drawable {
   public:
-    MultiText(const std::vector<std::wstring>& message, freetypeglxx::TextureFont* font);
-    ~MultiText();
+    TextBox(const std::vector<std::wstring>& message, Font* font);
+    ~TextBox();
 
     void SetMessage(const std::vector<std::wstring>& message);
 
@@ -27,8 +27,8 @@ class MultiText : public Drawable {
     virtual const ugdk::math::Vector2D& size() const { return size_; }
 
   private:
-    freetypeglxx::TextureFont* font_;
-    std::vector<Text*> texts_;
+    Font* font_;
+    std::vector<Label*> labels_;
 
     ugdk::math::Vector2D size_;
 };

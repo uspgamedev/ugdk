@@ -9,8 +9,8 @@
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
 
-// Convinience for users, so MultiText* implicitly converts into Drawable*.
-#include <ugdk/graphic/drawable/multitext.h> 
+// Convinience for users, so TextBox* implicitly converts into Drawable*.
+#include <ugdk/graphic/drawable/textbox.h> 
 
 #define RESOURCE_MANAGER()  (ugdk::Engine::reference()->resource_manager())
 
@@ -26,7 +26,7 @@ class ResourceManager {
     static graphic::Texture*                GetTextureFromFile       (const std::string& file);
     static graphic::Spritesheet*            GetSpritesheetFromTag    (const std::string& tag);
     static action::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
-    static graphic::MultiText*              CreateTextFromLanguageTag(const std::string& tag);
+    static graphic::TextBox*                CreateTextFromLanguageTag(const std::string& tag);
 
     // Generic Methods
     template <class T>

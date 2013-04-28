@@ -9,33 +9,27 @@
 
 #define TEXT_MANAGER() ugdk::Engine::reference()->text_manager()
 
-namespace freetypeglxx {
-    class TextureAtlas;
-    class TextureFont;
-}
-
 namespace ugdk {
 namespace graphic {
 
 class TextManager {
   public:
-    TextManager() : atlas_(NULL), current_font_(NULL) {}
+    TextManager() : current_font_(NULL) {}
     ~TextManager();
 
     bool Initialize();
     bool Release();
 
-    MultiText* GetText(        const std::wstring& text);
-    MultiText* GetText(        const std::wstring& text, const std::string& font, int width = -1);
-    MultiText* GetTextFromFile(const std:: string& path);
-	MultiText* GetTextFromFile(const std:: string& path, const std::string& font, int width = -1);
+    TextBox* GetText(        const std::wstring& text);
+    TextBox* GetText(        const std::wstring& text, const std::string& font, int width = -1);
+    TextBox* GetTextFromFile(const std:: string& path);
+	TextBox* GetTextFromFile(const std:: string& path, const std::string& font, int width = -1);
 
 	void AddFont(const std::string& name, const std::string& path, int size, char ident, bool fancy);
 
   private:
-    freetypeglxx::TextureAtlas* atlas_;
-	freetypeglxx::TextureFont *current_font_;
-    std::map<std::string, freetypeglxx::TextureFont*> fonts_;
+    Font *current_font_;
+    std::map<std::string, Font*> fonts_;
 };
 
 }  // namespace graphic

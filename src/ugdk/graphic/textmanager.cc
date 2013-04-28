@@ -12,13 +12,11 @@
 #include <ugdk/base/engine.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/videomanager.h>
-#include <ugdk/graphic/drawable/text.h>
-#include <ugdk/graphic/drawable/multitext.h>
+#include <ugdk/graphic/drawable/label.h>
+#include <ugdk/graphic/drawable/textbox.h>
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/utf8.h>
-
-using namespace std;
 
 //Tamanho máximo de uma linha do arquivo de entrada
 #define MAXLINE 1024
@@ -26,29 +24,30 @@ using namespace std;
 namespace ugdk {
 namespace graphic {
 
+using std::string;
+using std::wstring;
+using std::vector;
+using std::map;
+
 bool TextManager::Initialize() {
     setlocale (LC_ALL,"en_US.C-UTF-8");
-    atlas_ = new freetypeglxx::TextureAtlas(512, 512, 1);
     return true;
 }
 
 TextManager::~TextManager() {}
 
 bool TextManager::Release() {
-    map<std::string,freetypeglxx::TextureFont*>::iterator font_it;
-    for(font_it = fonts_.begin(); font_it != fonts_.end(); ++font_it)
+    for(map<string, Font*>::iterator font_it = fonts_.begin(); font_it != fonts_.end(); ++font_it)
         delete font_it->second;
     fonts_.clear();
     
-    delete atlas_;
-    atlas_ = NULL;
     return true;
 }
 
-MultiText* TextManager::GetText(const std::wstring& text, const std::string& fonttag, int width) {
+TextBox* TextManager::GetText(const std::wstring& text, const std::string& fonttag, int width) {
     wstring subString;
     vector<wstring> lines;
-    freetypeglxx::TextureFont *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
+    Font *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
     int screensize = ((width == -1) ? static_cast<int>(VIDEO_MANAGER()->video_size().x) : width) - 200;
     int cur_width = 0, last_break = 0;
     for(unsigned int i = 0; i < text.length(); i++) {
@@ -59,22 +58,22 @@ MultiText* TextManager::GetText(const std::wstring& text, const std::string& fon
             last_break = i + 1;
             cur_width = 0;
         } else {
-            cur_width += font->GetGlyph(text[i])->advance_x();
+            cur_width += font->freetype_font()->GetGlyph(text[i])->advance_x();
         }
     }
     if(cur_width > 0) {
         subString = text.substr(last_break, text.length());
         lines.push_back(subString);
     }
-    return new MultiText(lines, font);
+    return new TextBox(lines, font);
 }
 
-MultiText* TextManager::GetText(const std::wstring& text) {
+TextBox* TextManager::GetText(const std::wstring& text) {
     std::string blank_font;
     return GetText(text, blank_font);
 }
 
-MultiText* TextManager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
+TextBox* TextManager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
     std::string fullpath = PATH_MANAGER()->ResolvePath(path);
     FILE *txtFile = fopen(fullpath.c_str(), "r");
     if(txtFile == NULL) return NULL;
@@ -91,12 +90,10 @@ MultiText* TextManager::GetTextFromFile(const std::string& path, const std::stri
     return GetText(output, font, width);
 }
 
-MultiText* TextManager::GetTextFromFile(const std::string& path) {
+TextBox* TextManager::GetTextFromFile(const std::string& path) {
     std::string blank_font;
     return GetTextFromFile(path, blank_font);
 }
-
-
 
 void TextManager::AddFont(const std::string& name, const std::string& path, int size, char ident, bool fancy) {
     if(fonts_.count(name) > 0) {
@@ -109,9 +106,7 @@ void TextManager::AddFont(const std::string& name, const std::string& path, int 
         fprintf(stderr, "Loading new font tag: \"%s\"\n", name.c_str());
     #endif
     }
-    std::string fullpath = PATH_MANAGER()->ResolvePath(path);
-
-    fonts_[name] = current_font_ = new freetypeglxx::TextureFont(atlas_, fullpath, size);
+    fonts_[name] = current_font_ = new Font(path, size);
 }
 
 }  // namespace graphic
