@@ -4,6 +4,7 @@
 #include "language.h"
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/base/resourcemanager.h>
+#include <ugdk/graphic/drawable/label.h>
 #include <ugdk/graphic/drawable/textbox.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/util/pathmanager.h>
@@ -21,8 +22,8 @@ using std::wstring;
 class WordString : public LanguageWord {
   public:
     WordString(const std::wstring& text, const std::string& font) : LanguageWord(font), text_(text) {}
-    ugdk::graphic::TextBox* GenerateText() const {
-        return TEXT_MANAGER()->GetText(text_, font_);
+    ugdk::graphic::Drawable* GenerateText() const {
+        return new graphic::Label(text_, TEXT_MANAGER()->GetFont(font_));
     }
   private:
     std::wstring text_;
@@ -31,7 +32,7 @@ class WordString : public LanguageWord {
 class WordFile : public LanguageWord {
   public:
     WordFile(const std::string& filepath, const std::string& font) : LanguageWord(font), filepath_(filepath) {}
-    ugdk::graphic::TextBox* GenerateText() const {
+    ugdk::graphic::Drawable* GenerateText() const {
         return TEXT_MANAGER()->GetTextFromFile(filepath_, font_);
     }
   private:

@@ -51,7 +51,7 @@
 
 %import(module="ugdk_base") <ugdk/base/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
-%import(module="ugdk_drawable") <ugdk/graphic/drawable/text.h> //this needs to go after the include drawable.h
+%import(module="ugdk_drawable") <ugdk/graphic/drawable/textbox.h> //this needs to go after the include drawable.h
 
 %include <ugdk/graphic.h>
 %include <ugdk/graphic/texture.h>

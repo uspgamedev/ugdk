@@ -59,7 +59,7 @@ action::SpriteAnimationTable* ResourceManager::GetSpriteAnimationTableFromFile(c
     return RESOURCE_MANAGER()->spriteanimation_loader().Load(file, file);
 }
 
-graphic::TextBox*        ResourceManager::CreateTextFromLanguageTag(const std::string& tag) {
+graphic::Drawable*        ResourceManager::CreateTextFromLanguageTag(const std::string& tag) {
     ugdk::LanguageWord* word = RESOURCE_MANAGER()->word_container().Find(tag);
     return word ? word->GenerateText() : NULL;
 }

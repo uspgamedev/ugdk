@@ -80,7 +80,8 @@ void TextManager::AddFont(const std::string& name, const std::string& path, int 
     if(fonts_.count(name) > 0) {
         delete fonts_[name];
     #ifdef DEBUG
-        fprintf(stderr, "Replacing a font tag: \"%s\"\n", name.c_str());
+        if(fonts_[name])
+            fprintf(stderr, "Replacing a font tag: \"%s\"\n", name.c_str());
     #endif
     } else {
     #ifdef DEBUG

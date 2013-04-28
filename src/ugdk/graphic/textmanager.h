@@ -25,6 +25,11 @@ class TextManager {
     TextBox* GetTextFromFile(const std:: string& path);
 	TextBox* GetTextFromFile(const std:: string& path, const std::string& font, int width = -1);
 
+    Font* current_font() { return current_font_; }
+    Font* GetFont(const std::string& name) {
+        return fonts_[name];
+    }
+
 	void AddFont(const std::string& name, const std::string& path, int size, char ident, bool fancy);
 
   private:
