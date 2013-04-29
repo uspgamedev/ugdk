@@ -55,7 +55,6 @@ static bool IsFont(char *str) {
 
 static void ReadFont(char* str) {
     std::string s(str);
-    if(s.back() == '\n') s.pop_back();
 
     size_t start_name = s.find_first_of(font_def[0]) + 1;
     size_t   end_name = s.find_first_of(font_def[1], start_name);
@@ -64,6 +63,8 @@ static void ReadFont(char* str) {
     std::string name = s.substr(start_name, end_name - start_name);
     std::string size = s.substr(end_name + 1, start_path - end_name - 2);
     std::string path = s.substr(start_path);
+    if(path[path.size()-1] == '\n')
+        path.erase(path.size()-1);
 
     double font_size = atof(size.c_str());
 
