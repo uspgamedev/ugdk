@@ -33,3 +33,4 @@ _CPack_Packages/
 install_manifest.txt
 /modules.cc
 /*.a
+/build
