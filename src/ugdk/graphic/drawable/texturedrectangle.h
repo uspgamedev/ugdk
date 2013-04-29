@@ -13,7 +13,7 @@ class TexturedRectangle : public Drawable {
     TexturedRectangle(Texture* texture, const math::Vector2D& _size);
     ~TexturedRectangle();
 
-    void Update(double dt) {}
+    void Update(double) {}
     void Draw(const Geometry& geometry, const VisualEffect&) const;
 
     const ugdk::math::Vector2D& size() const {

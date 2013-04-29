@@ -17,7 +17,7 @@ class Label : public Drawable {
     /// This operation is slow.
     void ChangeMessage(const std::wstring& message);
 
-    void Update(double dt) {}
+    void Update(double) {}
     void Draw(const Geometry&, const VisualEffect&) const;
 
     const ugdk::math::Vector2D& size() const;

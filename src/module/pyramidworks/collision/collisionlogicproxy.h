@@ -16,7 +16,7 @@ class CollisionLogicProxy : public CollisionLogic, public ugdk::script::BaseProx
 public:
     CollisionLogicProxy(const ugdk::script::VirtualObj& proxy) : ugdk::script::BaseProxy<CollisionLogicProxy>(proxy) {}
     
-    virtual void Handle(void *data) {
+    virtual void Handle(void * /*data*/) {
 		// TODO: fix this
 		fputs("ERROR: CollisionLogicProxy::Handle not implemented.", stderr);
 		assert(false);

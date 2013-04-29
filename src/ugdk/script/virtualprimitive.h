@@ -39,7 +39,7 @@ class VirtualPrimitive<T*> {
     template <> \
     class VirtualPrimitive<type> { \
       public: \
-        static type value(const VirtualData::Ptr data, bool disown) { \
+        static type value(const VirtualData::Ptr data, bool) { \
             return static_cast<type>(data->Unwrap##name()); \
         } \
         static void set_value(const VirtualData::Ptr data, type value) { \

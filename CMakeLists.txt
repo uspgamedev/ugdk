@@ -175,18 +175,17 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 if (UNIX OR MINGW)
     add_definitions(-ansi -U_FORTIFY_SOURCE -msse2)
     add_definitions(-Wall
-# TODO: would like these but they produce overwhelming amounts of warnings
-#       -Wextra
-#       -Wmissing-field-initializers
-#       -Wswitch-default
-#       -Wfloat-equal
-#       -Wconversion
-#       -Wzero-as-null-pointer-constant
+        # TODO: would like these but they produce overwhelming amounts of warnings
+        #-Wshadow                       # GLM causes many warnings with this
+        #-Wextra                        # implies -Wunused-parameter
+        -Wmissing-field-initializers
+        -Wswitch-default
+        #-Wconversion                   # GLM causes many warnings with this
+        #-Wzero-as-null-pointer-constant
         -Wtype-limits
         -Wsign-compare
         -Wignored-qualifiers
         -Wuninitialized
-        #-Wshadow
         -Wlogical-op
         -Winit-self)
 

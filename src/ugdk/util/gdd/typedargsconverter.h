@@ -212,8 +212,8 @@ class TypedArgsConverter<void, void, void, void, void> : public ArgsConverter {
     }
   private:
     bool size_matches(const GDDArgs& args) const { return args.size() == num_args; }
-    bool type_matches(const GDDArgs& args) const { return true; }
-    bool call(const GDDArgs& args) const { return function_(); }
+    bool type_matches(const GDDArgs&) const { return true; }
+    bool call(const GDDArgs&) const { return function_(); }
     Func function_;
 };
 
