@@ -16,7 +16,7 @@
 namespace ugdk {
 namespace graphic {
 
-Light::Light() : color_(), dimension_(1.0, 1.0) {
+Light::Light() : dimension_(1.0, 1.0) {
     static const GLfloat buffer_data[] = { 
         -1.0f,-1.0f, 
          1.0f,-1.0f, 
