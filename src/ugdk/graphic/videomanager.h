@@ -19,7 +19,7 @@ class VideoManager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : settings_(false, false, false), light_buffer_(NULL), default_shader_(NULL) {}
+    VideoManager() : settings_(false, false, false), light_buffer_(NULL), white_texture_(NULL), default_shader_(NULL) {}
     ~VideoManager() {}
 
     bool Initialize(const std::string& title, const ugdk::math::Vector2D& size, bool fullscreen, const std::string& icon);
@@ -36,6 +36,7 @@ class VideoManager {
     bool fullscreen() const { return settings_.fullscreen; }
     const std::string& title() const { return title_; }
     opengl::ShaderProgram* default_shader() { return default_shader_; }
+    Texture* white_texture() { return white_texture_; }
 
   private:
     ugdk::math::Vector2D video_size_;
@@ -50,6 +51,7 @@ class VideoManager {
     } settings_;
 
     Texture* light_buffer_;
+    Texture* white_texture_;
     opengl::ShaderProgram* default_shader_;
     Geometry initial_geometry_;
 

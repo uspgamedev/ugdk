@@ -52,12 +52,20 @@ void ShaderProgram::Use::SendEffect(const ugdk::graphic::VisualEffect& effect) {
 }
 
 void ShaderProgram::Use::SendTexture(GLint slot, const Texture* texture) {
-    SendTexture(slot, texture, program_->texture_location_);
+    SendTexture(slot, texture->gltexture(), program_->texture_location_);
 }
     
 void ShaderProgram::Use::SendTexture(GLint slot, const Texture* texture, GLuint location) {
+    SendTexture(slot, texture->gltexture(), location);
+}
+
+void ShaderProgram::Use::SendTexture(GLint slot, GLuint texture) {
+    SendTexture(slot, texture, program_->texture_location_);
+}
+
+void ShaderProgram::Use::SendTexture(GLint slot, GLuint texture, GLuint location) {
     glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, texture->gltexture());
+    glBindTexture(GL_TEXTURE_2D, texture);
     glUniform1i(location, slot);
 }
 

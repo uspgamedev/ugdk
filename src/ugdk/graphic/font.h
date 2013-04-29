@@ -1,36 +1,36 @@
-#ifndef HORUSEYE_FRAMEWORK_FONT_H_
-#define HORUSEYE_FRAMEWORK_FONT_H_
+#ifndef UGDK_GRAPHIC_FONT_H_
+#define UGDK_GRAPHIC_FONT_H_
 
 #include <string>
-#include <ugdk/math/vector2D.h>
 #include <ugdk/graphic.h>
+#include <ugdk/math/vector2D.h>
 
+namespace freetypeglxx {
+    class TextureAtlas;
+    class TextureFont;
+}
 
 namespace ugdk {
 namespace graphic {
 
 class Font {
   public:
-	enum IdentType {
-		LEFT,
-		CENTER,
-		RIGHT
-	};
-	Font(Texture** letters, int fontsize, char ident, bool fancy);
-	~Font();
-	int id() { return id_; }
-	IdentType ident() { return ident_; }
-	ugdk::math::Vector2D GetLetterSize(wchar_t letter);
-	bool IsFancy() { return fancy_;}
+    Font(const std::string& path, double size, int num_glyphs = 128);
+    ~Font();
+
+    double size() const { return size_; }
+    double height() const;
+
+    /// Generates all glyphs in the given string and caches then for later use.
+    void HintString(const std::wstring&);
+
+    freetypeglxx::TextureFont* freetype_font() { return freetype_font_; }
 
   private:
-	int id_;
-	int size_;
-	Texture** letters_;
-	IdentType ident_;
-	bool fancy_;
+    freetypeglxx::TextureAtlas* atlas_;
+    freetypeglxx::TextureFont* freetype_font_;
+    double size_;
 };
-
 
 }  // namespace graphic
 }  // namespace ugdk

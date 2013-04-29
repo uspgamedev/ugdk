@@ -26,6 +26,7 @@ option(UGDK_BUILD_TESTS "Set to ON to enable building tests." ON)
 option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
 option(UGDK_LUA_BINDINGS "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
+option(UGDK_INTERNAL_GLEW "Set to ON to use an internal GLEW instead of the system one." OFF)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     SET (CHECKMAC "#define ISMAC")
@@ -63,30 +64,6 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
 endif ()
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
-if (UNIX OR MINGW)
-    # se for o g++ para *nix ou o MinGW para Windows:
-    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2)
-    add_definitions(-Wall
-# TODO: would like these but they produce overwhelming amounts of warnings
-#       -Wextra
-#       -Wmissing-field-initializers
-#       -Wswitch-default
-#       -Wfloat-equal
-#       -Wconversion
-#       -Wzero-as-null-pointer-constant
-        -Wtype-limits
-        -Wsign-compare
-        -Wignored-qualifiers
-        -Wuninitialized
-        #-Wshadow
-        -Wlogical-op
-        -Winit-self)
-
-elseif (MSVC) 
-    add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
-endif ()
-
 # ${UGDK_SRC} está definido?
 if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
@@ -96,6 +73,9 @@ include_directories ("src")
 include (cmake/ugdk.cmake)
 
 # Encontrando as bibliotecas necessarias:
+
+find_package(Git)
+
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 
@@ -113,12 +93,26 @@ include_directories(${SDLIMAGE_INCLUDE_DIR})
 
 find_package(GLEW 1.5 QUIET)
 if(NOT GLEW_FOUND)
-    message("-- GLEW not found, using included source.")
-	add_subdirectory(externals/glew)
-	set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
-	set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+    message("-- GLEW not found, forcing internal.")
+    set(UGDK_INTERNAL_GLEW ON CACHE BOOL "Set to ON to use the internal GLEW." FORCE)
 endif(NOT GLEW_FOUND)
+
+if(UGDK_INTERNAL_GLEW)
+    add_definitions(-DGLEW_STATIC)
+    add_subdirectory(externals/glew)
+    set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
+    set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+endif(UGDK_INTERNAL_GLEW)
 include_directories(${GLEW_INCLUDE_DIRS})
+
+if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init
+                    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+endif(GIT_FOUND)
+
+add_subdirectory(externals/freetype-glpp)
+include_directories("externals/freetype-glpp/include")
+set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
 
 ##########################################
 # Package Configuration
@@ -173,6 +167,33 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
+
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+if (UNIX OR MINGW)
+    # se for o g++ para *nix ou o MinGW para Windows:
+    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2)
+    add_definitions(-Wall
+# TODO: would like these but they produce overwhelming amounts of warnings
+#       -Wextra
+#       -Wmissing-field-initializers
+#       -Wswitch-default
+#       -Wfloat-equal
+#       -Wconversion
+#       -Wzero-as-null-pointer-constant
+        -Wtype-limits
+        -Wsign-compare
+        -Wignored-qualifiers
+        -Wuninitialized
+        #-Wshadow
+        -Wlogical-op
+        -Winit-self)
+
+elseif (MSVC) 
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
+endif ()
+
+# =============================
 add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
 
 if (CMAKE_COMPILER_IS_GNUCXX)
@@ -196,6 +217,7 @@ target_link_libraries (libugdk
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
+                       ${FREETYPE_GLPP_LIBRARIES}
                        ${UGDK_LIBRARIES})
 
 target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
@@ -206,6 +228,7 @@ target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
+                       ${FREETYPE_GLPP_LIBRARIES}
                        ${UGDK_LIBRARIES})
                       
 set_target_properties (libugdk PROPERTIES 

@@ -8,6 +8,8 @@ namespace graphic {
 
 opengl::ShaderProgram* InterfaceShader();
 opengl::ShaderProgram* LightSystemShader();
+opengl::ShaderProgram* InterfaceTextShader();
+opengl::ShaderProgram* LightSystemTextShader();
 opengl::ShaderProgram* LightShader();
 
 }  // namespace graphic

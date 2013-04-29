@@ -45,6 +45,8 @@ class ShaderProgram {
         void SendEffect(const ugdk::graphic::VisualEffect&);
         void SendTexture(GLint slot, const Texture* texture);
         void SendTexture(GLint slot, const Texture* texture, GLuint location);
+        void SendTexture(GLint slot, GLuint texture);
+        void SendTexture(GLint slot, GLuint texture, GLuint location);
         void SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2);
 
       private:
