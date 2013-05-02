@@ -106,6 +106,7 @@ bool ShaderProgram::IsValid() const {
 }
 
 void ShaderProgram::AttachShader(const Shader& shader) {
+    shader.Compile();
     glAttachShader(id_, shader.id());
 }
 
