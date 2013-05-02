@@ -10,131 +10,71 @@
 namespace ugdk {
 namespace graphic {
 
-opengl::ShaderProgram* InterfaceShader() {
-    static opengl::ShaderProgram* myprogram = NULL;
-    if(!myprogram) {
-        opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
+opengl::ShaderProgram* DEFAULT_SHADERS[4] = { NULL, NULL, NULL, NULL };
 
-        vertex_shader.AddCodeBlock("out vec2 UV;" "\n");
-        vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition,0,1);" "\n");
-        vertex_shader.AddLineInMain("	UV = vertexUV;" "\n");
-        vertex_shader.GenerateSource();
+static opengl::ShaderProgram* create_shader(bool light_system, bool color_text_mode) {
+    opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
-        fragment_shader.AddCodeBlock("in vec2 UV;" "\n"
-                                     "uniform sampler2D drawable_texture;" "\n"
-                                     "uniform vec4 effect_color;" "\n");
+    // VERTEX
+    vertex_shader.AddCodeBlock("out vec2 UV;" "\n");
+    if(light_system)
+        vertex_shader.AddCodeBlock("out vec2 lightUV;" "\n"
+                                   "void calculateLightUV() {" "\n"
+                                   "   lightUV = (gl_Position.xy + vec2(1, 1)) * 0.5;" "\n"
+                                   "}" "\n");
+
+    vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition,0,1);" "\n");
+    vertex_shader.AddLineInMain("	UV = vertexUV;" "\n");
+    if(light_system)
+        vertex_shader.AddLineInMain("   calculateLightUV();" "\n");
+    vertex_shader.GenerateSource();
+
+    // FRAGMENT
+    fragment_shader.AddCodeBlock("in vec2 UV;" "\n"
+                                 "uniform sampler2D drawable_texture;" "\n"
+                                 "uniform vec4 effect_color;" "\n");
+
+    if(light_system)
+        fragment_shader.AddCodeBlock("in vec2 lightUV;" "\n"
+                                     "uniform sampler2D light_texture;" "\n");
+
+    if(color_text_mode)
+        fragment_shader.AddLineInMain("	vec4 color = vec4(effect_color.rgb, texture2D( drawable_texture, UV ).a * effect_color.a);" "\n");
+    else
         fragment_shader.AddLineInMain("	vec4 color = texture2D( drawable_texture, UV ) * effect_color;" "\n");
-        fragment_shader.AddLineInMain(" gl_FragColor = color;" "\n");
-        fragment_shader.GenerateSource();
+    if(light_system)
+        fragment_shader.AddLineInMain("	color *= vec4(texture2D(light_texture, lightUV).rgb, 1.0);" "\n");
+    fragment_shader.AddLineInMain(" gl_FragColor = color;" "\n");
+    fragment_shader.GenerateSource();
 
+    opengl::ShaderProgram* myprogram = new opengl::ShaderProgram;
 
-        myprogram = new opengl::ShaderProgram;
-        myprogram->AttachShader(vertex_shader);
-        myprogram->AttachShader(fragment_shader);
+    myprogram->AttachShader(vertex_shader);
+    myprogram->AttachShader(fragment_shader);
 
-        bool status = myprogram->SetupProgram();
-        assert(status);
-    }
+    bool status = myprogram->SetupProgram();
+    assert(status);
     return myprogram;
+}
+
+opengl::ShaderProgram* InterfaceShader() {
+    if(DEFAULT_SHADERS[0*2 + 0]) return DEFAULT_SHADERS[0*2 + 0];
+    return DEFAULT_SHADERS[0 + 0] = create_shader(false, false);
 }
 
 opengl::ShaderProgram* LightSystemShader() {
-    static opengl::ShaderProgram* myprogram = NULL;
-    if(!myprogram) {
-        opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
-
-        vertex_shader.AddCodeBlock("out vec2 UV;" "\n");
-        vertex_shader.AddCodeBlock("out vec2 lightUV;" "\n"
-                                   "void calculateLightUV() {" "\n"
-                                   "   lightUV = (gl_Position.xy + vec2(1, 1)) * 0.5;" "\n"
-                                   "}" "\n");
-        vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition,0,1);" "\n");
-        vertex_shader.AddLineInMain("	UV = vertexUV;" "\n");
-        vertex_shader.AddLineInMain("   calculateLightUV();" "\n");
-        vertex_shader.GenerateSource();
-
-        fragment_shader.AddCodeBlock("in vec2 UV;" "\n"
-                                     "uniform sampler2D drawable_texture;" "\n"
-                                     "uniform vec4 effect_color;" "\n");
-        fragment_shader.AddCodeBlock("in vec2 lightUV;" "\n"
-                                     "uniform sampler2D light_texture;" "\n");
-        fragment_shader.AddLineInMain("	vec4 color = texture2D( drawable_texture, UV ) * effect_color;" "\n");
-        fragment_shader.AddLineInMain("	color *= vec4(texture2D(light_texture, lightUV).rgb, 1.0);" "\n");
-        fragment_shader.AddLineInMain(" gl_FragColor = color;" "\n");
-        fragment_shader.GenerateSource();
-
-        myprogram = new opengl::ShaderProgram;
-
-        myprogram->AttachShader(vertex_shader);
-        myprogram->AttachShader(fragment_shader);
-
-        bool status = myprogram->SetupProgram();
-        assert(status);
-    }
-    return myprogram;
+    if(DEFAULT_SHADERS[0*2 + 1]) return DEFAULT_SHADERS[0*2 + 1];
+    return DEFAULT_SHADERS[0 + 1] = create_shader(true, false);
 }
 
 opengl::ShaderProgram* InterfaceTextShader() {
-    static opengl::ShaderProgram* myprogram = NULL;
-    if(!myprogram) {
-        opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
-
-        vertex_shader.AddCodeBlock("out vec2 UV;" "\n");
-        vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition,0,1);" "\n");
-        vertex_shader.AddLineInMain("	UV = vertexUV;" "\n");
-        vertex_shader.GenerateSource();
-
-        fragment_shader.AddCodeBlock("in vec2 UV;" "\n"
-                                     "uniform sampler2D drawable_texture;" "\n"
-                                     "uniform vec4 effect_color;" "\n");
-        fragment_shader.AddLineInMain("	vec4 color = vec4(effect_color.rgb, texture2D( drawable_texture, UV ).a * effect_color.a);" "\n");
-        fragment_shader.AddLineInMain(" gl_FragColor = color;" "\n");
-        fragment_shader.GenerateSource();
-
-        myprogram = new opengl::ShaderProgram;
-
-        myprogram->AttachShader(vertex_shader);
-        myprogram->AttachShader(fragment_shader);
-
-        bool status = myprogram->SetupProgram();
-        assert(status);
-    }
-    return myprogram;
+    if(DEFAULT_SHADERS[1*2 + 0]) return DEFAULT_SHADERS[1*2 + 0];
+    return DEFAULT_SHADERS[1*2 + 0] = create_shader(false, true);
 }
 
 opengl::ShaderProgram* LightSystemTextShader() {
-    static opengl::ShaderProgram* myprogram = NULL;
-    if(!myprogram) {
-        opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
-
-        vertex_shader.AddCodeBlock("out vec2 UV;" "\n");
-        vertex_shader.AddCodeBlock("out vec2 lightUV;" "\n"
-                                   "void calculateLightUV() {" "\n"
-                                   "   lightUV = (gl_Position.xy + vec2(1, 1)) * 0.5;" "\n"
-                                   "}" "\n");
-        vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition,0,1);" "\n");
-        vertex_shader.AddLineInMain("	UV = vertexUV;" "\n");
-        vertex_shader.AddLineInMain("   calculateLightUV();" "\n");
-        vertex_shader.GenerateSource();
-
-        fragment_shader.AddCodeBlock("in vec2 UV;" "\n"
-                                     "uniform sampler2D drawable_texture;" "\n"
-                                     "uniform vec4 effect_color;" "\n");
-        fragment_shader.AddCodeBlock("uniform sampler2D light_texture;" "\n");
-        fragment_shader.AddLineInMain("	vec4 color = vec4(effect_color.rgb, texture2D( drawable_texture, UV ).a * effect_color.a);" "\n");
-        fragment_shader.AddLineInMain("	color *= vec4(light_color, 1.0);" "\n");
-        fragment_shader.AddLineInMain(" gl_FragColor = color;" "\n");
-        fragment_shader.GenerateSource();
-
-        myprogram = new opengl::ShaderProgram;
-
-        myprogram->AttachShader(vertex_shader);
-        myprogram->AttachShader(fragment_shader);
-
-        bool status = myprogram->SetupProgram();
-        assert(status);
-    }
-    return myprogram;
+    if(DEFAULT_SHADERS[1*2 + 1]) return DEFAULT_SHADERS[1*2 + 1];
+    return DEFAULT_SHADERS[1*2 + 1] = create_shader(true, true);
 }
 
 opengl::ShaderProgram* LightShader() {
