@@ -97,10 +97,8 @@ void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     Geometry final_geometry(geometry);
     final_geometry.Compose(Geometry(-hotspot_));
 
-    opengl::ShaderProgram::Use shader_use(
-        (VIDEO_MANAGER()->default_shader() == InterfaceShader()) 
-            ? InterfaceTextShader() 
-            : LightSystemTextShader());
+    VIDEO_MANAGER()->shaders().ChangeFlag(VideoManager::Shaders::IGNORE_TEXTURE_COLOR, true);
+    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->shaders().current_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
@@ -118,6 +116,8 @@ void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
 
     // Draw the triangle !
     glDrawArrays(GL_QUADS, 0, message_.size() * 4); // 12*3 indices starting at 0 -> 12 triangles
+    
+    VIDEO_MANAGER()->shaders().ChangeFlag(VideoManager::Shaders::IGNORE_TEXTURE_COLOR, false);
 }
 
 }  // namespace graphic

@@ -40,7 +40,7 @@ Light::~Light() {
 
 void Light::Draw(const Geometry& geometry) {
     // Use our shader
-    opengl::ShaderProgram* shader = VIDEO_MANAGER()->default_shader();
+    opengl::ShaderProgram* shader = VIDEO_MANAGER()->light_shader();
     opengl::ShaderProgram::Use shader_use(shader);
 
     shader_use.SendGeometry(geometry * Geometry(math::Vector2D(), dimension_));

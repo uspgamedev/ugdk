@@ -12,7 +12,7 @@ namespace graphic {
 
 opengl::ShaderProgram* DEFAULT_SHADERS[4] = { NULL, NULL, NULL, NULL };
 
-static opengl::ShaderProgram* create_shader(bool light_system, bool color_text_mode) {
+opengl::ShaderProgram* CreateShader(bool light_system, bool color_text_mode) {
     opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
     // VERTEX
@@ -59,22 +59,22 @@ static opengl::ShaderProgram* create_shader(bool light_system, bool color_text_m
 
 opengl::ShaderProgram* InterfaceShader() {
     if(DEFAULT_SHADERS[0*2 + 0]) return DEFAULT_SHADERS[0*2 + 0];
-    return DEFAULT_SHADERS[0 + 0] = create_shader(false, false);
+    return DEFAULT_SHADERS[0 + 0] = CreateShader(false, false);
 }
 
 opengl::ShaderProgram* LightSystemShader() {
     if(DEFAULT_SHADERS[0*2 + 1]) return DEFAULT_SHADERS[0*2 + 1];
-    return DEFAULT_SHADERS[0 + 1] = create_shader(true, false);
+    return DEFAULT_SHADERS[0 + 1] = CreateShader(true, false);
 }
 
 opengl::ShaderProgram* InterfaceTextShader() {
     if(DEFAULT_SHADERS[1*2 + 0]) return DEFAULT_SHADERS[1*2 + 0];
-    return DEFAULT_SHADERS[1*2 + 0] = create_shader(false, true);
+    return DEFAULT_SHADERS[1*2 + 0] = CreateShader(false, true);
 }
 
 opengl::ShaderProgram* LightSystemTextShader() {
     if(DEFAULT_SHADERS[1*2 + 1]) return DEFAULT_SHADERS[1*2 + 1];
-    return DEFAULT_SHADERS[1*2 + 1] = create_shader(true, true);
+    return DEFAULT_SHADERS[1*2 + 1] = CreateShader(true, true);
 }
 
 opengl::ShaderProgram* LightShader() {
