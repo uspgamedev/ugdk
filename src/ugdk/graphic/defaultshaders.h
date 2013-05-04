@@ -6,6 +6,8 @@
 namespace ugdk {
 namespace graphic {
 
+opengl::ShaderProgram* CreateShader(bool light_system, bool color_text_mode);
+
 opengl::ShaderProgram* InterfaceShader();
 opengl::ShaderProgram* LightSystemShader();
 opengl::ShaderProgram* InterfaceTextShader();
