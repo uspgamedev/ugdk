@@ -13,6 +13,8 @@
 namespace ugdk {
 namespace action {
 
+class MediaManager;
+
 /*TODO
  * Represents a sprite's current animation.
  *
@@ -27,7 +29,6 @@ namespace action {
  * to access any of the animations it requires, as long as these are all properly registered
  * in the AnimationSet object given to the AnimationManager object.
  */
-
 class MediaPlayer {
   public:
     MediaPlayer();
@@ -49,6 +50,9 @@ class MediaPlayer {
   private:
     std::vector<Observer *> observers_;
     std::vector< std::tr1::function<void (void)> > ticks_;
+    MediaManager* manager_;
+
+    friend class MediaManager;
 };
 
 } /* namespace action */
