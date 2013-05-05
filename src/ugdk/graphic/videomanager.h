@@ -3,6 +3,7 @@
 
 #include <string>
 #include <list>
+#include <bitset>
 #include <ugdk/base/types.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/frame.h>
@@ -52,17 +53,25 @@ class VideoManager {
         void ChangeFlag(Flag, bool);
 
         /// Replace the ShaderProgram UGDK uses for the given combination of flags.
-        /** @arg flags A vector containing the combation of flags.
+        /** @arg flags A STL bitset containing the flags.
             @arg program The ShaderProgram to use. This assumes you're passing the ownership of the object.
         */
-        void ReplaceShader(const bool flags[NUM_FLAGS], opengl::ShaderProgram* program);
+        void ReplaceShader(const std::bitset<NUM_FLAGS>& flags, opengl::ShaderProgram* program);
+        
+        void ReplaceShader(unsigned long flags, opengl::ShaderProgram* program) {
+            ReplaceShader(std::bitset<NUM_FLAGS>(flags), program);
+        }
+
+        void ReplaceShader(const std::string& flags, opengl::ShaderProgram* program) {
+            ReplaceShader(std::bitset<NUM_FLAGS>(flags), program);
+        }
 
       private:
         Shaders();
         ~Shaders();
 
         opengl::ShaderProgram* shaders_[1 << NUM_FLAGS];
-        int current_flag_value_;
+        std::bitset<NUM_FLAGS> flags_;
 
         friend class VideoManager;
     };

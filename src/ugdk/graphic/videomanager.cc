@@ -109,14 +109,10 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
     initializeLight();
 
-    bool shader_flags[Shaders::NUM_FLAGS] = { false, false };
-    shaders_.ReplaceShader(shader_flags, CreateShader(shader_flags[0], shader_flags[1])); // false, false
-    shader_flags[0] = true;
-    shaders_.ReplaceShader(shader_flags, CreateShader(shader_flags[0], shader_flags[1])); // true, false
-    shader_flags[1] = true;
-    shaders_.ReplaceShader(shader_flags, CreateShader(shader_flags[0], shader_flags[1])); // true, true
-    shader_flags[0] = false;
-    shaders_.ReplaceShader(shader_flags, CreateShader(shader_flags[0], shader_flags[1])); // false, true
+    shaders_.ReplaceShader(0, CreateShader(false, false));
+    shaders_.ReplaceShader(1, CreateShader( true, false));
+    shaders_.ReplaceShader(2, CreateShader(false,  true));
+    shaders_.ReplaceShader(3, CreateShader( true,  true));
 
     light_shader_ = LightShader();
     return true;
@@ -221,35 +217,28 @@ void VideoManager::initializeLight() {
 }
 
 const opengl::ShaderProgram* VideoManager::Shaders::current_shader() const {
-    return shaders_[current_flag_value_];
+    return shaders_[flags_.to_ulong()];
 }
 
 void VideoManager::Shaders::ChangeFlag(Flag flag, bool value) {
-    int flag_bit = 1 << static_cast<int>(flag);
-    if(value)
-        current_flag_value_ |= flag_bit; // Set the bit for this flag.
-    else
-        current_flag_value_ &= ~flag_bit; // Unset the bit for this flag.
+    int flag_bit = static_cast<int>(flag);
+    flags_[flag_bit] = value;
 }
 
-void VideoManager::Shaders::ReplaceShader(const bool flags[NUM_FLAGS], opengl::ShaderProgram* program) {
-    int result_flag = 0;
-    for(int i = 0; i < NUM_FLAGS; ++i)
-        if(flags[i])
-            result_flag += (1 << i);
-    delete shaders_[result_flag];
-    shaders_[result_flag] = program;
+void VideoManager::Shaders::ReplaceShader(const std::bitset<NUM_FLAGS>& flags, opengl::ShaderProgram* program) {
+    delete shaders_[flags.to_ulong()];
+    shaders_[flags.to_ulong()] = program;
 }
 
-VideoManager::Shaders::Shaders() : current_flag_value_(0) {
-    int max_flags = 1 << NUM_FLAGS;
-    for(int i = 0; i < max_flags; ++i)
+VideoManager::Shaders::Shaders() {
+    unsigned long max_flags = 1 << NUM_FLAGS;
+    for(unsigned long i = 0; i < max_flags; ++i)
         shaders_[i] = NULL;
 }
         
 VideoManager::Shaders::~Shaders() {
-    int max_flags = 1 << NUM_FLAGS;
-    for(int i = 0; i < max_flags; ++i)
+    unsigned long max_flags = 1 << NUM_FLAGS;
+    for(unsigned long i = 0; i < max_flags; ++i)
         delete shaders_[i];
 }
 
