@@ -80,8 +80,6 @@ void Scene::AddTask(Task *task) {
 void Scene::Update(double delta_t) {
     UpdateEntities(delta_t);
     UpdateTasks(delta_t);
-    content_node()->Update(delta_t);
-    interface_node()->Update(delta_t);
     DeleteToBeRemovedEntities();
     DeleteFinishedTasks();
     FlushEntityQueue();

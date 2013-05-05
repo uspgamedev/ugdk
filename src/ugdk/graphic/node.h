@@ -27,7 +27,6 @@ class Node {
     ~Node();
 
     /// Pushes the modifier to the VideoManager, renders 
-    void Update(double dt);
     void Render(const Geometry&, const VisualEffect&) const;
     void RenderLight(const Geometry& parent, const VisualEffect&) const;
 
