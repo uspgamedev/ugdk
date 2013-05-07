@@ -9,7 +9,7 @@ namespace ugdk {
 namespace action {
 
 class MediaManager {
-public:
+  public:
     MediaManager() {}
     ~MediaManager() {
         for(std::set<MediaPlayer*>::iterator it = players_.begin(); it != players_.end(); ++it)

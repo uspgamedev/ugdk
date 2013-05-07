@@ -5,6 +5,7 @@ namespace ugdk {
 namespace action {
 
 class MediaPlayer;
+class MediaManager;
 
 template<class T>
 class AnimationPlayer;

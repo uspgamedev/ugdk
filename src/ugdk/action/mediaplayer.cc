@@ -6,7 +6,7 @@
 namespace ugdk {
 namespace action {
     
-MediaPlayer::MediaPlayer() {}
+MediaPlayer::MediaPlayer() : manager_(NULL) {}
 
 MediaPlayer::~MediaPlayer() {
     if(manager_)
@@ -19,6 +19,10 @@ void MediaPlayer::AddObserver(Observer* observer) {
 
 void MediaPlayer::AddTickFunction(std::tr1::function<void (void)> tick) {
     ticks_.push_back(tick);
+}
+    
+void MediaPlayer::ChangeMediaManager(MediaManager* manager) {
+    manager->AddPlayer(this); // This function changes mangaer_
 }
 
 void MediaPlayer::notifyAllObservers() {
