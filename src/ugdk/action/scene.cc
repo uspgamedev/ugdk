@@ -79,6 +79,7 @@ void Scene::AddTask(Task *task) {
 
 void Scene::Update(double delta_t) {
     UpdateEntities(delta_t);
+    media_manager_.Update(delta_t);
     UpdateTasks(delta_t);
     DeleteToBeRemovedEntities();
     DeleteFinishedTasks();
