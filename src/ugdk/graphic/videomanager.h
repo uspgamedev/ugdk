@@ -37,6 +37,7 @@ class VideoManager {
     bool fullscreen() const { return settings_.fullscreen; }
     const std::string& title() const { return title_; }
     Texture* white_texture() { return white_texture_; }
+    Texture* light_buffer() { return light_buffer_; }
     opengl::ShaderProgram* light_shader() { return light_shader_; }
 
     class Shaders {

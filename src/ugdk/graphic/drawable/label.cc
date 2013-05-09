@@ -96,6 +96,8 @@ const ugdk::math::Vector2D& Label::size() const {
 void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     Geometry final_geometry(geometry);
     final_geometry.Compose(Geometry(-hotspot_));
+    
+    if(draw_setup_function_) draw_setup_function_(this, geometry, effect);
 
     VIDEO_MANAGER()->shaders().ChangeFlag(VideoManager::Shaders::IGNORE_TEXTURE_COLOR, true);
     opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->shaders().current_shader());

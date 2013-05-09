@@ -37,6 +37,9 @@ void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effec
         mat[0].x + mat[1].x + mat[3].x < -1 || 
         mat[0].y + mat[1].y + mat[3].y > 1)
         return;
+    
+    if(draw_setup_function_) draw_setup_function_(this, geometry, effect);
+    
     // Use our shader
     opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->shaders().current_shader());
 

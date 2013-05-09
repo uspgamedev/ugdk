@@ -30,9 +30,11 @@ Sprite::Sprite(const Spritesheet *spritesheet, const std::string& animation_set_
  
 Sprite::~Sprite() {}
 
-void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
+void Sprite::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     if(!spritesheet_) return;
     const action::SpriteAnimationFrame& animation_frame(current_animation_frame());
+    
+    if(draw_setup_function_) draw_setup_function_(this, geometry, effect);
 
     math::Vector2D mirror_scale(
             (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
@@ -41,7 +43,7 @@ void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     spritesheet_->Draw(
         animation_frame.spritesheet_frame(), 
         hotspot_, 
-        modifier * animation_frame.geometry() * Geometry(math::Vector2D(), mirror_scale),
+        geometry * animation_frame.geometry() * Geometry(math::Vector2D(), mirror_scale),
         effect * animation_frame.effect());
 }
 

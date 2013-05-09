@@ -42,6 +42,9 @@ void TextBox::ChangeMessage(const std::wstring& message) {
 }
 
 void TextBox::Draw(const Geometry& geo, const VisualEffect& eff) const {
+    
+    if(draw_setup_function_) draw_setup_function_(this, geo, eff);
+
     double off_y = 0.0;
     for(vector<Label*>::const_iterator it = labels_.begin(); it != labels_.end(); ++it) {
         double off_x = 0.0;
