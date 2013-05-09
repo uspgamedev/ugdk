@@ -30,10 +30,6 @@ Sprite::Sprite(const Spritesheet *spritesheet, const std::string& animation_set_
  
 Sprite::~Sprite() {}
 
-void Sprite::Update(double delta_t) { 
-    animation_player_.Update(delta_t);
-}
-
 void Sprite::Draw(const Geometry& modifier, const VisualEffect& effect) const {
     if(!spritesheet_) return;
     const action::SpriteAnimationFrame& animation_frame(current_animation_frame());

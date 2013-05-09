@@ -1,13 +1,17 @@
 #include <ugdk/action/mediaplayer.h>
 
 #include <ugdk/action/observer.h>
+#include <ugdk/action/mediamanager.h>
 
 namespace ugdk {
 namespace action {
     
-MediaPlayer::MediaPlayer() {}
+MediaPlayer::MediaPlayer() : manager_(NULL) {}
 
-MediaPlayer::~MediaPlayer() {}
+MediaPlayer::~MediaPlayer() {
+    if(manager_)
+        manager_->RemovePlayer(this);
+}
 
 void MediaPlayer::AddObserver(Observer* observer) {
     observers_.push_back(observer);
@@ -15,6 +19,10 @@ void MediaPlayer::AddObserver(Observer* observer) {
 
 void MediaPlayer::AddTickFunction(std::tr1::function<void (void)> tick) {
     ticks_.push_back(tick);
+}
+    
+void MediaPlayer::ChangeMediaManager(MediaManager* manager) {
+    manager->AddPlayer(this); // This function changes mangaer_
 }
 
 void MediaPlayer::notifyAllObservers() {

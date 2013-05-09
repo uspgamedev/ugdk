@@ -10,6 +10,7 @@
 #include <ugdk/audio.h>
 #include <ugdk/graphic.h>
 #include <ugdk/base/types.h>
+#include <ugdk/action/mediamanager.h>
 
 namespace ugdk {
 
@@ -71,6 +72,9 @@ class Scene {
           graphic::Node* interface_node()       { return interface_node_; }
     const graphic::Node* interface_node() const { return interface_node_; }
 
+          MediaManager& media_manager()       { return media_manager_; }
+    const MediaManager& media_manager() const { return media_manager_; }
+
     audio::Music* background_music() const { return background_music_; }
     void set_background_music(audio::Music* music) { background_music_ = music; }
     /**@}
@@ -107,6 +111,9 @@ class Scene {
 
     graphic::Node*   content_node_;
     graphic::Node* interface_node_;
+
+    /// A MediaManager provided for users.
+    MediaManager media_manager_;
 
     std::list<Entity*> entities_;
     std::queue<Entity*> queued_entities_;

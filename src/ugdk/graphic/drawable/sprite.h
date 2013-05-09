@@ -21,7 +21,6 @@ class Sprite : public Drawable {
     explicit Sprite(const Spritesheet *spritesheet, const std::string& animation_set_tag);
     virtual ~Sprite();
 
-    void Update(double dt);
     void Draw(const Geometry&, const VisualEffect&) const;
     const ugdk::math::Vector2D& size() const;
 

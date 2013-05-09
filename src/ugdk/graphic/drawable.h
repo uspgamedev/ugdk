@@ -16,7 +16,6 @@ class Drawable {
     };
     virtual ~Drawable() {}
 
-    virtual void Update(double dt) = 0;
     virtual void Draw(const Geometry&, const VisualEffect&) const = 0;
     virtual const ugdk::math::Vector2D& size() const = 0;
 

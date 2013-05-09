@@ -27,7 +27,6 @@ class TextBox : public Drawable {
     /// This operation is slow.
     void ChangeMessage(const std::wstring& message);
 
-    void Update(double) {}
     void Draw(const Geometry&, const VisualEffect&) const;
 
     void set_ident_style(IdentStyle style) { ident_style_ = style; }
