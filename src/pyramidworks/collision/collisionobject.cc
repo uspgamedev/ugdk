@@ -38,7 +38,9 @@ void CollisionObject::SearchCollisions(std::vector<CollisionInstance> &collision
     std::map<const CollisionClass*, CollisionLogic*>::const_iterator it;
     for(it = known_collisions_.begin(); it != known_collisions_.end(); ++it) {
 
-        const CollisionObjectList& target_list = it->first->FindCollidingObjects(this);
+        CollisionObjectList target_list;
+        it->first->FindCollidingObjects(this, target_list);
+        
         CollisionObjectList::const_iterator obj;
         for(obj = target_list.begin(); obj != target_list.end(); ++obj)
             collision_list.push_back(CollisionInstance(it->second, (*obj)->data_));

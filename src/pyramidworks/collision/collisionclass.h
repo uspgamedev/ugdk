@@ -5,7 +5,9 @@
 #include <list>
 #include <set>
 #include <ugdk/util.h>
+#include <ugdk/math.h>
 #include <pyramidworks/collision.h>
+#include <pyramidworks/geometry.h>
 
 namespace pyramidworks {
 namespace collision {
@@ -18,7 +20,8 @@ class CollisionClass {
     const CollisionClass* parent() const { return parent_; }
     void set_parent(CollisionClass* _parent) { parent_ = _parent; }
 
-    const CollisionObjectList FindCollidingObjects(const CollisionObject *target) const;
+    void FindCollidingObjects(const CollisionObject *target, CollisionObjectList& collisions) const;
+    void FindCollidingObjects(const ugdk::math::Vector2D& position, const geometry::GeometricShape& shape, CollisionObjectList& collisions) const;
 
     void AddObject(const CollisionObject *obj);
     void RemoveObject(const CollisionObject *obj);

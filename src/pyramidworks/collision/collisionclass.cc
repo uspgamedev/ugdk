@@ -1,8 +1,8 @@
-#include <vector>
-#include <ugdk/util/intervalkdtree.h>
-
 #include "collisionclass.h"
 
+#include <vector>
+#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/math/vector2D.h>
 #include "pyramidworks/collision/collisionobject.h"
 #include "pyramidworks/geometry/geometricshape.h"
 
@@ -15,12 +15,11 @@ CollisionClass::CollisionClass(const ugdk::ikdtree::Box<2>& tree_bounding_box)
   : parent_(NULL),
     objects_tree_(new ObjectTree(tree_bounding_box,5)) {}
 
-const CollisionObjectList CollisionClass::FindCollidingObjects(
-                                         const CollisionObject *target) const {
+void CollisionClass::FindCollidingObjects(const CollisionObject *target,
+                                                               CollisionObjectList& result) const {
     
     std::vector<const CollisionObject *> *filtered_results 
         = objects_tree_->getIntersectingItems(target->GetBoundingBox());
-    CollisionObjectList result;
 
     for(std::vector<const CollisionObject *>::const_iterator it
            = filtered_results->begin(); it != filtered_results->end(); ++it) {
@@ -28,14 +27,19 @@ const CollisionObjectList CollisionClass::FindCollidingObjects(
         if( (*it)->IsColliding(target) )
             result.push_front(*it);
     }
-    /*
-#ifdef DEBUG
-    cout << "Max depth: " << objects_tree_.max_height_ << endl;
-    cout << "Filtered " << filtered_results->size() << " of " << objects_.size() << endl;
-#endif
-     */
+
     delete filtered_results;
-    return result;
+}
+
+void CollisionClass::FindCollidingObjects(const ugdk::math::Vector2D& position, const geometry::GeometricShape& shape, CollisionObjectList& collisions) const {
+    std::vector<const CollisionObject *> *filtered_results 
+        = objects_tree_->getIntersectingItems(shape.GetBoundingBox(position));
+    for(std::vector<const CollisionObject *>::const_iterator it
+           = filtered_results->begin(); it != filtered_results->end(); ++it) {
+        if( shape.Intersects(position, (*it)->shape(), (*it)->absolute_position() ) )
+            collisions.push_front(*it);
+    }
+    delete filtered_results;
 }
     
 void CollisionClass::AddObject(const CollisionObject *obj) {
