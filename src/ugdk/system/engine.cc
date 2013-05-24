@@ -5,6 +5,7 @@
 #include <ugdk/config/config.h>
 #include "SDL.h"
 #include <ugdk/action/scene.h>
+#include <ugdk/audio/module.h>
 #include <ugdk/audio/manager.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/textmanager.h>
@@ -33,7 +34,6 @@ bool Engine::Initialize(const Configuration& configuration) {
     SDL_Init(SDL_INIT_EVERYTHING);
 
     // This sets the *::Manager::reference_ correctly.
-    new audio::Manager();
     new input::Manager();
 
     video_manager_    = new graphic::VideoManager();
@@ -47,7 +47,7 @@ bool Engine::Initialize(const Configuration& configuration) {
 
     video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, icon_path);
 
-    audio::manager()->Initialize();
+    audio::Initialize(new audio::Manager);
     input::manager()->Initialize();
      text_manager_->Initialize();
 

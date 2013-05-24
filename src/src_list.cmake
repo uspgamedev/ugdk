@@ -32,6 +32,8 @@ SET(UGDK_SRC
     ./src/ugdk/audio.h 
     ./src/ugdk/audio/manager.cc 
     ./src/ugdk/audio/manager.h 
+    ./src/ugdk/audio/module.cc 
+    ./src/ugdk/audio/module.h 
     ./src/ugdk/audio/music.cc 
     ./src/ugdk/audio/music.h 
     ./src/ugdk/audio/sample.cc 

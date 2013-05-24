@@ -9,6 +9,7 @@
 #include <ugdk/audio/sample.h>
 #include <ugdk/audio/music.h>
 #include <ugdk/audio/manager.h>
+#include <ugdk/audio/module.h>
 
 %}
 
@@ -25,6 +26,7 @@ return a new object sometimes, and the audio::Manager manages these objects.
 //%template(MusicMap) std::map<std::string, ugdk::audio::Music*>;
 
 %include <ugdk/audio/manager.h>
+%include <ugdk/audio/module.h>
 
 namespace ugdk {
 namespace audio {

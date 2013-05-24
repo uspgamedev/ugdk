@@ -12,18 +12,10 @@
 namespace ugdk {
 namespace audio {
 
-Manager* Manager::reference_ = NULL;
-
-Manager* Manager::reference() {
-    return reference_;
-}
-
 Manager::Manager() {
-    reference_ = this;
 }
 
 Manager::~Manager() {
-    reference_ = NULL;
 }
 
 bool Manager::Initialize() {
@@ -90,10 +82,6 @@ Music* Manager::LoadMusic(const std::string& filepath) {
 
 Music* Manager::CurrentMusic() const {
     return Music::playing_music_;
-}
-
-Manager* manager() {
-    return Manager::reference();
 }
 
 } // namespace audio

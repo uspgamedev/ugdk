@@ -11,7 +11,7 @@ namespace audio {
 
 class Manager {
   public:
-    static Manager* reference();
+    ~Manager();
 
     /// Initializes audio channels.
     /** @return True if successful, false otherwise.
@@ -42,21 +42,17 @@ class Manager {
     Music* CurrentMusic() const;
 
   private:
-    static Manager* reference_;
     static const int NUM_CHANNELS = 16;
     std::map<std::string, Sample*> sample_data_;
     std::map<std::string, Music*> music_data_;
 
     Manager();
-    ~Manager();
+
     void ReleaseSamples();
     void ReleaseMusics();
 
     friend class Engine;
 };
-
-/// Getter for the manager.
-Manager* manager();
 
 } // namespace audio
 } // namespace ugdk
