@@ -5,7 +5,7 @@
 #include <ugdk/config/config.h>
 #include "SDL.h"
 #include <ugdk/action/scene.h>
-#include <ugdk/audio/audiomanager.h>
+#include <ugdk/audio/manager.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/input/inputmanager.h>
@@ -32,10 +32,12 @@ bool Engine::Initialize(const Configuration& configuration) {
     quit_ = false;
     SDL_Init(SDL_INIT_EVERYTHING);
 
+    // This sets the *::Manager::reference_ correctly.
+    new audio::Manager();
+
     video_manager_    = new graphic::VideoManager();
     input_manager_    = new input::  InputManager();
     time_manager_     = new time::    TimeManager();
-    audio_manager_    = new audio::  AudioManager();
     text_manager_     = new graphic:: TextManager();
     path_manager_     = new           PathManager(configuration.base_path);
     resource_manager_ = new resource::ResourceManager();
@@ -44,7 +46,8 @@ bool Engine::Initialize(const Configuration& configuration) {
     std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";
 
     video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, icon_path);
-    audio_manager_->Initialize();
+
+    audio::manager()->Initialize();
      text_manager_->Initialize();
 
     if (!SCRIPT_MANAGER()->Initialize())
@@ -104,7 +107,7 @@ void Engine::Run() {
         input_manager()->Update(delta_t);
 
         // gerenciamento de audio
-        audio_manager()->Update();
+        audio::manager()->Update();
 
         // tratamento de eventos
         while(SDL_PollEvent(&event)) {
@@ -155,8 +158,7 @@ void Engine::Release() {
     delete time_manager_;
     delete input_manager_;
 
-    audio_manager()->Release();
-    delete audio_manager_;
+    audio::manager()->Release();
 
     text_manager_->Release();
     delete text_manager_;

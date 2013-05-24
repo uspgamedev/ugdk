@@ -29,11 +29,6 @@ class Engine {
     /// Returns a pointer to the current Engine. Creates an Engine if there isn't one.
     static Engine* reference() { return reference_ ? reference_ : reference_ = new Engine; }
 
-    /// Returns a reference to the Audio Manager.
-    /** @see AudioManager
-     */
-    audio::AudioManager *audio_manager() { return audio_manager_; }
-
     /// Returns a reference to the Video Manager.
     /** @see VideoManager
      */
@@ -121,7 +116,6 @@ class Engine {
     void DeleteFinishedScenes();
     static Engine         *    reference_;
 
-    audio::  AudioManager *       audio_manager_;
     graphic::VideoManager *       video_manager_;
     graphic:: TextManager *        text_manager_;
     input::  InputManager *       input_manager_;
@@ -135,12 +129,11 @@ class Engine {
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 
 	Engine() :
-        audio_manager_(nullptr),
-	    video_manager_(nullptr),
+        language_manager_(NULL) {}
+        video_manager_(nullptr),
         text_manager_(nullptr),
         input_manager_(nullptr),
         time_manager_(nullptr),
-		path_manager_(nullptr),
         resource_manager_(nullptr), 
         language_manager_(nullptr) {}
 };

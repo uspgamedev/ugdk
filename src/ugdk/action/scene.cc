@@ -4,7 +4,7 @@
 
 #include <ugdk/action/entity.h>
 #include <ugdk/system/engine.h>
-#include <ugdk/audio/audiomanager.h>
+#include <ugdk/audio/manager.h>
 #include <ugdk/audio/music.h>
 #include <ugdk/graphic/node.h>
 
@@ -74,7 +74,7 @@ void Scene::Focus() {
             background_music_->Unpause();
 
     } else if(stops_previous_music_) {
-        audio::Music* current_music = AUDIO_MANAGER()->CurrentMusic();
+        audio::Music* current_music = audio::manager()->CurrentMusic();
         if(current_music != nullptr)
             current_music->Stop();
     }

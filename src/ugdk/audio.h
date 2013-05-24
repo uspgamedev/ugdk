@@ -4,11 +4,9 @@
 namespace ugdk {
 namespace audio {
 
+class Manager;
 class Music;
 class Sample;
-
-// Managers
-class AudioManager;
 
 } // namespace audio
 } // namespace ugdk
