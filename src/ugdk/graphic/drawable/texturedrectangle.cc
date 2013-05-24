@@ -5,7 +5,7 @@
 //#define GLM_SWIZZLE 
 #include <glm/glm.hpp>
 
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>

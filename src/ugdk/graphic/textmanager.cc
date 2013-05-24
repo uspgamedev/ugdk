@@ -9,7 +9,7 @@
 #include <freetype-gl++/texture-font.hpp>
 
 #include <ugdk/config/config.h>
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/drawable/label.h>

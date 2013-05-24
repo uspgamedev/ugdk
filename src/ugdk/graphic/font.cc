@@ -3,7 +3,7 @@
 #include <freetype-gl++/texture-atlas.hpp>
 #include <freetype-gl++/texture-font.hpp>
 
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/util/pathmanager.h>
 
 namespace ugdk {

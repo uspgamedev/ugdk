@@ -11,7 +11,7 @@
 
 #include <ugdk/graphic/spritesheet.h>
 
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/videomanager.h>

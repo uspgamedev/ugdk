@@ -6,7 +6,7 @@
 #include <ugdk/ui/uielement.h>
 
 #include <ugdk/action/scene.h>
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/input/inputmanager.h>

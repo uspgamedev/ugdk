@@ -7,7 +7,7 @@
 #include <cstdlib>
 
 #include "SDL.h"
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/script.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>

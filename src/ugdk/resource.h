@@ -11,7 +11,7 @@ class ResourceContainer;
 
 class ResourceManager;
 
-template <class T, class Loader_T = T (*) (const std::string&)>
+template <class T, class Loader_T>
 class GenericContainer;
 
 }  // namespace resource

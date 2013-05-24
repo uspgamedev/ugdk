@@ -3,7 +3,7 @@
 #include "SDL_mixer.h"
 #include <ugdk/audio/audiomanager.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/audio/sample.h>
 #include <ugdk/audio/music.h>
 

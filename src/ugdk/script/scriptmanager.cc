@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <algorithm>
 
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/script/langwrapper.h>
 #include <ugdk/script/virtualobj.h>

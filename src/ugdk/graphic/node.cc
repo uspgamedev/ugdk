@@ -5,7 +5,7 @@
 #include <cmath>
 #include "SDL_opengl.h"
 
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/drawable.h>

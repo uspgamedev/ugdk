@@ -4,10 +4,10 @@
 #include <algorithm>
 #include "language.h"
 #include <ugdk/graphic/textmanager.h>
-#include <ugdk/base/resourcemanager.h>
+#include <ugdk/resource/resourcemanager.h>
 #include <ugdk/graphic/drawable/label.h>
 #include <ugdk/graphic/drawable/textbox.h>
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/languageword.h>
 #include <ugdk/util/utf8.h>

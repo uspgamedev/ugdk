@@ -12,7 +12,7 @@
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/graphic/defaultshaders.h>
 
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/common/types.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/geometry.h>

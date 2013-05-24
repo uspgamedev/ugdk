@@ -11,7 +11,7 @@
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 
 namespace ugdk {
 namespace script {

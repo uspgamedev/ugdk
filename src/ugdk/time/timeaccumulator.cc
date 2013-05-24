@@ -3,7 +3,7 @@
 #include "SDL_timer.h"
 #include <ugdk/time/timemanager.h>
 #include <ugdk/time/timeaccumulator.h>
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 
 namespace ugdk {
 namespace time {

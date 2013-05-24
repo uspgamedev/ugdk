@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/util/pathmanager.h>
 
 namespace ugdk {

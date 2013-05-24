@@ -13,7 +13,7 @@
 #include <ugdk/script/languages/python/swigpyrun.h>
 #include <ugdk/script/languages/python/modules.h>
 #include <ugdk/util/pathmanager.h>   // Two includes just so that we can use the engine's PathManager in a
-#include <ugdk/base/engine.h>        // single line of code here. Not nice. =(
+#include <ugdk/system/engine.h>        // single line of code here. Not nice. =(
 
 namespace ugdk {
 namespace script {
