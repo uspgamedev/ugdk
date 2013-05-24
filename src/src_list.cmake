@@ -20,6 +20,7 @@ SET(UGDK_SRC
     ./src/ugdk/action/animationplayer.h 
     ./src/ugdk/action/entity.h 
     ./src/ugdk/action/mediamanager.h 
+    ./src/ugdk/action/mediamanager.h 
     ./src/ugdk/action/mediaplayer.cc 
     ./src/ugdk/action/mediaplayer.h 
     ./src/ugdk/action/observer.h 
@@ -35,14 +36,7 @@ SET(UGDK_SRC
     ./src/ugdk/audio/music.h 
     ./src/ugdk/audio/sample.cc 
     ./src/ugdk/audio/sample.h 
-    ./src/ugdk/base/configuration.h 
-    ./src/ugdk/base/engine.cc 
-    ./src/ugdk/base/engine.h 
-    ./src/ugdk/base/genericcontainer.h 
-    ./src/ugdk/base/resourcecontainer.h 
-    ./src/ugdk/base/resourcemanager.cc 
-    ./src/ugdk/base/resourcemanager.h 
-    ./src/ugdk/base/types.h 
+    ./src/ugdk/config/config.h 
     ./src/ugdk/config/config.h 
     ./src/ugdk/graphic.h 
     ./src/ugdk/graphic/defaultshaders.cc 
@@ -92,6 +86,10 @@ SET(UGDK_SRC
     ./src/ugdk/math/vector2D.cc 
     ./src/ugdk/math/vector2D.h 
     ./src/ugdk/portable/tr1.h 
+    ./src/ugdk/resource/genericcontainer.h 
+    ./src/ugdk/resource/resourcecontainer.h 
+    ./src/ugdk/resource/resourcemanager.cc 
+    ./src/ugdk/resource/resourcemanager.h 
     ./src/ugdk/script.h 
     ./src/ugdk/script/baseproxy.h 
     ./src/ugdk/script/defs.h 
@@ -105,6 +103,10 @@ SET(UGDK_SRC
     ./src/ugdk/script/virtualobj.cc 
     ./src/ugdk/script/virtualobj.h 
     ./src/ugdk/script/virtualprimitive.h 
+    ./src/ugdk/system/configuration.h 
+    ./src/ugdk/system/engine.cc 
+    ./src/ugdk/system/engine.h 
+    ./src/ugdk/system/types.h 
     ./src/ugdk/time.h 
     ./src/ugdk/time/timeaccumulator.cc 
     ./src/ugdk/time/timeaccumulator.h 
