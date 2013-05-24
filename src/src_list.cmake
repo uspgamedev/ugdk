@@ -87,6 +87,7 @@ SET(UGDK_SRC
     ./src/ugdk/math/vector2D.cc 
     ./src/ugdk/math/vector2D.h 
     ./src/ugdk/portable/tr1.h 
+    ./src/ugdk/resource.h 
     ./src/ugdk/resource/genericcontainer.h 
     ./src/ugdk/resource/resourcecontainer.h 
     ./src/ugdk/resource/resourcemanager.cc 
