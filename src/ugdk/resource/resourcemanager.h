@@ -1,11 +1,11 @@
-#ifndef UGDK_BASE_RESOURCEMANAGER_H_
-#define UGDK_BASE_RESOURCEMANAGER_H_
+#ifndef UGDK_RESOURCE_RESOURCEMANAGER_H_
+#define UGDK_RESOURCE_RESOURCEMANAGER_H_
 
 #include <typeinfo>
 #include <map>
 #include <ugdk/action.h>
 #include <ugdk/action/spritetypes.h>
-#include <ugdk/base/resourcecontainer.h>
+#include <ugdk/resource/resourcecontainer.h>
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
 
@@ -15,7 +15,7 @@
 #define RESOURCE_MANAGER()  (ugdk::Engine::reference()->resource_manager())
 
 namespace ugdk {
-namespace base {
+namespace resource {
 
 class ResourceManager {
   public:
@@ -52,8 +52,8 @@ class ResourceManager {
     ResourceMap containers_;
 };
 
-} // namespace base
+} // namespace resource
 } // namespace ugdk
 
-#endif // UGDK_BASE_RESOURCEMANAGER_H_
+#endif // UGDK_RESOURCE_RESOURCEMANAGER_H_
 

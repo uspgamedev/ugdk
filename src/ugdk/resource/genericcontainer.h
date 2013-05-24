@@ -1,9 +1,9 @@
-#ifndef UGDK_BASE_GENERICCONTAINER_H_
-#define UGDK_BASE_GENERICCONTAINER_H_
+#ifndef UGDK_RESOURCE_GENERICCONTAINER_H_
+#define UGDK_RESOURCE_GENERICCONTAINER_H_
 
 #include <string>
 #include <map>
-#include <ugdk/base/resourcecontainer.h>
+#include <ugdk/resource/resourcecontainer.h>
 
 #ifdef DEBUG
 #include <cstdio>
@@ -12,7 +12,7 @@
 #endif
 
 namespace ugdk {
-namespace base {
+namespace resource {
 
 template <class T, class Loader_T = T (*) (const std::string&)>
 class GenericContainer : public virtual ResourceContainer<T> {
@@ -116,8 +116,8 @@ class GenericContainer<T*, T* (*) (const std::string&)> : public virtual Resourc
     }
 };
 
-} // namespace base
+} // namespace resource
 } // namespace ugdk
 
-#endif // UGDK_BASE_GENERICCONTAINER_H_
+#endif // UGDK_RESOURCE_GENERICCONTAINER_H_
 

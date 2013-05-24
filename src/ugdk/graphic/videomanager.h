@@ -4,7 +4,7 @@
 #include <string>
 #include <list>
 #include <bitset>
-#include <ugdk/base/types.h>
+#include <ugdk/common/types.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/frame.h>
 #include <ugdk/action.h>

@@ -1,11 +1,10 @@
-
-#include <ugdk/base/resourcemanager.h>
+#include <ugdk/resource/resourcemanager.h>
 
 #include <ugdk/action/spriteanimationframe.h>
-#include <ugdk/base/engine.h>
-#include <ugdk/base/genericcontainer.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/texture.h>
+#include <ugdk/resource/genericcontainer.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/util/animationprotocol.h>
 #include <ugdk/util/languageword.h>
 
@@ -28,7 +27,7 @@ bool type_info_cmp(const std::type_info* a, const std::type_info* b) {
 }
 
 namespace ugdk {
-namespace base {
+namespace resource {
 
 ResourceManager::ResourceManager() : containers_(type_info_cmp) {
     add_container(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile));
@@ -64,5 +63,5 @@ ugdk::LanguageWord*        ResourceManager::GetLanguageWord(const std::string& t
     return word;
 }
 
-} // namespace base
+} // namespace resource
 } // namespace ugdk

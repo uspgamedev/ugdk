@@ -1,5 +1,5 @@
-#ifndef UGDK_BASE_CONFIGURATION_H_
-#define UGDK_BASE_CONFIGURATION_H_
+#ifndef UGDK_SYSTEM_CONFIGURATION_H_
+#define UGDK_SYSTEM_CONFIGURATION_H_
 
 #include <string>
 #include <ugdk/math/vector2D.h>

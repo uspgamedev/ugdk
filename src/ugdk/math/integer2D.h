@@ -1,7 +1,7 @@
 #ifndef UGDK_MATH_INTEGER2D_H_
 #define UGDK_MATH_INTEGER2D_H_
 
-#include <ugdk/base/types.h>
+#include <ugdk/common/types.h>
 #include <ugdk/math.h>
 
 #ifdef SWIG

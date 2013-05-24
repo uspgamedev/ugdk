@@ -13,7 +13,7 @@
 #include <ugdk/graphic/defaultshaders.h>
 
 #include <ugdk/base/engine.h>
-#include <ugdk/base/types.h>
+#include <ugdk/common/types.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
