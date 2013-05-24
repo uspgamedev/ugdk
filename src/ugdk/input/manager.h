@@ -1,5 +1,5 @@
-#ifndef UGDK_INPUT_INPUTMANAGER_H_
-#define UGDK_INPUT_INPUTMANAGER_H_
+#ifndef UGDK_INPUT_MANAGER_H_
+#define UGDK_INPUT_MANAGER_H_
 
 #include <ugdk/math/vector2D.h>
 #include <ugdk/input/keys.h>
@@ -8,15 +8,14 @@ namespace ugdk {
 namespace input {
 
 #define BUFFER_SIZE 32
-#define INPUT_MANAGER() (ugdk::Engine::reference()->input_manager())
 
-class InputManager {
+class Manager {
   public:
-    // Construtores e destrutores
-    InputManager();
-    ~InputManager();
+    static Manager* reference();
 
-    // Member functions e
+    void Initialize();
+    void Release();
+
     void Update(double);
     ugdk::math::Vector2D GetMousePosition(void);
     void ShowCursor(bool toggle);
@@ -35,6 +34,8 @@ class InputManager {
     void SimulateKeyRelease(Key key);
 
   private:
+    static Manager* reference_;
+
     int kbsize_;
     bool *keystate_now_, *keystate_last_;
     bool mousestate_now_[5], mousestate_last_[5];
@@ -42,8 +43,14 @@ class InputManager {
 	int buffer_end_;
     ugdk::math::Vector2D mouseposition_;
     
+    Manager();
+    ~Manager();
     void UpdateDevices();
+
+    friend class Engine;
 };
+
+Manager* manager();
 
 }  // namespace input
 }  // namespace ugdk

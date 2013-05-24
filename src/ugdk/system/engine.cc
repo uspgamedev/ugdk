@@ -8,7 +8,7 @@
 #include <ugdk/audio/manager.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/textmanager.h>
-#include <ugdk/input/inputmanager.h>
+#include <ugdk/input/manager.h>
 #include <ugdk/resource/resourcemanager.h>
 #include <ugdk/time/timemanager.h>
 #include <ugdk/util/pathmanager.h>
@@ -34,9 +34,9 @@ bool Engine::Initialize(const Configuration& configuration) {
 
     // This sets the *::Manager::reference_ correctly.
     new audio::Manager();
+    new input::Manager();
 
     video_manager_    = new graphic::VideoManager();
-    input_manager_    = new input::  InputManager();
     time_manager_     = new time::    TimeManager();
     text_manager_     = new graphic:: TextManager();
     path_manager_     = new           PathManager(configuration.base_path);
@@ -48,6 +48,7 @@ bool Engine::Initialize(const Configuration& configuration) {
     video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, icon_path);
 
     audio::manager()->Initialize();
+    input::manager()->Initialize();
      text_manager_->Initialize();
 
     if (!SCRIPT_MANAGER()->Initialize())
@@ -104,7 +105,7 @@ void Engine::Run() {
         delta_t = min(delta_t, 0.1);
 
         // gerenciador de input
-        input_manager()->Update(delta_t);
+        input::manager()->Update(delta_t);
 
         // gerenciamento de audio
         audio::manager()->Update();
@@ -118,12 +119,12 @@ void Engine::Run() {
 
                 case SDL_KEYDOWN:
                     key = (Key)event.key.keysym.sym;
-                    input_manager()->SimulateKeyPress(key);
+                    input::manager()->SimulateKeyPress(key);
                     break;
 
                 case SDL_KEYUP:
                     key = (Key)event.key.keysym.sym;
-                    input_manager()->SimulateKeyRelease(key);
+                    input::manager()->SimulateKeyRelease(key);
                     break;
 
                 default:
@@ -156,9 +157,9 @@ void Engine::Run() {
 
 void Engine::Release() {
     delete time_manager_;
-    delete input_manager_;
 
     audio::manager()->Release();
+    input::manager()->Release();
 
     text_manager_->Release();
     delete text_manager_;

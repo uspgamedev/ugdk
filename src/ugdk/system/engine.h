@@ -39,10 +39,6 @@ class Engine {
      */
     graphic::TextManager *text_manager() { return text_manager_; }
 
-    /// Returns a reference to the Input Manager.
-    /** @see InputManager
-     */
-    input::InputManager *input_manager() { return input_manager_; }
     /// Returns a reference to the Time Handler.
     /** @see TimeManager
      */
@@ -118,7 +114,6 @@ class Engine {
 
     graphic::VideoManager *       video_manager_;
     graphic:: TextManager *        text_manager_;
-    input::  InputManager *       input_manager_;
     time::    TimeManager *        time_manager_;
 	          PathManager *        path_manager_;
     resource::ResourceManager *resource_manager_;
@@ -129,7 +124,7 @@ class Engine {
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 
 	Engine() :
-        language_manager_(NULL) {}
+        language_manager_(nullptr) {}
         video_manager_(nullptr),
         text_manager_(nullptr),
         input_manager_(nullptr),

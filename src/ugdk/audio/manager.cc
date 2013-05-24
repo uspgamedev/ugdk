@@ -12,6 +12,8 @@
 namespace ugdk {
 namespace audio {
 
+Manager* Manager::reference_ = NULL;
+
 Manager* Manager::reference() {
     return reference_;
 }
