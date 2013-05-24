@@ -36,6 +36,7 @@ SET(UGDK_SRC
     ./src/ugdk/audio/music.h 
     ./src/ugdk/audio/sample.cc 
     ./src/ugdk/audio/sample.h 
+    ./src/ugdk/common/types.h 
     ./src/ugdk/config/config.h 
     ./src/ugdk/config/config.h 
     ./src/ugdk/graphic.h 
@@ -106,7 +107,6 @@ SET(UGDK_SRC
     ./src/ugdk/system/configuration.h 
     ./src/ugdk/system/engine.cc 
     ./src/ugdk/system/engine.h 
-    ./src/ugdk/system/types.h 
     ./src/ugdk/time.h 
     ./src/ugdk/time/timeaccumulator.cc 
     ./src/ugdk/time/timeaccumulator.h 

@@ -1,14 +1,15 @@
+#include <ugdk/system/engine.h>
+
 #include <string>
 #include <algorithm>
 #include <ugdk/config/config.h>
 #include "SDL.h"
 #include <ugdk/action/scene.h>
 #include <ugdk/audio/audiomanager.h>
-#include <ugdk/base/engine.h>
-#include <ugdk/base/resourcemanager.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/input/inputmanager.h>
+#include <ugdk/resource/resourcemanager.h>
 #include <ugdk/time/timemanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/languagemanager.h>
@@ -37,7 +38,7 @@ bool Engine::Initialize(const Configuration& configuration) {
     audio_manager_    = new audio::  AudioManager();
     text_manager_     = new graphic:: TextManager();
     path_manager_     = new           PathManager(configuration.base_path);
-    resource_manager_ = new base::ResourceManager();
+    resource_manager_ = new resource::ResourceManager();
     language_manager_ = new       LanguageManager(configuration.default_language);
     
     std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";

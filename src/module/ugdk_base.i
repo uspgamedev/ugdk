@@ -8,7 +8,7 @@
 
 %{
 
-#include <ugdk/base/types.h>
+#include <ugdk/common/types.h>
 #include <ugdk/base/configuration.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/base/resourcecontainer.h> //class template
@@ -53,7 +53,7 @@ disable_disown(ugdk::LanguageWord* val)
 
 proxy_class(ugdk::action::Scene)
 
-%include <ugdk/base/types.h>
+%include <ugdk/common/types.h>
 %include <ugdk/base/configuration.h>
 %include <ugdk/base/engine.h>
 %include <ugdk/base/resourcemanager.h>

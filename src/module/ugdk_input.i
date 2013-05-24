@@ -10,7 +10,7 @@
 %}
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
-%import(module="ugdk_base") <ugdk/base/types.h>
+%import(module="ugdk_base") <ugdk/common/types.h>
 
 %newobject ugdk::input::InputManager::GetMousePosition();
 
