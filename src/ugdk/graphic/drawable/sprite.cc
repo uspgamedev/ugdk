@@ -1,7 +1,7 @@
 #include <ugdk/graphic/drawable/sprite.h>
 
 #include <ugdk/system/engine.h>
-#include <ugdk/resource/resourcemanager.h>
+#include <ugdk/resource/manager.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/visualeffect.h>
@@ -17,16 +17,16 @@ Sprite::Sprite(const Spritesheet *spritesheet, const action::SpriteAnimationTabl
     : spritesheet_(spritesheet), animation_player_(table) {}
 
 Sprite::Sprite(const std::string& spritesheet_tag, const action::SpriteAnimationTable* table)
-    : spritesheet_(resource::ResourceManager::GetSpritesheetFromTag(spritesheet_tag)), 
+    : spritesheet_(resource::Manager::GetSpritesheetFromTag(spritesheet_tag)), 
       animation_player_(table) {}
 
 Sprite::Sprite(const std::string& spritesheet_tag, const std::string& animation_set_tag) 
-    : spritesheet_(resource::ResourceManager::GetSpritesheetFromTag(spritesheet_tag)),
-      animation_player_(resource::ResourceManager::GetSpriteAnimationTableFromFile(animation_set_tag)) {}
+    : spritesheet_(resource::Manager::GetSpritesheetFromTag(spritesheet_tag)),
+      animation_player_(resource::Manager::GetSpriteAnimationTableFromFile(animation_set_tag)) {}
 
 Sprite::Sprite(const Spritesheet *spritesheet, const std::string& animation_set_tag)
     : spritesheet_(spritesheet),
-      animation_player_(resource::ResourceManager::GetSpriteAnimationTableFromFile(animation_set_tag)) {}
+      animation_player_(resource::Manager::GetSpriteAnimationTableFromFile(animation_set_tag)) {}
  
 Sprite::~Sprite() {}
 

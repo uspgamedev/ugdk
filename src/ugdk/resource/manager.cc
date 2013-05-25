@@ -1,9 +1,10 @@
-#include <ugdk/resource/resourcemanager.h>
+#include <ugdk/resource/manager.h>
 
 #include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/resource/genericcontainer.h>
+#include <ugdk/resource/module.h>
 #include <ugdk/system/engine.h>
 #include <ugdk/util/animationprotocol.h>
 #include <ugdk/util/languageword.h>
@@ -29,37 +30,37 @@ bool type_info_cmp(const std::type_info* a, const std::type_info* b) {
 namespace ugdk {
 namespace resource {
 
-ResourceManager::ResourceManager() : containers_(type_info_cmp) {
+Manager::Manager() : containers_(type_info_cmp) {
     add_container(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile));
     add_container(new GenericContainer<graphic::Spritesheet*>(graphic::CreateSpritesheetFromTag));
     add_container(new GenericContainer<action::SpriteAnimationTable*>(action::LoadSpriteAnimationTableFromFile));
     add_container(new GenericContainer<LanguageWord*>(NullLoad<LanguageWord>));
 }
 
-ResourceManager::~ResourceManager() {
+Manager::~Manager() {
     for(ResourceMap::iterator it = containers_.begin();
         it != containers_.end(); ++it)
         delete it->second;
 }
 
-graphic::Texture*     ResourceManager::GetTextureFromTag        (const std::string& tag) {
-    return RESOURCE_MANAGER()->texture_container().Find(tag);
+graphic::Texture*     Manager::GetTextureFromTag        (const std::string& tag) {
+    return resource::manager()->texture_container().Find(tag);
 }
 
-graphic::Texture*     ResourceManager::GetTextureFromFile       (const std::string& file) {
-    return RESOURCE_MANAGER()->texture_container().Load(file, file);
+graphic::Texture*     Manager::GetTextureFromFile       (const std::string& file) {
+    return resource::manager()->texture_container().Load(file, file);
 }
 
-graphic::Spritesheet* ResourceManager::GetSpritesheetFromTag    (const std::string& tag) {
-    return RESOURCE_MANAGER()->spritesheet_container().Load(tag, tag);
+graphic::Spritesheet* Manager::GetSpritesheetFromTag    (const std::string& tag) {
+    return resource::manager()->spritesheet_container().Load(tag, tag);
 }
 
-action::SpriteAnimationTable* ResourceManager::GetSpriteAnimationTableFromFile(const std::string& file) {
-    return RESOURCE_MANAGER()->spriteanimation_loader().Load(file, file);
+action::SpriteAnimationTable* Manager::GetSpriteAnimationTableFromFile(const std::string& file) {
+    return resource::manager()->spriteanimation_loader().Load(file, file);
 }
 
-ugdk::LanguageWord*        ResourceManager::GetLanguageWord(const std::string& tag) {
-    ugdk::LanguageWord* word = RESOURCE_MANAGER()->word_container().Find(tag);
+ugdk::LanguageWord*        Manager::GetLanguageWord(const std::string& tag) {
+    ugdk::LanguageWord* word = resource::manager()->word_container().Find(tag);
     return word;
 }
 

@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "language.h"
 #include <ugdk/graphic/textmanager.h>
-#include <ugdk/resource/resourcemanager.h>
+#include <ugdk/resource/module.h>
 #include <ugdk/graphic/drawable/label.h>
 #include <ugdk/graphic/drawable/textbox.h>
 #include <ugdk/system/engine.h>
@@ -181,7 +181,7 @@ bool Language::Load(const std::string& language_file) {
         } else if(IsWord(buffer_raw)) {
 
             std::pair<LanguageWord*, std::string> result = ReadWord(buffer_raw, reading_type == TITLE_FILES);
-            RESOURCE_MANAGER()->word_container().Replace(result.second, result.first);
+            resource::manager()->word_container().Replace(result.second, result.first);
 
         } else {
             // Syntax error!

@@ -11,7 +11,8 @@
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/input/module.h>
 #include <ugdk/input/manager.h>
-#include <ugdk/resource/resourcemanager.h>
+#include <ugdk/resource/module.h>
+#include <ugdk/resource/manager.h>
 #include <ugdk/time/timemanager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/languagemanager.h>
@@ -38,7 +39,7 @@ bool Engine::Initialize(const Configuration& configuration) {
     time_manager_     = new time::    TimeManager();
     text_manager_     = new graphic:: TextManager();
     path_manager_     = new           PathManager(configuration.base_path);
-    resource_manager_ = new resource::ResourceManager();
+    resource_manager_ = new resource::Manager();
     language_manager_ = new       LanguageManager(configuration.default_language);
     
     std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";
@@ -47,6 +48,7 @@ bool Engine::Initialize(const Configuration& configuration) {
 
     audio::Initialize(new audio::Manager);
     input::Initialize(new input::Manager);
+    resource::Initialize(new resource::Manager);
      text_manager_->Initialize();
 
     if (!SCRIPT_MANAGER()->Initialize())

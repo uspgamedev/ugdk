@@ -9,7 +9,7 @@ class ResourceContainerBase;
 template<class T>
 class ResourceContainer;
 
-class ResourceManager;
+class Manager;
 
 template <class T, class Loader_T>
 class GenericContainer;

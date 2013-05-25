@@ -10,7 +10,7 @@
 
 #include <ugdk/resource/resourcecontainer.h> //class template
 //#include <ugdk/resource/genericcontainer.h>
-#include <ugdk/resource/resourcemanager.h>
+#include <ugdk/resource/manager.h>
 
 //#include <ugdk/action/animationset.h>
 #include <ugdk/graphic/texture.h>
@@ -48,11 +48,11 @@ disable_disown(ugdk::LanguageWord* val)
 
 proxy_class(ugdk::action::Scene)
 
-%include <ugdk/resource/resourcemanager.h>
+%include <ugdk/resource/manager.h>
 
 namespace ugdk {
 namespace resource {
-    export_class(ResourceManager)
+    export_class(Manager)
 }
 }
  
