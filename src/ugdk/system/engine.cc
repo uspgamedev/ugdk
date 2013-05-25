@@ -34,9 +34,6 @@ bool Engine::Initialize(const Configuration& configuration) {
     quit_ = false;
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    // This sets the *::Manager::reference_ correctly.
-    new input::Manager();
-
     video_manager_    = new graphic::VideoManager();
     time_manager_     = new time::    TimeManager();
     text_manager_     = new graphic:: TextManager();

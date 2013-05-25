@@ -11,6 +11,7 @@ namespace audio {
 
 class Manager {
   public:
+    Manager();
     ~Manager();
 
     /// Initializes audio channels.
@@ -46,12 +47,8 @@ class Manager {
     std::map<std::string, Sample*> sample_data_;
     std::map<std::string, Music*> music_data_;
 
-    Manager();
-
     void ReleaseSamples();
     void ReleaseMusics();
-
-    friend class Engine;
 };
 
 } // namespace audio

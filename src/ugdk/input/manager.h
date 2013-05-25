@@ -11,6 +11,7 @@ namespace input {
 
 class Manager {
   public:
+    Manager();
     ~Manager();
 
     void Update(double);
@@ -38,10 +39,7 @@ class Manager {
 	int buffer_end_;
     ugdk::math::Vector2D mouseposition_;
     
-    Manager();
     void UpdateDevices();
-
-    friend class Engine;
 };
 
 }  // namespace input
