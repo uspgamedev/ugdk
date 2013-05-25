@@ -181,7 +181,7 @@ bool Language::Load(const std::string& language_file) {
         } else if(IsWord(buffer_raw)) {
 
             std::pair<LanguageWord*, std::string> result = ReadWord(buffer_raw, reading_type == TITLE_FILES);
-            resource::manager()->word_container().Replace(result.second, result.first);
+            resource::manager()->get_container<LanguageWord*>()->Replace(result.second, result.first);
 
         } else {
             // Syntax error!

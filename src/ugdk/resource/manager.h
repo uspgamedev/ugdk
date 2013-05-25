@@ -3,14 +3,7 @@
 
 #include <typeinfo>
 #include <map>
-#include <ugdk/action.h>
-#include <ugdk/action/spritetypes.h>
 #include <ugdk/resource/resourcecontainer.h>
-#include <ugdk/graphic.h>
-#include <ugdk/util.h>
-
-// Convenience for users.
-#include <ugdk/util/languageword.h>
 
 namespace ugdk {
 namespace resource {
@@ -27,23 +20,11 @@ class Manager {
     }
 
     template <class T>
-    ResourceContainer<T>& get_container() {
-        ResourceContainerBase* base = containers_[&typeid(T)];
-        ResourceContainer<T>* container = static_cast<ResourceContainer<T>*>(base);
-        return *container;
-    }
-
-    ResourceContainer<graphic::Texture*>& texture_container() { 
-        return get_container<graphic::Texture*>();
-    }
-    ResourceContainer<graphic::Spritesheet*>& spritesheet_container() {
-        return get_container<graphic::Spritesheet*>();
-    }
-    ResourceContainer<action::SpriteAnimationTable*>& spriteanimation_loader() {
-        return get_container<action::SpriteAnimationTable*>();
-    }
-    ResourceContainer<LanguageWord*>& word_container() { 
-        return get_container<LanguageWord*>();
+    ResourceContainer<T>* get_container() {
+        ResourceMap::iterator base = containers_.find(&typeid(T));
+        if(base == containers_.end())
+            return NULL;
+        return static_cast<ResourceContainer<T>*>(base->second);
     }
     
   private:

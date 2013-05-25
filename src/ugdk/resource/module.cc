@@ -48,23 +48,23 @@ Manager* manager() {
 }
 
 graphic::Texture* GetTextureFromTag(const std::string& tag) {
-    return manager()->get_container<graphic::Texture*>().Find(tag);
+    return manager()->get_container<graphic::Texture*>()->Find(tag);
 }
 
 graphic::Texture* GetTextureFromFile(const std::string& file) {
-    return manager()->get_container<graphic::Texture*>().Load(file, file);
+    return manager()->get_container<graphic::Texture*>()->Load(file, file);
 }
 
 graphic::Spritesheet* GetSpritesheetFromTag(const std::string& tag) {
-    return manager()->get_container<graphic::Spritesheet*>().Load(tag, tag);
+    return manager()->get_container<graphic::Spritesheet*>()->Load(tag, tag);
 }
 
 action::SpriteAnimationTable* GetSpriteAnimationTableFromFile(const std::string& file) {
-    return manager()->get_container<action::SpriteAnimationTable*>().Load(file, file);
+    return manager()->get_container<action::SpriteAnimationTable*>()->Load(file, file);
 }
 
 ugdk::LanguageWord* GetLanguageWord(const std::string& tag) {
-    return manager()->get_container<LanguageWord*>().Find(tag);
+    return manager()->get_container<LanguageWord*>()->Find(tag);
 }
 
 } // namespace resource

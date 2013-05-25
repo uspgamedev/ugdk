@@ -3,6 +3,10 @@
 
 #include <ugdk/resource/manager.h>
 
+#include <ugdk/action/spritetypes.h> // For action::SpriteAnimationTable
+#include <ugdk/graphic.h> // For graphic::Texture and graphic::Spritesheet
+#include <ugdk/util/languageword.h> // For ugdk::LanguageWord, and user convenience.
+
 namespace ugdk {
 namespace resource {
 
