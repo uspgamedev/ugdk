@@ -6,6 +6,7 @@
 
 #include <ugdk/input/keys.h>
 #include <ugdk/input/manager.h>
+#include <ugdk/input/module.h>
 
 %}
 
@@ -16,6 +17,7 @@
 
 %include <ugdk/input/keys.h>
 %include <ugdk/input/manager.h>
+%include <ugdk/input/module.h>
 
 namespace ugdk {
 namespace input {

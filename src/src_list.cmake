@@ -30,10 +30,10 @@ SET(UGDK_SRC
     ./src/ugdk/action/spritetypes.cc 
     ./src/ugdk/action/spritetypes.h 
     ./src/ugdk/audio.h 
-    ./src/ugdk/audio/manager.cc 
     ./src/ugdk/audio/manager.h 
-    ./src/ugdk/audio/module.cc 
+    ./src/ugdk/audio/manager-audio.cc 
     ./src/ugdk/audio/module.h 
+    ./src/ugdk/audio/module-audio.cc 
     ./src/ugdk/audio/music.cc 
     ./src/ugdk/audio/music.h 
     ./src/ugdk/audio/sample.cc 
@@ -79,8 +79,10 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/visualeffect.h 
     ./src/ugdk/input.h 
     ./src/ugdk/input/keys.h 
-    ./src/ugdk/input/manager.cc 
     ./src/ugdk/input/manager.h 
+    ./src/ugdk/input/manager-input.cc 
+    ./src/ugdk/input/module.h 
+    ./src/ugdk/input/module-input.cc 
     ./src/ugdk/math.h 
     ./src/ugdk/math/frame.cc 
     ./src/ugdk/math/frame.h 

@@ -8,11 +8,7 @@ namespace input {
 
 using math::Vector2D;
 
-Manager* Manager::reference_ = NULL;
-
 Manager::Manager() {
-    reference_ = this;
-
     SDL_GetKeyState(&kbsize_);
     keystate_now_ = new bool[kbsize_];
     keystate_last_ = new bool[kbsize_];
@@ -29,17 +25,8 @@ Manager::Manager() {
 }
 
 Manager::~Manager() {
-    reference_ = NULL;
     delete[] keystate_now_;
     delete[] keystate_last_;
-}
-
-void Manager::Initialize() {
-
-}
-
-void Manager::Release() {
-
 }
 
 void Manager::Update(double delta_t) {
@@ -135,10 +122,6 @@ void Manager::SimulateKeyPress(Key key) {
 		buffer_[buffer_end_] = key;
 		buffer_end_ = (buffer_end_ + 1) % BUFFER_SIZE;
 	}
-}
-
-Manager* manager() {
-    return Manager::reference();
 }
 
 }  // namespace input

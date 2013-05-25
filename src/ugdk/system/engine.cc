@@ -9,6 +9,7 @@
 #include <ugdk/audio/manager.h>
 #include <ugdk/graphic/videomanager.h>
 #include <ugdk/graphic/textmanager.h>
+#include <ugdk/input/module.h>
 #include <ugdk/input/manager.h>
 #include <ugdk/resource/resourcemanager.h>
 #include <ugdk/time/timemanager.h>
@@ -48,7 +49,7 @@ bool Engine::Initialize(const Configuration& configuration) {
     video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, icon_path);
 
     audio::Initialize(new audio::Manager);
-    input::manager()->Initialize();
+    input::Initialize(new input::Manager);
      text_manager_->Initialize();
 
     if (!SCRIPT_MANAGER()->Initialize())
@@ -158,8 +159,8 @@ void Engine::Run() {
 void Engine::Release() {
     delete time_manager_;
 
-    audio::manager()->Release();
-    input::manager()->Release();
+    audio::Release();
+    input::Release();
 
     text_manager_->Release();
     delete text_manager_;

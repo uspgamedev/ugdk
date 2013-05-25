@@ -11,10 +11,7 @@ namespace input {
 
 class Manager {
   public:
-    static Manager* reference();
-
-    void Initialize();
-    void Release();
+    ~Manager();
 
     void Update(double);
     ugdk::math::Vector2D GetMousePosition(void);
@@ -34,8 +31,6 @@ class Manager {
     void SimulateKeyRelease(Key key);
 
   private:
-    static Manager* reference_;
-
     int kbsize_;
     bool *keystate_now_, *keystate_last_;
     bool mousestate_now_[5], mousestate_last_[5];
@@ -44,13 +39,10 @@ class Manager {
     ugdk::math::Vector2D mouseposition_;
     
     Manager();
-    ~Manager();
     void UpdateDevices();
 
     friend class Engine;
 };
-
-Manager* manager();
 
 }  // namespace input
 }  // namespace ugdk

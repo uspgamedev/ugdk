@@ -9,7 +9,7 @@
 #include <ugdk/system/engine.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/node.h>
-#include <ugdk/input/manager.h>
+#include <ugdk/input/module.h>
 #include <ugdk/util/intervalkdtree.h>
 
 using std::mem_fn;
