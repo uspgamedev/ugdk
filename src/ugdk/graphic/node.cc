@@ -31,21 +31,12 @@ Node::~Node() {
     }
 }
 
-void Node::Update(double dt) {
-    if(!active_) return;
-    if(childs_.empty() && !drawable_) return; // optimization!
-
-    if(drawable_) drawable_->Update(dt);
-
-    if(must_sort_) SortChildren();
-    NodeSet::const_iterator it;
-    for(it = childs_.begin(); it != childs_.end(); ++it)
-        (*it)->Update(dt);
-}
-
 void Node::Render(const Geometry& parent, const VisualEffect& parent_effect) const {
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
+
+    if(must_sort_) // Lazyness usually breaks const-ness...
+        const_cast<Node*>(this)->SortChildren();
 
     VisualEffect compose_effect = (ignores_effect_) ? effect_ : parent_effect;
     if(!ignores_effect_) compose_effect.Compose(effect_);

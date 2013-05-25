@@ -52,10 +52,12 @@ bool PythonWrapper::Initialize() {
     Py_NoSiteFlag = 1;
 #endif
     Py_Initialize();
-
-    PyObject *path = PySys_GetObject("path");
+    
+    char pathstr[5];
+    strncpy(pathstr, "path", 4);
+    pathstr[4] = '\0';
+    PyObject *path = PySys_GetObject(pathstr);
     PyList_Append(path, PyString_FromString(PATH_MANAGER()->ResolvePath("scripts/").c_str()));
-
 #ifdef UGDK_INSTALL_LOCATION
     PyList_Append(path, PyString_FromString(UGDK_INSTALL_LOCATION "/" UGDK_BIGVERSION "/python"));
 #endif

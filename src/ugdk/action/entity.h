@@ -15,7 +15,7 @@ class Entity {
     
     virtual void Update(double dt) = 0;
     
-    virtual void OnSceneAdd(Scene* scene) {}
+    virtual void OnSceneAdd(Scene* /*scene*/) {}
 
   protected:
     Entity() : to_be_removed_(false) {}

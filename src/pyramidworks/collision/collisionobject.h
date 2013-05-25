@@ -76,6 +76,9 @@ class CollisionObject {
 
     /// Wrapper to shape()->GetBoundingBox(absolute_position())
     ugdk::ikdtree::Box<2> GetBoundingBox() const;
+    
+    /// Getter for the stored data.
+    void* data() const { return data_; }
 
   private:
     CollisionManager* manager_;

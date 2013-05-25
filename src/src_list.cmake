@@ -46,10 +46,12 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/defaultshaders.cc 
     ./src/ugdk/graphic/defaultshaders.h 
     ./src/ugdk/graphic/drawable.h 
+    ./src/ugdk/graphic/drawable/label.cc 
+    ./src/ugdk/graphic/drawable/label.h 
     ./src/ugdk/graphic/drawable/sprite.cc 
     ./src/ugdk/graphic/drawable/sprite.h 
-    ./src/ugdk/graphic/drawable/text.cc 
-    ./src/ugdk/graphic/drawable/text.h 
+    ./src/ugdk/graphic/drawable/textbox.cc 
+    ./src/ugdk/graphic/drawable/textbox.h 
     ./src/ugdk/graphic/drawable/texturedrectangle.cc 
     ./src/ugdk/graphic/drawable/texturedrectangle.h 
     ./src/ugdk/graphic/font.cc 
@@ -137,6 +139,7 @@ SET(UGDK_SRC
     ./src/ugdk/util/language.h 
     ./src/ugdk/util/languagemanager.cc 
     ./src/ugdk/util/languagemanager.h 
+    ./src/ugdk/util/languageword.cc 
     ./src/ugdk/util/languageword.h 
     ./src/ugdk/util/pathmanager.cc 
     ./src/ugdk/util/pathmanager.h 

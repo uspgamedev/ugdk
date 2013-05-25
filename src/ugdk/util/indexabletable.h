@@ -65,7 +65,7 @@ private:
         if(!val) return index_generator_.error_value();
         int id = index_generator_.GenerateID();
         if(id != index_generator_.error_value()) {
-            if(id >= indexes_.size())
+            if(static_cast<typename IndexArray::size_type>(id) >= indexes_.size())
                 indexes_.resize(id + 1);
             indexes_[id] = val;
         }

@@ -216,17 +216,17 @@ T ConvertTable (const U& data_map) {
 }
 
 template <>
-inline VirtualObj::List VirtualObj::value<VirtualObj::List>(bool disown) const {
+inline VirtualObj::List VirtualObj::value<VirtualObj::List>(bool /*disown*/) const {
     return ConvertSequence<List>(data_->UnwrapList());
 }
 
 template <>
-inline VirtualObj::Vector VirtualObj::value<VirtualObj::Vector>(bool disown) const {
+inline VirtualObj::Vector VirtualObj::value<VirtualObj::Vector>(bool /*disown*/) const {
     return ConvertSequence<Vector>(data_->UnwrapVector());
 }
 
 template <>
-inline VirtualObj::Map VirtualObj::value<VirtualObj::Map>(bool disown) const {
+inline VirtualObj::Map VirtualObj::value<VirtualObj::Map>(bool /*disown*/) const {
     return ConvertTable<Map>(data_->UnwrapMap());
 }
 

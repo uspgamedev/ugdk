@@ -161,7 +161,7 @@ void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, co
         mat[0].y + mat[1].y + mat[3].y > 1)
         return;
     // Use our shader
-    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->default_shader());
+    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->shaders().current_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform

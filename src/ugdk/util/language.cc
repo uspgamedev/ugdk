@@ -1,10 +1,12 @@
 #include <cstdio>
 #include <cstring>
 #include <utility>
+#include <algorithm>
 #include "language.h"
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/base/resourcemanager.h>
-#include <ugdk/graphic/drawable/text.h>
+#include <ugdk/graphic/drawable/label.h>
+#include <ugdk/graphic/drawable/textbox.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/languageword.h>
@@ -18,75 +20,55 @@ using std::wstring;
 
 #define STRING_LENGTH 1024
 
-class WordString : public LanguageWord {
-  public:
-    WordString(const std::wstring& text, const std::string& font) : LanguageWord(font), text_(text) {}
-    ugdk::graphic::Text* GenerateText() const {
-        return TEXT_MANAGER()->GetText(text_, font_);
+std::wstring LoadTextFromFile(const std::string& path) {
+    std::wstring output;
+    std::string fullpath = PATH_MANAGER()->ResolvePath(path);
+
+    FILE *txtFile = fopen(fullpath.c_str(), "r");
+    if(txtFile == NULL) return output;
+
+    static const int MAXLINE = 1024;
+
+    char buffer_utf8[MAXLINE];
+    wchar_t buffer[MAXLINE];
+    // Read from the UTF-8 encoded file.
+    while(fgets(buffer_utf8, MAXLINE, txtFile) != NULL){
+        // Converting UTF-8 to wstring
+        size_t buffer_size = utf8_to_wchar(buffer_utf8, strlen(buffer_utf8), buffer, MAXLINE, 0);
+        buffer[buffer_size] = L'\0';
+        output.append(buffer);
     }
-  private:
-    std::wstring text_;
-};
-    
-class WordFile : public LanguageWord {
-  public:
-    WordFile(const std::string& filepath, const std::string& font) : LanguageWord(font), filepath_(filepath) {}
-    ugdk::graphic::Text* GenerateText() const {
-        return TEXT_MANAGER()->GetTextFromFile(filepath_, font_);
-    }
-  private:
-    std::string filepath_;
-};
+    return output;
+}
 
 //===================================================================
 //  FONT
-static std::string font_def = "[]{}:";
+static std::string font_def = "[]:";
 
 static bool IsFont(char *str) {
-    if (str[0] != '[') return false;
-    char* tmp = str;
-    for(int i = 1; i<5/*font_def[i] != '\0'*/; ++i) {
-        tmp = strchr(tmp, font_def[i]);
-        if(tmp == nullptr) return false;
-    }
-    return true;
+    std::string s(str);
+    size_t search = 0;
+    for(std::string::const_iterator it = font_def.begin(); it != font_def.end(); ++it)
+        search = s.find_first_of(*it, search);
+    return search != std::string::npos;
 }
 
 static void ReadFont(char* str) {
-    char buffer[STRING_LENGTH];
-    strcpy(buffer, str);
+    std::string s(str);
 
-    // Get the tag name
-    char *start = strchr(buffer, font_def[0]);
-    char *end =   strchr(buffer, font_def[1]);
-    end[0] = L'\0';
-    std::string name = std::string(start + 1);
-    end[0] = font_def[1];
+    size_t start_name = s.find_first_of(font_def[0]) + 1;
+    size_t   end_name = s.find_first_of(font_def[1], start_name);
+    size_t start_path = s.find_first_of(font_def[2], end_name + 1) + 1;
 
-    int font_size = 50;
-    char ident = 'c';
-    bool style = false;
+    std::string name = s.substr(start_name, end_name - start_name);
+    std::string size = s.substr(end_name + 1, start_path - end_name - 2);
+    std::string path = s.substr(start_path);
+    if(path[path.size()-1] == '\n')
+        path.erase(path.size()-1);
 
-    // Get the font size
-    char* arg1 = strchr(buffer, '{');
-    char* arg2 = strchr(arg1, '}');
-    arg2[0] = L'\0';
-    sscanf(arg1 + 1, "%d", &font_size);
-    arg2[0] = L'}';
+    double font_size = atof(size.c_str());
 
-    if(arg2[1] != L':') {
-        if(arg2[1] == L'+')
-            style = true;
-        else {
-            ident = arg2[1];
-            style = (arg2[2] == L'+');
-        }
-    }
-    char *resp = strchr(buffer, ':');
-           end = strchr(buffer + 1, '\n');
-    if(end != nullptr) end[0] = '\0';
-
-    TEXT_MANAGER()->AddFont(name, resp + 1, font_size, ident, style);
+    TEXT_MANAGER()->AddFont(name, path, font_size);
 }
 
 //===================================================================
@@ -127,7 +109,7 @@ static std::pair<LanguageWord*, std::string> ReadWord(char* str, bool from_file)
 
     if(from_file) {
         std::string filepath(start + 1);
-        return std::pair<LanguageWord*, std::string>(new WordFile(filepath, font), name);
+        return std::pair<LanguageWord*, std::string>(new LanguageWord(LoadTextFromFile(filepath), font), name);
     } else {
         // Decode the UTF-8 'start + 1' into widechars.
         wchar_t wide_buffer[STRING_LENGTH];
@@ -135,7 +117,7 @@ static std::pair<LanguageWord*, std::string> ReadWord(char* str, bool from_file)
         wide_buffer[buffer_size] = L'\0';
 
         std::wstring decoded_text(wide_buffer);
-        return std::pair<LanguageWord*, std::string>(new WordString(decoded_text, font), name);
+        return std::pair<LanguageWord*, std::string>(new LanguageWord(decoded_text, font), name);
     }
 }
 

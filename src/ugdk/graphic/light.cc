@@ -16,7 +16,7 @@
 namespace ugdk {
 namespace graphic {
 
-Light::Light() : color_(), dimension_(1.0, 1.0) {
+Light::Light() : dimension_(1.0, 1.0) {
     static const GLfloat buffer_data[] = { 
         -1.0f,-1.0f, 
          1.0f,-1.0f, 
@@ -40,7 +40,7 @@ Light::~Light() {
 
 void Light::Draw(const Geometry& geometry) {
     // Use our shader
-    opengl::ShaderProgram* shader = VIDEO_MANAGER()->default_shader();
+    opengl::ShaderProgram* shader = VIDEO_MANAGER()->light_shader();
     opengl::ShaderProgram::Use shader_use(shader);
 
     shader_use.SendGeometry(geometry * Geometry(math::Vector2D(), dimension_));

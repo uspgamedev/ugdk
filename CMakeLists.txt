@@ -2,17 +2,17 @@
 cmake_minimum_required (VERSION 2.8)
 
 project (ugdk CXX C)
-set (FRAMEWORK_VERSION_MAJOR 0)
-set (FRAMEWORK_VERSION_MINOR 5)
-set (FRAMEWORK_VERSION_PATCH 0)
-set (FRAMEWORK_BIGVERSION ${FRAMEWORK_VERSION_MAJOR}.${FRAMEWORK_VERSION_MINOR})
-set (FRAMEWORK_VERSION ${FRAMEWORK_BIGVERSION}.${FRAMEWORK_VERSION_PATCH})
+set (UGDK_VERSION_MAJOR 0)
+set (UGDK_VERSION_MINOR 5)
+set (UGDK_VERSION_PATCH 0)
+set (UGDK_BIGVERSION ${UGDK_VERSION_MAJOR}.${UGDK_VERSION_MINOR})
+set (UGDK_VERSION ${UGDK_BIGVERSION}.${UGDK_VERSION_PATCH})
 set (GROUP_NAME "USPGameDev Team")
 set (HOME_URL "http://uspgamedev.org/")
-set (CONTACT_MAIL "admin@uspgamedev.org")
+set (CONTACT_MAIL "contato@uspgamedev.org")
 set (UGDK_INSTALL_LOCATION share/ugdk)
 
-message ("=== UGDK version ${FRAMEWORK_VERSION} ===")
+message ("=== UGDK version ${UGDK_VERSION} ===")
 
 IF(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
 	set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
@@ -22,10 +22,11 @@ ENDIF()
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
-option(UGDK_BUILD_TESTS "Set to ON to enable building tests." ON)
+option(UGDK_BUILD_TESTS     "Set to ON to enable building tests." ON)
 option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
-option(UGDK_LUA_BINDINGS "Set to ON to enable Lua as one of the languages to create bindings." ON)
+option(UGDK_LUA_BINDINGS    "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
+option(UGDK_INTERNAL_GLEW   "Set to ON to use an internal GLEW instead of the system one." OFF)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     SET (CHECKMAC "#define ISMAC")
@@ -42,7 +43,7 @@ ENDIF ()
 set (SRC_DIR src)
 set (LIB_DIR lib)
 
-set(FRAMEWORK_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
+set(UGDK_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
 
 CONFIGURE_FILE(
     "doxystuff/Doxyfile.in"
@@ -63,42 +64,16 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     LIST(APPEND LDFLAGS "-mmacosx-version-min=10.5")
 endif ()
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
-if (UNIX OR MINGW)
-    # se for o g++ para *nix ou o MinGW para Windows:
-    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2 -std=c++0x -DUGDK_USING_VARIADIC)
-    add_definitions(-Wall
-# TODO: would like these but they produce overwhelming amounts of warnings
-#       -Wextra
-#       -Wmissing-field-initializers
-#       -Wswitch-default
-#       -Wfloat-equal
-#       -Wconversion
-#       -Wzero-as-null-pointer-constant
-        -Wtype-limits
-        -Wsign-compare
-        -Wignored-qualifiers
-        -Wuninitialized
-        #-Wshadow
-        -Wlogical-op
-        -Winit-self)
-
-elseif (MSVC) 
-    add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
-endif ()
-if(WIN32)
-    add_definitions(/DWIN32)
-endif()
-
-# ${UGDK_SRC} está definido?
 if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT UGDK_SRC)
 
-include_directories ("src")
-include (cmake/ugdk.cmake)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR})
+include(cmake/ugdk.cmake)
 
-# Encontrando as bibliotecas necessarias:
+find_package(Git)
+
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 
@@ -116,16 +91,30 @@ include_directories(${SDLIMAGE_INCLUDE_DIR})
 
 find_package(GLEW 1.5 QUIET)
 if(NOT GLEW_FOUND)
-    message("-- GLEW not found, using included source.")
-    add_library(glew STATIC EXCLUDE_FROM_ALL "externals/glew/src/glew.c")
-    add_definitions(-DGLEW_STATIC)
-
-    include_directories("externals/glew/include")
-    set(EXTERNAL_GLEW_LIBRARY glew)
-else(NOT GLEW_FOUND)
-    include_directories(${GLEW_INCLUDE_DIR})
-    set(EXTERNAL_GLEW_LIBRARY ${GLEW_LIBRARY})
+    message("-- GLEW not found, forcing internal.")
+    set(UGDK_INTERNAL_GLEW ON CACHE BOOL "Set to ON to use the internal GLEW." FORCE)
 endif(NOT GLEW_FOUND)
+
+if(UGDK_INTERNAL_GLEW)
+    add_definitions(-DGLEW_STATIC)
+    add_subdirectory(externals/glew)
+    set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
+    set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+endif(UGDK_INTERNAL_GLEW)
+include_directories(${GLEW_INCLUDE_DIRS})
+
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/externals/freetype-glpp/CMakeLists.txt")
+    if(GIT_FOUND)
+        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init
+                        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+    else(GIT_FOUND)
+        message(FATAL_ERROR "Git submodule 'externals/freetype-glpp' not initialized and git not found.")
+    endif(GIT_FOUND)
+endif()
+
+add_subdirectory(externals/freetype-glpp)
+include_directories("externals/freetype-glpp/include")
+set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
 
 ##########################################
 # Package Configuration
@@ -136,11 +125,11 @@ set (CPACK_PACKAGE_NAME libugdk)
 set (CPACK_PACKAGE_VENDOR ${GROUP_NAME})
 set (CPACK_PACKAGE_CONTACT "${GROUP_NAME} <${CONTACT_MAIL}>")
 set (CPACK_PACKAGE_INSTALL_REGISTRY_KEY "ugdk")
-set (CPACK_PACKAGE_VERSION_MAJOR ${FRAMEWORK_VERSION_MAJOR})
-set (CPACK_PACKAGE_VERSION_MINOR ${FRAMEWORK_VERSION_MINOR})
-set (CPACK_PACKAGE_VERSION_PATCH ${FRAMEWORK_VERSION_PATCH})
+set (CPACK_PACKAGE_VERSION_MAJOR ${UGDK_VERSION_MAJOR})
+set (CPACK_PACKAGE_VERSION_MINOR ${UGDK_VERSION_MINOR})
+set (CPACK_PACKAGE_VERSION_PATCH ${UGDK_VERSION_PATCH})
 set (CPACK_PACKAGE_DESCRIPTION_SUMMARY "USP Game Development Kit, a framework for developing 2d games.")
-set (CPACK_DEBIAN_PACKAGE_NAME "libugdk${FRAMEWORK_BIGVERSION}")
+set (CPACK_DEBIAN_PACKAGE_NAME "libugdk${UGDK_BIGVERSION}")
 set (CPACK_DEBIAN_PACKAGE_HOMEPAGE ${HOME_URL})
 set (CPACK_DEBIAN_PACKAGE_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2, libsdl-mixer1.2-dev, libsdl-ttf2.0-0, lua5.1, python (>=2.6)")
 set (DEBIAN_PACKAGE_BUILDS_DEPENDS "libc6 (>= 2.2), libgcc1 (>= 1:4.1.1), libstdc++6 (>= 4.4.0), libsdl1.2-dev, libsdl-image1.2-dev, libsdl-mixer1.2-dev, libsdl-ttf2.0-dev, swig2.0, lua5.1-dev, python-dev (>= 2.6), cmake")
@@ -180,11 +169,33 @@ foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
     set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
 endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
+
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+if (UNIX OR MINGW)
+    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2)
+    add_definitions(-Wall
+        # TODO: would like these but they produce overwhelming amounts of warnings
+        #-Wshadow                       # GLM causes many warnings with this
+        #-Wextra                        # implies -Wunused-parameter
+        -Wmissing-field-initializers
+        -Wswitch-default
+        #-Wconversion                   # GLM causes many warnings with this
+        #-Wzero-as-null-pointer-constant
+        -Wtype-limits
+        -Wsign-compare
+        -Wignored-qualifiers
+        -Wuninitialized
+        -Wlogical-op
+        -Winit-self)
+
+elseif (MSVC) 
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
+endif ()
+
+# =============================
 add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
 
-if (CMAKE_COMPILER_IS_GNUCXX)
-    set (EXTRA_LIBRARIES m ${EXTRA_LIBRARIES})
-endif (CMAKE_COMPILER_IS_GNUCXX)
 if (MINGW)
     set (EXTRA_LIBRARIES mingw32 ${EXTRA_LIBRARIES})
 endif (MINGW)
@@ -202,7 +213,8 @@ target_link_libraries (libugdk
                        ${SDLTTF_LIBRARY}
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
-                       ${EXTERNAL_GLEW_LIBRARY}
+                       ${GLEW_LIBRARIES}
+                       ${FREETYPE_GLPP_LIBRARIES}
                        ${UGDK_LIBRARIES})
 
 target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
@@ -212,16 +224,17 @@ target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES
                        ${SDLTTF_LIBRARY}
                        ${SDLIMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
-                       ${EXTERNAL_GLEW_LIBRARY}
+                       ${GLEW_LIBRARIES}
+                       ${FREETYPE_GLPP_LIBRARIES}
                        ${UGDK_LIBRARIES})
                       
 set_target_properties (libugdk PROPERTIES 
     LINK_FLAGS "${LDFLAGS}"
     PROJECT_NAME UGDK
-    OUTPUT_NAME ugdk${FRAMEWORK_BIGVERSION}
-    OUTPUT_NAME_DEBUG ugdk${FRAMEWORK_BIGVERSION}-dbg
-    SOVERSION ${FRAMEWORK_VERSION_PATCH}
-    VERSION ${FRAMEWORK_VERSION}
+    OUTPUT_NAME ugdk${UGDK_BIGVERSION}
+    OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-dbg
+    SOVERSION ${UGDK_VERSION_PATCH}
+    VERSION ${UGDK_VERSION}
 )
 
 if(UGDK_BUILD_TESTS)
@@ -232,7 +245,12 @@ if (UNIX AND PYTHONLIBS_FOUND)
     set (UGDK_INSTALL_LOCATION_DEFINE "#define UGDK_INSTALL_LOCATION \"/usr/${UGDK_INSTALL_LOCATION}\"")
 endif (UNIX AND PYTHONLIBS_FOUND)
 
-set(UGDK_EXTERNAL_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/src;${SDL_INCLUDE_DIR};${SDLTTF_INCLUDE_DIR} CACHE STRING "UGDK include directories" FORCE)
+set(UGDK_EXTERNAL_INCLUDE_DIRS 
+    ${PROJECT_SOURCE_DIR}/${SRC_DIR};
+    ${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR};
+    ${SDL_INCLUDE_DIR};
+    ${SDLTTF_INCLUDE_DIR}
+    CACHE STRING "UGDK include directories" FORCE)
 
 CONFIGURE_FILE(
     "${SRC_DIR}/ugdk/config/config.h.in"
@@ -244,11 +262,11 @@ install(TARGETS libugdk
 #    CONFIGURATIONS Release
 )
 
-install(DIRECTORY src/ugdk src/pyramidworks DESTINATION include/ugdk${FRAMEWORK_BIGVERSION} FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
+install(DIRECTORY src/ugdk src/pyramidworks DESTINATION include/ugdk${UGDK_BIGVERSION} FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
 
 if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
     install(DIRECTORY src/generated/ 
-            DESTINATION ${UGDK_INSTALL_LOCATION}/${FRAMEWORK_BIGVERSION}/python
+            DESTINATION ${UGDK_INSTALL_LOCATION}/${UGDK_BIGVERSION}/python
             FILES_MATCHING PATTERN "*.py")
 endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
 

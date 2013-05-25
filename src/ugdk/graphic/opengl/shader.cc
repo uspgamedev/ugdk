@@ -16,7 +16,33 @@ Shader::~Shader() {
     glDeleteShader(id_);
 }
 
-bool Shader::CompileSource(const char* source) {
+void Shader::GenerateSource() {
+    source_ = "#version 120" "\n";
+    if(type_ == GL_VERTEX_SHADER) {
+        source_ += "#define in attribute" "\n";
+        source_ += "#define out varying" "\n";
+    } else {
+        source_ += "#define in varying" "\n";
+    }
+    
+    source_ += "uniform mat4 geometry_matrix;" "\n";
+
+    if(type_ == GL_VERTEX_SHADER) {
+        source_ += "in vec2 vertexPosition;" "\n";
+        source_ += "in vec2 vertexUV;" "\n";
+    }
+
+    source_ += blocks_;
+    source_ += "void main() {" "\n";
+    source_ += main_;
+    source_ += "}";
+
+    puts("=============================");
+    puts(source_.c_str());
+}
+
+bool Shader::Compile() const {
+    const char* source = source_.c_str();
     glShaderSource(id_, 1, &source, nullptr);
     glCompileShader(id_);
 
@@ -40,15 +66,6 @@ bool Shader::CompileSource(const char* source) {
         delete[] strInfoLog;
     }
     return status == GL_TRUE;
-}
-
-bool Shader::CompileFile(const std::string& file) {
-    std::ifstream in(file.c_str(), std::ios::in | std::ios::binary);
-    if(!in) return false;
-    std::ostringstream contents;
-    contents << in.rdbuf();
-    in.close();
-    return CompileSource(contents.str());
 }
 
 } // namespace opengl

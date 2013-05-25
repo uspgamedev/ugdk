@@ -24,7 +24,7 @@ const MenuCallback Menu::INTERACT_MENU(mem_fn(&Menu::InteractWithFocused));
 class CallbackCheckTask {
 public:
     CallbackCheckTask(Menu* menu) : menu_(menu) {}
-    bool operator()(double dt) {
+    bool operator()(double) {
         input::InputManager* input = INPUT_MANAGER();
         const InputCallbacks& callbacks = menu_->input_callbacks();
         for(InputCallbacks::const_iterator it = callbacks.begin(); it != callbacks.end(); ++it) {
@@ -57,7 +57,7 @@ Menu::~Menu() {
     delete objects_tree_;
 }
 
-void Menu::Update(double dt) {
+void Menu::Update(double) {
     input::InputManager* input = INPUT_MANAGER();
     ugdk::math::Vector2D mouse_pos = input->GetMousePosition();
     if((mouse_pos - last_mouse_position_).NormOne() > 10e-10) {

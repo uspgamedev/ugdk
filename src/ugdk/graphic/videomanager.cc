@@ -45,8 +45,6 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
             return false;
         }
 
-    default_shader_ = InterfaceShader();
-        
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
     /*if(GLEW_ARB_framebuffer_object) {
@@ -110,6 +108,13 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
 
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
     initializeLight();
+
+    shaders_.ReplaceShader(0, CreateShader(false, false));
+    shaders_.ReplaceShader(1, CreateShader( true, false));
+    shaders_.ReplaceShader(2, CreateShader(false,  true));
+    shaders_.ReplaceShader(3, CreateShader( true,  true));
+
+    light_shader_ = LightShader();
     return true;
 }
 
@@ -159,16 +164,15 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     if(settings_.light_system) {
-        default_shader_ = LightShader();
         mergeLights(scene_list);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     // Change the shader to the LightSystem shader, and bind the light texture.
     if(settings_.light_system) {
-        default_shader_ = LightSystemShader();
-        opengl::ShaderProgram::Use shader_use(default_shader_);
-        shader_use.SendTexture(1, light_buffer_, default_shader_->UniformLocation("light_texture"));
+        shaders_.ChangeFlag(Shaders::USE_LIGHT_BUFFER, true);
+        opengl::ShaderProgram::Use shader_use(shaders_.current_shader());
+        shader_use.SendTexture(1, light_buffer_, shaders_.current_shader()->UniformLocation("light_texture"));
     }
 
     // Draw all the sprites from all scenes.
@@ -177,7 +181,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
             (*it)->content_node()->Render(initial_geometry_, VisualEffect());
 
     if(settings_.light_system) {
-        default_shader_ = InterfaceShader();
+        shaders_.ChangeFlag(Shaders::USE_LIGHT_BUFFER, false);
     }
     // Draw all interface layers, with the usual RGBA blend.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
@@ -200,6 +204,42 @@ void VideoManager::initializeLight() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (GLsizei) video_size_.x, 
         (GLsizei) video_size_.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    unsigned char buffer[32*32*4];
+    for(int i = 0; i < 32*32*4; ++i) buffer[i] = 255;
+    if(white_texture_) delete white_texture_;
+    white_texture_ = Texture::CreateRawTexture(32, 32);
+    glBindTexture(GL_TEXTURE_2D, white_texture_->gltexture());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 32, 32, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+const opengl::ShaderProgram* VideoManager::Shaders::current_shader() const {
+    return shaders_[flags_.to_ulong()];
+}
+
+void VideoManager::Shaders::ChangeFlag(Flag flag, bool value) {
+    int flag_bit = static_cast<int>(flag);
+    flags_[flag_bit] = value;
+}
+
+void VideoManager::Shaders::ReplaceShader(const std::bitset<NUM_FLAGS>& flags, opengl::ShaderProgram* program) {
+    delete shaders_[flags.to_ulong()];
+    shaders_[flags.to_ulong()] = program;
+}
+
+VideoManager::Shaders::Shaders() {
+    unsigned long max_flags = 1 << NUM_FLAGS;
+    for(unsigned long i = 0; i < max_flags; ++i)
+        shaders_[i] = NULL;
+}
+        
+VideoManager::Shaders::~Shaders() {
+    unsigned long max_flags = 1 << NUM_FLAGS;
+    for(unsigned long i = 0; i < max_flags; ++i)
+        delete shaders_[i];
 }
 
 }  // namespace graphic

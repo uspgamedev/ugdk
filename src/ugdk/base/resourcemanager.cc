@@ -59,9 +59,9 @@ action::SpriteAnimationTable* ResourceManager::GetSpriteAnimationTableFromFile(c
     return RESOURCE_MANAGER()->spriteanimation_loader().Load(file, file);
 }
 
-graphic::Text*        ResourceManager::CreateTextFromLanguageTag(const std::string& tag) {
+ugdk::LanguageWord*        ResourceManager::GetLanguageWord(const std::string& tag) {
     ugdk::LanguageWord* word = RESOURCE_MANAGER()->word_container().Find(tag);
-    return word ? word->GenerateText() : nullptr;
+    return word;
 }
 
 } // namespace base

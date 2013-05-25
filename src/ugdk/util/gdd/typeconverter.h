@@ -16,10 +16,10 @@ template<typename T>
 inline bool is_of_type(const GDDString& args) { return false; }
 
 template<>
-inline bool is_of_type<double>(const GDDString& args) { return true; } // TODO: implement this
+inline bool is_of_type<double>(const GDDString&) { return true; } // TODO: implement this
 
 template<>
-inline bool is_of_type<int>(const GDDString& args) { return true; } // TODO: implement this
+inline bool is_of_type<int>(const GDDString&) { return true; } // TODO: implement this
 
 template<>
 inline bool is_of_type<std::string>(const GDDString& args) { return args.size() == 1; }

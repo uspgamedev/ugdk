@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <map>
+#include <string>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic.h>
 
@@ -19,17 +20,21 @@ class TextManager {
     bool Initialize();
     bool Release();
 
-    Text* GetText(        const std::wstring& text);
-    Text* GetText(        const std::wstring& text, const std::string& font, int width = -1);
-    Text* GetTextFromFile(const std:: string& path);
-	Text* GetTextFromFile(const std:: string& path, const std::string& font, int width = -1);
+    TextBox* GetText(        const std::wstring& text);
+    TextBox* GetText(        const std::wstring& text, const std::string& font, int width = -1);
+    TextBox* GetTextFromFile(const std:: string& path);
+	TextBox* GetTextFromFile(const std:: string& path, const std::string& font, int width = -1);
 
-	void AddFont(const std::string& name, const std::string& path, int size, char ident, bool fancy);
+    Font* current_font() { return current_font_; }
+    Font* GetFont(const std::string& name) {
+        return fonts_[name];
+    }
+
+	void AddFont(const std::string& name, const std::string& path, double size);
 
   private:
-	Font *current_font_;
-	std::map<std::string, Texture**> font_images_;
-	std::map<std::string, Font*> fonts_;
+    Font *current_font_;
+    std::map<std::string, Font*> fonts_;
 };
 
 }  // namespace graphic

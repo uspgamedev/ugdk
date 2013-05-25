@@ -1,3 +1,5 @@
+language: cpp
+
 env:
  - OPTIONS="-DCMAKE_BUILD_TYPE=Release"
  - OPTIONS="-DCMAKE_BUILD_TYPE=Debug"
