@@ -124,10 +124,8 @@ class Engine {
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 
 	Engine() :
-        language_manager_(nullptr) {}
         video_manager_(nullptr),
         text_manager_(nullptr),
-        input_manager_(nullptr),
         time_manager_(nullptr),
         resource_manager_(nullptr), 
         language_manager_(nullptr) {}
