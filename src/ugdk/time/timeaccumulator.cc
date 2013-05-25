@@ -1,9 +1,10 @@
-#include <ugdk/config/config.h>
+#include <ugdk/time/timeaccumulator.h>
+
 #include "SDL.h"
 #include "SDL_timer.h"
-#include <ugdk/time/timemanager.h>
-#include <ugdk/time/timeaccumulator.h>
+
 #include <ugdk/system/engine.h>
+#include <ugdk/time/timemanager.h>
 
 namespace ugdk {
 namespace time {

@@ -1,6 +1,6 @@
-#include <ugdk/config/config.h>
-#include "SDL_timer.h"
 #include <ugdk/time/timemanager.h>
+
+#include "SDL_timer.h"
 
 namespace ugdk {
 namespace time {

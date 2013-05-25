@@ -1,6 +1,5 @@
 #include <ugdk/graphic/drawable/label.h>
 
-#include <ugdk/config/config.h>
 #include <algorithm>
 #include "GL/glew.h"
 #define NO_SDL_GLEXT

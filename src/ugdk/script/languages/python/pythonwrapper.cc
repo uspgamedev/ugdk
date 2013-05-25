@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <memory>
 
-#include <ugdk/config/config.h>
+#include <ugdk/common/config.h>
 #include <ugdk/script/languages/python/pythondata.h>
 #include <ugdk/script/virtualobj.h>
 #include <ugdk/script/scriptmanager.h>
