@@ -173,7 +173,7 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 if (UNIX OR MINGW)
-    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2)
+    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2 -std=c++0x -DUGDK_USING_VARIADIC)
     add_definitions(-Wall
         # TODO: would like these but they produce overwhelming amounts of warnings
         #-Wshadow                       # GLM causes many warnings with this
