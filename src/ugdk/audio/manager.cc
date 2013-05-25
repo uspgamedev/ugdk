@@ -1,6 +1,5 @@
 #include <ugdk/audio/manager.h>
 
-#include <ugdk/config/config.h>
 #include "SDL.h"
 #include "SDL_mixer.h"
 

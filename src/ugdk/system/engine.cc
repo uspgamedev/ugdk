@@ -2,8 +2,8 @@
 
 #include <string>
 #include <algorithm>
-#include <ugdk/config/config.h>
 #include "SDL.h"
+
 #include <ugdk/action/scene.h>
 #include <ugdk/audio/module.h>
 #include <ugdk/audio/manager.h>

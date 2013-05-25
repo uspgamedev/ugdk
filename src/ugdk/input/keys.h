@@ -1,7 +1,6 @@
 #ifndef UGDK_INPUT_KEYS_H_
 #define UGDK_INPUT_KEYS_H_
 
-#include <ugdk/config/config.h>
 #include "SDL_keysym.h"
 #include "SDL_mouse.h"
 
