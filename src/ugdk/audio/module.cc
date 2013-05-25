@@ -3,7 +3,7 @@
 namespace ugdk {
 namespace audio {
 
-static Manager* reference_ = NULL;
+static Manager* reference_ = nullptr;
 
 bool Initialize(Manager* manager) {
     if(manager && reference_->Initialize()) {
@@ -21,7 +21,7 @@ bool Initialize(Manager* manager) {
 void Release() {
     reference_->Release();
     delete reference_;
-    reference_ = NULL;
+    reference_ = nullptr;
 }
 
 Manager* manager() {

@@ -43,14 +43,11 @@ class Engine {
     /** @see TimeManager
      */
     time::TimeManager *time_handler() { return time_manager_; }
+
     /// Returns a reference to the Path Manager.
     /** @see PathManager
      */
     PathManager *path_manager() { return path_manager_; }
-    /// Returns a reference to the Resource Manager.
-    /** @see Manager
-     */
-    resource::Manager *resource_manager() { return resource_manager_; }
 
     /// Returns a reference to the Language Manager.
     /** @see LanguageManager
@@ -116,7 +113,6 @@ class Engine {
     graphic:: TextManager *        text_manager_;
     time::    TimeManager *        time_manager_;
 	          PathManager *        path_manager_;
-    resource::Manager *resource_manager_;
           LanguageManager *    language_manager_;
 
     bool quit_;
@@ -127,7 +123,6 @@ class Engine {
         video_manager_(nullptr),
         text_manager_(nullptr),
         time_manager_(nullptr),
-        resource_manager_(nullptr), 
         language_manager_(nullptr) {}
 };
 

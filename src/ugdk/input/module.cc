@@ -3,7 +3,7 @@
 namespace ugdk {
 namespace input {
 
-static Manager* reference_ = NULL;
+static Manager* reference_ = nullptr;
 
 bool Initialize(Manager* manager) {
     if(manager) {
@@ -20,7 +20,7 @@ bool Initialize(Manager* manager) {
 
 void Release() {
     delete reference_;
-    reference_ = NULL;
+    reference_ = nullptr;
 }
 
 Manager* manager() {

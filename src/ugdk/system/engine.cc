@@ -39,7 +39,6 @@ bool Engine::Initialize(const Configuration& configuration) {
     time_manager_     = new time::    TimeManager();
     text_manager_     = new graphic:: TextManager();
     path_manager_     = new           PathManager(configuration.base_path);
-    resource_manager_ = new resource::Manager();
     language_manager_ = new       LanguageManager(configuration.default_language);
     
     std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";
@@ -65,13 +64,13 @@ bool Engine::Initialize(const Configuration& configuration) {
 
 void Engine::DeleteFinishedScenes() {
     std::list<action::Scene*> to_delete;
-    for(std::list<action::Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it)
-        if((*it)->finished())
-            to_delete.push_front(*it);
+    for(action::Scene* it : scene_list_)
+        if(it->finished())
+            to_delete.push_front(it);
 
-    for(std::list<action::Scene*>::iterator it = to_delete.begin(); it != to_delete.end(); ++it) {
-        delete (*it);
-        scene_list_.remove(*it);
+    for(action::Scene* it : to_delete) {
+        delete it;
+        scene_list_.remove(it);
     }
 }
 
@@ -148,9 +147,9 @@ void Engine::Run() {
             }
         }
     }
-    for(std::list<action::Scene*>::iterator it = scene_list_.begin(); it != scene_list_.end(); ++it) {
-        (*it)->Finish();
-        delete (*it);
+    for(action::Scene* it : scene_list_) {
+        it->Finish();
+        delete it;
     }
     scene_list_.clear();
 }
@@ -160,6 +159,7 @@ void Engine::Release() {
 
     audio::Release();
     input::Release();
+    resource::Release();
 
     text_manager_->Release();
     delete text_manager_;
@@ -169,8 +169,6 @@ void Engine::Release() {
 
     SCRIPT_MANAGER()->Finalize();
     delete SCRIPT_MANAGER();
-
-    delete resource_manager_;
 
     SDL_Quit();
 }

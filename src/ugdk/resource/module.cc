@@ -17,7 +17,7 @@ static T* NullLoad(const std::string& filepath) {
 #ifdef DEBUG
     fprintf(stderr, "Warning: NullLoad<%s> called with path '%s'.", TOSTRING(T), filepath.c_str());
 #endif
-    return NULL;
+    return nullptr;
 }
 
 bool Initialize(Manager* manager) {
@@ -40,7 +40,7 @@ bool Initialize(Manager* manager) {
 
 void Release() {
     delete reference_;
-    reference_ = NULL;
+    reference_ = nullptr;
 }
 
 Manager* manager() {

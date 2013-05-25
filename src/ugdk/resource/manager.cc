@@ -10,8 +10,8 @@ namespace resource {
 Manager::Manager() : containers_(type_info_cmp) {}
 
 Manager::~Manager() {
-    for(ResourceMap::iterator it = containers_.begin(); it != containers_.end(); ++it)
-        delete it->second;
+    for(const auto& it : containers_)
+        delete it.second;
 }
 
 } // namespace resource
