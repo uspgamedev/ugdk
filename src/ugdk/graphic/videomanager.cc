@@ -233,7 +233,7 @@ void VideoManager::Shaders::ReplaceShader(const std::bitset<NUM_FLAGS>& flags, o
 VideoManager::Shaders::Shaders() {
     unsigned long max_flags = 1 << NUM_FLAGS;
     for(unsigned long i = 0; i < max_flags; ++i)
-        shaders_[i] = NULL;
+        shaders_[i] = nullptr;
 }
         
 VideoManager::Shaders::~Shaders() {

@@ -6,7 +6,7 @@
 namespace ugdk {
 namespace action {
     
-MediaPlayer::MediaPlayer() : manager_(NULL) {}
+MediaPlayer::MediaPlayer() : manager_(nullptr) {}
 
 MediaPlayer::~MediaPlayer() {
     if(manager_)

@@ -119,8 +119,8 @@ namespace opengl {
 	VBO::VBO(size_t size, GLenum target, GLenum usage)
 		: VertexBuffer(size, target, usage)
 		, vbo(0)
-		, buffer_copy(0)
-		, mapped(0)
+		, buffer_copy(nullptr)
+		, mapped(nullptr)
 	{
 		if (!(GLEW_ARB_vertex_buffer_object || GLEW_VERSION_1_5))
 			throw love::Exception("Not supported");
@@ -155,7 +155,7 @@ namespace opengl {
 	{
 		glBufferSubDataARB(getTarget(), 0, getSize(), mapped);
 		free(mapped);
-		mapped = 0;
+		mapped = nullptr;
 	}
 
 	void VBO::bind() const
@@ -198,7 +198,7 @@ namespace opengl {
 		VertexBuffer::Bind bind(*this);
 
 		// Copy the old buffer only if 'restore' was requested.
-		const GLvoid *src = restore ? buffer_copy : 0;
+		const GLvoid *src = restore ? buffer_copy : nullptr;
 
 		while (GL_NO_ERROR != glGetError())
 			/* clear error messages */;
@@ -209,7 +209,7 @@ namespace opengl {
 
 		// Clean up buffer_copy, if it exists.
 		delete[] buffer_copy;
-		buffer_copy = 0;
+		buffer_copy = nullptr;
 
 		return (GL_NO_ERROR == err);
 	}
@@ -218,7 +218,7 @@ namespace opengl {
 	{
 		// Clean up buffer_copy, if it exists.
 		delete[] buffer_copy;
-		buffer_copy = 0;
+		buffer_copy = nullptr;
 
 		// Save data before unloading.
 		if (save)

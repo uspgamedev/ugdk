@@ -13,7 +13,7 @@ class MediaManager {
     MediaManager() {}
     ~MediaManager() {
         for(std::set<MediaPlayer*>::iterator it = players_.begin(); it != players_.end(); ++it)
-            (*it)->manager_ = NULL;
+            (*it)->manager_ = nullptr;
     }
 
     void Update(double dt) {
@@ -28,7 +28,7 @@ class MediaManager {
 
     void RemovePlayer(MediaPlayer* player) {
         players_.erase(player);
-        player->manager_ = NULL;
+        player->manager_ = nullptr;
     }
 
 private:
