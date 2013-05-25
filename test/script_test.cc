@@ -25,6 +25,8 @@ static bool LuaTests() {
     assert(f(13, 25) == 38);
     assert(main["soma"].Call(3, val).value<int>() == 45);
     return main["soma"].Call(3, 8).value<int>() == 11;
+#else
+    return true;
 #endif
 }
 

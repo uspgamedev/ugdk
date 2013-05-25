@@ -1,17 +1,17 @@
-#ifndef UGDK_TIME_TIMEMANAGER_H_
-#define UGDK_TIME_TIMEMANAGER_H_
+#ifndef UGDK_TIME_MANAGER_H_
+#define UGDK_TIME_MANAGER_H_
 
 #include <ugdk/common/types.h>
 
 namespace ugdk {
 namespace time {
 
-class TimeManager {
+class Manager {
   public:
-    TimeManager();
-    ~TimeManager() { }
+    Manager();
+    ~Manager() { }
 
-    /// Informs the TimeManager that a new frame started.
+    /// Informs the Manager that a new frame started.
     void Update();
 
     /*  @return Time elapsed since initialization, in milliseconds */

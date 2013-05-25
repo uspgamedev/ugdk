@@ -1,8 +1,7 @@
 #ifndef UGDK_GRAPHIC_DRAWABLE_H_
 #define UGDK_GRAPHIC_DRAWABLE_H_
 
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(functional)
+#include <functional>
 
 #include <ugdk/graphic.h>
 #include <ugdk/math/vector2D.h>

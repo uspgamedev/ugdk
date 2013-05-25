@@ -5,19 +5,21 @@
 %{
 
 #include <ugdk/time/timeaccumulator.h>
-#include <ugdk/time/timemanager.h>
+#include <ugdk/time/manager.h>
+#include <ugdk/time/module.h>
 
 %}
 
 %import(module="ugdk_base") <ugdk/common/types.h>
 
 %include <ugdk/time/timeaccumulator.h>
-%include <ugdk/time/timemanager.h>
+%include <ugdk/time/manager.h>
+%include <ugdk/time/module.h>
 
 namespace ugdk {
 namespace time {
     export_class(TimeAccumulator)
-    export_class(TimeManager)
+    export_class(Manager)
 }
 }
  

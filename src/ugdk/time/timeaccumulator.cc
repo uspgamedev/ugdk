@@ -3,14 +3,13 @@
 #include "SDL.h"
 #include "SDL_timer.h"
 
-#include <ugdk/system/engine.h>
-#include <ugdk/time/timemanager.h>
+#include <ugdk/time/module.h>
 
 namespace ugdk {
 namespace time {
 
 TimeAccumulator::TimeAccumulator(int duration_miliseconds) {
-    handler_ = Engine::reference()->time_handler();
+    handler_ = manager();
     Restart(duration_miliseconds);
 }
 

@@ -39,11 +39,6 @@ class Engine {
      */
     graphic::TextManager *text_manager() { return text_manager_; }
 
-    /// Returns a reference to the Time Handler.
-    /** @see TimeManager
-     */
-    time::TimeManager *time_handler() { return time_manager_; }
-
     /// Returns a reference to the Path Manager.
     /** @see PathManager
      */
@@ -111,7 +106,6 @@ class Engine {
 
     graphic::VideoManager *       video_manager_;
     graphic:: TextManager *        text_manager_;
-    time::    TimeManager *        time_manager_;
 	          PathManager *        path_manager_;
           LanguageManager *    language_manager_;
 
@@ -122,7 +116,6 @@ class Engine {
 	Engine() :
         video_manager_(nullptr),
         text_manager_(nullptr),
-        time_manager_(nullptr),
         language_manager_(nullptr) {}
 };
 

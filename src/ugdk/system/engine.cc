@@ -13,7 +13,8 @@
 #include <ugdk/input/manager.h>
 #include <ugdk/resource/module.h>
 #include <ugdk/resource/manager.h>
-#include <ugdk/time/timemanager.h>
+#include <ugdk/time/module.h>
+#include <ugdk/time/manager.h>
 #include <ugdk/util/pathmanager.h>
 #include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
@@ -36,7 +37,6 @@ bool Engine::Initialize(const Configuration& configuration) {
     SDL_Init(SDL_INIT_EVERYTHING);
 
     video_manager_    = new graphic::VideoManager();
-    time_manager_     = new time::    TimeManager();
     text_manager_     = new graphic:: TextManager();
     path_manager_     = new           PathManager(configuration.base_path);
     language_manager_ = new       LanguageManager(configuration.default_language);
@@ -48,6 +48,7 @@ bool Engine::Initialize(const Configuration& configuration) {
     audio::Initialize(new audio::Manager);
     input::Initialize(new input::Manager);
     resource::Initialize(new resource::Manager);
+    time::Initialize(new time::Manager);
      text_manager_->Initialize();
 
     if (!SCRIPT_MANAGER()->Initialize())
@@ -56,10 +57,10 @@ bool Engine::Initialize(const Configuration& configuration) {
     scene_list_.clear();
 
     frames_since_reset_ = reported_fps_ = 0;
-    if(time_manager_ != nullptr)
-        last_fps_report_ = time_manager_->TimeElapsed();
+    if(time::manager() != nullptr)
+        last_fps_report_ = time::manager()->TimeElapsed();
 
-    return (time_manager_ != nullptr);
+    return (time::manager() != nullptr);
 }
 
 void Engine::DeleteFinishedScenes() {
@@ -96,8 +97,8 @@ void Engine::Run() {
             (current_top_scene = CurrentScene())->Focus();
 
         // gerenciamento de tempo
-        time_manager_->Update();
-        delta_t = (time_manager_->TimeDifference())/1000.0;
+        time::manager()->Update();
+        delta_t = (time::manager()->TimeDifference())/1000.0;
 
         // Verifica se o FPS nao esta baixo demais.
         // Impede que os personagens atravessem paredes.
@@ -155,11 +156,10 @@ void Engine::Run() {
 }
 
 void Engine::Release() {
-    delete time_manager_;
-
     audio::Release();
     input::Release();
     resource::Release();
+    time::Release();
 
     text_manager_->Release();
     delete text_manager_;

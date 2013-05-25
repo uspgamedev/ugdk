@@ -1,7 +1,8 @@
 #ifndef UGDK_TIME_TIMEACCUMULATOR_H_
 #define UGDK_TIME_TIMEACCUMULATOR_H_
 
-#include <ugdk/time/timemanager.h>
+#include <ugdk/time.h>
+#include <ugdk/common/types.h>
 
 namespace ugdk {
 namespace time {
@@ -34,7 +35,7 @@ class TimeAccumulator {
     bool IsPaused();
 
   private:
-    TimeManager *handler_;
+    Manager *handler_;
     uint32 initial_time_, time_paused_, when_paused_, duration_;
 };
 

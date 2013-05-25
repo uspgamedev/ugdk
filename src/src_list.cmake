@@ -87,7 +87,6 @@ SET(UGDK_SRC
     src/ugdk/math/integer2D.h 
     src/ugdk/math/vector2D.cc 
     src/ugdk/math/vector2D.h 
-    src/ugdk/portable/tr1.h 
     src/ugdk/resource.h 
     src/ugdk/resource/genericcontainer.h 
     src/ugdk/resource/manager.cc 
@@ -113,10 +112,12 @@ SET(UGDK_SRC
     src/ugdk/system/engine.cc 
     src/ugdk/system/engine.h 
     src/ugdk/time.h 
+    src/ugdk/time/manager.cc 
+    src/ugdk/time/manager.h 
+    src/ugdk/time/module.cc 
+    src/ugdk/time/module.h 
     src/ugdk/time/timeaccumulator.cc 
     src/ugdk/time/timeaccumulator.h 
-    src/ugdk/time/timemanager.cc 
-    src/ugdk/time/timemanager.h 
     src/ugdk/ui.h 
     src/ugdk/ui/button.cc 
     src/ugdk/ui/button.h 
