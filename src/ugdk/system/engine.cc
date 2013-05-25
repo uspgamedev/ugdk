@@ -96,19 +96,20 @@ void Engine::Run() {
         else if(current_top_scene != CurrentScene())
             (current_top_scene = CurrentScene())->Focus();
 
-        // gerenciamento de tempo
-        time::manager()->Update();
-        delta_t = (time::manager()->TimeDifference())/1000.0;
+        if(time::manager()) {
+            time::manager()->Update();
+            delta_t = (time::manager()->TimeDifference())/1000.0;
+        } else
+            delta_t = 0.0;
 
-        // Verifica se o FPS nao esta baixo demais.
-        // Impede que os personagens atravessem paredes.
+        // Over-compensation for lag causes bugs.
         delta_t = min(delta_t, 0.1);
 
-        // gerenciador de input
-        input::manager()->Update();
+        if(input::manager())
+            input::manager()->Update();
 
-        // gerenciamento de audio
-        audio::manager()->Update();
+        if(audio::manager())
+            audio::manager()->Update();
 
         // tratamento de eventos
         while(SDL_PollEvent(&event)) {
@@ -119,12 +120,14 @@ void Engine::Run() {
 
                 case SDL_KEYDOWN:
                     key = (Key)event.key.keysym.sym;
-                    input::manager()->SimulateKeyPress(key);
+                    if(input::manager())
+                        input::manager()->SimulateKeyPress(key);
                     break;
 
                 case SDL_KEYUP:
                     key = (Key)event.key.keysym.sym;
-                    input::manager()->SimulateKeyRelease(key);
+                    if(input::manager())
+                        input::manager()->SimulateKeyRelease(key);
                     break;
 
                 default:
