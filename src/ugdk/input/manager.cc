@@ -21,7 +21,7 @@ Manager::Manager() {
     std::fill(keystate_now_, keystate_now_+kbsize_, false);
     std::fill(keystate_last_, keystate_last_+kbsize_, false);
     
-    Update(1.3);
+    Update();
 }
 
 Manager::~Manager() {
@@ -29,7 +29,7 @@ Manager::~Manager() {
     delete[] keystate_last_;
 }
 
-void Manager::Update(double delta_t) {
+void Manager::Update() {
     int i;
     
     // bufferiza teclado

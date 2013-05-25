@@ -14,7 +14,7 @@ class Manager {
     Manager();
     ~Manager();
 
-    void Update(double);
+    void Update();
     ugdk::math::Vector2D GetMousePosition(void);
     void ShowCursor(bool toggle);
     bool KeyPressed(Key key);

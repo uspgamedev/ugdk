@@ -105,7 +105,7 @@ void Engine::Run() {
         delta_t = min(delta_t, 0.1);
 
         // gerenciador de input
-        input::manager()->Update(delta_t);
+        input::manager()->Update();
 
         // gerenciamento de audio
         audio::manager()->Update();
