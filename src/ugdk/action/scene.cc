@@ -43,13 +43,6 @@ Scene::Scene()
             return true;
         });
 
-        // Update nodes
-        tasks_.emplace_back(200, [&](double dt) {  
-            content_node_->Update(dt);
-            interface_node_->Update(dt);
-            return true;
-        });
-
         // Flush add queue
         tasks_.emplace_back(300, [&](double dt) {  
             while(!queued_entities_.empty()) {
