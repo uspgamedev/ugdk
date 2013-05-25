@@ -23,7 +23,7 @@ class LuaWrapper: public LuaWrapperBase {
 
     LuaWrapper() :
         LuaWrapperBase("lua",LANG(Lua), "Lua"),
-        data_gear_(NULL) {}
+        data_gear_(nullptr) {}
     ~LuaWrapper() {
         if (data_gear_) Finalize();
     }

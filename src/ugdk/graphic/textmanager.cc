@@ -57,12 +57,12 @@ TextBox* TextManager::GetText(const std::wstring& text) {
 TextBox* TextManager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
     std::string fullpath = PATH_MANAGER()->ResolvePath(path);
     FILE *txtFile = fopen(fullpath.c_str(), "r");
-    if(txtFile == NULL) return NULL;
+    if(txtFile == nullptr) return nullptr;
     char buffer_utf8[MAXLINE];
     wchar_t buffer[MAXLINE];
     wstring output;
     // Read from the UTF-8 encoded file.
-    while(fgets(buffer_utf8, MAXLINE, txtFile)!=NULL){
+    while(fgets(buffer_utf8, MAXLINE, txtFile)!=nullptr){
         // Converting UTF-8 to wstring
         size_t buffer_size = utf8_to_wchar(buffer_utf8, strlen(buffer_utf8), buffer, MAXLINE, 0);
         buffer[buffer_size] = L'\0';

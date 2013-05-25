@@ -79,7 +79,7 @@ class GenericContainer<T*, T* (*) (const std::string&)> : public virtual Resourc
 
     void Insert(const std::string& tag, T* val) {
         DataIterator it = database_.find(tag);
-        if(it == database_.end() || it->second == NULL) {
+        if(it == database_.end() || it->second == nullptr) {
             database_[tag] = val;
         } else {
             #ifdef DEBUG
@@ -90,7 +90,7 @@ class GenericContainer<T*, T* (*) (const std::string&)> : public virtual Resourc
 
     void Replace(const std::string& tag, T* val) {
         DataIterator it = database_.find(tag);
-        if(it == database_.end() || it->second == NULL) {
+        if(it == database_.end() || it->second == nullptr) {
             database_[tag] = val;
         } else {
             delete it->second;

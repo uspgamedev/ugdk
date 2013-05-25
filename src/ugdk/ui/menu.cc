@@ -5,7 +5,6 @@
 #include <ugdk/ui/menu.h>
 #include <ugdk/ui/uielement.h>
 
-#include <ugdk/action/generictask.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/base/engine.h>
 #include <ugdk/graphic/drawable.h>
@@ -13,8 +12,8 @@
 #include <ugdk/input/inputmanager.h>
 #include <ugdk/util/intervalkdtree.h>
 
-using std::tr1::mem_fn;
-using std::tr1::placeholders::_1;
+using std::mem_fn;
+using std::placeholders::_1;
 
 namespace ugdk {
 namespace ui {
@@ -22,16 +21,17 @@ namespace ui {
 const MenuCallback Menu::FINISH_MENU(mem_fn(&Menu::FinishScene));
 const MenuCallback Menu::INTERACT_MENU(mem_fn(&Menu::InteractWithFocused));
 
-class CallbackCheckTask : public action::Task {
+class CallbackCheckTask {
 public:
     CallbackCheckTask(Menu* menu) : menu_(menu) {}
-    void operator()(double) {
+    bool operator()(double) {
         input::InputManager* input = INPUT_MANAGER();
         const InputCallbacks& callbacks = menu_->input_callbacks();
         for(InputCallbacks::const_iterator it = callbacks.begin(); it != callbacks.end(); ++it) {
             if(input->KeyPressed(it->first))
                 it->second(menu_);
         }
+        return true;
     }
 private:
     Menu* menu_;
@@ -39,14 +39,14 @@ private:
 
 Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
   : node_(new graphic::Node()),
-    owner_scene_(NULL),
-    focused_element_(NULL),
+    owner_scene_(nullptr),
+    focused_element_(nullptr),
     objects_tree_(new ObjectTree(tree_bounding_box,5)),
     hook_(hook) {
       node_->geometry().ChangeOffset(offset);
-      option_node_[0] = NULL;
-      option_node_[1] = NULL;
-      //std::tr1::function<bool (double)> func = std::tr1::bind(&CheckMouse, this, _1);
+      option_node_[0] = nullptr;
+      option_node_[1] = nullptr;
+      //std::function<bool (double)> func = std::bind(&CheckMouse, this, _1);
       //this->AddTask(new action::GenericTask(func));
       //this->AddTask(new CallbackCheckTask(this));
 }
@@ -116,7 +116,7 @@ void Menu::PositionSelectionDrawables() {
 
 void Menu::OnSceneAdd(action::Scene* scene) {
     owner_scene_ = scene;
-    scene->AddTask(new CallbackCheckTask(this));
+    scene->AddTask(CallbackCheckTask(this));
 }
 
 void Menu::FinishScene() const {
@@ -157,7 +157,7 @@ void Menu::AddObject(UIElement *obj) {
 }
 
 void Menu::RemoveObject(UIElement *obj) { 
-    obj->set_owner(NULL);
+    obj->set_owner(nullptr);
     objects_tree_->Remove(obj);
     node_->RemoveChild(obj->node());
     uielements_.remove(obj);

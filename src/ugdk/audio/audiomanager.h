@@ -41,7 +41,7 @@ class AudioManager {
     Music* LoadMusic(const std::string& filepath);
 
     /// Getter for the music that is currently playing.
-    /** @return NULL is no music is currently playing, a
+    /** @return nullptr is no music is currently playing, a
         Music* otherwise. */
     Music* CurrentMusic() const;
 

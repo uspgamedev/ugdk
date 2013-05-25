@@ -1,11 +1,9 @@
 #ifndef UGDK_UTIL_INDEXABLETABLE_H_
 #define UGDK_UTIL_INDEXABLETABLE_H_
 
-#include <ugdk/portable/tr1.h>
-
 #include <string>
 #include <vector>
-#include FROM_TR1(unordered_map)
+#include <unordered_map>
 
 #include <ugdk/util.h>
 #include <ugdk/util/idgenerator.h>
@@ -19,7 +17,7 @@ class IndexableTable { private: IndexableTable() {} };
 template<class T>
 class IndexableTable<T*> {
 private:
-    typedef typename std::tr1::unordered_map<std::string, T*> Table;
+    typedef typename std::unordered_map<std::string, T*> Table;
     typedef typename Table::iterator TableIterator;
     typedef typename Table::const_iterator TableConstIterator;
 
@@ -51,7 +49,7 @@ private:
     /// Searches for the element with the given name.
     T* Search(const std::string& name) const { 
         TableConstIterator it = data_.find(name);
-        return (it != data_.end()) ? it->second : NULL;
+        return (it != data_.end()) ? it->second : nullptr;
     }
     
     /// Instant access to an element, using a pre-generated ID.
@@ -85,7 +83,7 @@ private:
     void removeIndexes(T* val) {
         for(int id = 0; id < static_cast<int>(indexes_.size()); ++id)
             if(indexes_[id] == val) {
-                indexes_[id] = NULL;
+                indexes_[id] = nullptr;
                 index_generator_.ReleaseID(id);
             }
     }

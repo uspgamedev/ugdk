@@ -71,7 +71,7 @@ __utf8_forbitten(u_char octet)
  *	It takes the following arguments:
  *	in	- input UTF-8 string. It can be null-terminated.
  *	insize	- size of input string in bytes.
- *	out	- result buffer for UCS-4 string. If out is NULL,
+ *	out	- result buffer for UCS-4 string. If out is nullptr,
  *		function returns size of result buffer.
  *	outsize - size of out buffer in wide characters.
  *
@@ -83,7 +83,7 @@ __utf8_forbitten(u_char octet)
  *	1. If UTF-8 string contains zero symbols, they will be translated
  *	   as regular symbols.
  *	2. If UTF8_IGNORE_ERROR or UTF8_SKIP_BOM flag is set, sizes may vary
- *	   when `out' is NULL and not NULL. It's because of special UTF-8
+ *	   when `out' is nullptr and not nullptr. It's because of special UTF-8
  *	   sequences which may result in forbitten (by RFC3629) UNICODE
  *	   characters.  So, the caller must check return value every time and
  *	   not prepare buffer in advance (\0 terminate) but after calling this
@@ -97,7 +97,7 @@ utf8_to_wchar(const char *in, size_t insize, wchar_t *out, size_t outsize,
 	wchar_t *wlim, high;
 	size_t n, total, i, n_bits;
 
-	if (in == NULL || insize == 0 || (outsize == 0 && out != NULL))
+	if (in == nullptr || insize == 0 || (outsize == 0 && out != nullptr))
 		return (0);
 
 	total = 0;
@@ -164,7 +164,7 @@ utf8_to_wchar(const char *in, size_t insize, wchar_t *out, size_t outsize,
 
 		total++;
 
-		if (out == NULL)
+		if (out == nullptr)
 			continue;
 
 		if (out >= wlim)
@@ -204,7 +204,7 @@ utf8_to_wchar(const char *in, size_t insize, wchar_t *out, size_t outsize,
  *	It takes the following arguments:
  *	in	- input unicode string. It can be null-terminated.
  *	insize	- size of input string in wide characters.
- *	out	- result buffer for utf8 string. If out is NULL,
+ *	out	- result buffer for utf8 string. If out is nullptr,
  *		function returns size of result buffer.
  *	outsize - size of result buffer.
  *
@@ -224,7 +224,7 @@ wchar_to_utf8(const wchar_t *in, size_t insize, char *out, size_t outsize,
 	u_char *p, *lim, *oc;
 	size_t total, n;
 
-	if (in == NULL || insize == 0 || (outsize == 0 && out != NULL))
+	if (in == nullptr || insize == 0 || (outsize == 0 && out != nullptr))
 		return (0);
 
 	w = (wchar_t *)in;
@@ -262,7 +262,7 @@ wchar_to_utf8(const wchar_t *in, size_t insize, char *out, size_t outsize,
 
 		total += n;
 
-		if (out == NULL)
+		if (out == nullptr)
 			continue;
 
 		if (lim - p <= (signed int) n - 1)

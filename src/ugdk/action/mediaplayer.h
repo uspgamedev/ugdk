@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <string>
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(functional)
+
+#include <functional>
 
 #include <ugdk/action.h>
 
@@ -42,7 +42,7 @@ class MediaPlayer {
     */
     void AddObserver(Observer* observer);
 
-    void AddTickFunction(std::tr1::function<void (void)> tick);
+    void AddTickFunction(std::function<void (void)> tick);
 
     void ChangeMediaManager(MediaManager*);
 
@@ -51,7 +51,7 @@ class MediaPlayer {
 
   private:
     std::vector<Observer *> observers_;
-    std::vector< std::tr1::function<void (void)> > ticks_;
+    std::vector< std::function<void (void)> > ticks_;
     MediaManager* manager_;
 
     friend class MediaManager;

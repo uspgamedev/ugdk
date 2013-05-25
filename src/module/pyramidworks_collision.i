@@ -32,6 +32,7 @@
 %ignore pyramidworks::collision::CollisionManager::Generate(const char n[]);
 %ignore pyramidworks::collision::CollisionManager::Generate(const char n[], const char p[]);
 %ignore pyramidworks::collision::CollisionManager::Get(const char n[]);
+%ignore pyramidworks::collision::CollisionManager::GenerateHandleCollisionTask();
 %ignore pyramidworks::collision::CollisionObject::AddCollisionLogic(const char n[], CollisionLogic* logic);
 %ignore pyramidworks::collision::CollisionObject::InitializeCollisionClass(const char n[]);
 

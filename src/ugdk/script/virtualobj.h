@@ -41,14 +41,16 @@ class VirtualObj {
     /** Attempting to use any method in a virtual object created this way will
      ** result in a segmentation fault.
      */
-    explicit VirtualObj() :
-        data_() {}
+    explicit VirtualObj() : data_() {}
 
-    explicit VirtualObj(VirtualData::Ptr data) :
-        data_(data) {}
+    explicit VirtualObj(VirtualData::Ptr data) : data_(data) {}
 
-    explicit VirtualObj(LangWrapper* wrapper) :
-        data_(wrapper->NewData()) {}
+    explicit VirtualObj(LangWrapper* wrapper) : data_(wrapper->NewData()) {}
+
+    template <class T>
+    explicit VirtualObj(LangWrapper* wrapper, T val) : data_(wrapper->NewData()) {
+        set_value<T>(val);
+    }
 
     ~VirtualObj() {}
 
@@ -82,6 +84,7 @@ class VirtualObj {
     }
 
     VirtualObj operator() (const List& args = List()) const;
+    VirtualObj operator() (const VirtualObj& arg) const;
 
     VirtualObj attribute(const VirtualObj& key) const {
         return VirtualObj(data_->GetAttribute(key.data_));
@@ -138,11 +141,54 @@ class VirtualObj {
         return data_->unsafe_data();
     }
 
+#ifdef UGDK_USING_VARIADIC
+    template<typename R, typename ...Args>
+    std::function<R (Args...)> AsFunction() {
+        return CreateFunction<R, Args...>(data_);
+    }
+
+    template<typename ...Args>
+    VirtualObj Call(Args... args) {
+        VirtualData::Vector arguments;
+        createArgumentsVector(arguments, wrapper(), args...);
+        return VirtualObj(data_->Execute(arguments));
+    }
+#endif
+
   private:
+#ifdef UGDK_USING_VARIADIC
+    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper) { return true; }
+
+    template<typename T, typename ...Args>
+    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, T t, Args... args) {
+        VirtualData::Ptr val = wrapper->NewData();
+        VirtualPrimitive<T>::set_value(val, t);
+        v.push_back(val);
+        return createArgumentsVector(v, wrapper, args...);
+    }
+
+    template<typename ...Args>
+    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, VirtualObj t, Args... args) {
+        if(t.wrapper() != wrapper) return false;
+        v.push_back(t.data_);
+        return createArgumentsVector(v, wrapper, args...);
+    }
+
+    template<typename R, typename ...Args>
+    static std::function<R (Args...)> CreateFunction(VirtualData::Ptr data) {
+        return [data](Args... args) -> R {
+            VirtualData::Vector arguments;
+            createArgumentsVector(arguments, data->wrapper(), args...);
+            return VirtualPrimitive<R>::value(data->Execute(arguments), false);
+        };
+    }
+#endif
 
     VirtualData::Ptr data_;
 
 };
+
+
 
 template <class T, class U>
 T ConvertSequence (const U& data_seq) {
@@ -186,18 +232,12 @@ inline VirtualObj::Map VirtualObj::value<VirtualObj::Map>(bool /*disown*/) const
 
 class Bind {
   public:
-    Bind(VirtualObj& obj, const std::string& method_name) :
-        obj_(obj),
-        method_name_(obj.wrapper()) {
-        method_name_.set_value(method_name.c_str());
-    }
-    VirtualObj operator() () const {
-        std::list<VirtualObj> args;
-        return obj_[method_name_]((obj_, args)); 
-    }
-    VirtualObj operator() (std::list<VirtualObj>& args) const {
-        return obj_[method_name_]((obj_, args));
-    }
+    Bind(VirtualObj& obj, const std::string& method_name);
+
+    VirtualObj operator() () const;
+    VirtualObj operator() (const VirtualObj& arg) const;
+    VirtualObj operator() (std::list<VirtualObj>& args) const;
+
   private:
     Bind& operator=(Bind&); // Bind cannot be copied.
 

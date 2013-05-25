@@ -19,7 +19,7 @@ SET(UGDK_SRC
     ./src/ugdk/action.h 
     ./src/ugdk/action/animationplayer.h 
     ./src/ugdk/action/entity.h 
-    ./src/ugdk/action/generictask.h 
+    ./src/ugdk/action/mediamanager.h 
     ./src/ugdk/action/mediaplayer.cc 
     ./src/ugdk/action/mediaplayer.h 
     ./src/ugdk/action/observer.h 
@@ -28,7 +28,6 @@ SET(UGDK_SRC
     ./src/ugdk/action/spriteanimationframe.h 
     ./src/ugdk/action/spritetypes.cc 
     ./src/ugdk/action/spritetypes.h 
-    ./src/ugdk/action/task.h 
     ./src/ugdk/audio.h 
     ./src/ugdk/audio/audiomanager.cc 
     ./src/ugdk/audio/audiomanager.h 
@@ -44,6 +43,7 @@ SET(UGDK_SRC
     ./src/ugdk/base/resourcemanager.cc 
     ./src/ugdk/base/resourcemanager.h 
     ./src/ugdk/base/types.h 
+    ./src/ugdk/config/config.h 
     ./src/ugdk/graphic.h 
     ./src/ugdk/graphic/defaultshaders.cc 
     ./src/ugdk/graphic/defaultshaders.h 
@@ -58,7 +58,6 @@ SET(UGDK_SRC
     ./src/ugdk/graphic/drawable/texturedrectangle.h 
     ./src/ugdk/graphic/font.cc 
     ./src/ugdk/graphic/font.h 
-    ./src/ugdk/graphic/geometry.cc 
     ./src/ugdk/graphic/geometry.h 
     ./src/ugdk/graphic/light.cc 
     ./src/ugdk/graphic/light.h 

@@ -2,7 +2,6 @@
 #define UGDK_GRAPHIC_NODE_H_
 
 #include <vector>
-#include <cstddef> // for NULL
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
@@ -15,13 +14,13 @@ class Node {
   public:
     typedef std::vector<Node*> NodeSet;
 
-    Node(Drawable* _drawable = NULL) 
+    Node(Drawable* _drawable = nullptr) 
         :   drawable_(_drawable),
-            light_(NULL),
+            light_(nullptr),
             active_(true),
             ignores_effect_(false),
             zindex_(0.0),
-            parent_(NULL),
+            parent_(nullptr),
             must_sort_(false) {}
 
     ~Node();

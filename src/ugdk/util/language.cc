@@ -25,14 +25,14 @@ std::wstring LoadTextFromFile(const std::string& path) {
     std::string fullpath = PATH_MANAGER()->ResolvePath(path);
 
     FILE *txtFile = fopen(fullpath.c_str(), "r");
-    if(txtFile == NULL) return output;
+    if(txtFile == nullptr) return output;
 
     static const int MAXLINE = 1024;
 
     char buffer_utf8[MAXLINE];
     wchar_t buffer[MAXLINE];
     // Read from the UTF-8 encoded file.
-    while(fgets(buffer_utf8, MAXLINE, txtFile) != NULL){
+    while(fgets(buffer_utf8, MAXLINE, txtFile) != nullptr){
         // Converting UTF-8 to wstring
         size_t buffer_size = utf8_to_wchar(buffer_utf8, strlen(buffer_utf8), buffer, MAXLINE, 0);
         buffer[buffer_size] = L'\0';
@@ -81,7 +81,7 @@ static bool IsWord(char* str) {
     char *tmp = str;
     for(int i = 1; i<5/*key_def[i] != '\0'*/; ++i) {
         tmp = strchr(tmp, key_def[i]);
-        if(tmp == NULL) return false;
+        if(tmp == nullptr) return false;
     }
     return true;
 }
@@ -105,7 +105,7 @@ static std::pair<LanguageWord*, std::string> ReadWord(char* str, bool from_file)
     // Value
     start = strchr(end + 1, key_def[4]);
     end =   strchr(end + 1, '\n');
-    if(end != NULL) end[0] = '\0';
+    if(end != nullptr) end[0] = '\0';
 
     if(from_file) {
         std::string filepath(start + 1);
@@ -151,7 +151,7 @@ static int title_type(char* str) {
 // Fills the map with the information on the given file
 bool Language::Load(const std::string& language_file) {
     FILE* file = fopen(PATH_MANAGER()->ResolvePath(language_file).c_str(), "r");
-    if(file == NULL)
+    if(file == nullptr)
         return false;
 
     char buffer_raw[STRING_LENGTH];

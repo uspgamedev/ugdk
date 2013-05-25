@@ -515,8 +515,8 @@ SWIG_TypePrettyName(const swig_type_info *type) {
      type, separated by vertical-bar characters.  We choose
      to print the last name, as it is often (?) the most
      specific. */
-  if (!type) return NULL;
-  if (type->str != NULL) {
+  if (!type) return nullptr;
+  if (type->str != nullptr) {
     const char *last_name = type->str;
     const char *s;
     for (s = type->str; *s; s++)
@@ -692,7 +692,7 @@ SWIG_PackVoidPtr(char *buff, void *ptr, const char *name, size_t bsz) {
 SWIGRUNTIME const char *
 SWIG_UnpackVoidPtr(const char *c, void **ptr, const char *name) {
   if (*c != '_') {
-    if (strcmp(c,"NULL") == 0) {
+    if (strcmp(c,"nullptr") == 0) {
       *ptr = (void *) 0;
       return name;
     } else {
@@ -720,7 +720,7 @@ SWIG_PackDataName(char *buff, void *ptr, size_t sz, const char *name, size_t bsz
 SWIGRUNTIME const char *
 SWIG_UnpackDataName(const char *c, void *ptr, size_t sz, const char *name) {
   if (*c != '_') {
-    if (strcmp(c,"NULL") == 0) {
+    if (strcmp(c,"nullptr") == 0) {
       memset(ptr,0,sz);
       return name;
     } else {
@@ -1328,7 +1328,7 @@ SWIGRUNTIME int  SWIG_Lua_ConvertPtr(lua_State* L,int index,void** ptr,swig_type
 {
   swig_lua_userdata* usr;
   swig_cast_info *cast;
-  if (lua_isnil(L,index)){*ptr=0; return SWIG_OK;}    /* special case: lua nil => NULL pointer */
+  if (lua_isnil(L,index)){*ptr=0; return SWIG_OK;}    /* special case: lua nil => nullptr pointer */
   usr=(swig_lua_userdata*)lua_touserdata(L,index);  /* get data */
   if (usr)
   {
@@ -1368,7 +1368,7 @@ SWIGRUNTIME void* SWIG_Lua_MustGetPtr(lua_State* L,int index,swig_type_info *typ
 SWIGRUNTIME void SWIG_Lua_NewPackedObj(lua_State* L,void* ptr,size_t size,swig_type_info *type)
 {
   swig_lua_rawdata* raw;
-  assert(ptr); /* not acceptable to pass in a NULL value */
+  assert(ptr); /* not acceptable to pass in a nullptr value */
   raw=(swig_lua_rawdata*)lua_newuserdata(L,sizeof(swig_lua_rawdata)-1+size);  /* alloc data */
   raw->type=type;
   raw->own=0;
@@ -1535,13 +1535,13 @@ SWIG_MangledTypeQuery(SWIG_MODULE_CLIENTDATA_TYPE clientdata, const char *name) 
 
 SWIGRUNTIMEINLINE swig_type_info *
 SWIG_TypeQuery(const char *name) {
-  swig_module_info *module = SWIG_GetModule(NULL);
+  swig_module_info *module = SWIG_GetModule(nullptr);
   return SWIG_TypeQueryModule(module, module, name);
 }
 
 SWIGRUNTIMEINLINE swig_type_info *
 SWIG_MangledTypeQuery(const char *name) {
-  swig_module_info *module = SWIG_GetModule(NULL);
+  swig_module_info *module = SWIG_GetModule(nullptr);
   return SWIG_MangledTypeQueryModule(module, module, name);
 }
 

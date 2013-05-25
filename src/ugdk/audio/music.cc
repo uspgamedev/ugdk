@@ -5,9 +5,9 @@
 namespace ugdk {
 namespace audio {
 
-Music* Music::playing_music_(NULL);
+Music* Music::playing_music_(nullptr);
 
-Music::Music(const std::string& filepath) : data_(NULL), volume_(1.0) {
+Music::Music(const std::string& filepath) : data_(nullptr), volume_(1.0) {
     data_ = Mix_LoadMUS(filepath.c_str());
     Mix_HookMusicFinished(MusicDone);
 }
@@ -15,7 +15,7 @@ Music::Music(const std::string& filepath) : data_(NULL), volume_(1.0) {
 Music::~Music() {
     if(data_) {
         Mix_FreeMusic(data_);
-        data_ = NULL;
+        data_ = nullptr;
     }
 }
 
@@ -37,7 +37,7 @@ void Music::Play(int loops) {
 void Music::Stop() {
     if(playing_music_ == this) {
         Mix_HaltMusic();
-        playing_music_ = NULL;
+        playing_music_ = nullptr;
     }
 }
 
@@ -70,7 +70,7 @@ double Music::Volume() {
 }
 
 void Music::MusicDone() {
-    playing_music_ = NULL;
+    playing_music_ = nullptr;
 }
 
 void Music::UpdateVolume(double vol) {

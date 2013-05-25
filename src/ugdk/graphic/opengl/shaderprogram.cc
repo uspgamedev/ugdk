@@ -13,7 +13,7 @@ namespace ugdk {
 namespace graphic {
 namespace opengl {
 
-const ShaderProgram* ShaderProgram::Use::active_program_ = NULL;
+const ShaderProgram* ShaderProgram::Use::active_program_ = nullptr;
 
 GLuint get_vertextype_location(VertexType type) {
     switch(type) {
@@ -34,7 +34,7 @@ ShaderProgram::Use::Use(const ShaderProgram* program) : program_(program), last_
 ShaderProgram::Use::~Use() {
     for(int i = 0; i < last_attribute_; ++i)
         glDisableVertexAttribArray(active_attributes_[i]);
-    active_program_ = NULL;
+    active_program_ = nullptr;
     glUseProgram(0);
 }
 
@@ -120,7 +120,7 @@ bool ShaderProgram::SetupProgram() {
         glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &infoLogLength);
 
         GLchar *strInfoLog = new GLchar[infoLogLength + 1];
-        glGetProgramInfoLog(id_, infoLogLength, NULL, strInfoLog);
+        glGetProgramInfoLog(id_, infoLogLength, nullptr, strInfoLog);
         fprintf(stderr, "Linker failure: %s\n", strInfoLog);
         delete[] strInfoLog;
     } else {

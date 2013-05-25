@@ -15,8 +15,8 @@ namespace graphic {
 
 class Sprite : public Drawable {
   public:
-    Sprite(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table = NULL);
-    explicit Sprite(const std::string& spritesheet_tag, const action::SpriteAnimationTable* table = NULL);
+    Sprite(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table = nullptr);
+    explicit Sprite(const std::string& spritesheet_tag, const action::SpriteAnimationTable* table = nullptr);
     explicit Sprite(const std::string& spritesheet_tag, const std::string& animation_set_tag);
     explicit Sprite(const Spritesheet *spritesheet, const std::string& animation_set_tag);
     virtual ~Sprite();

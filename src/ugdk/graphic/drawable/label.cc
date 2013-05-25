@@ -28,15 +28,15 @@ using std::vector;
 using std::wstring;
 
 Label::Label(const std::wstring& message, Font *font) 
-    : font_(font), vertex_buffer_(NULL), texture_buffer_(NULL) {
+    : font_(font), vertex_buffer_(nullptr), texture_buffer_(nullptr) {
     this->ChangeMessage(message);
 }
 
 Label::~Label() {
     delete vertex_buffer_;
     delete texture_buffer_;
-    vertex_buffer_ = NULL;
-    texture_buffer_ = NULL;
+    vertex_buffer_ = nullptr;
+    texture_buffer_ = nullptr;
 }
 
 void Label::ChangeMessage(const std::wstring& message) {

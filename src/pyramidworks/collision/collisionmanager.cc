@@ -1,4 +1,3 @@
-#include <ugdk/action/task.h>
 #include <ugdk/util/intervalkdtree.h>
 
 #include "collisionmanager.h"
@@ -36,11 +35,11 @@ void CollisionManager::Generate(const std::string &name, const std::string &pare
 #endif
 }
 
-class HandleCollisionTask : public ugdk::action::Task {
+class HandleCollisionTask {
   public:
     HandleCollisionTask(const std::set<const CollisionObject*>& s) : objects_(s) {}
 
-    void operator()(double dt) {
+    bool operator()(double dt) {
         std::vector<CollisionInstance> collision_list;
     
         std::set<const CollisionObject*>::const_iterator i;
@@ -51,14 +50,16 @@ class HandleCollisionTask : public ugdk::action::Task {
         for(it = collision_list.begin(); it != collision_list.end(); ++it) {
             it->first->Handle(it->second);
         }
+
+        return true;
     }
 
   protected:
     const std::set<const CollisionObject*>& objects_;
 };
 
-ugdk::action::Task* CollisionManager::GenerateHandleCollisionTask() {
-    return new HandleCollisionTask(active_objects_);
+ugdk::action::Task CollisionManager::GenerateHandleCollisionTask() {
+    return HandleCollisionTask(active_objects_);
 }
 
 } // namespace collision

@@ -16,7 +16,7 @@ template<class T>
 class AnimationPlayer : public MediaPlayer {
   public:
     AnimationPlayer(const util::IndexableTable<T*> *table) 
-        : current_animation_(NULL), current_frame_(0), elapsed_time_(0.0), table_(table) {
+        : current_animation_(nullptr), current_frame_(0), elapsed_time_(0.0), table_(table) {
         // TODO: a user defined current_animation_ may leak
     }
 

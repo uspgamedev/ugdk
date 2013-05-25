@@ -5,9 +5,7 @@
 #include <vector>
 #include <cstdio>
 #include <map>
-
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(functional)
+#include <functional>
 
 #include <ugdk/util/gdd/types.h>
 #include <ugdk/util/gdd/typedargsconverter.h>
@@ -29,37 +27,37 @@ class DescriptionProtocolBase {
 
     template<class P>
     void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (void), P* obj) {
-        std::tr1::function<bool ()> result = std::tr1::bind(function, obj);
+        std::function<bool ()> result = std::bind(function, obj);
         find_schema(field)[to_lower(name)] = new TypedArgsConverter<void, void, void, void, void>(result);
     }
     template<class P, typename T1>
     void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T1), P* obj) {
-        using namespace std::tr1::placeholders;
-        std::tr1::function<bool (T1)> result = std::tr1::bind(function, obj, _1);
+        using namespace std::placeholders;
+        std::function<bool (T1)> result = std::bind(function, obj, _1);
         registerFunc(field, name, result);
     }
     template<class P, typename T1, typename T2>
     void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T1, T2), P* obj) {
-        using namespace std::tr1::placeholders;
-        std::tr1::function<bool (T1, T2)> result = std::tr1::bind(function, obj, _1, _2);
+        using namespace std::placeholders;
+        std::function<bool (T1, T2)> result = std::bind(function, obj, _1, _2);
         registerFunc(field, name, result);
     }
     template<class P, typename T1, typename T2, typename T3>
     void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T1, T2, T3), P* obj) {
-        using namespace std::tr1::placeholders;
-        std::tr1::function<bool (T1, T2, T3)> result = std::tr1::bind(function, obj, _1, _2, _3);
+        using namespace std::placeholders;
+        std::function<bool (T1, T2, T3)> result = std::bind(function, obj, _1, _2, _3);
         registerFunc(field, name, result);
     }
     template<class P, typename T1, typename T2, typename T3, typename T4>
     void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T1, T2, T3, T4), P* obj) {
-        using namespace std::tr1::placeholders;
-        std::tr1::function<bool (T1, T2, T3, T4)> result = std::tr1::bind(function, obj, _1, _2, _3, _4);
+        using namespace std::placeholders;
+        std::function<bool (T1, T2, T3, T4)> result = std::bind(function, obj, _1, _2, _3, _4);
         registerFunc(field, name, result);
     }
     template<class P, typename T1, typename T2, typename T3, typename T4, typename T5>
     void RegisterBind(ProtocolField field, const GDDString& name, bool (P::*function) (T1, T2, T3, T4, T5), P* obj) {
-        using namespace std::tr1::placeholders;
-        std::tr1::function<bool (T1, T2, T3, T4, T5)> result = std::tr1::bind(function, obj, _1, _2, _3, _4, _5);
+        using namespace std::placeholders;
+        std::function<bool (T1, T2, T3, T4, T5)> result = std::bind(function, obj, _1, _2, _3, _4, _5);
         registerFunc(field, name, result);
     }
 

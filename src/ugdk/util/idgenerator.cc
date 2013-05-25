@@ -5,7 +5,7 @@
 namespace ugdk {
 namespace util {
 
-using std::tr1::unordered_set;
+using std::unordered_set;
 
 IDGenerator::IDGenerator(int min_id, int max_id, int error_value) :
     current_id_(min_id),

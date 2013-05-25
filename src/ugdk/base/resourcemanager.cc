@@ -20,7 +20,7 @@ static T* NullLoad(const std::string& filepath) {
 #ifdef DEBUG
     fprintf(stderr, "Warning: NullLoad<%s> called with path '%s'.", TOSTRING(T), filepath.c_str());
 #endif
-    return NULL;
+    return nullptr;
 }
 
 bool type_info_cmp(const std::type_info* a, const std::type_info* b) {

@@ -26,7 +26,7 @@ Node::~Node() {
 
     NodeSet::iterator it;
     for(it = childs_.begin(); it != childs_.end(); ++it) {
-        (*it)->parent_ = NULL;
+        (*it)->parent_ = nullptr;
         delete *it;
     }
 }
@@ -83,7 +83,7 @@ void Node::RemoveChild(Node *child) {
     while(it != childs_.end() && *it != child) ++it;
     if(it != childs_.end())
         childs_.erase(it);
-    child->parent_ = NULL;
+    child->parent_ = nullptr;
 }
 
 void Node::SortChildren() {

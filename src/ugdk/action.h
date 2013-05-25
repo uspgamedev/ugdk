@@ -1,6 +1,8 @@
 #ifndef UGDK_ACTION_H_
 #define UGDK_ACTION_H_
 
+#include <functional>
+
 namespace ugdk {
 namespace action {
 
@@ -19,7 +21,8 @@ class SpriteAnimation;
 class Scene;
 class Entity;
 class Observer;
-class Task;
+
+typedef std::function<bool (double)> Task;
 
 }  // namespace action
 }  // namespace ugdk

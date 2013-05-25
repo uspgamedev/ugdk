@@ -4,9 +4,7 @@
 
 #include <string>
 #include <cstdlib>
-
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(memory)
+#include <memory>
 
 #include <ugdk/config/config.h>
 #include <ugdk/script/languages/python/pythondata.h>
@@ -21,10 +19,10 @@ namespace ugdk {
 namespace script {
 namespace python {
 
-using std::tr1::shared_ptr;
+using std::shared_ptr;
 
 VirtualData::Ptr PythonWrapper::NewData() {
-    VirtualData::Ptr vdata( new PythonData(this, NULL, false) ); 
+    VirtualData::Ptr vdata( new PythonData(this, nullptr, false) ); 
     return vdata;
 }
 
@@ -36,7 +34,7 @@ VirtualObj PythonWrapper::LoadModule(const std::string& name) {
     std::string dotted_name =
         SCRIPT_MANAGER()->ConvertPathToDottedNotation(name);
     PyObject* module = PyImport_ImportModule(dotted_name.c_str()); //new ref
-    if (module == NULL) {
+    if (module == nullptr) {
         fprintf(stderr, "[Python] Error loading module: '%s' (python exception details below)\n", dotted_name.c_str());
         PrintPythonExceptionDetails();
         return VirtualObj();
@@ -85,7 +83,7 @@ void PythonWrapper::Finalize() {
 }
 
 void PythonWrapper::PrintPythonExceptionDetails() {
-    if(PyErr_Occurred() == NULL) {
+    if(PyErr_Occurred() == nullptr) {
         puts("No Exception.");
         return;
     }
@@ -94,15 +92,15 @@ void PythonWrapper::PrintPythonExceptionDetails() {
     PyErr_NormalizeException(&exc_typ,&exc_val,&exc_tb);
 
     temp = PyObject_GetAttrString(exc_typ, "__name__");
-    if (temp != NULL) {
+    if (temp != nullptr) {
         fprintf(stderr, "%s: ", PyString_AsString(temp));
         Py_DECREF(temp);
     }
     Py_DECREF(exc_typ);
 
-    if(exc_val != NULL) {
+    if(exc_val != nullptr) {
         temp = PyObject_Str(exc_val);
-        if (temp != NULL) {
+        if (temp != nullptr) {
             fprintf(stderr, "%s", PyString_AsString(temp));
             Py_DECREF(temp);
         }
@@ -110,13 +108,13 @@ void PythonWrapper::PrintPythonExceptionDetails() {
     }
 
     fprintf(stderr, "\n");
-    if(exc_tb == NULL) return;
+    if(exc_tb == nullptr) return;
     
     PyObject *pName = PyString_FromString("traceback");
     PyObject *pModule = PyImport_Import(pName);
     Py_DECREF(pName);
     
-    if(pModule == NULL) return;
+    if(pModule == nullptr) return;
 
     PyObject *pFunc = PyObject_GetAttrString(pModule, "format_tb");
     
@@ -125,7 +123,7 @@ void PythonWrapper::PrintPythonExceptionDetails() {
         PyTuple_SetItem(pArgs, 0, exc_tb);
 
         PyObject *pValue = PyObject_CallObject(pFunc, pArgs);
-        if (pValue != NULL) {
+        if (pValue != nullptr) {
             Py_ssize_t len = PyList_Size(pValue);
             PyObject *t;
             for (Py_ssize_t i = 0; i < len; i++) {

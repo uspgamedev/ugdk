@@ -124,7 +124,7 @@ IntervalKDTree<T, DIMENSIONS>::IntervalKDTree (
     max_elements_per_leaf_(_max_elements_per_leaf), 
     tree_bounding_box_(_tree_bounding_box), 
     container_items_() {
-        root_ = new Node<T, DIMENSIONS>(this, NULL, 0, _tree_bounding_box);
+        root_ = new Node<T, DIMENSIONS>(this, nullptr, 0, _tree_bounding_box);
 #ifdef DEBUG
     max_height_ = 0;
 #endif
@@ -141,7 +141,7 @@ void IntervalKDTree<T, DIMENSIONS>::Clear () {
     container_items_.clear ();
     root_->Clear ();
     delete root_;
-    root_ = new Node<T,DIMENSIONS> (this, NULL, 0, tree_bounding_box_);
+    root_ = new Node<T,DIMENSIONS> (this, nullptr, 0, tree_bounding_box_);
 }
 
 template <class T, int DIMENSIONS>
@@ -216,7 +216,7 @@ void IntervalKDTree<T, DIMENSIONS>::PrintTree () {
 
 template <int DIMENSIONS>
 Box<DIMENSIONS>::Box (const Coordinate *min_coordinates, const Coordinate *max_coordinates) {
-    if (min_coordinates != NULL && max_coordinates != NULL) {
+    if (min_coordinates != nullptr && max_coordinates != nullptr) {
         for (int k = 0; k < DIMENSIONS; ++k) {
             min_coordinates_[k] = min_coordinates[k];
             max_coordinates_[k] = max_coordinates[k];
@@ -315,13 +315,13 @@ Node<T, DIMENSIONS>::Node (IntervalKDTree<T, DIMENSIONS> * const tree,
     Node *parent, int depth,
     Coordinate *min_coordinates, Coordinate *max_coordinates) :
     super (min_coordinates, max_coordinates), depth_(depth), has_children_(false), 
-    tree_(tree), parent_(parent), low_child_(NULL), high_child_(NULL) {}
+    tree_(tree), parent_(parent), low_child_(nullptr), high_child_(nullptr) {}
 
 template <class T, int DIMENSIONS>
 Node<T, DIMENSIONS>::Node (IntervalKDTree<T, DIMENSIONS> * const tree,
     Node *parent, int depth, const Box<DIMENSIONS>& coordinates) :
     super (coordinates), depth_(depth), has_children_(false), 
-    tree_(tree), parent_(parent), low_child_(NULL), high_child_(NULL) {}
+    tree_(tree), parent_(parent), low_child_(nullptr), high_child_(nullptr) {}
 
 template <class T, int DIMENSIONS>
 Node<T, DIMENSIONS>::~Node () {
@@ -440,9 +440,9 @@ void Node<T, DIMENSIONS>::Merge () {
             (*it)->set_container_node (this);
         }
         delete low_child_;
-        low_child_ = NULL;
+        low_child_ = nullptr;
         delete high_child_;
-        high_child_ = NULL;
+        high_child_ = nullptr;
         has_children_ = false;
         if (parent_)
             parent_->Merge();
@@ -455,9 +455,9 @@ void Node<T, DIMENSIONS>::Clear () {
         low_child_->Clear ();
         high_child_->Clear ();
         delete low_child_;
-        low_child_ = NULL;
+        low_child_ = nullptr;
         delete high_child_;
-        high_child_ = NULL;
+        high_child_ = nullptr;
     }
     for (typename std::list<Item<T, DIMENSIONS> *>::iterator it
                 = items_.begin(); it != items_.end(); ++it) {

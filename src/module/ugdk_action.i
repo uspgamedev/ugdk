@@ -9,7 +9,6 @@
 %{
 
 #include <ugdk/action/mediaplayer.h>
-#include <ugdk/action/task.h>
 #include <ugdk/action/entity.h>
 #include <ugdk/action/observer.h>
 #include <ugdk/action/scene.h>
@@ -41,7 +40,6 @@ proxy_class(ugdk::action::Task)
 %ignore ugdk::action::Entity::OnSceneAdd(Scene* scene);
 
 %include <ugdk/action/mediaplayer.h>
-%include <ugdk/action/task.h>
 %include <ugdk/action/entity.h>
 %include <ugdk/action/observer.h>
 %include <ugdk/action/scene.h>
@@ -59,7 +57,6 @@ namespace action {
     export_class(Entity)
     export_class(Observer)
     export_class(Scene)
-    export_class(Task)
     export_class(SpriteAnimation)
     export_class(SpriteAnimationFrame)
 }

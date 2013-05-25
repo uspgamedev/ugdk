@@ -1,7 +1,6 @@
 
 #include <algorithm>
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(functional)
+#include <functional>
 
 #include <ugdk/script/languages/lua/luadata.h>
 #include <ugdk/script/languages/lua/datagear.h>
@@ -26,7 +25,7 @@ void* LuaData::Unwrap(const VirtualType& type, bool disown) const {
         .Arg(id_)
         .Arg(type.FromLang(LANG(Lua)))
         .Arg(static_cast<int>(disown))
-        .GetResult<UData>(NULL);
+        .GetResult<UData>(nullptr);
 }
 
 template <class T>
@@ -38,7 +37,7 @@ T UnwrapPrimitive(LuaWrapper* wrapper, const DataID id, const T default_value) {
 }
 
 const char* LuaData::UnwrapString() const {
-    return UnwrapPrimitive<const char*>(wrapper_, id_, NULL);
+    return UnwrapPrimitive<const char*>(wrapper_, id_, nullptr);
 }
 
 bool LuaData::UnwrapBoolean() const {
@@ -136,7 +135,7 @@ VirtualData::Ptr LuaData::Execute(const vector<Ptr>& args) {
     std::for_each(
         args.begin(),
         args.end(),
-        std::tr1::mem_fn(&VirtualData::AddToBuffer)
+        std::mem_fn(&VirtualData::AddToBuffer)
     );
     return wrapper_->OperateBuffer(id_, DataGear::Execute);
 }

@@ -5,14 +5,14 @@
 namespace ugdk {
 namespace audio {
 
-Sample::Sample(const std::string& filepath) : data_(NULL), channel_(-1), volume_(1.0) {
+Sample::Sample(const std::string& filepath) : data_(nullptr), channel_(-1), volume_(1.0) {
     data_ = Mix_LoadWAV(filepath.c_str());
 }
 
 Sample::~Sample() {
     if(data_) {
         Mix_FreeChunk(data_);
-        data_ = NULL;
+        data_ = nullptr;
     }
 }
 

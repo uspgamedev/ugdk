@@ -22,7 +22,7 @@ public:
     static ScriptManager* ref() {
         return ref_ ? ref_ : ref_ = new ScriptManager;
     }
-    ~ScriptManager() { ref_ = NULL; }
+    ~ScriptManager() { ref_ = nullptr; }
 
     bool Initialize();
     void Finalize();

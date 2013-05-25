@@ -10,7 +10,7 @@
 namespace ugdk {
 namespace graphic {
 
-opengl::ShaderProgram* DEFAULT_SHADERS[4] = { NULL, NULL, NULL, NULL };
+opengl::ShaderProgram* DEFAULT_SHADERS[4] = { nullptr, nullptr, nullptr, nullptr };
 
 opengl::ShaderProgram* CreateShader(bool light_system, bool color_text_mode) {
     opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
@@ -78,7 +78,7 @@ opengl::ShaderProgram* LightSystemTextShader() {
 }
 
 opengl::ShaderProgram* LightShader() {
-    static opengl::ShaderProgram* myprogram = NULL;
+    static opengl::ShaderProgram* myprogram = nullptr;
     if(!myprogram) {
         opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 

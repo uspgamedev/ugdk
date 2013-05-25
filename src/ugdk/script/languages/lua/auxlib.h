@@ -2,8 +2,8 @@
 #ifndef UGDK_SCRIPT_LUA_AUXLIB_H_
 #define UGDK_SCRIPT_LUA_AUXLIB_H_
 
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(functional)
+
+#include <functional>
 
 #include <ugdk/script/languages/lua/header.h>
 #include <ugdk/script/languages/lua/primitive.h>
@@ -28,13 +28,13 @@ class AuxLib {
 
     const Constant loadfile(const char* filename) {
         return Constant(
-            std::tr1::bind(luaL_loadfile, L_, filename)
+            std::bind(luaL_loadfile, L_, filename)
         );
     }
 
     const Constant loadstring(const char* str) {
         return Constant(
-            std::tr1::bind(luaL_loadstring, L_, str)
+            std::bind(luaL_loadstring, L_, str)
         );
     }
 

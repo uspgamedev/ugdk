@@ -106,27 +106,27 @@ Texture* Texture::CreateFromFile(const std::string& filepath) {
     std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
     SDL_Surface* data = IMG_Load(fullpath.c_str());
 
-    if(data == NULL) {
+    if(data == nullptr) {
         fprintf(stderr, "UGDK::Texture::CreateFromFile Error - No data loaded from file.\n");
-        return NULL;
+        return nullptr;
 
     } else {
         Texture* tex = CreateFromSurface(data);
-        if(data != NULL) SDL_FreeSurface(data);
+        if(data != nullptr) SDL_FreeSurface(data);
         return tex;
     }
 }
 
 Texture* Texture::CreateFromSurface(SDL_Surface* data) {
-    if(data == NULL) {
+    if(data == nullptr) {
         fprintf(stderr, "UGDK::Texture::CreateFromSurface Error - No Data\n");
-        return NULL; // Safeguard from NULL
+        return nullptr; // Safeguard from nullptr
     }
 
     GLuint gltex;
     int texture_width, texture_height;
     bool result = ConvertSurfaceToTexture(data, &gltex, &texture_width, &texture_height);
-    if(!result) return NULL;
+    if(!result) return nullptr;
 
     return new Texture(gltex, texture_width, texture_height);
 }

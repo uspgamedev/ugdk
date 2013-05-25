@@ -101,7 +101,7 @@ void InputManager::UpdateDevices() {
     
     // atualiza mouse
     for(i = 0; i < 5; i++) {
-        if(SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(i))
+        if(SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(i))
             mousestate_now_[i] = true;
         else
             mousestate_now_[i] = false;

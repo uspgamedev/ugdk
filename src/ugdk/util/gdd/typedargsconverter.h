@@ -6,8 +6,7 @@
 #include <vector>
 #include <utility>
 #include <cstdio>
-#include <ugdk/portable/tr1.h>
-#include FROM_TR1(tuple)
+#include <tuple>
 
 #include <ugdk/util/gdd/types.h>
 #include <ugdk/util/gdd/typeconverter.h>
@@ -15,9 +14,9 @@
 namespace ugdk {
 namespace gdd {
 
-using std::tr1::function;
-using std::tr1::tuple;
-using std::tr1::get;
+using std::function;
+using std::tuple;
+using std::get;
 
 static bool error(LoadError::Type error_type, const std::string &msg) {
     switch (error_type) {
