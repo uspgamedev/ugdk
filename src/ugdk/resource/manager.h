@@ -20,12 +20,6 @@ class Manager {
     Manager();
     ~Manager();
     
-    static graphic::Texture*                GetTextureFromTag        (const std::string& tag);
-    static graphic::Texture*                GetTextureFromFile       (const std::string& file);
-    static graphic::Spritesheet*            GetSpritesheetFromTag    (const std::string& tag);
-    static action::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
-    static ugdk::LanguageWord*              GetLanguageWord(const std::string& tag);
-
     // Generic Methods
     template <class T>
     void add_container(ResourceContainer<T>* container) {

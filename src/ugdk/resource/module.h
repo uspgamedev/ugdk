@@ -15,6 +15,12 @@ void Release();
 /// Getter for the manager of the module.
 Manager* manager();
 
+graphic::Texture*                GetTextureFromTag        (const std::string& tag);
+graphic::Texture*                GetTextureFromFile       (const std::string& file);
+graphic::Spritesheet*            GetSpritesheetFromTag    (const std::string& tag);
+action::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
+ugdk::LanguageWord*              GetLanguageWord(const std::string& tag);
+
 } // namespace resource
 } // namespace ugdk
 
