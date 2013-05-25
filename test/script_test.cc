@@ -1,4 +1,4 @@
-#include <ugdk/config/config.h>
+#include <ugdk/common/config.h>
 
 #ifdef UGDK_PYTHON_ENABLED
 #include <Python.h>
