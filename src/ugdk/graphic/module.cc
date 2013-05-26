@@ -19,7 +19,8 @@ bool Initialize(Manager* manager) {
 }
 
 void Release() {
-    reference_->Release();
+    if(reference_)
+        reference_->Release();
     delete reference_;
     reference_ = nullptr;
 }

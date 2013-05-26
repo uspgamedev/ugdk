@@ -20,9 +20,7 @@ class Manager {
     bool Initialize();
 
     /// Frees all audio samples and music, and closes the audio channels.
-    /** @return True if successfull, false otherwise.
-     */
-    bool Release();
+    void Release();
 
     /// Logical update. Currently does nothing.
     void Update();

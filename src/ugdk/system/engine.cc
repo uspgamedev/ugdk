@@ -35,7 +35,7 @@ ugdk::math::Vector2D Engine::window_size() {
 
 bool Engine::Initialize(const Configuration& configuration) {
     quit_ = false;
-    SDL_Init(SDL_INIT_EVERYTHING);
+    SDL_Init(0);
 
     path_manager_     = new           PathManager(configuration.base_path);
     language_manager_ = new       LanguageManager(configuration.default_language);

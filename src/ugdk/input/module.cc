@@ -6,7 +6,7 @@ namespace input {
 static Manager* reference_ = nullptr;
 
 bool Initialize(Manager* manager) {
-    if(manager) {
+    if(manager && manager->Initialize()) {
         // The manager initialized correctly, so we can use it.
         reference_ = manager;
         return true;
@@ -19,6 +19,8 @@ bool Initialize(Manager* manager) {
 }
 
 void Release() {
+    if(reference_)
+        reference_->Release();
     delete reference_;
     reference_ = nullptr;
 }

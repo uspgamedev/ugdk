@@ -18,6 +18,10 @@ Manager::~Manager() {
 }
 
 bool Manager::Initialize() {
+
+    if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+        return false;
+
     // inicializa SDL_mixer
     if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) != 0)
         return false;
@@ -31,13 +35,10 @@ bool Manager::Initialize() {
     return true;
 }
 
-bool Manager::Release() {
+void Manager::Release() {
     ReleaseSamples();
     ReleaseMusics();
     Mix_CloseAudio();
-
-    // sucesso ;)
-    return true;
 }
 
 void Manager::Update() {

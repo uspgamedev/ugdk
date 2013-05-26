@@ -33,7 +33,8 @@ class Manager {
     void Configure(const std::string& title, const ugdk::math::Vector2D& size, 
                    const VideoSettings& settings, const std::string& icon);
     bool Initialize();
-    bool Release();
+    void Release();
+
     void Render(const std::list<action::Scene*>&);
 
     // Configuration

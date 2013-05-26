@@ -8,7 +8,15 @@ namespace input {
 
 using math::Vector2D;
 
-Manager::Manager() {
+Manager::Manager() {}
+
+Manager::~Manager() {}
+
+bool Manager::Initialize() {
+
+    if(SDL_InitSubSystem(SDL_INIT_JOYSTICK) < 0)
+        return false;
+
     SDL_GetKeyState(&kbsize_);
     keystate_now_ = new bool[kbsize_];
     keystate_last_ = new bool[kbsize_];
@@ -24,7 +32,7 @@ Manager::Manager() {
     Update();
 }
 
-Manager::~Manager() {
+void Manager::Release() {
     delete[] keystate_now_;
     delete[] keystate_last_;
 }

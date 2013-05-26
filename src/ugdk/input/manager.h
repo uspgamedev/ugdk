@@ -14,6 +14,12 @@ class Manager {
     Manager();
     ~Manager();
 
+    /// Initializes input libraries.
+    /** @return True if successful, false otherwise.
+     */
+    bool Initialize();
+    void Release();
+
     void Update();
     ugdk::math::Vector2D GetMousePosition(void);
     void ShowCursor(bool toggle);

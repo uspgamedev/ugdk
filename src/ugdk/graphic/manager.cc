@@ -8,6 +8,7 @@
 #   include "GL/wglew.h"
 #endif
 #define NO_SDL_GLEXT
+#include "SDL.h"
 #include "SDL_opengl.h"
 
 #include <ugdk/system/engine.h>
@@ -49,6 +50,9 @@ void Manager::Configure(const string& title, const ugdk::math::Vector2D& size,
 // resolucao para o programa. Retorna true em caso de
 // sucesso.
 bool Manager::Initialize() {
+
+    if(SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
+        return false;
     
     // Set window title.
     SDL_WM_SetCaption(title_.c_str(), (icon_.length() > 0) ? icon_.c_str() : nullptr );
@@ -134,13 +138,10 @@ bool Manager::ChangeResolution(const ugdk::math::Vector2D& size, bool fullscreen
     return true;
 }
 
-// Termina o gerenciador de video, retornando true em
-// caso de sucesso.
-bool Manager::Release() {
+void Manager::Release() {
     /*if(GLEW_ARB_framebuffer_object) {
         glDeleteFramebuffersEXT(1, &light_buffer_id_);
     }*/
-    return true;
 }
 
 void Manager::SetVSync(const bool active) {
