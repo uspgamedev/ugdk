@@ -10,7 +10,7 @@
 
 #include <ugdk/system/engine.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/module.h>
 #include <ugdk/graphic/drawable/label.h>
 #include <ugdk/graphic/drawable/textbox.h>
 #include <ugdk/graphic/font.h>
@@ -45,7 +45,7 @@ bool TextManager::Release() {
 
 TextBox* TextManager::GetText(const std::wstring& text, const std::string& fonttag, int width) {
     Font *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
-    return new TextBox(text, (width == -1) ? VIDEO_MANAGER()->video_size().x : width, font);
+    return new TextBox(text, (width == -1) ? graphic::manager()->video_size().x : width, font);
 }
 
 TextBox* TextManager::GetText(const std::wstring& text) {

@@ -55,6 +55,10 @@ SET(UGDK_SRC
     src/ugdk/graphic/geometry.h 
     src/ugdk/graphic/light.cc 
     src/ugdk/graphic/light.h 
+    src/ugdk/graphic/manager.cc 
+    src/ugdk/graphic/manager.h 
+    src/ugdk/graphic/module.cc 
+    src/ugdk/graphic/module.h 
     src/ugdk/graphic/node.cc 
     src/ugdk/graphic/node.h 
     src/ugdk/graphic/opengl/Exception.cc 
@@ -71,8 +75,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/textmanager.h 
     src/ugdk/graphic/texture.cc 
     src/ugdk/graphic/texture.h 
-    src/ugdk/graphic/videomanager.cc 
-    src/ugdk/graphic/videomanager.h 
     src/ugdk/graphic/visualeffect.h 
     src/ugdk/input.h 
     src/ugdk/input/keys.h 

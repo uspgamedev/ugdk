@@ -13,10 +13,9 @@
 
 #include <ugdk/system/engine.h>
 #include <ugdk/common/types.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/module.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
-#include <ugdk/math/frame.h>
 #include <ugdk/graphic/font.h>
 
 namespace ugdk {
@@ -98,8 +97,8 @@ void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     
     if(draw_setup_function_) draw_setup_function_(this, geometry, effect);
 
-    VIDEO_MANAGER()->shaders().ChangeFlag(VideoManager::Shaders::IGNORE_TEXTURE_COLOR, true);
-    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->shaders().current_shader());
+    graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
+    opengl::ShaderProgram::Use shader_use(graphic::manager()->shaders().current_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
@@ -118,7 +117,7 @@ void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     // Draw the triangle !
     glDrawArrays(GL_QUADS, 0, message_.size() * 4); // 12*3 indices starting at 0 -> 12 triangles
     
-    VIDEO_MANAGER()->shaders().ChangeFlag(VideoManager::Shaders::IGNORE_TEXTURE_COLOR, false);
+    graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
 }
 
 }  // namespace graphic

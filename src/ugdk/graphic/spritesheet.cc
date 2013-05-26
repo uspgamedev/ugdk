@@ -11,15 +11,15 @@
 
 #include <ugdk/graphic/spritesheet.h>
 
-#include <ugdk/system/engine.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/util/pathmanager.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/module.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
+#include <ugdk/system/engine.h>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>
@@ -161,7 +161,7 @@ void Spritesheet::Draw(int frame_number, const ugdk::math::Vector2D& hotspot, co
         mat[0].y + mat[1].y + mat[3].y > 1)
         return;
     // Use our shader
-    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->shaders().current_shader());
+    opengl::ShaderProgram::Use shader_use(graphic::manager()->shaders().current_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform

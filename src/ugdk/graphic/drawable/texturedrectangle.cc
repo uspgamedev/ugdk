@@ -5,9 +5,8 @@
 //#define GLM_SWIZZLE 
 #include <glm/glm.hpp>
 
-#include <ugdk/system/engine.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/module.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/math/integer2D.h>
@@ -41,7 +40,7 @@ void TexturedRectangle::Draw(const Geometry& geometry, const VisualEffect& effec
     if(draw_setup_function_) draw_setup_function_(this, geometry, effect);
     
     // Use our shader
-    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->shaders().current_shader());
+    opengl::ShaderProgram::Use shader_use(graphic::manager()->shaders().current_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform

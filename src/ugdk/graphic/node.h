@@ -25,7 +25,7 @@ class Node {
 
     ~Node();
 
-    /// Pushes the modifier to the VideoManager, renders 
+    /// Pushes the modifier to the Manager, renders 
     void Render(const Geometry&, const VisualEffect&) const;
     void RenderLight(const Geometry& parent, const VisualEffect&) const;
 

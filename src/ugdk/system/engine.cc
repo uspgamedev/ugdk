@@ -7,7 +7,8 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/audio/module.h>
 #include <ugdk/audio/manager.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/module.h>
+#include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/input/module.h>
 #include <ugdk/input/manager.h>
@@ -36,20 +37,24 @@ bool Engine::Initialize(const Configuration& configuration) {
     quit_ = false;
     SDL_Init(SDL_INIT_EVERYTHING);
 
-    video_manager_    = new graphic::VideoManager();
-    text_manager_     = new graphic:: TextManager();
     path_manager_     = new           PathManager(configuration.base_path);
     language_manager_ = new       LanguageManager(configuration.default_language);
     
     std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";
 
-    video_manager_->Initialize(configuration.window_title, configuration.window_size, configuration.fullscreen, icon_path);
-
+    graphic::Manager* graphic_manager = new graphic::Manager;
+    if(graphic_manager) {
+        graphic_manager->Configure(configuration.window_title, configuration.window_size, 
+                        graphic::VideoSettings(configuration.fullscreen, true, false), icon_path);
+        graphic::Initialize(graphic_manager);
+    }
     audio::Initialize(new audio::Manager);
     input::Initialize(new input::Manager);
     resource::Initialize(new resource::Manager);
     time::Initialize(new time::Manager);
-     text_manager_->Initialize();
+    
+    text_manager_ = new graphic:: TextManager();
+    text_manager_->Initialize();
 
     if (!SCRIPT_MANAGER()->Initialize())
         puts("Failed to initialize script manager.");

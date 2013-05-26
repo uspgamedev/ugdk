@@ -11,19 +11,28 @@
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/geometry.h>
 
-#define VIDEO_MANAGER() (ugdk::Engine::reference()->video_manager())
-
 namespace ugdk {
 namespace graphic {
 
-class VideoManager {
+struct VideoSettings {
+    bool fullscreen;
+    bool vsync;
+    bool light_system;
+
+    VideoSettings();
+    VideoSettings(bool fs, bool vs, bool light) : fullscreen(fs), vsync(vs), light_system(light) {}
+};
+
+class Manager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : settings_(false, false, false), light_buffer_(nullptr), white_texture_(nullptr), light_shader_(nullptr) {}
-    ~VideoManager() {}
+    Manager();
+    ~Manager() {}
 
-    bool Initialize(const std::string& title, const ugdk::math::Vector2D& size, bool fullscreen, const std::string& icon);
+    void Configure(const std::string& title, const ugdk::math::Vector2D& size, 
+                   const VideoSettings& settings, const std::string& icon);
+    bool Initialize();
     bool Release();
     void Render(const std::list<action::Scene*>&);
 
@@ -74,7 +83,7 @@ class VideoManager {
         opengl::ShaderProgram* shaders_[1 << NUM_FLAGS];
         std::bitset<NUM_FLAGS> flags_;
 
-        friend class VideoManager;
+        friend class Manager;
     };
 
     Shaders& shaders() { return shaders_; }
@@ -82,15 +91,10 @@ class VideoManager {
 
   private:
     ugdk::math::Vector2D video_size_;
-    std::string title_;
+    ugdk::math::Vector2D default_resolution_;
+    std::string title_, icon_;
 
-    struct Settings {
-        bool fullscreen;
-        bool vsync;
-        bool light_system;
-
-        Settings(bool fs, bool vs, bool light) : fullscreen(fs), vsync(vs), light_system(light) {}
-    } settings_;
+    VideoSettings settings_;
 
     Texture* light_buffer_;
     Texture* white_texture_;

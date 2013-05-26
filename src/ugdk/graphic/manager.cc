@@ -1,4 +1,4 @@
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/manager.h>
 
 #include <cmath>
 #include <cassert>
@@ -26,24 +26,40 @@ namespace graphic {
 using std::string;
 
 static ugdk::math::Vector2D default_resolution(800.0, 600.0);
+    
+VideoSettings::VideoSettings()
+    : fullscreen(false), vsync(true), light_system(false) {}
+
+Manager::Manager() 
+    :   default_resolution_(800.0, 600.0),
+        settings_(false, false, false), 
+        light_buffer_(nullptr), 
+        white_texture_(nullptr), 
+        light_shader_(nullptr) {}
+
+void Manager::Configure(const string& title, const ugdk::math::Vector2D& size, 
+                            const VideoSettings& settings, const string& icon) {
+    title_ = title;
+    default_resolution_ = size;
+    settings_ = settings;
+    icon_ = icon;
+}
 
 // Inicializa o gerenciador de video, definindo uma
 // resolucao para o programa. Retorna true em caso de
 // sucesso.
-bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& size, bool fullscreen, const string& icon) {
-    title_ = title;
+bool Manager::Initialize() {
     
     // Set window title.
-    SDL_WM_SetCaption(title.c_str(), (icon.length() > 0) ? icon.c_str() : nullptr );
+    SDL_WM_SetCaption(title_.c_str(), (icon_.length() > 0) ? icon_.c_str() : nullptr );
     
-    if(icon.length() > 0)
-        SDL_WM_SetIcon(SDL_LoadBMP(icon.c_str()), nullptr);
+    if(icon_.length() > 0)
+        SDL_WM_SetIcon(SDL_LoadBMP(icon_.c_str()), nullptr);
        
-    if(ChangeResolution(size, fullscreen) == false)
-        if(ChangeResolution(default_resolution, false) == false) {
-            /* TODO: insert error message here. */
-            return false;
-        }
+    if(ChangeResolution(default_resolution_, settings_.fullscreen) == false) {
+        /* TODO: insert error message here. */
+        return false;
+    }
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
@@ -55,12 +71,12 @@ bool VideoManager::Initialize(const string& title, const ugdk::math::Vector2D& s
 
 // Changes the resolution to the requested value.
 // Returns true on success.
-bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fullscreen) {
+bool Manager::ChangeResolution(const ugdk::math::Vector2D& size, bool fullscreen) {
     Uint32 flags = SDL_OPENGL;
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     if(fullscreen) flags |= SDL_FULLSCREEN;
 
-    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), VideoManager::COLOR_DEPTH, flags) == nullptr)
+    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), Manager::COLOR_DEPTH, flags) == nullptr)
         return false;
       
     GLenum err = glewInit();
@@ -120,14 +136,14 @@ bool VideoManager::ChangeResolution(const ugdk::math::Vector2D& size, bool fulls
 
 // Termina o gerenciador de video, retornando true em
 // caso de sucesso.
-bool VideoManager::Release() {
+bool Manager::Release() {
     /*if(GLEW_ARB_framebuffer_object) {
         glDeleteFramebuffersEXT(1, &light_buffer_id_);
     }*/
     return true;
 }
 
-void VideoManager::SetVSync(const bool active) {
+void Manager::SetVSync(const bool active) {
     settings_.vsync = active;
     //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions.
 #ifdef _WIN32
@@ -136,7 +152,7 @@ void VideoManager::SetVSync(const bool active) {
 #endif
 }
 
-void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
+void Manager::mergeLights(const std::list<action::Scene*>& scene_list) {
     // Lights are simply added together.
     glBlendFunc(GL_ONE, GL_ONE);
 
@@ -160,7 +176,7 @@ void VideoManager::mergeLights(const std::list<action::Scene*>& scene_list) {
 }
 
 // Desenha backbuffer na tela
-void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
+void Manager::Render(const std::list<action::Scene*>& scene_list) {
 
     // Draw all lights to a buffer, merging then to a light texture.
     if(settings_.light_system) {
@@ -193,7 +209,7 @@ void VideoManager::Render(const std::list<action::Scene*>& scene_list) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void VideoManager::initializeLight() {
+void Manager::initializeLight() {
     if(light_buffer_ != nullptr) delete light_buffer_;
     light_buffer_ = Texture::CreateRawTexture(static_cast<int>(video_size_.x), static_cast<int>(video_size_.y));
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
@@ -216,27 +232,27 @@ void VideoManager::initializeLight() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-const opengl::ShaderProgram* VideoManager::Shaders::current_shader() const {
+const opengl::ShaderProgram* Manager::Shaders::current_shader() const {
     return shaders_[flags_.to_ulong()];
 }
 
-void VideoManager::Shaders::ChangeFlag(Flag flag, bool value) {
+void Manager::Shaders::ChangeFlag(Flag flag, bool value) {
     int flag_bit = static_cast<int>(flag);
     flags_[flag_bit] = value;
 }
 
-void VideoManager::Shaders::ReplaceShader(const std::bitset<NUM_FLAGS>& flags, opengl::ShaderProgram* program) {
+void Manager::Shaders::ReplaceShader(const std::bitset<NUM_FLAGS>& flags, opengl::ShaderProgram* program) {
     delete shaders_[flags.to_ulong()];
     shaders_[flags.to_ulong()] = program;
 }
 
-VideoManager::Shaders::Shaders() {
+Manager::Shaders::Shaders() {
     unsigned long max_flags = 1 << NUM_FLAGS;
     for(unsigned long i = 0; i < max_flags; ++i)
         shaders_[i] = nullptr;
 }
         
-VideoManager::Shaders::~Shaders() {
+Manager::Shaders::~Shaders() {
     unsigned long max_flags = 1 << NUM_FLAGS;
     for(unsigned long i = 0; i < max_flags; ++i)
         delete shaders_[i];

@@ -26,7 +26,7 @@ class Spritesheet;
 
 // Managers
 class TextManager;
-class VideoManager;
+class Manager;
 
 namespace opengl {
 class Shader;

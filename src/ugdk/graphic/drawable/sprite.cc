@@ -3,7 +3,7 @@
 #include <ugdk/system/engine.h>
 #include <ugdk/resource/module.h>
 #include <ugdk/graphic/spritesheet.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/action/animationplayer.h>
