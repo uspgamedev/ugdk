@@ -36,21 +36,29 @@ bool Engine::Initialize(const Configuration& configuration) {
     path_manager_     = new           PathManager(configuration.base_path);
     language_manager_ = new       LanguageManager(configuration.default_language);
     
-    std::string icon_path = (configuration.window_icon.length() > 0) ? path_manager_->ResolvePath(configuration.window_icon) : "";
-
-    graphic::Manager* graphic_manager = new graphic::Manager;
-    if(graphic_manager) {
-        graphic_manager->Configure(configuration.window_title, configuration.window_size, 
-                        graphic::VideoSettings(configuration.fullscreen, true, false), icon_path);
-        graphic::Initialize(graphic_manager);
+    if(configuration.graphic_enabled) {
+        graphic::Manager* graphic_manager = new graphic::Manager;
+        if(graphic_manager) {
+            std::string icon_path = (configuration.window_icon.length() > 0) ? 
+                                        path_manager_->ResolvePath(configuration.window_icon) : "";
+            graphic_manager->Configure(configuration.window_title, configuration.window_size, 
+                            graphic::VideoSettings(configuration.fullscreen, true, false), icon_path);
+            graphic::Initialize(graphic_manager);
+        }
     }
-    audio::Initialize(new audio::Manager);
-    input::Initialize(new input::Manager);
+    if(configuration.audio_enabled)
+        audio::Initialize(new audio::Manager);
+    
+    if(configuration.input_enabled)
+        input::Initialize(new input::Manager);
+
     resource::Initialize(new resource::Manager);
     time::Initialize(new time::Manager);
     
-    text_manager_ = new graphic:: TextManager();
-    text_manager_->Initialize();
+    if(graphic::manager()) {
+        text_manager_ = new graphic:: TextManager();
+        text_manager_->Initialize();
+    }
 
     if (!SCRIPT_MANAGER()->Initialize())
         puts("Failed to initialize script manager.");
@@ -159,8 +167,10 @@ void Engine::Run() {
 }
 
 void Engine::Release() {
-    text_manager_->Release();
-    delete text_manager_;
+    if(text_manager_) {
+        text_manager_->Release();
+        delete text_manager_;
+    }
 
     audio::Release();
     input::Release();

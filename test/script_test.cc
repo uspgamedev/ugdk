@@ -43,6 +43,9 @@ static bool PythonTests() {
 int main(int argc, char **argv) {
     ugdk::Configuration config;
     config.base_path = "data/";
+    config.audio_enabled = false;
+    config.input_enabled = false;
+    config.graphic_enabled = false;
     
     ugdk::script::InitScripts();
     
