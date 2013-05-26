@@ -21,7 +21,7 @@ class Drawable {
     virtual void Draw(const Geometry&, const VisualEffect&) const = 0;
     virtual const ugdk::math::Vector2D& size() const = 0;
 
-    void set_draw_setup_function(const std::tr1::function<void (const Drawable*, const Geometry&, const VisualEffect&)> &func) {
+    void set_draw_setup_function(const std::function<void (const Drawable*, const Geometry&, const VisualEffect&)> &func) {
         draw_setup_function_ = func;
     }
 
@@ -48,7 +48,7 @@ class Drawable {
     Drawable() {}
 
     ugdk::math::Vector2D hotspot_;
-    std::tr1::function<void (const Drawable*, const Geometry&, const VisualEffect&)> draw_setup_function_;
+    std::function<void (const Drawable*, const Geometry&, const VisualEffect&)> draw_setup_function_;
 };
 
 }  // namespace graphic
