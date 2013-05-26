@@ -6,7 +6,7 @@ namespace graphic {
 static Manager* reference_ = nullptr;
 
 bool Initialize(Manager* manager) {
-    if(manager && reference_->Initialize()) {
+    if(manager && manager->Initialize()) {
         // The manager initialized correctly, so we can use it.
         reference_ = manager;
         return true;

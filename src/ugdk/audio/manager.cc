@@ -36,8 +36,6 @@ bool Manager::Release() {
     ReleaseMusics();
     Mix_CloseAudio();
 
-    delete this; // Holy crap.
-
     // sucesso ;)
     return true;
 }
