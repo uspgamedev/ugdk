@@ -29,11 +29,6 @@ class Engine {
     /// Returns a pointer to the current Engine. Creates an Engine if there isn't one.
     static Engine* reference() { return reference_ ? reference_ : reference_ = new Engine; }
 
-    /// Returns a reference to the Video Manager.
-    /** @see Manager
-     */
-    graphic::Manager *video_manager() { return video_manager_; }
-
     /// Returns a reference to the Text Manager.
     /** @see TextManager
      */
@@ -48,9 +43,6 @@ class Engine {
     /** @see LanguageManager
      */
     LanguageManager* language_manager() { return language_manager_; }
-
-    /// Returns the window dimensions.
-    ugdk::math::Vector2D window_size();
 
     /** @name Engine Management
      ** @{
@@ -104,7 +96,6 @@ class Engine {
     void DeleteFinishedScenes();
     static Engine         *    reference_;
 
-    graphic::Manager *       video_manager_;
     graphic:: TextManager *        text_manager_;
 	          PathManager *        path_manager_;
           LanguageManager *    language_manager_;
@@ -114,7 +105,6 @@ class Engine {
     uint32 reported_fps_, frames_since_reset_, last_fps_report_;
 
 	Engine() :
-        video_manager_(nullptr),
         text_manager_(nullptr),
         language_manager_(nullptr) {}
 };

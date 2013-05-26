@@ -29,10 +29,6 @@ using namespace input;
 
 Engine* Engine::reference_ = nullptr;
 
-ugdk::math::Vector2D Engine::window_size() {
-    return video_manager_->video_size();
-}
-
 bool Engine::Initialize(const Configuration& configuration) {
     quit_ = false;
     SDL_Init(0);
@@ -143,9 +139,8 @@ void Engine::Run() {
         if (!quit_) {
             CurrentScene()->Update(delta_t);
 
-            // Sends the scene list to the videomanager, who handles everything 
-            // needed to draw
-            video_manager_->Render(scene_list_);
+            if(graphic::manager())
+                graphic::manager()->Render(scene_list_);
 
             ++frames_since_reset_;
             total_fps += 1.0/delta_t;
@@ -164,16 +159,14 @@ void Engine::Run() {
 }
 
 void Engine::Release() {
+    text_manager_->Release();
+    delete text_manager_;
+
     audio::Release();
     input::Release();
     resource::Release();
     time::Release();
-
-    text_manager_->Release();
-    delete text_manager_;
-
-    video_manager()->Release();
-    delete video_manager_;
+    graphic::Release();
 
     SCRIPT_MANAGER()->Finalize();
     delete SCRIPT_MANAGER();
