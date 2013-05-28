@@ -12,7 +12,6 @@
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>
 
-using ugdk::Engine;
 using ugdk::script::VirtualObj;
 
 static bool LuaTests() {
@@ -49,8 +48,7 @@ int main(int argc, char **argv) {
     
     ugdk::script::InitScripts();
     
-    Engine* eng = Engine::reference();
-    eng->Initialize(config);
+    ugdk::Initialize(config);
 
 #ifdef UGDK_LUA_ENABLED
     if(!LuaTests()) puts("LUA FAILED!");
@@ -62,7 +60,7 @@ int main(int argc, char **argv) {
     if(!PythonTests()) puts("PYTHON FAILED!");
 #endif
     
-    eng->Run();
-    eng->Release();
+    ugdk::Run();
+    ugdk::Release();
     return 0;
 }

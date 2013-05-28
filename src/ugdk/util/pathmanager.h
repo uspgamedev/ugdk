@@ -2,7 +2,7 @@
 #define HORUSEYE_FRAMEWORK_PATHMANAGER_H_
 
 #include <string>
-#define PATH_MANAGER() ugdk::Engine::reference()->path_manager()
+#define PATH_MANAGER() ugdk::path_manager()
 
 namespace ugdk {
 

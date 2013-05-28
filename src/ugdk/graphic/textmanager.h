@@ -7,7 +7,7 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic.h>
 
-#define TEXT_MANAGER() ugdk::Engine::reference()->text_manager()
+#define TEXT_MANAGER() ugdk::text_manager()
 
 namespace ugdk {
 namespace graphic {

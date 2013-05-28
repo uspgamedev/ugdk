@@ -24,12 +24,25 @@ using namespace std;
 
 namespace ugdk {
 
-using namespace graphic;
-using namespace input;
+static    graphic:: TextManager *        text_manager_;
+static	          PathManager *        path_manager_;
+static          LanguageManager *    language_manager_;
+static    bool quit_;
+static    std::list<action::Scene*> scene_list_;
 
-Engine* Engine::reference_ = nullptr;
+graphic::TextManager *text_manager() {
+    return text_manager_;
+}
 
-bool Engine::Initialize(const Configuration& configuration) {
+PathManager *path_manager() {
+    return path_manager_;
+}
+
+LanguageManager* language_manager() {
+    return language_manager_;
+}
+
+bool Initialize(const Configuration& configuration) {
     quit_ = false;
     SDL_Init(0);
 
@@ -64,15 +77,10 @@ bool Engine::Initialize(const Configuration& configuration) {
         puts("Failed to initialize script manager.");
 
     scene_list_.clear();
-
-    frames_since_reset_ = reported_fps_ = 0;
-    if(time::manager() != nullptr)
-        last_fps_report_ = time::manager()->TimeElapsed();
-
     return (time::manager() != nullptr);
 }
 
-void Engine::DeleteFinishedScenes() {
+static void DeleteFinishedScenes() {
     std::list<action::Scene*> to_delete;
     for(action::Scene* it : scene_list_)
         if(it->finished())
@@ -84,12 +92,9 @@ void Engine::DeleteFinishedScenes() {
     }
 }
 
-
-
-void Engine::Run() {
-    Key key;
+void Run() {
     SDL_Event event;
-    double delta_t, total_fps = 0;
+    double delta_t;
     action::Scene* current_top_scene = nullptr;
 
     quit_ = false;
@@ -101,7 +106,7 @@ void Engine::Run() {
         DeleteFinishedScenes();
 
         if (CurrentScene() == nullptr)
-            quit();
+            Quit();
         else if(current_top_scene != CurrentScene())
             (current_top_scene = CurrentScene())->Focus();
 
@@ -122,19 +127,20 @@ void Engine::Run() {
 
         // tratamento de eventos
         while(SDL_PollEvent(&event)) {
+            input::Key key;
             switch(event.type) {
                 case SDL_QUIT:
-                    quit();
+                    Quit();
                     break;
 
                 case SDL_KEYDOWN:
-                    key = (Key)event.key.keysym.sym;
+                    key = (input::Key)event.key.keysym.sym;
                     if(input::manager())
                         input::manager()->SimulateKeyPress(key);
                     break;
 
                 case SDL_KEYUP:
-                    key = (Key)event.key.keysym.sym;
+                    key = (input::Key)event.key.keysym.sym;
                     if(input::manager())
                         input::manager()->SimulateKeyRelease(key);
                     break;
@@ -149,14 +155,6 @@ void Engine::Run() {
 
             if(graphic::manager())
                 graphic::manager()->Render(scene_list_);
-
-            ++frames_since_reset_;
-            total_fps += 1.0/delta_t;
-            if(frames_since_reset_ == 10) {
-                reported_fps_ = static_cast<int>(total_fps/10.0);
-                frames_since_reset_ = 0;
-                total_fps = 0;
-            }
         }
     }
     for(action::Scene* it : scene_list_) {
@@ -166,7 +164,7 @@ void Engine::Run() {
     scene_list_.clear();
 }
 
-void Engine::Release() {
+void Release() {
     if(text_manager_) {
         text_manager_->Release();
         delete text_manager_;
@@ -184,16 +182,20 @@ void Engine::Release() {
     SDL_Quit();
 }
 
-void Engine::PushScene(action::Scene* scene) {
+void PushScene(action::Scene* scene) {
     scene_list_.push_back(scene);
 }
 
-action::Scene* Engine::CurrentScene() const {
+action::Scene* CurrentScene() {
     return scene_list_.empty() ? nullptr : scene_list_.back();
 }
 
-void Engine::PopScene() {
+void PopScene() {
     if(!scene_list_.empty()) scene_list_.pop_back();
+}
+
+void Quit() {
+    quit_ = true;
 }
 
 }

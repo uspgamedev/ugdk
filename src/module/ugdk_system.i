@@ -40,7 +40,6 @@ proxy_class(ugdk::action::Scene)
 namespace ugdk {
 	export_class(Color)
 	export_class(Configuration)
-	export_class(Engine)
 }
  
 confirm_exports(ugdk_system)
