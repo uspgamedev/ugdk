@@ -3,7 +3,6 @@
 #include "SDL.h"
 #include "SDL_mixer.h"
 
-#include <ugdk/util/pathmanager.h>
 #include <ugdk/system/engine.h>
 #include <ugdk/audio/sample.h>
 #include <ugdk/audio/music.h>
@@ -57,7 +56,7 @@ void Manager::ReleaseMusics() {
 }
 
 Sample* Manager::LoadSample(const std::string& filepath) {
-	std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
+	std::string fullpath = ugdk::ResolvePath(filepath);
     if(sample_data_.find(filepath) == sample_data_.end()) {
         Sample *sample = new Sample(fullpath);
         if(sample)
@@ -68,7 +67,7 @@ Sample* Manager::LoadSample(const std::string& filepath) {
 }
 
 Music* Manager::LoadMusic(const std::string& filepath) {
-	std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
+	std::string fullpath = ugdk::ResolvePath(filepath);
     if(music_data_.find(filepath) == music_data_.end()) {
         Music *music = new Music(fullpath);
         if(music)

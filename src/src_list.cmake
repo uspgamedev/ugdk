@@ -152,8 +152,6 @@ SET(UGDK_SRC
     src/ugdk/util/languagemanager.h 
     src/ugdk/util/languageword.cc 
     src/ugdk/util/languageword.h 
-    src/ugdk/util/pathmanager.cc 
-    src/ugdk/util/pathmanager.h 
     src/ugdk/util/uncopyable.h 
     src/ugdk/util/utf8.cc 
     src/ugdk/util/utf8.h 

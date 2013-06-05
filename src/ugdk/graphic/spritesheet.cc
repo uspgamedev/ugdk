@@ -12,7 +12,6 @@
 #include <ugdk/graphic/spritesheet.h>
 
 #include <ugdk/math/integer2D.h>
-#include <ugdk/util/pathmanager.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/geometry.h>
@@ -73,7 +72,7 @@ struct PixelSurface {
 };
 
 SpritesheetData::SpritesheetData(const std::string& filename) {
-    std::string filepath = PATH_MANAGER()->ResolvePath(filename);
+    std::string filepath = ugdk::ResolvePath(filename);
     file_data_.push_back(new PixelSurface(filepath));
 #ifdef DEBUG
     if(file_data_.back()->surface == nullptr)
@@ -84,7 +83,7 @@ SpritesheetData::SpritesheetData(const std::string& filename) {
 SpritesheetData::SpritesheetData(const std::list<std::string>& filenames) {
     std::list<std::string>::const_iterator it;
     for(it = filenames.begin(); it != filenames.end(); ++it) {
-        std::string filepath = PATH_MANAGER()->ResolvePath(*it);
+        std::string filepath = ugdk::ResolvePath(*it);
         file_data_.push_back(new PixelSurface(filepath));
 #ifdef DEBUG
         if(file_data_.back()->surface == nullptr)

@@ -34,6 +34,9 @@ PathManager *path_manager();
  */
 LanguageManager* language_manager();
 
+/// Expands the given path with configurated base path.
+std::string ResolvePath(const std::string& path);
+
 /** @name Engine Management
  ** @{
  */

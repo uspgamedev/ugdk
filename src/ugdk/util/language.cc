@@ -8,7 +8,6 @@
 #include <ugdk/graphic/drawable/label.h>
 #include <ugdk/graphic/drawable/textbox.h>
 #include <ugdk/system/engine.h>
-#include <ugdk/util/pathmanager.h>
 #include <ugdk/util/languageword.h>
 #include <ugdk/util/utf8.h>
 
@@ -22,7 +21,7 @@ using std::wstring;
 
 std::wstring LoadTextFromFile(const std::string& path) {
     std::wstring output;
-    std::string fullpath = PATH_MANAGER()->ResolvePath(path);
+    std::string fullpath = ugdk::ResolvePath(path);
 
     FILE *txtFile = fopen(fullpath.c_str(), "r");
     if(txtFile == nullptr) return output;
@@ -150,7 +149,7 @@ static int title_type(char* str) {
 
 // Fills the map with the information on the given file
 bool Language::Load(const std::string& language_file) {
-    FILE* file = fopen(PATH_MANAGER()->ResolvePath(language_file).c_str(), "r");
+    FILE* file = fopen(ugdk::ResolvePath(language_file).c_str(), "r");
     if(file == nullptr)
         return false;
 

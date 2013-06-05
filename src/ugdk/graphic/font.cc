@@ -4,7 +4,6 @@
 #include <freetype-gl++/texture-font.hpp>
 
 #include <ugdk/system/engine.h>
-#include <ugdk/util/pathmanager.h>
 
 namespace ugdk {
 namespace graphic {
@@ -18,7 +17,7 @@ Font::Font(const string& path, double size, int num_glyphs)
     : atlas_(new freetypeglxx::TextureAtlas(512, 512, 1)),
       size_(size) {
     
-    std::string fullpath = PATH_MANAGER()->ResolvePath(path);
+    std::string fullpath = ugdk::ResolvePath(path);
     freetype_font_ = new TextureFont(atlas_, fullpath, static_cast<float>(size));
 }
 

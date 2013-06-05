@@ -16,44 +16,42 @@
 #include <ugdk/resource/manager.h>
 #include <ugdk/time/module.h>
 #include <ugdk/time/manager.h>
-#include <ugdk/util/pathmanager.h>
 #include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
-
-using namespace std;
 
 namespace ugdk {
 
 static    graphic:: TextManager *        text_manager_;
-static	          PathManager *        path_manager_;
 static          LanguageManager *    language_manager_;
 static    bool quit_;
 static    std::list<action::Scene*> scene_list_;
+static    std::string base_path_;
 
 graphic::TextManager *text_manager() {
     return text_manager_;
-}
-
-PathManager *path_manager() {
-    return path_manager_;
 }
 
 LanguageManager* language_manager() {
     return language_manager_;
 }
 
+std::string ResolvePath(const std::string& path) {
+    return path + base_path_;
+}
+
 bool Initialize(const Configuration& configuration) {
     quit_ = false;
     SDL_Init(0);
 
-    path_manager_     = new           PathManager(configuration.base_path);
+    base_path_ = configuration.base_path;
+
     language_manager_ = new       LanguageManager(configuration.default_language);
     
     if(configuration.graphic_enabled) {
         graphic::Manager* graphic_manager = new graphic::Manager;
         if(graphic_manager) {
             std::string icon_path = (configuration.window_icon.length() > 0) ? 
-                                        path_manager_->ResolvePath(configuration.window_icon) : "";
+                                        ResolvePath(configuration.window_icon) : "";
             graphic_manager->Configure(configuration.window_title, configuration.window_size, 
                             graphic::VideoSettings(configuration.fullscreen, true, false), icon_path);
             graphic::Initialize(graphic_manager);
@@ -117,7 +115,7 @@ void Run() {
             delta_t = 0.0;
 
         // Over-compensation for lag causes bugs.
-        delta_t = min(delta_t, 0.1);
+        delta_t = std::min(delta_t, 0.1);
 
         if(input::manager())
             input::manager()->Update();
