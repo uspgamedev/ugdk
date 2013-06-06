@@ -2,7 +2,7 @@
 #define UGDK_SYSTEM_CONFIGURATION_H_
 
 #include <string>
-#include <ugdk/math/vector2D.h>
+#include <ugdk/math/integer2D.h>
 
 namespace ugdk {
 namespace system {
@@ -15,9 +15,9 @@ typedef struct Configuration {
     
     bool graphic_enabled;
     std::string      window_icon;
-    std::string     window_title;
-    ugdk::math::Vector2D window_size;
-    bool              fullscreen;
+    std::string      window_title;
+    math::Integer2D  window_resolution;
+    bool             fullscreen;
 
     bool input_enabled;
 
@@ -30,7 +30,7 @@ typedef struct Configuration {
         graphic_enabled(true),
         window_icon(""),
         window_title("UGDK Game"),
-        window_size(800.0, 600.0),
+        window_resolution(800, 600),
         fullscreen(false),
 
         input_enabled(true) 

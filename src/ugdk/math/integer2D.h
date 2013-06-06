@@ -236,8 +236,16 @@ class Integer2D {
         */
     int    operator*(const Integer2D &right) const;
     
-     /// Remainder of integer division by "scalar" coordinate by coordinate.
+    /// Remainder of integer division by "scalar" coordinate by coordinate.
     Integer2D operator%(const Integer2D& right) const;
+
+    /// Checks if their coordinates are equal, coordinate by coordinate.
+    bool operator==(const Integer2D& right) const { 
+        return this->x == right.x && this->y == right.y;
+    }
+
+    /// True when operator== is false.
+    bool operator!=(const Integer2D& right) const { return !(right == *this); }
 };
 
  /// Method that returns a integer equal to the a integer multiplied by a scalar

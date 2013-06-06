@@ -31,39 +31,29 @@ static ugdk::math::Vector2D default_resolution(800.0, 600.0);
 VideoSettings::VideoSettings()
     : fullscreen(false), vsync(true), light_system(false) {}
 
-Manager::Manager() 
-    :   default_resolution_(800.0, 600.0),
-        settings_(false, false, false), 
+Manager::Manager(const VideoSettings& settings) 
+    :   settings_(settings), 
         light_buffer_(nullptr), 
         white_texture_(nullptr), 
         light_shader_(nullptr) {}
 
-void Manager::Configure(const string& title, const ugdk::math::Vector2D& size, 
-                            const VideoSettings& settings, const string& icon) {
-    title_ = title;
-    default_resolution_ = size;
-    settings_ = settings;
-    icon_ = icon;
-}
-
-// Inicializa o gerenciador de video, definindo uma
-// resolucao para o programa. Retorna true em caso de
-// sucesso.
 bool Manager::Initialize() {
-
     if(SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
         return false;
     
     // Set window title.
-    SDL_WM_SetCaption(title_.c_str(), (icon_.length() > 0) ? icon_.c_str() : nullptr );
+    SDL_WM_SetCaption(settings_.window_title.c_str(), 
+                      (settings_.window_icon.length() > 0) ? settings_.window_icon.c_str() : nullptr );
     
-    if(icon_.length() > 0)
-        SDL_WM_SetIcon(SDL_LoadBMP(icon_.c_str()), nullptr);
+    if(settings_.window_icon.length() > 0)
+        SDL_WM_SetIcon(SDL_LoadBMP(settings_.window_icon.c_str()), nullptr);
        
-    if(ChangeResolution(default_resolution_, settings_.fullscreen) == false) {
+    if(UpdateResolution() == false) {
         /* TODO: insert error message here. */
         return false;
     }
+
+    UpdateVSync();
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
 
@@ -73,14 +63,30 @@ bool Manager::Initialize() {
     return true;
 }
 
+bool Manager::ChangeSettings(const VideoSettings& new_settings) {
+    VideoSettings old_settings = settings_;
+
+    settings_ = new_settings;
+
+    if(old_settings.resolution != new_settings.resolution || 
+        old_settings.fullscreen != new_settings.fullscreen) {
+        if(!UpdateResolution())
+            return false;
+    }
+
+    UpdateVSync();
+
+    return true;
+}
+
 // Changes the resolution to the requested value.
 // Returns true on success.
-bool Manager::ChangeResolution(const ugdk::math::Vector2D& size, bool fullscreen) {
+bool Manager::UpdateResolution() {
     Uint32 flags = SDL_OPENGL;
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-    if(fullscreen) flags |= SDL_FULLSCREEN;
+    if(settings_.fullscreen) flags |= SDL_FULLSCREEN;
 
-    if(SDL_SetVideoMode(static_cast<int>(size.x), static_cast<int>(size.y), Manager::COLOR_DEPTH, flags) == nullptr)
+    if(SDL_SetVideoMode(settings_.resolution.x, settings_.resolution.y, Manager::COLOR_DEPTH, flags) == nullptr)
         return false;
       
     GLenum err = glewInit();
@@ -88,8 +94,6 @@ bool Manager::ChangeResolution(const ugdk::math::Vector2D& size, bool fullscreen
         fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
         return false;
     }
-
-    SetVSync(settings_.vsync);
 
     // We want the following properties to our display:
     //   (0;0) is the top-left corner of the screen
@@ -99,16 +103,15 @@ bool Manager::ChangeResolution(const ugdk::math::Vector2D& size, bool fullscreen
     //   - Offset it by (-1,1), correcting the origin
     //   - Invert the y-axis, so it grows in the direction we expect
     //   - Scale down by the (2/w;2/h), so it goes up to what we expect.
-    initial_geometry_ = Geometry(math::Vector2D(-1.0, 1.0), math::Vector2D(2.0/size.x, -2.0/size.y));
+    initial_geometry_ = Geometry(math::Vector2D(-1.0, 1.0), math::Vector2D(2.0/settings_.resolution.x, -2.0/settings_.resolution.y));
         
     //Set projection
-    glViewport(0, 0, (GLsizei) size.x, (GLsizei) size.y);
-    glMatrixMode( GL_PROJECTION );
+    glViewport(0, 0, settings_.resolution.x, settings_.resolution.y);
 
+    glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
     //glOrtho( 0, size.x, size.y, 0, -1, 1 );
 
-    //Initialize modelview matrix
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
@@ -122,9 +125,6 @@ bool Manager::ChangeResolution(const ugdk::math::Vector2D& size, bool fullscreen
     //If there was any errors
     if( glGetError() != GL_NO_ERROR )
         return false;
-
-    video_size_ = size;
-    settings_.fullscreen = fullscreen;
 
     // Changing to and from fullscreen destroys all textures, so we must recreate them.
     initializeLight();
@@ -144,12 +144,12 @@ void Manager::Release() {
     }*/
 }
 
-void Manager::SetVSync(const bool active) {
-    settings_.vsync = active;
-    //TODO:IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions.
+void Manager::UpdateVSync() {
 #ifdef _WIN32
     if(WGL_EXT_swap_control)
         wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
+#else
+    //TODO: IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions.
 #endif
 }
 
@@ -167,7 +167,7 @@ void Manager::mergeLights(const std::list<action::Scene*>& scene_list) {
     
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, (GLsizei) video_size_.x, (GLsizei) video_size_.y);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, settings_.resolution.x, settings_.resolution.y);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glPopAttrib(); // GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
@@ -212,14 +212,14 @@ void Manager::Render(const std::list<action::Scene*>& scene_list) {
 
 void Manager::initializeLight() {
     if(light_buffer_ != nullptr) delete light_buffer_;
-    light_buffer_ = Texture::CreateRawTexture(static_cast<int>(video_size_.x), static_cast<int>(video_size_.y));
+    light_buffer_ = Texture::CreateRawTexture(settings_.resolution.x, settings_.resolution.y);
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, (GLsizei) video_size_.x, 
-        (GLsizei) video_size_.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, settings_.resolution.x, 
+        settings_.resolution.y, 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     unsigned char buffer[32*32*4];

@@ -26,7 +26,7 @@ static    graphic:: TextManager *        text_manager_;
 static          LanguageManager *    language_manager_;
 static    bool quit_;
 static    std::list<action::Scene*> scene_list_;
-static    std::string base_path_;
+static    Configuration configuration_;
 
 graphic::TextManager *text_manager() {
     return text_manager_;
@@ -37,46 +37,50 @@ LanguageManager* language_manager() {
 }
 
 std::string ResolvePath(const std::string& path) {
-    return base_path_ + path;
+    return configuration_.base_path + path;
 }
 
 bool Initialize(const Configuration& configuration) {
+    bool result = true;
+
     quit_ = false;
     SDL_Init(0);
 
-    base_path_ = configuration.base_path;
+    configuration_ = configuration;
 
     language_manager_ = new       LanguageManager(configuration.default_language);
     
-    if(configuration.graphic_enabled) {
-        graphic::Manager* graphic_manager = new graphic::Manager;
-        if(graphic_manager) {
-            std::string icon_path = (configuration.window_icon.length() > 0) ? 
-                                        ResolvePath(configuration.window_icon) : "";
-            graphic_manager->Configure(configuration.window_title, configuration.window_size, 
-                            graphic::VideoSettings(configuration.fullscreen, true, false), icon_path);
-            graphic::Initialize(graphic_manager);
-        }
-    }
+    if(configuration.graphic_enabled)
+        result &= !graphic::Initialize(new graphic::Manager(graphic::VideoSettings(
+            configuration.window_title,
+            (configuration.window_icon.length() > 0) ? ResolvePath(configuration.window_icon) : "",
+            configuration.window_resolution,
+            configuration.fullscreen,
+            true,
+            false
+        )));
+    
     if(configuration.audio_enabled)
-        audio::Initialize(new audio::Manager);
+        result &= !audio::Initialize(new audio::Manager);
     
     if(configuration.input_enabled)
-        input::Initialize(new input::Manager);
+        result &= !input::Initialize(new input::Manager);
 
-    resource::Initialize(new resource::Manager);
-    time::Initialize(new time::Manager);
+    //TODO: make flag to disable module time
+    result &= !time::Initialize(new time::Manager);
+
+    result &= !resource::Initialize(new resource::Manager);
     
     if(graphic::manager()) {
         text_manager_ = new graphic:: TextManager();
-        text_manager_->Initialize();
+        result &= !text_manager_->Initialize();
     }
 
     if (!SCRIPT_MANAGER()->Initialize())
         puts("Failed to initialize script manager.");
 
     scene_list_.clear();
-    return (time::manager() != nullptr);
+    return result;
 }
 
 static void DeleteFinishedScenes() {
