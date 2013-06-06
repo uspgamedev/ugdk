@@ -4,7 +4,6 @@
 
 #include <ugdk/graphic/light.h>
 
-#include <ugdk/system/engine.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/geometry.h>

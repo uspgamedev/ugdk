@@ -1,6 +1,5 @@
 #include <ugdk/graphic/drawable/sprite.h>
 
-#include <ugdk/system/engine.h>
 #include <ugdk/resource/module.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/manager.h>

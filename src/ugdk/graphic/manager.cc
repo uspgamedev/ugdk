@@ -11,7 +11,6 @@
 #include "SDL.h"
 #include "SDL_opengl.h"
 
-#include <ugdk/system/engine.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/defaultshaders.h>
 #include <ugdk/graphic/node.h>

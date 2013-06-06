@@ -3,7 +3,6 @@
 #include <ugdk/action/scene.h>
 
 #include <ugdk/action/entity.h>
-#include <ugdk/system/engine.h>
 #include <ugdk/audio/module.h>
 #include <ugdk/audio/music.h>
 #include <ugdk/graphic/node.h>
