@@ -51,7 +51,7 @@ bool Initialize(const Configuration& configuration) {
     language_manager_ = new       LanguageManager(configuration.default_language);
     
     if(configuration.graphic_enabled)
-        result &= !graphic::Initialize(new graphic::Manager(graphic::VideoSettings(
+        result &= graphic::Initialize(new graphic::Manager(graphic::VideoSettings(
             configuration.window_title,
             (configuration.window_icon.length() > 0) ? ResolvePath(configuration.window_icon) : "",
             configuration.window_resolution,
@@ -61,19 +61,19 @@ bool Initialize(const Configuration& configuration) {
         )));
     
     if(configuration.audio_enabled)
-        result &= !audio::Initialize(new audio::Manager);
+        result &= audio::Initialize(new audio::Manager);
     
     if(configuration.input_enabled)
-        result &= !input::Initialize(new input::Manager);
+        result &= input::Initialize(new input::Manager);
 
     //TODO: make flag to disable module time
-    result &= !time::Initialize(new time::Manager);
+    result &= time::Initialize(new time::Manager);
 
-    result &= !resource::Initialize(new resource::Manager);
+    result &= resource::Initialize(new resource::Manager);
     
     if(graphic::manager()) {
         text_manager_ = new graphic:: TextManager();
-        result &= !text_manager_->Initialize();
+        result &= text_manager_->Initialize();
     }
 
     if (!SCRIPT_MANAGER()->Initialize())
