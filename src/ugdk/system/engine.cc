@@ -20,6 +20,7 @@
 #include <ugdk/script/scriptmanager.h>
 
 namespace ugdk {
+namespace system {
 
 static    graphic:: TextManager *        text_manager_;
 static          LanguageManager *    language_manager_;
@@ -36,7 +37,7 @@ LanguageManager* language_manager() {
 }
 
 std::string ResolvePath(const std::string& path) {
-    return path + base_path_;
+    return base_path_ + path;
 }
 
 bool Initialize(const Configuration& configuration) {
@@ -196,4 +197,5 @@ void Quit() {
     quit_ = true;
 }
 
-}
+} // namespace system
+} // namespace ugdk

@@ -56,7 +56,7 @@ bool PythonWrapper::Initialize() {
     strncpy(pathstr, "path", 4);
     pathstr[4] = '\0';
     PyObject *path = PySys_GetObject(pathstr);
-    PyList_Append(path, PyString_FromString(ugdk::ResolvePath("scripts/").c_str()));
+    PyList_Append(path, PyString_FromString(ugdk::system::ResolvePath("scripts/").c_str()));
 #ifdef UGDK_INSTALL_LOCATION
     PyList_Append(path, PyString_FromString(UGDK_INSTALL_LOCATION "/" UGDK_BIGVERSION "/python"));
 #endif

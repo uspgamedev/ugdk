@@ -53,7 +53,7 @@ TextBox* TextManager::GetText(const std::wstring& text) {
 }
 
 TextBox* TextManager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
-    std::string fullpath = ugdk::ResolvePath(path);
+    std::string fullpath = ugdk::system::ResolvePath(path);
     FILE *txtFile = fopen(fullpath.c_str(), "r");
     if(txtFile == nullptr) return nullptr;
     char buffer_utf8[MAXLINE];

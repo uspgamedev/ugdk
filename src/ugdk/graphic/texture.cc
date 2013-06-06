@@ -102,7 +102,7 @@ static bool ConvertSurfaceToTexture(SDL_Surface* data, GLuint* texture_, int* te
 }
 
 Texture* Texture::CreateFromFile(const std::string& filepath) {
-    std::string fullpath = ugdk::ResolvePath(filepath);
+    std::string fullpath = ugdk::system::ResolvePath(filepath);
     SDL_Surface* data = IMG_Load(fullpath.c_str());
 
     if(data == nullptr) {

@@ -21,7 +21,7 @@ using std::wstring;
 
 std::wstring LoadTextFromFile(const std::string& path) {
     std::wstring output;
-    std::string fullpath = ugdk::ResolvePath(path);
+    std::string fullpath = ugdk::system::ResolvePath(path);
 
     FILE *txtFile = fopen(fullpath.c_str(), "r");
     if(txtFile == nullptr) return output;
@@ -149,7 +149,7 @@ static int title_type(char* str) {
 
 // Fills the map with the information on the given file
 bool Language::Load(const std::string& language_file) {
-    FILE* file = fopen(ugdk::ResolvePath(language_file).c_str(), "r");
+    FILE* file = fopen(ugdk::system::ResolvePath(language_file).c_str(), "r");
     if(file == nullptr)
         return false;
 

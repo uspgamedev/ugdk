@@ -5,6 +5,7 @@
 #include <ugdk/math/vector2D.h>
 
 namespace ugdk {
+namespace system {
 
 typedef struct Configuration {
     std::string        base_path;
@@ -36,6 +37,7 @@ typedef struct Configuration {
     {}
 } Configuration;
 
+} // namespace system
 } // namespace ugdk
 
 #endif

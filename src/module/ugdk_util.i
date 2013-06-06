@@ -6,7 +6,6 @@
 
 %{
 
-#include <ugdk/util/pathmanager.h>
 #include <ugdk/util/uncopyable.h>
 #include <ugdk/util/languageword.h>
 #include <ugdk/util/language.h>
@@ -18,7 +17,6 @@
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 
-%include <ugdk/util/pathmanager.h>
 %include <ugdk/util/uncopyable.h>
 %include <ugdk/util/languageword.h>
 %include <ugdk/util/language.h>
@@ -37,7 +35,6 @@ static ugdk::ikdtree::Box<2> CreateBox2D(double a1, double a2, double b1, double
 %template(Box3D) ugdk::ikdtree::Box<3>;
 
 namespace ugdk {
-	export_class(PathManager)
 	export_class(LanguageWord)
 	export_class(Language)
 	export_class(LanguageManager)

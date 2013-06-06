@@ -61,7 +61,7 @@ void ScriptManager::ExecuteCode(const string& language, const string& code) {
 
 
 VirtualObj ScriptManager::LoadModule(const string& script) {
-    string filepath = ugdk::ResolvePath(
+    string filepath = ugdk::system::ResolvePath(
         "scripts/" + ConvertDottedNotationToPath(script)
     );
 

@@ -16,6 +16,7 @@
 #include <ugdk/math/vector2D.h>
 
 namespace ugdk {
+namespace system {
 
 class PathManager;
 
@@ -23,11 +24,6 @@ class PathManager;
 /** @see TextManager
  */
 graphic::TextManager *text_manager();
-
-/// Returns a reference to the Path Manager.
-/** @see PathManager
- */
-PathManager *path_manager();
 
 /// Returns a reference to the Language Manager.
 /** @see LanguageManager
@@ -81,6 +77,7 @@ void PopScene();
 /// Stops the engine and clears the scene list.
 void Quit();
 
+} // namespace system
 } // namespace ugdk
 
 #endif

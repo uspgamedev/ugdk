@@ -50,7 +50,7 @@ void LuaWrapper::ExecuteCode(const std::string& code) {
 }
 
 VirtualObj LuaWrapper::LoadModule(const string& name) {
-    string fullpath = ugdk::ResolvePath(
+    string fullpath = ugdk::system::ResolvePath(
         "scripts/" +
         SCRIPT_MANAGER()->ConvertDottedNotationToPath(name) +
         "." + file_extension()

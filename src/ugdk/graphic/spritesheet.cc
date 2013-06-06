@@ -72,7 +72,7 @@ struct PixelSurface {
 };
 
 SpritesheetData::SpritesheetData(const std::string& filename) {
-    std::string filepath = ugdk::ResolvePath(filename);
+    std::string filepath = ugdk::system::ResolvePath(filename);
     file_data_.push_back(new PixelSurface(filepath));
 #ifdef DEBUG
     if(file_data_.back()->surface == nullptr)
@@ -83,7 +83,7 @@ SpritesheetData::SpritesheetData(const std::string& filename) {
 SpritesheetData::SpritesheetData(const std::list<std::string>& filenames) {
     std::list<std::string>::const_iterator it;
     for(it = filenames.begin(); it != filenames.end(); ++it) {
-        std::string filepath = ugdk::ResolvePath(*it);
+        std::string filepath = ugdk::system::ResolvePath(*it);
         file_data_.push_back(new PixelSurface(filepath));
 #ifdef DEBUG
         if(file_data_.back()->surface == nullptr)

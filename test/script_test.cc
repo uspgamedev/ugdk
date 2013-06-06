@@ -40,7 +40,7 @@ static bool PythonTests() {
 }
 
 int main(int argc, char **argv) {
-    ugdk::Configuration config;
+    ugdk::system::Configuration config;
     config.base_path = "data/";
     config.audio_enabled = false;
     config.input_enabled = false;
@@ -48,7 +48,7 @@ int main(int argc, char **argv) {
     
     ugdk::script::InitScripts();
     
-    ugdk::Initialize(config);
+    ugdk::system::Initialize(config);
 
 #ifdef UGDK_LUA_ENABLED
     if(!LuaTests()) puts("LUA FAILED!");
@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
     if(!PythonTests()) puts("PYTHON FAILED!");
 #endif
     
-    ugdk::Run();
-    ugdk::Release();
+    ugdk::system::Run();
+    ugdk::system::Release();
     return 0;
 }
