@@ -66,8 +66,7 @@ bool Initialize(const Configuration& configuration) {
         if(!input::Initialize(new input::Manager))
             return false;
 
-    //TODO: make flag to disable module time
-    if(true)
+    if(configuration.time_enabled)
         if(!time::Initialize(new time::Manager))
             return false;
 

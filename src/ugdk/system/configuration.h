@@ -21,6 +21,8 @@ typedef struct Configuration {
 
     bool input_enabled;
 
+    bool time_enabled;
+
     Configuration() :
         base_path("./"),
         default_language("en_US"),
@@ -33,7 +35,9 @@ typedef struct Configuration {
         window_resolution(800, 600),
         fullscreen(false),
 
-        input_enabled(true) 
+        input_enabled(true),
+
+        time_enabled(true)
     {}
 } Configuration;
 
