@@ -33,6 +33,9 @@ class CollisionClass {
   private:
     friend class CollisionManager;
     CollisionClass(const ugdk::ikdtree::Box<2>& tree_bounding_box);
+    
+    CollisionClass(const CollisionClass&); // Uncopyable
+    void operator=(const CollisionClass&); // Uncopyable 
 
 #ifdef DEBUG
     // Unnecessary, used for debugging purposes.

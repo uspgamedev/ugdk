@@ -66,6 +66,7 @@ TextBox* TextManager::GetTextFromFile(const std::string& path, const std::string
         buffer[buffer_size] = L'\0';
         output.append(buffer);
     }
+    fclose(txtFile);
     return GetText(output, font, width);
 }
 

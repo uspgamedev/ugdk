@@ -37,6 +37,7 @@ std::wstring LoadTextFromFile(const std::string& path) {
         buffer[buffer_size] = L'\0';
         output.append(buffer);
     }
+    fclose(txtFile);
     return output;
 }
 
