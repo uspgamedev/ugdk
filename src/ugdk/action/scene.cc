@@ -91,12 +91,16 @@ void Scene::RemoveAllEntities() {
     entities_.clear();
 }
 
-void Scene::AddTask(const Task& task, int priority) {
+void Scene::AddTask(const Task& task, double priority) {
     tasks_.merge(list<OrderedTask>(1, OrderedTask(priority, task)));
 }
 
 void Scene::Update(double dt) {
-    tasks_.remove_if([dt](OrderedTask& otask) { return otask.task(dt); });
+    // For each task, do. Note the tasks list is already ordered by the priorities.
+    tasks_.remove_if([dt](OrderedTask& otask) {
+        // Calls the task, and removes it from the list if the task returned false.
+        return !otask.task(dt);
+    });
 }
 
 void Scene::End() {

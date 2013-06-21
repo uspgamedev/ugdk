@@ -44,8 +44,16 @@ class Scene {
 
     void RemoveAllEntities();
 
-    /// Adds a Task to the scene.
-    void AddTask(const Task& task, int priority = 0);
+    /// Adds a task to the scene.
+    /** All tasks are called for each Scene's Update, in order of the priorities, which
+        are ordered from smaller values to bigger values.
+
+        The task's returned value is used to destroy the task or keep it alive:
+        - True keeps then another Update
+        - False destroys then.
+    
+        Priority values are commonly in the [0; 1] interval. */
+    void AddTask(const Task& task, double priority = 0.5);
 
     /// Finishes the scene.
     void Finish() { End(); finished_ = true; }
@@ -112,13 +120,14 @@ class Scene {
     std::function<void (Scene*)> focus_callback_;
 
     struct OrderedTask {
-        OrderedTask(int p, const Task& t) : priority(p), task(t) {}
+        OrderedTask(double p, const Task& t) : priority(p), task(t) {}
 
-        int priority;
+        double priority;
         Task task;
 
-        bool operator< (const OrderedTask& other) const { return priority < other.priority; }
-        bool operator()(double dt) { return task(dt); }
+        bool operator< (const OrderedTask& other) const { 
+            return priority < other.priority;
+        }
     };
     std::list<OrderedTask> tasks_;
    
