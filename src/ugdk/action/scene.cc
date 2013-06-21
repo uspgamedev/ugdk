@@ -27,14 +27,19 @@ Scene::Scene()
     content_node_(new graphic::Node), 
     interface_node_(new graphic::Node) {
 
+        tasks_.emplace_back(0.4, [&](double dt) {
+            media_manager_.Update(dt);
+            return true;
+        });
+
         // Update entities
-        tasks_.emplace_back(0, [&](double dt) {  
+        tasks_.emplace_back(0.5, [&](double dt) {  
             for(auto it : entities_) it->Update(dt);
             return true;
         });
 
         // Remove to be deleted entities
-        tasks_.emplace_back(100, [&](double dt) {  
+        tasks_.emplace_back(0.9, [&](double dt) {  
             entities_.remove_if([](Entity* e){ 
                 bool is_dead = e->to_be_removed();
                 if (is_dead) delete e;
@@ -44,7 +49,7 @@ Scene::Scene()
         });
 
         // Flush add queue
-        tasks_.emplace_back(300, [&](double dt) {  
+        tasks_.emplace_back(1.0, [&](double dt) {  
             while(!queued_entities_.empty()) {
                 Entity* e = queued_entities_.front();
                 this->AddEntity(e);
