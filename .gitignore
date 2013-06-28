@@ -34,3 +34,7 @@ install_manifest.txt
 /modules.cc
 /*.a
 /build
+*.exe
+*.pdb
+
+*.ilk
