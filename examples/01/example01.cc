@@ -8,7 +8,6 @@ int main(int argc, char* argv[]) {
     scene->AddTask([scene](double dt) {
         if(ugdk::input::manager()->KeyDown(ugdk::input::K_ESCAPE))
             scene->Finish();
-        return true; // Keep the task alive
     });
     ugdk::system::PushScene(scene);
     ugdk::system::Run();

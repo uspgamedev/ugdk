@@ -95,7 +95,7 @@ void Scene::RemoveAllEntities() {
     entities_.clear();
 }
 
-void Scene::AddTask(const Task& task, double priority) {
+void Scene::AddFunctionTask(const Task& task, double priority) {
     tasks_.merge(list<OrderedTask>(1, OrderedTask(priority, task)));
 }
 

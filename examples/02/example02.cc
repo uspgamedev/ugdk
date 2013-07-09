@@ -62,7 +62,6 @@ int main(int argc, char* argv[]) {
     scene->AddTask([scene](double dt) {
         if(input::manager()->KeyDown(input::K_ESCAPE))
             scene->Finish();
-        return true; // Keep the task alive
     });
     scene->AddEntity(new Rectangle);
 
