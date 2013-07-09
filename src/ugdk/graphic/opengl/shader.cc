@@ -36,9 +36,6 @@ void Shader::GenerateSource() {
     source_ += "void main() {" "\n";
     source_ += main_;
     source_ += "}";
-
-    puts("=============================");
-    puts(source_.c_str());
 }
 
 bool Shader::Compile() const {
