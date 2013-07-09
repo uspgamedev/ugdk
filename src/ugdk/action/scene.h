@@ -28,7 +28,7 @@ class Scene {
     template <typename Ret>
     struct TaskAdapter {
         template <typename T>
-        static Task Adapt(T&& t) {
+        static Task Adapt(T t) {
             return Task(t);
         }
     };
@@ -66,7 +66,7 @@ class Scene {
     
         Priority values are commonly in the [0; 1] interval. */
     template <typename T>
-    void AddTask(T&& task, double priority = 0.5) {
+    void AddTask(T task, double priority = 0.5) {
         AddFunctionTask(TaskAdapter<decltype(task(0.0))>::Adapt(task), priority);
     }
 
@@ -154,7 +154,7 @@ class Scene {
 template <>
 struct Scene::TaskAdapter<void> {
     template <typename T>
-    static Task Adapt(T&& t) {
+    static Task Adapt(T t) {
         return Task([t](double dt) -> bool {
             t(dt);
             return true;

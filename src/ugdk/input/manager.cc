@@ -30,6 +30,7 @@ bool Manager::Initialize() {
     std::fill(keystate_last_, keystate_last_+kbsize_, false);
     
     Update();
+    return true;
 }
 
 void Manager::Release() {
