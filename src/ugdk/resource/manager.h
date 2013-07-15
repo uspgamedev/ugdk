@@ -24,7 +24,7 @@ class Manager {
         ResourceMap::iterator base = containers_.find(&typeid(T));
         if(base == containers_.end())
             return NULL;
-        return static_cast<ResourceContainer<T>*>(base->second);
+        return dynamic_cast<ResourceContainer<T>*>(base->second);
     }
     
   private:

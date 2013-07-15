@@ -147,8 +147,6 @@ class Scene {
         }
     };
     std::list<OrderedTask> tasks_;
-   
-    friend class Engine;
 }; // class Scene.
 
 template <>
