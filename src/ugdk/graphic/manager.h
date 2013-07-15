@@ -4,38 +4,60 @@
 #include <string>
 #include <list>
 #include <bitset>
-#include <ugdk/base/types.h>
+#include <ugdk/common/types.h>
 #include <ugdk/math/vector2D.h>
+#include <ugdk/math/integer2D.h>
 #include <ugdk/math/frame.h>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/geometry.h>
 
-#define VIDEO_MANAGER() (ugdk::Engine::reference()->video_manager())
-
 namespace ugdk {
 namespace graphic {
 
-class VideoManager {
+struct VideoSettings {
+    std::string window_title;
+    std::string window_icon;
+    math::Integer2D resolution;
+    bool fullscreen;
+    bool vsync;
+    bool light_system;
+
+    VideoSettings();
+    VideoSettings(const std::string& title,
+                  const std::string& icon,
+                  const math::Integer2D& _resolution, 
+                  bool _fullscreen,
+                  bool _vsync,
+                  bool _light_system) 
+        : 
+        window_title(title),
+        window_icon(icon),
+        resolution(_resolution),
+        fullscreen(_fullscreen), vsync(_vsync), light_system(_light_system) {}
+};
+
+class Manager {
   public:
     static const int COLOR_DEPTH = 32;
 
-    VideoManager() : settings_(false, false, false), light_buffer_(nullptr), white_texture_(nullptr), light_shader_(nullptr) {}
-    ~VideoManager() {}
+    Manager(const VideoSettings& settings);
+    ~Manager() {}
 
-    bool Initialize(const std::string& title, const ugdk::math::Vector2D& size, bool fullscreen, const std::string& icon);
-    bool Release();
+    bool Initialize();
+    void Release();
+
     void Render(const std::list<action::Scene*>&);
 
-    // Configuration
-    bool ChangeResolution(const ugdk::math::Vector2D& size, bool fullscreen);
-    void SetVSync(const bool active);
-    void SetLightSystem(const bool active) { settings_.light_system = active; }
+    /// Updates the settings and applies the changes.
+    /** Warning: changing the resolution and/or fullscreen is a slow operation. */
+    bool ChangeSettings(const VideoSettings& new_settings);
+    
+    /// Convenience
+    const math::Integer2D& video_size() const { return settings_.resolution; }
 
     // Getters
-    ugdk::math::Vector2D video_size() const { return video_size_; }
-    bool fullscreen() const { return settings_.fullscreen; }
-    const std::string& title() const { return title_; }
+    const VideoSettings& settings() const { return settings_; }
     Texture* white_texture() { return white_texture_; }
     Texture* light_buffer() { return light_buffer_; }
     opengl::ShaderProgram* light_shader() { return light_shader_; }
@@ -74,23 +96,19 @@ class VideoManager {
         opengl::ShaderProgram* shaders_[1 << NUM_FLAGS];
         std::bitset<NUM_FLAGS> flags_;
 
-        friend class VideoManager;
+        friend class Manager;
     };
 
     Shaders& shaders() { return shaders_; }
     const Shaders& shaders() const { return shaders_; }
 
   private:
-    ugdk::math::Vector2D video_size_;
-    std::string title_;
+    bool UpdateResolution();
+    void UpdateVSync();
+    void initializeLight();
+    void mergeLights(const std::list<action::Scene*>& scene_list);
 
-    struct Settings {
-        bool fullscreen;
-        bool vsync;
-        bool light_system;
-
-        Settings(bool fs, bool vs, bool light) : fullscreen(fs), vsync(vs), light_system(light) {}
-    } settings_;
+    VideoSettings settings_;
 
     Texture* light_buffer_;
     Texture* white_texture_;
@@ -98,9 +116,6 @@ class VideoManager {
     
     Shaders shaders_;
     opengl::ShaderProgram* light_shader_;
-
-    void initializeLight();
-    void mergeLights(const std::list<action::Scene*>& scene_list);
 };
 
 }  // namespace graphic

@@ -6,10 +6,9 @@
 #include <ugdk/ui/uielement.h>
 
 #include <ugdk/action/scene.h>
-#include <ugdk/base/engine.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/node.h>
-#include <ugdk/input/inputmanager.h>
+#include <ugdk/input/module.h>
 #include <ugdk/util/intervalkdtree.h>
 
 using std::mem_fn;
@@ -25,7 +24,7 @@ class CallbackCheckTask {
 public:
     CallbackCheckTask(Menu* menu) : menu_(menu) {}
     bool operator()(double) {
-        input::InputManager* input = INPUT_MANAGER();
+        input::Manager* input = input::manager();
         const InputCallbacks& callbacks = menu_->input_callbacks();
         for(InputCallbacks::const_iterator it = callbacks.begin(); it != callbacks.end(); ++it) {
             if(input->KeyPressed(it->first))
@@ -58,7 +57,7 @@ Menu::~Menu() {
 }
 
 void Menu::Update(double) {
-    input::InputManager* input = INPUT_MANAGER();
+    input::Manager* input = input::manager();
     ugdk::math::Vector2D mouse_pos = input->GetMousePosition();
     if((mouse_pos - last_mouse_position_).NormOne() > 10e-10) {
         std::vector<UIElement *> *intersecting_uielements = GetMouseCollision();
@@ -124,7 +123,7 @@ void Menu::FinishScene() const {
 }
 
 std::vector<UIElement *>* Menu::GetMouseCollision() {
-    ugdk::math::Vector2D mouse_pos = INPUT_MANAGER()->GetMousePosition();
+    ugdk::math::Vector2D mouse_pos = input::manager()->GetMousePosition();
     double min_coords[2], max_coords[2];
     min_coords[0] = mouse_pos.x - 0.5;
     min_coords[1] = mouse_pos.y - 0.5;

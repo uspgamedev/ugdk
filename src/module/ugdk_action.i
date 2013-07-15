@@ -23,7 +23,7 @@
 
 %}
 
-%import(module="ugdk_base") <ugdk/base/types.h>
+%import(module="ugdk_base") <ugdk/common/types.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_audio") <ugdk/audio.h>
 %import(module="ugdk_action") <ugdk/action.h>

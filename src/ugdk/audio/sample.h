@@ -49,7 +49,7 @@ class Sample {
     int channel_;
     double volume_;
 
-  friend class AudioManager;
+    friend class Manager;
 };
 
 } // namespace audio

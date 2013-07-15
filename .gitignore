@@ -5,7 +5,7 @@ CMakeCache.txt
 CMakeFiles/
 Makefile
 cmake_install.cmake
-src/ugdk/config/config.h
+src/ugdk/common/config.h
 *.user
 *.sdf
 /ipch
@@ -34,3 +34,8 @@ install_manifest.txt
 /modules.cc
 /*.a
 /build
+*.exe
+*.pdb
+
+*.ilk
+*.cache

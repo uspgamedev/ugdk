@@ -1,7 +1,7 @@
 #ifndef UGDK_GRAPHIC_VISUALEFFECT_H_
 #define UGDK_GRAPHIC_VISUALEFFECT_H_
 
-#include <ugdk/base/types.h>
+#include <ugdk/common/types.h>
 
 namespace ugdk {
 namespace graphic {

@@ -1,13 +1,22 @@
+#include <ugdk/input/manager.h>
+
 #include <algorithm>
 #include "SDL.h"
-#include <ugdk/input/inputmanager.h>
 
 namespace ugdk {
 namespace input {
 
 using math::Vector2D;
 
-InputManager::InputManager() {
+Manager::Manager() {}
+
+Manager::~Manager() {}
+
+bool Manager::Initialize() {
+
+    if(SDL_InitSubSystem(SDL_INIT_JOYSTICK) < 0)
+        return false;
+
     SDL_GetKeyState(&kbsize_);
     keystate_now_ = new bool[kbsize_];
     keystate_last_ = new bool[kbsize_];
@@ -20,15 +29,16 @@ InputManager::InputManager() {
     std::fill(keystate_now_, keystate_now_+kbsize_, false);
     std::fill(keystate_last_, keystate_last_+kbsize_, false);
     
-    Update(1.3);
+    Update();
+    return true;
 }
 
-InputManager::~InputManager() {
+void Manager::Release() {
     delete[] keystate_now_;
     delete[] keystate_last_;
 }
 
-void InputManager::Update(double delta_t) {
+void Manager::Update() {
     int i;
     
     // bufferiza teclado
@@ -43,33 +53,33 @@ void InputManager::Update(double delta_t) {
     UpdateDevices();
 }
 
-Vector2D InputManager::GetMousePosition(void) {
+Vector2D Manager::GetMousePosition(void) {
     int x, y;
     SDL_GetMouseState(&x, &y);
     return Vector2D((double) x, (double) y);
 }
 
-void InputManager::ShowCursor(bool toggle) {
+void Manager::ShowCursor(bool toggle) {
     SDL_ShowCursor((int) toggle);
 }
 
-bool InputManager::KeyPressed(Key key) {
+bool Manager::KeyPressed(Key key) {
     return (keystate_now_[key] && !keystate_last_[key]);
 }
 
-bool InputManager::KeyReleased(Key key) {
+bool Manager::KeyReleased(Key key) {
     return (!keystate_now_[key] && keystate_last_[key]);
 }
 
-bool InputManager::KeyDown(Key key) {
+bool Manager::KeyDown(Key key) {
     return keystate_now_[key];
 }
 
-bool InputManager::KeyUp(Key key) {
+bool Manager::KeyUp(Key key) {
     return !keystate_now_[key];
 }
 
-bool InputManager::CheckSequence(Key* sequence, int size) {
+bool Manager::CheckSequence(Key* sequence, int size) {
 	int iterator = buffer_end_ - 1;
 	for(int seq = size - 1; seq >= 0; seq--) {
 		if(iterator < 0) iterator += BUFFER_SIZE;
@@ -80,23 +90,23 @@ bool InputManager::CheckSequence(Key* sequence, int size) {
 	return true;
 }
 
-bool InputManager::MousePressed(MouseButton button) {
+bool Manager::MousePressed(MouseButton button) {
   return (mousestate_now_[button] && !mousestate_last_[button]);
 }
 
-bool InputManager::MouseReleased(MouseButton button) {
+bool Manager::MouseReleased(MouseButton button) {
     return (!mousestate_now_[button] && mousestate_last_[button]);
 }
 
-bool InputManager::MouseDown(MouseButton button) {
+bool Manager::MouseDown(MouseButton button) {
     return mousestate_now_[button];
 }
 
-bool InputManager::MouseUp(MouseButton button) {
+bool Manager::MouseUp(MouseButton button) {
     return !mousestate_now_[button];
 }
 
-void InputManager::UpdateDevices() {
+void Manager::UpdateDevices() {
     int i;
     
     // atualiza mouse
@@ -108,13 +118,13 @@ void InputManager::UpdateDevices() {
     }
 }
 
-void InputManager::SimulateKeyRelease(Key key) {
+void Manager::SimulateKeyRelease(Key key) {
     int k = (int)key;
     if(k >= 0 && k < kbsize_)
         keystate_now_[k] = false;
 }
  
-void InputManager::SimulateKeyPress(Key key) {
+void Manager::SimulateKeyPress(Key key) {
     int k = (int)key;
 	if(k >= 0 && k < kbsize_) {
         keystate_now_[k] = true;

@@ -8,15 +8,15 @@
 
 #include <ugdk/audio/sample.h>
 #include <ugdk/audio/music.h>
-#include <ugdk/audio/audiomanager.h>
+#include <ugdk/audio/manager.h>
+#include <ugdk/audio/module.h>
 
 %}
 
 /*  TAKE CARE
-AudioManager has 2 methods that may return a new object
+audio::Manager has 2 methods that may return a new object
 But we're not using the %newobject here because they only
-return a new object sometimes, and the AudioManager
-(at least in theory) should manage these objects.
+return a new object sometimes, and the audio::Manager manages these objects.
 */
 
 %include <ugdk/audio/sample.h>
@@ -25,13 +25,14 @@ return a new object sometimes, and the AudioManager
 //%template(SampleMap) std::map<std::string, ugdk::audio::Sample*>;
 //%template(MusicMap) std::map<std::string, ugdk::audio::Music*>;
 
-%include <ugdk/audio/audiomanager.h>
+%include <ugdk/audio/manager.h>
+%include <ugdk/audio/module.h>
 
 namespace ugdk {
 namespace audio {
     export_class(Sample)
     export_class(Music)
-    export_class(AudioManager)
+    export_class(Manager)
 }
 }
  

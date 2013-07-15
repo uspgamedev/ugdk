@@ -29,7 +29,7 @@ option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages 
 option(UGDK_INTERNAL_GLEW   "Set to ON to use an internal GLEW instead of the system one." OFF)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    SET (CHECKMAC "#define ISMAC")
+    SET (CHECKMAC TRUE)
 endif ()
 
 IF (UNIVERSAL)
@@ -253,8 +253,8 @@ set(UGDK_EXTERNAL_INCLUDE_DIRS
     CACHE STRING "UGDK include directories" FORCE)
 
 CONFIGURE_FILE(
-    "${SRC_DIR}/ugdk/config/config.h.in"
-    "${SRC_DIR}/ugdk/config/config.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/config.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR}/ugdk/common/config.h"
 )
 
 install(TARGETS libugdk
@@ -269,4 +269,7 @@ if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/pa
             DESTINATION ${UGDK_INSTALL_LOCATION}/${UGDK_BIGVERSION}/python
             FILES_MATCHING PATTERN "*.py")
 endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
+
+# Examples
+add_subdirectory(examples)
 

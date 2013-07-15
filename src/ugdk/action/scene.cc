@@ -3,8 +3,7 @@
 #include <ugdk/action/scene.h>
 
 #include <ugdk/action/entity.h>
-#include <ugdk/base/engine.h>
-#include <ugdk/audio/audiomanager.h>
+#include <ugdk/audio/module.h>
 #include <ugdk/audio/music.h>
 #include <ugdk/graphic/node.h>
 
@@ -74,7 +73,7 @@ void Scene::Focus() {
             background_music_->Unpause();
 
     } else if(stops_previous_music_) {
-        audio::Music* current_music = AUDIO_MANAGER()->CurrentMusic();
+        audio::Music* current_music = audio::manager()->CurrentMusic();
         if(current_music != nullptr)
             current_music->Stop();
     }
@@ -96,7 +95,7 @@ void Scene::RemoveAllEntities() {
     entities_.clear();
 }
 
-void Scene::AddTask(const Task& task, double priority) {
+void Scene::AddFunctionTask(const Task& task, double priority) {
     tasks_.merge(list<OrderedTask>(1, OrderedTask(priority, task)));
 }
 

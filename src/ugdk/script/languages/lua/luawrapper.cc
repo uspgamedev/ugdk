@@ -10,8 +10,7 @@
 #include <ugdk/script/languages/lua/modules.h>
 
 #include <ugdk/script/scriptmanager.h>
-#include <ugdk/util/pathmanager.h>
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 
 namespace ugdk {
 namespace script {
@@ -51,7 +50,7 @@ void LuaWrapper::ExecuteCode(const std::string& code) {
 }
 
 VirtualObj LuaWrapper::LoadModule(const string& name) {
-    string fullpath = PATH_MANAGER()->ResolvePath(
+    string fullpath = ugdk::system::ResolvePath(
         "scripts/" +
         SCRIPT_MANAGER()->ConvertDottedNotationToPath(name) +
         "." + file_extension()

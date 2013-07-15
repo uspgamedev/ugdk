@@ -8,10 +8,8 @@
 
 #include <freetype-gl++/texture-font.hpp>
 
-#include <ugdk/config/config.h>
-#include <ugdk/base/engine.h>
-#include <ugdk/util/pathmanager.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/system/engine.h>
+#include <ugdk/graphic/module.h>
 #include <ugdk/graphic/drawable/label.h>
 #include <ugdk/graphic/drawable/textbox.h>
 #include <ugdk/graphic/font.h>
@@ -46,7 +44,7 @@ bool TextManager::Release() {
 
 TextBox* TextManager::GetText(const std::wstring& text, const std::string& fonttag, int width) {
     Font *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
-    return new TextBox(text, (width == -1) ? VIDEO_MANAGER()->video_size().x : width, font);
+    return new TextBox(text, (width == -1) ? graphic::manager()->video_size().x : width, font);
 }
 
 TextBox* TextManager::GetText(const std::wstring& text) {
@@ -55,7 +53,7 @@ TextBox* TextManager::GetText(const std::wstring& text) {
 }
 
 TextBox* TextManager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
-    std::string fullpath = PATH_MANAGER()->ResolvePath(path);
+    std::string fullpath = ugdk::system::ResolvePath(path);
     FILE *txtFile = fopen(fullpath.c_str(), "r");
     if(txtFile == nullptr) return nullptr;
     char buffer_utf8[MAXLINE];
@@ -68,6 +66,7 @@ TextBox* TextManager::GetTextFromFile(const std::string& path, const std::string
         buffer[buffer_size] = L'\0';
         output.append(buffer);
     }
+    fclose(txtFile);
     return GetText(output, font, width);
 }
 

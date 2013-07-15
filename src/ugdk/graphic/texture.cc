@@ -5,8 +5,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/base/engine.h>
-#include <ugdk/util/pathmanager.h>
+#include <ugdk/system/engine.h>
 
 namespace ugdk {
 namespace graphic {
@@ -103,7 +102,7 @@ static bool ConvertSurfaceToTexture(SDL_Surface* data, GLuint* texture_, int* te
 }
 
 Texture* Texture::CreateFromFile(const std::string& filepath) {
-    std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
+    std::string fullpath = ugdk::system::ResolvePath(filepath);
     SDL_Surface* data = IMG_Load(fullpath.c_str());
 
     if(data == nullptr) {

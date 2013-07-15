@@ -1,4 +1,4 @@
-%module ugdk_base
+%module ugdk_resource
 
 %include <module/export.swig>
 %include <module/ownership.swig>
@@ -8,39 +8,35 @@
 
 %{
 
-#include <ugdk/base/types.h>
-#include <ugdk/base/configuration.h>
-#include <ugdk/base/engine.h>
-#include <ugdk/base/resourcecontainer.h> //class template
-//#include <ugdk/base/genericcontainer.h>
-#include <ugdk/base/resourcemanager.h>
+#include <ugdk/resource/resourcecontainer.h> //class template
+//#include <ugdk/resource/genericcontainer.h>
+#include <ugdk/resource/manager.h>
+#include <ugdk/resource/module.h>
 
 //#include <ugdk/action/animationset.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/util/languageword.h>
 
-#include <module/ugdk/action/sceneproxy.h>
-
 %}
 
 
-%include <ugdk/base/resourcecontainer.h> //class template
+%include <ugdk/resource/resourcecontainer.h> //class template
 
 enable_disown(ugdk::graphic::Texture* val)
-%template(ResourceContainer_Texture) ugdk::base::ResourceContainer<ugdk::graphic::Texture*>;
+%template(ResourceContainer_Texture) ugdk::resource::ResourceContainer<ugdk::graphic::Texture*>;
 disable_disown(ugdk::graphic::Texture* val)
 
 //enable_disown(ugdk::action::AnimationSet* val)
-//%template(ResourceContainer_AnimationSet) ugdk::base::ResourceContainer<ugdk::action::AnimationSet*>;
+//%template(ResourceContainer_AnimationSet) ugdk::resource::ResourceContainer<ugdk::action::AnimationSet*>;
 //disable_disown(ugdk::action::AnimationSet* val)
 
 enable_disown(ugdk::graphic::Spritesheet* val)
-%template(ResourceContainer_Spritesheet) ugdk::base::ResourceContainer<ugdk::graphic::Spritesheet*>;
+%template(ResourceContainer_Spritesheet) ugdk::resource::ResourceContainer<ugdk::graphic::Spritesheet*>;
 disable_disown(ugdk::graphic::Spritesheet* val)
 
 enable_disown(ugdk::LanguageWord* val)
-%template(ResourceContainer_LanguageWord) ugdk::base::ResourceContainer<ugdk::LanguageWord*>;
+%template(ResourceContainer_LanguageWord) ugdk::resource::ResourceContainer<ugdk::LanguageWord*>;
 disable_disown(ugdk::LanguageWord* val)
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
@@ -53,19 +49,13 @@ disable_disown(ugdk::LanguageWord* val)
 
 proxy_class(ugdk::action::Scene)
 
-%include <ugdk/base/types.h>
-%include <ugdk/base/configuration.h>
-%include <ugdk/base/engine.h>
-%include <ugdk/base/resourcemanager.h>
+%include <ugdk/resource/manager.h>
+%include <ugdk/resource/module.h>
 
 namespace ugdk {
-	export_class(Color)
-	export_class(Configuration)
-	export_class(Engine)
-	
-namespace base {
-    export_class(ResourceManager)
+namespace resource {
+    export_class(Manager)
 }
 }
  
-confirm_exports(ugdk_base)
+confirm_exports(ugdk_resource)

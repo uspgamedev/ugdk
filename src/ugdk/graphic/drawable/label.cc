@@ -1,6 +1,5 @@
 #include <ugdk/graphic/drawable/label.h>
 
-#include <ugdk/config/config.h>
 #include <algorithm>
 #include "GL/glew.h"
 #define NO_SDL_GLEXT
@@ -12,19 +11,16 @@
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/graphic/defaultshaders.h>
 
-#include <ugdk/base/engine.h>
-#include <ugdk/base/types.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/common/types.h>
+#include <ugdk/graphic/module.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
-#include <ugdk/math/frame.h>
 #include <ugdk/graphic/font.h>
 
 namespace ugdk {
 namespace graphic {
 
 using ugdk::Color;
-using std::vector;
 using std::wstring;
 
 Label::Label(const std::wstring& message, Font *font) 
@@ -50,21 +46,21 @@ void Label::ChangeMessage(const std::wstring& message) {
     texture_buffer_= opengl::VertexBuffer::Create(message_.size() * 4 * sizeof(freetypeglxx::vec2), 
                                                     GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
-    math::Vector2D pen;
+    freetypeglxx::vec2 pen;
     size_t buffer_offset = 0;
     for(size_t i = 0; i < message.size(); ++i ) {
         freetypeglxx::TextureGlyph* glyph = font_->freetype_font()->GetGlyph(message[i]);
         if(!glyph) continue;
-        double kerning = 0;
+        float kerning = 0;
         if(i > 0)
             kerning = glyph->GetKerning( message[i-1] );
         pen.x += kerning;
-        double x0  = pen.x + glyph->offset_x();
-        double y0  = glyph->offset_y();
-        double x1  = x0 + glyph->width();
-        double y1  = y0 - glyph->height();
-        y0 = pen.y + font_->height() - y0;
-        y1 = pen.y + font_->height() - y1;
+        float x0  = pen.x + glyph->offset_x();
+        float y0  = static_cast<float>(glyph->offset_y());
+        float x1  = x0 + glyph->width();
+        float y1  = y0 - glyph->height();
+        y0 = pen.y + font_->freetype_font()->height() - y0;
+        y1 = pen.y + font_->freetype_font()->height() - y1;
         {
             opengl::VertexBuffer::Bind bind(*vertex_buffer_);
             freetypeglxx::vec2 points[4];
@@ -99,8 +95,8 @@ void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     
     if(draw_setup_function_) draw_setup_function_(this, geometry, effect);
 
-    VIDEO_MANAGER()->shaders().ChangeFlag(VideoManager::Shaders::IGNORE_TEXTURE_COLOR, true);
-    opengl::ShaderProgram::Use shader_use(VIDEO_MANAGER()->shaders().current_shader());
+    graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
+    opengl::ShaderProgram::Use shader_use(graphic::manager()->shaders().current_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
@@ -119,7 +115,7 @@ void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     // Draw the triangle !
     glDrawArrays(GL_QUADS, 0, message_.size() * 4); // 12*3 indices starting at 0 -> 12 triangles
     
-    VIDEO_MANAGER()->shaders().ChangeFlag(VideoManager::Shaders::IGNORE_TEXTURE_COLOR, false);
+    graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
 }
 
 }  // namespace graphic

@@ -5,7 +5,7 @@ namespace ugdk {
 namespace input {
 
 // Managers
-class InputManager;
+class Manager;
 
 }  // namespace input
 }  // namespace ugdk

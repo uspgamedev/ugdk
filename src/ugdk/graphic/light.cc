@@ -1,12 +1,10 @@
 #include <GL/glew.h>
 #define NO_SDL_GLEXT
-#include <ugdk/config/config.h>
 #include "SDL_opengl.h"
 
 #include <ugdk/graphic/light.h>
 
-#include <ugdk/base/engine.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/module.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
@@ -40,7 +38,7 @@ Light::~Light() {
 
 void Light::Draw(const Geometry& geometry) {
     // Use our shader
-    opengl::ShaderProgram* shader = VIDEO_MANAGER()->light_shader();
+    opengl::ShaderProgram* shader = graphic::manager()->light_shader();
     opengl::ShaderProgram::Use shader_use(shader);
 
     shader_use.SendGeometry(geometry * Geometry(math::Vector2D(), dimension_));

@@ -1,22 +1,26 @@
-#include <ugdk/config/config.h>
+#include <ugdk/audio/manager.h>
+
 #include "SDL.h"
 #include "SDL_mixer.h"
-#include <ugdk/audio/audiomanager.h>
-#include <ugdk/util/pathmanager.h>
-#include <ugdk/base/engine.h>
+
+#include <ugdk/system/engine.h>
 #include <ugdk/audio/sample.h>
 #include <ugdk/audio/music.h>
 
 namespace ugdk {
 namespace audio {
 
-AudioManager::AudioManager() {
+Manager::Manager() {
 }
 
-AudioManager::~AudioManager() {
+Manager::~Manager() {
 }
 
-bool AudioManager::Initialize() {
+bool Manager::Initialize() {
+
+    if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
+        return false;
+
     // inicializa SDL_mixer
     if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) != 0)
         return false;
@@ -30,32 +34,29 @@ bool AudioManager::Initialize() {
     return true;
 }
 
-bool AudioManager::Release() {
+void Manager::Release() {
     ReleaseSamples();
     ReleaseMusics();
     Mix_CloseAudio();
-
-    // sucesso ;)
-    return true;
 }
 
-void AudioManager::Update() {
+void Manager::Update() {
 }
 
-void AudioManager::ReleaseSamples() {
+void Manager::ReleaseSamples() {
     std::map<std::string, Sample*>::iterator it;
     for(it = sample_data_.begin(); it != sample_data_.end(); ++it)
         delete it->second;
 }
 
-void AudioManager::ReleaseMusics() {
+void Manager::ReleaseMusics() {
     std::map<std::string, Music*>::iterator it;
     for(it = music_data_.begin(); it != music_data_.end(); ++it)
         delete it->second;
 }
 
-Sample* AudioManager::LoadSample(const std::string& filepath) {
-	std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
+Sample* Manager::LoadSample(const std::string& filepath) {
+	std::string fullpath = ugdk::system::ResolvePath(filepath);
     if(sample_data_.find(filepath) == sample_data_.end()) {
         Sample *sample = new Sample(fullpath);
         if(sample)
@@ -65,8 +66,8 @@ Sample* AudioManager::LoadSample(const std::string& filepath) {
     return sample_data_[filepath];
 }
 
-Music* AudioManager::LoadMusic(const std::string& filepath) {
-	std::string fullpath = PATH_MANAGER()->ResolvePath(filepath);
+Music* Manager::LoadMusic(const std::string& filepath) {
+	std::string fullpath = ugdk::system::ResolvePath(filepath);
     if(music_data_.find(filepath) == music_data_.end()) {
         Music *music = new Music(fullpath);
         if(music)
@@ -76,7 +77,7 @@ Music* AudioManager::LoadMusic(const std::string& filepath) {
     return music_data_[filepath];
 }
 
-Music* AudioManager::CurrentMusic() const {
+Music* Manager::CurrentMusic() const {
     return Music::playing_music_;
 }
 

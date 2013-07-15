@@ -7,7 +7,7 @@
 #include <ugdk/action.h>
 #include <ugdk/audio.h>
 #include <ugdk/graphic.h>
-#include <ugdk/base/types.h>
+#include <ugdk/common/types.h>
 #include <ugdk/action/mediamanager.h>
 
 namespace ugdk {
@@ -22,6 +22,17 @@ namespace action {
    itself.
 */
 class Scene {
+  private:
+
+    /// Auxiliar class for AddTask.
+    template <typename Ret>
+    struct TaskAdapter {
+        template <typename T>
+        static Task Adapt(T t) {
+            return Task(t);
+        }
+    };
+
   public:
     Scene();
       
@@ -49,11 +60,15 @@ class Scene {
         are ordered from smaller values to bigger values.
 
         The task's returned value is used to destroy the task or keep it alive:
-        - True keeps then another Update
+        - True keeps then for another Update.
         - False destroys then.
+        - void return type implies in 'always true'.
     
         Priority values are commonly in the [0; 1] interval. */
-    void AddTask(const Task& task, double priority = 0.5);
+    template <typename T>
+    void AddTask(T task, double priority = 0.5) {
+        AddFunctionTask(TaskAdapter<decltype(task(0.0))>::Adapt(task), priority);
+    }
 
     /// Finishes the scene.
     void Finish() { End(); finished_ = true; }
@@ -105,6 +120,8 @@ class Scene {
     audio::Music* background_music_;
 
   private:
+    void AddFunctionTask(const Task& task, double priority);
+
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;
 
@@ -131,8 +148,19 @@ class Scene {
     };
     std::list<OrderedTask> tasks_;
    
-  friend class Engine;
+    friend class Engine;
 }; // class Scene.
+
+template <>
+struct Scene::TaskAdapter<void> {
+    template <typename T>
+    static Task Adapt(T t) {
+        return Task([t](double dt) -> bool {
+            t(dt);
+            return true;
+        });
+    }
+};
 
 } /* namespace action */
 

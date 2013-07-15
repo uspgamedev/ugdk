@@ -19,7 +19,8 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/textmanager.h>
-#include <ugdk/graphic/videomanager.h>
+#include <ugdk/graphic/manager.h>
+#include <ugdk/graphic/module.h>
 
 %}
 
@@ -27,7 +28,7 @@
 %import(module="ugdk_math") <ugdk/math/frame.h>
 
 %ignore ugdk::graphic::Texture::CreateFromSurface(SDL_Surface* data);
-%ignore ugdk::graphic::VideoManager::PushAndApplyModifier(const Geometry& apply);
+%ignore ugdk::graphic::Manager::PushAndApplyModifier(const Geometry& apply);
 %ignore ugdk::graphic::Font::GetLetterSize(wchar_t letter);
 %ignore ugdk::graphic::SpritesheetData::frames() const;
 
@@ -49,7 +50,7 @@
 
 %include <ugdk/graphic/drawable.h>
 
-%import(module="ugdk_base") <ugdk/base/types.h>
+%import(module="ugdk_base") <ugdk/common/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_drawable") <ugdk/graphic/drawable/textbox.h> //this needs to go after the include drawable.h
 
@@ -65,7 +66,8 @@ disable_disown(ugdk::graphic::Node* new_child)
 %include <ugdk/graphic/spritesheet.h>
 
 %include <ugdk/graphic/textmanager.h>
-%include <ugdk/graphic/videomanager.h>
+%include <ugdk/graphic/manager.h>
+%include <ugdk/graphic/module.h>
 
 namespace ugdk {
 namespace graphic {
@@ -78,7 +80,7 @@ namespace graphic {
     export_class(Node)
     export_class(Spritesheet)
     export_class(TextManager)
-    export_class(VideoManager)
+    export_class(Manager)
 }
 }
 

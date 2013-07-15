@@ -7,7 +7,7 @@ namespace time {
 class TimeAccumulator;
 
 // Managers
-class TimeManager;
+class Manager;
 
 }  // namespace time
 }  // namespace ugdk

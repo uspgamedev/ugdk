@@ -1,4 +1,4 @@
-#include <ugdk/config/config.h>
+#include <ugdk/common/config.h>
 
 #ifdef UGDK_PYTHON_ENABLED
 #include <Python.h>
@@ -7,12 +7,11 @@
 #include <cstdlib>
 
 #include "SDL.h"
-#include <ugdk/base/engine.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/script.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>
 
-using ugdk::Engine;
 using ugdk::script::VirtualObj;
 
 static bool LuaTests() {
@@ -25,6 +24,8 @@ static bool LuaTests() {
     assert(f(13, 25) == 38);
     assert(main["soma"].Call(3, val).value<int>() == 45);
     return main["soma"].Call(3, 8).value<int>() == 11;
+#else
+    return true;
 #endif
 }
 
@@ -39,13 +40,15 @@ static bool PythonTests() {
 }
 
 int main(int argc, char **argv) {
-    ugdk::Configuration config;
+    ugdk::system::Configuration config;
     config.base_path = "data/";
+    config.audio_enabled = false;
+    config.input_enabled = false;
+    config.graphic_enabled = false;
     
     ugdk::script::InitScripts();
     
-    Engine* eng = Engine::reference();
-    eng->Initialize(config);
+    ugdk::system::Initialize(config);
 
 #ifdef UGDK_LUA_ENABLED
     if(!LuaTests()) puts("LUA FAILED!");
@@ -57,7 +60,7 @@ int main(int argc, char **argv) {
     if(!PythonTests()) puts("PYTHON FAILED!");
 #endif
     
-    eng->Run();
-    eng->Release();
+    ugdk::system::Run();
+    ugdk::system::Release();
     return 0;
 }

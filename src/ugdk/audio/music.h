@@ -56,7 +56,7 @@ class Music {
     static void MusicDone();
     static Music *playing_music_;
 
-  friend class AudioManager;
+    friend class Manager;
 };
 
 } // namespace audio

@@ -1,10 +1,10 @@
-#ifndef UGDK_BASE_RESOURCECONTAINER_H_
-#define UGDK_BASE_RESOURCECONTAINER_H_
+#ifndef UGDK_RESOURCE_RESOURCECONTAINER_H_
+#define UGDK_RESOURCE_RESOURCECONTAINER_H_
 
 #include <string>
 
 namespace ugdk {
-namespace base {
+namespace resource {
 
 class ResourceContainerBase {
   protected: ResourceContainerBase() {}
@@ -37,8 +37,8 @@ class ResourceContainer<T*> : public ResourceContainerBase {
     virtual T*   Load(   const std::string& filepath, const std::string& tag) = 0;
 };
 
-} // namespace base
+} // namespace resource
 } // namespace ugdk
 
-#endif // UGDK_BASE_RESOURCECONTAINER_H_
+#endif // UGDK_RESOURCE_RESOURCECONTAINER_H_
 

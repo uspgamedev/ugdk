@@ -3,8 +3,7 @@
 #include <cstdio>
 #include <algorithm>
 
-#include <ugdk/base/engine.h>
-#include <ugdk/util/pathmanager.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/script/langwrapper.h>
 #include <ugdk/script/virtualobj.h>
 
@@ -62,7 +61,7 @@ void ScriptManager::ExecuteCode(const string& language, const string& code) {
 
 
 VirtualObj ScriptManager::LoadModule(const string& script) {
-    string filepath = PATH_MANAGER()->ResolvePath(
+    string filepath = ugdk::system::ResolvePath(
         "scripts/" + ConvertDottedNotationToPath(script)
     );
 

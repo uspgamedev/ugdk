@@ -4,11 +4,10 @@
 #include <algorithm>
 #include "language.h"
 #include <ugdk/graphic/textmanager.h>
-#include <ugdk/base/resourcemanager.h>
+#include <ugdk/resource/module.h>
 #include <ugdk/graphic/drawable/label.h>
 #include <ugdk/graphic/drawable/textbox.h>
-#include <ugdk/base/engine.h>
-#include <ugdk/util/pathmanager.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/util/languageword.h>
 #include <ugdk/util/utf8.h>
 
@@ -22,7 +21,7 @@ using std::wstring;
 
 std::wstring LoadTextFromFile(const std::string& path) {
     std::wstring output;
-    std::string fullpath = PATH_MANAGER()->ResolvePath(path);
+    std::string fullpath = ugdk::system::ResolvePath(path);
 
     FILE *txtFile = fopen(fullpath.c_str(), "r");
     if(txtFile == nullptr) return output;
@@ -38,6 +37,7 @@ std::wstring LoadTextFromFile(const std::string& path) {
         buffer[buffer_size] = L'\0';
         output.append(buffer);
     }
+    fclose(txtFile);
     return output;
 }
 
@@ -150,7 +150,7 @@ static int title_type(char* str) {
 
 // Fills the map with the information on the given file
 bool Language::Load(const std::string& language_file) {
-    FILE* file = fopen(PATH_MANAGER()->ResolvePath(language_file).c_str(), "r");
+    FILE* file = fopen(ugdk::system::ResolvePath(language_file).c_str(), "r");
     if(file == nullptr)
         return false;
 
@@ -181,7 +181,7 @@ bool Language::Load(const std::string& language_file) {
         } else if(IsWord(buffer_raw)) {
 
             std::pair<LanguageWord*, std::string> result = ReadWord(buffer_raw, reading_type == TITLE_FILES);
-            RESOURCE_MANAGER()->word_container().Replace(result.second, result.first);
+            resource::manager()->get_container<LanguageWord*>()->Replace(result.second, result.first);
 
         } else {
             // Syntax error!

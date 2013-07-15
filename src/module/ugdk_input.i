@@ -5,23 +5,25 @@
 %{
 
 #include <ugdk/input/keys.h>
-#include <ugdk/input/inputmanager.h>
+#include <ugdk/input/manager.h>
+#include <ugdk/input/module.h>
 
 %}
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
-%import(module="ugdk_base") <ugdk/base/types.h>
+%import(module="ugdk_base") <ugdk/common/types.h>
 
-%newobject ugdk::input::InputManager::GetMousePosition();
+%newobject ugdk::input::Manager::GetMousePosition();
 
 %include <ugdk/input/keys.h>
-%include <ugdk/input/inputmanager.h>
+%include <ugdk/input/manager.h>
+%include <ugdk/input/module.h>
 
 namespace ugdk {
 namespace input {
     export_class(Key)
     export_class(MouseButton)
-    export_class(InputManager)
+    export_class(Manager)
 }
 }
  
