@@ -34,7 +34,7 @@ class Vector2D {
     Vector2D(double _x, double _y) : x(_x), y(_y) {}
 
     /// Copy constructor from Integer2D.
-    Vector2D(const ugdk::math::Integer2D& int2d);
+    Vector2D(const math::Integer2D& int2d);
 
     ~Vector2D() { }
 
@@ -91,7 +91,7 @@ class Vector2D {
     *  @return Rotated Vector
     *  @see Angle
     */
-    Vector2D Rotate(const double angle) const;
+    Vector2D Rotate(double angle) const;
     
     /// Mirrors this Vector2D (in-place) by the "axis" axis. Include types.h and use "using namespace ugdk::enums".
     /** @param axis Either mirroraxis::HORZ, mirroraxis::VERT, mirroraxis::DIAG_UP, or mirroraxis::DIAG_DOWN.
@@ -109,7 +109,7 @@ class Vector2D {
     /** The resulting scaled vector is (this->x * scale.x, this->y * scale.y).
      *  @return scaled vector
      */
-    Vector2D Scale(const Vector2D &scale) const;
+    Vector2D Scale(const Vector2D& scale) const;
 
     // Static methods
 
@@ -117,7 +117,7 @@ class Vector2D {
     /** The sum of two vectors (x,y) (w,z) is igual to the vector (x+w, y+z)
     *  @return Sum Vector
     */
-    static Vector2D Add(const Vector2D &a, const Vector2D &b) {
+    static Vector2D Add(const Vector2D& a, const Vector2D& b) {
         return Vector2D(a.x + b.x, a.y + b.y);
     }
     
@@ -125,7 +125,7 @@ class Vector2D {
     /** The subtraction of two vectors (x,y) (z,w) is equal to the vector (x-z,y-w) in this order
     *  @return Subtract Vector 
     */
-    static Vector2D Subtract(const Vector2D &a, const Vector2D &b) {
+    static Vector2D Subtract(const Vector2D& a, const Vector2D& b) {
         return Vector2D(a.x - b.x, a.y - b.y);
     }
     
@@ -133,7 +133,7 @@ class Vector2D {
     /** A vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y*scalar)
     *  @return Scalar Multiplied Vector
     */
-    static Vector2D Multiply(const Vector2D &a, const double &scalar) {
+    static Vector2D Multiply(const Vector2D& a, double scalar) {
         return Vector2D(a.x * scalar, a.y * scalar);
     }
     
@@ -141,7 +141,7 @@ class Vector2D {
     /** By definition the inner product of two vectors (x,y) (w,z) is equal to (x*w) + (y*z)
     *  @return InnerProduct
     */
-    static double InnerProduct(const Vector2D &a, const Vector2D &b) {
+    static double InnerProduct(const Vector2D& a, const Vector2D& b) {
         return (a.x * b.x) + (a.y * b.y);
     }
 
@@ -164,14 +164,14 @@ class Vector2D {
     *  @return normalized vector
     *  @see Normalize()
     */
-    static Vector2D Normalized(Vector2D &a) { return a.Normalize(); }
+    static Vector2D Normalized(Vector2D& a) { return a.Normalize(); }
 
     /// Deprecated. Use the method function Rotate.
     /** Deprecated method that returns a rotated vector of a vector (x,y). Use instead Rotate
     *  @return rotated vector
     *  @see Rotate
     */
-    static Vector2D Rotate(Vector2D &a, double angle) {
+    static Vector2D Rotate(Vector2D& a, double angle) {
         return a.Rotate(angle);
     }
 
@@ -180,7 +180,7 @@ class Vector2D {
 		/** Two vectors are equivalent if the coordinates are equal.
         *  @return True if vectors are equivalent.
         */
-	bool operator==(const Vector2D &rhs) {
+	bool operator==(const Vector2D& rhs) {
 		return x==rhs.x && y==rhs.y;
 	}
 
@@ -190,11 +190,14 @@ class Vector2D {
     // TODO document and revise
     Vector2D& operator-=(const Vector2D &other);
     
+    // TODO document
+    Vector2D& operator*=(double other);
+    
     /// Method that returns a vector equal to the sum of two others
         /** The sum of two vectors (x,y) (w,z) is igual to the vector (x+w, y+z)
         *  @return Sum Vector
         */
-    Vector2D operator+(const Vector2D &right) const;
+    Vector2D operator+(const Vector2D& right) const;
 
      /// Method that returns a vector equal to the oposite of another
         /** The oposite of a vector (x,y) is equal to the vector (-x,-y) in this order
@@ -207,20 +210,20 @@ class Vector2D {
         /** The subtraction of two vectors (x,y) (z,w) is equal to the vector (x-z,y-w) in this order
         *  @return Subtract Vector 
         */
-    Vector2D operator-(const Vector2D &right) const;
+    Vector2D operator-(const Vector2D& right) const;
 
 
      /// Method that returns a vector equal to the a vector multiplied by a scalar
         /** A vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y*scalar)
         *  @return Scalar Multiplied Vector
         */
-    Vector2D operator*(const double   &scalar) const;
+    Vector2D operator*(double scalar) const;
 
      /// Method that returns a vector equal to the a vector multiplied by the inverse of a scalar
         /** A vector (x,y) multiplied by the inverse of a scalar is equal to the vector (x * 1/scalar, y * 1/scalar)
         *  @return Inverse Scalar Multiplied Vector
         */
-    Vector2D operator/(const double   &scalar) const;
+    Vector2D operator/(double scalar) const;
 
     /// Method that returns a scalar equal to the inner product of two vectors
         /** By definition the inner product of two vectors (x,y) (w,z) is equal to (x*w) + (y*z)
@@ -229,11 +232,11 @@ class Vector2D {
     double    operator*(const Vector2D &right) const;
 };
 
- /// Method that returns a vector equal to the a vector multiplied by a scalar
-    /** A vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y*scalar)
-    *  @return Scalar Multiplied Vector
-    */
-Vector2D operator*(const double  &scalar, const Vector2D &right);
+/// Method that returns a vector equal to the a vector multiplied by a scalar
+/** A vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y*scalar)
+  * @return Scalar Multiplied Vector
+  */
+Vector2D operator*(double scalar, const Vector2D &right);
 
 }  // namespace math
 }  // namespace ugdk

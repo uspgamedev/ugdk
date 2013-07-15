@@ -196,30 +196,36 @@ class Integer2D {
     Integer2D& operator%=(int scalar);
 
     /// Method that returns a integer equal to the sum of two others
-        /** The sum of two vectors (x,y) (w,z) is igual to the integer (x+w, y+z)
-        *  @return Sum Integer
-        */
+    /** The sum of two vectors (x,y) (w,z) is igual to the integer (x+w, y+z)
+      *  @return Sum Integer
+      */
     Integer2D operator+(const Integer2D &right) const;
 
-     /// Method that returns a integer equal to the oposite of another
-        /** The oposite of a integer (x,y) is equal to the integer (-x,-y) in this order
-        *  @return Oposite Integer 
-        */
+    /// Method that returns a integer equal to the oposite of another
+    /** The oposite of a integer (x,y) is equal to the integer (-x,-y) in this order
+      * @return Oposite Integer 
+      */
     // TODO revise
     Integer2D operator-() const;
 
-     /// Method that returns a integer equal to the subtraction of two others
-        /** The subtraction of two vectors (x,y) (z,w) is equal to the integer (x-z,y-w) in this order
-        *  @return Subtract Integer 
-        */
+    /// Method that returns a integer equal to the subtraction of two others
+    /** The subtraction of two vectors (x,y) (z,w) is equal to the integer (x-z,y-w) in this order
+      * @return Subtract Integer 
+      */
     Integer2D operator-(const Integer2D &right) const;
 
 
-     /// Method that returns a integer equal to the a integer multiplied by a scalar
-        /** A integer (x,y) multiplied by a scalar a is equal to the integer (x * scalar, y*scalar)
-        *  @return Scalar Multiplied Integer
-        */
+    /// Method that returns a integer equal to the a integer multiplied by a int
+    /** A integer (x,y) multiplied by a scalar a is equal to the integer (x * scalar, y*scalar)
+      * @return Scalar Multiplied Integer
+      */
     Integer2D operator*(int scalar) const;
+     
+    /// Method that returns a vector equal to the a integer multiplied by a double
+    /** A Vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y * scalar)
+      * @return Scalar Multiplied Vector
+      */
+    Vector2D operator*(double scalar) const;
 
      /// Method that returns a integer equal to the a integer multiplied by the inverse of a scalar
         /** A integer (x,y) multiplied by the inverse of a scalar is equal to the integer (x * 1/scalar, y * 1/scalar)
@@ -248,11 +254,17 @@ class Integer2D {
     bool operator!=(const Integer2D& right) const { return !(right == *this); }
 };
 
- /// Method that returns a integer equal to the a integer multiplied by a scalar
-    /** A integer (x,y) multiplied by a scalar a is equal to the integer (x * scalar, y*scalar)
-    *  @return Scalar Multiplied Integer
-    */
+/// Method that returns a integer equal to the a integer multiplied by a scalar
+/** A integer (x,y) multiplied by a scalar a is equal to the integer (x * scalar, y*scalar)
+  * @return Scalar Multiplied Integer
+  */
 Integer2D operator*(int scalar, const Integer2D &right);
+
+/// Method that returns a vector equal to the a integer multiplied by a double
+/** A Vector (x,y) multiplied by a scalar a is equal to the vector (x * scalar, y * scalar)
+  * @return Scalar Multiplied Vector
+  */
+Vector2D operator*(double scalar, const Integer2D &right);
 
 }  // namespace math
 }  // namespace ugdk

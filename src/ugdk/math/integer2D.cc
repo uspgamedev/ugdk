@@ -191,6 +191,12 @@ Integer2D Integer2D::operator*(int scalar) const {
     return ret;
 }
 
+Vector2D Integer2D::operator*(double scalar) const {
+    Vector2D ret(*this);
+    ret *= scalar;
+    return ret;
+}
+
 Integer2D Integer2D::operator/(int scalar) const {
     assert( scalar != 0 );
 
@@ -207,7 +213,7 @@ Integer2D Integer2D::operator%(int scalar) const {
     return ret;
 }
 
-int Integer2D::operator*(const Integer2D &right) const {
+int Integer2D::operator*(const Integer2D& right) const {
     return x * right.x + y * right.y;
 }
 
@@ -217,9 +223,10 @@ Integer2D Integer2D::operator%(const Integer2D& right) const {
     return Remainder(right);
 }
 
-//-//
-
-Integer2D operator*(int scalar, const Integer2D &right) {
+Integer2D operator*(int scalar, const Integer2D& right) {
+    return right * scalar;
+}
+Vector2D operator*(double scalar, const Integer2D& right) {
     return right * scalar;
 }
 
