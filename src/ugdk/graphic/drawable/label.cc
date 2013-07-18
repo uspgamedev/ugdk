@@ -46,7 +46,7 @@ void Label::ChangeMessage(const std::wstring& message) {
     texture_buffer_= opengl::VertexBuffer::Create(message_.size() * 4 * sizeof(freetypeglxx::vec2), 
                                                     GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
-    freetypeglxx::vec2 pen;
+    freetypeglxx::vec2 pen(0.0, 0.0);
     size_t buffer_offset = 0;
     for(size_t i = 0; i < message.size(); ++i ) {
         freetypeglxx::TextureGlyph* glyph = font_->freetype_font()->GetGlyph(message[i]);
