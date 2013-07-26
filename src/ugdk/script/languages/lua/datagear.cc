@@ -315,7 +315,7 @@ int DataGear::DoFile(lua_State* L) {
 
     L_.settop(3);
     GETARG(L_, 1, DataGear, dtgear);
-    const char* filename = L_.aux().checkstring(2);
+    std::string filename = L_.aux().checkstring(2);
     DataID result_id = L_.aux().checkintteger(3);
     L_.settop(0);
 
@@ -326,7 +326,7 @@ int DataGear::DoFile(lua_State* L) {
             "At operation dofile: could not acquire data table."
         );
 
-    const Constant result = L_.aux().loadfile(filename);
+    const Constant result = L_.aux().loadfile(filename.c_str());
     if (result != Constant::OK()) {
         dtgear.Report(result);
         return 0;
