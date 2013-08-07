@@ -153,6 +153,9 @@ void Manager::UpdateVSync() {
 }
 
 void Manager::mergeLights(const std::list<action::Scene*>& scene_list) {
+    glClearColor( 1.0, 1.0, 1.0, 1.0 );
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
     // Lights are simply added together.
     glBlendFunc(GL_ONE, GL_ONE);
 
@@ -160,10 +163,13 @@ void Manager::mergeLights(const std::list<action::Scene*>& scene_list) {
     glDrawBuffer(GL_BACK);
     glReadBuffer(GL_BACK);
 
+    /* FIXME: DEPOIS AGENTE VE
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->RenderLight(initial_geometry_, VisualEffect());
-    
+    */
+
+
     // copy the framebuffer pixels to a texture
     glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, settings_.resolution.x, settings_.resolution.y);
@@ -172,6 +178,7 @@ void Manager::mergeLights(const std::list<action::Scene*>& scene_list) {
     glPopAttrib(); // GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
 
     // Clear the screen so it's back to how it was before.
+    glClearColor( 0.0, 0.0, 0.0, 0.0 );
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
@@ -192,24 +199,6 @@ void Manager::Render(const std::list<action::Scene*>& scene_list) {
     }
     ///==================================================
 
-    ///==================================================
-    // Draw all the sprites from all scenes.
-    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
-        if (!(*it)->finished())
-            (*it)->content_node()->Render(initial_geometry_, VisualEffect());
-    ///==================================================
-
-
-    ///==================================================
-    if(settings_.light_system) {
-        shaders_.ChangeFlag(Shaders::USE_LIGHT_BUFFER, false);
-    }
-    // Draw all interface layers, with the usual RGBA blend.
-    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
-        if (!(*it)->finished())
-            (*it)->interface_node()->Render(initial_geometry_, VisualEffect());
-    ///==================================================
-    
     for(action::Scene* it : scene_list)
         it->Render(initial_geometry_, VisualEffect());
 

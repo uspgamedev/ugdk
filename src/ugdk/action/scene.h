@@ -98,11 +98,6 @@ class Scene {
     bool visible() const { return visible_; }
     void set_visible(bool is_visible) { visible_ = is_visible; }
 
-          graphic::Node*   content_node()       { return   content_node_; }
-    const graphic::Node*   content_node() const { return   content_node_; }
-          graphic::Node* interface_node()       { return interface_node_; }
-    const graphic::Node* interface_node() const { return interface_node_; }
-
           MediaManager& media_manager()       { return media_manager_; }
     const MediaManager& media_manager() const { return media_manager_; }
 
@@ -144,9 +139,6 @@ class Scene {
 
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;
-
-    graphic::Node*   content_node_;
-    graphic::Node* interface_node_;
 
     /// A MediaManager provided for users.
     MediaManager media_manager_;

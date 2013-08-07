@@ -24,9 +24,7 @@ Scene::Scene()
     active_(true),
     visible_(true),
     background_music_(nullptr), 
-    stops_previous_music_(true), 
-    content_node_(new graphic::Node), 
-    interface_node_(new graphic::Node) {
+    stops_previous_music_(true) {
 
         tasks_.emplace_back(0.4, [&](double dt) {
             media_manager_.Update(dt);
@@ -62,8 +60,6 @@ Scene::Scene()
 
 Scene::~Scene() {
     //RemoveAllEntities(); Play safe... TODO: activate this and refactor users!
-    delete content_node_;
-    delete interface_node_;
 }
 
 void Scene::Focus() {
