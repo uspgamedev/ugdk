@@ -33,6 +33,9 @@ class Scene {
         }
     };
 
+    // struct Scene::TaskAdapter<void>
+    // Located after Scene definition.
+
   public:
     Scene();
       
@@ -82,10 +85,15 @@ class Scene {
     /// Whether this scene stops the previous music even if wont play any music.
     void StopsPreviousMusic(bool set) { stops_previous_music_ = set; }
 
+    void Render() const;
+
     /** @name Getters and Setters
     @{
     */
     bool finished() const { return finished_; }
+
+    bool active() const { return active_; }
+    void set_active(bool is_active) { active_ = is_active; }
 
           graphic::Node*   content_node()       { return   content_node_; }
     const graphic::Node*   content_node() const { return   content_node_; }
@@ -100,11 +108,14 @@ class Scene {
     /**@}
      */
 
-    void set_defocus_callback(std::function<void (Scene*)> defocus_callback) { 
+    void set_defocus_callback(const std::function<void (Scene*)>& defocus_callback) { 
         defocus_callback_ = defocus_callback;
     }
-    void set_focus_callback(std::function<void (Scene*)> focus_callback) { 
+    void set_focus_callback(const std::function<void (Scene*)>& focus_callback) { 
         focus_callback_ = focus_callback;
+    }
+    void set_render_function(const std::function<void (void)>& render_function) {
+        render_function_ = render_function;
     }
 
   protected:
@@ -112,8 +123,11 @@ class Scene {
     /// Ends the scene activity.
     /** Note: do not release any resources in this method. */
     virtual void End();
+    
+    /// Tells whether the scene is currently running or not.
+    bool active_;
 
-    /// Tells whether scene is finished or not.
+    /// Tells whether the scene is finished or not.
     bool finished_;
 
     /// The background music when this scene is on top.
@@ -135,6 +149,7 @@ class Scene {
     std::queue<Entity*> queued_entities_;
     std::function<void (Scene*)> defocus_callback_;
     std::function<void (Scene*)> focus_callback_;
+    std::function<void (void)> render_function_;
 
     struct OrderedTask {
         OrderedTask(double p, const Task& t) : priority(p), task(t) {}

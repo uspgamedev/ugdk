@@ -162,8 +162,7 @@ void Run() {
 
         if (!quit_) {
             for(action::Scene* it : scene_list_)
-                if(!it->finished())
-                    it->Update(delta_t);
+                it->Update(delta_t);
 
             if(graphic::manager())
                 graphic::manager()->Render(scene_list_);

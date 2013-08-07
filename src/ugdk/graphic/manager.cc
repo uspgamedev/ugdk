@@ -178,24 +178,32 @@ void Manager::mergeLights(const std::list<action::Scene*>& scene_list) {
 // Desenha backbuffer na tela
 void Manager::Render(const std::list<action::Scene*>& scene_list) {
 
+    for(action::Scene* it : scene_list)
+        it->Render();
+
+    ///==================================================
     // Draw all lights to a buffer, merging then to a light texture.
     if(settings_.light_system) {
         mergeLights(scene_list);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
-
     // Change the shader to the LightSystem shader, and bind the light texture.
     if(settings_.light_system) {
         shaders_.ChangeFlag(Shaders::USE_LIGHT_BUFFER, true);
         opengl::ShaderProgram::Use shader_use(shaders_.current_shader());
         shader_use.SendTexture(1, light_buffer_, shaders_.current_shader()->UniformLocation("light_texture"));
     }
+    ///==================================================
 
+    ///==================================================
     // Draw all the sprites from all scenes.
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->content_node()->Render(initial_geometry_, VisualEffect());
+    ///==================================================
 
+
+    ///==================================================
     if(settings_.light_system) {
         shaders_.ChangeFlag(Shaders::USE_LIGHT_BUFFER, false);
     }
@@ -203,6 +211,7 @@ void Manager::Render(const std::list<action::Scene*>& scene_list) {
     for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
         if (!(*it)->finished())
             (*it)->interface_node()->Render(initial_geometry_, VisualEffect());
+    ///==================================================
 
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapBuffers();

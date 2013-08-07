@@ -20,7 +20,8 @@ using std::list;
 }*/
 
 Scene::Scene() 
-  : finished_(false), 
+  : finished_(false),
+    active_(true),
     background_music_(nullptr), 
     stops_previous_music_(true), 
     content_node_(new graphic::Node), 
@@ -100,11 +101,19 @@ void Scene::AddFunctionTask(const Task& task, double priority) {
 }
 
 void Scene::Update(double dt) {
+    if(finished_ || !active_)
+        return;
+
     // For each task, do. Note the tasks list is already ordered by the priorities.
     tasks_.remove_if([dt](OrderedTask& otask) {
         // Calls the task, and removes it from the list if the task returned false.
         return !otask.task(dt);
     });
+}
+
+void Scene::Render() const {
+    if(!finished_ && render_function_)
+        render_function_();
 }
 
 void Scene::End() {
