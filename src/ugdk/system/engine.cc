@@ -26,6 +26,7 @@ static    graphic:: TextManager *        text_manager_;
 static          LanguageManager *    language_manager_;
 static    bool quit_;
 static    std::list<action::Scene*> scene_list_;
+static    std::list<action::Scene*> queued_scene_list_;
 static    Configuration configuration_;
 
 graphic::TextManager *text_manager() {
@@ -104,6 +105,10 @@ void Run() {
 
     quit_ = false;
     while(!quit_) {
+        // Insert all queued Scenes at the end of the scene list.
+        scene_list_.insert(scene_list_.end(), queued_scene_list_.begin(), queued_scene_list_.end());
+        queued_scene_list_.clear();
+
         if(current_top_scene && current_top_scene != CurrentScene()) {
             current_top_scene->DeFocus();
             (current_top_scene = CurrentScene())->Focus();
@@ -190,7 +195,7 @@ void Release() {
 }
 
 void PushScene(action::Scene* scene) {
-    scene_list_.push_back(scene);
+    queued_scene_list_.push_back(scene);
 }
 
 action::Scene* CurrentScene() {
