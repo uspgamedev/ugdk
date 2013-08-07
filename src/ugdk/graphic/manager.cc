@@ -178,9 +178,6 @@ void Manager::mergeLights(const std::list<action::Scene*>& scene_list) {
 // Desenha backbuffer na tela
 void Manager::Render(const std::list<action::Scene*>& scene_list) {
 
-    for(action::Scene* it : scene_list)
-        it->Render();
-
     ///==================================================
     // Draw all lights to a buffer, merging then to a light texture.
     if(settings_.light_system) {
@@ -212,6 +209,9 @@ void Manager::Render(const std::list<action::Scene*>& scene_list) {
         if (!(*it)->finished())
             (*it)->interface_node()->Render(initial_geometry_, VisualEffect());
     ///==================================================
+    
+    for(action::Scene* it : scene_list)
+        it->Render(initial_geometry_, VisualEffect());
 
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapBuffers();

@@ -22,6 +22,7 @@ using std::list;
 Scene::Scene() 
   : finished_(false),
     active_(true),
+    visible_(true),
     background_music_(nullptr), 
     stops_previous_music_(true), 
     content_node_(new graphic::Node), 
@@ -111,9 +112,9 @@ void Scene::Update(double dt) {
     });
 }
 
-void Scene::Render() const {
-    if(!finished_ && render_function_)
-        render_function_();
+void Scene::Render(const graphic::Geometry& geometry, const graphic::VisualEffect& effect) const {
+    if(!finished_ && visible_ && render_function_)
+        render_function_(geometry, effect);
 }
 
 void Scene::End() {

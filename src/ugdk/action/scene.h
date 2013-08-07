@@ -85,7 +85,7 @@ class Scene {
     /// Whether this scene stops the previous music even if wont play any music.
     void StopsPreviousMusic(bool set) { stops_previous_music_ = set; }
 
-    void Render() const;
+    void Render(const graphic::Geometry&, const graphic::VisualEffect&) const;
 
     /** @name Getters and Setters
     @{
@@ -94,6 +94,9 @@ class Scene {
 
     bool active() const { return active_; }
     void set_active(bool is_active) { active_ = is_active; }
+    
+    bool visible() const { return visible_; }
+    void set_visible(bool is_visible) { visible_ = is_visible; }
 
           graphic::Node*   content_node()       { return   content_node_; }
     const graphic::Node*   content_node() const { return   content_node_; }
@@ -114,7 +117,7 @@ class Scene {
     void set_focus_callback(const std::function<void (Scene*)>& focus_callback) { 
         focus_callback_ = focus_callback;
     }
-    void set_render_function(const std::function<void (void)>& render_function) {
+    void set_render_function(const std::function<void (const graphic::Geometry&, const graphic::VisualEffect&)>& render_function) {
         render_function_ = render_function;
     }
 
@@ -129,6 +132,9 @@ class Scene {
 
     /// Tells whether the scene is finished or not.
     bool finished_;
+
+    /// Tells whether the scene is visible or not.
+    bool visible_;
 
     /// The background music when this scene is on top.
     audio::Music* background_music_;
@@ -149,7 +155,7 @@ class Scene {
     std::queue<Entity*> queued_entities_;
     std::function<void (Scene*)> defocus_callback_;
     std::function<void (Scene*)> focus_callback_;
-    std::function<void (void)> render_function_;
+    std::function<void (const graphic::Geometry&, const graphic::VisualEffect&)> render_function_;
 
     struct OrderedTask {
         OrderedTask(double p, const Task& t) : priority(p), task(t) {}
