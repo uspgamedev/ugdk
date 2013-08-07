@@ -156,7 +156,9 @@ void Run() {
         }
 
         if (!quit_) {
-            CurrentScene()->Update(delta_t);
+            for(action::Scene* it : scene_list_)
+                if(!it->finished())
+                    it->Update(delta_t);
 
             if(graphic::manager())
                 graphic::manager()->Render(scene_list_);
@@ -193,6 +195,10 @@ void PushScene(action::Scene* scene) {
 
 action::Scene* CurrentScene() {
     return scene_list_.empty() ? nullptr : scene_list_.back();
+}
+
+const std::list<action::Scene*>& scene_list() {
+    return scene_list_;
 }
 
 void PopScene() {

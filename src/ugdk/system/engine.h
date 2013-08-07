@@ -1,7 +1,6 @@
 #ifndef UGDK_SYSTEM_ENGINE_H_
 #define UGDK_SYSTEM_ENGINE_H_
 
-#include <vector>
 #include <list>
 #include <string>
 #include <ugdk/action.h>
@@ -13,7 +12,6 @@
 #include <ugdk/util.h>
 #include <ugdk/common/types.h>
 #include <ugdk/system/configuration.h>
-#include <ugdk/math/vector2D.h>
 
 namespace ugdk {
 namespace system {
@@ -68,6 +66,10 @@ void PushScene(action::Scene* scene);
 
 /// Returns the current scene.
 action::Scene* CurrentScene();
+
+/// Returns the scene list.
+/** The list is changed when PushScene is called. */
+const std::list<action::Scene*>& scene_list();
 
 /// Removes the top scene.
 void PopScene();
