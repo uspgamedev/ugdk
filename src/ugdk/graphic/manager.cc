@@ -193,9 +193,10 @@ void Manager::Render(const std::list<action::Scene*>& scene_list) {
     }
     // Change the shader to the LightSystem shader, and bind the light texture.
     if(settings_.light_system) {
-        shaders_.ChangeFlag(Shaders::USE_LIGHT_BUFFER, true);
-        opengl::ShaderProgram::Use shader_use(shaders_.current_shader());
-        shader_use.SendTexture(1, light_buffer_, shaders_.current_shader()->UniformLocation("light_texture"));
+        opengl::ShaderProgram::Use(shaders_.GetSpecificShader(Shaders::USE_LIGHT_BUFFER))
+            .SendTexture(1, light_buffer_, "light_texture");
+        opengl::ShaderProgram::Use(shaders_.GetSpecificShader(Shaders::USE_LIGHT_BUFFER | Shaders::IGNORE_TEXTURE_COLOR))
+            .SendTexture(1, light_buffer_, "light_texture");
     }
     ///==================================================
 
@@ -232,6 +233,10 @@ void Manager::initializeLight() {
 
 const opengl::ShaderProgram* Manager::Shaders::current_shader() const {
     return shaders_[flags_.to_ulong()];
+}
+        
+const opengl::ShaderProgram* Manager::Shaders::GetSpecificShader(const std::bitset<Manager::Shaders::NUM_FLAGS>& flags) const {
+    return shaders_[flags.to_ulong()];
 }
 
 void Manager::Shaders::ChangeFlag(Flag flag, bool value) {

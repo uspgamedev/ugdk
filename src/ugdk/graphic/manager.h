@@ -72,6 +72,8 @@ class Manager {
         };
 
         const opengl::ShaderProgram* current_shader() const;
+        
+        const opengl::ShaderProgram* GetSpecificShader(const std::bitset<NUM_FLAGS>& flags) const;
 
         void ChangeFlag(Flag, bool);
 
