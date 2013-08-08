@@ -43,10 +43,14 @@ class ShaderProgram {
         void SendGeometry(const glm::mat4&);
         void SendGeometry(const ugdk::graphic::Geometry&);
         void SendEffect(const ugdk::graphic::VisualEffect&);
+
         void SendTexture(GLint slot, const Texture* texture);
         void SendTexture(GLint slot, const Texture* texture, GLuint location);
+        void SendTexture(GLint slot, const Texture* texture, const std::string& location);
         void SendTexture(GLint slot, GLuint texture);
         void SendTexture(GLint slot, GLuint texture, GLuint location);
+        void SendTexture(GLint slot, GLuint texture, const std::string& location);
+
         void SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2);
 
       private:

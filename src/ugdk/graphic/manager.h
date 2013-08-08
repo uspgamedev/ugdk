@@ -37,6 +37,8 @@ struct VideoSettings {
         fullscreen(_fullscreen), vsync(_vsync), light_system(_light_system) {}
 };
 
+action::Scene* CreateLightrenderingScene(std::function<void (const graphic::Geometry&, const graphic::VisualEffect&)> render_light_function);
+
 class Manager {
   public:
     static const int COLOR_DEPTH = 32;
@@ -52,6 +54,8 @@ class Manager {
     /// Updates the settings and applies the changes.
     /** Warning: changing the resolution and/or fullscreen is a slow operation. */
     bool ChangeSettings(const VideoSettings& new_settings);
+
+    void SaveBackbufferToTexture(Texture* texture);
     
     /// Convenience
     const math::Integer2D& video_size() const { return settings_.resolution; }
@@ -72,6 +76,8 @@ class Manager {
         };
 
         const opengl::ShaderProgram* current_shader() const;
+        
+        const opengl::ShaderProgram* GetSpecificShader(const std::bitset<NUM_FLAGS>& flags) const;
 
         void ChangeFlag(Flag, bool);
 

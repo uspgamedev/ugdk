@@ -20,11 +20,11 @@ using std::list;
 }*/
 
 Scene::Scene() 
-  : finished_(false), 
+  : finished_(false),
+    active_(true),
+    visible_(true),
     background_music_(nullptr), 
-    stops_previous_music_(true), 
-    content_node_(new graphic::Node), 
-    interface_node_(new graphic::Node) {
+    stops_previous_music_(true) {
 
         tasks_.emplace_back(0.4, [&](double dt) {
             media_manager_.Update(dt);
@@ -60,8 +60,6 @@ Scene::Scene()
 
 Scene::~Scene() {
     //RemoveAllEntities(); Play safe... TODO: activate this and refactor users!
-    delete content_node_;
-    delete interface_node_;
 }
 
 void Scene::Focus() {
@@ -100,11 +98,19 @@ void Scene::AddFunctionTask(const Task& task, double priority) {
 }
 
 void Scene::Update(double dt) {
+    if(finished_ || !active_)
+        return;
+
     // For each task, do. Note the tasks list is already ordered by the priorities.
     tasks_.remove_if([dt](OrderedTask& otask) {
         // Calls the task, and removes it from the list if the task returned false.
         return !otask.task(dt);
     });
+}
+
+void Scene::Render(const graphic::Geometry& geometry, const graphic::VisualEffect& effect) const {
+    if(!finished_ && visible_ && render_function_)
+        render_function_(geometry, effect);
 }
 
 void Scene::End() {

@@ -16,6 +16,7 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
+#include <ugdk/graphic/module.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 
 #define LN255 5.5412635451584261462455391880218
@@ -74,8 +75,16 @@ bool Manager::ChangeSettings(const VideoSettings& new_settings) {
     }
 
     UpdateVSync();
+    shaders_.ChangeFlag(Shaders::USE_LIGHT_BUFFER, settings_.light_system);
 
     return true;
+}
+
+void Manager::SaveBackbufferToTexture(Texture* texture) {
+    glBindTexture(GL_TEXTURE_2D, texture->gltexture());
+    glReadBuffer(GL_BACK);
+    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, texture->width(), texture->height());
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 // Changes the resolution to the requested value.
@@ -152,57 +161,45 @@ void Manager::UpdateVSync() {
 #endif
 }
 
-void Manager::mergeLights(const std::list<action::Scene*>& scene_list) {
-    // Lights are simply added together.
-    glBlendFunc(GL_ONE, GL_ONE);
+action::Scene* CreateLightrenderingScene(std::function<void (const graphic::Geometry&, const graphic::VisualEffect&)> render_light_function) {
+    action::Scene* light_scene = new action::Scene;
+    // This scene has no logic, so quit if you ask for it to be only scene.
+    light_scene->set_focus_callback([](action::Scene* scene) { scene->Finish(); });
+    light_scene->set_render_function([render_light_function](const graphic::Geometry& geometry, const graphic::VisualEffect& effect) {
+        graphic::Manager* manager = graphic::manager();
 
-    glPushAttrib(GL_COLOR_BUFFER_BIT | GL_PIXEL_MODE_BIT); // for GL_DRAW_BUFFER and GL_READ_BUFFER
-    glDrawBuffer(GL_BACK);
-    glReadBuffer(GL_BACK);
-
-    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
-        if (!(*it)->finished())
-            (*it)->content_node()->RenderLight(initial_geometry_, VisualEffect());
+        glClearColor( 0.0, 0.0, 0.0, 0.0 );
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     
-    // copy the framebuffer pixels to a texture
-    glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, settings_.resolution.x, settings_.resolution.y);
-    glBindTexture(GL_TEXTURE_2D, 0);
+        // Lights are simply added together.
+        glBlendFunc(GL_ONE, GL_ONE);
 
-    glPopAttrib(); // GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT
+        // Draw the lights, as the user specified.
+        render_light_function(geometry, effect);
 
-    // Clear the screen so it's back to how it was before.
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        // Draw all lights to a buffer, merging then to a light texture.
+        manager->SaveBackbufferToTexture(manager->light_buffer());
+    
+        // Clear the screen so it's back to how it was before.
+        glClearColor( 0.0, 0.0, 0.0, 0.0 );
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        // Bind the light texture to all shaders that USE_LIGHT_BUFFER.
+        opengl::ShaderProgram::Use(manager->shaders().GetSpecificShader((1 << 0) + (0 << 1)))
+            .SendTexture(1, manager->light_buffer(), "light_texture");
+        opengl::ShaderProgram::Use(manager->shaders().GetSpecificShader((1 << 0) + (1 << 1)))
+            .SendTexture(1, manager->light_buffer(), "light_texture");
+    });
+
+    return light_scene;
 }
 
 // Desenha backbuffer na tela
 void Manager::Render(const std::list<action::Scene*>& scene_list) {
 
-    // Draw all lights to a buffer, merging then to a light texture.
-    if(settings_.light_system) {
-        mergeLights(scene_list);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    // Change the shader to the LightSystem shader, and bind the light texture.
-    if(settings_.light_system) {
-        shaders_.ChangeFlag(Shaders::USE_LIGHT_BUFFER, true);
-        opengl::ShaderProgram::Use shader_use(shaders_.current_shader());
-        shader_use.SendTexture(1, light_buffer_, shaders_.current_shader()->UniformLocation("light_texture"));
-    }
-
-    // Draw all the sprites from all scenes.
-    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
-        if (!(*it)->finished())
-            (*it)->content_node()->Render(initial_geometry_, VisualEffect());
-
-    if(settings_.light_system) {
-        shaders_.ChangeFlag(Shaders::USE_LIGHT_BUFFER, false);
-    }
-    // Draw all interface layers, with the usual RGBA blend.
-    for(std::list<action::Scene*>::const_iterator it = scene_list.begin(); it != scene_list.end(); ++it)
-        if (!(*it)->finished())
-            (*it)->interface_node()->Render(initial_geometry_, VisualEffect());
+    for(action::Scene* it : scene_list)
+        it->Render(initial_geometry_, VisualEffect());
 
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapBuffers();
@@ -234,6 +231,10 @@ void Manager::initializeLight() {
 
 const opengl::ShaderProgram* Manager::Shaders::current_shader() const {
     return shaders_[flags_.to_ulong()];
+}
+        
+const opengl::ShaderProgram* Manager::Shaders::GetSpecificShader(const std::bitset<Manager::Shaders::NUM_FLAGS>& flags) const {
+    return shaders_[flags.to_ulong()];
 }
 
 void Manager::Shaders::ChangeFlag(Flag flag, bool value) {

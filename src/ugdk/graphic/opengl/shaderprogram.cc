@@ -59,6 +59,10 @@ void ShaderProgram::Use::SendTexture(GLint slot, const Texture* texture, GLuint 
     SendTexture(slot, texture->gltexture(), location);
 }
 
+void ShaderProgram::Use::SendTexture(GLint slot, const Texture* texture, const std::string& location) {
+    SendTexture(slot, texture->gltexture(), program_->UniformLocation(location));
+}
+
 void ShaderProgram::Use::SendTexture(GLint slot, GLuint texture) {
     SendTexture(slot, texture, program_->texture_location_);
 }
@@ -67,6 +71,10 @@ void ShaderProgram::Use::SendTexture(GLint slot, GLuint texture, GLuint location
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, texture);
     glUniform1i(location, slot);
+}
+
+void ShaderProgram::Use::SendTexture(GLint slot, GLuint texture, const std::string& location) {
+    SendTexture(slot, texture, program_->UniformLocation(location));
 }
 
 void ShaderProgram::Use::SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size) {
