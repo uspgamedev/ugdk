@@ -186,9 +186,9 @@ action::Scene* CreateLightrenderingScene(std::function<void (const graphic::Geom
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Bind the light texture to all shaders that USE_LIGHT_BUFFER.
-        opengl::ShaderProgram::Use(manager->shaders().GetSpecificShader(Manager::Shaders::USE_LIGHT_BUFFER))
+        opengl::ShaderProgram::Use(manager->shaders().GetSpecificShader((1 << 0) + (0 << 1)))
             .SendTexture(1, manager->light_buffer(), "light_texture");
-        opengl::ShaderProgram::Use(manager->shaders().GetSpecificShader(Manager::Shaders::USE_LIGHT_BUFFER | Manager::Shaders::IGNORE_TEXTURE_COLOR))
+        opengl::ShaderProgram::Use(manager->shaders().GetSpecificShader((1 << 0) + (1 << 1)))
             .SendTexture(1, manager->light_buffer(), "light_texture");
     });
 
