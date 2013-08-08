@@ -4,6 +4,7 @@
 
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/virtualobj.h>
+#include <ugdk/script/languages/lua/header.h>
 #include <ugdk/script/languages/lua/luadata.h>
 #include <ugdk/script/languages/lua/bootstrapgear.h>
 #include <ugdk/script/languages/lua/datagear.h>
@@ -30,6 +31,14 @@ bool LuaWrapper::Initialize() {
         modules_.clear();
         data_gear_ = btgear.NextGear();
         if (!data_gear_) break;
+        data_gear()->getglobal("package");
+        data_gear()->getfield(-1, "path");
+        string oldpath = (*data_gear_)->toprimitive<const char*>(-1);
+        data_gear()->pop(1);
+        string path = ugdk::system::ResolvePath("scripts/")+"?.lua;"+oldpath;
+        data_gear()->pushprimitive<const char*>(path.c_str());
+        data_gear()->setfield(-2, "path");
+        data_gear()->pop(1);
         return true;
     } while(0);
     btgear.Abort();
