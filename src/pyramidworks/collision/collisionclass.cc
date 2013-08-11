@@ -1,6 +1,6 @@
 #include "collisionclass.h"
 
-#include <vector>
+#include <list>
 #include <ugdk/structure/intervalkdtree.h>
 #include <ugdk/math/vector2D.h>
 #include "pyramidworks/collision/collisionobject.h"
@@ -18,28 +18,25 @@ CollisionClass::CollisionClass(const ugdk::structure::Box<2>& tree_bounding_box)
 void CollisionClass::FindCollidingObjects(const CollisionObject *target,
                                                                CollisionObjectList& result) const {
     
-    std::vector<const CollisionObject *> *filtered_results 
-        = objects_tree_->getIntersectingItems(target->GetBoundingBox());
+    std::list<const CollisionObject *> filtered_results;
+    objects_tree_->FindIntersectingItems(target->GetBoundingBox(), std::back_inserter(filtered_results));
 
-    for(std::vector<const CollisionObject *>::const_iterator it
-           = filtered_results->begin(); it != filtered_results->end(); ++it) {
-        if((*it) == target) continue;
-        if( (*it)->IsColliding(target) )
-            result.push_front(*it);
+    for(const CollisionObject* it : filtered_results) {
+        if(it == target) continue;
+        if(it->IsColliding(target))
+            result.push_front(it);
     }
-
-    delete filtered_results;
 }
 
-void CollisionClass::FindCollidingObjects(const ugdk::math::Vector2D& position, const geometry::GeometricShape& shape, CollisionObjectList& collisions) const {
-    std::vector<const CollisionObject *> *filtered_results 
-        = objects_tree_->getIntersectingItems(shape.GetBoundingBox(position));
-    for(std::vector<const CollisionObject *>::const_iterator it
-           = filtered_results->begin(); it != filtered_results->end(); ++it) {
-        if( shape.Intersects(position, (*it)->shape(), (*it)->absolute_position() ) )
-            collisions.push_front(*it);
+void CollisionClass::FindCollidingObjects(const ugdk::math::Vector2D& position, 
+                                          const geometry::GeometricShape& shape, 
+                                          CollisionObjectList& collisions) const {
+    std::list<const CollisionObject *> filtered_results;
+    objects_tree_->FindIntersectingItems(shape.GetBoundingBox(position), std::back_inserter(filtered_results));
+    for(const CollisionObject* it : filtered_results) {
+        if(shape.Intersects(position, it->shape(), it->absolute_position()))
+            collisions.push_front(it);
     }
-    delete filtered_results;
 }
     
 void CollisionClass::AddObject(const CollisionObject *obj) {

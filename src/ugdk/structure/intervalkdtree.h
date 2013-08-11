@@ -5,7 +5,6 @@
 #include <cstddef>
 #include <map>
 #include <list>
-#include <vector>
 #include <climits>
 #ifdef DEBUG
 #include <iostream>
@@ -30,7 +29,8 @@ class IntervalKDTree {
     void Remove(const T& element);
     void Update(const Box<DIMENSIONS>& new_bounding_box, const T& element);
 
-    std::vector<T>* getIntersectingItems (const Box<DIMENSIONS>& boundary) const;
+    template<class OutputIterator>
+    void FindIntersectingItems(const Box<DIMENSIONS>& boundary, OutputIterator output) const;
     
     unsigned int max_elements_per_leaf() const;
 
@@ -85,7 +85,9 @@ class Node : public Box<DIMENSIONS> {
     
     void InsertItem(Item<T, DIMENSIONS> *item);
     void RemoveItem(Item<T, DIMENSIONS> *item);
-    void getIntersectingItems(const Box<DIMENSIONS>& boundary, std::vector<T> *items) const;
+
+    template<typename Iterator>
+    void FindIntersectingItems(const Box<DIMENSIONS>& boundary, Iterator it) const;
     
     void Clear();
 
@@ -192,11 +194,9 @@ void IntervalKDTree<T, DIMENSIONS>::UpdateItem(Item<T, DIMENSIONS> * item) {
 }
 
 template <class T, int DIMENSIONS>
-std::vector<T>* IntervalKDTree<T, DIMENSIONS>::getIntersectingItems (
-        const Box<DIMENSIONS>& boundary) const {
-    std::vector<T>* items = new std::vector<T>;
-    root_->getIntersectingItems (boundary, items);
-    return items;
+template <class OutputIterator>
+void IntervalKDTree<T, DIMENSIONS>::FindIntersectingItems(const Box<DIMENSIONS>& boundary, OutputIterator output) const {
+    root_->FindIntersectingItems(boundary, output);
 }
 
 template <class T, int DIMENSIONS>
@@ -298,22 +298,19 @@ void Node<T, DIMENSIONS>::RemoveItem (Item<T, DIMENSIONS> *item) {
 }
 
 template <class T, int DIMENSIONS>
-void Node<T, DIMENSIONS>::getIntersectingItems (const Box<DIMENSIONS>& boundary,
-        std::vector<T> *intersecting_items) const {
-    for (typename std::list<Item<T, DIMENSIONS> *>::const_iterator it = items_.begin();
-            it != items_.end(); ++it) {
-        if (boundary.Intersects (*it)) {
-            intersecting_items->push_back ((*it)->element ());
-        }
-    }
+template <class Iterator>
+void Node<T, DIMENSIONS>::FindIntersectingItems(const Box<DIMENSIONS>& boundary, Iterator output) const {
+    for (Item<T, DIMENSIONS>* it : items_)
+        if (boundary.Intersects(it))
+            *output++ = it->element();
     if (has_children_) {
-        if (boundary.IsBelow (depth_, division_boundary_)) {
-            low_child_->getIntersectingItems (boundary, intersecting_items);
-        } else if (boundary.IsAbove (depth_, division_boundary_)) {
-            high_child_->getIntersectingItems (boundary, intersecting_items);
+        if (boundary.IsBelow(depth_, division_boundary_)) {
+            low_child_->FindIntersectingItems(boundary, output);
+        } else if (boundary.IsAbove(depth_, division_boundary_)) {
+            high_child_->FindIntersectingItems(boundary, output);
         } else {
-            low_child_->getIntersectingItems (boundary, intersecting_items);
-            high_child_->getIntersectingItems (boundary, intersecting_items);
+            low_child_->FindIntersectingItems(boundary, output);
+            high_child_->FindIntersectingItems(boundary, output);
         }
     }
 }

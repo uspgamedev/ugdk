@@ -23,20 +23,22 @@ TEST(IntervalKDTree, InsertFind) {
     ikd.Insert(makeMyBox(0.8, 0.5, 0.5, 1.0), 3);
 
     {
-        std::shared_ptr<std::vector<int>> v(ikd.getIntersectingItems(makeMyBox(0.25, 0.25, 0.75, 0.75)));
-        EXPECT_TRUE(contains(*v, 1));
-        EXPECT_TRUE(contains(*v, 2));
-        EXPECT_FALSE(contains(*v, 3));
-        EXPECT_EQ(2, v->size());
+        std::list<int> v;
+        ikd.FindIntersectingItems(makeMyBox(0.25, 0.25, 0.75, 0.75), std::back_inserter(v));
+        EXPECT_TRUE(contains(v, 1));
+        EXPECT_TRUE(contains(v, 2));
+        EXPECT_FALSE(contains(v, 3));
+        EXPECT_EQ(2, v.size());
     }
 
     ikd.Update(makeMyBox(0.5, 0.5, 0.5, 1.0), 3);
     {
-        std::shared_ptr<std::vector<int>> v(ikd.getIntersectingItems(makeMyBox(0.25, 0.25, 0.75, 0.75)));
-        EXPECT_TRUE(contains(*v, 1));
-        EXPECT_TRUE(contains(*v, 2));
-        EXPECT_TRUE(contains(*v, 3));
-        EXPECT_EQ(3, v->size());
+        std::list<int> v;
+        ikd.FindIntersectingItems(makeMyBox(0.25, 0.25, 0.75, 0.75), std::back_inserter(v));
+        EXPECT_TRUE(contains(v, 1));
+        EXPECT_TRUE(contains(v, 2));
+        EXPECT_TRUE(contains(v, 3));
+        EXPECT_EQ(3, v.size());
     }
 }
 
