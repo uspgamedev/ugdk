@@ -1,7 +1,7 @@
 #include "collisionclass.h"
 
 #include <vector>
-#include <ugdk/structures/intervalkdtree.h>
+#include <ugdk/structure/intervalkdtree.h>
 #include <ugdk/math/vector2D.h>
 #include "pyramidworks/collision/collisionobject.h"
 #include "pyramidworks/geometry/geometricshape.h"
@@ -11,7 +11,7 @@ namespace collision {
 
 CollisionClass::~CollisionClass() {delete objects_tree_;}
 
-CollisionClass::CollisionClass(const ugdk::ikdtree::Box<2>& tree_bounding_box) 
+CollisionClass::CollisionClass(const ugdk::structure::ikdtree::Box<2>& tree_bounding_box) 
   : parent_(nullptr),
     objects_tree_(new ObjectTree(tree_bounding_box,5)) {}
 

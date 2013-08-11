@@ -2,7 +2,7 @@
 #define PYRAMIDWORKS_GEOMETRY_GEOMETRYOBJECT_H_
 
 #include <ugdk/math/vector2D.h>
-#include <ugdk/util.h>
+#include <ugdk/structure.h>
 #include <pyramidworks/geometry.h>
 
 namespace pyramidworks {
@@ -46,7 +46,7 @@ class GeometricShape {
     /** The box is at the shape's position and offset
         @param position The absolute position for this shape.
         @return A 2D Box around this shape */
-    virtual ugdk::ikdtree::Box<2> GetBoundingBox(const ugdk::math::Vector2D& position) const = 0;
+    virtual ugdk::structure::ikdtree::Box<2> GetBoundingBox(const ugdk::math::Vector2D& position) const = 0;
 
   protected:
     /** @param offset An offset to the position. Defaults to (0,0) */

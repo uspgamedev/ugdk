@@ -2,7 +2,7 @@
 
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/ui/menu.h>
-#include <ugdk/structures/intervalkdtree.h>
+#include <ugdk/structure/intervalkdtree.h>
 
 namespace ugdk {
 namespace ui {
@@ -19,13 +19,13 @@ Button::~Button() {
     delete node_;
 }
 
-ikdtree::Box<2> Button::GetBoundingBox() const {
+structure::ikdtree::Box<2> Button::GetBoundingBox() const {
     if (!node_->drawable())
-        return ikdtree::Box<2>(ugdk::math::Vector2D(0.0, 0.0).val, ugdk::math::Vector2D(0.0, 0.0).val);
+        return structure::ikdtree::Box<2>(ugdk::math::Vector2D(0.0, 0.0).val, ugdk::math::Vector2D(0.0, 0.0).val);
     ugdk::math::Vector2D top_left = owner_->node()->geometry().offset() - node_->drawable()->hotspot();
     top_left += top_left_;
     ugdk::math::Vector2D bottom_right = top_left + node_->drawable()->size();
-    return ikdtree::Box<2>(top_left.val, bottom_right.val);
+    return structure::ikdtree::Box<2>(top_left.val, bottom_right.val);
 }
 
 } // namespace ui

@@ -108,9 +108,10 @@ SET(UGDK_SRC
     src/ugdk/script/virtualobj.cc 
     src/ugdk/script/virtualobj.h 
     src/ugdk/script/virtualprimitive.h 
-    src/ugdk/structures.h 
-    src/ugdk/structures/intervalkdtree.h 
-    src/ugdk/structures/types.h 
+    src/ugdk/structure.h 
+    src/ugdk/structure/indexabletable.h 
+    src/ugdk/structure/intervalkdtree.h 
+    src/ugdk/structure/types.h 
     src/ugdk/system.h 
     src/ugdk/system/configuration.h 
     src/ugdk/system/engine.cc 
@@ -146,7 +147,6 @@ SET(UGDK_SRC
     src/ugdk/util/gdd/types.h 
     src/ugdk/util/idgenerator.cc 
     src/ugdk/util/idgenerator.h 
-    src/ugdk/util/indexabletable.h 
     src/ugdk/util/language.cc 
     src/ugdk/util/language.h 
     src/ugdk/util/languagemanager.cc 

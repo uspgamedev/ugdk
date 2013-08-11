@@ -8,7 +8,7 @@
 
 %{
 
-#include <ugdk/structures/types.h>
+#include <ugdk/structure/types.h>
 #include <ugdk/system/configuration.h>
 #include <ugdk/system/engine.h>
 
@@ -33,7 +33,7 @@
 
 proxy_class(ugdk::action::Scene)
 
-%include <ugdk/structures/types.h>
+%include <ugdk/structure/types.h>
 %include <ugdk/system/configuration.h>
 %include <ugdk/system/engine.h>
 

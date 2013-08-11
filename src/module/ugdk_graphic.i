@@ -50,7 +50,7 @@
 
 %include <ugdk/graphic/drawable.h>
 
-%import(module="ugdk_system") <ugdk/structures/types.h>
+%import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_drawable") <ugdk/graphic/drawable/textbox.h> //this needs to go after the include drawable.h
 

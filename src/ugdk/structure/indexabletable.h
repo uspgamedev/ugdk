@@ -1,5 +1,5 @@
-#ifndef UGDK_UTIL_INDEXABLETABLE_H_
-#define UGDK_UTIL_INDEXABLETABLE_H_
+#ifndef UGDK_STRUCTURE_INDEXABLETABLE_H_
+#define UGDK_STRUCTURE_INDEXABLETABLE_H_
 
 #include <string>
 #include <vector>
@@ -9,7 +9,7 @@
 #include <ugdk/util/idgenerator.h>
 
 namespace ugdk {
-namespace util {
+namespace structure {
 
 template<class T>
 class IndexableTable { private: IndexableTable() {} };
@@ -88,12 +88,12 @@ private:
             }
     }
 
-    IDGenerator index_generator_;
+    util::IDGenerator index_generator_;
     Table data_;
     IndexArray indexes_;
 };
 
-} // namespace util
+} // namespace structure
 } // namespace ugdk
 
-#endif // UGDK_UTIL_CACHEDSET_H_
+#endif // UGDK_STRUCTURE_INDEXABLETABLE_H_

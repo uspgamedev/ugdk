@@ -1,4 +1,4 @@
-#include <ugdk/structures/intervalkdtree.h>
+#include <ugdk/structure/intervalkdtree.h>
 
 #include "collisionmanager.h"
 
@@ -9,7 +9,7 @@
 namespace pyramidworks {
 namespace collision {
 
-CollisionManager::CollisionManager(const ugdk::ikdtree::Box<2>& tree_bounding_box) 
+CollisionManager::CollisionManager(const ugdk::structure::ikdtree::Box<2>& tree_bounding_box) 
     :   tree_bounding_box_(tree_bounding_box) {}
 
 CollisionManager::~CollisionManager() { 

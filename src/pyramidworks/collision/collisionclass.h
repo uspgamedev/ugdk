@@ -4,7 +4,7 @@
 #include <string>
 #include <list>
 #include <set>
-#include <ugdk/util.h>
+#include <ugdk/structure.h>
 #include <ugdk/math.h>
 #include <pyramidworks/collision.h>
 #include <pyramidworks/geometry.h>
@@ -14,7 +14,7 @@ namespace collision {
 
 /// \class CollisionClass collisionclass.h "pyramidworks/collision/collisionclass.h"
 class CollisionClass {
-  typedef ugdk::ikdtree::IntervalKDTree<const CollisionObject*, 2> ObjectTree;
+  typedef ugdk::structure::ikdtree::IntervalKDTree<const CollisionObject*, 2> ObjectTree;
   public:
     ~CollisionClass();
     const CollisionClass* parent() const { return parent_; }
@@ -32,7 +32,7 @@ class CollisionClass {
 #endif
   private:
     friend class CollisionManager;
-    CollisionClass(const ugdk::ikdtree::Box<2>& tree_bounding_box);
+    CollisionClass(const ugdk::structure::ikdtree::Box<2>& tree_bounding_box);
     
     CollisionClass(const CollisionClass&); // Uncopyable
     void operator=(const CollisionClass&); // Uncopyable 

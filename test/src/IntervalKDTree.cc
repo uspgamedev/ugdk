@@ -1,11 +1,11 @@
 #include "gtest/gtest.h"
-#include <ugdk/structures/intervalkdtree.h>
+#include <ugdk/structure/intervalkdtree.h>
 #include <memory>
 #include <algorithm>
 
-ugdk::ikdtree::Box<2> makeMyBox(double a1, double a2, double b1, double b2) {
+ugdk::structure::ikdtree::Box<2> makeMyBox(double a1, double a2, double b1, double b2) {
     double min[] = { a1, a2 }, max[] = { b1, b2 };
-    return ugdk::ikdtree::Box<2>(min, max);
+    return ugdk::structure::ikdtree::Box<2>(min, max);
 }
 template<class T, class Container>
 bool contains(const Container& cont, const T& t) {
@@ -13,7 +13,7 @@ bool contains(const Container& cont, const T& t) {
 }
 
 TEST(IntervalKDTree, InsertFind) {
-    using namespace ugdk::ikdtree;
+    using namespace ugdk::structure::ikdtree;
 
     IntervalKDTree<int, 2> ikd(makeMyBox(0.0, 0.0, 1.0, 1.0), 5);
 

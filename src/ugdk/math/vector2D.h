@@ -2,7 +2,7 @@
 #ifndef UGDK_MATH_VECTOR2D_H_
 #define UGDK_MATH_VECTOR2D_H_
 
-#include <ugdk/structures/types.h>
+#include <ugdk/structure/types.h>
 #include <ugdk/math.h>
 
 #ifdef SWIG

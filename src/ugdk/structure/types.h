@@ -1,5 +1,5 @@
-#ifndef HORUSEYE_FRAMEWORK_TYPES_H_
-#define HORUSEYE_FRAMEWORK_TYPES_H_
+#ifndef UGDK_STRUCTURE_TYPES_H_
+#define UGDK_STRUCTURE_TYPES_H_
 
 #include <stdint.h>
 
@@ -83,4 +83,4 @@ static const Color WHITE(1.0, 1.0, 1.0);
 
 }  // namespace ugdk
 
-#endif /* HORUSEYE_FRAMEWORK_TYPES_H_ */
+#endif /* UGDK_STRUCTURE_TYPES_H_ */

@@ -9,7 +9,7 @@
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/input/module.h>
-#include <ugdk/structures/intervalkdtree.h>
+#include <ugdk/structure/intervalkdtree.h>
 
 using std::mem_fn;
 using std::placeholders::_1;
@@ -36,7 +36,7 @@ private:
     Menu* menu_;
 };
 
-Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
+Menu::Menu(const ugdk::structure::ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
   : node_(new graphic::Node()),
     owner_scene_(nullptr),
     focused_element_(nullptr),
@@ -129,7 +129,7 @@ std::vector<UIElement *>* Menu::GetMouseCollision() {
     min_coords[1] = mouse_pos.y - 0.5;
     max_coords[0] = min_coords[0] + 1;
     max_coords[1] = min_coords[1] + 1;
-    ugdk::ikdtree::Box<2> box(min_coords, max_coords);
+    ugdk::structure::ikdtree::Box<2> box(min_coords, max_coords);
 
     return objects_tree_->getIntersectingItems(box);
 }

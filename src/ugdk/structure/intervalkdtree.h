@@ -11,10 +11,10 @@
 #include <iostream>
 #endif
 
-#include <ugdk/util.h>
+#include <ugdk/structure.h>
 
 namespace ugdk {
-
+namespace structure {
 namespace ikdtree {
 
 typedef double Coordinate;
@@ -489,7 +489,7 @@ void Node<T, DIMENSIONS>::PrintTreeRootedAtThisNode () {
 #endif
 
 } // namespace ikdtree
-
+} // namespace structure
 } // namespace ugdk
 
 #endif

@@ -1,16 +1,9 @@
-#ifndef UGDK_UTIL_H_
-#define UGDK_UTIL_H_
+#ifndef UGDK_STRUCTURE_H_
+#define UGDK_STRUCTURE_H_
 
 namespace ugdk {
-//namespace util {
-
-class AnimationParser;
-class AnimationProtocol;
-class Language;
-class LanguageManager;
-class LanguageWord;
-class PathManager;
-   
+namespace structure {
+  
 namespace ikdtree {
     template <class T, int DIMENSIONS>
     class IntervalKDTree;
@@ -25,15 +18,10 @@ namespace ikdtree {
     class Item;
 }
 
-
-namespace util {
-
 template<class T>
 class IndexableTable;
 
-}
-
-//}  // namespace util
+}  // namespace structures
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_STRUCTURE_H_

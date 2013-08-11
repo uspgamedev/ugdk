@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include <ugdk/structures/types.h>
+#include <ugdk/structure/types.h>
 
 namespace {
 

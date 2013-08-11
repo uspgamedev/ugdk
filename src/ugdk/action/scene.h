@@ -7,7 +7,7 @@
 #include <ugdk/action.h>
 #include <ugdk/audio.h>
 #include <ugdk/graphic.h>
-#include <ugdk/structures/types.h>
+#include <ugdk/structure/types.h>
 #include <ugdk/action/mediamanager.h>
 
 namespace ugdk {

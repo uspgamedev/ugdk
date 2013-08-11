@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 #include <set>
-#include <ugdk/structures/intervalkdtree.h>
+#include <ugdk/structure/intervalkdtree.h>
 #include <pyramidworks/collision.h>
 #include <ugdk/action.h>
 #include <ugdk/util/uncopyable.h>
@@ -16,7 +16,7 @@ namespace collision {
 /// A singleton that manages all collisions.
 class CollisionManager : public ugdk::util::Uncopyable {
   public:
-    CollisionManager(const ugdk::ikdtree::Box<2>& tree_bounding_box);
+    CollisionManager(const ugdk::structure::ikdtree::Box<2>& tree_bounding_box);
     ~CollisionManager();
 
     /// Creates a CollisionClass with no parent.
@@ -44,7 +44,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
     ugdk::action::Task GenerateHandleCollisionTask();
     
   private:
-    const ugdk::ikdtree::Box<2> tree_bounding_box_;
+    const ugdk::structure::ikdtree::Box<2> tree_bounding_box_;
     std::map<std::string, CollisionClass*> cache_;
     std::set<const CollisionObject*> active_objects_;
 };

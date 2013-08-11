@@ -4,7 +4,7 @@
 
 #include "collisionobject.h"
 
-#include <ugdk/structures/intervalkdtree.h>
+#include <ugdk/structure/intervalkdtree.h>
 #include "pyramidworks/collision/collisionmanager.h"
 #include "pyramidworks/collision/collisionclass.h"
 #include "pyramidworks/collision/collisionlogic.h"
@@ -103,7 +103,7 @@ void CollisionObject::MoveTo(const ugdk::math::Vector2D& position) {
     if(is_active_) this->collision_class_->RefreshObject(this);
 }
 
-ugdk::ikdtree::Box<2> CollisionObject::GetBoundingBox() const {
+ugdk::structure::ikdtree::Box<2> CollisionObject::GetBoundingBox() const {
     return shape_->GetBoundingBox(this->absolute_position());
 }
 

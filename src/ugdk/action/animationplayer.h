@@ -7,7 +7,7 @@
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/action/mediaplayer.h>
-#include <ugdk/util/indexabletable.h>
+#include <ugdk/structure/indexabletable.h>
 
 namespace ugdk {
 namespace action {
@@ -15,7 +15,7 @@ namespace action {
 template<class T>
 class AnimationPlayer : public MediaPlayer {
   public:
-    AnimationPlayer(const util::IndexableTable<T*> *table) 
+    AnimationPlayer(const structure::IndexableTable<T*> *table) 
         : current_animation_(nullptr), current_frame_(0), elapsed_time_(0.0), table_(table) {
         // TODO: a user defined current_animation_ may leak
     }
@@ -70,7 +70,7 @@ class AnimationPlayer : public MediaPlayer {
     const T* current_animation_;
     int current_frame_;
     double elapsed_time_;
-    const util::IndexableTable<T*> *table_;
+    const structure::IndexableTable<T*> *table_;
 };
 
 } /* namespace action */
