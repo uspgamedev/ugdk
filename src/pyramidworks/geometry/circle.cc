@@ -31,7 +31,7 @@ ugdk::structure::Box<2> Circle::GetBoundingBox (const ugdk::math::Vector2D& this
                         thispos.y - radius_);
     ugdk::math::Vector2D thisposmax(thispos.x + radius_,
                         thispos.y + radius_);
-    return ugdk::structure::Box<2>(thisposmin.val, thisposmax.val);
+    return ugdk::structure::Box<2>(thisposmin, thisposmax);
 }
 } // namespace geometry
 } // namespace pyramidworks

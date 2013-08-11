@@ -124,7 +124,7 @@ ugdk::structure::Box<2> Rect::GetBoundingBox(const ugdk::math::Vector2D& thispos
                         thispos.y - half_height_);
     ugdk::math::Vector2D thisposmax(thispos.x + half_width_,
                         thispos.y + half_height_);
-    return ugdk::structure::Box<2>(thisposmin.val, thisposmax.val);
+    return ugdk::structure::Box<2>(thisposmin, thisposmax);
 }
 
 } // namespace geometry

@@ -10,7 +10,6 @@ namespace structure {
 template <int DIMENSIONS>
 class Box {
   public:
-    Box(const Coordinate *min_coordinates, const Coordinate *max_coordinates);
     Box(const std::array<Coordinate, DIMENSIONS>& min_coordinates, const std::array<Coordinate, DIMENSIONS>& max_coordinates);
     virtual ~Box();
 
@@ -29,16 +28,6 @@ class Box {
 };
 
 //************* Implementation **************
-
-template <int DIMENSIONS>
-Box<DIMENSIONS>::Box (const Coordinate *min_coordinates, const Coordinate *max_coordinates) {
-    if (min_coordinates != nullptr && max_coordinates != nullptr) {
-        for (int k = 0; k < DIMENSIONS; ++k) {
-            min_coordinates_[k] = min_coordinates[k];
-            max_coordinates_[k] = max_coordinates[k];
-        }
-    }
-}
 
 template <int DIMENSIONS>
 Box<DIMENSIONS>::Box(const std::array<Coordinate, DIMENSIONS>& min_coordinates, 

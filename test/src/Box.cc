@@ -15,6 +15,7 @@ TEST(Box, CopyConstruct) {
 
 TEST(Box, Update) {
     using namespace ugdk::structure;
+    using ugdk::math::Vector2D;
 
     Box<2> b1(Vector2D(0.5, 1.5), Vector2D(1.0, 2.0));
     Box<2> b2(Vector2D(0.0, 1.5), Vector2D(0.5, 2.0));

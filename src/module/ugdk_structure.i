@@ -21,8 +21,7 @@
 %template(Box2D) ugdk::structure::Box<2>;
 %inline %{
 static ugdk::structure::Box<2> CreateBox2D(double a1, double a2, double b1, double b2) {
-    double min[2] = { a1, a2 };
-    double max[2] = { b1, b2 };
+    std::array<double, 2> min = { a1, a2 }, max = { b1, b2 };
     return ugdk::structure::Box<2>(min, max);
 }
 %}

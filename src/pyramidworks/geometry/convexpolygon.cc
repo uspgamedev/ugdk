@@ -79,7 +79,7 @@ ugdk::structure::Box<2> ConvexPolygon::GetBoundingBox(const ugdk::math::Vector2D
                         thispos.y - bbox_half_height_);
     ugdk::math::Vector2D thisposmax(thispos.x + bbox_half_width_,
                         thispos.y + bbox_half_height_);
-    return ugdk::structure::Box<2>(thisposmin.val, thisposmax.val);
+    return ugdk::structure::Box<2>(thisposmin, thisposmax);
 }
 
 void ConvexPolygon::calculateSize() {
