@@ -12,11 +12,10 @@ class Rectangle : public action::Entity {
   public:
     Rectangle() 
       : velocity_(500.0), 
-        node_(new graphic::Node) {
-            node_->set_drawable(new graphic::TexturedRectangle(graphic::manager()->white_texture(), math::Vector2D(50.0, 50.0)));
+        drawable_(new graphic::TexturedRectangle(graphic::manager()->white_texture(), math::Vector2D(50.0, 50.0))) {
     }
     ~Rectangle() {
-        delete node_;
+        delete drawable_;
     }
 
     void Update(double dt) override {
@@ -29,13 +28,8 @@ class Rectangle : public action::Entity {
             MoveUp(dt);
         if(manager->KeyDown(input::K_s))
             MoveDown(dt);
-        node_->geometry().ChangeOffset(position_);
     }
     
-    void OnSceneAdd(action::Scene* scene) override {
-        scene->content_node()->AddChild(node_);
-    }
-
     void MoveLeft(double dt) {
         position_.x -= dt*velocity_;
     }
@@ -49,21 +43,28 @@ class Rectangle : public action::Entity {
         position_.y += dt*velocity_;
     }
 
+    const math::Vector2D& position() const { return position_; }
+    graphic::TexturedRectangle* drawable() { return drawable_; }
+
   private:
     math::Vector2D position_;
     double velocity_;
-    graphic::Node* node_;
+    graphic::TexturedRectangle* drawable_;
 };
 
 int main(int argc, char* argv[]) {
     system::Initialize();
     action::Scene* scene = new action::Scene();
+    Rectangle* r = new Rectangle;
 
     scene->AddTask([scene](double dt) {
         if(input::manager()->KeyDown(input::K_ESCAPE))
             scene->Finish();
     });
-    scene->AddEntity(new Rectangle);
+    scene->AddEntity(r);
+    scene->set_render_function([r](const graphic::Geometry& geometry, const graphic::VisualEffect& effect) {
+        r->drawable()->Draw(geometry * graphic::Geometry(r->position()), effect);
+    });
 
     system::PushScene(scene);
     system::Run();
