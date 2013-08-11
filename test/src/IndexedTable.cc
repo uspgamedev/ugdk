@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
-#include <ugdk/util/indexabletable.h>
+#include <ugdk/structure/indexabletable.h>
 
 namespace {
 
-using ugdk::util::IndexableTable;
+using ugdk::structure::IndexableTable;
 
 TEST(IndexableTable, MapMethods) {
     int *a = new int, *b = new int, *c = new int;

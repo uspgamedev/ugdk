@@ -9,6 +9,7 @@
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
+#include <ugdk/structure.h>
 #include <ugdk/ui.h>
 #include <ugdk/action/entity.h>
 #include <ugdk/graphic/node.h>
@@ -25,9 +26,9 @@ typedef std::function<void (Menu*)> MenuCallback;
 typedef std::map<input::Key, MenuCallback > InputCallbacks;
 
 class Menu: public action::Entity {
-  typedef ikdtree::IntervalKDTree<UIElement*, 2> ObjectTree;
+  typedef structure::ikdtree::IntervalKDTree<UIElement*, 2> ObjectTree;
   public:
-    Menu(const ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook = graphic::Drawable::TOP_LEFT);
+    Menu(const structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook = graphic::Drawable::TOP_LEFT);
     ~Menu();
 
     void Update(double dt);

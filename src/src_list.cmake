@@ -37,7 +37,6 @@ SET(UGDK_SRC
     src/ugdk/audio/music.h 
     src/ugdk/audio/sample.cc 
     src/ugdk/audio/sample.h 
-    src/ugdk/common/types.h 
     src/ugdk/graphic.h 
     src/ugdk/graphic/defaultshaders.cc 
     src/ugdk/graphic/defaultshaders.h 
@@ -109,6 +108,11 @@ SET(UGDK_SRC
     src/ugdk/script/virtualobj.cc 
     src/ugdk/script/virtualobj.h 
     src/ugdk/script/virtualprimitive.h 
+    src/ugdk/structure.h 
+    src/ugdk/structure/box.h 
+    src/ugdk/structure/indexabletable.h 
+    src/ugdk/structure/intervalkdtree.h 
+    src/ugdk/structure/types.h 
     src/ugdk/system.h 
     src/ugdk/system/configuration.h 
     src/ugdk/system/engine.cc 
@@ -144,8 +148,6 @@ SET(UGDK_SRC
     src/ugdk/util/gdd/types.h 
     src/ugdk/util/idgenerator.cc 
     src/ugdk/util/idgenerator.h 
-    src/ugdk/util/indexabletable.h 
-    src/ugdk/util/intervalkdtree.h 
     src/ugdk/util/language.cc 
     src/ugdk/util/language.h 
     src/ugdk/util/languagemanager.cc 

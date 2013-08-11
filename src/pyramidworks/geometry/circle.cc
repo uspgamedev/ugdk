@@ -2,7 +2,7 @@
 #include "circle.h"
 #include "rect.h"
 #include "convexpolygon.h"
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structure/intervalkdtree.h>
 
 namespace pyramidworks {
 namespace geometry {
@@ -26,12 +26,12 @@ bool Circle::Intersects(const ugdk::math::Vector2D& this_pos, const  ConvexPolyg
 	return obj->Intersects(that_pos, this, this_pos);
 }
 
-ugdk::ikdtree::Box<2> Circle::GetBoundingBox (const ugdk::math::Vector2D& thispos) const {
+ugdk::structure::Box<2> Circle::GetBoundingBox (const ugdk::math::Vector2D& thispos) const {
     ugdk::math::Vector2D thisposmin(thispos.x - radius_,
                         thispos.y - radius_);
     ugdk::math::Vector2D thisposmax(thispos.x + radius_,
                         thispos.y + radius_);
-    return ugdk::ikdtree::Box<2>(thisposmin.val, thisposmax.val);
+    return ugdk::structure::Box<2>(thisposmin, thisposmax);
 }
 } // namespace geometry
 } // namespace pyramidworks

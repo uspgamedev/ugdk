@@ -2,7 +2,8 @@
 #ifndef UGDK_MATH_VECTOR2D_H_
 #define UGDK_MATH_VECTOR2D_H_
 
-#include <ugdk/common/types.h>
+#include <array>
+#include <ugdk/structure/types.h>
 #include <ugdk/math.h>
 
 #ifdef SWIG
@@ -230,6 +231,13 @@ class Vector2D {
         *  @return InnerProduct
         */
     double    operator*(const Vector2D &right) const;
+
+    operator std::array<double, 2> () const {
+        std::array<double, 2> result;
+        result[0] = this->val[0];
+        result[1] = this->val[1];
+        return result;
+    }
 };
 
 /// Method that returns a vector equal to the a vector multiplied by a scalar

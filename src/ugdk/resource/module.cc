@@ -4,7 +4,7 @@
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/resource/genericcontainer.h>
-#include <ugdk/util/indexabletable.h>
+#include <ugdk/structure/indexabletable.h>
 #include <ugdk/util/languageword.h>
 
 namespace ugdk {

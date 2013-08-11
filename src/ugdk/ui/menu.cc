@@ -1,6 +1,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <iterator>
 
 #include <ugdk/ui/menu.h>
 #include <ugdk/ui/uielement.h>
@@ -9,7 +10,7 @@
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/input/module.h>
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structure/intervalkdtree.h>
 
 using std::mem_fn;
 using std::placeholders::_1;
@@ -36,7 +37,7 @@ private:
     Menu* menu_;
 };
 
-Menu::Menu(const ugdk::ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
+Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
   : node_(new graphic::Node()),
     owner_scene_(nullptr),
     focused_element_(nullptr),
@@ -124,14 +125,16 @@ void Menu::FinishScene() const {
 
 std::vector<UIElement *>* Menu::GetMouseCollision() {
     ugdk::math::Vector2D mouse_pos = input::manager()->GetMousePosition();
-    double min_coords[2], max_coords[2];
+    std::array<double, 2> min_coords, max_coords;
     min_coords[0] = mouse_pos.x - 0.5;
     min_coords[1] = mouse_pos.y - 0.5;
     max_coords[0] = min_coords[0] + 1;
     max_coords[1] = min_coords[1] + 1;
-    ugdk::ikdtree::Box<2> box(min_coords, max_coords);
+    ugdk::structure::Box<2> box(min_coords, max_coords);
 
-    return objects_tree_->getIntersectingItems(box);
+    std::vector<UIElement *>* results = new std::vector<UIElement *>;
+    objects_tree_->FindIntersectingItems(box, std::back_inserter(*results));
+    return results;
 }
 
 void Menu::InteractWithFocused() { 

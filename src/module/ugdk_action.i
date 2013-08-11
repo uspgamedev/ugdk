@@ -23,7 +23,8 @@
 
 %}
 
-%import(module="ugdk_system") <ugdk/common/types.h>
+%import(module="ugdk_structure") <ugdk/structure.h>
+%import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_audio") <ugdk/audio.h>
 %import(module="ugdk_action") <ugdk/action.h>
@@ -46,10 +47,10 @@ proxy_class(ugdk::action::Task)
 %include <ugdk/action/animationplayer.h>
 %include <ugdk/action/spriteanimationframe.h>
 %include <ugdk/action/spritetypes.h>
-%include <ugdk/util/indexabletable.h>
+%include <ugdk/structure/indexabletable.h>
 
 %template(SpriteAnimationPlayer) ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimation>;
-%template(SpriteAnimationTable) ugdk::util::IndexableTable<ugdk::action::SpriteAnimation*>;
+%template(SpriteAnimationTable) ugdk::structure::IndexableTable<ugdk::action::SpriteAnimation*>;
 
 namespace ugdk {
 namespace action { 

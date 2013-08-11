@@ -6,7 +6,7 @@
 #include <string>
 #include <list>
 #include <ugdk/math/vector2D.h>
-#include <ugdk/util.h>
+#include <ugdk/structure.h>
 #include <pyramidworks/collision.h>
 #include <pyramidworks/geometry.h>
 
@@ -75,7 +75,7 @@ class CollisionObject {
     void MoveTo(const ugdk::math::Vector2D& position);
 
     /// Wrapper to shape()->GetBoundingBox(absolute_position())
-    ugdk::ikdtree::Box<2> GetBoundingBox() const;
+    ugdk::structure::Box<2> GetBoundingBox() const;
     
     /// Getter for the stored data.
     void* data() const { return data_; }

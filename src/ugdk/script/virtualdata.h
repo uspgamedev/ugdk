@@ -7,7 +7,7 @@
 #include <memory>
 #include <functional>
 
-#include <ugdk/common/types.h>
+#include <ugdk/structure/types.h>
 #include <ugdk/script/type.h>
 
 /*namespace ugdk {

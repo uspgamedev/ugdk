@@ -2,7 +2,7 @@
 #include "circle.h"
 #include "convexpolygon.h"
 #include <cmath>
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structure/intervalkdtree.h>
 
 #define SQRT_TWO 1.4142136
 
@@ -119,12 +119,12 @@ bool Rect::Intersects(const ugdk::math::Vector2D& this_pos, const  ConvexPolygon
 	return obj->Intersects(that_pos, this, this_pos);
 }
 
-ugdk::ikdtree::Box<2> Rect::GetBoundingBox(const ugdk::math::Vector2D& thispos) const {
+ugdk::structure::Box<2> Rect::GetBoundingBox(const ugdk::math::Vector2D& thispos) const {
     ugdk::math::Vector2D thisposmin(thispos.x - half_width_,
                         thispos.y - half_height_);
     ugdk::math::Vector2D thisposmax(thispos.x + half_width_,
                         thispos.y + half_height_);
-    return ugdk::ikdtree::Box<2>(thisposmin.val, thisposmax.val);
+    return ugdk::structure::Box<2>(thisposmin, thisposmax);
 }
 
 } // namespace geometry

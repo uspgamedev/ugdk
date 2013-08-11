@@ -3,14 +3,14 @@
 
 #include <string>
 #include <ugdk/action.h>
-#include <ugdk/util.h>
+#include <ugdk/structure.h>
 #include <ugdk/action/spriteanimationframe.h>
 
 namespace ugdk {
 namespace action {
 
 typedef ::ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimation> SpriteAnimationPlayer;
-typedef ::ugdk::util::IndexableTable<ugdk::action::SpriteAnimation*> SpriteAnimationTable;
+typedef ::ugdk::structure::IndexableTable<ugdk::action::SpriteAnimation*> SpriteAnimationTable;
 
 action::SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepath);
 

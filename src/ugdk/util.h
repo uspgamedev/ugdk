@@ -11,28 +11,6 @@ class LanguageManager;
 class LanguageWord;
 class PathManager;
    
-namespace ikdtree {
-    template <class T, int DIMENSIONS>
-    class IntervalKDTree;
-    
-    template <int DIMENSIONS>
-    class Box;
-    
-    template <class T, int DIMENSIONS>
-    class Node;
-    
-    template <class T, int DIMENSIONS>
-    class Item;
-}
-
-
-namespace util {
-
-template<class T>
-class IndexableTable;
-
-}
-
 //}  // namespace util
 }  // namespace ugdk
 

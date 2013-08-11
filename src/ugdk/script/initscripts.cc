@@ -1,6 +1,6 @@
 #include <ugdk/script.h>
 
-#include <ugdk/common/config.h>
+#include <ugdk/system/config.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/languages/lua/luawrapper.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
