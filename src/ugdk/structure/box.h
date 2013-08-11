@@ -10,6 +10,7 @@ namespace structure {
 template <int DIMENSIONS>
 class Box {
   public:
+    Box();
     Box(const std::array<Coordinate, DIMENSIONS>& min_coordinates, const std::array<Coordinate, DIMENSIONS>& max_coordinates);
     virtual ~Box();
 
@@ -28,6 +29,9 @@ class Box {
 };
 
 //************* Implementation **************
+
+template <int DIMENSIONS>
+Box<DIMENSIONS>::Box() {}
 
 template <int DIMENSIONS>
 Box<DIMENSIONS>::Box(const std::array<Coordinate, DIMENSIONS>& min_coordinates, 
