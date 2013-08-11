@@ -48,19 +48,23 @@ class IntervalKDTree {
 
 template <class T, int DIMENSIONS>
 class Item : public Box<DIMENSIONS> {
-    public :
-        Item (Box<DIMENSIONS> bounding_box, T element);
-        ~Item ();
-        T element ();
-        void set_container_node (Node<T, DIMENSIONS> *container_node);
-        Node<T, DIMENSIONS> *container_node ();
+  public :
+    Item(const Box<DIMENSIONS>& bounding_box, const T& element);
+    ~Item();
+    
+    const T& element() const;
+    
+    void set_container_node(Node<T, DIMENSIONS>* container_node);
+    Node<T, DIMENSIONS>* container_node() const;
+
 #ifdef DEBUG
-        void Print ();
+    void Print() const;
 #endif
-    private:
-        typedef Box<DIMENSIONS> super;
-        T element_;
-        Node<T, DIMENSIONS> *container_node_;
+
+  private:
+    typedef Box<DIMENSIONS> super;
+    T element_;
+    Node<T, DIMENSIONS>* container_node_;
 };
 
 template <class T, int DIMENSIONS>
@@ -198,30 +202,30 @@ void IntervalKDTree<T, DIMENSIONS>::PrintTree () {
 // Item Implementation
 
 template <class T, int DIMENSIONS>
-Item<T, DIMENSIONS>::Item (Box<DIMENSIONS> bounding_box, T _element) :
-    super (bounding_box), element_(_element) {}
+Item<T, DIMENSIONS>::Item(const Box<DIMENSIONS>& bounding_box, const T& _element) :
+    super(bounding_box), element_(_element) {}
 
 template <class T, int DIMENSIONS>
-Item<T, DIMENSIONS>::~Item () {}
+Item<T, DIMENSIONS>::~Item() {}
 
 template <class T, int DIMENSIONS>
-Node<T, DIMENSIONS>* Item<T, DIMENSIONS>::container_node () {
+Node<T, DIMENSIONS>* Item<T, DIMENSIONS>::container_node() const {
     return container_node_;
 }
 
 template <class T, int DIMENSIONS>
-void Item<T, DIMENSIONS>::set_container_node (Node<T, DIMENSIONS> *_container_node) {
+void Item<T, DIMENSIONS>::set_container_node(Node<T, DIMENSIONS>* _container_node) {
     container_node_ = _container_node;
 }
 
 template <class T, int DIMENSIONS>
-T Item<T, DIMENSIONS>::element () {
+const T& Item<T, DIMENSIONS>::element() const {
     return element_;
 }
 
 #ifdef DEBUG
 template <class T, int DIMENSIONS>
-void Item<T, DIMENSIONS>::Print () {
+void Item<T, DIMENSIONS>::Print() const {
     std::cout << element_;
 }
 #endif
