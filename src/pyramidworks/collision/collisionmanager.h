@@ -4,16 +4,16 @@
 #include <string>
 #include <map>
 #include <set>
-#include <ugdk/structure/intervalkdtree.h>
-#include <pyramidworks/collision.h>
 #include <ugdk/action.h>
+#include <pyramidworks/collision.h>
 #include <ugdk/util/uncopyable.h>
+#include <ugdk/structure/box.h>
 
 namespace pyramidworks {
 namespace collision {
 
 /// \class CollisionManager collisionmanager.h "pyramidworks/collision/collisionmanager.h"
-/// A singleton that manages all collisions.
+/// An instance of the collision system.
 class CollisionManager : public ugdk::util::Uncopyable {
   public:
     CollisionManager(const ugdk::structure::Box<2>& tree_bounding_box);
@@ -34,7 +34,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
     /** Searches for a CollisionClass with the given name, returning nullptr is none is found.
       * @param name The name to search for.
       * @return A pointer to a CollisionClass. */
-    CollisionClass* Get(const std::string &name) { return cache_[name]; }
+    CollisionClass* Get(const std::string &name) { return classes_[name]; }
     CollisionClass* Get(const char n[]) { const std::string str(n); return Get(str); }
 
     void AddActiveObject(const CollisionObject* obj) { active_objects_.insert(obj); }
@@ -45,7 +45,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
     
   private:
     const ugdk::structure::Box<2> tree_bounding_box_;
-    std::map<std::string, CollisionClass*> cache_;
+    std::map<std::string, CollisionClass*> classes_;
     std::set<const CollisionObject*> active_objects_;
 };
 
