@@ -14,7 +14,7 @@ class Box {
     Box(const std::array<Coordinate, DIMENSIONS>& min_coordinates, const std::array<Coordinate, DIMENSIONS>& max_coordinates);
     virtual ~Box();
 
-    void setBox(const Box& box);
+    void UpdateBox(const Box&);
     bool IsBelow(int depth, Coordinate boundary) const;
     bool IsAbove(int depth, Coordinate boundary) const;
     bool Contains(const Box& box) const;
@@ -49,11 +49,8 @@ template <int DIMENSIONS>
 Box<DIMENSIONS>::~Box () {}
 
 template <int DIMENSIONS>
-void Box<DIMENSIONS>::setBox (const Box& box) {
-    for (int k = 0; k < DIMENSIONS; ++k) {
-        min_coordinates_[k] = box.min_coordinates_[k];
-        max_coordinates_[k] = box.max_coordinates_[k];
-    }
+void Box<DIMENSIONS>::UpdateBox(const Box& box) {
+    *this = box;
 }
 
 template <int DIMENSIONS>

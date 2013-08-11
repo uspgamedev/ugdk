@@ -154,7 +154,7 @@ void IntervalKDTree<T, DIMENSIONS>::Update (const Box<DIMENSIONS>& new_bounding_
     // Shouldn't update an unexisting element!
     assert (container_items_.count(element));
     Item<T, DIMENSIONS> * item = container_items_[element];
-    item->setBox (new_bounding_box);
+    item->UpdateBox (new_bounding_box);
     UpdateItem (item);
 }
 

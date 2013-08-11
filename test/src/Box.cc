@@ -9,17 +9,25 @@ std::array<double, 2> makeArray(double a, double b) {
     return result;
 }
 
-TEST(Box, Copy) {
+TEST(Box, CopyConstruct) {
+    using namespace ugdk::structure;
+
+    Box<2> b1(makeArray(0.5, 1.5), makeArray(1.0, 2.0));
+    Box<2> c(b1);
+    EXPECT_EQ(b1.min_coordinates(), c.min_coordinates());
+    EXPECT_EQ(b1.max_coordinates(), c.max_coordinates());
+}
+
+TEST(Box, Update) {
     using namespace ugdk::structure;
 
     Box<2> b1(makeArray(0.5, 1.5), makeArray(1.0, 2.0));
     Box<2> b2(makeArray(0.0, 1.5), makeArray(0.5, 2.0));
 
-    Box<2> c(b1);
-    EXPECT_EQ(b1.min_coordinates(), c.min_coordinates());
-    EXPECT_EQ(b1.max_coordinates(), c.max_coordinates());
+    EXPECT_NE(b1.min_coordinates(), b2.min_coordinates());
+    EXPECT_NE(b1.max_coordinates(), b2.max_coordinates());
 
-    b1 = b2;
+    b1.UpdateBox(b2);
     EXPECT_EQ(b2.min_coordinates(), b1.min_coordinates());
     EXPECT_EQ(b2.max_coordinates(), b1.max_coordinates());
 }

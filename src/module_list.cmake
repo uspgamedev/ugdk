@@ -8,6 +8,7 @@ SET(UGDK_MODULE_SRC
     src/module/ugdk_input.i 
     src/module/ugdk_math.i 
     src/module/ugdk_resource.i 
+    src/module/ugdk_structure.i 
     src/module/ugdk_system.i 
     src/module/ugdk_time.i 
     src/module/ugdk_util.i 

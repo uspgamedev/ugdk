@@ -109,6 +109,7 @@ SET(UGDK_SRC
     src/ugdk/script/virtualobj.h 
     src/ugdk/script/virtualprimitive.h 
     src/ugdk/structure.h 
+    src/ugdk/structure/box.h 
     src/ugdk/structure/indexabletable.h 
     src/ugdk/structure/intervalkdtree.h 
     src/ugdk/structure/types.h 
