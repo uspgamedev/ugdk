@@ -75,7 +75,7 @@ class CollisionObject {
     void MoveTo(const ugdk::math::Vector2D& position);
 
     /// Wrapper to shape()->GetBoundingBox(absolute_position())
-    ugdk::structure::ikdtree::Box<2> GetBoundingBox() const;
+    ugdk::structure::Box<2> GetBoundingBox() const;
     
     /// Getter for the stored data.
     void* data() const { return data_; }

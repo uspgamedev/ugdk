@@ -19,13 +19,13 @@ Button::~Button() {
     delete node_;
 }
 
-structure::ikdtree::Box<2> Button::GetBoundingBox() const {
+structure::Box<2> Button::GetBoundingBox() const {
     if (!node_->drawable())
-        return structure::ikdtree::Box<2>(ugdk::math::Vector2D(0.0, 0.0).val, ugdk::math::Vector2D(0.0, 0.0).val);
+        return structure::Box<2>(ugdk::math::Vector2D(0.0, 0.0).val, ugdk::math::Vector2D(0.0, 0.0).val);
     ugdk::math::Vector2D top_left = owner_->node()->geometry().offset() - node_->drawable()->hotspot();
     top_left += top_left_;
     ugdk::math::Vector2D bottom_right = top_left + node_->drawable()->size();
-    return structure::ikdtree::Box<2>(top_left.val, bottom_right.val);
+    return structure::Box<2>(top_left.val, bottom_right.val);
 }
 
 } // namespace ui

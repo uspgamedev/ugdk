@@ -3,9 +3,9 @@
 #include <memory>
 #include <algorithm>
 
-ugdk::structure::ikdtree::Box<2> makeMyBox(double a1, double a2, double b1, double b2) {
+ugdk::structure::Box<2> makeMyBox(double a1, double a2, double b1, double b2) {
     double min[] = { a1, a2 }, max[] = { b1, b2 };
-    return ugdk::structure::ikdtree::Box<2>(min, max);
+    return ugdk::structure::Box<2>(min, max);
 }
 template<class T, class Container>
 bool contains(const Container& cont, const T& t) {

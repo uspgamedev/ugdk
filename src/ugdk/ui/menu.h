@@ -28,7 +28,7 @@ typedef std::map<input::Key, MenuCallback > InputCallbacks;
 class Menu: public action::Entity {
   typedef structure::ikdtree::IntervalKDTree<UIElement*, 2> ObjectTree;
   public:
-    Menu(const structure::ikdtree::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook = graphic::Drawable::TOP_LEFT);
+    Menu(const structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook = graphic::Drawable::TOP_LEFT);
     ~Menu();
 
     void Update(double dt);

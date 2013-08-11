@@ -1,3 +1,4 @@
+#include "Box.cc"
 #include "Color.cc"
 #include "IDGenerator.cc"
 #include "IndexedTable.cc"

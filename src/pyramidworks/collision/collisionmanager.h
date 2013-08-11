@@ -16,7 +16,7 @@ namespace collision {
 /// A singleton that manages all collisions.
 class CollisionManager : public ugdk::util::Uncopyable {
   public:
-    CollisionManager(const ugdk::structure::ikdtree::Box<2>& tree_bounding_box);
+    CollisionManager(const ugdk::structure::Box<2>& tree_bounding_box);
     ~CollisionManager();
 
     /// Creates a CollisionClass with no parent.
@@ -44,7 +44,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
     ugdk::action::Task GenerateHandleCollisionTask();
     
   private:
-    const ugdk::structure::ikdtree::Box<2> tree_bounding_box_;
+    const ugdk::structure::Box<2> tree_bounding_box_;
     std::map<std::string, CollisionClass*> cache_;
     std::set<const CollisionObject*> active_objects_;
 };

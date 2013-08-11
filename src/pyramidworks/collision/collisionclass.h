@@ -32,7 +32,7 @@ class CollisionClass {
 #endif
   private:
     friend class CollisionManager;
-    CollisionClass(const ugdk::structure::ikdtree::Box<2>& tree_bounding_box);
+    CollisionClass(const ugdk::structure::Box<2>& tree_bounding_box);
     
     CollisionClass(const CollisionClass&); // Uncopyable
     void operator=(const CollisionClass&); // Uncopyable 

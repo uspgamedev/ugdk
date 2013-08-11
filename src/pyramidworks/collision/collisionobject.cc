@@ -103,7 +103,7 @@ void CollisionObject::MoveTo(const ugdk::math::Vector2D& position) {
     if(is_active_) this->collision_class_->RefreshObject(this);
 }
 
-ugdk::structure::ikdtree::Box<2> CollisionObject::GetBoundingBox() const {
+ugdk::structure::Box<2> CollisionObject::GetBoundingBox() const {
     return shape_->GetBoundingBox(this->absolute_position());
 }
 

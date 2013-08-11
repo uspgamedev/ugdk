@@ -22,7 +22,7 @@ class ConvexPolygon : public GeometricShape {
     bool Intersects(const ugdk::math::Vector2D& this_pos, const           Rect *obj, const ugdk::math::Vector2D& that_pos) const;
     bool Intersects(const ugdk::math::Vector2D& this_pos, const         Circle *obj, const ugdk::math::Vector2D& that_pos) const;
 	bool Intersects(const ugdk::math::Vector2D& this_pos, const  ConvexPolygon *obj, const ugdk::math::Vector2D& that_pos) const;
-    ugdk::structure::ikdtree::Box<2> GetBoundingBox(const ugdk::math::Vector2D& position) const;
+    ugdk::structure::Box<2> GetBoundingBox(const ugdk::math::Vector2D& position) const;
 
 	double bbox_width() { return bbox_half_width_*2; }
 	double bbox_height() { return bbox_half_height_*2; }

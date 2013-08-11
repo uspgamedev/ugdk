@@ -12,12 +12,11 @@
 #endif
 
 #include <ugdk/structure.h>
+#include <ugdk/structure/box.h>
 
 namespace ugdk {
 namespace structure {
 namespace ikdtree {
-
-typedef double Coordinate;
 
 template <class T, int DIMENSIONS>
 class IntervalKDTree {
@@ -41,22 +40,6 @@ class IntervalKDTree {
         std::map<T,Item<T, DIMENSIONS>* > container_items_;
         Node<T, DIMENSIONS> * root_;
         void UpdateItem (Item<T, DIMENSIONS> * item);
-};
-
-template <int DIMENSIONS>
-class Box {
-    public:
-        Box (const Coordinate *min_coordinates, const Coordinate *max_coordinates);
-        Box (const Box& box);
-        void setBox (const Box& box);
-        ~Box ();
-        bool IsBelow (int depth, Coordinate boundary) const;
-        bool IsAbove (int depth, Coordinate boundary) const;
-        bool Contains (const Box& box) const;
-        bool Intersects (const Box *box) const;
-    protected:
-        Coordinate min_coordinates_[DIMENSIONS];
-        Coordinate max_coordinates_[DIMENSIONS];
 };
 
 //************* Implementation **************
@@ -212,71 +195,6 @@ void IntervalKDTree<T, DIMENSIONS>::PrintTree () {
 }
 #endif
 
-// Box implementation
-
-template <int DIMENSIONS>
-Box<DIMENSIONS>::Box (const Coordinate *min_coordinates, const Coordinate *max_coordinates) {
-    if (min_coordinates != nullptr && max_coordinates != nullptr) {
-        for (int k = 0; k < DIMENSIONS; ++k) {
-            min_coordinates_[k] = min_coordinates[k];
-            max_coordinates_[k] = max_coordinates[k];
-        }
-    }
-}
-
-template <int DIMENSIONS>
-Box<DIMENSIONS>::Box (const Box& box) {
-    for (int k = 0; k < DIMENSIONS; ++k) {
-        min_coordinates_[k] = box.min_coordinates_[k];
-        max_coordinates_[k] = box.max_coordinates_[k];
-    }
-}
-
-template <int DIMENSIONS>
-Box<DIMENSIONS>::~Box () {}
-
-template <int DIMENSIONS>
-void Box<DIMENSIONS>::setBox (const Box& box) {
-    for (int k = 0; k < DIMENSIONS; ++k) {
-        min_coordinates_[k] = box.min_coordinates_[k];
-        max_coordinates_[k] = box.max_coordinates_[k];
-    }
-}
-
-template <int DIMENSIONS>
-bool Box<DIMENSIONS>::IsBelow (int depth, Coordinate boundary) const {
-    return max_coordinates_[depth % DIMENSIONS] <= boundary;
-}
-
-template <int DIMENSIONS>
-bool Box<DIMENSIONS>::IsAbove (int depth, Coordinate boundary) const {
-    return boundary < min_coordinates_[depth % DIMENSIONS];
-}
-
-template <int DIMENSIONS>
-bool Box<DIMENSIONS>::Contains (const Box& box) const {
-    for (int k = 0; k < DIMENSIONS; ++k) {
-        // first comparison is a strict inequality
-        // because of the way IsBelow and IsAbove are
-        // defined.
-        if (!(       min_coordinates_[k] <  box.min_coordinates_[k]
-              && box.max_coordinates_[k] <=     max_coordinates_[k]))
-            return false;
-    }
-    return true;
-}
-
-template <int DIMENSIONS>
-bool Box<DIMENSIONS>::Intersects (const Box *box) const {
-    for (int k = 0; k < DIMENSIONS; ++k) {
-        if (!(        min_coordinates_[k] <= box->max_coordinates_[k]
-              && box->min_coordinates_[k] <=      max_coordinates_[k]))
-            // found separating axis
-            return false;
-    }
-    return true;
-}
-
 // Item Implementation
 
 template <class T, int DIMENSIONS>
@@ -406,9 +324,9 @@ void Node<T, DIMENSIONS>::Divide () {
         }
     }
     low_child_ = new Node (tree_, this, depth_ + 1,
-            this->min_coordinates_, new_max_coordinates);
+            this->min_coordinates_.data(), new_max_coordinates);
     high_child_ = new Node (tree_, this, depth_ + 1,
-            new_min_coordinates, this->max_coordinates_);
+            new_min_coordinates, this->max_coordinates_.data());
 
     std::list<Item<T, DIMENSIONS> *> old_items_list = items_;
     items_.clear();

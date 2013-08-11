@@ -17,7 +17,7 @@ class UIElement {
     graphic::Node* node() const { return node_; }
 
     virtual void Interact() const = 0;
-    virtual structure::ikdtree::Box<2> GetBoundingBox() const = 0;
+    virtual structure::Box<2> GetBoundingBox() const = 0;
 
   protected:
     UIElement();
