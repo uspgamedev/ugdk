@@ -39,3 +39,5 @@ install_manifest.txt
 
 *.ilk
 *.cache
+
+/src/ugdk/system/config.h

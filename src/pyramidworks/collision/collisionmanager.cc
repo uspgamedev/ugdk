@@ -1,4 +1,4 @@
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 
 #include "collisionmanager.h"
 

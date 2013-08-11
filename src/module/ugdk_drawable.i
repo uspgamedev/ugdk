@@ -19,7 +19,7 @@
 %}
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
-%import(module="ugdk_system") <ugdk/common/types.h>
+%import(module="ugdk_system") <ugdk/structures/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_action") <ugdk/action/spritetypes.h>
 %import(module="ugdk_graphic") <ugdk/graphic/geometry.h>

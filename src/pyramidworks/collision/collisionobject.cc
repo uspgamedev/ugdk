@@ -4,7 +4,7 @@
 
 #include "collisionobject.h"
 
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 #include "pyramidworks/collision/collisionmanager.h"
 #include "pyramidworks/collision/collisionclass.h"
 #include "pyramidworks/collision/collisionlogic.h"

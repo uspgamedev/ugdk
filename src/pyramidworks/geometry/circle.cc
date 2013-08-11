@@ -2,7 +2,7 @@
 #include "circle.h"
 #include "rect.h"
 #include "convexpolygon.h"
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 
 namespace pyramidworks {
 namespace geometry {

@@ -2,7 +2,7 @@
 #include "rect.h"
 #include "circle.h"
 #include <cmath>
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 
 namespace pyramidworks {
 namespace geometry {

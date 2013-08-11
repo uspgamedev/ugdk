@@ -5,7 +5,7 @@
 
 %{
 
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 
 #include <pyramidworks/geometry.h>
 #include <pyramidworks/geometry/geometricshape.h>

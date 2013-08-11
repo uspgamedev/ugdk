@@ -2,7 +2,7 @@
 #include "circle.h"
 #include "convexpolygon.h"
 #include <cmath>
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 
 #define SQRT_TWO 1.4142136
 

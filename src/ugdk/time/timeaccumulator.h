@@ -2,7 +2,7 @@
 #define UGDK_TIME_TIMEACCUMULATOR_H_
 
 #include <ugdk/time.h>
-#include <ugdk/common/types.h>
+#include <ugdk/structures/types.h>
 
 namespace ugdk {
 namespace time {

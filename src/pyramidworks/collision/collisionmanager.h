@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 #include <set>
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 #include <pyramidworks/collision.h>
 #include <ugdk/action.h>
 #include <ugdk/util/uncopyable.h>

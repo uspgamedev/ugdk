@@ -254,7 +254,7 @@ set(UGDK_EXTERNAL_INCLUDE_DIRS
 
 CONFIGURE_FILE(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/config.h.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR}/ugdk/common/config.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR}/ugdk/system/config.h"
 )
 
 install(TARGETS libugdk

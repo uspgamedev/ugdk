@@ -10,7 +10,7 @@
 #include <ugdk/resource.h>
 #include <ugdk/time.h>
 #include <ugdk/util.h>
-#include <ugdk/common/types.h>
+#include <ugdk/structures/types.h>
 #include <ugdk/system/configuration.h>
 
 namespace ugdk {

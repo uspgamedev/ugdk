@@ -2,7 +2,7 @@
 
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/ui/menu.h>
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 
 namespace ugdk {
 namespace ui {

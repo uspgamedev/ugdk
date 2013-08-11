@@ -10,7 +10,7 @@
 #include <ugdk/util/languageword.h>
 #include <ugdk/util/language.h>
 #include <ugdk/util/languagemanager.h>
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 
 %}
 
@@ -21,7 +21,7 @@
 %include <ugdk/util/languageword.h>
 %include <ugdk/util/language.h>
 %include <ugdk/util/languagemanager.h>
-%include <ugdk/util/intervalkdtree.h>
+%include <ugdk/structures/intervalkdtree.h>
 
 
 %template(Box2D) ugdk::ikdtree::Box<2>;

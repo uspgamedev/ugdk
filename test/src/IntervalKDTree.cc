@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 #include <memory>
 #include <algorithm>
 

@@ -1,7 +1,7 @@
 #include "collisionclass.h"
 
 #include <vector>
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 #include <ugdk/math/vector2D.h>
 #include "pyramidworks/collision/collisionobject.h"
 #include "pyramidworks/geometry/geometricshape.h"

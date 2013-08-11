@@ -1,7 +1,7 @@
 #ifndef UGDK_TIME_MANAGER_H_
 #define UGDK_TIME_MANAGER_H_
 
-#include <ugdk/common/types.h>
+#include <ugdk/structures/types.h>
 
 namespace ugdk {
 namespace time {

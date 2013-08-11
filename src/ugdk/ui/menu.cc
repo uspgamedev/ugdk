@@ -9,7 +9,7 @@
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/input/module.h>
-#include <ugdk/util/intervalkdtree.h>
+#include <ugdk/structures/intervalkdtree.h>
 
 using std::mem_fn;
 using std::placeholders::_1;
