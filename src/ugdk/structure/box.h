@@ -10,8 +10,10 @@ namespace structure {
 template <int DIMENSIONS>
 class Box {
   public:
+    typedef std::array<Coordinate, DIMENSIONS> Point;
+
     Box();
-    Box(const std::array<Coordinate, DIMENSIONS>& min_coordinates, const std::array<Coordinate, DIMENSIONS>& max_coordinates);
+    Box(const Point& min_coordinates, const Point& max_coordinates);
     virtual ~Box();
 
     void UpdateBox(const Box&);
@@ -20,12 +22,12 @@ class Box {
     bool Contains(const Box& box) const;
     bool Intersects(const Box *box) const;
 
-    const std::array<Coordinate, DIMENSIONS>& min_coordinates() const;
-    const std::array<Coordinate, DIMENSIONS>& max_coordinates() const;
+    const Point& min_coordinates() const;
+    const Point& max_coordinates() const;
 
   protected:
-    std::array<Coordinate, DIMENSIONS> min_coordinates_;
-    std::array<Coordinate, DIMENSIONS> max_coordinates_;
+    Point min_coordinates_;
+    Point max_coordinates_;
 };
 
 //************* Implementation **************
@@ -34,8 +36,7 @@ template <int DIMENSIONS>
 Box<DIMENSIONS>::Box() {}
 
 template <int DIMENSIONS>
-Box<DIMENSIONS>::Box(const std::array<Coordinate, DIMENSIONS>& min_coordinates, 
-                     const std::array<Coordinate, DIMENSIONS>& max_coordinates)
+Box<DIMENSIONS>::Box(const Point& min_coordinates, const Point& max_coordinates)
      : min_coordinates_(min_coordinates), max_coordinates_(max_coordinates) {}
 
 template <int DIMENSIONS>
@@ -81,12 +82,12 @@ bool Box<DIMENSIONS>::Intersects (const Box *box) const {
 }
     
 template <int DIMENSIONS>
-const std::array<Coordinate, DIMENSIONS>& Box<DIMENSIONS>::min_coordinates() const {
+const typename Box<DIMENSIONS>::Point& Box<DIMENSIONS>::min_coordinates() const {
     return min_coordinates_;
 }
 
 template <int DIMENSIONS>
-const std::array<Coordinate, DIMENSIONS>& Box<DIMENSIONS>::max_coordinates() const {
+const typename Box<DIMENSIONS>::Point& Box<DIMENSIONS>::max_coordinates() const {
     return max_coordinates_;
 
 }
