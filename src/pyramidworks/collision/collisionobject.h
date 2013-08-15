@@ -81,18 +81,18 @@ class CollisionObject {
     void* data() const { return data_; }
 
   private:
-    CollisionManager* manager_;
-
     // Data that is sent to CollisionLogic::Handle
     void *data_;
 
+    CollisionClass* collision_class_;
+
+    bool is_active_;
     ugdk::math::Vector2D position_;
     ugdk::math::Vector2D offset_;
 
-    CollisionClass* collision_class_;
     geometry::GeometricShape* shape_;
 
-    bool is_active_;
+    CollisionManager* manager_;
 
     std::map<const CollisionClass*, CollisionLogic*> known_collisions_;
 };
