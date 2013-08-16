@@ -4,6 +4,7 @@
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/visualeffect.h>
+#include <ugdk/graphic/drawable/functions.h>
 #include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/action/animationplayer.h>
 
@@ -32,18 +33,20 @@ Sprite::~Sprite() {}
 void Sprite::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     if(!spritesheet_) return;
     const action::SpriteAnimationFrame& animation_frame(current_animation_frame());
+    const Spritesheet::Frame& spritesheet_frame = spritesheet_->frame(animation_frame.spritesheet_frame());
     
     if(draw_setup_function_) draw_setup_function_(this, geometry, effect);
 
     math::Vector2D mirror_scale(
-            (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
-            (animation_frame.mirror() & ugdk::MIRROR_VFLIP) ? -1.0 : 1.0);
+            spritesheet_frame.size.x * (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
+            spritesheet_frame.size.y * (animation_frame.mirror() & ugdk::MIRROR_VFLIP) ? -1.0 : 1.0);
 
-    spritesheet_->Draw(
-        animation_frame.spritesheet_frame(), 
-        hotspot_, 
-        geometry * animation_frame.geometry() * Geometry(math::Vector2D(), mirror_scale),
-        effect * animation_frame.effect());
+    DrawSquare(
+        geometry 
+            * animation_frame.geometry()
+            * Geometry(-(hotspot_ + spritesheet_frame.hotspot), mirror_scale),
+        effect * animation_frame.effect(),
+        spritesheet_frame.texture);
 }
 
 const ugdk::math::Vector2D& Sprite::size() const {

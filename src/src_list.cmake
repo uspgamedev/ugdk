@@ -41,6 +41,8 @@ SET(UGDK_SRC
     src/ugdk/graphic/defaultshaders.cc 
     src/ugdk/graphic/defaultshaders.h 
     src/ugdk/graphic/drawable.h 
+    src/ugdk/graphic/drawable/functions.cc 
+    src/ugdk/graphic/drawable/functions.h 
     src/ugdk/graphic/drawable/label.cc 
     src/ugdk/graphic/drawable/label.h 
     src/ugdk/graphic/drawable/sprite.cc 
@@ -68,8 +70,11 @@ SET(UGDK_SRC
     src/ugdk/graphic/opengl/shaderprogram.h 
     src/ugdk/graphic/opengl/vertexbuffer.cc 
     src/ugdk/graphic/opengl/vertexbuffer.h 
+    src/ugdk/graphic/pixelsurface.h 
     src/ugdk/graphic/spritesheet.cc 
     src/ugdk/graphic/spritesheet.h 
+    src/ugdk/graphic/spritesheetdata.cc 
+    src/ugdk/graphic/spritesheetdata.h 
     src/ugdk/graphic/textmanager.cc 
     src/ugdk/graphic/textmanager.h 
     src/ugdk/graphic/texture.cc 

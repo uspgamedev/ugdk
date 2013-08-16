@@ -18,6 +18,7 @@
 #include <ugdk/graphic/light.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/spritesheet.h>
+#include <ugdk/graphic/spritesheetdata.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/module.h>
@@ -76,7 +77,7 @@ namespace graphic {
     export_class(Font)
     export_class(Light)
     export_class(Geometry)
-	export_class(VisualEffect)
+    export_class(VisualEffect)
     export_class(Node)
     export_class(Spritesheet)
     export_class(TextManager)
