@@ -1,5 +1,5 @@
 #ifndef MODULE_PROXY_TASK_H_
-#define MODULE_PROXY_ENTITY_H_
+#define MODULE_PROXY_TASK_H_
 
 #include <list>
 #include <ugdk/script/baseproxy.h>
@@ -20,6 +20,6 @@ class TaskProxy : public ugdk::script::BaseProxy<TaskProxy> {
     }
 };
 
-}
-}
-#endif
+} // namespace action
+} // namespace ugdk
+#endif // MODULE_PROXY_TASK_H_
