@@ -4,7 +4,6 @@
 #include <map>
 #include <vector>
 #include <string>
-#include <list>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/structure.h>
 #include <pyramidworks/collision.h>
@@ -59,6 +58,9 @@ class CollisionObject {
     /// Removes this object from it's CollisionClass object list.
     void StopColliding();
 
+    // TODO document
+    CollisionClass* collision_class() const { return collision_class_; }
+
     /// Returns the shape used.
     /** @return A const GeometricShape pointer. */
     const geometry::GeometricShape* shape() const { return shape_; };
@@ -81,10 +83,10 @@ class CollisionObject {
     void* data() const { return data_; }
 
   private:
+    CollisionClass* collision_class_;
+
     // Data that is sent to CollisionLogic::Handle
     void *data_;
-
-    CollisionClass* collision_class_;
 
     bool is_active_;
     ugdk::math::Vector2D position_;

@@ -28,6 +28,7 @@ class CollisionClass {
     void RefreshObject(const CollisionObject *obj);
 
 #ifdef DEBUG
+    const std::string& name() const { return name_; }
     void set_name(const std::string &name) { name_ = name; }
 #endif
   private:

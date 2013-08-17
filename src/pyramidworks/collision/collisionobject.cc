@@ -1,8 +1,7 @@
+#include "collisionobject.h"
 
 #include <cstdlib>
 #include <cstdio>
-
-#include "collisionobject.h"
 
 #include <ugdk/structure/intervalkdtree.h>
 #include "pyramidworks/collision/collisionmanager.h"
@@ -22,16 +21,13 @@ CollisionObject::CollisionObject(CollisionManager* manager, void *data)
         is_active_(false) {}
 
 CollisionObject::~CollisionObject() {
-    std::map<const CollisionClass*, CollisionLogic*>::iterator it;
-    for(it = known_collisions_.begin(); it != known_collisions_.end(); ++it)
-        delete it->second;
-    known_collisions_.clear();
+    for(auto& it : known_collisions_)
+        delete it.second;
 
     if(is_active_)
         StopColliding();
 
-    if(shape_ != nullptr)
-        delete shape_;
+    delete shape_;
 }
 
 void CollisionObject::SearchCollisions(std::vector<CollisionInstance> &collision_list) const {
@@ -54,29 +50,20 @@ bool CollisionObject::IsColliding(const CollisionObject* obj) const {
 
 void CollisionObject::AddCollisionLogic(const std::string& colclass, CollisionLogic* logic) {
     const CollisionClass* collision_class = manager_->Get(colclass);
-    CollisionLogic *query = known_collisions_[collision_class];
-    if( query != nullptr ) delete query;
+    delete known_collisions_[collision_class];
     known_collisions_[collision_class] = logic;
 }
 
 void CollisionObject::InitializeCollisionClass(const std::string& colclass) {
-    CollisionClass* collision_class = manager_->Get(colclass);
-#ifdef DEBUG
-    if(collision_class_ != nullptr) fprintf(stderr, "Pyramidworks - CollisionObject Fatal Error: Changing the collision_class of.\n");
-    if(collision_class == nullptr) fprintf(stderr, "Pyramidworks - CollisionObject Warning: Initializing the collision_class with nullptr.\n");
-#endif
-    collision_class_ = collision_class;
+    CollisionClass* new_collision_class = manager_->Get(colclass);
+    assert(!collision_class_);
+    assert(new_collision_class);
+    collision_class_ = new_collision_class;
 }
 
 void CollisionObject::StartColliding() {
     if(is_active_) return;
-#ifdef DEBUG
-    if(collision_class_ == nullptr) fprintf(stderr, "Pyramidworks - CollisionObject Warning: StartColliding called with an object with nullptr collision_class.\n");
-    if(shape_ == nullptr) {
-        fprintf(stderr, "Pyramidworks - CollisionObject Error: StartColliding called with an object with nullptr shape.\n");
-        return;
-    }
-#endif
+    assert(shape_);
     collision_class_->AddObject(this);
     manager_->AddActiveObject(this);
     is_active_ = true;
@@ -84,23 +71,22 @@ void CollisionObject::StartColliding() {
 
 void CollisionObject::StopColliding() {
     if(!is_active_) return;
-#ifdef DEBUG
-    if(collision_class_ == nullptr) fprintf(stderr, "Pyramidworks - CollisionObject Warning: StopColliding called with an object with nullptr collision_class.\n");
-#endif
     collision_class_->RemoveObject(this);
     manager_->RemoveActiveObject(this);
     is_active_ = false;
 }
 
 void CollisionObject::set_shape(geometry::GeometricShape* shape) { 
-    if(shape_) delete shape_;
+    delete shape_;
     shape_ = shape;
-    if(is_active_) this->collision_class_->RefreshObject(this);
+    if(is_active_)
+        this->collision_class_->RefreshObject(this);
 }
 
 void CollisionObject::MoveTo(const ugdk::math::Vector2D& position) {
     position_ = position;
-    if(is_active_) this->collision_class_->RefreshObject(this);
+    if(is_active_)
+        this->collision_class_->RefreshObject(this);
 }
 
 ugdk::structure::Box<2> CollisionObject::GetBoundingBox() const {

@@ -19,15 +19,10 @@ bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const Conv
 
 bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const Rect *rect, const ugdk::math::Vector2D& otherpos) const {
 	std::vector<ugdk::math::Vector2D> rect_vertices;
-	ugdk::math::Vector2D v1 (-rect->width()/2.0, -rect->height()/2.0);
-	ugdk::math::Vector2D v2 ( rect->width()/2.0, -rect->height()/2.0);
-	ugdk::math::Vector2D v3 (-rect->width()/2.0,  rect->height()/2.0);
-	ugdk::math::Vector2D v4 ( rect->width()/2.0,  rect->height()/2.0);
-	rect_vertices.push_back(v1);
-	rect_vertices.push_back(v2);
-	rect_vertices.push_back(v3);
-	rect_vertices.push_back(v4);
-
+	rect_vertices.emplace_back(-rect->width()/2.0, -rect->height()/2.0);
+	rect_vertices.emplace_back( rect->width()/2.0, -rect->height()/2.0);
+	rect_vertices.emplace_back(-rect->width()/2.0,  rect->height()/2.0);
+	rect_vertices.emplace_back( rect->width()/2.0,  rect->height()/2.0);
 	return ! checkAxisSeparation(vertices_, this_pos, rect_vertices, otherpos);
 }
 

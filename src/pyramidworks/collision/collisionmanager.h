@@ -39,6 +39,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
 
     void AddActiveObject(const CollisionObject* obj) { active_objects_.insert(obj); }
     void RemoveActiveObject(const CollisionObject* obj) { active_objects_.erase(obj); }
+    const std::set<const CollisionObject*>& active_objects() const { return active_objects_; }
 
     /// Warning: this task depends on resources from this object. Do not use it after this object is destroyed.
     ugdk::action::Task GenerateHandleCollisionTask();
