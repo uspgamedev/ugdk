@@ -1,15 +1,15 @@
 language: cpp
 
-env:
- - OPTIONS="-DCMAKE_BUILD_TYPE=Release"
- - OPTIONS="-DCMAKE_BUILD_TYPE=Debug"
+compiler:
+  - gcc
+  - clang
 
 before_script:
-  - sudo apt-get update > /dev/null
-  - sudo apt-get install cmake libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-net1.2-dev libsdl-ttf2.0-dev swig2.0 liblua5.1-0-dev python-dev  > /dev/null
+  - sudo apt-get update
+  - sudo apt-get install cmake libsdl1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-net1.2-dev libsdl-ttf2.0-dev swig2.0 liblua5.1-0-dev python-dev
 
 script:
-  - cmake . $OPTIONS
+  - cmake .
   - make ugdk_test && make ugdk_script_test
   - ./test/ugdk_test
 

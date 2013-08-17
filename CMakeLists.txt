@@ -70,6 +70,7 @@ endif (NOT UGDK_SRC)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR})
+include_directories(SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/externals/glm-0.9.4.2)
 include(cmake/ugdk.cmake)
 
 find_package(Git)
@@ -186,7 +187,6 @@ if (UNIX OR MINGW)
         -Wsign-compare
         -Wignored-qualifiers
         -Wuninitialized
-        -Wlogical-op
         -Winit-self)
 
 elseif (MSVC) 

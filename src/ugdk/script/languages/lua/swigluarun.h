@@ -14,6 +14,7 @@
  * ----------------------------------------------------------------------------- */
  
 /// @cond DOXYGEN_IGNORE_GENERATED
+#pragma clang system_header
 
 /* template workaround for compilers that cannot correctly implement the C++ standard */
 #ifndef SWIGTEMPLATEDISAMBIGUATOR
