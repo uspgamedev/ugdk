@@ -23,6 +23,7 @@ ENDIF()
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
 option(UGDK_BUILD_TESTS     "Set to ON to enable building tests." ON)
+option(UGDK_BUILD_EXAMPLES  "Set to ON to enable building examples." ON)
 option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
 option(UGDK_LUA_BINDINGS    "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
@@ -282,5 +283,7 @@ if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/pa
 endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
 
 # Examples
-add_subdirectory(examples)
+if(UGDK_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif(UGDK_BUILD_EXAMPLES)
 
