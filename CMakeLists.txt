@@ -68,9 +68,11 @@ if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT UGDK_SRC)
 
+set(GLM_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/externals/glm-0.9.4.2")
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR})
-include_directories(SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/externals/glm-0.9.4.2)
+include_directories(SYSTEM ${GLM_LOCATION})
 include(cmake/ugdk.cmake)
 
 find_package(Git)
@@ -188,8 +190,16 @@ if (UNIX OR MINGW)
         -Wignored-qualifiers
         -Wuninitialized
         -Winit-self)
+endif()
 
-elseif (MSVC) 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    add_definitions(
+        -Wno-self-assign
+        -Wno-deprecated-register
+    )
+endif ()
+
+if (MSVC) 
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
 endif ()
 
@@ -249,7 +259,8 @@ set(UGDK_EXTERNAL_INCLUDE_DIRS
     ${PROJECT_SOURCE_DIR}/${SRC_DIR};
     ${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR};
     ${SDL_INCLUDE_DIR};
-    ${SDLTTF_INCLUDE_DIR}
+    ${SDLTTF_INCLUDE_DIR};
+    ${GLM_LOCATION}
     CACHE STRING "UGDK include directories" FORCE)
 
 CONFIGURE_FILE(
