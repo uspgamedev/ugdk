@@ -3,9 +3,11 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <ugdk/graphic.h>
 #include <ugdk/math/vector2D.h>
+#include <ugdk/util/uncopyable.h>
 
 namespace ugdk {
 namespace graphic {
@@ -13,13 +15,20 @@ namespace graphic {
 class SpritesheetData;
 class Spritesheet {
   public:
-    struct Frame {
-        Frame(Texture* _tex, const math::Vector2D& _size, const math::Vector2D& _hotspot)
-            : texture(_tex), size(_size), hotspot(_hotspot) {}
+    class Frame : public util::Uncopyable {
+      public:
+        Frame(Texture* texure, const math::Vector2D& size, const math::Vector2D& hotspot);
         ~Frame();
+#ifndef SWIG
+        Frame(Frame&&);
+        Frame& operator=(Frame&&);
+#endif
 
-        Texture* texture;
+        std::unique_ptr<Texture> texture;
         math::Vector2D size, hotspot;
+      private:
+        Frame(const Frame&);
+        Frame& operator=(const Frame&);
     };
 
     /// Converts the given SpritesheetData into an optimized Spritesheet.

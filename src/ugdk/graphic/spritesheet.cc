@@ -28,11 +28,27 @@
 namespace ugdk {
 namespace graphic {
         
-Spritesheet::Frame::~Frame() {
-    delete texture;
-}
+Spritesheet::Frame::Frame(Texture* _tex, const math::Vector2D& _size, const math::Vector2D& _hotspot)
+    : texture(_tex)
+    , size(_size)
+    , hotspot(_hotspot) {}
 
-Spritesheet::Spritesheet(const SpritesheetData& data) {
+Spritesheet::Frame::~Frame() {}
+
+Spritesheet::Frame::Frame(Spritesheet::Frame&& other)
+    : texture(std::move(other.texture))
+    , size(std::move(other.size))
+    , hotspot(std::move(other.hotspot)) {}
+
+Spritesheet::Frame& Spritesheet::Frame::operator=(Spritesheet::Frame&& other) {
+    this->texture = std::move(other.texture);
+    this->size = std::move(other.size);
+    this->hotspot = std::move(other.hotspot);
+    return *this;
+}
+        
+Spritesheet::Spritesheet(const SpritesheetData& data)
+{
     for(const SpritesheetData::SpritesheetFrame& frame : data.frames()) {
         Texture* texture = Texture::CreateFromSurface(frame.surface->surface);
         frames_.emplace_back(texture, math::Vector2D(math::Integer2D(texture->width(), texture->height())), frame.hotspot);

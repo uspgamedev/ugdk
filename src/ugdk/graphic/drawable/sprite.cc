@@ -38,15 +38,16 @@ void Sprite::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     if(draw_setup_function_) draw_setup_function_(this, geometry, effect);
 
     math::Vector2D mirror_scale(
-            spritesheet_frame.size.x * (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
-            spritesheet_frame.size.y * (animation_frame.mirror() & ugdk::MIRROR_VFLIP) ? -1.0 : 1.0);
+        (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
+        (animation_frame.mirror() & ugdk::MIRROR_VFLIP) ? -1.0 : 1.0);
 
     DrawSquare(
         geometry 
             * animation_frame.geometry()
-            * Geometry(-(hotspot_ + spritesheet_frame.hotspot), mirror_scale),
+            * Geometry(math::Vector2D(), mirror_scale)
+            * Geometry(-(hotspot_ + spritesheet_frame.hotspot), spritesheet_frame.size),
         effect * animation_frame.effect(),
-        spritesheet_frame.texture);
+        spritesheet_frame.texture.get());
 }
 
 const ugdk::math::Vector2D& Sprite::size() const {
