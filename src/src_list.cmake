@@ -2,12 +2,10 @@ SET(UGDK_SRC
     src/pyramidworks/collision.h 
     src/pyramidworks/collision/collisionclass.cc 
     src/pyramidworks/collision/collisionclass.h 
-    src/pyramidworks/collision/collisionlogic.h 
     src/pyramidworks/collision/collisionmanager.cc 
     src/pyramidworks/collision/collisionmanager.h 
     src/pyramidworks/collision/collisionobject.cc 
     src/pyramidworks/collision/collisionobject.h 
-    src/pyramidworks/collision/genericcollisionlogic.h 
     src/pyramidworks/geometry.h 
     src/pyramidworks/geometry/circle.cc 
     src/pyramidworks/geometry/circle.h 
