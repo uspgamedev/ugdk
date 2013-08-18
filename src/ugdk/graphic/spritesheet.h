@@ -27,8 +27,13 @@ class Spritesheet {
         std::unique_ptr<Texture> texture;
         math::Vector2D size, hotspot;
       private:
+#ifdef _MSC_VER
         Frame(const Frame&);
         Frame& operator=(const Frame&);
+#else
+        Frame(const Frame&) = delete;
+        Frame& operator=(const Frame&) = delete;
+#endif
     };
 
     /// Converts the given SpritesheetData into an optimized Spritesheet.
