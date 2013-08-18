@@ -14,11 +14,11 @@ namespace collision {
 
 
 CollisionObject::CollisionObject(CollisionManager* manager, void *data) 
-    :   manager_(manager),
-        data_(data),
-        collision_class_(nullptr),
-        shape_(nullptr),
-        is_active_(false) {}
+    :   collision_class_(nullptr)
+    ,   data_(data)
+    ,   is_active_(false)
+    ,   shape_(nullptr)
+    ,   manager_(manager) {}
 
 CollisionObject::~CollisionObject() {
     for(auto& it : known_collisions_)

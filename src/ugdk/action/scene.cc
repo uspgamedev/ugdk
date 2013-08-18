@@ -20,11 +20,11 @@ using std::list;
 }*/
 
 Scene::Scene() 
-  : finished_(false),
-    active_(true),
-    visible_(true),
-    background_music_(nullptr), 
-    stops_previous_music_(true) {
+  : active_(true)
+  , finished_(false)
+  , visible_(true)
+  , background_music_(nullptr) 
+  , stops_previous_music_(true) {
 
         tasks_.emplace_back(0.4, [&](double dt) {
             media_manager_.Update(dt);

@@ -308,10 +308,6 @@ namespace opengl {
 		// A pointer to mapped memory. Zero if memory is currently
 		// not mapped.
 		void *mapped;
-
-		// Usage hint for map()/unmap() pair. Same as `access' parameter in
-		// glBufferData or 0 if not mapped.
-		GLenum mapped_access;
 	};
 
 } // namespace opengl
