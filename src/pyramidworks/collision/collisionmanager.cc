@@ -31,7 +31,7 @@ void CollisionManager::Generate(const std::string &name, const std::string &pare
 
 ugdk::action::Task CollisionManager::GenerateHandleCollisionTask() {
     return [this](double) -> bool {
-        std::vector<CollisionInstance> collision_list;
+        std::list<CollisionInstance> collision_list;
         for (const CollisionObject* obj : this->active_objects_)
             obj->SearchCollisions(collision_list);
         for(const CollisionInstance& it : collision_list)

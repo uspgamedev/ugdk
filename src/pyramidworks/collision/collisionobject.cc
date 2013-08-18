@@ -26,7 +26,7 @@ CollisionObject::~CollisionObject() {
     delete shape_;
 }
 
-void CollisionObject::SearchCollisions(std::vector<CollisionInstance> &collision_list) const {
+void CollisionObject::SearchCollisions(std::list<CollisionInstance> &collision_list) const {
     for(const auto& it : known_collisions_) {
         CollisionObjectList target_list;
         it.first->FindCollidingObjects(this, target_list);
