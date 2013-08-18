@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <ugdk/action.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/structure.h>
 #include <pyramidworks/collision.h>
@@ -20,7 +21,7 @@ class CollisionObject {
   public:
     /** @param data The data sent to the CollisionLogic when a collision happens.
       * @see CollisionLogic */
-    CollisionObject(CollisionManager* manager, void *data);
+    CollisionObject(CollisionManager* manager, ugdk::action::Entity* data);
     ~CollisionObject();
 
     /// Search if there's any collision.
@@ -39,8 +40,8 @@ class CollisionObject {
     /** @param colclass Name of the collision class.
       * @param logic Is not changed.
       * @see AddCollisionLogic */
-    void AddCollisionLogic(const std::string& colclass, CollisionLogic* logic);
-    void AddCollisionLogic(const char n[], CollisionLogic* logic) { 
+    void AddCollisionLogic(const std::string& colclass, const CollisionLogic& logic);
+    void AddCollisionLogic(const char n[], const CollisionLogic& logic) { 
         const std::string str(n); AddCollisionLogic(str, logic); 
     }
 
@@ -80,13 +81,13 @@ class CollisionObject {
     ugdk::structure::Box<2> GetBoundingBox() const;
     
     /// Getter for the stored data.
-    void* data() const { return data_; }
+    ugdk::action::Entity* data() const { return data_; }
 
   private:
     CollisionClass* collision_class_;
 
     // Data that is sent to CollisionLogic::Handle
-    void *data_;
+    ugdk::action::Entity* data_;
 
     bool is_active_;
     ugdk::math::Vector2D position_;
@@ -96,7 +97,7 @@ class CollisionObject {
 
     CollisionManager* manager_;
 
-    std::map<const CollisionClass*, CollisionLogic*> known_collisions_;
+    std::map<const CollisionClass*, CollisionLogic> known_collisions_;
 };
 
 } // namespace collision

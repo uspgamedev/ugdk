@@ -2,7 +2,6 @@
 
 #include "pyramidworks/collision/collisionclass.h"
 #include "pyramidworks/collision/collisionobject.h"
-#include "pyramidworks/collision/collisionlogic.h"
 
 namespace pyramidworks {
 namespace collision {
@@ -36,7 +35,7 @@ ugdk::action::Task CollisionManager::GenerateHandleCollisionTask() {
         for (const CollisionObject* obj : this->active_objects_)
             obj->SearchCollisions(collision_list);
         for(const CollisionInstance& it : collision_list)
-            it.first->Handle(it.second);
+            it.first(it.second);
         return true;
     };
 }

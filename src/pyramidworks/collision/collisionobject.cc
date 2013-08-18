@@ -6,14 +6,13 @@
 #include <ugdk/structure/intervalkdtree.h>
 #include "pyramidworks/collision/collisionmanager.h"
 #include "pyramidworks/collision/collisionclass.h"
-#include "pyramidworks/collision/collisionlogic.h"
 #include "pyramidworks/geometry/geometricshape.h"
 
 namespace pyramidworks {
 namespace collision {
 
 
-CollisionObject::CollisionObject(CollisionManager* manager, void *data) 
+CollisionObject::CollisionObject(CollisionManager* manager, ugdk::action::Entity* data) 
     :   collision_class_(nullptr)
     ,   data_(data)
     ,   is_active_(false)
@@ -21,9 +20,6 @@ CollisionObject::CollisionObject(CollisionManager* manager, void *data)
     ,   manager_(manager) {}
 
 CollisionObject::~CollisionObject() {
-    for(auto& it : known_collisions_)
-        delete it.second;
-
     if(is_active_)
         StopColliding();
 
@@ -31,15 +27,12 @@ CollisionObject::~CollisionObject() {
 }
 
 void CollisionObject::SearchCollisions(std::vector<CollisionInstance> &collision_list) const {
-    std::map<const CollisionClass*, CollisionLogic*>::const_iterator it;
-    for(it = known_collisions_.begin(); it != known_collisions_.end(); ++it) {
-
+    for(const auto& it : known_collisions_) {
         CollisionObjectList target_list;
-        it->first->FindCollidingObjects(this, target_list);
-        
-        CollisionObjectList::const_iterator obj;
-        for(obj = target_list.begin(); obj != target_list.end(); ++obj)
-            collision_list.push_back(CollisionInstance(it->second, (*obj)->data_));
+        it.first->FindCollidingObjects(this, target_list);
+
+        for(const CollisionObject *obj : target_list)
+            collision_list.emplace_back(it.second, obj->data_);
     }
 }
 
@@ -48,9 +41,8 @@ bool CollisionObject::IsColliding(const CollisionObject* obj) const {
     return this->shape_->Intersects(absolute_position(), obj->shape_, obj->absolute_position());
 }
 
-void CollisionObject::AddCollisionLogic(const std::string& colclass, CollisionLogic* logic) {
+void CollisionObject::AddCollisionLogic(const std::string& colclass, const CollisionLogic& logic) {
     const CollisionClass* collision_class = manager_->Get(colclass);
-    delete known_collisions_[collision_class];
     known_collisions_[collision_class] = logic;
 }
 
