@@ -19,7 +19,7 @@ void CollisionClass::FindCollidingObjects(const CollisionObject *target,
                                                                CollisionObjectList& result) const {
     
     std::list<const CollisionObject *> filtered_results;
-    objects_tree_->FindIntersectingItems(target->GetBoundingBox(), std::back_inserter(filtered_results));
+    objects_tree_->FindIntersectingItems(target->CreateBoundingBox(), std::back_inserter(filtered_results));
 
     for(const CollisionObject* it : filtered_results) {
         if(it == target) continue;
@@ -41,7 +41,7 @@ void CollisionClass::FindCollidingObjects(const ugdk::math::Vector2D& position,
     
 void CollisionClass::AddObject(const CollisionObject *obj) {
 	if(parent_) parent_->AddObject(obj);
-    objects_tree_->Insert(obj->GetBoundingBox(), obj);
+    objects_tree_->Insert(obj->CreateBoundingBox(), obj);
 }
 
 void CollisionClass::RemoveObject(const CollisionObject *obj) { 
@@ -51,7 +51,7 @@ void CollisionClass::RemoveObject(const CollisionObject *obj) {
 
 void CollisionClass::RefreshObject(const CollisionObject *obj) {
 	if(parent_) parent_->RefreshObject(obj);
-    objects_tree_->Update(obj->GetBoundingBox(), obj);
+    objects_tree_->Update(obj->CreateBoundingBox(), obj);
 }
 
 } // namespace collision

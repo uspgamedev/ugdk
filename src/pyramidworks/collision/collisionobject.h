@@ -4,6 +4,7 @@
 #include <map>
 #include <list>
 #include <string>
+#include <memory>
 #include <ugdk/action.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/structure.h>
@@ -20,8 +21,9 @@ namespace collision {
 class CollisionObject {
   public:
     /** @param data The data sent to the CollisionLogic when a collision happens.
+      * @param colclass Name of the collision class of this object.
       * @see CollisionLogic */
-    CollisionObject(CollisionManager* manager, ugdk::action::Entity* data);
+    CollisionObject(ugdk::action::Entity* data, const std::string& colclass);
     ~CollisionObject();
 
     /// Search if there's any collision.
@@ -38,33 +40,31 @@ class CollisionObject {
 
     /// Adds a new collision to the known collisions.
     /** @param colclass Name of the collision class.
-      * @param logic Is not changed.
-      * @see AddCollisionLogic */
+      * @param logic The handler called when the collision occurs. */
     void AddCollisionLogic(const std::string& colclass, const CollisionLogic& logic);
-    void AddCollisionLogic(const char n[], const CollisionLogic& logic) { 
-        const std::string str(n); AddCollisionLogic(str, logic); 
-    }
 
-    /// Defines the CollisionClass associated with this object.
-    /** Warning: will quit the program with a Fatal Error if used to the
-        collision_class is already set.
-        @param colclass The CollisionClass to set to.
-        @see CollisionClass */
-    void InitializeCollisionClass(const std::string&);
-    void InitializeCollisionClass(const char n[]) { const std::string str(n); InitializeCollisionClass(str); }
+    /// Changes the collision class associated with this object.
+    /** @param colclass The string representating the collision class to set to. */
+    void ChangeCollisionClass(const std::string&);
 
-    /// Adds this object to it's CollisionClass object list.
-    void StartColliding();
+    /// Enables collisions with this object in the given CollisionManager.
+    void StartColliding(CollisionManager*);
 
     /// Removes this object from it's CollisionClass object list.
     void StopColliding();
 
+    /// TODO document
+    void MoveTo(const ugdk::math::Vector2D& position);
+
+    /// Wrapper to shape()->CreateBoundingBox(absolute_position())
+    ugdk::structure::Box<2> CreateBoundingBox() const;
+
     // TODO document
-    CollisionClass* collision_class() const { return collision_class_; }
+    const std::string& collision_class() const { return collision_class_; }
 
     /// Returns the shape used.
     /** @return A const GeometricShape pointer. */
-    const geometry::GeometricShape* shape() const { return shape_; };
+    const geometry::GeometricShape* shape() const { return shape_.get(); };
 
     /// Changes the shape used.
     /** @param shape The shape to use. 
@@ -73,31 +73,24 @@ class CollisionObject {
 
     /// TODO document
     ugdk::math::Vector2D absolute_position() const { return position_ + offset_; }
-
-    /// TODO document
-    void MoveTo(const ugdk::math::Vector2D& position);
-
-    /// Wrapper to shape()->GetBoundingBox(absolute_position())
-    ugdk::structure::Box<2> GetBoundingBox() const;
     
     /// Getter for the stored data.
     ugdk::action::Entity* data() const { return data_; }
 
   private:
-    CollisionClass* collision_class_;
+    std::string collision_class_;
 
     // Data that is sent to CollisionLogic::Handle
     ugdk::action::Entity* data_;
 
-    bool is_active_;
     ugdk::math::Vector2D position_;
     ugdk::math::Vector2D offset_;
 
-    geometry::GeometricShape* shape_;
+    std::unique_ptr<geometry::GeometricShape> shape_;
 
     CollisionManager* manager_;
-
-    std::map<const CollisionClass*, CollisionLogic> known_collisions_;
+    
+    std::map<std::string, CollisionLogic> known_collisions_;
 };
 
 } // namespace collision

@@ -12,24 +12,21 @@ namespace pyramidworks {
 namespace collision {
 
 
-CollisionObject::CollisionObject(CollisionManager* manager, ugdk::action::Entity* data) 
-    :   collision_class_(nullptr)
-    ,   data_(data)
-    ,   is_active_(false)
-    ,   shape_(nullptr)
-    ,   manager_(manager) {}
+CollisionObject::CollisionObject(ugdk::action::Entity* data, const std::string& colclass) 
+    : collision_class_(nullptr)
+    , data_(data)
+    , shape_(nullptr)
+    , manager_(nullptr) {}
 
 CollisionObject::~CollisionObject() {
-    if(is_active_)
+    if(manager_)
         StopColliding();
-
-    delete shape_;
 }
 
 void CollisionObject::SearchCollisions(std::list<CollisionInstance> &collision_list) const {
     for(const auto& it : known_collisions_) {
         CollisionObjectList target_list;
-        it.first->FindCollidingObjects(this, target_list);
+        manager_->Get(it.first)->FindCollidingObjects(this, target_list);
 
         for(const CollisionObject *obj : target_list)
             collision_list.emplace_back(it.second, obj->data_);
@@ -37,51 +34,52 @@ void CollisionObject::SearchCollisions(std::list<CollisionInstance> &collision_l
 }
 
 bool CollisionObject::IsColliding(const CollisionObject* obj) const {
-    if(this->shape_ == nullptr || obj->shape_ == nullptr) return false;
-    return this->shape_->Intersects(absolute_position(), obj->shape_, obj->absolute_position());
+    if(!this->shape_ || !obj->shape_) return false;
+    return this->shape()->Intersects(absolute_position(), obj->shape(), obj->absolute_position());
 }
 
 void CollisionObject::AddCollisionLogic(const std::string& colclass, const CollisionLogic& logic) {
-    const CollisionClass* collision_class = manager_->Get(colclass);
-    known_collisions_[collision_class] = logic;
+    known_collisions_[colclass] = logic;
 }
 
-void CollisionObject::InitializeCollisionClass(const std::string& colclass) {
-    CollisionClass* new_collision_class = manager_->Get(colclass);
-    assert(!collision_class_);
-    assert(new_collision_class);
-    collision_class_ = new_collision_class;
+void CollisionObject::ChangeCollisionClass(const std::string& colclass) {
+    if(manager_)
+        manager_->Get(colclass)->RemoveObject(this);
+    collision_class_ = colclass;
+    if(manager_)
+        manager_->Get(colclass)->AddObject(this);
 }
 
-void CollisionObject::StartColliding() {
-    if(is_active_) return;
-    assert(shape_);
-    collision_class_->AddObject(this);
+void CollisionObject::StartColliding(CollisionManager* manager) {
+    if(manager_) {
+        //throw 
+        return;
+    }
+    manager_ = manager;
+    manager_->Get(collision_class_)->AddObject(this);
     manager_->AddActiveObject(this);
-    is_active_ = true;
 }
 
 void CollisionObject::StopColliding() {
-    if(!is_active_) return;
-    collision_class_->RemoveObject(this);
+    if(!manager_) return;
+    manager_->Get(collision_class_)->RemoveObject(this);
     manager_->RemoveActiveObject(this);
-    is_active_ = false;
+    manager_ = nullptr;
 }
 
 void CollisionObject::set_shape(geometry::GeometricShape* shape) { 
-    delete shape_;
-    shape_ = shape;
-    if(is_active_)
-        this->collision_class_->RefreshObject(this);
+    shape_.reset(shape);
+    if(manager_)
+        manager_->Get(collision_class_)->RefreshObject(this);
 }
 
 void CollisionObject::MoveTo(const ugdk::math::Vector2D& position) {
     position_ = position;
-    if(is_active_)
-        this->collision_class_->RefreshObject(this);
+    if(manager_)
+        manager_->Get(collision_class_)->RefreshObject(this);
 }
 
-ugdk::structure::Box<2> CollisionObject::GetBoundingBox() const {
+ugdk::structure::Box<2> CollisionObject::CreateBoundingBox() const {
     return shape_->GetBoundingBox(this->absolute_position());
 }
 
