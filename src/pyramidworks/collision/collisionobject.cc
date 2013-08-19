@@ -13,7 +13,7 @@ namespace collision {
 
 
 CollisionObject::CollisionObject(ugdk::action::Entity* data, const std::string& colclass) 
-    : collision_class_(nullptr)
+    : collision_class_(colclass)
     , data_(data)
     , shape_(nullptr)
     , manager_(nullptr) {}
@@ -44,10 +44,10 @@ void CollisionObject::AddCollisionLogic(const std::string& colclass, const Colli
 
 void CollisionObject::ChangeCollisionClass(const std::string& colclass) {
     if(manager_)
-        manager_->Get(colclass)->RemoveObject(this);
+        manager_->Get(collision_class_)->RemoveObject(this);
     collision_class_ = colclass;
     if(manager_)
-        manager_->Get(colclass)->AddObject(this);
+        manager_->Get(collision_class_)->AddObject(this);
 }
 
 void CollisionObject::StartColliding(CollisionManager* manager) {
