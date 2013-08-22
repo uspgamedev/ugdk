@@ -22,8 +22,9 @@ class CollisionObject {
   public:
     /** @param data The data sent to the CollisionLogic when a collision happens.
       * @param colclass Name of the collision class of this object.
+      * @param shape The shape for this object.
       * @see CollisionLogic */
-    CollisionObject(ugdk::action::Entity* owner, const std::string& colclass);
+    CollisionObject(ugdk::action::Entity* owner, const std::string& colclass, geometry::GeometricShape* shape);
     ~CollisionObject();
 
     /// Search if there's any collision.
