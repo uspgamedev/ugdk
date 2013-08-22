@@ -13,9 +13,9 @@ class CollisionClass;
 class CollisionObject;
 class CollisionManager;
 
-typedef std::list<const CollisionObject *> CollisionObjectList;
-typedef std::function<void (ugdk::action::Entity*)> CollisionLogic;
-typedef std::pair<const CollisionLogic&, ugdk::action::Entity*> CollisionInstance;
+typedef std::list<const CollisionObject*> CollisionObjectList;
+typedef std::function<void (const CollisionObject*)> CollisionLogic;
+typedef std::pair<const CollisionLogic&, const CollisionObject*> CollisionInstance;
 
 } // namespace collision
 } // namespace pyramidworks

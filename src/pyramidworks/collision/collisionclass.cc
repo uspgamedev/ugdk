@@ -53,6 +53,16 @@ void CollisionClass::RefreshObject(const CollisionObject *obj) {
 	if(parent_) parent_->RefreshObject(obj);
     objects_tree_->Update(obj->CreateBoundingBox(), obj);
 }
+    
+void CollisionClass::ChangeParent(CollisionClass* parent) {
+    if(parent_)
+        for(const auto& it : *objects_tree_)
+            parent_->RemoveObject(it.first);
+    parent_ = parent;
+    if(parent_)
+        for(const auto& it : *objects_tree_)
+            parent_->AddObject(it.first);
+}
 
 } // namespace collision
 } // namespace pyramidworks

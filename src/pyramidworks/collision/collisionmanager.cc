@@ -25,7 +25,7 @@ CollisionClass& CollisionManager::Find(const std::string &name) {
 
 void CollisionManager::ChangeParent(const std::string &name, const std::string &parent) {
     CollisionClass& colclass = Find(name);
-    colclass.set_parent(&Find(parent));
+    colclass.ChangeParent(&Find(parent));
 }
 
 ugdk::action::Task CollisionManager::GenerateHandleCollisionTask() {

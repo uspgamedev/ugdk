@@ -23,7 +23,7 @@ class CollisionObject {
     /** @param data The data sent to the CollisionLogic when a collision happens.
       * @param colclass Name of the collision class of this object.
       * @see CollisionLogic */
-    CollisionObject(ugdk::action::Entity* data, const std::string& colclass);
+    CollisionObject(ugdk::action::Entity* owner, const std::string& colclass);
     ~CollisionObject();
 
     /// Search if there's any collision.
@@ -75,13 +75,12 @@ class CollisionObject {
     ugdk::math::Vector2D absolute_position() const { return position_ + offset_; }
     
     /// Getter for the stored data.
-    ugdk::action::Entity* data() const { return data_; }
+    ugdk::action::Entity* owner() const { return owner_; }
 
   private:
     std::string collision_class_;
 
-    // Data that is sent to CollisionLogic::Handle
-    ugdk::action::Entity* data_;
+    ugdk::action::Entity* owner_;
 
     ugdk::math::Vector2D position_;
     ugdk::math::Vector2D offset_;

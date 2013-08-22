@@ -19,7 +19,6 @@ class CollisionClass {
   public:
     ~CollisionClass();
     const CollisionClass* parent() const { return parent_; }
-    void set_parent(CollisionClass* _parent) { parent_ = _parent; }
 
     void FindCollidingObjects(const CollisionObject *target, CollisionObjectList& collisions) const;
     void FindCollidingObjects(const ugdk::math::Vector2D& position, const geometry::GeometricShape& shape, CollisionObjectList& collisions) const;
@@ -27,6 +26,8 @@ class CollisionClass {
     void AddObject(const CollisionObject *obj);
     void RemoveObject(const CollisionObject *obj);
     void RefreshObject(const CollisionObject *obj);
+
+    void ChangeParent(CollisionClass* parent);
 
 #ifdef DEBUG
     const std::string& name() const { return name_; }

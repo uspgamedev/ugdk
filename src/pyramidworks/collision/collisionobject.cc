@@ -12,9 +12,9 @@ namespace pyramidworks {
 namespace collision {
 
 
-CollisionObject::CollisionObject(ugdk::action::Entity* data, const std::string& colclass) 
+CollisionObject::CollisionObject(ugdk::action::Entity* owner, const std::string& colclass) 
     : collision_class_(colclass)
-    , data_(data)
+    , owner_(owner)
     , shape_(nullptr)
     , manager_(nullptr) {}
 
@@ -29,7 +29,7 @@ void CollisionObject::SearchCollisions(std::list<CollisionInstance> &collision_l
         manager_->Find(it.first).FindCollidingObjects(this, target_list);
 
         for(const CollisionObject *obj : target_list)
-            collision_list.emplace_back(it.second, obj->data_);
+            collision_list.emplace_back(it.second, obj);
     }
 }
 
