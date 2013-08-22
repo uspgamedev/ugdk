@@ -53,29 +53,38 @@ class CollisionObject {
     /// Removes this object from it's CollisionClass object list.
     void StopColliding();
 
-    /// TODO document
+    /// Moves the object to the given position.
     void MoveTo(const ugdk::math::Vector2D& position);
 
     /// Wrapper to shape()->CreateBoundingBox(absolute_position())
     ugdk::structure::Box<2> CreateBoundingBox() const;
 
-    // TODO document
+    /// Calculates the position of this object, with the offset added.
+    ugdk::math::Vector2D absolute_position() const { return position_ + offset_; }
+    
+    /// Changes the shape used.
+    /** @param shape The shape to use. 
+      * @see GeometricShape */
+    void ChangeShape(geometry::GeometricShape* shape);
+    
+    /// Returns the name of the collision class of this object.
     const std::string& collision_class() const { return collision_class_; }
+    
+    /// Returns the Entity that owns this object.
+    ugdk::action::Entity* owner() const { return owner_; }
+
+    /// Returns the position of this object.
+    const ugdk::math::Vector2D& position() const { return position_; }
+
+    /// Returns the offset of this object.
+    const ugdk::math::Vector2D& offset() const { return offset_; }
 
     /// Returns the shape used.
     /** @return A const GeometricShape pointer. */
     const geometry::GeometricShape* shape() const { return shape_.get(); };
-
-    /// Changes the shape used.
-    /** @param shape The shape to use. 
-      * @see GeometricShape */
-    void set_shape(geometry::GeometricShape* shape);
-
-    /// TODO document
-    ugdk::math::Vector2D absolute_position() const { return position_ + offset_; }
     
-    /// Getter for the stored data.
-    ugdk::action::Entity* owner() const { return owner_; }
+    /// Changes the offset of this object.
+    void set_offset(const ugdk::math::Vector2D& _offset) { offset_ = _offset; }
 
   private:
     std::string collision_class_;

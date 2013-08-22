@@ -30,7 +30,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
     /** @param name The name of the class whose parent will be changed.
       * @param parent The name of the parent class.
       */
-    void ChangeParent(const std::string &name, const std::string &parent);
+    void ChangeClassParent(const std::string &name, const std::string &parent);
 
     void AddActiveObject(const CollisionObject* obj) { active_objects_.insert(obj); }
     void RemoveActiveObject(const CollisionObject* obj) { active_objects_.erase(obj); }

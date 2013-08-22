@@ -67,12 +67,6 @@ void CollisionObject::StopColliding() {
     manager_ = nullptr;
 }
 
-void CollisionObject::set_shape(geometry::GeometricShape* shape) { 
-    shape_.reset(shape);
-    if(manager_)
-        manager_->Find(collision_class_).RefreshObject(this);
-}
-
 void CollisionObject::MoveTo(const ugdk::math::Vector2D& position) {
     position_ = position;
     if(manager_)
@@ -81,6 +75,11 @@ void CollisionObject::MoveTo(const ugdk::math::Vector2D& position) {
 
 ugdk::structure::Box<2> CollisionObject::CreateBoundingBox() const {
     return shape_->GetBoundingBox(this->absolute_position());
+}
+void CollisionObject::ChangeShape(geometry::GeometricShape* shape) { 
+    shape_.reset(shape);
+    if(manager_)
+        manager_->Find(collision_class_).RefreshObject(this);
 }
 
 } // namespace collision

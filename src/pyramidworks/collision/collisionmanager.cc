@@ -23,7 +23,7 @@ CollisionClass& CollisionManager::Find(const std::string &name) {
         return *find->second;
 }
 
-void CollisionManager::ChangeParent(const std::string &name, const std::string &parent) {
+void CollisionManager::ChangeClassParent(const std::string &name, const std::string &parent) {
     CollisionClass& colclass = Find(name);
     colclass.ChangeParent(&Find(parent));
 }
