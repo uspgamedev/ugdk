@@ -9,7 +9,7 @@
 namespace pyramidworks {
 namespace collision {
 
-CollisionClass::~CollisionClass() {delete objects_tree_;}
+CollisionClass::~CollisionClass() {}
 
 CollisionClass::CollisionClass(const ugdk::structure::Box<2>& tree_bounding_box) 
   : parent_(nullptr),

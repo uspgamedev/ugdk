@@ -4,6 +4,7 @@
 #include <string>
 #include <list>
 #include <set>
+#include <memory>
 #include <ugdk/structure.h>
 #include <ugdk/math.h>
 #include <pyramidworks/collision.h>
@@ -43,7 +44,7 @@ class CollisionClass {
     std::string name_;
 #endif
     CollisionClass* parent_;
-    ObjectTree* objects_tree_;
+    std::unique_ptr<ObjectTree> objects_tree_;
 };
 
 } // namespace collision

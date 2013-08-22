@@ -26,7 +26,7 @@ CollisionObject::~CollisionObject() {
 void CollisionObject::SearchCollisions(std::list<CollisionInstance> &collision_list) const {
     for(const auto& it : known_collisions_) {
         CollisionObjectList target_list;
-        manager_->Get(it.first)->FindCollidingObjects(this, target_list);
+        manager_->Find(it.first).FindCollidingObjects(this, target_list);
 
         for(const CollisionObject *obj : target_list)
             collision_list.emplace_back(it.second, obj->data_);
@@ -44,10 +44,10 @@ void CollisionObject::AddCollisionLogic(const std::string& colclass, const Colli
 
 void CollisionObject::ChangeCollisionClass(const std::string& colclass) {
     if(manager_)
-        manager_->Get(collision_class_)->RemoveObject(this);
+        manager_->Find(collision_class_).RemoveObject(this);
     collision_class_ = colclass;
     if(manager_)
-        manager_->Get(collision_class_)->AddObject(this);
+        manager_->Find(collision_class_).AddObject(this);
 }
 
 void CollisionObject::StartColliding(CollisionManager* manager) {
@@ -56,13 +56,13 @@ void CollisionObject::StartColliding(CollisionManager* manager) {
         return;
     }
     manager_ = manager;
-    manager_->Get(collision_class_)->AddObject(this);
+    manager_->Find(collision_class_).AddObject(this);
     manager_->AddActiveObject(this);
 }
 
 void CollisionObject::StopColliding() {
     if(!manager_) return;
-    manager_->Get(collision_class_)->RemoveObject(this);
+    manager_->Find(collision_class_).RemoveObject(this);
     manager_->RemoveActiveObject(this);
     manager_ = nullptr;
 }
@@ -70,13 +70,13 @@ void CollisionObject::StopColliding() {
 void CollisionObject::set_shape(geometry::GeometricShape* shape) { 
     shape_.reset(shape);
     if(manager_)
-        manager_->Get(collision_class_)->RefreshObject(this);
+        manager_->Find(collision_class_).RefreshObject(this);
 }
 
 void CollisionObject::MoveTo(const ugdk::math::Vector2D& position) {
     position_ = position;
     if(manager_)
-        manager_->Get(collision_class_)->RefreshObject(this);
+        manager_->Find(collision_class_).RefreshObject(this);
 }
 
 ugdk::structure::Box<2> CollisionObject::CreateBoundingBox() const {
