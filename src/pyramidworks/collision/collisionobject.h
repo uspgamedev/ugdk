@@ -2,8 +2,10 @@
 #define PYRAMIDWORKS_COLLISION_COLLISIONOBJECT_H_
 
 #include <map>
-#include <vector>
+#include <list>
 #include <string>
+#include <memory>
+#include <ugdk/action.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/structure.h>
 #include <pyramidworks/collision.h>
@@ -19,8 +21,10 @@ namespace collision {
 class CollisionObject {
   public:
     /** @param data The data sent to the CollisionLogic when a collision happens.
+      * @param colclass Name of the collision class of this object.
+      * @param shape The shape for this object.
       * @see CollisionLogic */
-    CollisionObject(CollisionManager* manager, void *data);
+    CollisionObject(ugdk::action::Entity* owner, const std::string& colclass, geometry::GeometricShape* shape);
     ~CollisionObject();
 
     /// Search if there's any collision.
@@ -28,7 +32,7 @@ class CollisionObject {
       * list of CollisionObject it's colliding with and generates a list of the collisions.
       * @param collision_list A list in which the result is appended to.
       * @return A list of CollisionInstance, appended to the collision_list argument. */
-    void SearchCollisions(std::vector<CollisionInstance> &collision_list) const;
+    void SearchCollisions(std::list<CollisionInstance> &collision_list) const;
 
     /// Verifies if this CollisionObject is colliding with another CollisionObject.
     /** @param obj The CollisionObject to check against.
@@ -37,66 +41,65 @@ class CollisionObject {
 
     /// Adds a new collision to the known collisions.
     /** @param colclass Name of the collision class.
-      * @param logic Is not changed.
-      * @see AddCollisionLogic */
-    void AddCollisionLogic(const std::string& colclass, CollisionLogic* logic);
-    void AddCollisionLogic(const char n[], CollisionLogic* logic) { 
-        const std::string str(n); AddCollisionLogic(str, logic); 
-    }
+      * @param logic The handler called when the collision occurs. */
+    void AddCollisionLogic(const std::string& colclass, const CollisionLogic& logic);
 
-    /// Defines the CollisionClass associated with this object.
-    /** Warning: will quit the program with a Fatal Error if used to the
-        collision_class is already set.
-        @param colclass The CollisionClass to set to.
-        @see CollisionClass */
-    void InitializeCollisionClass(const std::string&);
-    void InitializeCollisionClass(const char n[]) { const std::string str(n); InitializeCollisionClass(str); }
+    /// Changes the collision class associated with this object.
+    /** @param colclass The string representating the collision class to set to. */
+    void ChangeCollisionClass(const std::string&);
 
-    /// Adds this object to it's CollisionClass object list.
-    void StartColliding();
+    /// Enables collisions with this object in the given CollisionManager.
+    void StartColliding(CollisionManager*);
 
     /// Removes this object from it's CollisionClass object list.
     void StopColliding();
 
-    // TODO document
-    CollisionClass* collision_class() const { return collision_class_; }
+    /// Moves the object to the given position.
+    void MoveTo(const ugdk::math::Vector2D& position);
 
-    /// Returns the shape used.
-    /** @return A const GeometricShape pointer. */
-    const geometry::GeometricShape* shape() const { return shape_; };
+    /// Wrapper to shape()->CreateBoundingBox(absolute_position())
+    ugdk::structure::Box<2> CreateBoundingBox() const;
 
+    /// Calculates the position of this object, with the offset added.
+    ugdk::math::Vector2D absolute_position() const { return position_ + offset_; }
+    
     /// Changes the shape used.
     /** @param shape The shape to use. 
       * @see GeometricShape */
-    void set_shape(geometry::GeometricShape* shape);
-
-    /// TODO document
-    ugdk::math::Vector2D absolute_position() const { return position_ + offset_; }
-
-    /// TODO document
-    void MoveTo(const ugdk::math::Vector2D& position);
-
-    /// Wrapper to shape()->GetBoundingBox(absolute_position())
-    ugdk::structure::Box<2> GetBoundingBox() const;
+    void ChangeShape(geometry::GeometricShape* shape);
     
-    /// Getter for the stored data.
-    void* data() const { return data_; }
+    /// Returns the name of the collision class of this object.
+    const std::string& collision_class() const { return collision_class_; }
+    
+    /// Returns the Entity that owns this object.
+    ugdk::action::Entity* owner() const { return owner_; }
+
+    /// Returns the position of this object.
+    const ugdk::math::Vector2D& position() const { return position_; }
+
+    /// Returns the offset of this object.
+    const ugdk::math::Vector2D& offset() const { return offset_; }
+
+    /// Returns the shape used.
+    /** @return A const GeometricShape pointer. */
+    const geometry::GeometricShape* shape() const { return shape_.get(); };
+    
+    /// Changes the offset of this object.
+    void set_offset(const ugdk::math::Vector2D& _offset) { offset_ = _offset; }
 
   private:
-    CollisionClass* collision_class_;
+    std::string collision_class_;
 
-    // Data that is sent to CollisionLogic::Handle
-    void *data_;
+    ugdk::action::Entity* owner_;
 
-    bool is_active_;
     ugdk::math::Vector2D position_;
     ugdk::math::Vector2D offset_;
 
-    geometry::GeometricShape* shape_;
+    std::unique_ptr<geometry::GeometricShape> shape_;
 
     CollisionManager* manager_;
-
-    std::map<const CollisionClass*, CollisionLogic*> known_collisions_;
+    
+    std::map<std::string, CollisionLogic> known_collisions_;
 };
 
 } // namespace collision

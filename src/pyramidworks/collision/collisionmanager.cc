@@ -2,7 +2,6 @@
 
 #include "pyramidworks/collision/collisionclass.h"
 #include "pyramidworks/collision/collisionobject.h"
-#include "pyramidworks/collision/collisionlogic.h"
 
 namespace pyramidworks {
 namespace collision {
@@ -10,33 +9,32 @@ namespace collision {
 CollisionManager::CollisionManager(const ugdk::structure::Box<2>& tree_bounding_box) 
     :   tree_bounding_box_(tree_bounding_box) {}
 
-CollisionManager::~CollisionManager() { 
-    for(const auto& it : classes_)
-        delete it.second;
+CollisionManager::~CollisionManager() {}
+
+CollisionClass& CollisionManager::Find(const std::string &name) {
+    auto find = classes_.find(name);
+    if(find == classes_.end()) {
+        classes_[name] = std::unique_ptr<CollisionClass>(new CollisionClass(tree_bounding_box_));
+#ifdef DEBUG
+        classes_[name]->set_name(name);
+#endif
+        return *classes_[name];
+    } else
+        return *find->second;
 }
 
-void CollisionManager::Generate(const std::string &name) {
-    classes_[name] = new CollisionClass(tree_bounding_box_);
-#ifdef DEBUG
-    classes_[name]->set_name(name);
-#endif
-}
-
-void CollisionManager::Generate(const std::string &name, const std::string &parent) {
-    CollisionClass* colclass = classes_[name] = new CollisionClass(tree_bounding_box_);
-    colclass->set_parent(classes_[parent]);
-#ifdef DEBUG
-    colclass->set_name(name);
-#endif
+void CollisionManager::ChangeClassParent(const std::string &name, const std::string &parent) {
+    CollisionClass& colclass = Find(name);
+    colclass.ChangeParent(&Find(parent));
 }
 
 ugdk::action::Task CollisionManager::GenerateHandleCollisionTask() {
     return [this](double) -> bool {
-        std::vector<CollisionInstance> collision_list;
+        std::list<CollisionInstance> collision_list;
         for (const CollisionObject* obj : this->active_objects_)
             obj->SearchCollisions(collision_list);
         for(const CollisionInstance& it : collision_list)
-            it.first->Handle(it.second);
+            it.first(it.second);
         return true;
     };
 }

@@ -31,6 +31,9 @@ class IntervalKDTree {
 
     template<class OutputIterator>
     void FindIntersectingItems(const Box<DIMENSIONS>& boundary, OutputIterator output) const;
+
+    typename std::map<T, Item<T, DIMENSIONS>* >::const_iterator begin() const;
+    typename std::map<T, Item<T, DIMENSIONS>* >::const_iterator end() const;
     
     unsigned int max_elements_per_leaf() const;
 
@@ -197,6 +200,16 @@ template <class T, int DIMENSIONS>
 template <class OutputIterator>
 void IntervalKDTree<T, DIMENSIONS>::FindIntersectingItems(const Box<DIMENSIONS>& boundary, OutputIterator output) const {
     root_->FindIntersectingItems(boundary, output);
+}
+
+template <class T, int DIMENSIONS>
+typename std::map<T, Item<T, DIMENSIONS>* >::const_iterator IntervalKDTree<T, DIMENSIONS>::begin() const {
+    return container_items_.begin();
+}
+
+template <class T, int DIMENSIONS>
+typename std::map<T, Item<T, DIMENSIONS>* >::const_iterator IntervalKDTree<T, DIMENSIONS>::end() const {
+    return container_items_.end();
 }
 
 template <class T, int DIMENSIONS>

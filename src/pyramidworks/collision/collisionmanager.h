@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include <memory>
 #include <ugdk/action.h>
 #include <pyramidworks/collision.h>
 #include <ugdk/util/uncopyable.h>
@@ -19,23 +20,17 @@ class CollisionManager : public ugdk::util::Uncopyable {
     CollisionManager(const ugdk::structure::Box<2>& tree_bounding_box);
     ~CollisionManager();
 
-    /// Creates a CollisionClass with no parent.
-    void Generate(const std::string &name);
-    void Generate(const char n[]) { const std::string str(n); Generate(str); }
-
-    /// Creates a CollisionClass with a parent.
-    void Generate(const std::string &name, const std::string &parent);
-    void Generate(const char n[], const char p[]) { 
-        const std::string name(n), parent(p); 
-        Generate(name, parent); 
-    }
-
     /// Returns a CollisionClass of the asked name.
-    /** Searches for a CollisionClass with the given name, returning nullptr is none is found.
+    /** Searches for a CollisionClass with the given name, creating it if none is found.
       * @param name The name to search for.
-      * @return A pointer to a CollisionClass. */
-    CollisionClass* Get(const std::string &name) { return classes_[name]; }
-    CollisionClass* Get(const char n[]) { const std::string str(n); return Get(str); }
+      * @return A reference to a CollisionClass. */
+    CollisionClass& Find(const std::string &name);
+
+    /// Changes the parent of a CollisionClass.
+    /** @param name The name of the class whose parent will be changed.
+      * @param parent The name of the parent class.
+      */
+    void ChangeClassParent(const std::string &name, const std::string &parent);
 
     void AddActiveObject(const CollisionObject* obj) { active_objects_.insert(obj); }
     void RemoveActiveObject(const CollisionObject* obj) { active_objects_.erase(obj); }
@@ -46,7 +41,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
     
   private:
     const ugdk::structure::Box<2> tree_bounding_box_;
-    std::map<std::string, CollisionClass*> classes_;
+    std::map<std::string, std::unique_ptr<CollisionClass> > classes_;
     std::set<const CollisionObject*> active_objects_;
 };
 

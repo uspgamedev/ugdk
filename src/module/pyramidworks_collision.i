@@ -11,12 +11,9 @@
 %{
 
 #include <pyramidworks/collision.h>
-#include <pyramidworks/collision/collisionlogic.h>
 #include <pyramidworks/collision/collisionclass.h>
 #include <pyramidworks/collision/collisionmanager.h>
 #include <pyramidworks/collision/collisionobject.h>
-
-#include <module/pyramidworks/collision/collisionlogicproxy.h>
 
 %}
 
@@ -27,23 +24,14 @@
 
 %newobject pyramidworks::collision::CollisionClass::FindCollidingObjects(const CollisionObject *target) const;
 %newobject pyramidworks::collision::CollisionObject::absolute_position() const;
-%newobject pyramidworks::collision::CollisionObject::GetBoundingBox() const;
+%newobject pyramidworks::collision::CollisionObject::CreateBoundingBox() const;
 
-%ignore pyramidworks::collision::CollisionManager::Generate(const char n[]);
-%ignore pyramidworks::collision::CollisionManager::Generate(const char n[], const char p[]);
-%ignore pyramidworks::collision::CollisionManager::Get(const char n[]);
 %ignore pyramidworks::collision::CollisionManager::GenerateHandleCollisionTask();
-%ignore pyramidworks::collision::CollisionObject::AddCollisionLogic(const char n[], CollisionLogic* logic);
-%ignore pyramidworks::collision::CollisionObject::InitializeCollisionClass(const char n[]);
 
 proxy_class(pyramidworks::collision::CollisionLogic)
 void_class()
 
 %include <pyramidworks/collision.h>
-%template(CollisionInstanceList) std::vector<pyramidworks::collision::CollisionInstance>;
-%template(CollisionInstance) std::pair<pyramidworks::collision::CollisionLogic*, void* >;
-
-%include <pyramidworks/collision/collisionlogic.h>
 %include <pyramidworks/collision/collisionclass.h>
 %include <pyramidworks/collision/collisionmanager.h>
 
@@ -55,7 +43,6 @@ disable_disown(geometry::GeometricShape* shape)
 
 namespace pyramidworks {
 namespace collision {
-    export_class(CollisionLogic)
     export_class(CollisionClass)
     export_class(CollisionManager)
     export_class(CollisionObject)

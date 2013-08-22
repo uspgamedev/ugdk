@@ -196,7 +196,6 @@ endif()
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     add_definitions(
         -Wno-self-assign
-        -Wno-deprecated-register
     )
 endif ()
 
