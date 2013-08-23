@@ -31,22 +31,23 @@ class TaskFactory : public ITaskFactory {
     std::function<ugdk::action::Task (const Event& ev)> factory_;
 };
 
-class EventHandler {
-  public:
-    EventHandler(ITaskFactory* _factory, ugdk::action::Scene* _scene, double _priority)
-        : factory_(_factory), scene_(_scene), priority_(_priority) {}
-
-    ITaskFactory* factory() const { return factory_.get(); }
-    action::Scene* scene() const { return scene_; }
-    double priority() const { return priority_; }
-
-  private:
-    std::shared_ptr<ITaskFactory> factory_;
-    ugdk::action::Scene* scene_;
-    double priority_;
-};
-
 class Manager {
+  private:
+    class EventHandler {
+      public:
+        EventHandler(ITaskFactory* _factory, ugdk::action::Scene* _scene, double _priority)
+            : factory_(_factory), scene_(_scene), priority_(_priority) {}
+
+        ITaskFactory* factory() const { return factory_.get(); }
+        action::Scene* scene() const { return scene_; }
+        double priority() const { return priority_; }
+
+      private:
+        std::shared_ptr<ITaskFactory> factory_;
+        ugdk::action::Scene* scene_;
+        double priority_;
+    };
+
   public:
     Manager() {}
     ~Manager() {}
