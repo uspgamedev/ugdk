@@ -35,6 +35,10 @@ SET(UGDK_SRC
     src/ugdk/audio/music.h 
     src/ugdk/audio/sample.cc 
     src/ugdk/audio/sample.h 
+    src/ugdk/event/manager.cc 
+    src/ugdk/event/manager.h 
+    src/ugdk/event/module.cc 
+    src/ugdk/event/module.h 
     src/ugdk/graphic.h 
     src/ugdk/graphic/defaultshaders.cc 
     src/ugdk/graphic/defaultshaders.h 
