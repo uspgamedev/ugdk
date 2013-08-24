@@ -1,7 +1,7 @@
 #ifndef UGDK_ACTION_H_
 #define UGDK_ACTION_H_
 
-#include <functional>
+#include <ugdk/system.h>
 
 namespace ugdk {
 namespace action {
@@ -22,7 +22,7 @@ class Scene;
 class Entity;
 class Observer;
 
-typedef std::function<bool (double)> Task;
+using system::Task;
 
 }  // namespace action
 }  // namespace ugdk

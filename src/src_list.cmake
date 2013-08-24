@@ -124,6 +124,8 @@ SET(UGDK_SRC
     src/ugdk/system/configuration.h 
     src/ugdk/system/engine.cc 
     src/ugdk/system/engine.h 
+    src/ugdk/system/taskplayer.cc 
+    src/ugdk/system/taskplayer.h 
     src/ugdk/time.h 
     src/ugdk/time/manager.cc 
     src/ugdk/time/manager.h 
