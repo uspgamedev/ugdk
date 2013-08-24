@@ -16,7 +16,6 @@
 #include <ugdk/resource/manager.h>
 #include <ugdk/time/module.h>
 #include <ugdk/time/manager.h>
-#include <ugdk/event/module.h>
 #include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
 
@@ -75,8 +74,6 @@ bool Initialize(const Configuration& configuration) {
     if(!resource::Initialize(new resource::Manager))
         return false;
 
-    event::Initialize(new event::Manager);
-    
     if(graphic::manager()) {
         text_manager_ = new graphic::TextManager;
         text_manager_->Initialize();
