@@ -12,6 +12,9 @@
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/geometry.h>
 
+struct SDL_Window;
+struct SDL_Renderer;
+
 namespace ugdk {
 namespace graphic {
 
@@ -115,6 +118,9 @@ class Manager {
     void mergeLights(const std::list<action::Scene*>& scene_list);
 
     VideoSettings settings_;
+
+    SDL_Window* screen_;
+    SDL_Renderer* renderer_;
 
     Texture* light_buffer_;
     Texture* white_texture_;

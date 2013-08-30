@@ -32,14 +32,29 @@ VideoSettings::VideoSettings()
     : fullscreen(false), vsync(true), light_system(false) {}
 
 Manager::Manager(const VideoSettings& settings) 
-    :   settings_(settings), 
-        light_buffer_(nullptr), 
-        white_texture_(nullptr), 
-        light_shader_(nullptr) {}
+    :   settings_(settings)
+    ,   screen_(nullptr)
+    ,   renderer_(nullptr)
+    ,   light_buffer_(nullptr)
+    ,   white_texture_(nullptr)
+    ,   light_shader_(nullptr) {}
 
 bool Manager::Initialize() {
     if(SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
         return false;
+
+    screen_ = SDL_CreateWindow(settings_.window_title.c_str(),
+                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                               settings_.resolution.x, settings_.resolution.y,
+                               SDL_WINDOW_OPENGL);
+
+    if(!screen_) {
+        // Couldn't create the window.
+        // TODO: Log the error
+        return false;
+    }
+
+    SDL_Renderer* renderer_;
     
     // Set window title.
     SDL_WM_SetCaption(settings_.window_title.c_str(), 
