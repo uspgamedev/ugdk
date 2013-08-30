@@ -18,6 +18,8 @@ IF(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
 	set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
 ENDIF()
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
+
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
@@ -81,17 +83,14 @@ find_package(Git)
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 
-find_package(SDL REQUIRED)
-include_directories(${SDL_INCLUDE_DIR})
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIR})
 
-find_package(SDL_mixer REQUIRED)
-include_directories(${SDLMIXER_INCLUDE_DIR})
+find_package(SDL2_mixer REQUIRED)
+include_directories(${SDL2MIXER_INCLUDE_DIR})
 
-find_package(SDL_ttf REQUIRED)
-include_directories(${SDLTTF_INCLUDE_DIR})
-
-find_package(SDL_image REQUIRED)
-include_directories(${SDLIMAGE_INCLUDE_DIR})
+find_package(SDL2_image REQUIRED)
+include_directories(${SDL2IMAGE_INCLUDE_DIR})
 
 find_package(GLEW 1.5 QUIET)
 if(NOT GLEW_FOUND)
@@ -218,10 +217,9 @@ endif (WIN32)
 
 target_link_libraries (libugdk
                        ${EXTRA_LIBRARIES}
-                       ${SDL_LIBRARY}
-                       ${SDLMIXER_LIBRARY}
-                       ${SDLTTF_LIBRARY}
-                       ${SDLIMAGE_LIBRARY}
+                       ${SDL2_LIBRARY}
+                       ${SDL2MIXER_LIBRARY}
+                       ${SDL2IMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
                        ${FREETYPE_GLPP_LIBRARIES}
@@ -229,10 +227,9 @@ target_link_libraries (libugdk
 
 target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
                        ${EXTRA_LIBRARIES}
-                       ${SDL_LIBRARY}
-                       ${SDLMIXER_LIBRARY}
-                       ${SDLTTF_LIBRARY}
-                       ${SDLIMAGE_LIBRARY}
+                       ${SDL2_LIBRARY}
+                       ${SDL2MIXER_LIBRARY}
+                       ${SDL2IMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
                        ${FREETYPE_GLPP_LIBRARIES}
@@ -258,8 +255,7 @@ endif (UNIX AND PYTHONLIBS_FOUND)
 set(UGDK_EXTERNAL_INCLUDE_DIRS 
     ${PROJECT_SOURCE_DIR}/${SRC_DIR};
     ${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR};
-    ${SDL_INCLUDE_DIR};
-    ${SDLTTF_INCLUDE_DIR};
+    ${SDL2_INCLUDE_DIR};
     ${GLM_LOCATION}
     CACHE STRING "UGDK include directories" FORCE)
 

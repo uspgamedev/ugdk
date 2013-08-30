@@ -1,7 +1,7 @@
 #ifndef UGDK_INPUT_KEYS_H_
 #define UGDK_INPUT_KEYS_H_
 
-#include "SDL_keysym.h"
+#include "SDL_keycode.h"
 #include "SDL_mouse.h"
 
 namespace ugdk {
@@ -9,7 +9,6 @@ namespace input {
 
 typedef enum {
     K_UNKNOWN = SDLK_UNKNOWN,
-    K_FIRST = SDLK_FIRST,
     K_BACKSPACE = SDLK_BACKSPACE,
     K_TAB = SDLK_TAB,
     K_CLEAR = SDLK_CLEAR,
@@ -83,16 +82,16 @@ typedef enum {
     K_z = SDLK_z,
     K_DELETE = SDLK_DELETE,
 
-    K_KP0 = SDLK_KP0,
-    K_KP1 = SDLK_KP1,
-    K_KP2 = SDLK_KP2,
-    K_KP3 = SDLK_KP3,
-    K_KP4 = SDLK_KP4,
-    K_KP5 = SDLK_KP5,
-    K_KP6 = SDLK_KP6,
-    K_KP7 = SDLK_KP7,
-    K_KP8 = SDLK_KP8,
-    K_KP9 = SDLK_KP9,
+    K_KP_0 = SDLK_KP_0,
+    K_KP_1 = SDLK_KP_1,
+    K_KP_2 = SDLK_KP_2,
+    K_KP_3 = SDLK_KP_3,
+    K_KP_4 = SDLK_KP_4,
+    K_KP_5 = SDLK_KP_5,
+    K_KP_6 = SDLK_KP_6,
+    K_KP_7 = SDLK_KP_7,
+    K_KP_8 = SDLK_KP_8,
+    K_KP_9 = SDLK_KP_9,
     K_KP_PERIOD = SDLK_KP_PERIOD,
     K_KP_DIVIDE = SDLK_KP_DIVIDE,
     K_KP_MULTIPLY = SDLK_KP_MULTIPLY,
@@ -127,40 +126,28 @@ typedef enum {
     K_F14 = SDLK_F14,
     K_F15 = SDLK_F15,
         
-    K_NUMLOCK = SDLK_NUMLOCK,
     K_CAPSLOCK = SDLK_CAPSLOCK,
-    K_SCROLLOCK = SDLK_SCROLLOCK,
+    K_SCROLLLOCK = SDLK_SCROLLLOCK,
     K_RSHIFT = SDLK_RSHIFT,
     K_LSHIFT = SDLK_LSHIFT,
     K_RCTRL = SDLK_RCTRL,
     K_LCTRL = SDLK_LCTRL,
     K_RALT = SDLK_RALT,
     K_LALT = SDLK_LALT,
-    K_RMETA = SDLK_RMETA,
-    K_LMETA = SDLK_LMETA,
-    K_LSUPER = SDLK_LSUPER,/**< Left "Windows" key */
-    K_RSUPER = SDLK_RSUPER,/**< Right "Windows" key */
     K_MODE = SDLK_MODE,/**< "Alt Gr" key */
-    K_COMPOSE = SDLK_COMPOSE,/**< Multi-key compose key */
 
     K_HELP = SDLK_HELP,
-    K_PRINT = SDLK_PRINT,
+    K_PRINTSCREEN = SDLK_PRINTSCREEN,
     K_SYSREQ = SDLK_SYSREQ,
-    K_BREAK = SDLK_BREAK,
     K_MENU = SDLK_MENU,
     K_POWER = SDLK_POWER,/**< Power Macintosh power key */
-    K_EURO = SDLK_EURO,/**< Some european keyboards */
     K_UNDO = SDLK_UNDO,/**< Atari keyboard has Undo */
-
-    K_LAST = SDLK_LAST
 } Key;
 
 typedef enum {
   M_BUTTON_LEFT = SDL_BUTTON_LEFT,
   M_BUTTON_MIDDLE = SDL_BUTTON_MIDDLE,
   M_BUTTON_RIGHT = SDL_BUTTON_RIGHT,
-  M_BUTTON_WHEELUP = SDL_BUTTON_WHEELUP,
-  M_BUTTON_WHEELDOWN = SDL_BUTTON_WHEELDOWN
 } MouseButton;
 
 }  // namespace input
