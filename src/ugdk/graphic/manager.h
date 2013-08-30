@@ -13,7 +13,6 @@
 #include <ugdk/graphic/geometry.h>
 
 struct SDL_Window;
-struct SDL_Renderer;
 
 namespace ugdk {
 namespace graphic {
@@ -119,8 +118,7 @@ class Manager {
 
     VideoSettings settings_;
 
-    SDL_Window* screen_;
-    SDL_Renderer* renderer_;
+    SDL_Window* window_;
 
     Texture* light_buffer_;
     Texture* white_texture_;

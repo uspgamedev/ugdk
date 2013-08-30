@@ -17,7 +17,7 @@ bool Manager::Initialize() {
     if(SDL_InitSubSystem(SDL_INIT_JOYSTICK) < 0)
         return false;
 
-    SDL_GetKeyState(&kbsize_);
+    kbsize_ = 512;
     keystate_now_ = new bool[kbsize_];
     keystate_last_ = new bool[kbsize_];
 	buffer_end_ = 0;

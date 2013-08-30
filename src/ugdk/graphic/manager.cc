@@ -9,7 +9,7 @@
 #endif
 #define NO_SDL_GLEXT
 #include "SDL.h"
-#include "SDL_opengl.h"
+#include "SDL_image.h"
 
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/defaultshaders.h>
@@ -33,8 +33,7 @@ VideoSettings::VideoSettings()
 
 Manager::Manager(const VideoSettings& settings) 
     :   settings_(settings)
-    ,   screen_(nullptr)
-    ,   renderer_(nullptr)
+    ,   window_(nullptr)
     ,   light_buffer_(nullptr)
     ,   white_texture_(nullptr)
     ,   light_shader_(nullptr) {}
@@ -42,31 +41,56 @@ Manager::Manager(const VideoSettings& settings)
 bool Manager::Initialize() {
     if(SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
         return false;
+    
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-    screen_ = SDL_CreateWindow(settings_.window_title.c_str(),
+    window_ = SDL_CreateWindow(settings_.window_title.c_str(),
                                SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                settings_.resolution.x, settings_.resolution.y,
                                SDL_WINDOW_OPENGL);
 
-    if(!screen_) {
+    if(!window_) {
         // Couldn't create the window.
         // TODO: Log the error
         return false;
     }
 
-    SDL_Renderer* renderer_;
+    if(settings_.window_icon.length() > 0) {
+        SDL_Surface* icon = IMG_Load(settings_.window_icon.c_str());
+        SDL_SetWindowIcon(window_, icon);
+        SDL_FreeSurface(icon);
+    }
+
+    SDL_GL_CreateContext(window_);
     
-    // Set window title.
-    SDL_WM_SetCaption(settings_.window_title.c_str(), 
-                      (settings_.window_icon.length() > 0) ? settings_.window_icon.c_str() : nullptr );
-    
-    if(settings_.window_icon.length() > 0)
-        SDL_WM_SetIcon(SDL_LoadBMP(settings_.window_icon.c_str()), nullptr);
-       
-    if(UpdateResolution() == false) {
-        /* TODO: insert error message here. */
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {
+        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
         return false;
     }
+       
+    // This hint can improve the speed of texturing when perspective- correct texture coordinate interpolation isn't needed, such as when using a glOrtho() projection.
+    // From http://www.mesa3d.org/brianp/sig97/perfopt.htm
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    //If there was any errors
+    if( glGetError() != GL_NO_ERROR )
+        return false;
+    
+    UpdateResolution();
+
+    // Changing to and from fullscreen destroys all textures, so we must recreate them.
+    initializeLight();
+
+    shaders_.ReplaceShader(0, CreateShader(false, false));
+    shaders_.ReplaceShader(1, CreateShader( true, false));
+    shaders_.ReplaceShader(2, CreateShader(false,  true));
+    shaders_.ReplaceShader(3, CreateShader( true,  true));
+
+    light_shader_ = LightShader();
 
     UpdateVSync();
 
@@ -79,15 +103,11 @@ bool Manager::Initialize() {
 }
 
 bool Manager::ChangeSettings(const VideoSettings& new_settings) {
-    VideoSettings old_settings = settings_;
-
     settings_ = new_settings;
 
-    if(old_settings.resolution != new_settings.resolution || 
-        old_settings.fullscreen != new_settings.fullscreen) {
-        if(!UpdateResolution())
-            return false;
-    }
+    UpdateResolution();
+
+    SDL_SetWindowFullscreen(window_, settings_.fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
 
     UpdateVSync();
     shaders_.ChangeFlag(Shaders::USE_LIGHT_BUFFER, settings_.light_system);
@@ -105,18 +125,7 @@ void Manager::SaveBackbufferToTexture(Texture* texture) {
 // Changes the resolution to the requested value.
 // Returns true on success.
 bool Manager::UpdateResolution() {
-    Uint32 flags = SDL_OPENGL;
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-    if(settings_.fullscreen) flags |= SDL_FULLSCREEN;
-
-    if(SDL_SetVideoMode(settings_.resolution.x, settings_.resolution.y, Manager::COLOR_DEPTH, flags) == nullptr)
-        return false;
-      
-    GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
-        return false;
-    }
+    SDL_SetWindowSize(window_, settings_.resolution.x, settings_.resolution.y);
 
     // We want the following properties to our display:
     //   (0;0) is the top-left corner of the screen
@@ -130,50 +139,21 @@ bool Manager::UpdateResolution() {
         
     //Set projection
     glViewport(0, 0, settings_.resolution.x, settings_.resolution.y);
-
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    //glOrtho( 0, size.x, size.y, 0, -1, 1 );
-
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-
-    // This hint can improve the speed of texturing when perspective- correct texture coordinate interpolation isn't needed, such as when using a glOrtho() projection.
-    // From http://www.mesa3d.org/brianp/sig97/perfopt.htm
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    //If there was any errors
     if( glGetError() != GL_NO_ERROR )
         return false;
 
-    // Changing to and from fullscreen destroys all textures, so we must recreate them.
-    initializeLight();
-
-    shaders_.ReplaceShader(0, CreateShader(false, false));
-    shaders_.ReplaceShader(1, CreateShader( true, false));
-    shaders_.ReplaceShader(2, CreateShader(false,  true));
-    shaders_.ReplaceShader(3, CreateShader( true,  true));
-
-    light_shader_ = LightShader();
     return true;
 }
 
 void Manager::Release() {
+    SDL_DestroyWindow(window_);
     /*if(GLEW_ARB_framebuffer_object) {
         glDeleteFramebuffersEXT(1, &light_buffer_id_);
     }*/
 }
 
 void Manager::UpdateVSync() {
-#ifdef _WIN32
-    if(WGL_EXT_swap_control)
-        wglSwapIntervalEXT(settings_.vsync ? 1 : 0); // sets VSync to "ON".
-#else
-    //TODO: IMPLEMENT in Linux. Refer to http://www.opengl.org/wiki/Swap_Interval for instructions.
-#endif
+    SDL_GL_SetSwapInterval(settings_.vsync ? 1 : 0);
 }
 
 action::Scene* CreateLightrenderingScene(std::function<void (const graphic::Geometry&, const graphic::VisualEffect&)> render_light_function) {
@@ -217,7 +197,7 @@ void Manager::Render(const std::list<action::Scene*>& scene_list) {
         it->Render(initial_geometry_, VisualEffect());
 
     // Swap the buffers to show the backbuffer to the user.
-    SDL_GL_SwapBuffers();
+    SDL_GL_SwapWindow(window_);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
