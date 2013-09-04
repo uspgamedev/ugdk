@@ -26,6 +26,13 @@ namespace graphic {
 
 using std::string;
 
+namespace {
+bool errlog(const string& msg) {
+    fprintf(stderr, "ugdk::graphic::Manager Error Log - %s\n", msg.c_str());
+    return false;
+}
+}
+
 static ugdk::math::Vector2D default_resolution(800.0, 600.0);
     
 VideoSettings::VideoSettings()
@@ -40,9 +47,11 @@ Manager::Manager(const VideoSettings& settings)
 
 bool Manager::Initialize() {
     if(SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
-        return false;
+        return errlog("Failed to initialize SDL_VIDEO");
     
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
     window_ = SDL_CreateWindow(settings_.window_title.c_str(),
                                SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -52,7 +61,7 @@ bool Manager::Initialize() {
     if(!window_) {
         // Couldn't create the window.
         // TODO: Log the error
-        return false;
+        return errlog("Failed to create the window.");
     }
 
     if(settings_.window_icon.length() > 0) {
@@ -61,13 +70,12 @@ bool Manager::Initialize() {
         SDL_FreeSurface(icon);
     }
 
-    SDL_GL_CreateContext(window_);
+    if(!SDL_GL_CreateContext(window_))
+        return errlog("OpenGL context creation failed: " + string(SDL_GetError()));
     
     GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
-        return false;
-    }
+    if (GLEW_OK != err)
+        return errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
        
     // This hint can improve the speed of texturing when perspective- correct texture coordinate interpolation isn't needed, such as when using a glOrtho() projection.
     // From http://www.mesa3d.org/brianp/sig97/perfopt.htm
@@ -76,9 +84,8 @@ bool Manager::Initialize() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    //If there was any errors
-    if( glGetError() != GL_NO_ERROR )
-        return false;
+    if(GLenum err = glGetError())
+        return errlog("OpenGL error: " + string((const char*) gluErrorString(err)));
     
     UpdateResolution();
 
