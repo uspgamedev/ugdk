@@ -13,6 +13,14 @@ if(MSVC)
     list(APPEND SDL2-image-sources version.rc)
 endif(MSVC)
 
+add_definitions(-DLOAD_TGA
+                -DLOAD_BMP
+                -DLOAD_GIF
+                -DLOAD_XCF
+                -DLOAD_PCX
+                -DLOAD_PNM
+                -DLOAD_XV)
+
 include_directories(include)
 
 add_library(SDL2-image ${SDL2-image-sources})
