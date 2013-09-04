@@ -30,6 +30,7 @@ option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script
 option(UGDK_LUA_BINDINGS    "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
 option(UGDK_INTERNAL_GLEW   "Set to ON to use an internal GLEW instead of the system one." OFF)
+option(UGDK_INTERNAL_SDL2   "Set to ON to use an internal SDL2 instead of the system one." OFF)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     SET (CHECKMAC TRUE)
@@ -83,14 +84,36 @@ find_package(Git)
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIR})
+find_package(SDL2 QUIET)
+if(NOT SDL2_FOUND)
+    message("-- SDL2 not found, forcing internal.")
+    set(UGDK_INTERNAL_SDL2 ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
+endif(NOT SDL2_FOUND)
 
-find_package(SDL2_mixer REQUIRED)
-include_directories(${SDL2MIXER_INCLUDE_DIR})
-
-find_package(SDL2_image REQUIRED)
-include_directories(${SDL2IMAGE_INCLUDE_DIR})
+if(UGDK_INTERNAL_SDL2)
+    set(SDL_SHARED OFF CACHE BOOL "Build a shared version of the library")
+    add_subdirectory(externals/sdl2 externals/sdl2-build)
+    
+    include_directories(${SDL2_SOURCE_DIR}/include)
+    set(SDL2_LIBRARY SDL2-static)
+    
+    add_subdirectory(externals/sdl2-mixer)
+    include_directories(${SDL2-mixer_SOURCE_DIR}/include)
+    set(SDL2MIXER_LIBRARY SDL2-mixer)
+    
+    add_subdirectory(externals/sdl2-image)
+    include_directories(${SDL2-image_SOURCE_DIR}/include)
+    set(SDL2IMAGE_LIBRARY SDL2-image)
+    
+else(UGDK_INTERNAL_SDL2)
+    include_directories(${SDL2_INCLUDE_DIR})
+    
+    find_package(SDL2_mixer REQUIRED)
+    include_directories(${SDL2MIXER_INCLUDE_DIR})
+    
+    find_package(SDL2_image REQUIRED)
+    include_directories(${SDL2IMAGE_INCLUDE_DIR})
+endif(UGDK_INTERNAL_SDL2)
 
 find_package(GLEW 1.5 QUIET)
 if(NOT GLEW_FOUND)
