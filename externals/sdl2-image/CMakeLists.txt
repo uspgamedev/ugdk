@@ -20,8 +20,20 @@ add_definitions(-DLOAD_TGA
                 -DLOAD_PCX
                 -DLOAD_PNM
                 -DLOAD_XV)
+                
+find_package(PNG QUIET)
+if(PNG_FOUND)
+    include_directories(${PNG_INCLUDE_DIRS})
+    set(SDLIMAGE_LIBPNG ${PNG_LIBRARIES})
+    add_definitions(-DLOAD_PNG)
+else(PNG_FOUND)
+    set(PNG_SHARED OFF CACHE BOOL "Build shared lib." FORCE)
+    set(PNG_STATIC ON CACHE BOOL "Build static lib." FORCE)
+    add_subdirectory(lpng163)
+    message(${PNG_LIB_NAME}_static)
+endif(PNG_FOUND)
 
 include_directories(include)
 
 add_library(SDL2-image ${SDL2-image-sources})
-target_link_libraries(SDL2-image ${SDL2_LIBRARY})
+target_link_libraries(SDL2-image ${SDL2_LIBRARY} ${SDLIMAGE_LIBPNG})
