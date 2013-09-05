@@ -17,33 +17,25 @@ bool Manager::Initialize() {
     if(SDL_InitSubSystem(SDL_INIT_JOYSTICK) < 0)
         return false;
 
-    kbsize_ = 512;
-    keystate_now_ = new bool[kbsize_];
-    keystate_last_ = new bool[kbsize_];
 	buffer_end_ = 0;
 	for(int i = 0; i < BUFFER_SIZE; i++)
 		buffer_[i] = K_UNKNOWN;
     
     std::fill(mousestate_now_, mousestate_now_+5, false);
     std::fill(mousestate_last_, mousestate_last_+5, false);
-    std::fill(keystate_now_, keystate_now_+kbsize_, false);
-    std::fill(keystate_last_, keystate_last_+kbsize_, false);
     
     Update();
     return true;
 }
 
 void Manager::Release() {
-    delete[] keystate_now_;
-    delete[] keystate_last_;
 }
 
 void Manager::Update() {
     int i;
     
     // bufferiza teclado
-    for(i = 0; i < kbsize_; i++)
-      keystate_last_[i] = keystate_now_[i];
+    keystate_last_ = keystate_now_;
       
     // bufferiza botoes do mouse
     for(i = 0; i < 5; i++)
@@ -64,19 +56,19 @@ void Manager::ShowCursor(bool toggle) {
 }
 
 bool Manager::KeyPressed(Key key) {
-    return (keystate_now_[key] && !keystate_last_[key]);
+    return (keystate_now_.count(key) > 0 && keystate_last_.count(key) == 0);
 }
 
 bool Manager::KeyReleased(Key key) {
-    return (!keystate_now_[key] && keystate_last_[key]);
+    return (keystate_now_.count(key) == 0 && keystate_last_.count(key) > 0);
 }
 
 bool Manager::KeyDown(Key key) {
-    return keystate_now_[key];
+    return keystate_now_.count(key) > 0;
 }
 
 bool Manager::KeyUp(Key key) {
-    return !keystate_now_[key];
+    return keystate_now_.count(key) == 0;
 }
 
 bool Manager::CheckSequence(Key* sequence, int size) {
@@ -119,18 +111,11 @@ void Manager::UpdateDevices() {
 }
 
 void Manager::SimulateKeyRelease(Key key) {
-    int k = (int)key;
-    if(k >= 0 && k < kbsize_)
-        keystate_now_[k] = false;
+    keystate_now_.erase(key);
 }
  
 void Manager::SimulateKeyPress(Key key) {
-    int k = (int)key;
-	if(k >= 0 && k < kbsize_) {
-        keystate_now_[k] = true;
-		buffer_[buffer_end_] = key;
-		buffer_end_ = (buffer_end_ + 1) % BUFFER_SIZE;
-	}
+    keystate_now_.insert(key);
 }
 
 }  // namespace input

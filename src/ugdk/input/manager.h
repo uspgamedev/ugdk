@@ -3,6 +3,7 @@
 
 #include <ugdk/math/vector2D.h>
 #include <ugdk/input/keys.h>
+#include <set>
 
 namespace ugdk {
 namespace input {
@@ -38,8 +39,7 @@ class Manager {
     void SimulateKeyRelease(Key key);
 
   private:
-    int kbsize_;
-    bool *keystate_now_, *keystate_last_;
+    std::set<Key> keystate_now_, keystate_last_;
     bool mousestate_now_[5], mousestate_last_[5];
 	Key buffer_[BUFFER_SIZE];
 	int buffer_end_;
