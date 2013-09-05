@@ -18,6 +18,8 @@ IF(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
 	set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
 ENDIF()
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
+
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
@@ -28,6 +30,7 @@ option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script
 option(UGDK_LUA_BINDINGS    "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
 option(UGDK_INTERNAL_GLEW   "Set to ON to use an internal GLEW instead of the system one." OFF)
+option(UGDK_INTERNAL_SDL2   "Set to ON to use an internal SDL2 instead of the system one." OFF)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     SET (CHECKMAC TRUE)
@@ -71,27 +74,43 @@ endif (NOT UGDK_SRC)
 
 set(GLM_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/externals/glm-0.9.4.2")
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR})
-include_directories(SYSTEM ${GLM_LOCATION})
 include(cmake/ugdk.cmake)
 
-find_package(Git)
+find_package(SDL2 QUIET)
+if(NOT SDL2_FOUND)
+    message("-- SDL2 not found, forcing internal.")
+    set(UGDK_INTERNAL_SDL2 ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
+endif(NOT SDL2_FOUND)
+
+if(UGDK_INTERNAL_SDL2)
+    set(SDL_SHARED OFF CACHE BOOL "Build a shared version of the library")
+    set(DIRECTX    OFF CACHE BOOL "Use DirectX for Windows audio/video" FORCE)
+    set(RENDER_D3D OFF CACHE BOOL "Enable the Direct3D render driver" FORCE)
+    add_subdirectory(externals/sdl2 externals/sdl2-build)
+    
+    include_directories(${SDL2_SOURCE_DIR}/include)
+    set(SDL2_LIBRARY SDL2-static)
+    
+    add_subdirectory(externals/sdl2-mixer)
+    add_subdirectory(externals/sdl2-image)
+    
+    include_directories(${SDL2-mixer_SOURCE_DIR}/include)
+    include_directories(${SDL2-image_SOURCE_DIR}/include)
+    
+    set(SDL2MIXER_LIBRARY SDL2-mixer)
+    set(SDL2IMAGE_LIBRARY SDL2-image)
+    
+else(UGDK_INTERNAL_SDL2)
+    find_package(SDL2_mixer REQUIRED)
+    find_package(SDL2_image REQUIRED)
+    
+    include_directories(${SDL2_INCLUDE_DIR})
+    include_directories(${SDL2MIXER_INCLUDE_DIR})
+    include_directories(${SDL2IMAGE_INCLUDE_DIR})
+endif(UGDK_INTERNAL_SDL2)
 
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
-
-find_package(SDL REQUIRED)
-include_directories(${SDL_INCLUDE_DIR})
-
-find_package(SDL_mixer REQUIRED)
-include_directories(${SDLMIXER_INCLUDE_DIR})
-
-find_package(SDL_ttf REQUIRED)
-include_directories(${SDLTTF_INCLUDE_DIR})
-
-find_package(SDL_image REQUIRED)
-include_directories(${SDLIMAGE_INCLUDE_DIR})
 
 find_package(GLEW 1.5 QUIET)
 if(NOT GLEW_FOUND)
@@ -108,6 +127,7 @@ endif(UGDK_INTERNAL_GLEW)
 include_directories(${GLEW_INCLUDE_DIRS})
 
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/externals/freetype-glpp/CMakeLists.txt")
+    find_package(Git)
     if(GIT_FOUND)
         execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init
                         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -119,6 +139,11 @@ endif()
 add_subdirectory(externals/freetype-glpp)
 include_directories("externals/freetype-glpp/include")
 set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR})
+
+include_directories(SYSTEM ${GLM_LOCATION})
 
 ##########################################
 # Package Configuration
@@ -218,10 +243,9 @@ endif (WIN32)
 
 target_link_libraries (libugdk
                        ${EXTRA_LIBRARIES}
-                       ${SDL_LIBRARY}
-                       ${SDLMIXER_LIBRARY}
-                       ${SDLTTF_LIBRARY}
-                       ${SDLIMAGE_LIBRARY}
+                       ${SDL2_LIBRARY}
+                       ${SDL2MIXER_LIBRARY}
+                       ${SDL2IMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
                        ${FREETYPE_GLPP_LIBRARIES}
@@ -229,10 +253,9 @@ target_link_libraries (libugdk
 
 target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
                        ${EXTRA_LIBRARIES}
-                       ${SDL_LIBRARY}
-                       ${SDLMIXER_LIBRARY}
-                       ${SDLTTF_LIBRARY}
-                       ${SDLIMAGE_LIBRARY}
+                       ${SDL2_LIBRARY}
+                       ${SDL2MIXER_LIBRARY}
+                       ${SDL2IMAGE_LIBRARY}
                        ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
                        ${FREETYPE_GLPP_LIBRARIES}
@@ -258,8 +281,7 @@ endif (UNIX AND PYTHONLIBS_FOUND)
 set(UGDK_EXTERNAL_INCLUDE_DIRS 
     ${PROJECT_SOURCE_DIR}/${SRC_DIR};
     ${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR};
-    ${SDL_INCLUDE_DIR};
-    ${SDLTTF_INCLUDE_DIR};
+    ${SDL2_INCLUDE_DIR};
     ${GLM_LOCATION}
     CACHE STRING "UGDK include directories" FORCE)
 

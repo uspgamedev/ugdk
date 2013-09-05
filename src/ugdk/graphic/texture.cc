@@ -106,14 +106,12 @@ Texture* Texture::CreateFromFile(const std::string& filepath) {
     SDL_Surface* data = IMG_Load(fullpath.c_str());
 
     if(data == nullptr) {
-        fprintf(stderr, "UGDK::Texture::CreateFromFile Error - No data loaded from file.\n");
+        fprintf(stderr, "UGDK::Texture::CreateFromFile -- error loading file '%s' -> %s.\n", fullpath.c_str(), SDL_GetError());
         return nullptr;
-
-    } else {
-        Texture* tex = CreateFromSurface(data);
-        if(data != nullptr) SDL_FreeSurface(data);
-        return tex;
     }
+    Texture* tex = CreateFromSurface(data);
+    SDL_FreeSurface(data);
+    return tex;
 }
 
 Texture* Texture::CreateFromSurface(SDL_Surface* data) {

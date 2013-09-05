@@ -41,3 +41,6 @@ install_manifest.txt
 *.cache
 
 /src/ugdk/system/config.h
+/externals/sdl2-build/
+
+CTestTestfile.cmake
