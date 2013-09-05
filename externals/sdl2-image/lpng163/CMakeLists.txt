@@ -106,9 +106,6 @@ set(libpng_sources
   pngwtran.c
   pngwutil.c
 )
-set(pngtest_sources
-  pngtest.c
-)
 # SOME NEEDED DEFINITIONS
 
 if(MSVC)
@@ -125,26 +122,28 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 unset(PNG_LIB_TARGETS)
 
 if(PNG_SHARED)
-  add_library(${PNG_LIB_NAME} SHARED ${libpng_sources})
-  set(PNG_LIB_TARGETS ${PNG_LIB_NAME})
+  add_library(libpng SHARED ${libpng_sources})
+  set_target_properties(libpng PROPERTIES OUTPUT_NAME ${PNG_LIB_NAME})
+  set(PNG_LIB_TARGETS libpng)
   if(MSVC)
     # msvc does not append 'lib' - do it here to have consistent name
-    set_target_properties(${PNG_LIB_NAME} PROPERTIES PREFIX "lib")
-    set_target_properties(${PNG_LIB_NAME} PROPERTIES IMPORT_PREFIX "lib")
+    set_target_properties(libpng PROPERTIES PREFIX "lib")
+    set_target_properties(libpng PROPERTIES IMPORT_PREFIX "lib")
   endif()
-  target_link_libraries(${PNG_LIB_NAME} ${ZLIB_LIBRARY_SHARED} ${M_LIBRARY})
+  target_link_libraries(libpng ${ZLIB_LIBRARY_SHARED} ${M_LIBRARY})
 endif()
 
 if(PNG_STATIC)
 # does not work without changing name
   set(PNG_LIB_NAME_STATIC ${PNG_LIB_NAME}_static)
-  add_library(${PNG_LIB_NAME_STATIC} STATIC ${libpng_sources})
-  list(APPEND PNG_LIB_TARGETS ${PNG_LIB_NAME_STATIC})
+  add_library(libpng_static STATIC ${libpng_sources})
+  set_target_properties(libpng_static PROPERTIES OUTPUT_NAME ${PNG_LIB_NAME_STATIC})
+  list(APPEND PNG_LIB_TARGETS libpng_static)
   if(MSVC)
     # msvc does not append 'lib' - do it here to have consistent name
-    set_target_properties(${PNG_LIB_NAME_STATIC} PROPERTIES PREFIX "lib")
+    set_target_properties(libpng_static PROPERTIES PREFIX "lib")
   endif()
-  target_link_libraries(${PNG_LIB_NAME_STATIC} ${ZLIB_LIBRARY_STATIC} ${M_LIBRARY})
+  target_link_libraries(libpng_static ${ZLIB_LIBRARY_STATIC} ${M_LIBRARY})
 endif()
 
 if(NOT PNG_LIB_TARGETS)
@@ -154,7 +153,7 @@ if(NOT PNG_LIB_TARGETS)
 endif()
 
 if(PNG_SHARED AND WIN32)
-  set_target_properties(${PNG_LIB_NAME} PROPERTIES DEFINE_SYMBOL PNG_BUILD_DLL)
+  set_target_properties(libpng PROPERTIES DEFINE_SYMBOL PNG_BUILD_DLL)
 endif()
 
 # Ensure the CMAKE_LIBRARY_OUTPUT_DIRECTORY is set
@@ -208,7 +207,7 @@ endif(NOT WIN32 OR CYGWIN OR MINGW)
 
 # SET UP LINKS
 if(PNG_SHARED)
-  set_target_properties(${PNG_LIB_NAME} PROPERTIES
+  set_target_properties(libpng PROPERTIES
 #   VERSION 16.${PNGLIB_RELEASE}.1.6.3
     VERSION 16.${PNGLIB_RELEASE}.0
     SOVERSION 16
@@ -219,7 +218,7 @@ if(PNG_STATIC)
   # libs.  We are able to change OUTPUT_NAME to remove the _static
   # for all other platforms.
   if(NOT MSVC)
-    set_target_properties(${PNG_LIB_NAME_STATIC} PROPERTIES
+    set_target_properties(libpng_static PROPERTIES
       OUTPUT_NAME ${PNG_LIB_NAME}
       CLEAN_DIRECT_OUTPUT 1)
   endif()
