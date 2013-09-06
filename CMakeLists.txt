@@ -246,8 +246,8 @@ target_link_libraries (libugdk
                        ${SDL2_LIBRARY}
                        ${SDL2MIXER_LIBRARY}
                        ${SDL2IMAGE_LIBRARY}
-                       ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
+                       ${OPENGL_LIBRARIES}
                        ${FREETYPE_GLPP_LIBRARIES}
                        ${UGDK_LIBRARIES})
 
@@ -256,8 +256,8 @@ target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES
                        ${SDL2_LIBRARY}
                        ${SDL2MIXER_LIBRARY}
                        ${SDL2IMAGE_LIBRARY}
-                       ${OPENGL_LIBRARIES}
                        ${GLEW_LIBRARIES}
+                       ${OPENGL_LIBRARIES}
                        ${FREETYPE_GLPP_LIBRARIES}
                        ${UGDK_LIBRARIES})
                       
