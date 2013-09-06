@@ -6,6 +6,8 @@
 namespace ugdk {
 namespace system {
 
+struct Configuration;
+class EventHandler;
 class TaskPlayer;
 
 typedef std::function<bool (double)> Task;

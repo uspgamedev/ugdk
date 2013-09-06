@@ -7,7 +7,7 @@
 namespace ugdk {
 namespace system {
 
-typedef struct Configuration {
+struct Configuration {
     std::string        base_path;
     std::string default_language;
     
@@ -39,7 +39,7 @@ typedef struct Configuration {
 
         time_enabled(true)
     {}
-} Configuration;
+};
 
 } // namespace system
 } // namespace ugdk
