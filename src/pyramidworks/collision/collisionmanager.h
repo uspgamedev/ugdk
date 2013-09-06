@@ -5,7 +5,7 @@
 #include <map>
 #include <set>
 #include <memory>
-#include <ugdk/action.h>
+#include <ugdk/system.h>
 #include <pyramidworks/collision.h>
 #include <ugdk/util/uncopyable.h>
 #include <ugdk/structure/box.h>
@@ -37,7 +37,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
     const std::set<const CollisionObject*>& active_objects() const { return active_objects_; }
 
     /// Warning: this task depends on resources from this object. Do not use it after this object is destroyed.
-    ugdk::action::Task GenerateHandleCollisionTask();
+    ugdk::system::Task GenerateHandleCollisionTask();
     
   private:
     const ugdk::structure::Box<2> tree_bounding_box_;

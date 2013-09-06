@@ -12,50 +12,42 @@ namespace action {
 
 using std::list;
 
-/*static bool entityIsToBeRemoved (const Entity* value) {
-    bool is_dead = value->to_be_removed();
-    if (is_dead)
-        delete value;
-    return is_dead;
-}*/
-
 Scene::Scene() 
   : active_(true)
   , finished_(false)
   , visible_(true)
   , background_music_(nullptr) 
-  , stops_previous_music_(true) {
+  , stops_previous_music_(true)
+{
+    AddTask([&](double dt) {
+        media_manager_.Update(dt);
+    }, 0.4);
 
-        tasks_.emplace_back(0.4, [&](double dt) {
-            media_manager_.Update(dt);
-            return true;
-        });
+    // Update entities
+    AddTask([&](double dt) {  
+        for(auto it : entities_) it->Update(dt);
+        return true;
+    }, 0.5);
 
-        // Update entities
-        tasks_.emplace_back(0.5, [&](double dt) {  
-            for(auto it : entities_) it->Update(dt);
-            return true;
+    // Remove to be deleted entities
+    AddTask([&](double dt) {  
+        entities_.remove_if([](Entity* e){ 
+            bool is_dead = e->to_be_removed();
+            if (is_dead) delete e;
+            return is_dead;
         });
+        return true;
+    }, 0.9);
 
-        // Remove to be deleted entities
-        tasks_.emplace_back(0.9, [&](double dt) {  
-            entities_.remove_if([](Entity* e){ 
-                bool is_dead = e->to_be_removed();
-                if (is_dead) delete e;
-                return is_dead;
-            });
-            return true;
-        });
-
-        // Flush add queue
-        tasks_.emplace_back(1.0, [&](double dt) {  
-            while(!queued_entities_.empty()) {
-                Entity* e = queued_entities_.front();
-                this->AddEntity(e);
-                queued_entities_.pop();
-            }
-            return true;
-        });
+    // Flush add queue
+    AddTask([&](double dt) {  
+        while(!queued_entities_.empty()) {
+            Entity* e = queued_entities_.front();
+            this->AddEntity(e);
+            queued_entities_.pop();
+        }
+        return true;
+    }, 1.0);
 }
 
 Scene::~Scene() {
@@ -93,19 +85,10 @@ void Scene::RemoveAllEntities() {
     entities_.clear();
 }
 
-void Scene::AddFunctionTask(const Task& task, double priority) {
-    tasks_.merge(list<OrderedTask>(1, OrderedTask(priority, task)));
-}
-
 void Scene::Update(double dt) {
     if(finished_ || !active_)
         return;
-
-    // For each task, do. Note the tasks list is already ordered by the priorities.
-    tasks_.remove_if([dt](OrderedTask& otask) {
-        // Calls the task, and removes it from the list if the task returned false.
-        return !otask.task(dt);
-    });
+    TaskPlayer::Update(dt);
 }
 
 void Scene::Render(const graphic::Geometry& geometry, const graphic::VisualEffect& effect) const {

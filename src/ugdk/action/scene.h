@@ -9,6 +9,7 @@
 #include <ugdk/graphic.h>
 #include <ugdk/structure/types.h>
 #include <ugdk/action/mediamanager.h>
+#include <ugdk/system/taskplayer.h>
 
 namespace ugdk {
 namespace action {
@@ -21,21 +22,7 @@ namespace action {
    A scene is game screen, such as a menu, or the playable part
    itself.
 */
-class Scene {
-  private:
-
-    /// Auxiliar class for AddTask.
-    template <typename Ret>
-    struct TaskAdapter {
-        template <typename T>
-        static Task Adapt(T t) {
-            return Task(t);
-        }
-    };
-
-    // struct Scene::TaskAdapter<void>
-    // Located after Scene definition.
-
+class Scene : public system::TaskPlayer {
   public:
     Scene();
       
@@ -57,21 +44,6 @@ class Scene {
     void QueuedAddEntity(Entity *entity) { queued_entities_.push(entity); }
 
     void RemoveAllEntities();
-
-    /// Adds a task to the scene.
-    /** All tasks are called for each Scene's Update, in order of the priorities, which
-        are ordered from smaller values to bigger values.
-
-        The task's returned value is used to destroy the task or keep it alive:
-        - True keeps then for another Update.
-        - False destroys then.
-        - void return type implies in 'always true'.
-    
-        Priority values are commonly in the [0; 1] interval. */
-    template <typename T>
-    void AddTask(T task, double priority = 0.5) {
-        AddFunctionTask(TaskAdapter<decltype(task(0.0))>::Adapt(task), priority);
-    }
 
     /// Finishes the scene.
     void Finish() { End(); finished_ = true; }
@@ -135,8 +107,6 @@ class Scene {
     audio::Music* background_music_;
 
   private:
-    void AddFunctionTask(const Task& task, double priority);
-
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;
 
@@ -148,33 +118,9 @@ class Scene {
     std::function<void (Scene*)> defocus_callback_;
     std::function<void (Scene*)> focus_callback_;
     std::function<void (const graphic::Geometry&, const graphic::VisualEffect&)> render_function_;
-
-    struct OrderedTask {
-        OrderedTask(double p, const Task& t) : priority(p), task(t) {}
-
-        double priority;
-        Task task;
-
-        bool operator< (const OrderedTask& other) const { 
-            return priority < other.priority;
-        }
-    };
-    std::list<OrderedTask> tasks_;
 }; // class Scene.
 
-template <>
-struct Scene::TaskAdapter<void> {
-    template <typename T>
-    static Task Adapt(T t) {
-        return Task([t](double dt) -> bool {
-            t(dt);
-            return true;
-        });
-    }
-};
-
 } /* namespace action */
-
 } /* namespace ugdk */
 
 #endif /* UGDK_ACTION_SCENE_H_ */

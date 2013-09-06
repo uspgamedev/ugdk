@@ -73,7 +73,7 @@ bool Initialize(const Configuration& configuration) {
 
     if(!resource::Initialize(new resource::Manager))
         return false;
-    
+
     if(graphic::manager()) {
         text_manager_ = new graphic::TextManager;
         text_manager_->Initialize();

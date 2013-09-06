@@ -28,7 +28,7 @@ void CollisionManager::ChangeClassParent(const std::string &name, const std::str
     colclass.ChangeParent(&Find(parent));
 }
 
-ugdk::action::Task CollisionManager::GenerateHandleCollisionTask() {
+ugdk::system::Task CollisionManager::GenerateHandleCollisionTask() {
     return [this](double) -> bool {
         std::list<CollisionInstance> collision_list;
         for (const CollisionObject* obj : this->active_objects_)
