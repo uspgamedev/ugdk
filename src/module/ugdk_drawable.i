@@ -7,6 +7,11 @@
 %include "std_string.i"
 %include "std_vector.i"
 
+// Manually including cmath in the beginning prevents errors on some compilers
+%begin %{
+#include <cmath>
+%}
+
 %{
 
 #include <ugdk/graphic/drawable/sprite.h>

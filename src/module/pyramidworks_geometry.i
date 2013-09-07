@@ -3,6 +3,11 @@
 %include <module/export.swig>
 %include "std_vector.i"
 
+// Manually including cmath in the beginning prevents errors on some compilers
+%begin %{
+#include <cmath>
+%}
+
 %{
 
 #include <ugdk/structure/intervalkdtree.h>

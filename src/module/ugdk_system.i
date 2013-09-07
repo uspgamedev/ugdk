@@ -6,6 +6,11 @@
 %include "std_string.i"
 %include "std_map.i"
 
+// Manually including cmath in the beginning prevents errors on some compilers
+%begin %{
+#include <cmath>
+%}
+
 %{
 
 #include <ugdk/structure/types.h>

@@ -4,6 +4,11 @@
 %include <module/export.swig>
 %include "std_vector.i"
 
+// Manually including cmath in the beginning prevents errors on some compilers
+%begin %{
+#include <cmath>
+%}
+
 %{
 
 #include <ugdk/math/vector2D.h>

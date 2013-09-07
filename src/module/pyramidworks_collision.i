@@ -8,6 +8,11 @@
 %include "std_vector.i"
 %include "std_pair.i"
 
+// Manually including cmath in the beginning prevents errors on some compilers
+%begin %{
+#include <cmath>
+%}
+
 %{
 
 #include <pyramidworks/collision.h>

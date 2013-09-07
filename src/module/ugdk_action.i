@@ -6,6 +6,11 @@
 %include "std_vector.i"
 %include "std_string.i"
 
+// Manually including cmath in the beginning prevents errors on some compilers
+%begin %{
+#include <cmath>
+%}
+
 %{
 
 #include <ugdk/action/mediaplayer.h>
