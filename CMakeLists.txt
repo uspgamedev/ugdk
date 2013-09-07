@@ -1,5 +1,4 @@
-# Requires CMake 2.8 or newer.
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 2.8.7)
 
 project (ugdk CXX C)
 set (UGDK_VERSION_MAJOR 0)
@@ -54,9 +53,6 @@ CONFIGURE_FILE(
     "doxystuff/Doxyfile"
 )
 
-#set (CMAKE_CURRENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${MODULE_DIR}")
-#set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${WRAPPER_DIR}")
-
 include (${SRC_DIR}/src_list.cmake)
 include (${SRC_DIR}/module_list.cmake)
 include (${SRC_DIR}/lua_src_list.cmake)
@@ -89,7 +85,6 @@ if(UGDK_INTERNAL_SDL2)
     add_subdirectory(externals/sdl2 externals/sdl2-build)
     
     include_directories(${SDL2_SOURCE_DIR}/include)
-    set(SDL2_LIBRARY SDL2-static)
     
     add_subdirectory(externals/sdl2-mixer)
     add_subdirectory(externals/sdl2-image)
@@ -97,8 +92,9 @@ if(UGDK_INTERNAL_SDL2)
     include_directories(${SDL2-mixer_SOURCE_DIR}/include)
     include_directories(${SDL2-image_SOURCE_DIR}/include)
     
-    set(SDL2MIXER_LIBRARY SDL2-mixer)
-    set(SDL2IMAGE_LIBRARY SDL2-image)
+    # SDL-mixer must come before SDL itself, or else we may have linking errors.
+    set(UGDK_EXTERNALS_SDL_LIBRARIES SDL2-mixer;SDL2-image;SDL2-static)
+    set(UGDK_EXTERNALS_SDL_INCLUDE_DIRS ${SDL2_SOURCE_DIR}/include;${SDL2-mixer_SOURCE_DIR}/include)
     
 else(UGDK_INTERNAL_SDL2)
     find_package(SDL2_mixer REQUIRED)
@@ -107,6 +103,9 @@ else(UGDK_INTERNAL_SDL2)
     include_directories(${SDL2_INCLUDE_DIR})
     include_directories(${SDL2MIXER_INCLUDE_DIR})
     include_directories(${SDL2IMAGE_INCLUDE_DIR})
+    
+    set(UGDK_EXTERNALS_SDL_LIBRARIES ${SDL2MIXER_LIBRARY};${SDL2IMAGE_LIBRARY};${SDL2_LIBRARY})
+    set(UGDK_EXTERNALS_SDL_INCLUDE_DIRS ${SDL2_INCLUDE_DIR};${SDL2MIXER_INCLUDE_DIR})
 endif(UGDK_INTERNAL_SDL2)
 
 find_package(OpenGL REQUIRED)
@@ -239,23 +238,9 @@ if (WIN32)
 endif (WIN32)
 
 
-# We could use LINK_PUBLIC here, but it's a new feature in cmake 2.8.7, so we'd rather not require the newest version.
-
-target_link_libraries (libugdk
+target_link_libraries (libugdk LINK_PUBLIC
                        ${EXTRA_LIBRARIES}
-                       ${SDL2_LIBRARY}
-                       ${SDL2MIXER_LIBRARY}
-                       ${SDL2IMAGE_LIBRARY}
-                       ${GLEW_LIBRARIES}
-                       ${OPENGL_LIBRARIES}
-                       ${FREETYPE_GLPP_LIBRARIES}
-                       ${UGDK_LIBRARIES})
-
-target_link_libraries (libugdk LINK_INTERFACE_LIBRARIES 
-                       ${EXTRA_LIBRARIES}
-                       ${SDL2_LIBRARY}
-                       ${SDL2MIXER_LIBRARY}
-                       ${SDL2IMAGE_LIBRARY}
+                       ${UGDK_EXTERNALS_SDL_LIBRARIES}
                        ${GLEW_LIBRARIES}
                        ${OPENGL_LIBRARIES}
                        ${FREETYPE_GLPP_LIBRARIES}
@@ -281,7 +266,7 @@ endif (UNIX AND PYTHONLIBS_FOUND)
 set(UGDK_EXTERNAL_INCLUDE_DIRS 
     ${PROJECT_SOURCE_DIR}/${SRC_DIR};
     ${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR};
-    ${SDL2_INCLUDE_DIR};
+    ${UGDK_EXTERNALS_SDL_INCLUDE_DIRS};
     ${GLM_LOCATION}
     CACHE STRING "UGDK include directories" FORCE)
 
