@@ -47,7 +47,7 @@ Manager::Manager(const VideoSettings& settings)
 
 bool Manager::Initialize() {
     if(SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
-        return errlog("Failed to initialize SDL_VIDEO");
+        return errlog("Failed to initialize SDL_VIDEO: " + string(SDL_GetError()));
     
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -61,7 +61,7 @@ bool Manager::Initialize() {
     if(!window_) {
         // Couldn't create the window.
         // TODO: Log the error
-        return errlog("Failed to create the window.");
+        return errlog("Failed to create the window: " + string(SDL_GetError()));
     }
 
     if(settings_.window_icon.length() > 0) {
