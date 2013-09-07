@@ -13,22 +13,24 @@
 
 %{
 
-#include <ugdk/action/mediaplayer.h>
+#include <ugdk/action/animationplayer.h>
 #include <ugdk/action/entity.h>
+#include <ugdk/action/mediamanager.h>
+#include <ugdk/action/mediaplayer.h>
 #include <ugdk/action/observer.h>
 #include <ugdk/action/scene.h>
-#include <ugdk/action/animationplayer.h>
 #include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/action/spritetypes.h>
 
-#include <module/ugdk/action/observerproxy.h>
+// Proxies
 #include <module/ugdk/action/entityproxy.h>
+#include <module/ugdk/action/observerproxy.h>
 #include <module/ugdk/action/sceneproxy.h>
-#include <module/ugdk/action/taskproxy.h>
 
 %}
 
 %import(module="ugdk_structure") <ugdk/structure.h>
+%import(module="ugdk_system") <ugdk/system.h>
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_audio") <ugdk/audio.h>
@@ -39,12 +41,12 @@
 proxy_class(ugdk::action::Observer)
 proxy_class(ugdk::action::Entity)
 proxy_class(ugdk::action::Scene)
-proxy_class(ugdk::action::Task)
 
 %ignore ugdk::action::Scene::content_node() const;
 %ignore ugdk::action::Scene::interface_node() const;
 %ignore ugdk::action::Entity::OnSceneAdd(Scene* scene);
 
+%include <ugdk/system/taskplayer.h>
 %include <ugdk/action/mediaplayer.h>
 %include <ugdk/action/entity.h>
 %include <ugdk/action/observer.h>

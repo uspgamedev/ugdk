@@ -5,6 +5,7 @@
 
 #include "GL/glew.h"
 #ifdef _WIN32
+#   include "windows.h"
 #   include "GL/wglew.h"
 #endif
 #define NO_SDL_GLEXT

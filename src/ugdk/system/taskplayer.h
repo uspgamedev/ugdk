@@ -62,6 +62,8 @@ class TaskPlayer {
     std::list<OrderedTask> tasks_;
 };
 
+#ifndef SWIG // SWIG doesn't know TaskAdapter
+
 template <>
 struct TaskPlayer::TaskAdapter<void> {
     template <typename T>
@@ -72,6 +74,8 @@ struct TaskPlayer::TaskAdapter<void> {
         });
     }
 };
+
+#endif
 
 } // namespace action */
 } // namespace ugdk */

@@ -31,6 +31,11 @@ option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages 
 option(UGDK_INTERNAL_GLEW   "Set to ON to use an internal GLEW instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2   "Set to ON to use an internal SDL2 instead of the system one." OFF)
 
+if(NOT ${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
+    # Don't polute the git repository with the generated files for out-of-source builds
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.gitignore "*")
+endif()
+
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     SET (CHECKMAC TRUE)
 endif ()
@@ -215,6 +220,12 @@ if (UNIX OR MINGW)
         -Wignored-qualifiers
         -Wuninitialized
         -Winit-self)
+        
+    set_source_files_properties(${GENERATED_SRC}
+        PROPERTIES 
+            COMPILE_FLAGS
+                "-fpermissive -Wno-unused-value")
+            
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")

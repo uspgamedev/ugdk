@@ -4,11 +4,7 @@
 #include <list>
 #include <string>
 #include <ugdk/action.h>
-#include <ugdk/audio.h>
 #include <ugdk/graphic.h>
-#include <ugdk/input.h>
-#include <ugdk/resource.h>
-#include <ugdk/time.h>
 #include <ugdk/util.h>
 #include <ugdk/structure/types.h>
 #include <ugdk/system/configuration.h>
