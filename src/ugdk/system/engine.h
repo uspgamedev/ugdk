@@ -68,15 +68,13 @@ void PushScene(const SceneFactory& scene_factory);
 /** @param scene The scene to be added. */
 void PushScene(action::Scene* scene);
 
-/// Returns the current scene.
+/// Returns the currently focused scene.
 action::Scene* CurrentScene();
 
 /// Returns the scene list.
 /** The list is changed when PushScene is called. */
 const std::list<action::Scene*>& scene_list();
 
-/// Removes the top scene.
-void PopScene();
 /** @}
  */
 

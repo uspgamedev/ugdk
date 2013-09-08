@@ -190,6 +190,7 @@ void Run() {
                 graphic::manager()->Render(scene_list_);
         }
     }
+    quit_ = true;
     for(action::Scene* it : scene_list_) {
         it->Finish();
         delete it;
@@ -198,6 +199,7 @@ void Run() {
 }
 
 void Release() {
+    assert(quit_);
     if(text_manager_) {
         text_manager_->Release();
         delete text_manager_;
@@ -229,10 +231,6 @@ action::Scene* CurrentScene() {
 
 const std::list<action::Scene*>& scene_list() {
     return scene_list_;
-}
-
-void PopScene() {
-    if(!scene_list_.empty()) scene_list_.pop_back();
 }
 
 void Quit() {
