@@ -16,7 +16,7 @@ using math::Vector2D;
 #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
 
 class InputSDLEventHandler;
-typedef std::map<::Uint32, void (InputSDLEventHandler::*)(const ::SDL_Event&) const> InputCallback;
+typedef std::map< ::Uint32, void (InputSDLEventHandler::*)(const ::SDL_Event&) const> InputCallback;
 class InputSDLEventHandler : public internal::SDLEventHandler {
 public:
     InputSDLEventHandler(Manager* manager) : manager_(manager) {}
