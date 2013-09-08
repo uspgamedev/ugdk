@@ -84,6 +84,8 @@ SET(UGDK_SRC
     src/ugdk/input/manager.h 
     src/ugdk/input/module.cc 
     src/ugdk/input/module.h 
+    src/ugdk/internal.h 
+    src/ugdk/internal/sdleventhandler.h 
     src/ugdk/math.h 
     src/ugdk/math/frame.cc 
     src/ugdk/math/frame.h 
