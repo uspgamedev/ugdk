@@ -1,9 +1,12 @@
 #ifndef UGDK_INPUT_MANAGER_H_
 #define UGDK_INPUT_MANAGER_H_
 
-#include <ugdk/math/vector2D.h>
 #include <ugdk/input/keys.h>
+#include <ugdk/internal.h>
+#include <ugdk/math/vector2D.h>
+
 #include <set>
+#include <memory>
 
 namespace ugdk {
 namespace input {
@@ -21,6 +24,8 @@ class Manager {
     bool Initialize();
     void Release();
 
+    const internal::SDLEventHandler* sdlevent_handler() { return sdlevent_handler_.get(); }
+
     void Update();
     ugdk::math::Vector2D GetMousePosition(void);
     void ShowCursor(bool toggle);
@@ -34,9 +39,6 @@ class Manager {
     bool MouseDown(MouseButton button);
     bool MouseUp(MouseButton button);
 	bool CheckSequence(Key* sequence, int size);
-    
-    void SimulateKeyPress(Key key);
-    void SimulateKeyRelease(Key key);
 
   private:
     std::set<Key> keystate_now_, keystate_last_;
@@ -44,8 +46,11 @@ class Manager {
 	Key buffer_[BUFFER_SIZE];
 	int buffer_end_;
     ugdk::math::Vector2D mouseposition_;
+    std::unique_ptr<internal::SDLEventHandler> sdlevent_handler_;
     
     void UpdateDevices();
+    
+    friend class InputSDLEventHandler;
 };
 
 }  // namespace input

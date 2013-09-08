@@ -1,12 +1,65 @@
 #include <ugdk/input/manager.h>
 
 #include <algorithm>
+#include <utility>
+#include <map>
+#include <functional>
 #include "SDL.h"
+
+#include <ugdk/internal/sdleventhandler.h>
 
 namespace ugdk {
 namespace input {
 
 using math::Vector2D;
+
+#define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
+
+class InputSDLEventHandler;
+typedef std::map<::Uint32, void (InputSDLEventHandler::*)(const ::SDL_Event&) const> InputCallback;
+class InputSDLEventHandler : public internal::SDLEventHandler {
+public:
+    InputSDLEventHandler(Manager* manager) : manager_(manager) {}
+
+    bool CanHandle(const ::SDL_Event& sdlevent) const {
+        /* We can handle the following:
+        * Keyboard events
+        * Mouse events
+        * Joystick events
+        * Game controller events
+        * Touch events
+        * Gesture events
+        */
+        return SDL_KEYDOWN <= sdlevent.type && sdlevent.type <= SDL_MULTIGESTURE;
+    }
+
+    void Handle(const ::SDL_Event& sdlevent) const {
+        auto handler = event_methods_.find(sdlevent.type);
+        if(handler != event_methods_.end()) {
+            CALL_MEMBER_FN(*this,handler->second)(sdlevent);
+        }
+    }
+
+    void KeyDownHandler(const ::SDL_Event& sdlevent) const {
+        printf("Key Pressed: '%s'\n", SDL_GetKeyName(sdlevent.key.keysym.sym));
+        manager_->keystate_now_.insert(static_cast<input::Key>(sdlevent.key.keysym.sym));
+    }
+    
+    void KeyUpHandler(const ::SDL_Event& sdlevent) const {
+        manager_->keystate_now_.erase(static_cast<input::Key>(sdlevent.key.keysym.sym));
+    }
+
+  private:
+    Manager* manager_;
+    static InputCallback event_methods_;
+};
+
+InputCallback InputSDLEventHandler::event_methods_ = [] {
+    InputCallback result;
+    result[SDL_KEYDOWN] = &InputSDLEventHandler::KeyDownHandler;
+    result[SDL_KEYUP] = &InputSDLEventHandler::KeyUpHandler;
+    return result;
+}();
 
 Manager::Manager() {}
 
@@ -16,6 +69,8 @@ bool Manager::Initialize() {
 
     if(SDL_InitSubSystem(SDL_INIT_JOYSTICK) < 0)
         return false;
+
+    sdlevent_handler_.reset(new InputSDLEventHandler(this));
 
 	buffer_end_ = 0;
 	for(int i = 0; i < BUFFER_SIZE; i++)
@@ -108,14 +163,6 @@ void Manager::UpdateDevices() {
         else
             mousestate_now_[i] = false;
     }
-}
-
-void Manager::SimulateKeyRelease(Key key) {
-    keystate_now_.erase(key);
-}
- 
-void Manager::SimulateKeyPress(Key key) {
-    keystate_now_.insert(key);
 }
 
 }  // namespace input

@@ -135,6 +135,8 @@ bool Initialize(const Configuration& configuration) {
     if(configuration.input_enabled)
         if(!input::Initialize(new input::Manager))
             return false;
+        else
+            sdlevent_handlers_.push_back(input::manager()->sdlevent_handler());
 
     if(configuration.time_enabled)
         if(!time::Initialize(new time::Manager))
@@ -210,6 +212,8 @@ void Run() {
 
 void Release() {
     assert(quit_);
+    sdlevent_handlers_.clear();
+
     if(text_manager_) {
         text_manager_->Release();
         delete text_manager_;
