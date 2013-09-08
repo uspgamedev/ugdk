@@ -3,14 +3,18 @@
 
 #include <list>
 #include <string>
+#include <functional>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
+#include <ugdk/system.h>
 #include <ugdk/structure/types.h>
 #include <ugdk/system/configuration.h>
 
 namespace ugdk {
 namespace system {
+
+typedef std::function<action::Scene* ()> SceneFactory;
 
 class PathManager;
 
@@ -55,9 +59,13 @@ void Release();
 /** @name Scene Management
  * @{
  */
-/// Puts a scene onto the scene list, on top.
-/** @param scene The scene to be put.
- */
+
+/// Queues a scene to be added just before the start of the next frame.
+/** @param scene_factory A factory for the scene to be added. */
+void PushScene(const SceneFactory& scene_factory);
+
+/// Queues a scene to be added just before the start of the next frame.
+/** @param scene The scene to be added. */
 void PushScene(action::Scene* scene);
 
 /// Returns the current scene.

@@ -28,7 +28,7 @@ graphic:: TextManager *        text_manager_;
       LanguageManager *    language_manager_;
 bool quit_;
 std::list<action::Scene*> scene_list_;
-std::list<action::Scene*> queued_scene_list_;
+std::list<SceneFactory>   queued_scene_list_;
 action::Scene*            previous_focused_scene_;
 Configuration configuration_;
 }
@@ -94,7 +94,9 @@ namespace {
 
 void AddPendingScenes() {
     // Insert all queued Scenes at the end of the scene list.
-    scene_list_.splice(scene_list_.end(), queued_scene_list_);
+    for(const SceneFactory& scene_factory : queued_scene_list_)
+        scene_list_.push_back(scene_factory());
+    queued_scene_list_.clear();
 }
 
 void DeleteFinishedScenes() {
@@ -214,7 +216,11 @@ void Release() {
 }
 
 void PushScene(action::Scene* scene) {
-    queued_scene_list_.push_back(scene);
+    PushScene([scene]{ return scene; });
+}
+
+void PushScene(const SceneFactory& scene_factory) {
+    queued_scene_list_.push_back(scene_factory);
 }
 
 action::Scene* CurrentScene() {
