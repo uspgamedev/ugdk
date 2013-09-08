@@ -2,6 +2,7 @@
 
 #include <string>
 #include <algorithm>
+#include <list>
 #include "SDL.h"
 
 #include <ugdk/action/scene.h>
@@ -22,12 +23,15 @@
 namespace ugdk {
 namespace system {
 
-static    graphic:: TextManager *        text_manager_;
-static          LanguageManager *    language_manager_;
-static    bool quit_;
-static    std::list<action::Scene*> scene_list_;
-static    std::list<action::Scene*> queued_scene_list_;
-static    Configuration configuration_;
+namespace {
+graphic:: TextManager *        text_manager_;
+      LanguageManager *    language_manager_;
+bool quit_;
+std::list<action::Scene*> scene_list_;
+std::list<action::Scene*> queued_scene_list_;
+action::Scene*            previous_focused_scene_;
+Configuration configuration_;
+}
 
 graphic::TextManager *text_manager() {
     return text_manager_;
@@ -86,7 +90,14 @@ bool Initialize(const Configuration& configuration) {
     return true;
 }
 
-static void DeleteFinishedScenes() {
+namespace {
+
+void AddPendingScenes() {
+    // Insert all queued Scenes at the end of the scene list.
+    scene_list_.splice(scene_list_.end(), queued_scene_list_);
+}
+
+void DeleteFinishedScenes() {
     std::list<action::Scene*> to_delete;
     for(action::Scene* it : scene_list_)
         if(it->finished())
@@ -98,27 +109,36 @@ static void DeleteFinishedScenes() {
     }
 }
 
+void DefocusRoutine() {
+    if(!previous_focused_scene_) return;
+    // If we're adding any scenes, the current scene will lose it's focus.
+    if(previous_focused_scene_->finished() || !queued_scene_list_.empty())
+        previous_focused_scene_->DeFocus();
+}
+
+void FocusRoutine() {
+    if(previous_focused_scene_ != CurrentScene())
+        (previous_focused_scene_ = CurrentScene())->Focus();
+}
+
+}
+
 void Run() {
     SDL_Event event;
     double delta_t;
-    action::Scene* current_top_scene = nullptr;
 
+    previous_focused_scene_ = nullptr;
     quit_ = false;
     while(!quit_) {
-        // Insert all queued Scenes at the end of the scene list.
-        scene_list_.insert(scene_list_.end(), queued_scene_list_.begin(), queued_scene_list_.end());
-        queued_scene_list_.clear();
-
-        if(current_top_scene && current_top_scene != CurrentScene()) {
-            current_top_scene->DeFocus();
-            (current_top_scene = CurrentScene())->Focus();
-        }
+        // Pre-frame start logic
+        DefocusRoutine();
         DeleteFinishedScenes();
+        AddPendingScenes();
+        if(CurrentScene() == nullptr)
+            break;
 
-        if (CurrentScene() == nullptr)
-            Quit();
-        else if(current_top_scene != CurrentScene())
-            (current_top_scene = CurrentScene())->Focus();
+        // Frame starts here!
+        FocusRoutine();
 
         if(time::manager()) {
             time::manager()->Update();
