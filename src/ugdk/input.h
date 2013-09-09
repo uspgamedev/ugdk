@@ -4,8 +4,9 @@
 namespace ugdk {
 namespace input {
 
-// Managers
 class Manager;
+class Keyboard;
+class Mouse;
 
 }  // namespace input
 }  // namespace ugdk

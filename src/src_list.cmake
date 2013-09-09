@@ -79,6 +79,8 @@ SET(UGDK_SRC
     src/ugdk/graphic/texture.h 
     src/ugdk/graphic/visualeffect.h 
     src/ugdk/input.h 
+    src/ugdk/input/events.h 
+    src/ugdk/input/keyboard.h 
     src/ugdk/input/keys.h 
     src/ugdk/input/manager.cc 
     src/ugdk/input/manager.h 

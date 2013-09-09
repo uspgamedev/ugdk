@@ -1,12 +1,16 @@
 #include <ugdk/input/manager.h>
 
+#include <ugdk/action/scene.h>
+#include <ugdk/input/events.h>
+#include <ugdk/internal/sdleventhandler.h>
+#include <ugdk/system/engine.h>
+
 #include <algorithm>
 #include <utility>
 #include <map>
 #include <functional>
-#include "SDL.h"
 
-#include <ugdk/internal/sdleventhandler.h>
+#include "SDL.h"
 
 namespace ugdk {
 namespace input {
@@ -19,7 +23,7 @@ class InputSDLEventHandler;
 typedef std::map< ::Uint32, void (InputSDLEventHandler::*)(const ::SDL_Event&) const> InputCallback;
 class InputSDLEventHandler : public internal::SDLEventHandler {
 public:
-    InputSDLEventHandler(Manager* manager) : manager_(manager) {}
+    InputSDLEventHandler(Manager& manager) : manager_(manager) {}
 
     bool CanHandle(const ::SDL_Event& sdlevent) const {
         /* We can handle the following:
@@ -37,21 +41,29 @@ public:
         auto handler = event_methods_.find(sdlevent.type);
         if(handler != event_methods_.end()) {
             CALL_MEMBER_FN(*this,handler->second)(sdlevent);
+        } else {
+            printf("UGDK::Input -- Unhandled event of type 0x%X\n", sdlevent.type);
         }
     }
 
     void KeyDownHandler(const ::SDL_Event& sdlevent) const {
-        printf("Key Pressed: '%s'\n", SDL_GetKeyName(sdlevent.key.keysym.sym));
-        manager_->keystate_now_.insert(static_cast<input::Key>(sdlevent.key.keysym.sym));
+        manager_.keyboard_.keystate_.insert(static_cast<input::Key>(sdlevent.key.keysym.sym));
+        system::CurrentScene()->event_handler().RaiseEvent(KeyPressedEvent());
     }
     
     void KeyUpHandler(const ::SDL_Event& sdlevent) const {
-        manager_->keystate_now_.erase(static_cast<input::Key>(sdlevent.key.keysym.sym));
+        manager_.keyboard_.keystate_.erase(static_cast<input::Key>(sdlevent.key.keysym.sym));
+        system::CurrentScene()->event_handler().RaiseEvent(KeyReleasedEvent());
+    }
+
+    void MouseMotionHandler(const ::SDL_Event& sdlevent) const {
     }
 
   private:
-    Manager* manager_;
+    Manager& manager_;
     static InputCallback event_methods_;
+
+    void operator=(const InputSDLEventHandler&);
 };
 
 InputCallback InputSDLEventHandler::event_methods_ = [] {
@@ -70,7 +82,7 @@ bool Manager::Initialize() {
     if(SDL_InitSubSystem(SDL_INIT_JOYSTICK) < 0)
         return false;
 
-    sdlevent_handler_.reset(new InputSDLEventHandler(this));
+    sdlevent_handler_.reset(new InputSDLEventHandler(*this));
 
 	buffer_end_ = 0;
 	for(int i = 0; i < BUFFER_SIZE; i++)
@@ -90,7 +102,7 @@ void Manager::Update() {
     int i;
     
     // bufferiza teclado
-    keystate_last_ = keystate_now_;
+    keystate_old_ = keyboard_.keystate_;
       
     // bufferiza botoes do mouse
     for(i = 0; i < 5; i++)
@@ -111,19 +123,11 @@ void Manager::ShowCursor(bool toggle) {
 }
 
 bool Manager::KeyPressed(Key key) {
-    return (keystate_now_.count(key) > 0 && keystate_last_.count(key) == 0);
+    return (keyboard_.IsDown(key) && keystate_old_.count(key) == 0);
 }
 
 bool Manager::KeyReleased(Key key) {
-    return (keystate_now_.count(key) == 0 && keystate_last_.count(key) > 0);
-}
-
-bool Manager::KeyDown(Key key) {
-    return keystate_now_.count(key) > 0;
-}
-
-bool Manager::KeyUp(Key key) {
-    return keystate_now_.count(key) == 0;
+    return (keyboard_.IsUp(key) && keystate_old_.count(key) > 0);
 }
 
 bool Manager::CheckSequence(Key* sequence, int size) {
