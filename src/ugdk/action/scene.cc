@@ -1,11 +1,11 @@
-#include <algorithm>
-
 #include <ugdk/action/scene.h>
 
 #include <ugdk/action/entity.h>
 #include <ugdk/audio/module.h>
 #include <ugdk/audio/music.h>
 #include <ugdk/graphic/node.h>
+
+#include <algorithm>
 
 namespace ugdk {
 namespace action {
@@ -18,6 +18,7 @@ Scene::Scene()
   , visible_(true)
   , background_music_(nullptr) 
   , stops_previous_music_(true)
+  , event_handler_(this)
 {
     AddTask([&](double dt) {
         media_manager_.Update(dt);
