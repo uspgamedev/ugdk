@@ -238,6 +238,10 @@ if (MSVC)
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
 endif ()
 
+if (NOT MSVC_VERSION LESS 1800)
+    add_definitions(/DUGDK_USING_VARIADIC)
+endif()
+
 # =============================
 add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
 

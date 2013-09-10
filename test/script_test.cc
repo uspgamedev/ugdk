@@ -6,7 +6,6 @@
 
 #include <cstdlib>
 
-#include "SDL.h"
 #include <ugdk/system/engine.h>
 #include <ugdk/script.h>
 #include <ugdk/script/scriptmanager.h>
@@ -20,7 +19,7 @@ static bool LuaTests() {
     VirtualObj val = main["integer"];
 
 #ifdef UGDK_USING_VARIADIC
-    auto f = main["soma"].AsFunction<int, int, int>();
+    auto f = main["soma"].AsFunction<int (int, int)>();
     assert(f(13, 25) == 38);
     assert(main["soma"].Call(3, val).value<int>() == 45);
     return main["soma"].Call(3, 8).value<int>() == 11;

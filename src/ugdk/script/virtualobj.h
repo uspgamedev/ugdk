@@ -142,13 +142,13 @@ class VirtualObj {
     }
 
 #ifdef UGDK_USING_VARIADIC
-    template<typename R, typename ...Args>
-    std::function<R (Args...)> AsFunction() {
-        return CreateFunction<R, Args...>(data_);
+    template<typename signature>
+    std::function<signature> AsFunction() const {
+        return function_helper<signature>::CreateFunction(*this);
     }
 
     template<typename ...Args>
-    VirtualObj Call(Args... args) {
+    VirtualObj Call(Args... args) const {
         VirtualData::Vector arguments;
         createArgumentsVector(arguments, wrapper(), args...);
         return VirtualObj(data_->Execute(arguments));
@@ -160,28 +160,28 @@ class VirtualObj {
     static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper) { return true; }
 
     template<typename T, typename ...Args>
-    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, T t, Args... args) {
-        VirtualData::Ptr val = wrapper->NewData();
-        VirtualPrimitive<T>::set_value(val, t);
-        v.push_back(val);
-        return createArgumentsVector(v, wrapper, args...);
+    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, const T& t, Args... args) {
+        return createArgumentsVector(v, wrapper, VirtualObj(wrapper, t), args...);
     }
 
     template<typename ...Args>
-    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, VirtualObj t, Args... args) {
-        if(t.wrapper() != wrapper) return false;
-        v.push_back(t.data_);
+    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, const VirtualObj& t, Args... args) {
+        if(!t || t.wrapper() != wrapper) return false;
+        v.emplace_back(t.data_);
         return createArgumentsVector(v, wrapper, args...);
     }
 
+    template<typename signature>
+    struct function_helper;
+
     template<typename R, typename ...Args>
-    static std::function<R (Args...)> CreateFunction(VirtualData::Ptr data) {
-        return [data](Args... args) -> R {
-            VirtualData::Vector arguments;
-            createArgumentsVector(arguments, data->wrapper(), args...);
-            return VirtualPrimitive<R>::value(data->Execute(arguments), false);
-        };
-    }
+    struct function_helper<R(Args...)> {
+        static std::function<R(Args...)> CreateFunction(const VirtualObj& data) {
+            return [data](Args... args) -> R {
+                return data.Call(args...).value<R>(false);
+            };
+        }
+    };
 #endif
 
     VirtualData::Ptr data_;
