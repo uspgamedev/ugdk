@@ -5,6 +5,8 @@
 %{
 
 #include <ugdk/input/keys.h>
+#include <ugdk/input/keyboard.h>
+#include <ugdk/input/mouse.h>
 #include <ugdk/input/manager.h>
 #include <ugdk/input/module.h>
 
@@ -18,6 +20,7 @@
 
 %include <ugdk/input/keys.h>
 %include <ugdk/input/keyboard.h>
+%include <ugdk/input/mouse.h>
 %include <ugdk/input/manager.h>
 %include <ugdk/input/module.h>
 
@@ -26,7 +29,8 @@ namespace input {
     export_class(Key)
     export_class(MouseButton)
     export_class(Manager)
-	export_class(Keyboard)
+	 export_class(Keyboard)
+	 export_class(Mouse)
 }
 }
  
