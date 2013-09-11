@@ -161,7 +161,6 @@ bool Initialize(const Configuration& configuration) {
 }
 
 void Run() {
-    ::SDL_Event sdlevent;
     double delta_t;
 
     previous_focused_scene_ = nullptr;

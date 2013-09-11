@@ -19,6 +19,8 @@
 
 #include "utf8.h"
 
+#include <vector>
+
 #ifdef _WIN32
 #include <Winsock2.h>
 #else
@@ -323,4 +325,19 @@ wchar_to_utf8(const wchar_t *in, size_t insize, char *out, size_t outsize,
 	}
 
 	return (total);
+}
+
+std::wstring utf8_to_wstring(const std::string& utf8) {
+    std::wstring result(utf8.length(), L' ');
+    size_t final_size = utf8_to_wchar(utf8.c_str(), utf8.length(), &result[0], result.size(), 0);
+    result[final_size] = L'\0';
+    result.resize(final_size + 1);
+    return result;
+}
+
+std::string wstring_to_utf8(const std::wstring& wstr) {
+    size_t final_size = wchar_to_utf8(wstr.c_str(), wstr.length(), nullptr, 0, 0);
+    std::string result(final_size + 1, L' ');
+    result[wchar_to_utf8(wstr.c_str(), wstr.length(), &result[0], result.size(), 0)] = '\0';
+    return result;
 }

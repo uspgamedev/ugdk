@@ -4,6 +4,7 @@
 #include <ugdk/input/events.h>
 #include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/system/engine.h>
+#include <ugdk/util/utf8.h>
 
 #include <algorithm>
 #include <utility>
@@ -56,7 +57,25 @@ public:
         system::CurrentScene()->event_handler().RaiseEvent(KeyReleasedEvent());
     }
 
+    void TextInputHandler(const ::SDL_Event& sdlevent) const {
+        wprintf(L"TextInput: %s\n", utf8_to_wstring(sdlevent.text.text).c_str());
+    }
+
     void MouseMotionHandler(const ::SDL_Event& sdlevent) const {
+        manager_.mouse_.position_.x = sdlevent.motion.x;
+        manager_.mouse_.position_.y = sdlevent.motion.y;
+        system::CurrentScene()->event_handler().RaiseEvent(MouseMotionEvent(
+            manager_.mouse_,
+            math::Integer2D(sdlevent.motion.xrel, sdlevent.motion.yrel)
+        ));
+    }
+
+    void MouseButtonDownHandler(const ::SDL_Event& sdlevent) const {
+        system::CurrentScene()->event_handler().RaiseEvent(MouseButtonPressedEvent());
+    }
+
+    void MouseButtonUpHandler(const ::SDL_Event& sdlevent) const {
+        system::CurrentScene()->event_handler().RaiseEvent(MouseButtonReleasedEvent());
     }
 
   private:
@@ -70,6 +89,10 @@ InputCallback InputSDLEventHandler::event_methods_ = [] {
     InputCallback result;
     result[SDL_KEYDOWN] = &InputSDLEventHandler::KeyDownHandler;
     result[SDL_KEYUP] = &InputSDLEventHandler::KeyUpHandler;
+    result[SDL_TEXTINPUT] = &InputSDLEventHandler::TextInputHandler;
+    result[SDL_MOUSEMOTION] = &InputSDLEventHandler::MouseMotionHandler;
+    result[SDL_MOUSEBUTTONDOWN] = &InputSDLEventHandler::MouseButtonDownHandler;
+    result[SDL_MOUSEBUTTONUP] = &InputSDLEventHandler::MouseButtonUpHandler;
     return result;
 }();
 
@@ -81,6 +104,8 @@ bool Manager::Initialize() {
 
     if(SDL_InitSubSystem(SDL_INIT_JOYSTICK) < 0)
         return false;
+    
+    //SDL_StopTextInput();
 
     sdlevent_handler_.reset(new InputSDLEventHandler(*this));
 
@@ -113,9 +138,7 @@ void Manager::Update() {
 }
 
 Vector2D Manager::GetMousePosition(void) {
-    int x, y;
-    SDL_GetMouseState(&x, &y);
-    return Vector2D((double) x, (double) y);
+    return Vector2D(mouse_.position());
 }
 
 void Manager::ShowCursor(bool toggle) {
