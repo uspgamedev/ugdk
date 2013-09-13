@@ -18,6 +18,7 @@ namespace input {
 
 using math::Vector2D;
 
+
 #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
 
 class InputSDLEventHandler;
@@ -48,17 +49,22 @@ public:
     }
 
     void KeyDownHandler(const ::SDL_Event& sdlevent) const {
-        manager_.keyboard_.keystate_.insert(static_cast<input::Key>(sdlevent.key.keysym.sym));
-        system::CurrentScene()->event_handler().RaiseEvent(KeyPressedEvent());
+        manager_.keyboard_.keystate_.insert(Scancode(sdlevent.key.keysym.scancode));
+        if(sdlevent.key.repeat == 0)
+            system::CurrentScene()->event_handler().RaiseEvent(KeyPressedEvent());
+        else
+            system::CurrentScene()->event_handler().RaiseEvent(KeyHeldEvent());
+        printf("Key down, keycode: 0x%X -- scancode: %d -- repeat: %d\n", sdlevent.key.keysym.sym, sdlevent.key.keysym.scancode, sdlevent.key.repeat);
     }
     
     void KeyUpHandler(const ::SDL_Event& sdlevent) const {
-        manager_.keyboard_.keystate_.erase(static_cast<input::Key>(sdlevent.key.keysym.sym));
+        manager_.keyboard_.keystate_.erase(Scancode(sdlevent.key.keysym.scancode));
         system::CurrentScene()->event_handler().RaiseEvent(KeyReleasedEvent());
+        printf("Key up, keycode: 0x%X -- scancode: %d\n", sdlevent.key.keysym.sym, sdlevent.key.keysym.scancode);
     }
 
     void TextInputHandler(const ::SDL_Event& sdlevent) const {
-        wprintf(L"TextInput: %s\n", utf8_to_wstring(sdlevent.text.text).c_str());
+        //printf("TextInput: %s\n", sdlevent.text.text);
     }
 
     void MouseMotionHandler(const ::SDL_Event& sdlevent) const {
@@ -108,10 +114,6 @@ bool Manager::Initialize() {
     //SDL_StopTextInput();
 
     sdlevent_handler_.reset(new InputSDLEventHandler(*this));
-
-	buffer_end_ = 0;
-	for(int i = 0; i < BUFFER_SIZE; i++)
-		buffer_[i] = K_UNKNOWN;
     
     std::fill(mousestate_now_, mousestate_now_+5, false);
     std::fill(mousestate_last_, mousestate_last_+5, false);
@@ -126,8 +128,7 @@ void Manager::Release() {
 void Manager::Update() {
     int i;
     
-    // bufferiza teclado
-    keystate_old_ = keyboard_.keystate_;
+    keyboard_.keystate_previous_ = keyboard_.keystate_;
       
     // bufferiza botoes do mouse
     for(i = 0; i < 5; i++)
@@ -143,25 +144,6 @@ Vector2D Manager::GetMousePosition(void) {
 
 void Manager::ShowCursor(bool toggle) {
     SDL_ShowCursor((int) toggle);
-}
-
-bool Manager::KeyPressed(Key key) {
-    return (keyboard_.IsDown(key) && keystate_old_.count(key) == 0);
-}
-
-bool Manager::KeyReleased(Key key) {
-    return (keyboard_.IsUp(key) && keystate_old_.count(key) > 0);
-}
-
-bool Manager::CheckSequence(Key* sequence, int size) {
-	int iterator = buffer_end_ - 1;
-	for(int seq = size - 1; seq >= 0; seq--) {
-		if(iterator < 0) iterator += BUFFER_SIZE;
-		if(buffer_[iterator] != sequence[seq])
-			return false;
-		iterator--;
-	}
-	return true;
 }
 
 bool Manager::MousePressed(MouseButton button) {

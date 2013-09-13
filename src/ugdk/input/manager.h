@@ -38,28 +38,19 @@ class Manager {
     ugdk::math::Vector2D GetMousePosition(void);
     void ShowCursor(bool toggle);
     
-    bool KeyPressed(Key key);
-    bool KeyReleased(Key key);
-        
     bool MousePressed(MouseButton button);
     bool MouseReleased(MouseButton button);
     bool MouseDown(MouseButton button);
     bool MouseUp(MouseButton button);
-	bool CheckSequence(Key* sequence, int size);
 
     // Merely pointless wrappers, TODO remove these
-    bool KeyDown(Key key) { return keyboard().IsDown(key); }
-    bool KeyUp(Key key) { return keyboard().IsUp(key); }
 
   private:
     std::unique_ptr<internal::SDLEventHandler> sdlevent_handler_;
     Keyboard keyboard_;
     Mouse mouse_;
 
-    std::set<Key> keystate_old_;
     bool mousestate_now_[5], mousestate_last_[5];
-	Key buffer_[BUFFER_SIZE];
-	int buffer_end_;
     ugdk::math::Vector2D mouseposition_;
     
     void UpdateDevices();

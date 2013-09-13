@@ -8,6 +8,7 @@ namespace ugdk {
 namespace input {
 
 struct KeyPressedEvent {};
+struct KeyHeldEvent {};
 struct KeyReleasedEvent {};
 
 struct MouseMotionEvent {
