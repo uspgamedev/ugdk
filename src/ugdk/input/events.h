@@ -13,23 +13,29 @@ namespace input {
 struct KeyPressedEvent {
     Keycode keycode;
     Scancode scancode;
+    Keymod modifiers;
 
-    KeyPressedEvent(const Keycode& _keycode, const Scancode& _scancode)
-        : keycode(_keycode), scancode(_scancode) {}
+    KeyPressedEvent(const Keycode& _keycode, const Scancode& _scancode,
+                    const Keymod& _modifiers)
+        : keycode(_keycode), scancode(_scancode), modifiers(_modifiers) {}
 };
 struct KeyHeldEvent {
     Keycode keycode;
     Scancode scancode;
+    Keymod modifiers;
     
-    KeyHeldEvent(const Keycode& _keycode, const Scancode& _scancode)
-        : keycode(_keycode), scancode(_scancode) {}
+    KeyHeldEvent(const Keycode& _keycode, const Scancode& _scancode,
+                    const Keymod& _modifiers)
+        : keycode(_keycode), scancode(_scancode), modifiers(_modifiers) {}
 };
 struct KeyReleasedEvent {
     Keycode keycode;
     Scancode scancode;
+    Keymod modifiers;
     
-    KeyReleasedEvent(const Keycode& _keycode, const Scancode& _scancode)
-        : keycode(_keycode), scancode(_scancode) {}
+    KeyReleasedEvent(const Keycode& _keycode, const Scancode& _scancode,
+                    const Keymod& _modifiers)
+        : keycode(_keycode), scancode(_scancode), modifiers(_modifiers) {}
 };
 
 struct MouseMotionEvent {

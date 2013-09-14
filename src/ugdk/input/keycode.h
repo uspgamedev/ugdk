@@ -344,6 +344,9 @@ enum class Keymod
     MODE = 0x4000,
     RESERVED = 0x8000
 };
+inline bool operator&(const Keymod& left, const Keymod& right) {
+    return (static_cast<int>(left) & static_cast<int>(right)) != 0;
+}
 
 } // namespace input
 } // namespace ugdk

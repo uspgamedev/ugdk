@@ -18,15 +18,29 @@ struct ITaskFactory { virtual ~ITaskFactory() {} };
 template <class Event>
 class TaskFactory : public ITaskFactory {
   public:
-    TaskFactory(std::function<Task (const Event& ev)> factory)
-        : factory_(factory) {}
+    template<typename EventTask>
+    TaskFactory(EventTask task)
+        : task_(task) {}
+
+    template<typename Filter>
+    void set_filter(Filter f) {
+        filter_ = f;
+    }
+
+    bool Filter(const Event& ev) {
+        return static_cast<bool>(filter_) ? filter_(ev) : true;
+    }
 
     Task Construct(const Event& ev) {
-        return factory_(ev);
+        return [this, ev](double dt) {
+            return this->task_(ev, dt);
+        };
     }
   private:
-    std::function<Task (const Event& ev)> factory_;
+    std::function<bool (const Event&, double)> task_;
+    std::function<bool (const Event&)> filter_;
 };
+
 
 class EventHandler {
   private:
@@ -47,20 +61,28 @@ class EventHandler {
     EventHandler(TaskPlayer* task_player) : task_player_(task_player) {}
     ~EventHandler() {}
 
-    template<class Event>
-    void AddListener(std::function<Task (const Event& ev)> task_factory, double priority = 0.5) {
-        event_handlers_[typeid(Event)].emplace_back(
-            new TaskFactory<Event>(task_factory),
+    template<class Event, class EventTask>
+    void AddListener(EventTask event_task, double priority = 0.5) {
+        AddListener(
+            typeid(Event),
+            new TaskFactory<Event>(event_task),
             priority);
     }
 
+    void AddListener(const std::type_index& type, ITaskFactory* factory, double priority) {
+        event_handlers_[type].emplace_back(factory, priority);
+    }
+
     template<class Event>
-    void RaiseEvent(const Event& ev) {
-        for(const EventAdapter& handler : event_handlers_[typeid(Event)]) {
-            auto specific_factory = dynamic_cast<TaskFactory<Event>*>(handler.factory());
-            assert(specific_factory);
-            task_player_->AddTask(specific_factory->Construct(ev), handler.priority());
-        }
+    void RaiseEvent(const Event& ev) const {
+        auto handlers = event_handlers_.find(typeid(Event));
+        if(handlers != event_handlers_.end())
+            for(const EventAdapter& handler : handlers->second) {
+                auto specific_factory = dynamic_cast<TaskFactory<Event>*>(handler.factory());
+                assert(specific_factory);
+                if(specific_factory->Filter(ev))
+                    task_player_->AddTask(specific_factory->Construct(ev), handler.priority());
+            }
     }
 
   private:
