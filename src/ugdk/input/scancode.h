@@ -42,7 +42,6 @@ namespace input {
  *  The values in this enumeration are based on the USB usage page standard:
  *  http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf
  */
-#ifndef SWIG
 enum class Scancode
 {
     UNKNOWN = 0,
@@ -399,10 +398,6 @@ enum class Scancode
     SDL_NUM_SCANCODES = 512 /**< not a key, just marks the number of scancodes
                                  for array bounds */
 };
-#else
-struct Scancode {};
-#endif
-
 
 } // namespace input
 } // namespace ugdk

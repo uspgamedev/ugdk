@@ -6,6 +6,7 @@
 #include <map>
 
 #include <ugdk/math/vector2D.h>
+#include <ugdk/math/integer2D.h>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
@@ -15,7 +16,6 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/input.h>
-#include <ugdk/input/keys.h>
 #include <pyramidworks/collision.h>
 
 namespace ugdk {
@@ -67,7 +67,7 @@ class Menu: public action::Entity {
     graphic::Node* node_;
     graphic::Node* option_node_[2];
     action::Scene* owner_scene_;
-    ugdk::math::Vector2D last_mouse_position_;
+    math::Integer2D last_mouse_position_;
     UIElement* focused_element_;
     std::list< UIElement* > uielements_;
     ObjectTree* objects_tree_;

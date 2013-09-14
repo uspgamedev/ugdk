@@ -15,8 +15,14 @@
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %include <ugdk/internal.h>
  
-%include <ugdk/input/scancode.h>
-%include <ugdk/input/keycode.h>
+namespace ugdk {
+namespace input {
+struct Scancode {};
+struct Keycode {};
+struct Keymod {};
+struct MouseButton {};
+}
+}
 %include <ugdk/input/keyboard.h>
 %include <ugdk/input/mouse.h>
 %include <ugdk/input/manager.h>

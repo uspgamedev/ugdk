@@ -60,20 +60,15 @@ public:
     }
 
     void MouseMotionHandler(const ::SDL_Event& sdlevent) const {
-        manager_.mouse_.position_.x = sdlevent.motion.x;
-        manager_.mouse_.position_.y = sdlevent.motion.y;
-        system::CurrentScene()->event_handler().RaiseEvent(MouseMotionEvent(
-            manager_.mouse_,
-            math::Integer2D(sdlevent.motion.xrel, sdlevent.motion.yrel)
-        ));
+        manager_.mouse_.event_handler()->Handle(sdlevent);
     }
 
     void MouseButtonDownHandler(const ::SDL_Event& sdlevent) const {
-        system::CurrentScene()->event_handler().RaiseEvent(MouseButtonPressedEvent());
+        manager_.mouse_.event_handler()->Handle(sdlevent);
     }
 
     void MouseButtonUpHandler(const ::SDL_Event& sdlevent) const {
-        system::CurrentScene()->event_handler().RaiseEvent(MouseButtonReleasedEvent());
+        manager_.mouse_.event_handler()->Handle(sdlevent);
     }
 
   private:
@@ -110,11 +105,11 @@ bool Manager::Initialize() {
     return true;
 }
 
-void Manager::Release() {
-}
+void Manager::Release() {}
 
 void Manager::Update() {
     keyboard_.keystate_previous_ = keyboard_.keystate_;
+    mouse_.state_previous_ = mouse_.state_;
 }
 
 void Manager::ShowCursor(bool toggle) {

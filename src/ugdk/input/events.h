@@ -32,11 +32,10 @@ struct KeyReleasedEvent {
 };
 
 struct MouseMotionEvent {
-    const Mouse& mouse;
     math::Integer2D motion;
     
-    MouseMotionEvent(const Mouse& _mouse, const math::Integer2D& _motion)
-        : mouse(_mouse), motion(_motion) {}
+    MouseMotionEvent(const math::Integer2D& _motion)
+        : motion(_motion) {}
 };
 struct MouseButtonPressedEvent {};
 struct MouseButtonReleasedEvent {};

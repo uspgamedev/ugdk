@@ -88,7 +88,9 @@ SET(UGDK_SRC
     src/ugdk/input/manager.h 
     src/ugdk/input/module.cc 
     src/ugdk/input/module.h 
+    src/ugdk/input/mouse.cc 
     src/ugdk/input/mouse.h 
+    src/ugdk/input/mousebutton.h 
     src/ugdk/input/scancode.h 
     src/ugdk/internal.h 
     src/ugdk/internal/sdleventhandler.h 
