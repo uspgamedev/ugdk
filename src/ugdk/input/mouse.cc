@@ -38,14 +38,16 @@ class MouseInputSDLEventHandler : public internal::SDLEventHandler {
     }
 
     void MouseButtonDownHandler(const ::SDL_Event& sdlevent) const {
-        system::CurrentScene()->event_handler().RaiseEvent(MouseButtonPressedEvent());
-        mouse_.state_.insert(MouseButton(sdlevent.button.button-1));
+        MouseButton button = static_cast<MouseButton>(sdlevent.button.button-1);
+        system::CurrentScene()->event_handler().RaiseEvent(MouseButtonPressedEvent(button));
+        mouse_.state_.insert(button);
         printf("mouse down!");
     }
 
     void MouseButtonUpHandler(const ::SDL_Event& sdlevent) const {
-        system::CurrentScene()->event_handler().RaiseEvent(MouseButtonReleasedEvent());
-        mouse_.state_.erase(MouseButton(sdlevent.button.button-1));
+        MouseButton button = static_cast<MouseButton>(sdlevent.button.button-1);
+        system::CurrentScene()->event_handler().RaiseEvent(MouseButtonReleasedEvent(button));
+        mouse_.state_.erase(button);
     }
 
 
@@ -71,6 +73,10 @@ bool Mouse::IsPressed(const MouseButton& button) const {
 }
 bool Mouse::IsReleased(const MouseButton& button) const {
     return IsUp(button) && state_previous_.count(button) > 0;
+}
+
+const internal::SDLEventHandler* Mouse::event_handler() {
+    return event_handler_.get();
 }
 
 } // namespace input

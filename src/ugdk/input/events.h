@@ -4,6 +4,7 @@
 #include <ugdk/input.h>
 #include <ugdk/input/keycode.h>
 #include <ugdk/input/scancode.h>
+#include <ugdk/input/mousebutton.h>
 #include <ugdk/math/integer2D.h>
 
 namespace ugdk {
@@ -37,8 +38,18 @@ struct MouseMotionEvent {
     MouseMotionEvent(const math::Integer2D& _motion)
         : motion(_motion) {}
 };
-struct MouseButtonPressedEvent {};
-struct MouseButtonReleasedEvent {};
+struct MouseButtonPressedEvent {
+    MouseButton button;
+
+    MouseButtonPressedEvent(const MouseButton& _button)
+        : button(_button) {}
+};
+struct MouseButtonReleasedEvent {
+    MouseButton button;
+
+    MouseButtonReleasedEvent(const MouseButton& _button)
+        : button(_button) {}
+};
 
 } // namespace input
 } // namespace ugdk

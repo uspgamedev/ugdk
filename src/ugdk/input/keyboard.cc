@@ -79,6 +79,10 @@ bool Keyboard::IsReleased(const Scancode& scancode) const {
 bool Keyboard::IsReleased(const Keycode& keycode) const {
     return IsReleased(CreateScancodeFromKeycode(keycode));
 }
+    
+const internal::SDLEventHandler* Keyboard::event_handler() {
+    return event_handler_.get();
+}
 
 } // namespace input
 } // namespace ugdk
