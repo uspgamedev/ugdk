@@ -20,35 +20,32 @@ Scene::Scene()
   , stops_previous_music_(true)
   , event_handler_(this)
 {
-    AddTask([&](double dt) {
+    AddTask(system::Task([&](double dt) {
         media_manager_.Update(dt);
-    }, 0.4);
+    }, 0.4));
 
     // Update entities
-    AddTask([&](double dt) {  
+    AddTask(system::Task([&](double dt) {  
         for(auto it : entities_) it->Update(dt);
-        return true;
-    }, 0.5);
+    }, 0.5));
 
     // Remove to be deleted entities
-    AddTask([&](double dt) {  
+    AddTask(system::Task([&](double dt) {  
         entities_.remove_if([](Entity* e){ 
             bool is_dead = e->to_be_removed();
             if (is_dead) delete e;
             return is_dead;
         });
-        return true;
-    }, 0.9);
+    }, 0.9));
 
     // Flush add queue
-    AddTask([&](double dt) {  
+    AddTask(system::Task([&](double dt) {  
         while(!queued_entities_.empty()) {
             Entity* e = queued_entities_.front();
             this->AddEntity(e);
             queued_entities_.pop();
         }
-        return true;
-    }, 1.0);
+    }, 1.0));
 }
 
 Scene::~Scene() {

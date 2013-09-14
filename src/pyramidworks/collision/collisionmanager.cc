@@ -2,6 +2,7 @@
 
 #include "pyramidworks/collision/collisionclass.h"
 #include "pyramidworks/collision/collisionobject.h"
+#include <ugdk/system/task.h>
 
 namespace pyramidworks {
 namespace collision {
@@ -28,15 +29,15 @@ void CollisionManager::ChangeClassParent(const std::string &name, const std::str
     colclass.ChangeParent(&Find(parent));
 }
 
-ugdk::system::Task CollisionManager::GenerateHandleCollisionTask() {
-    return [this](double) -> bool {
+ugdk::system::Task CollisionManager::GenerateHandleCollisionTask(double priority) {
+    return ugdk::system::Task([this](double) -> bool {
         std::list<CollisionInstance> collision_list;
         for (const CollisionObject* obj : this->active_objects_)
             obj->SearchCollisions(collision_list);
         for(const CollisionInstance& it : collision_list)
             it.first(it.second);
         return true;
-    };
+    }, priority);
 }
 
 } // namespace collision

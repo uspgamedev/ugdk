@@ -9,8 +9,7 @@ namespace system {
 struct Configuration;
 class EventHandler;
 class TaskPlayer;
-
-typedef std::function<bool (double)> Task;
+class Task;
 
 }  // namespace system
 }  // namespace ugdk

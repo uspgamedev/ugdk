@@ -16,6 +16,8 @@
 #include <ugdk/structure/types.h>
 #include <ugdk/system/configuration.h>
 #include <ugdk/system/engine.h>
+#include <ugdk/system/task.h>
+#include <ugdk/system/taskplayer.h>
 
 //#include <ugdk/action/animationset.h>
 #include <ugdk/graphic/texture.h>
@@ -38,16 +40,19 @@
 
 proxy_class(ugdk::action::Scene)
 
+%include <ugdk/system.h>
 %include <ugdk/structure/types.h>
 %include <ugdk/system/configuration.h>
 %include <ugdk/system/engine.h>
+%include <ugdk/system/taskplayer.h>
 
 namespace ugdk {
 	export_class(Color)
 
 namespace system {
 	export_class(Configuration)
-}
+	export_class(TaskPlayer)
+} 
 }
  
 confirm_exports(ugdk_system)

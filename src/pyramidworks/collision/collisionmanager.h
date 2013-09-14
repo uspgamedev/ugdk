@@ -37,7 +37,7 @@ class CollisionManager : public ugdk::util::Uncopyable {
     const std::set<const CollisionObject*>& active_objects() const { return active_objects_; }
 
     /// Warning: this task depends on resources from this object. Do not use it after this object is destroyed.
-    ugdk::system::Task GenerateHandleCollisionTask();
+    ugdk::system::Task GenerateHandleCollisionTask(double priority);
     
   private:
     const ugdk::structure::Box<2> tree_bounding_box_;

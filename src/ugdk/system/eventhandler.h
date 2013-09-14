@@ -81,7 +81,7 @@ class EventHandler {
                 auto specific_factory = dynamic_cast<TaskFactory<Event>*>(handler.factory());
                 assert(specific_factory);
                 if(specific_factory->Filter(ev))
-                    task_player_->AddTask(specific_factory->Construct(ev), handler.priority());
+                    task_player_->AddTask(specific_factory->Construct(ev));
             }
     }
 
