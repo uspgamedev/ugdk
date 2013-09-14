@@ -81,11 +81,14 @@ SET(UGDK_SRC
     src/ugdk/input.h 
     src/ugdk/input/events.h 
     src/ugdk/input/keyboard.h 
-    src/ugdk/input/keys.h 
+    src/ugdk/input/keycode.cc 
+    src/ugdk/input/keycode.h 
     src/ugdk/input/manager.cc 
     src/ugdk/input/manager.h 
     src/ugdk/input/module.cc 
     src/ugdk/input/module.h 
+    src/ugdk/input/mouse.h 
+    src/ugdk/input/scancode.h 
     src/ugdk/internal.h 
     src/ugdk/internal/sdleventhandler.h 
     src/ugdk/math.h 
