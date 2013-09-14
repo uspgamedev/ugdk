@@ -4,7 +4,6 @@
 
 %{
 
-#include <ugdk/input/keys.h>
 #include <ugdk/input/keyboard.h>
 #include <ugdk/input/mouse.h>
 #include <ugdk/input/manager.h>
@@ -14,11 +13,10 @@
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 %import(module="ugdk_system") <ugdk/structure/types.h>
-%import(module="ugdk_internal") <ugdk/internal.h>
+%include <ugdk/internal.h>
 
-%newobject ugdk::input::Manager::GetMousePosition();
-
-%include <ugdk/input/keys.h>
+%include <ugdk/input/scancode.h>
+%include <ugdk/input/keycode.h>
 %include <ugdk/input/keyboard.h>
 %include <ugdk/input/mouse.h>
 %include <ugdk/input/manager.h>
@@ -26,11 +24,9 @@
 
 namespace ugdk {
 namespace input {
-    export_class(Key)
-    export_class(MouseButton)
     export_class(Manager)
-	 export_class(Keyboard)
-	 export_class(Mouse)
+    export_class(Keyboard)
+    export_class(Mouse)
 }
 }
  

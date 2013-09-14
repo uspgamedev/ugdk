@@ -2,14 +2,34 @@
 #define UGDK_INPUT_EVENTS_H_
 
 #include <ugdk/input.h>
+#include <ugdk/input/keycode.h>
+#include <ugdk/input/scancode.h>
 #include <ugdk/math/integer2D.h>
 
 namespace ugdk {
 namespace input {
 
-struct KeyPressedEvent {};
-struct KeyHeldEvent {};
-struct KeyReleasedEvent {};
+struct KeyPressedEvent {
+    Keycode keycode;
+    Scancode scancode;
+
+    KeyPressedEvent(const Keycode& _keycode, const Scancode& _scancode)
+        : keycode(_keycode), scancode(_scancode) {}
+};
+struct KeyHeldEvent {
+    Keycode keycode;
+    Scancode scancode;
+    
+    KeyHeldEvent(const Keycode& _keycode, const Scancode& _scancode)
+        : keycode(_keycode), scancode(_scancode) {}
+};
+struct KeyReleasedEvent {
+    Keycode keycode;
+    Scancode scancode;
+    
+    KeyReleasedEvent(const Keycode& _keycode, const Scancode& _scancode)
+        : keycode(_keycode), scancode(_scancode) {}
+};
 
 struct MouseMotionEvent {
     const Mouse& mouse;

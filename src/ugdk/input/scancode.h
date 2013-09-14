@@ -23,13 +23,14 @@
 */
 
 /**
- *  \file SDL_scancode.h
- *
  *  Defines keyboard scancodes.
  */
 
 #ifndef UGDK_INPUT_SCANCODE_H_
 #define UGDK_INPUT_SCANCODE_H_
+
+namespace ugdk {
+namespace input {
 
 /**
  *  \brief The SDL keyboard scancode representation.
@@ -41,6 +42,7 @@
  *  The values in this enumeration are based on the USB usage page standard:
  *  http://www.usb.org/developers/devclass_docs/Hut1_12v2.pdf
  */
+#ifndef SWIG
 enum class Scancode
 {
     UNKNOWN = 0,
@@ -245,7 +247,7 @@ enum class Scancode
 /*     LOCKINGNUMLOCK = 131, */
 /*     LOCKINGSCROLLLOCK = 132, */
     NUMPAD_COMMA = 133,
-    NUMPADEQUALSAS400 = 134,
+    NUMPAD_EQUALSAS400 = 134,
 
     INTERNATIONAL1 = 135, /**< used on Asian keyboards, see
                                footnotes in USB doc */
@@ -397,5 +399,12 @@ enum class Scancode
     SDL_NUM_SCANCODES = 512 /**< not a key, just marks the number of scancodes
                                  for array bounds */
 };
+#else
+struct Scancode {};
+#endif
+
+
+} // namespace input
+} // namespace ugdk
 
 #endif // UGDK_INPUT_SCANCODE_H_

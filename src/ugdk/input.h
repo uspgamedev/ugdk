@@ -7,6 +7,8 @@ namespace input {
 class Manager;
 class Keyboard;
 class Mouse;
+enum class Keycode;
+enum class Scancode;
 
 }  // namespace input
 }  // namespace ugdk

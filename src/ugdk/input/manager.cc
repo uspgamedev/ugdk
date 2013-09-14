@@ -18,7 +18,6 @@ namespace input {
 
 using math::Vector2D;
 
-
 #define CALL_MEMBER_FN(object,ptrToMember)  ((object).*(ptrToMember))
 
 class InputSDLEventHandler;
@@ -51,15 +50,18 @@ public:
     void KeyDownHandler(const ::SDL_Event& sdlevent) const {
         manager_.keyboard_.keystate_.insert(Scancode(sdlevent.key.keysym.scancode));
         if(sdlevent.key.repeat == 0)
-            system::CurrentScene()->event_handler().RaiseEvent(KeyPressedEvent());
+            system::CurrentScene()->event_handler().RaiseEvent(
+                KeyPressedEvent(Keycode(sdlevent.key.keysym.sym), Scancode(sdlevent.key.keysym.scancode)));
         else
-            system::CurrentScene()->event_handler().RaiseEvent(KeyHeldEvent());
+            system::CurrentScene()->event_handler().RaiseEvent(
+                KeyHeldEvent(Keycode(sdlevent.key.keysym.sym), Scancode(sdlevent.key.keysym.scancode)));
         printf("Key down, keycode: 0x%X -- scancode: %d -- repeat: %d\n", sdlevent.key.keysym.sym, sdlevent.key.keysym.scancode, sdlevent.key.repeat);
     }
     
     void KeyUpHandler(const ::SDL_Event& sdlevent) const {
         manager_.keyboard_.keystate_.erase(Scancode(sdlevent.key.keysym.scancode));
-        system::CurrentScene()->event_handler().RaiseEvent(KeyReleasedEvent());
+        system::CurrentScene()->event_handler().RaiseEvent(
+                KeyReleasedEvent(Keycode(sdlevent.key.keysym.sym), Scancode(sdlevent.key.keysym.scancode)));
         printf("Key up, keycode: 0x%X -- scancode: %d\n", sdlevent.key.keysym.sym, sdlevent.key.keysym.scancode);
     }
 
@@ -114,11 +116,7 @@ bool Manager::Initialize() {
     //SDL_StopTextInput();
 
     sdlevent_handler_.reset(new InputSDLEventHandler(*this));
-    
-    std::fill(mousestate_now_, mousestate_now_+5, false);
-    std::fill(mousestate_last_, mousestate_last_+5, false);
-    
-    Update();
+
     return true;
 }
 
@@ -126,52 +124,11 @@ void Manager::Release() {
 }
 
 void Manager::Update() {
-    int i;
-    
     keyboard_.keystate_previous_ = keyboard_.keystate_;
-      
-    // bufferiza botoes do mouse
-    for(i = 0; i < 5; i++)
-      mousestate_last_[i] = mousestate_now_[i];
-      
-    // atualiza dispositivos
-    UpdateDevices();
-}
-
-Vector2D Manager::GetMousePosition(void) {
-    return Vector2D(mouse_.position());
 }
 
 void Manager::ShowCursor(bool toggle) {
     SDL_ShowCursor((int) toggle);
-}
-
-bool Manager::MousePressed(MouseButton button) {
-  return (mousestate_now_[button] && !mousestate_last_[button]);
-}
-
-bool Manager::MouseReleased(MouseButton button) {
-    return (!mousestate_now_[button] && mousestate_last_[button]);
-}
-
-bool Manager::MouseDown(MouseButton button) {
-    return mousestate_now_[button];
-}
-
-bool Manager::MouseUp(MouseButton button) {
-    return !mousestate_now_[button];
-}
-
-void Manager::UpdateDevices() {
-    int i;
-    
-    // atualiza mouse
-    for(i = 0; i < 5; i++) {
-        if(SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(i))
-            mousestate_now_[i] = true;
-        else
-            mousestate_now_[i] = false;
-    }
 }
 
 }  // namespace input
