@@ -80,6 +80,7 @@ SET(UGDK_SRC
     src/ugdk/graphic/visualeffect.h 
     src/ugdk/input.h 
     src/ugdk/input/events.h 
+    src/ugdk/input/keyboard.cc 
     src/ugdk/input/keyboard.h 
     src/ugdk/input/keycode.cc 
     src/ugdk/input/keycode.h 
