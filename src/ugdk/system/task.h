@@ -31,19 +31,19 @@ class Task {
         }
     };
 
-    template<>
-    struct CallableAdapter<void> {
-        template<typename Callable>
-        static void Set(std::function<bool (double)>& function, Callable c) {
-            function = [c](double dt) {
-                c(dt);
-                return true;
-            };
-        }
-    };
-
     double priority_;
     std::function<bool (double)> function_;
+};
+
+template<>
+struct Task::CallableAdapter<void> {
+    template<typename Callable>
+    static void Set(std::function<bool (double)>& function, Callable c) {
+        function = [c](double dt) {
+            c(dt);
+            return true;
+        };
+    }
 };
 
 } // namespace action */
