@@ -20,11 +20,13 @@ class Mouse {
     bool IsPressed(const MouseButton&) const;
     bool IsReleased(const MouseButton&) const;
 
-    const internal::SDLEventHandler* event_handler();
 
   private:
     Mouse();
     ~Mouse();
+    
+    void Update();
+    const internal::SDLEventHandler* event_handler();
 
     std::unique_ptr<internal::SDLEventHandler> event_handler_;
     math::Integer2D position_;

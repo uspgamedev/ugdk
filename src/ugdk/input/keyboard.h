@@ -22,11 +22,12 @@ class Keyboard {
     bool IsReleased(const Scancode& scancode) const;
     bool IsReleased(const Keycode& keycode) const;
 
-    const internal::SDLEventHandler* event_handler();
-
   private:
     Keyboard();
     ~Keyboard();
+
+    void Update();
+    const internal::SDLEventHandler* event_handler();
 
     std::unique_ptr<internal::SDLEventHandler> event_handler_;
     std::set<Scancode> keystate_, keystate_previous_;

@@ -93,6 +93,7 @@ SET(UGDK_SRC
     src/ugdk/input/mousebutton.h 
     src/ugdk/input/scancode.h 
     src/ugdk/internal.h 
+    src/ugdk/internal/sdleventdelegatorhandler.h 
     src/ugdk/internal/sdleventhandler.h 
     src/ugdk/math.h 
     src/ugdk/math/frame.cc 
@@ -131,6 +132,7 @@ SET(UGDK_SRC
     src/ugdk/system/engine.cc 
     src/ugdk/system/engine.h 
     src/ugdk/system/eventhandler.h 
+    src/ugdk/system/task.h 
     src/ugdk/system/taskplayer.cc 
     src/ugdk/system/taskplayer.h 
     src/ugdk/time.h 

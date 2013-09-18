@@ -56,6 +56,12 @@ struct MouseButtonReleasedEvent {
     MouseButtonReleasedEvent(const MouseButton& _button)
         : button(_button) {}
 };
+struct MouseWheelEvent {
+    math::Integer2D scroll;
+
+    MouseWheelEvent(const math::Integer2D& _scroll)
+        : scroll(_scroll) {}
+};
 
 } // namespace input
 } // namespace ugdk

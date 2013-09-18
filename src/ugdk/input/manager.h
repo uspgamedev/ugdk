@@ -2,17 +2,13 @@
 #define UGDK_INPUT_MANAGER_H_
 
 #include <ugdk/internal.h>
-#include <ugdk/math/vector2D.h>
 #include <ugdk/input/keyboard.h>
 #include <ugdk/input/mouse.h>
 
-#include <set>
 #include <memory>
 
 namespace ugdk {
 namespace input {
-
-#define BUFFER_SIZE 32
 
 class Manager {
   public:
@@ -34,9 +30,6 @@ class Manager {
     const Mouse& mouse() const { return mouse_; }
 
     void Update();
-    void ShowCursor(bool toggle);
-
-    // Merely pointless wrappers, TODO remove these
 
   private:
     std::unique_ptr<internal::SDLEventHandler> sdlevent_handler_;

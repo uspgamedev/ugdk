@@ -37,7 +37,6 @@ class KeyboardInputSDLEventHandler : public internal::SDLEventHandler {
                 Keycode(sdlevent.key.keysym.sym),
                 Scancode(sdlevent.key.keysym.scancode),
                 Keymod(sdlevent.key.keysym.mod)));
-        printf("Key down, keycode: 0x%X -- scancode: %d -- repeat: %d\n", sdlevent.key.keysym.sym, sdlevent.key.keysym.scancode, sdlevent.key.repeat);
     }
     
     void KeyUpHandler(const ::SDL_Event& sdlevent) const {
@@ -46,7 +45,6 @@ class KeyboardInputSDLEventHandler : public internal::SDLEventHandler {
                 Keycode(sdlevent.key.keysym.sym),
                 Scancode(sdlevent.key.keysym.scancode),
                 Keymod(sdlevent.key.keysym.mod)));
-        printf("Key up, keycode: 0x%X -- scancode: %d\n", sdlevent.key.keysym.sym, sdlevent.key.keysym.scancode);
     }
 
 
@@ -55,10 +53,6 @@ class KeyboardInputSDLEventHandler : public internal::SDLEventHandler {
 
     Keyboard& keyboard_;
 };
-
-Keyboard::Keyboard() : event_handler_(new KeyboardInputSDLEventHandler(*this)) {}
-
-Keyboard::~Keyboard() {}
 
 bool Keyboard::IsDown(const Scancode& scancode) const {
     return keystate_.count(scancode) > 0;
@@ -86,6 +80,14 @@ bool Keyboard::IsReleased(const Keycode& keycode) const {
     return IsReleased(CreateScancodeFromKeycode(keycode));
 }
     
+Keyboard::Keyboard() : event_handler_(new KeyboardInputSDLEventHandler(*this)) {}
+
+Keyboard::~Keyboard() {}
+
+void Keyboard::Update() {
+    keystate_previous_ = keystate_;
+}
+
 const internal::SDLEventHandler* Keyboard::event_handler() {
     return event_handler_.get();
 }
