@@ -178,7 +178,7 @@ class VirtualObj {
     struct function_helper<R(Args...)> {
         static std::function<R(Args...)> CreateFunction(const VirtualObj& data) {
             return [data](Args... args) -> R {
-                return data.Call(args...).value<R>(false);
+                return data.Call(args...).template value<R>(false);
             };
         }
     };
