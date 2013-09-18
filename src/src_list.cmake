@@ -79,11 +79,22 @@ SET(UGDK_SRC
     src/ugdk/graphic/texture.h 
     src/ugdk/graphic/visualeffect.h 
     src/ugdk/input.h 
-    src/ugdk/input/keys.h 
+    src/ugdk/input/events.h 
+    src/ugdk/input/keyboard.cc 
+    src/ugdk/input/keyboard.h 
+    src/ugdk/input/keycode.cc 
+    src/ugdk/input/keycode.h 
     src/ugdk/input/manager.cc 
     src/ugdk/input/manager.h 
     src/ugdk/input/module.cc 
     src/ugdk/input/module.h 
+    src/ugdk/input/mouse.cc 
+    src/ugdk/input/mouse.h 
+    src/ugdk/input/mousebutton.h 
+    src/ugdk/input/scancode.h 
+    src/ugdk/internal.h 
+    src/ugdk/internal/sdleventdelegatorhandler.h 
+    src/ugdk/internal/sdleventhandler.h 
     src/ugdk/math.h 
     src/ugdk/math/frame.cc 
     src/ugdk/math/frame.h 
@@ -121,6 +132,7 @@ SET(UGDK_SRC
     src/ugdk/system/engine.cc 
     src/ugdk/system/engine.h 
     src/ugdk/system/eventhandler.h 
+    src/ugdk/system/task.h 
     src/ugdk/system/taskplayer.cc 
     src/ugdk/system/taskplayer.h 
     src/ugdk/time.h 

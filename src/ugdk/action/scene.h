@@ -1,15 +1,18 @@
 #ifndef UGDK_ACTION_SCENE_H_
 #define UGDK_ACTION_SCENE_H_
 
-#include <functional>
-#include <list>
-#include <queue>
+#include <ugdk/action/mediamanager.h>
+#include <ugdk/structure/types.h>
+#include <ugdk/system/taskplayer.h>
+#include <ugdk/system/eventhandler.h>
+
 #include <ugdk/action.h>
 #include <ugdk/audio.h>
 #include <ugdk/graphic.h>
-#include <ugdk/structure/types.h>
-#include <ugdk/action/mediamanager.h>
-#include <ugdk/system/taskplayer.h>
+
+#include <functional>
+#include <list>
+#include <queue>
 
 namespace ugdk {
 namespace action {
@@ -73,6 +76,9 @@ class Scene : public system::TaskPlayer {
           MediaManager& media_manager()       { return media_manager_; }
     const MediaManager& media_manager() const { return media_manager_; }
 
+          system::EventHandler& event_handler()       { return event_handler_; }
+    const system::EventHandler& event_handler() const { return event_handler_; }
+
     audio::Music* background_music() const { return background_music_; }
     void set_background_music(audio::Music* music) { background_music_ = music; }
     /**@}
@@ -112,6 +118,8 @@ class Scene : public system::TaskPlayer {
 
     /// A MediaManager provided for users.
     MediaManager media_manager_;
+
+    system::EventHandler event_handler_;
 
     std::list<Entity*> entities_;
     std::queue<Entity*> queued_entities_;

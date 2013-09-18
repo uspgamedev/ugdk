@@ -6,6 +6,7 @@
 #include <map>
 
 #include <ugdk/math/vector2D.h>
+#include <ugdk/math/integer2D.h>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
@@ -15,7 +16,6 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/input.h>
-#include <ugdk/input/keys.h>
 #include <pyramidworks/collision.h>
 
 namespace ugdk {
@@ -23,7 +23,7 @@ namespace ui {
 //typedef std::list<const UIElement *> UICollisionList;
     
 typedef std::function<void (Menu*)> MenuCallback;
-typedef std::map<input::Key, MenuCallback > InputCallbacks;
+typedef std::map<input::Keycode, MenuCallback > InputCallbacks;
 
 class Menu: public action::Entity {
   typedef structure::ikdtree::IntervalKDTree<UIElement*, 2> ObjectTree;
@@ -36,9 +36,8 @@ class Menu: public action::Entity {
 
     std::vector<UIElement *>* GetMouseCollision();
 
-    void AddCallback(input::Key key, const MenuCallback& callback) {
-        input_callbacks_[key] = callback;
-    }
+    void AddCallback(const input::Keycode& key, const MenuCallback& callback);
+
     void SetOptionDrawable(graphic::Drawable* option_graphic, int index = 0) {
         if(!option_node_[index]) option_node_[index] = new graphic::Node;
         option_node_[index]->set_drawable(option_graphic);
@@ -68,7 +67,7 @@ class Menu: public action::Entity {
     graphic::Node* node_;
     graphic::Node* option_node_[2];
     action::Scene* owner_scene_;
-    ugdk::math::Vector2D last_mouse_position_;
+    math::Integer2D last_mouse_position_;
     UIElement* focused_element_;
     std::list< UIElement* > uielements_;
     ObjectTree* objects_tree_;

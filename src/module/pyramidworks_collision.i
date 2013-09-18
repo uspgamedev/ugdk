@@ -31,7 +31,7 @@
 %newobject pyramidworks::collision::CollisionObject::absolute_position() const;
 %newobject pyramidworks::collision::CollisionObject::CreateBoundingBox() const;
 
-%ignore pyramidworks::collision::CollisionManager::GenerateHandleCollisionTask();
+%ignore pyramidworks::collision::CollisionManager::GenerateHandleCollisionTask(double priority);
 
 proxy_class(pyramidworks::collision::CollisionLogic)
 void_class()

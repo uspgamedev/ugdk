@@ -4,8 +4,21 @@
 namespace ugdk {
 namespace input {
 
-// Managers
+#ifdef SWIG
+#define ENUMCLASS struct
+#else
+#define ENUMCLASS enum class
+#endif
+
 class Manager;
+class Keyboard;
+class Mouse;
+ENUMCLASS Keycode;
+ENUMCLASS Scancode;
+ENUMCLASS Keymod;
+ENUMCLASS MouseButton;
+
+#undef ENUMCLASS
 
 }  // namespace input
 }  // namespace ugdk

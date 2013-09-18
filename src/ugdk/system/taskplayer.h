@@ -3,24 +3,12 @@
 
 #include <list>
 #include <ugdk/system.h>
+#include <ugdk/system/task.h>
 
 namespace ugdk {
 namespace system {
 
 class TaskPlayer {
-  private:
-
-    /// Auxiliar class for AddTask.
-    template <typename Ret>
-    struct TaskAdapter {
-        template <typename T>
-        static Task Adapt(T t) {
-            return Task(t);
-        }
-    };
-    // struct TaskPlayer::TaskAdapter<void>
-    // Located after TaskPlayer definition.
-
   public:
     TaskPlayer() {}
     virtual ~TaskPlayer() {}
@@ -35,10 +23,7 @@ class TaskPlayer {
         - void return type implies in 'always true'.
     
         Priority values are commonly in the [0; 1] interval. */
-    template <typename T>
-    void AddTask(T task, double priority = 0.5) {
-        AddFunctionTask(TaskAdapter<decltype(task(0.0))>::Adapt(task), priority);
-    }
+    void AddTask(const Task& task);
 
     /// Logical update of the scene.
     /**
@@ -47,35 +32,8 @@ class TaskPlayer {
     void Update(double delta_t);
 
   private:
-    void AddFunctionTask(const Task& task, double priority);
-
-    struct OrderedTask {
-        OrderedTask(double p, const Task& t) : priority(p), task(t) {}
-
-        double priority;
-        Task task;
-
-        bool operator< (const OrderedTask& other) const { 
-            return priority < other.priority;
-        }
-    };
-    std::list<OrderedTask> tasks_;
+    std::list<Task> tasks_;
 };
-
-#ifndef SWIG // SWIG doesn't know TaskAdapter
-
-template <>
-struct TaskPlayer::TaskAdapter<void> {
-    template <typename T>
-    static Task Adapt(T t) {
-        return Task([t](double dt) -> bool {
-            t(dt);
-            return true;
-        });
-    }
-};
-
-#endif
 
 } // namespace action */
 } // namespace ugdk */

@@ -10,6 +10,8 @@
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/input/module.h>
+#include <ugdk/input/scancode.h>
+#include <ugdk/input/events.h>
 #include <ugdk/structure/intervalkdtree.h>
 
 using std::mem_fn;
@@ -28,7 +30,7 @@ public:
         input::Manager* input = input::manager();
         const InputCallbacks& callbacks = menu_->input_callbacks();
         for(InputCallbacks::const_iterator it = callbacks.begin(); it != callbacks.end(); ++it) {
-            if(input->KeyPressed(it->first))
+            if(input->keyboard().IsPressed(it->first))
                 it->second(menu_);
         }
         return true;
@@ -59,7 +61,7 @@ Menu::~Menu() {
 
 void Menu::Update(double) {
     input::Manager* input = input::manager();
-    ugdk::math::Vector2D mouse_pos = input->GetMousePosition();
+    ugdk::math::Vector2D mouse_pos = input->mouse().position();
     if((mouse_pos - last_mouse_position_).NormOne() > 10e-10) {
         std::vector<UIElement *> *intersecting_uielements = GetMouseCollision();
         if(intersecting_uielements->size() > 0)
@@ -67,12 +69,16 @@ void Menu::Update(double) {
         delete intersecting_uielements;
     }
     last_mouse_position_ = mouse_pos;
-    if(input->MouseReleased(input::M_BUTTON_LEFT))
+    if(input->mouse().IsReleased(input::MouseButton::LEFT))
         this->CheckInteraction(mouse_pos);
-    if(input->KeyReleased(input::K_DOWN))
+    if(input->keyboard().IsReleased(input::Scancode::DOWN))
         this->FocusNextElement(1);
-    if(input->KeyReleased(input::K_UP))
+    if(input->keyboard().IsReleased(input::Scancode::UP))
         this->FocusNextElement(-1);
+}
+
+void Menu::AddCallback(const input::Keycode& key, const MenuCallback& callback) {
+    input_callbacks_[key] = callback;
 }
 
 void Menu::SelectUIElement(UIElement* target) {
@@ -124,7 +130,7 @@ void Menu::FinishScene() const {
 }
 
 std::vector<UIElement *>* Menu::GetMouseCollision() {
-    ugdk::math::Vector2D mouse_pos = input::manager()->GetMousePosition();
+    math::Vector2D mouse_pos = input::manager()->mouse().position();
     std::array<double, 2> min_coords, max_coords;
     min_coords[0] = mouse_pos.x - 0.5;
     min_coords[1] = mouse_pos.y - 0.5;

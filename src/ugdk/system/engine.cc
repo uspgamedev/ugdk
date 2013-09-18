@@ -13,6 +13,7 @@
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/input/module.h>
 #include <ugdk/input/manager.h>
+#include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/resource/module.h>
 #include <ugdk/resource/manager.h>
 #include <ugdk/time/module.h>
@@ -24,6 +25,9 @@ namespace ugdk {
 namespace system {
 
 namespace {
+
+// Attributes
+
 graphic:: TextManager *        text_manager_;
       LanguageManager *    language_manager_;
 bool quit_;
@@ -31,6 +35,67 @@ std::list<action::Scene*> scene_list_;
 std::list<SceneFactory>   queued_scene_list_;
 action::Scene*            previous_focused_scene_;
 Configuration configuration_;
+
+std::vector<const internal::SDLEventHandler*> sdlevent_handlers_;
+
+void AddPendingScenes() {
+    // Insert all queued Scenes at the end of the scene list.
+    for(const SceneFactory& scene_factory : queued_scene_list_)
+        scene_list_.push_back(scene_factory());
+    queued_scene_list_.clear();
+}
+
+void DeleteFinishedScenes() {
+    std::list<action::Scene*> to_delete;
+    for(action::Scene* it : scene_list_)
+        if(it->finished())
+            to_delete.push_front(it);
+
+    for(action::Scene* it : to_delete) {
+        delete it;
+        scene_list_.remove(it);
+    }
+}
+
+void DefocusRoutine() {
+    if(!previous_focused_scene_) return;
+    // If we're adding any scenes, the current scene will lose it's focus.
+    if(previous_focused_scene_->finished() || !queued_scene_list_.empty())
+        previous_focused_scene_->DeFocus();
+}
+
+void FocusRoutine() {
+    if(previous_focused_scene_ != CurrentScene())
+        (previous_focused_scene_ = CurrentScene())->Focus();
+}
+
+void HandleSDLEvents() {
+    ::SDL_Event sdlevent;
+    while(SDL_PollEvent(&sdlevent)) {
+        bool found = false;
+        for(const internal::SDLEventHandler* handler : sdlevent_handlers_)
+            if(handler->CanHandle(sdlevent)) {
+                handler->Handle(sdlevent);
+                found = true;
+                break;
+            }
+        if(!found)
+            printf("UGDK -- Event of type 0x%X received, but no known handler.\n", sdlevent.type);
+    }
+}
+
+class SystemSDLEventHandler : public internal::SDLEventHandler {
+  public:
+    bool CanHandle(const ::SDL_Event& sdlevent) const { 
+        return sdlevent.type == SDL_QUIT;
+    }
+
+    void Handle(const ::SDL_Event&) const {
+        Quit();
+    }
+
+} system_sdlevent_handler;
+
 }
 
 graphic::TextManager *text_manager() {
@@ -70,6 +135,8 @@ bool Initialize(const Configuration& configuration) {
     if(configuration.input_enabled)
         if(!input::Initialize(new input::Manager))
             return false;
+        else
+            sdlevent_handlers_.push_back(input::manager()->sdlevent_handler());
 
     if(configuration.time_enabled)
         if(!time::Initialize(new time::Manager))
@@ -87,46 +154,13 @@ bool Initialize(const Configuration& configuration) {
         return false;
 
     scene_list_.clear();
+
+    sdlevent_handlers_.push_back(&system_sdlevent_handler);
+
     return true;
 }
 
-namespace {
-
-void AddPendingScenes() {
-    // Insert all queued Scenes at the end of the scene list.
-    for(const SceneFactory& scene_factory : queued_scene_list_)
-        scene_list_.push_back(scene_factory());
-    queued_scene_list_.clear();
-}
-
-void DeleteFinishedScenes() {
-    std::list<action::Scene*> to_delete;
-    for(action::Scene* it : scene_list_)
-        if(it->finished())
-            to_delete.push_front(it);
-
-    for(action::Scene* it : to_delete) {
-        delete it;
-        scene_list_.remove(it);
-    }
-}
-
-void DefocusRoutine() {
-    if(!previous_focused_scene_) return;
-    // If we're adding any scenes, the current scene will lose it's focus.
-    if(previous_focused_scene_->finished() || !queued_scene_list_.empty())
-        previous_focused_scene_->DeFocus();
-}
-
-void FocusRoutine() {
-    if(previous_focused_scene_ != CurrentScene())
-        (previous_focused_scene_ = CurrentScene())->Focus();
-}
-
-}
-
 void Run() {
-    SDL_Event event;
     double delta_t;
 
     previous_focused_scene_ = nullptr;
@@ -157,30 +191,7 @@ void Run() {
         if(audio::manager())
             audio::manager()->Update();
 
-        // tratamento de eventos
-        while(SDL_PollEvent(&event)) {
-            input::Key key;
-            switch(event.type) {
-                case SDL_QUIT:
-                    Quit();
-                    break;
-
-                case SDL_KEYDOWN:
-                    key = (input::Key)event.key.keysym.sym;
-                    if(input::manager())
-                        input::manager()->SimulateKeyPress(key);
-                    break;
-
-                case SDL_KEYUP:
-                    key = (input::Key)event.key.keysym.sym;
-                    if(input::manager())
-                        input::manager()->SimulateKeyRelease(key);
-                    break;
-
-                default:
-                    break;
-            }
-        }
+        HandleSDLEvents();
 
         if (!quit_) {
             for(action::Scene* it : scene_list_)
@@ -200,6 +211,8 @@ void Run() {
 
 void Release() {
     assert(quit_);
+    sdlevent_handlers_.clear();
+
     if(text_manager_) {
         text_manager_->Release();
         delete text_manager_;
