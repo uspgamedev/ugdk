@@ -36,11 +36,11 @@
 
 #define _BOM	0xfeff
 
-static int __wchar_forbitten(wchar_t sym);
+static int __wchar_forbitten(ugdk::uint32 sym);
 static int __utf8_forbitten(u_char octet);
 
 static int
-__wchar_forbitten(wchar_t sym)
+__wchar_forbitten(ugdk::uint32 sym)
 {
 
 	/* Surrogate pairs */
@@ -92,11 +92,11 @@ __utf8_forbitten(u_char octet)
  *	   function.
  */
 size_t
-utf8_to_wchar(const char *in, size_t insize, wchar_t *out, size_t outsize,
+utf8_to_ucs4(const char *in, size_t insize, ugdk::uint32 *out, size_t outsize,
     int flags)
 {
 	u_char *p, *lim;
-	wchar_t *wlim, high;
+	ugdk::uint32 *wlim, high;
 	size_t n, total, i, n_bits;
 
 	if (in == nullptr || insize == 0 || (outsize == 0 && out != nullptr))
@@ -117,22 +117,22 @@ utf8_to_wchar(const char *in, size_t insize, wchar_t *out, size_t outsize,
 		 */
 		n = 1;	/* default: 1 byte. Used when skipping bytes. */
 		if ((*p & 0x80) == 0)
-			high = (wchar_t)*p;
+			high = (ugdk::uint32)*p;
 		else if ((*p & 0xe0) == _SEQ2) {
 			n = 2;
-			high = (wchar_t)(*p & 0x1f);
+			high = (ugdk::uint32)(*p & 0x1f);
 		} else if ((*p & 0xf0) == _SEQ3) {
 			n = 3;
-			high = (wchar_t)(*p & 0x0f);
+			high = (ugdk::uint32)(*p & 0x0f);
 		} else if ((*p & 0xf8) == _SEQ4) {
 			n = 4;
-			high = (wchar_t)(*p & 0x07);
+			high = (ugdk::uint32)(*p & 0x07);
 		} else if ((*p & 0xfc) == _SEQ5) {
 			n = 5;
-			high = (wchar_t)(*p & 0x03);
+			high = (ugdk::uint32)(*p & 0x03);
 		} else if ((*p & 0xfe) == _SEQ6) {
 			n = 6;
-			high = (wchar_t)(*p & 0x01);
+			high = (ugdk::uint32)(*p & 0x01);
 		} else {
 			if ((flags & UTF8_IGNORE_ERROR) == 0)
 				return (0);
@@ -175,7 +175,7 @@ utf8_to_wchar(const char *in, size_t insize, wchar_t *out, size_t outsize,
 		*out = 0;
 		n_bits = 0;
 		for (i = 1; i < n; i++) {
-			*out |= (wchar_t)(p[n - i] & 0x3f) << n_bits;
+			*out |= (ugdk::uint32)(p[n - i] & 0x3f) << n_bits;
 			n_bits += 6;		/* 6 low bits in every byte */
 		}
 		*out |= high << n_bits;
@@ -219,17 +219,17 @@ utf8_to_wchar(const char *in, size_t insize, wchar_t *out, size_t outsize,
  *	as regular symbols.
  */
 size_t
-wchar_to_utf8(const wchar_t *in, size_t insize, char *out, size_t outsize,
+ucs4_to_utf8(const ugdk::uint32 *in, size_t insize, char *out, size_t outsize,
     int flags)
 {
-	wchar_t *w, *wlim, ch;
+	ugdk::uint32 *w, *wlim, ch;
 	u_char *p, *lim, *oc;
 	size_t total, n;
 
 	if (in == nullptr || insize == 0 || (outsize == 0 && out != nullptr))
 		return (0);
 
-	w = (wchar_t *)in;
+	w = (ugdk::uint32 *)in;
 	wlim = w + insize;
 	p = (u_char *)out;
 	lim = p + outsize;
@@ -327,16 +327,16 @@ wchar_to_utf8(const wchar_t *in, size_t insize, char *out, size_t outsize,
 	return (total);
 }
 
-std::wstring utf8_to_wstring(const std::string& utf8) {
-    std::wstring result(utf8.length(), L' ');
-    size_t final_size = utf8_to_wchar(utf8.c_str(), utf8.length(), &result[0], result.size(), 0);
+UCS4Vector utf8_to_ucs4(const std::string& utf8) {
+    UCS4Vector result(utf8.length(), 0);
+    size_t final_size = utf8_to_ucs4(utf8.c_str(), utf8.length(), &result[0], result.size(), 0);
     result.resize(final_size);
     return result;
 }
 
-std::string wstring_to_utf8(const std::wstring& wstr) {
-    size_t final_size = wchar_to_utf8(wstr.c_str(), wstr.length(), nullptr, 0, 0);
-    std::string result(final_size + 1, L' ');
-    result[wchar_to_utf8(wstr.c_str(), wstr.length(), &result[0], result.size(), 0)] = '\0';
+std::string ucs4_to_utf8(const UCS4Vector& wstr) {
+    size_t final_size = ucs4_to_utf8(&wstr[0], wstr.size(), nullptr, 0, 0);
+    std::string result(final_size, ' ');
+    ucs4_to_utf8(&wstr[0], wstr.size(), &result[0], result.size(), 0);
     return result;
 }

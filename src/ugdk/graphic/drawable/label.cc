@@ -17,15 +17,21 @@
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/font.h>
 
+#include <ugdk/util/utf8.h>
+
 namespace ugdk {
 namespace graphic {
 
 using ugdk::Color;
-using std::wstring;
 
-Label::Label(const std::wstring& message, Font *font) 
+Label::Label(const std::string& utf8_message, Font *font) 
     : font_(font), vertex_buffer_(nullptr), texture_buffer_(nullptr) {
-    this->ChangeMessage(message);
+    this->ChangeMessage(utf8_message);
+}
+
+Label::Label(const UCS4Vector& ucs4_message, Font *font) 
+    : font_(font), vertex_buffer_(nullptr), texture_buffer_(nullptr) {
+    this->ChangeMessage(ucs4_message);
 }
 
 Label::~Label() {
@@ -35,25 +41,31 @@ Label::~Label() {
     texture_buffer_ = nullptr;
 }
 
-void Label::ChangeMessage(const std::wstring& message) {
+void Label::ChangeMessage(const std::string& utf8_message) {
+    ChangeMessage(utf8_to_ucs4(utf8_message));
+}
+
+void Label::ChangeMessage(const UCS4Vector& ucs4_message) {
     delete vertex_buffer_;
     delete texture_buffer_;
-    message_ = message;
+
+    num_characters_ = ucs4_message.size();
     size_ = math::Vector2D(0, font_->height());
 
-    vertex_buffer_ = opengl::VertexBuffer::Create(message_.size() * 4 * sizeof(freetypeglxx::vec2),
+    vertex_buffer_ = opengl::VertexBuffer::Create(num_characters_ * 4 * sizeof(freetypeglxx::vec2),
                                                     GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-    texture_buffer_= opengl::VertexBuffer::Create(message_.size() * 4 * sizeof(freetypeglxx::vec2), 
+    texture_buffer_= opengl::VertexBuffer::Create(num_characters_ * 4 * sizeof(freetypeglxx::vec2), 
                                                     GL_ARRAY_BUFFER, GL_STATIC_DRAW);
 
     freetypeglxx::vec2 pen(0.0, 0.0);
     size_t buffer_offset = 0;
-    for(size_t i = 0; i < message.size(); ++i ) {
-        freetypeglxx::TextureGlyph* glyph = font_->freetype_font()->GetGlyph(message[i]);
+    for(size_t i = 0; i < ucs4_message.size(); ++i ) {
+        freetypeglxx::TextureGlyph* glyph =
+            font_->freetype_font()->GetGlyph(static_cast<wchar_t>(ucs4_message[i]));
         if(!glyph) continue;
         float kerning = 0;
         if(i > 0)
-            kerning = glyph->GetKerning( message[i-1] );
+            kerning = glyph->GetKerning(static_cast<wchar_t>( ucs4_message[i-1] ));
         pen.x += kerning;
         float x0  = pen.x + glyph->offset_x();
         float y0  = static_cast<float>(glyph->offset_y());
@@ -113,7 +125,7 @@ void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     shader_use.SendVertexBuffer(texture_buffer_, opengl::TEXTURE, 0);
 
     // Draw the triangle !
-    glDrawArrays(GL_QUADS, 0, message_.size() * 4); // 12*3 indices starting at 0 -> 12 triangles
+    glDrawArrays(GL_QUADS, 0, static_cast<GLsizei>(num_characters_ * 4)); // 12*3 indices starting at 0 -> 12 triangles
     
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
 }

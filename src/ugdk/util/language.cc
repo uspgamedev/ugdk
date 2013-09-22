@@ -15,12 +15,11 @@ namespace ugdk {
 
 using std::map;
 using std::string;
-using std::wstring;
 
 #define STRING_LENGTH 1024
 
-std::wstring LoadTextFromFile(const std::string& path) {
-    std::wstring output;
+std::string LoadTextFromFile(const std::string& path) {
+    std::string output;
     std::string fullpath = ugdk::system::ResolvePath(path);
 
     FILE *txtFile = fopen(fullpath.c_str(), "r");
@@ -29,13 +28,9 @@ std::wstring LoadTextFromFile(const std::string& path) {
     static const int MAXLINE = 1024;
 
     char buffer_utf8[MAXLINE];
-    wchar_t buffer[MAXLINE];
     // Read from the UTF-8 encoded file.
     while(fgets(buffer_utf8, MAXLINE, txtFile) != nullptr){
-        // Converting UTF-8 to wstring
-        size_t buffer_size = utf8_to_wchar(buffer_utf8, strlen(buffer_utf8), buffer, MAXLINE, 0);
-        buffer[buffer_size] = L'\0';
-        output.append(buffer);
+        output.append(buffer_utf8);
     }
     fclose(txtFile);
     return output;
@@ -111,12 +106,8 @@ static std::pair<LanguageWord*, std::string> ReadWord(char* str, bool from_file)
         std::string filepath(start + 1);
         return std::pair<LanguageWord*, std::string>(new LanguageWord(LoadTextFromFile(filepath), font), name);
     } else {
-        // Decode the UTF-8 'start + 1' into widechars.
-        wchar_t wide_buffer[STRING_LENGTH];
-        size_t buffer_size = utf8_to_wchar(start + 1, strlen(start + 1), wide_buffer, STRING_LENGTH, 0);
-        wide_buffer[buffer_size] = L'\0';
-
-        std::wstring decoded_text(wide_buffer);
+        // Store the UTF-8 'start + 1'.
+        std::string decoded_text(start + 1);
         return std::pair<LanguageWord*, std::string>(new LanguageWord(decoded_text, font), name);
     }
 }
@@ -155,16 +146,11 @@ bool Language::Load(const std::string& language_file) {
         return false;
 
     char buffer_raw[STRING_LENGTH];
-    wchar_t buffer[STRING_LENGTH];
     int reading_type = 0;
 
     while(!feof(file)) {
         // Read from the UTF-8 encoded file.
         fgets(buffer_raw, STRING_LENGTH, file);
-
-        // Converting UTF-8 to wstring
-        size_t buffer_size = utf8_to_wchar(buffer_raw, strlen(buffer_raw), buffer, STRING_LENGTH, 0);
-        buffer[buffer_size] = L'\0';
 
         if(is_blank(buffer_raw)) { // Is this line blank?
             continue;

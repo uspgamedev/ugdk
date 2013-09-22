@@ -20,10 +20,10 @@ class TextManager {
     bool Initialize();
     bool Release();
 
-    TextBox* GetText(        const std::wstring& text);
-    TextBox* GetText(        const std::wstring& text, const std::string& font, int width = -1);
-    TextBox* GetTextFromFile(const std:: string& path);
-	TextBox* GetTextFromFile(const std:: string& path, const std::string& font, int width = -1);
+    TextBox* GetText(        const std::string& text);
+    TextBox* GetText(        const std::string& text, const std::string& font, int width = -1);
+    TextBox* GetTextFromFile(const std::string& path);
+	TextBox* GetTextFromFile(const std::string& path, const std::string& font, int width = -1);
 
     Font* current_font() { return current_font_; }
     Font* GetFont(const std::string& name) {
