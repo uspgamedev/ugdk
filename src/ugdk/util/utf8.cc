@@ -330,8 +330,7 @@ wchar_to_utf8(const wchar_t *in, size_t insize, char *out, size_t outsize,
 std::wstring utf8_to_wstring(const std::string& utf8) {
     std::wstring result(utf8.length(), L' ');
     size_t final_size = utf8_to_wchar(utf8.c_str(), utf8.length(), &result[0], result.size(), 0);
-    result[final_size] = L'\0';
-    result.resize(final_size + 1);
+    result.resize(final_size);
     return result;
 }
 
