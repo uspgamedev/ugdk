@@ -41,7 +41,7 @@ class TextBox : public Drawable {
   private:
     Font* font_;
     double width_;
-    std::vector<std::unique_ptr<Label>> labels_;
+    std::vector< std::unique_ptr<Label> > labels_;
     IdentStyle ident_style_;
 
     ugdk::math::Vector2D size_;
