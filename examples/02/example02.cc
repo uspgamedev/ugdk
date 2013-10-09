@@ -1,6 +1,8 @@
 #include <ugdk/system/engine.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/input/module.h>
+#include <ugdk/input/events.h>
+#include <ugdk/input/scancode.h>
 #include <ugdk/action/entity.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/drawable/texturedrectangle.h>
@@ -20,13 +22,13 @@ class Rectangle : public action::Entity {
 
     void Update(double dt) override {
         auto manager = input::manager();
-        if(manager->KeyDown(input::K_a))
+        if(manager->keyboard().IsDown(input::Scancode::A))
             MoveLeft(dt);
-        if(manager->KeyDown(input::K_d))
+        if(manager->keyboard().IsDown(input::Scancode::D))
             MoveRight(dt);
-        if(manager->KeyDown(input::K_w))
+        if(manager->keyboard().IsDown(input::Scancode::W))
             MoveUp(dt);
-        if(manager->KeyDown(input::K_s))
+        if(manager->keyboard().IsDown(input::Scancode::S))
             MoveDown(dt);
     }
     
@@ -57,10 +59,11 @@ int main(int argc, char* argv[]) {
     action::Scene* scene = new action::Scene();
     Rectangle* r = new Rectangle;
 
-    scene->AddTask([scene](double dt) {
-        if(input::manager()->KeyDown(input::K_ESCAPE))
-            scene->Finish();
-    });
+    scene->event_handler().AddListener<input::KeyPressedEvent>(
+        [scene](const input::KeyPressedEvent& ev) {
+            if(ev.scancode == input::Scancode::ESCAPE)
+                scene->Finish();
+        });
     scene->AddEntity(r);
     scene->set_render_function([r](const graphic::Geometry& geometry, const graphic::VisualEffect& effect) {
         r->drawable()->Draw(geometry * graphic::Geometry(r->position()), effect);
