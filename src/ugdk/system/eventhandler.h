@@ -8,12 +8,13 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+#include <algorithm>
 #include <ugdk/system/taskplayer.h>
 
 namespace ugdk {
 namespace system {
 
-struct IListener { virtual ~IListener() {} };
+class IListener { public: virtual ~IListener() {} };
 
 template <class Event>
 class Listener : public IListener {
@@ -51,23 +52,46 @@ class EventHandler {
     EventHandler(TaskPlayer* task_player) : task_player_(task_player) {}
     ~EventHandler() {}
 
+    // Add listeners
+
     template<class Event, class EventTask>
-    void AddListener(EventTask event_task, double priority = 0.5) {
-        AddListener(
+    IListener* AddListener(EventTask event_task, double priority = 0.5) {
+        return AddListener(
             typeid(Event),
             new Listener<Event>(event_task, priority));
     }
 
-    void AddListener(const std::type_index& type, IListener* factory) {
-        event_handlers_[type].emplace_back(factory);
+    IListener* AddListener(const std::type_index& type, IListener* listener) {
+        event_handlers_[type].emplace_back(listener);
+        return listener;
     }
+
+    // Remove listeners
+
+    void RemoveListener(const std::type_index& type, IListener* listener) {
+        auto handlers = event_handlers_.find(type);
+        if(handlers == event_handlers_.end()) return;
+
+        handlers->second.erase(std::remove_if(handlers->second.begin(), handlers->second.end(),
+            [listener](const std::shared_ptr<IListener>& val) { return val.get() == listener; }), handlers->second.end());
+    }
+
+    template<class Event>
+    void RemoveListener(IListener* listener) {
+        RemoveListener(typeid(Event), listener);
+    }
+    
+
+    // Raising events
+
+    // Schedule (create Task)
 
     template<class Event>
     void ScheduleEvent(const Event& ev) const {
         auto handlers = event_handlers_.find(typeid(Event));
         if(handlers == event_handlers_.end()) return;
 
-        for(const std::shared_ptr<IListener>& listener : handlers->second)
+        for(const auto& listener : handlers->second)
             ScheduleEvent(ev, dynamic_cast<Listener<Event>*>(listener.get()));
     }
 
