@@ -44,6 +44,10 @@ class CollisionObject {
       * @param logic The handler called when the collision occurs. */
     void AddCollisionLogic(const std::string& colclass, const CollisionLogic& logic);
 
+    /// Removes a collision from the known collisions.
+    /** @param colclass Name of the collision class. */
+    void RemoveCollisionLogic(const std::string& colclass);
+
     /// Changes the collision class associated with this object.
     /** @param colclass The string representating the collision class to set to. */
     void ChangeCollisionClass(const std::string&);

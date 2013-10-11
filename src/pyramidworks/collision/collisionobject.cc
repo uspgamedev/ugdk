@@ -42,6 +42,10 @@ void CollisionObject::AddCollisionLogic(const std::string& colclass, const Colli
     known_collisions_[colclass] = logic;
 }
 
+void CollisionObject::RemoveCollisionLogic(const std::string& colclass) {
+    known_collisions_.erase(colclass);
+}
+
 void CollisionObject::ChangeCollisionClass(const std::string& colclass) {
     if(manager_)
         manager_->Find(collision_class_).RemoveObject(this);
@@ -75,7 +79,7 @@ void CollisionObject::MoveTo(const ugdk::math::Vector2D& position) {
 
 ugdk::structure::Box<2> CollisionObject::CreateBoundingBox() const {
     return shape_->GetBoundingBox(this->absolute_position());
-}
+}
 void CollisionObject::ChangeShape(geometry::GeometricShape* shape) { 
     shape_.reset(shape);
     if(manager_)
