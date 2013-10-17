@@ -1,8 +1,8 @@
 # Locate SDL2 library
 # This module defines
-# SDL2_LIBRARY, the name of the library to link against
+# SDL2_LIBRARIES, the name of the library to link against
 # SDL2_FOUND, if false, do not try to link to SDL2
-# SDL2_INCLUDE_DIR, where to find SDL.h
+# SDL2_INCLUDE_DIRS, where to find SDL.h
 #
 # This module responds to the the flag:
 # SDL2_BUILDING_LIBRARY
@@ -160,4 +160,10 @@ ENDIF(SDL2_LIBRARY_TEMP)
 
 INCLUDE(FindPackageHandleStandardArgs)
 
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2 REQUIRED_VARS SDL2_LIBRARY SDL2_INCLUDE_DIR) 
+set(SDL2_LIBRARIES    ${SDL2_LIBRARY})
+set(SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIR})
+
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2
+                                  REQUIRED_VARS SDL2_LIBRARIES SDL2_INCLUDE_DIRS)
+
+mark_as_advanced(SDL2_LIBRARY SDL2_INCLUDE_DIR)

@@ -5,11 +5,6 @@
 #  SDL2_MIXER_FOUND, if false, do not try to link against
 #  SDL2_MIXER_VERSION_STRING - human-readable string containing the version of SDL2_mixer
 #
-# For backward compatiblity the following variables are also set:
-#  SDL2MIXER_LIBRARY (same value as SDL2_MIXER_LIBRARIES)
-#  SDL2MIXER_INCLUDE_DIR (same value as SDL2_MIXER_INCLUDE_DIRS)
-#  SDL2MIXER_FOUND (same value as SDL2_MIXER_FOUND)
-#
 # $SDL2DIR is an environment variable that would
 # correspond to the ./configure --prefix=$SDL2DIR
 # used in building SDL2.
@@ -71,10 +66,5 @@ include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SDL2_mixer
                                   REQUIRED_VARS SDL2_MIXER_LIBRARIES SDL2_MIXER_INCLUDE_DIRS
                                   VERSION_VAR SDL2_MIXER_VERSION_STRING)
-
-# for backward compatiblity
-set(SDL2MIXER_LIBRARY ${SDL2_MIXER_LIBRARIES})
-set(SDL2MIXER_INCLUDE_DIR ${SDL2_MIXER_INCLUDE_DIRS})
-set(SDL2MIXER_FOUND ${SDL2_MIXER_FOUND})
 
 mark_as_advanced(SDL2_MIXER_LIBRARY SDL2_MIXER_INCLUDE_DIR)

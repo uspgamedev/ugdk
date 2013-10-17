@@ -14,7 +14,7 @@ set (UGDK_INSTALL_LOCATION share/ugdk)
 message ("=== UGDK version ${UGDK_VERSION} ===")
 
 IF(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
-	set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
+    set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
 ENDIF()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
@@ -23,13 +23,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Mo
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
-option(UGDK_BUILD_TESTS     "Set to ON to enable building tests." ON)
-option(UGDK_BUILD_EXAMPLES  "Set to ON to enable building examples." ON)
-option(UGDK_CREATE_BINDINGS "Set to ON to generate bindings for supported script languages." ON)
-option(UGDK_LUA_BINDINGS    "Set to ON to enable Lua as one of the languages to create bindings." ON)
-option(UGDK_PYTHON_BINDINGS "Set to ON to enable Python as one of the languages to create bindings." ON)
-option(UGDK_INTERNAL_GLEW   "Set to ON to use an internal GLEW instead of the system one." OFF)
-option(UGDK_INTERNAL_SDL2   "Set to ON to use an internal SDL2 instead of the system one." OFF)
+option(UGDK_BUILD_TESTS          "Set to ON to enable building tests." ON)
+option(UGDK_BUILD_EXAMPLES       "Set to ON to enable building examples." ON)
+option(UGDK_CREATE_BINDINGS      "Set to ON to generate bindings for supported script languages." ON)
+option(UGDK_LUA_BINDINGS         "Set to ON to enable Lua as one of the languages to create bindings." ON)
+option(UGDK_PYTHON_BINDINGS      "Set to ON to enable Python as one of the languages to create bindings." ON)
+option(UGDK_INTERNAL_GLEW        "Set to ON to use an internal GLEW instead of the system one." OFF)
+option(UGDK_INTERNAL_SDL2        "Set to ON to use an internal SDL2 instead of the system one." OFF)
+option(UGDK_INTERNAL_SDL2_IMAGE   "Set to ON to use an internal SDL2_image instead of the system one." OFF)
+option(UGDK_INTERNAL_SDL2_MIXER   "Set to ON to use an internal SDL2_mixer instead of the system one." OFF)
 
 if(NOT ${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
     # Don't polute the git repository with the generated files for out-of-source builds
@@ -83,36 +85,67 @@ if(NOT SDL2_FOUND)
     set(UGDK_INTERNAL_SDL2 ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
 endif(NOT SDL2_FOUND)
 
+find_package(SDL2_image QUIET)
+if(NOT SDL2_IMAGE_FOUND)
+    message("-- SDL2_image not found, forcing internal.")
+    set(UGDK_INTERNAL_SDL2_IMAGE ON CACHE BOOL "Set to ON to use an internal SDL2_image instead of the system one." FORCE)
+endif(NOT SDL2_IMAGE_FOUND)
+
+find_package(SDL2_mixer QUIET)
+if(NOT SDL2_MIXER_FOUND)
+    message("-- SDL2_mixer not found, forcing internal.")
+    set(UGDK_INTERNAL_SDL2_MIXER ON CACHE BOOL "Set to ON to use an internal SDL2_mixer instead of the system one." FORCE)
+endif(NOT SDL2_MIXER_FOUND)
+
+########################
+## SDL2
+########################
 if(UGDK_INTERNAL_SDL2)
     set(SDL_SHARED OFF CACHE BOOL "Build a shared version of the library")
     set(DIRECTX    OFF CACHE BOOL "Use DirectX for Windows audio/video" FORCE)
     set(RENDER_D3D OFF CACHE BOOL "Enable the Direct3D render driver" FORCE)
     add_subdirectory(externals/sdl2 externals/sdl2-build)
-    
-    include_directories(${SDL2_SOURCE_DIR}/include)
-    
-    add_subdirectory(externals/sdl2-mixer)
-    add_subdirectory(externals/sdl2-image)
-    
-    include_directories(${SDL2-mixer_SOURCE_DIR}/include)
-    include_directories(${SDL2-image_SOURCE_DIR}/include)
-    
-    # SDL-mixer must come before SDL itself, or else we may have linking errors.
-    set(UGDK_EXTERNALS_SDL_LIBRARIES SDL2-mixer;SDL2-image;SDL2-static)
-    set(UGDK_EXTERNALS_SDL_INCLUDE_DIRS ${SDL2_SOURCE_DIR}/include;${SDL2-mixer_SOURCE_DIR}/include)
-    
-else(UGDK_INTERNAL_SDL2)
-    find_package(SDL2_mixer REQUIRED)
-    find_package(SDL2_image REQUIRED)
-    
-    include_directories(${SDL2_INCLUDE_DIR})
-    include_directories(${SDL2MIXER_INCLUDE_DIR})
-    include_directories(${SDL2IMAGE_INCLUDE_DIR})
-    
-    set(UGDK_EXTERNALS_SDL_LIBRARIES ${SDL2MIXER_LIBRARY};${SDL2IMAGE_LIBRARY};${SDL2_LIBRARY})
-    set(UGDK_EXTERNALS_SDL_INCLUDE_DIRS ${SDL2_INCLUDE_DIR};${SDL2MIXER_INCLUDE_DIR})
-endif(UGDK_INTERNAL_SDL2)
 
+    set(UGDK_DEPENDENCIES_SDL2_LIBRARIES    SDL2-static)
+    set(UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS ${SDL2_SOURCE_DIR}/include)
+else(UGDK_INTERNAL_SDL2)
+    set(UGDK_DEPENDENCIES_SDL2_LIBRARIES    ${SDL2_LIBRARIES})
+    set(UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIRS})
+endif(UGDK_INTERNAL_SDL2)
+include_directories(${UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS})
+
+########################
+## SDL2_IMAGE
+########################
+if(UGDK_INTERNAL_SDL2_IMAGE)
+    add_subdirectory(externals/sdl2-image)
+    set(UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES    SDL2-image)
+    set(UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS ${SDL2-image_SOURCE_DIR}/include)
+
+else(UGDK_INTERNAL_SDL2_IMAGE)
+    set(UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES    ${SDL2_IMAGE_LIBRARIES})
+    set(UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS ${SDL2_IMAGE_INCLUDE_DIRS})
+endif(UGDK_INTERNAL_SDL2_IMAGE)
+include_directories(${UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS})
+
+########################
+## SDL2_MIXER
+########################
+if(UGDK_INTERNAL_SDL2_MIXER)
+    add_subdirectory(externals/sdl2-mixer)
+    set(UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES    SDL2-mixer)
+    set(UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS ${SDL2-mixer_SOURCE_DIR}/include)
+
+else(UGDK_INTERNAL_SDL2_MIXER)
+    set(UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES    ${SDL2_MIXER_LIBRARIES})
+    set(UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS ${SDL2_MIXER_INCLUDE_DIRS})
+endif(UGDK_INTERNAL_SDL2_MIXER)
+include_directories(${UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS})
+
+# We set the UGDK_EXTERNALS_SDL_INCLUDE_DIRS variable for users building UGDK with add_subdirectory
+set(UGDK_EXTERNALS_SDL_INCLUDE_DIRS ${UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS};${UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS})
+
+# Other libs
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIR})
 
@@ -236,11 +269,10 @@ endif ()
 
 if (MSVC) 
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
+    if (NOT MSVC_VERSION LESS 1800)
+        add_definitions(/DUGDK_USING_VARIADIC)
+    endif()
 endif ()
-
-if (NOT MSVC_VERSION LESS 1800)
-    add_definitions(/DUGDK_USING_VARIADIC)
-endif()
 
 # =============================
 add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
@@ -249,17 +281,21 @@ if (MINGW)
     set (EXTRA_LIBRARIES mingw32 ${EXTRA_LIBRARIES})
 endif (MINGW)
 if (WIN32)
-    set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES})
+    # utf8<->ucs4 conversion uses a networking function
+    set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES}) 
 endif (WIN32)
 
 
 target_link_libraries (libugdk LINK_PUBLIC
-                       ${EXTRA_LIBRARIES}
-                       ${UGDK_EXTERNALS_SDL_LIBRARIES}
-                       ${GLEW_LIBRARIES}
-                       ${OPENGL_LIBRARIES}
-                       ${FREETYPE_GLPP_LIBRARIES}
-                       ${UGDK_LIBRARIES})
+                        ${EXTRA_LIBRARIES}
+                        # SDL-mixer must come before SDL itself, or else we may have linking errors.
+                        ${UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES}
+                        ${UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES}
+                        ${UGDK_DEPENDENCIES_SDL2_LIBRARIES}
+                        ${GLEW_LIBRARIES}
+                        ${OPENGL_LIBRARIES}
+                        ${FREETYPE_GLPP_LIBRARIES}
+                        ${UGDK_LIBRARIES})
                       
 set_target_properties (libugdk PROPERTIES 
     LINK_FLAGS "${LDFLAGS}"
