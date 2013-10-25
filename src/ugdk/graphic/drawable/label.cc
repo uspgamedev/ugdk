@@ -29,7 +29,7 @@ Label::Label(const std::string& utf8_message, Font *font)
     this->ChangeMessage(utf8_message);
 }
 
-Label::Label(const UCS4Vector& ucs4_message, Font *font) 
+Label::Label(const std::u32string& ucs4_message, Font *font) 
     : font_(font), vertex_buffer_(nullptr), texture_buffer_(nullptr) {
     this->ChangeMessage(ucs4_message);
 }
@@ -45,7 +45,7 @@ void Label::ChangeMessage(const std::string& utf8_message) {
     ChangeMessage(utf8_to_ucs4(utf8_message));
 }
 
-void Label::ChangeMessage(const UCS4Vector& ucs4_message) {
+void Label::ChangeMessage(const std::u32string& ucs4_message) {
     delete vertex_buffer_;
     delete texture_buffer_;
 

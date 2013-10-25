@@ -46,8 +46,8 @@ class TextBox : public Drawable {
 
     ugdk::math::Vector2D size_;
 
-    void splitString(const UCS4Vector&, std::list<UCS4Vector>&);
-    double calculateWidth(UCS4Vector::const_iterator start, UCS4Vector::const_iterator end);
+    void splitString(const std::u32string&, std::list<std::u32string>&);
+    double calculateWidth(std::u32string::const_iterator start, std::u32string::const_iterator end);
 };
 
 }  // namespace graphic

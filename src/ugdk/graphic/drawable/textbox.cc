@@ -25,10 +25,10 @@ TextBox::~TextBox() {}
 void TextBox::ChangeMessage(const std::string& utf8_message) {
     labels_.clear();
 
-    UCS4Vector ucs4_message = utf8_to_ucs4(utf8_message);
+    std::u32string ucs4_message = utf8_to_ucs4(utf8_message);
     size_ = math::Vector2D(width_, 0.0);
 
-    std::list<UCS4Vector> split_ucs4_message;
+    std::list<std::u32string> split_ucs4_message;
     splitString(ucs4_message, split_ucs4_message);
 
     labels_.reserve(split_ucs4_message.size());
@@ -55,8 +55,8 @@ void TextBox::Draw(const Geometry& geo, const VisualEffect& eff) const {
     }
 }
     
-void TextBox::splitString(const UCS4Vector& ucs4_message, std::list<UCS4Vector>& split_ucs4_message) {
-    list<UCS4Vector> line_split;
+void TextBox::splitString(const std::u32string& ucs4_message, std::list<std::u32string>& split_ucs4_message) {
+    list<std::u32string> line_split;
     {
         auto start = ucs4_message.begin();
         for(auto it = ucs4_message.begin(); it != ucs4_message.end(); ++it) {
@@ -67,7 +67,7 @@ void TextBox::splitString(const UCS4Vector& ucs4_message, std::list<UCS4Vector>&
         }
         line_split.emplace_back(start, ucs4_message.end());
     }
-    for(list<UCS4Vector>::iterator it = line_split.begin(); it != line_split.end(); ++it) {
+    for(list<std::u32string>::iterator it = line_split.begin(); it != line_split.end(); ++it) {
         bool skip = true;
 
         auto guaranteed = std::find(it->begin(), it->end(), ' ');
@@ -92,11 +92,11 @@ void TextBox::splitString(const UCS4Vector& ucs4_message, std::list<UCS4Vector>&
     }
 }
 
-double TextBox::calculateWidth(UCS4Vector::const_iterator start, UCS4Vector::const_iterator end) {
+double TextBox::calculateWidth(std::u32string::const_iterator start, std::u32string::const_iterator end) {
     double width = 0.0;
 
     bool has_previous = false;
-    UCS4Vector::const_iterator previous;
+    std::u32string::const_iterator previous;
     for(auto step = start; step != end; previous = step++) {
         freetypeglxx::TextureGlyph* glyph = font_->freetype_font()->GetGlyph(*step);
         if(!glyph) continue;

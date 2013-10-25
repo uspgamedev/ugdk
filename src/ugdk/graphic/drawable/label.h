@@ -15,12 +15,12 @@ namespace graphic {
 class Label : public Drawable {
   public:
     Label(const std::string& utf8_message, Font* font);
-    Label(const UCS4Vector& ucs4_message, Font* font);
+    Label(const std::u32string& ucs4_message, Font* font);
     ~Label();
 
     /// This operation is slow.
     void ChangeMessage(const std::string& utf8_message);
-    void ChangeMessage(const UCS4Vector& ucs4_message);
+    void ChangeMessage(const std::u32string& ucs4_message);
 
     void Draw(const Geometry&, const VisualEffect&) const;
 

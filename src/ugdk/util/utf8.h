@@ -28,14 +28,12 @@
 #define UTF8_IGNORE_ERROR		0x01
 #define UTF8_SKIP_BOM			0x02
 
-size_t utf8_to_ucs4(const char *in, size_t insize, ugdk::uint32 *out,
+size_t utf8_to_ucs4(const char *in, size_t insize, char32_t *out,
 		    size_t outsize, int flags);
-size_t ucs4_to_utf8(const ugdk::uint32 *in, size_t insize, char *out,
+size_t ucs4_to_utf8(const char32_t *in, size_t insize, char *out,
 		    size_t outsize, int flags);
 
-typedef std::vector<ugdk::uint32> UCS4Vector;
-
-UCS4Vector utf8_to_ucs4(const std::string& utf8);
-std::string ucs4_to_utf8(const UCS4Vector& wstr);
+std::u32string utf8_to_ucs4(const std::string& utf8);
+std::string ucs4_to_utf8(const std::u32string& wstr);
 
 #endif /* !_UTF8_H_ */
