@@ -175,4 +175,8 @@ SET(UGDK_SRC
     src/ugdk/util/uncopyable.h 
     src/ugdk/util/utf8.cc 
     src/ugdk/util/utf8.h 
+    src/ugdk/window/manager.cc 
+    src/ugdk/window/manager.h 
+    src/ugdk/window/module.cc 
+    src/ugdk/window/module.h 
 )
