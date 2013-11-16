@@ -17,8 +17,13 @@ class Manager {
     void Release();
 
     std::weak_ptr<Window> CreateWindow(const WindowSettings& settings);
+    // TODO: DestroyWindow
 
+    void set_primary_window(const std::weak_ptr<Window>& window) {
+        primary_window_ = window;
+    }
     std::weak_ptr<Window> primary_window() const { return primary_window_; }
+    std::weak_ptr<Window> window(size_t index) const { return windows_[index]; }
 
   private:
     std::weak_ptr<Window> primary_window_;

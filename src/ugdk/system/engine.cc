@@ -120,8 +120,8 @@ bool Initialize(const Configuration& configuration) {
 
     language_manager_ = new       LanguageManager(configuration.default_language);
 
-    if(configuration.window_configuration) {
-        if(!desktop::Initialize(new desktop::Manager(*configuration.window_configuration)))
+    if(configuration.desktop_enabled) {
+        if(!desktop::Initialize(new desktop::Manager))
             return false;
     }
     

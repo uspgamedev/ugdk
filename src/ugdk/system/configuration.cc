@@ -9,16 +9,12 @@ Configuration::Configuration()
 
     , audio_enabled(true)
 
-    , window_configuration(nullptr)
+    , desktop_enabled(true)
 
     , input_enabled(true)
 
     , time_enabled(true)
     {}
-
-Configuration::~Configuration() {
-    delete window_configuration;
-}
 
 } // namespace system
 } // namespace ugdk

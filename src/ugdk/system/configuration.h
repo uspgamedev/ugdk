@@ -3,7 +3,6 @@
 
 #include <string>
 #include <ugdk/math/integer2D.h>
-#include <ugdk/desktop.h>
 
 namespace ugdk {
 namespace system {
@@ -13,15 +12,14 @@ struct Configuration {
     std::string default_language;
     
     bool audio_enabled;
-    
-    desktop::WindowSettings* window_configuration;
+
+    bool desktop_enabled;
 
     bool input_enabled;
 
     bool time_enabled;
 
     Configuration();
-    ~Configuration();
 };
 
 } // namespace system
