@@ -2,6 +2,8 @@
 
 #include "SDL_video.h"
 
+#include <ugdk/graphic/canvas.h>
+
 namespace ugdk {
 namespace desktop {
 
@@ -37,6 +39,9 @@ void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen) {
     // the requested resolution, but SDL_SetWindowFullscreen reports no errors in such cases.
     if(fullscreen)
         SDL_SetWindowFullscreen(sdl_window_, SDL_WINDOW_FULLSCREEN);
+
+    if(auto canvas = this->attached_canvas_.lock())
+        canvas->UpdateViewport();
 }
 
 }  // namespace desktop

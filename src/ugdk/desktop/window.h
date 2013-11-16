@@ -1,10 +1,12 @@
 #ifndef UGDK_DESKTOP_WINDOW_H_
 #define UGDK_DESKTOP_WINDOW_H_
 
-#include <string>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/desktop.h>
 #include <ugdk/graphic.h>
+
+#include <string>
+#include <memory>
 
 struct SDL_Window;
 
@@ -35,6 +37,7 @@ class Window {
     std::string title_;
     math::Integer2D size_;
     bool fullscreen_;
+    std::weak_ptr<graphic::Canvas> attached_canvas_;
 
     friend class ::ugdk::desktop::Manager;
     friend class ::ugdk::graphic::Canvas;

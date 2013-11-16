@@ -76,7 +76,12 @@ void Canvas::Resize(const math::Vector2D& size) {
 void Canvas::AttachTo(const std::weak_ptr<desktop::Window>& window_weak) {
     auto window = window_weak.lock();
     if(window) {
+        if(auto previous_window = attached_window_.lock())
+            previous_window->attached_canvas_.reset();
+
         attached_window_ = window_weak;
+        window->attached_canvas_ = this->shared_from_this();
+
         SDL_GL_MakeCurrent(window->sdl_window_, context_);
         UpdateViewport();
     }
