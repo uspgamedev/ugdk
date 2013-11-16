@@ -45,6 +45,8 @@ SET(UGDK_SRC
     src/ugdk/desktop/windowsettings.cc 
     src/ugdk/desktop/windowsettings.h 
     src/ugdk/graphic.h 
+    src/ugdk/graphic/canvas.cc 
+    src/ugdk/graphic/canvas.h 
     src/ugdk/graphic/defaultshaders.cc 
     src/ugdk/graphic/defaultshaders.h 
     src/ugdk/graphic/drawable.h 

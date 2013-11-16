@@ -4,6 +4,7 @@
 #include <string>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/desktop.h>
+#include <ugdk/graphic.h>
 
 struct SDL_Window;
 
@@ -36,6 +37,7 @@ class Window {
     bool fullscreen_;
 
     friend class ::ugdk::desktop::Manager;
+    friend class ::ugdk::graphic::Canvas;
 };
 
 }  // namespace desktop

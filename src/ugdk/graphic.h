@@ -23,6 +23,7 @@ class Light;
 class Node;
 class Texture;
 class Spritesheet;
+class Canvas;
 
 // Managers
 class TextManager;
