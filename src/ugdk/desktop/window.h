@@ -1,14 +1,14 @@
-#ifndef UGDK_WINDOW_WINDOW_H_
-#define UGDK_WINDOW_WINDOW_H_
+#ifndef UGDK_DESKTOP_WINDOW_H_
+#define UGDK_DESKTOP_WINDOW_H_
 
 #include <string>
 #include <ugdk/math/integer2D.h>
-#include <ugdk/window.h>
+#include <ugdk/desktop.h>
 
 struct SDL_Window;
 
 namespace ugdk {
-namespace window {
+namespace desktop {
 
 struct WindowSettings {
     std::string title;
@@ -61,7 +61,7 @@ class Window {
 
 };
 
-}  // namespace window
+}  // namespace desktop
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_DESKTOP_WINDOW_H_

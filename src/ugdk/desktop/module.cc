@@ -1,14 +1,14 @@
-#include <ugdk/window/module.h>
+#include <ugdk/desktop/module.h>
 
 #include "SDL.h"
 
 namespace ugdk {
-namespace window {
+namespace desktop {
 
 namespace {
 
 bool errlog(const std::string& msg) {
-    fprintf(stderr, "ugdk::window::Manager Error Log - %s\n", msg.c_str());
+    fprintf(stderr, "ugdk::desktop::Manager Error Log - %s\n", msg.c_str());
     return false;
 }
 
@@ -47,5 +47,5 @@ Manager* manager() {
     return reference_;
 }
 
-} // namespace window
+} // namespace desktop
 } // namespace ugdk

@@ -3,7 +3,7 @@
 
 #include <string>
 #include <ugdk/math/integer2D.h>
-#include <ugdk/window.h>
+#include <ugdk/desktop.h>
 
 namespace ugdk {
 namespace system {
@@ -14,7 +14,7 @@ struct Configuration {
     
     bool audio_enabled;
     
-    window::WindowSettings* window_configuration;
+    desktop::WindowSettings* window_configuration;
 
     bool input_enabled;
 

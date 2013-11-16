@@ -1,4 +1,4 @@
-#include <ugdk/window/window.h>
+#include <ugdk/desktop/window.h>
 
 #include <cmath>
 #include <cassert>
@@ -11,11 +11,11 @@
 
 
 namespace ugdk {
-namespace window {
+namespace desktop {
 
 namespace {
 bool errlog(const std::string& msg) {
-    fprintf(stderr, "ugdk::window::Manager Error Log - %s\n", msg.c_str());
+    fprintf(stderr, "ugdk::desktop::Manager Error Log - %s\n", msg.c_str());
     return false;
 }
 }
@@ -87,5 +87,5 @@ void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen) {
         SDL_SetWindowFullscreen(sdl_window_, SDL_WINDOW_FULLSCREEN);
 }
 
-}  // namespace window
+}  // namespace desktop
 }  // namespace ugdk

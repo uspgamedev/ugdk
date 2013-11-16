@@ -18,8 +18,8 @@
 #include <ugdk/resource/manager.h>
 #include <ugdk/time/module.h>
 #include <ugdk/time/manager.h>
-#include <ugdk/window/module.h>
-#include <ugdk/window/manager.h>
+#include <ugdk/desktop/module.h>
+#include <ugdk/desktop/manager.h>
 #include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
 
@@ -121,7 +121,7 @@ bool Initialize(const Configuration& configuration) {
     language_manager_ = new       LanguageManager(configuration.default_language);
 
     if(configuration.window_configuration) {
-        if(!window::Initialize(new window::Manager(*configuration.window_configuration)))
+        if(!desktop::Initialize(new desktop::Manager(*configuration.window_configuration)))
             return false;
     }
     
