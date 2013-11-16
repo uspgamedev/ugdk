@@ -35,6 +35,15 @@ SET(UGDK_SRC
     src/ugdk/audio/music.h 
     src/ugdk/audio/sample.cc 
     src/ugdk/audio/sample.h 
+    src/ugdk/desktop.h 
+    src/ugdk/desktop/manager.cc 
+    src/ugdk/desktop/manager.h 
+    src/ugdk/desktop/module.cc 
+    src/ugdk/desktop/module.h 
+    src/ugdk/desktop/window.cc 
+    src/ugdk/desktop/window.h 
+    src/ugdk/desktop/windowsettings.cc 
+    src/ugdk/desktop/windowsettings.h 
     src/ugdk/graphic.h 
     src/ugdk/graphic/defaultshaders.cc 
     src/ugdk/graphic/defaultshaders.h 
@@ -128,6 +137,7 @@ SET(UGDK_SRC
     src/ugdk/structure/intervalkdtree.h 
     src/ugdk/structure/types.h 
     src/ugdk/system.h 
+    src/ugdk/system/configuration.cc 
     src/ugdk/system/configuration.h 
     src/ugdk/system/engine.cc 
     src/ugdk/system/engine.h 
@@ -175,8 +185,4 @@ SET(UGDK_SRC
     src/ugdk/util/uncopyable.h 
     src/ugdk/util/utf8.cc 
     src/ugdk/util/utf8.h 
-    src/ugdk/window/manager.cc 
-    src/ugdk/window/manager.h 
-    src/ugdk/window/module.cc 
-    src/ugdk/window/module.h 
 )

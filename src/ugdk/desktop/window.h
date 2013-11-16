@@ -10,34 +10,12 @@ struct SDL_Window;
 namespace ugdk {
 namespace desktop {
 
-struct WindowSettings {
-    std::string title;
-    std::string icon;
-    math::Integer2D size;
-    bool fullscreen;
-
-    WindowSettings();
-
-    WindowSettings(const std::string& _title,
-                  const std::string& _icon,
-                  const math::Integer2D& _size, 
-                  bool _fullscreen)
-
-        : title(_title)
-        , icon(_icon)
-        , size(_size)
-        , fullscreen(_fullscreen)
-        {}
-};
-
 class Window {
   private:
     Window(SDL_Window* sdl_window, const std::string& title, const math::Integer2D& size, bool fullscreen);
 
   public:
     ~Window();
-
-    static Window* Create(const WindowSettings& settings);
 
     /// Presents the current canvas in the screen.
     void Present();
@@ -52,13 +30,12 @@ class Window {
     bool fullscreen() const { return fullscreen_; }
 
   private:
-    bool UpdateResolution();
-
     SDL_Window* sdl_window_;
     std::string title_;
     math::Integer2D size_;
     bool fullscreen_;
 
+    friend class ::ugdk::desktop::Manager;
 };
 
 }  // namespace desktop
