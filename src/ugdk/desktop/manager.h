@@ -30,7 +30,7 @@ class Manager {
 
   private:
     std::weak_ptr<Window> primary_window_;
-    std::vector<std::shared_ptr<Window>> windows_;
+    std::vector< std::shared_ptr<Window> > windows_;
 };
 
 }  // namespace desktop

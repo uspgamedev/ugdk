@@ -18,7 +18,7 @@ struct SDL_Window;
 namespace ugdk {
 namespace graphic {
 
-action::Scene* CreateLightrenderingScene(std::function<void (const graphic::Geometry&, const graphic::VisualEffect&)> render_light_function);
+action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_light_function);
 
 class Manager {
   public:
@@ -27,8 +27,6 @@ class Manager {
 
     bool Initialize();
     void Release();
-
-    void Render(const std::list<action::Scene*>&);
 
     class Shaders {
       public:

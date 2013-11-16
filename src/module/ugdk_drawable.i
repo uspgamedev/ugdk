@@ -27,8 +27,7 @@
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_action") <ugdk/action/spritetypes.h>
-%import(module="ugdk_graphic") <ugdk/graphic/geometry.h>
-%import(module="ugdk_graphic") <ugdk/graphic/visualeffect.h>
+%import(module="ugdk_graphic") <ugdk/graphic/canvas.h>
 %import(module="ugdk_graphic") <ugdk/graphic/drawable.h>
 %import(module="ugdk_graphic") <ugdk/graphic/spritesheet.h>
 %import(module="ugdk_graphic") <ugdk/graphic/texture.h>

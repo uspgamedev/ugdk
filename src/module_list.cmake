@@ -3,6 +3,7 @@ SET(UGDK_MODULE_SRC
     src/module/pyramidworks_geometry.i 
     src/module/ugdk_action.i 
     src/module/ugdk_audio.i 
+    src/module/ugdk_desktop.i 
     src/module/ugdk_drawable.i 
     src/module/ugdk_graphic.i 
     src/module/ugdk_input.i 

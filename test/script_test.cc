@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
     config.base_path = "data/";
     config.audio_enabled = false;
     config.input_enabled = false;
-    config.graphic_enabled = false;
+    config.desktop_enabled = false;
     
     ugdk::script::InitScripts();
     
