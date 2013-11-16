@@ -1,6 +1,7 @@
 #ifndef UGDK_DESKTOP_MANAGER_H_
 #define UGDK_DESKTOP_MANAGER_H_
 
+#include <ugdk/desktop/windowsettings.h>
 #include <ugdk/desktop.h>
 #include <vector>
 #include <memory>

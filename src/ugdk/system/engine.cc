@@ -128,13 +128,13 @@ bool Initialize(const Configuration& configuration) {
         if(!desktop::Initialize(new desktop::Manager))
             return false;
 
-        if(!graphic::Initialize(new graphic::Manager))
-            return false;
-
         canvas_ = graphic::Canvas::Create(
             desktop::manager()->CreateWindow(desktop::WindowSettings()),
             math::Vector2D(1024.0, 768.0)
         );
+
+        if(!graphic::Initialize(new graphic::Manager))
+            return false;
     }
     
     if(configuration.audio_enabled)

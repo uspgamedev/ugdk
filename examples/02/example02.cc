@@ -5,6 +5,7 @@
 #include <ugdk/input/scancode.h>
 #include <ugdk/action/entity.h>
 #include <ugdk/graphic/node.h>
+#include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/drawable/texturedrectangle.h>
 #include <ugdk/graphic/module.h>
 
@@ -56,6 +57,7 @@ class Rectangle : public action::Entity {
 
 int main(int argc, char* argv[]) {
     system::Initialize();
+
     action::Scene* scene = new action::Scene();
     Rectangle* r = new Rectangle;
 
@@ -65,8 +67,10 @@ int main(int argc, char* argv[]) {
                 scene->Finish();
         });
     scene->AddEntity(r);
-    scene->set_render_function([r](const graphic::Geometry& geometry, const graphic::VisualEffect& effect) {
-        r->drawable()->Draw(geometry * graphic::Geometry(r->position()), effect);
+    scene->set_render_function([r](graphic::Canvas& canvas) {
+        canvas.PushAndCompose(graphic::Geometry(r->position()));
+        r->drawable()->Draw(canvas);
+        canvas.PopGeometry();
     });
 
     system::PushScene(scene);
