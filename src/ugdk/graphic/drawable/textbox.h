@@ -30,7 +30,7 @@ class TextBox : public Drawable {
     /// This operation is slow.
     void ChangeMessage(const std::string& message);
 
-    void Draw(const Geometry&, const VisualEffect&) const;
+    void Draw(Canvas&) const;
 
     void set_ident_style(IdentStyle style) { ident_style_ = style; }
 

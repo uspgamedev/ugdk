@@ -16,6 +16,7 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/font.h>
+#include <ugdk/graphic/canvas.h>
 
 #include <ugdk/util/utf8.h>
 
@@ -101,19 +102,18 @@ const ugdk::math::Vector2D& Label::size() const {
     return size_;
 }
 
-void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
-    Geometry final_geometry(geometry);
-    final_geometry.Compose(Geometry(-hotspot_));
+void Label::Draw(Canvas& canvas) const {
+    canvas.PushAndCompose(Geometry(-hotspot_));
     
-    if(draw_setup_function_) draw_setup_function_(this, geometry, effect);
+    if(draw_setup_function_) draw_setup_function_(this, canvas);
 
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
     opengl::ShaderProgram::Use shader_use(graphic::manager()->shaders().current_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
-    shader_use.SendGeometry(final_geometry);
-    shader_use.SendEffect(effect);
+    shader_use.SendGeometry(canvas.current_geometry());
+    shader_use.SendEffect(canvas.current_visualeffect());
 
     // Bind our texture in Texture Unit 0
     shader_use.SendTexture(0, font_->freetype_font()->atlas()->id());
@@ -128,6 +128,8 @@ void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     glDrawArrays(GL_QUADS, 0, static_cast<GLsizei>(num_characters_ * 4)); // 12*3 indices starting at 0 -> 12 triangles
     
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
+
+    canvas.PopGeometry();
 }
 
 }  // namespace graphic

@@ -26,8 +26,8 @@ class Node {
     ~Node();
 
     /// Pushes the modifier to the Manager, renders 
-    void Render(const Geometry&, const VisualEffect&) const;
-    void RenderLight(const Geometry& parent, const VisualEffect&) const;
+    void Render(Canvas&) const;
+    void RenderLight(Canvas&) const;
 
     void set_drawable(Drawable* _drawable)  { drawable_ = _drawable; }
     void set_light(Light* _light)           {    light_ =    _light; }

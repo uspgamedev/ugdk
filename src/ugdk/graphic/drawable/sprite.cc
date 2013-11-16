@@ -5,6 +5,7 @@
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/drawable/functions.h>
+#include <ugdk/graphic/canvas.h>
 #include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/action/animationplayer.h>
 
@@ -30,23 +31,23 @@ Sprite::Sprite(const Spritesheet *spritesheet, const std::string& animation_set_
  
 Sprite::~Sprite() {}
 
-void Sprite::Draw(const Geometry& geometry, const VisualEffect& effect) const {
+void Sprite::Draw(Canvas& canvas) const {
     if(!spritesheet_) return;
     const action::SpriteAnimationFrame& animation_frame(current_animation_frame());
     const Spritesheet::Frame& spritesheet_frame = spritesheet_->frame(animation_frame.spritesheet_frame());
     
-    if(draw_setup_function_) draw_setup_function_(this, geometry, effect);
+    if(draw_setup_function_) draw_setup_function_(this, canvas);
 
     math::Vector2D mirror_scale(
         (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
         (animation_frame.mirror() & ugdk::MIRROR_VFLIP) ? -1.0 : 1.0);
 
     DrawSquare(
-        geometry 
+        canvas.current_geometry()
             * animation_frame.geometry()
             * Geometry(math::Vector2D(), mirror_scale)
             * Geometry(-(hotspot_ + spritesheet_frame.hotspot), spritesheet_frame.size),
-        effect * animation_frame.effect(),
+        canvas.current_visualeffect() * animation_frame.effect(),
         spritesheet_frame.texture.get());
 }
 

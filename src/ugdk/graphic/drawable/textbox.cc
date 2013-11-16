@@ -8,6 +8,7 @@
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/drawable/label.h>
+#include <ugdk/graphic/canvas.h>
 
 namespace ugdk {
 namespace graphic {
@@ -39,9 +40,9 @@ void TextBox::ChangeMessage(const std::string& utf8_message) {
     }
 }
 
-void TextBox::Draw(const Geometry& geo, const VisualEffect& eff) const {
+void TextBox::Draw(Canvas& canvas) const {
     
-    if(draw_setup_function_) draw_setup_function_(this, geo, eff);
+    if(draw_setup_function_) draw_setup_function_(this, canvas);
 
     double off_y = 0.0;
     for(const auto& label : labels_) {
@@ -50,7 +51,11 @@ void TextBox::Draw(const Geometry& geo, const VisualEffect& eff) const {
             off_x = (width_ - label->width()) * 0.5;
         else if(ident_style_ == RIGHT)
             off_x = (width_ - label->width()) * 1.0;
-        label->Draw(geo * Geometry(math::Vector2D(off_x, off_y) - hotspot_), eff);
+
+        canvas.PushAndCompose(Geometry(math::Vector2D(off_x, off_y) - hotspot_));
+        label->Draw(canvas);
+        canvas.PopGeometry();
+
         off_y += label->size().y;
     }
 }

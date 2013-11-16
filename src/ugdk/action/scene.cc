@@ -89,7 +89,7 @@ void Scene::Update(double dt) {
     TaskPlayer::Update(dt);
 }
 
-void Scene::Render(const graphic::Canvas& canvas) const {
+void Scene::Render(graphic::Canvas& canvas) const {
     if(!finished_ && visible_ && render_function_)
         render_function_(canvas);
 }

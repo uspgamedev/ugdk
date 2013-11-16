@@ -76,7 +76,7 @@ class Manager {
     opengl::ShaderProgram* light_shader() { return light_shader_; }
 
   private:
-    void CreateLightBuffer();
+    void CreateLightBuffer(const math::Vector2D& size);
 
     Texture* light_buffer_;
     Texture* white_texture_;

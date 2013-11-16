@@ -22,7 +22,7 @@ class Label : public Drawable {
     void ChangeMessage(const std::string& utf8_message);
     void ChangeMessage(const std::u32string& ucs4_message);
 
-    void Draw(const Geometry&, const VisualEffect&) const;
+    void Draw(Canvas&) const;
 
     const ugdk::math::Vector2D& size() const;
 
