@@ -3,6 +3,7 @@
 
 #include <string>
 #include <ugdk/math/integer2D.h>
+#include <ugdk/window.h>
 
 namespace ugdk {
 namespace system {
@@ -13,32 +14,14 @@ struct Configuration {
     
     bool audio_enabled;
     
-    bool graphic_enabled;
-    std::string      window_icon;
-    std::string      window_title;
-    math::Integer2D  window_resolution;
-    bool             fullscreen;
+    window::WindowSettings* window_configuration;
 
     bool input_enabled;
 
     bool time_enabled;
 
-    Configuration() :
-        base_path("./"),
-        default_language("en_US"),
-
-        audio_enabled(true),
-
-        graphic_enabled(true),
-        window_icon(""),
-        window_title("UGDK Game"),
-        window_resolution(800, 600),
-        fullscreen(false),
-
-        input_enabled(true),
-
-        time_enabled(true)
-    {}
+    Configuration();
+    ~Configuration();
 };
 
 } // namespace system

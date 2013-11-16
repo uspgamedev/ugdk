@@ -6,6 +6,8 @@ namespace window {
 
 // Managers
 class Manager;
+class Window;
+struct WindowSettings;
 
 }  // namespace window
 }  // namespace ugdk
