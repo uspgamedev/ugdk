@@ -18,56 +18,17 @@ struct SDL_Window;
 namespace ugdk {
 namespace graphic {
 
-struct VideoSettings {
-    std::string window_title;
-    std::string window_icon;
-    math::Integer2D resolution;
-    bool fullscreen;
-    bool vsync;
-    bool light_system;
-
-    VideoSettings();
-    VideoSettings(const std::string& title,
-                  const std::string& icon,
-                  const math::Integer2D& _resolution, 
-                  bool _fullscreen,
-                  bool _vsync,
-                  bool _light_system) 
-        : 
-        window_title(title),
-        window_icon(icon),
-        resolution(_resolution),
-        fullscreen(_fullscreen), vsync(_vsync), light_system(_light_system) {}
-};
-
 action::Scene* CreateLightrenderingScene(std::function<void (const graphic::Geometry&, const graphic::VisualEffect&)> render_light_function);
 
 class Manager {
   public:
-    static const int COLOR_DEPTH = 32;
-
-    Manager(const VideoSettings& settings);
+    Manager();
     ~Manager() {}
 
     bool Initialize();
     void Release();
 
     void Render(const std::list<action::Scene*>&);
-
-    /// Updates the settings and applies the changes.
-    /** Warning: changing the resolution and/or fullscreen is a slow operation. */
-    bool ChangeSettings(const VideoSettings& new_settings);
-
-    void SaveBackbufferToTexture(Texture* texture);
-    
-    /// Convenience
-    const math::Integer2D& video_size() const { return settings_.resolution; }
-
-    // Getters
-    const VideoSettings& settings() const { return settings_; }
-    Texture* white_texture() { return white_texture_; }
-    Texture* light_buffer() { return light_buffer_; }
-    opengl::ShaderProgram* light_shader() { return light_shader_; }
 
     class Shaders {
       public:
@@ -108,22 +69,17 @@ class Manager {
         friend class Manager;
     };
 
+    Texture* light_buffer() { return light_buffer_; }
+    Texture* white_texture() { return white_texture_; }
     Shaders& shaders() { return shaders_; }
     const Shaders& shaders() const { return shaders_; }
+    opengl::ShaderProgram* light_shader() { return light_shader_; }
 
   private:
-    bool UpdateResolution();
-    void UpdateVSync();
-    void initializeLight();
-    void mergeLights(const std::list<action::Scene*>& scene_list);
-
-    VideoSettings settings_;
-
-    SDL_Window* window_;
+    void CreateLightBuffer();
 
     Texture* light_buffer_;
     Texture* white_texture_;
-    Geometry initial_geometry_;
     
     Shaders shaders_;
     opengl::ShaderProgram* light_shader_;
