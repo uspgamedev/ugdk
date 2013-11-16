@@ -11,6 +11,7 @@
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/textmanager.h>
+#include <ugdk/graphic/canvas.h>
 #include <ugdk/input/module.h>
 #include <ugdk/input/manager.h>
 #include <ugdk/internal/sdleventhandler.h>
@@ -20,6 +21,7 @@
 #include <ugdk/time/manager.h>
 #include <ugdk/desktop/module.h>
 #include <ugdk/desktop/manager.h>
+#include <ugdk/desktop/windowsettings.h>
 #include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
 
@@ -32,7 +34,9 @@ namespace {
 
 graphic:: TextManager *        text_manager_;
       LanguageManager *    language_manager_;
-bool quit_;
+
+std::shared_ptr<graphic::Canvas>   canvas_;
+bool                      quit_;
 std::list<action::Scene*> scene_list_;
 std::list<SceneFactory>   queued_scene_list_;
 action::Scene*            previous_focused_scene_;
@@ -123,17 +127,15 @@ bool Initialize(const Configuration& configuration) {
     if(configuration.desktop_enabled) {
         if(!desktop::Initialize(new desktop::Manager))
             return false;
+
+        if(!graphic::Initialize(new graphic::Manager))
+            return false;
+
+        canvas_ = graphic::Canvas::Create(
+            desktop::manager()->CreateWindow(desktop::WindowSettings()),
+            math::Vector2D(1024.0, 768.0)
+        );
     }
-    
-    if(configuration.graphic_enabled)
-        if(!graphic::Initialize(new graphic::Manager(graphic::VideoSettings(
-            configuration.window_title,
-            (configuration.window_icon.length() > 0) ? ResolvePath(configuration.window_icon) : "",
-            configuration.window_resolution,
-            configuration.fullscreen,
-            true,
-            false
-        )))) return false;
     
     if(configuration.audio_enabled)
         if(!audio::Initialize(new audio::Manager))
@@ -204,8 +206,14 @@ void Run() {
             for(action::Scene* it : scene_list_)
                 it->Update(delta_t);
 
-            if(graphic::manager())
-                graphic::manager()->Render(scene_list_);
+            if(desktop::manager()) {
+                if(canvas_) {
+                    canvas_->Clear();
+                    for(action::Scene* it : scene_list_)
+                        it->Render(*canvas_);
+                }
+                desktop::manager()->PresentAll();
+            }
         }
     }
     quit_ = true;

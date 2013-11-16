@@ -68,6 +68,11 @@ std::weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
 
     return windows_.back();
 }
+    
+void Manager::PresentAll() {
+    for(const auto& window : windows_)
+        window->Present();
+}
 
 }  // namespace desktop
 }  // namespace ugdk

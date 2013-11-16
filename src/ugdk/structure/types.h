@@ -35,7 +35,7 @@ enum MirrorAxis {
 }
 }
 
-typedef struct Color {
+struct Color {
     Color() : r(1.0), g(1.0), b(1.0), a(1.0) {}
     explicit Color(double _r, double _g, double _b, double _a = 1.0)
           : r(_r), g(_g), b(_b), a(_a) {}
@@ -74,7 +74,7 @@ typedef struct Color {
     void set_b(double b_)  { b = b_; }
     void set_a(double a_)  { a = a_; }
     
-} Color;
+};
 
 //static Color BLACK = {0.0, 0.0, 0.0};
 #ifndef SWIG

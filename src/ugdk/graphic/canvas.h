@@ -6,6 +6,7 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/desktop.h>
 #include <ugdk/graphic.h>
+#include <ugdk/structure/types.h>
 
 #include <memory>
 #include <vector>
@@ -37,6 +38,9 @@ class Canvas : public std::enable_shared_from_this<Canvas> {
 
     void PopGeometry();
     void PopVisualEffect();
+
+    void Clear();
+    void Clear(Color);
 
   protected:
     Canvas(SDL_GLContext);
