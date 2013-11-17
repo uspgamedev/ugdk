@@ -21,18 +21,21 @@
 #define _UTF8_H_
 
 #include <sys/types.h>
-#include <wchar.h>
+#include <ugdk/structure/types.h>
 #include <string>
+#include <vector>
 
 #define UTF8_IGNORE_ERROR		0x01
 #define UTF8_SKIP_BOM			0x02
 
-size_t utf8_to_wchar(const char *in, size_t insize, wchar_t *out,
+size_t utf8_to_ucs4(const char *in, size_t insize, ugdk::uint32 *out,
 		    size_t outsize, int flags);
-size_t wchar_to_utf8(const wchar_t *in, size_t insize, char *out,
+size_t ucs4_to_utf8(const ugdk::uint32 *in, size_t insize, char *out,
 		    size_t outsize, int flags);
 
-std::wstring utf8_to_wstring(const std::string& utf8);
-std::string wstring_to_utf8(const std::wstring& wstr);
+typedef std::vector<ugdk::uint32> UCS4Vector;
+
+UCS4Vector utf8_to_ucs4(const std::string& utf8);
+std::string ucs4_to_utf8(const UCS4Vector& wstr);
 
 #endif /* !_UTF8_H_ */

@@ -33,9 +33,9 @@ int main(int argc, char* argv[]) {
     config.base_path = EXAMPLE_LOCATION "/content/"; 
     system::Initialize(config);
 
-    system::text_manager()->AddFont("default", "epgyosho.ttf", 20);
+    system::text_manager()->AddFont("default", "epgyosho.ttf", 30);
     { // scope so these objects are destroyed before system::Release
-        graphic::Label label1(utf8_to_wstring(get_file_contents(system::ResolvePath("hello.txt"))), 
+        graphic::Label label1(get_file_contents(system::ResolvePath("hello.txt")),
                                 system::text_manager()->GetFont("default"));
         auto box = std::unique_ptr<graphic::TextBox>(system::text_manager()->GetTextFromFile("touhou.txt", "default"));
 

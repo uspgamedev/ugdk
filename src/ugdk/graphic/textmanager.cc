@@ -23,7 +23,6 @@ namespace ugdk {
 namespace graphic {
 
 using std::string;
-using std::wstring;
 using std::vector;
 using std::map;
 
@@ -42,12 +41,12 @@ bool TextManager::Release() {
     return true;
 }
 
-TextBox* TextManager::GetText(const std::wstring& text, const std::string& fonttag, int width) {
+TextBox* TextManager::GetText(const std::string& text, const std::string& fonttag, int width) {
     Font *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
     return new TextBox(text, (width == -1) ? graphic::manager()->video_size().x : width, font);
 }
 
-TextBox* TextManager::GetText(const std::wstring& text) {
+TextBox* TextManager::GetText(const std::string& text) {
     std::string blank_font;
     return GetText(text, blank_font);
 }
@@ -57,14 +56,10 @@ TextBox* TextManager::GetTextFromFile(const std::string& path, const std::string
     FILE *txtFile = fopen(fullpath.c_str(), "r");
     if(txtFile == nullptr) return nullptr;
     char buffer_utf8[MAXLINE];
-    wchar_t buffer[MAXLINE];
-    wstring output;
+    string output;
     // Read from the UTF-8 encoded file.
     while(fgets(buffer_utf8, MAXLINE, txtFile)!=nullptr){
-        // Converting UTF-8 to wstring
-        size_t buffer_size = utf8_to_wchar(buffer_utf8, strlen(buffer_utf8), buffer, MAXLINE, 0);
-        buffer[buffer_size] = L'\0';
-        output.append(buffer);
+        output.append(buffer_utf8);
     }
     fclose(txtFile);
     return GetText(output, font, width);

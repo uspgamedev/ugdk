@@ -1,21 +1,26 @@
 #ifndef UGDK_GRAPHIC_DRAWABLE_LABEL_H_
 #define UGDK_GRAPHIC_DRAWABLE_LABEL_H_
 
-#include <string>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/drawable.h>
+#include <ugdk/util/utf8.h>
+
+#include <string>
+#include <cstddef>
 
 namespace ugdk {
 namespace graphic {
 
 class Label : public Drawable {
   public:
-    Label(const std::wstring& message, Font* font);
+    Label(const std::string& utf8_message, Font* font);
+    Label(const UCS4Vector& ucs4_message, Font* font);
     ~Label();
 
     /// This operation is slow.
-    void ChangeMessage(const std::wstring& message);
+    void ChangeMessage(const std::string& utf8_message);
+    void ChangeMessage(const UCS4Vector& ucs4_message);
 
     void Draw(const Geometry&, const VisualEffect&) const;
 
@@ -27,7 +32,7 @@ class Label : public Drawable {
     opengl::VertexBuffer* texture_buffer_;
 
     ugdk::math::Vector2D size_;
-    std::wstring message_;
+    std::size_t num_characters_;
 };
 
 }  // namespace graphic
