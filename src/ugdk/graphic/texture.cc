@@ -1,6 +1,6 @@
+#include <GL/glew.h>
 #include "SDL_endian.h"
 #include "SDL_image.h"
-#include "SDL_opengl.h"
 
 #include <cstdlib>
 #include <cstdio>

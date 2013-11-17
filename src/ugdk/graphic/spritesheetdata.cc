@@ -1,20 +1,17 @@
 #include <ugdk/graphic/spritesheetdata.h>
 
-#include <GL/glew.h>
-#define NO_SDL_GLEXT
-#include <iostream>
-#include <cstring>
-#include <cmath>
-#include <algorithm>
-
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_opengl.h"
-
 #include <ugdk/graphic/pixelsurface.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/system/engine.h>
+
+#include <GL/glew.h>
+#include "SDL_image.h"
+
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
 
 namespace ugdk {
 namespace graphic {

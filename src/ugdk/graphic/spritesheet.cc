@@ -1,15 +1,6 @@
 #include <ugdk/graphic/spritesheet.h>
 
 #include <GL/glew.h>
-#define NO_SDL_GLEXT
-#include <iostream>
-#include <cstring>
-#include <cmath>
-#include <algorithm>
-
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_opengl.h"
 
 #include <ugdk/math/integer2D.h>
 #include <ugdk/graphic/module.h>
@@ -21,6 +12,12 @@
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/system/engine.h>
+
+#include "SDL_image.h"
+#include <iostream>
+#include <cstring>
+#include <cmath>
+#include <algorithm>
 
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/script/virtualobj.h>

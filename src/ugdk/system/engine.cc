@@ -134,7 +134,7 @@ bool Initialize(const Configuration& configuration) {
         canvas_ = graphic::Canvas::Create(desktop::manager()->primary_window(),
                                           configuration.canvas_size);
 
-        if(!graphic::Initialize(new graphic::Manager))
+        if(!graphic::Initialize(new graphic::Manager(canvas_)))
             return false;
     }
     
@@ -142,11 +142,11 @@ bool Initialize(const Configuration& configuration) {
         if(!audio::Initialize(new audio::Manager))
             return false;
     
-    if(configuration.input_enabled)
+    if(configuration.input_enabled) {
         if(!input::Initialize(new input::Manager))
             return false;
-        else
-            sdlevent_handlers_.push_back(input::manager()->sdlevent_handler());
+        sdlevent_handlers_.push_back(input::manager()->sdlevent_handler());
+    }
 
     if(configuration.time_enabled)
         if(!time::Initialize(new time::Manager))

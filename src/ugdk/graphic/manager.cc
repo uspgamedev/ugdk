@@ -1,50 +1,25 @@
 #include <ugdk/graphic/manager.h>
 
-#include <cmath>
-#include <cassert>
-
-#include "GL/glew.h"
-#ifdef _WIN32
-#   include "windows.h"
-#   include "GL/wglew.h"
-#endif
-#define NO_SDL_GLEXT
-#include "SDL.h"
-#include "SDL_image.h"
-
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/defaultshaders.h>
-#include <ugdk/graphic/node.h>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 
-#define LN255 5.5412635451584261462455391880218
+#include "SDL_video.h"
 
 namespace ugdk {
 namespace graphic {
 
-using std::string;
-
-namespace {
-bool errlog(const string& msg) {
-    fprintf(stderr, "ugdk::graphic::Manager Error Log - %s\n", msg.c_str());
-    return false;
-}
-}
-
-static ugdk::math::Vector2D default_resolution(800.0, 600.0);
-    
-Manager::Manager() 
-    :   light_buffer_(nullptr)
+Manager::Manager(const std::weak_ptr<Canvas>& canvas) 
+    :   canvas_(canvas)
+    ,   light_buffer_(nullptr)
     ,   white_texture_(nullptr)
     ,   light_shader_(nullptr) {}
 
 bool Manager::Initialize() {
-    // Changing to and from fullscreen destroys all textures, so we must recreate them.
-    CreateLightBuffer(math::Vector2D(1024.0, 768.0));
+    CreateLightBuffer(math::Vector2D(canvas_.lock()->size()));
 
     shaders_.ReplaceShader(0, CreateShader(false, false));
     shaders_.ReplaceShader(1, CreateShader( true, false));

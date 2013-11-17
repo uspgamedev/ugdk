@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cfloat>
 #include <cmath>
-#include "SDL_opengl.h"
+#include <GL/glew.h>
 
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/geometry.h>

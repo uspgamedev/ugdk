@@ -1,17 +1,16 @@
 #ifndef UGDK_GRAPHIC_VIDEOMANAGER_H_
 #define UGDK_GRAPHIC_VIDEOMANAGER_H_
 
-#include <string>
-#include <list>
-#include <bitset>
-#include <functional>
 #include <ugdk/structure/types.h>
 #include <ugdk/math/vector2D.h>
-#include <ugdk/math/integer2D.h>
-#include <ugdk/math/frame.h>
+
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/geometry.h>
+
+#include <string>
+#include <bitset>
+#include <functional>
+#include <memory>
 
 struct SDL_Window;
 
@@ -22,8 +21,8 @@ action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_li
 
 class Manager {
   public:
-    Manager();
-    ~Manager() {}
+    Manager(const std::weak_ptr<Canvas>&);
+    ~Manager();
 
     bool Initialize();
     void Release();
@@ -76,6 +75,7 @@ class Manager {
   private:
     void CreateLightBuffer(const math::Vector2D& size);
 
+    std::weak_ptr<Canvas> canvas_;
     Texture* light_buffer_;
     Texture* white_texture_;
     

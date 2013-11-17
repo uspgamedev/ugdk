@@ -4,11 +4,6 @@
 #include <cassert>
 
 #include "GL/glew.h"
-#ifdef _WIN32
-#   include "windows.h"
-#   include "GL/wglew.h"
-#endif
-#define NO_SDL_GLEXT
 #include "SDL_video.h"
 
 #include <ugdk/graphic/texture.h>
@@ -39,7 +34,7 @@ std::shared_ptr<Canvas> Canvas::Create(const std::weak_ptr<desktop::Window>& win
     
     GLenum err = glewInit();
     if (GLEW_OK != err)
-        return nullptr; //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
+        return std::shared_ptr<Canvas>(); //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
     
     canvas->AttachTo(window_weak);
     canvas->Resize(size);
@@ -74,8 +69,7 @@ void Canvas::Resize(const math::Vector2D& size) {
 }
     
 void Canvas::AttachTo(const std::weak_ptr<desktop::Window>& window_weak) {
-    auto window = window_weak.lock();
-    if(window) {
+    if(auto window = window_weak.lock()) {
         if(auto previous_window = attached_window_.lock())
             previous_window->attached_canvas_.reset();
 
@@ -88,8 +82,7 @@ void Canvas::AttachTo(const std::weak_ptr<desktop::Window>& window_weak) {
 }
     
 void Canvas::UpdateViewport() {
-    auto window = attached_window_.lock();
-    if(window)
+    if(auto window = attached_window_.lock())
         glViewport(0, 0, window->size().x, window->size().y);
 }
 void Canvas::SaveToTexture(Texture* texture) {

@@ -1,6 +1,5 @@
 #include <GL/glew.h>
 #define NO_SDL_GLEXT
-#include "SDL_opengl.h"
 
 #include <ugdk/graphic/light.h>
 

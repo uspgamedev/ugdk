@@ -3,7 +3,6 @@
 #include <algorithm>
 #include "GL/glew.h"
 #define NO_SDL_GLEXT
-#include "SDL_opengl.h"
 #include <freetype-gl++/texture-font.hpp>
 #include <freetype-gl++/vec234.hpp>
 
