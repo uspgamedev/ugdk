@@ -5,10 +5,8 @@
 #include <ugdk/math/integer2D.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/graphic/geometry.h>
-#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/spritesheetdata.h>
-#include <ugdk/graphic/pixelsurface.h>
+#include <ugdk/internal/pixelsurface.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/system/engine.h>

@@ -4,6 +4,7 @@
 namespace ugdk {
 namespace internal {
 
+struct PixelSurface;
 class SDLEventHandler;
 
 }  // namespace internal
