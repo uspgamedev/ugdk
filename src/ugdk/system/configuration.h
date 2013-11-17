@@ -1,8 +1,11 @@
 #ifndef UGDK_SYSTEM_CONFIGURATION_H_
 #define UGDK_SYSTEM_CONFIGURATION_H_
 
-#include <string>
 #include <ugdk/math/integer2D.h>
+#include <ugdk/math/vector2D.h>
+#include <ugdk/desktop/windowsettings.h>
+#include <string>
+#include <vector>
 
 namespace ugdk {
 namespace system {
@@ -13,7 +16,8 @@ struct Configuration {
     
     bool audio_enabled;
 
-    bool desktop_enabled;
+    std::vector<desktop::WindowSettings> windows_list;
+    math::Vector2D canvas_size;
 
     bool input_enabled;
 

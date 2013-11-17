@@ -124,14 +124,15 @@ bool Initialize(const Configuration& configuration) {
 
     language_manager_ = new       LanguageManager(configuration.default_language);
 
-    if(configuration.desktop_enabled) {
+    if(!configuration.windows_list.empty()) {
         if(!desktop::Initialize(new desktop::Manager))
             return false;
 
-        canvas_ = graphic::Canvas::Create(
-            desktop::manager()->CreateWindow(desktop::WindowSettings()),
-            math::Vector2D(1024.0, 768.0)
-        );
+        for(const auto& window_config : configuration.windows_list)
+            desktop::manager()->CreateWindow(window_config);
+
+        canvas_ = graphic::Canvas::Create(desktop::manager()->primary_window(),
+                                          configuration.canvas_size);
 
         if(!graphic::Initialize(new graphic::Manager))
             return false;

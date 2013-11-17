@@ -9,7 +9,8 @@ Configuration::Configuration()
 
     , audio_enabled(true)
 
-    , desktop_enabled(true)
+    , windows_list(1, desktop::WindowSettings())
+    , canvas_size(1024.0, 768.0)
 
     , input_enabled(true)
 
