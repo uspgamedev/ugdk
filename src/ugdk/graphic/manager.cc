@@ -12,14 +12,16 @@
 namespace ugdk {
 namespace graphic {
 
-Manager::Manager(const std::weak_ptr<Canvas>& canvas) 
-    :   canvas_(canvas)
+Manager::Manager(const std::weak_ptr<desktop::Window>& window, const math::Vector2D& canvas_size)
+    :   canvas_(Canvas::Create(window, canvas_size))
     ,   light_buffer_(nullptr)
     ,   white_texture_(nullptr)
     ,   light_shader_(nullptr) {}
 
+Manager::~Manager() {}
+
 bool Manager::Initialize() {
-    CreateLightBuffer(math::Vector2D(canvas_.lock()->size()));
+    CreateLightBuffer(math::Vector2D(canvas_->size()));
 
     shaders_.ReplaceShader(0, CreateShader(false, false));
     shaders_.ReplaceShader(1, CreateShader( true, false));
@@ -41,7 +43,9 @@ bool Manager::Initialize() {
     return true;
 }
 
-void Manager::Release() {}
+void Manager::Release() {
+    canvas_.reset();
+}
 
 action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> render_light_function) {
     action::Scene* light_scene = new action::Scene;

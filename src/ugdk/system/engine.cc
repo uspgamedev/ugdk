@@ -1,29 +1,23 @@
 #include <ugdk/system/engine.h>
 
+#include <ugdk/input/module.h>
+#include <ugdk/graphic/module.h>
+#include <ugdk/audio/module.h>
+#include <ugdk/resource/module.h>
+#include <ugdk/time/module.h>
+#include <ugdk/desktop/module.h>
+
+#include <ugdk/action/scene.h>
+#include <ugdk/graphic/textmanager.h>
+#include <ugdk/graphic/canvas.h>
+#include <ugdk/internal/sdleventhandler.h>
+#include <ugdk/util/languagemanager.h>
+#include <ugdk/script/scriptmanager.h>
+
 #include <string>
 #include <algorithm>
 #include <list>
 #include "SDL.h"
-
-#include <ugdk/action/scene.h>
-#include <ugdk/audio/module.h>
-#include <ugdk/audio/manager.h>
-#include <ugdk/graphic/module.h>
-#include <ugdk/graphic/manager.h>
-#include <ugdk/graphic/textmanager.h>
-#include <ugdk/graphic/canvas.h>
-#include <ugdk/input/module.h>
-#include <ugdk/input/manager.h>
-#include <ugdk/internal/sdleventhandler.h>
-#include <ugdk/resource/module.h>
-#include <ugdk/resource/manager.h>
-#include <ugdk/time/module.h>
-#include <ugdk/time/manager.h>
-#include <ugdk/desktop/module.h>
-#include <ugdk/desktop/manager.h>
-#include <ugdk/desktop/windowsettings.h>
-#include <ugdk/util/languagemanager.h>
-#include <ugdk/script/scriptmanager.h>
 
 namespace ugdk {
 namespace system {
@@ -35,7 +29,6 @@ namespace {
 graphic:: TextManager *        text_manager_;
       LanguageManager *    language_manager_;
 
-std::shared_ptr<graphic::Canvas>   canvas_;
 bool                      quit_;
 std::list<action::Scene*> scene_list_;
 std::list<SceneFactory>   queued_scene_list_;
@@ -118,11 +111,16 @@ std::string ResolvePath(const std::string& path) {
 
 bool Initialize(const Configuration& configuration) {
     quit_ = false;
+    scene_list_.clear();
+
+    // Init SDL, but don't load any modules.
     SDL_Init(0);
 
     configuration_ = configuration;
 
-    language_manager_ = new       LanguageManager(configuration.default_language);
+    sdlevent_handlers_.push_back(&system_sdlevent_handler);
+
+    language_manager_ = new LanguageManager(configuration.default_language);
 
     if(!configuration.windows_list.empty()) {
         if(!desktop::Initialize(new desktop::Manager))
@@ -131,10 +129,9 @@ bool Initialize(const Configuration& configuration) {
         for(const auto& window_config : configuration.windows_list)
             desktop::manager()->CreateWindow(window_config);
 
-        canvas_ = graphic::Canvas::Create(desktop::manager()->primary_window(),
-                                          configuration.canvas_size);
-
-        if(!graphic::Initialize(new graphic::Manager(canvas_)))
+        if(!graphic::Initialize(new graphic::Manager(
+                                    desktop::manager()->primary_window(),
+                                    configuration.canvas_size)))
             return false;
     }
     
@@ -162,10 +159,6 @@ bool Initialize(const Configuration& configuration) {
 
     if (!SCRIPT_MANAGER()->Initialize())
         return false;
-
-    scene_list_.clear();
-
-    sdlevent_handlers_.push_back(&system_sdlevent_handler);
 
     return true;
 }
@@ -208,10 +201,11 @@ void Run() {
                 it->Update(delta_t);
 
             if(desktop::manager()) {
-                if(canvas_) {
-                    canvas_->Clear();
+                if(graphic::manager()) {
+                    auto canvas = graphic::manager()->canvas().lock();
+                    canvas->Clear();
                     for(action::Scene* it : scene_list_)
-                        it->Render(*canvas_);
+                        it->Render(*canvas);
                 }
                 desktop::manager()->PresentAll();
             }
@@ -239,6 +233,7 @@ void Release() {
     resource::Release();
     time::Release();
     graphic::Release();
+    desktop::Release();
 
     SCRIPT_MANAGER()->Finalize();
     delete SCRIPT_MANAGER();
