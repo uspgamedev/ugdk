@@ -4,13 +4,17 @@ compiler:
   - gcc
   - clang
 
+cache: apt
+
 before_script:
   - sudo apt-get update
   - sudo apt-get install swig2.0 liblua5.1-0-dev python-dev libpng12-dev 
 
 script:
   - cmake .
-  - make ugdk_test && make ugdk_script_test
+  - make libugdk
+  - make ugdk_test
+  - make ugdk_script_test
   - ./test/ugdk_test
 
 notifications:
