@@ -40,6 +40,10 @@ if(NOT ${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.gitignore "*")
 endif()
 
+#if(UGDK_ANDROID AND ${ANDROID_NATIVE_API_LEVEL} LESS 9)
+#    message(FATAL_ERROR "ANDROID_NATIVE_API_LEVEL must be at least 9")
+#endif()
+
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     SET (CHECKMAC TRUE)
 endif ()
@@ -53,7 +57,13 @@ ENDIF ()
 
 # Important build locations.
 set (SRC_DIR src)
-set (LIB_DIR lib)
+
+if(ANDROID)
+    set (LIB_DIR android/libs)
+else()
+    set (LIB_DIR lib)
+endif()
+
 
 set(UGDK_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
 
@@ -180,9 +190,12 @@ if(NOT ANDROID)
     include_directories("externals/freetype-glpp/include")
     set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
 else()
+    include(externals/android_sdl.cmake)
     include_directories(SYSTEM externals/sdl2/include)
     include_directories(SYSTEM externals/sdl2-image/include)
     include_directories(SYSTEM externals/sdl2-mixer/include)
+    set(OPENGL_LIBRARIES "-lGLESv2")
+    set(UGDK_DEPENDENCIES_SDL2_LIBRARIES SDL2)
 endif(NOT ANDROID)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
@@ -248,6 +261,7 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 if (UNIX OR MINGW)
     add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++0x -DUGDK_USING_VARIADIC)
+    #add_definitions(-msse2)
     add_definitions(-Wall
         # TODO: would like these but they produce overwhelming amounts of warnings
         #-Wshadow                       # GLM causes many warnings with this
