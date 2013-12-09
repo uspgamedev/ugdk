@@ -140,12 +140,12 @@ typedef struct _SDL_Haptic SDL_Haptic;
  *
  *  Different haptic features a device can have.
  */
-/*@{*/
+/* @{ */
 
 /**
  *  \name Haptic effects
  */
-/*@{*/
+/* @{ */
 
 /**
  *  \brief Constant effect supported.
@@ -177,7 +177,7 @@ typedef struct _SDL_Haptic SDL_Haptic;
 #define SDL_HAPTIC_LEFTRIGHT     (1<<2)
 
 /* !!! FIXME: put this back when we have more bits in 2.1 */
-/*#define SDL_HAPTIC_SQUARE     (1<<2)*/
+/* #define SDL_HAPTIC_SQUARE     (1<<2) */
 
 /**
  *  \brief Triangle wave effect supported.
@@ -262,7 +262,7 @@ typedef struct _SDL_Haptic SDL_Haptic;
  */
 #define SDL_HAPTIC_CUSTOM     (1<<11)
 
-/*@}*//*Haptic effects*/
+/* @} *//* Haptic effects */
 
 /* These last few are features the device has, not effects */
 
@@ -305,7 +305,7 @@ typedef struct _SDL_Haptic SDL_Haptic;
 /**
  * \name Direction encodings
  */
-/*@{*/
+/* @{ */
 
 /**
  *  \brief Uses polar coordinates for the direction.
@@ -328,9 +328,9 @@ typedef struct _SDL_Haptic SDL_Haptic;
  */
 #define SDL_HAPTIC_SPHERICAL  2
 
-/*@}*//*Direction encodings*/
+/* @} *//* Direction encodings */
 
-/*@}*//*Haptic features*/
+/* @} *//* Haptic features */
 
 /*
  * Misc defines.
@@ -483,7 +483,7 @@ typedef struct SDL_HapticConstant
  *
  *  The struct handles the following effects:
  *   - ::SDL_HAPTIC_SINE
- *   - ::SDL_HAPTIC_SQUARE
+ *   - ::SDL_HAPTIC_LEFTRIGHT
  *   - ::SDL_HAPTIC_TRIANGLE
  *   - ::SDL_HAPTIC_SAWTOOTHUP
  *   - ::SDL_HAPTIC_SAWTOOTHDOWN
@@ -529,7 +529,7 @@ typedef struct SDL_HapticConstant
     \endverbatim
  *
  *  \sa SDL_HAPTIC_SINE
- *  \sa SDL_HAPTIC_SQUARE
+ *  \sa SDL_HAPTIC_LEFTRIGHT
  *  \sa SDL_HAPTIC_TRIANGLE
  *  \sa SDL_HAPTIC_SAWTOOTHUP
  *  \sa SDL_HAPTIC_SAWTOOTHDOWN
@@ -538,7 +538,7 @@ typedef struct SDL_HapticConstant
 typedef struct SDL_HapticPeriodic
 {
     /* Header */
-    Uint16 type;        /**< ::SDL_HAPTIC_SINE, ::SDL_HAPTIC_SQUARE,
+    Uint16 type;        /**< ::SDL_HAPTIC_SINE, ::SDL_HAPTIC_LEFTRIGHT,
                              ::SDL_HAPTIC_TRIANGLE, ::SDL_HAPTIC_SAWTOOTHUP or
                              ::SDL_HAPTIC_SAWTOOTHDOWN */
     SDL_HapticDirection direction;  /**< Direction of the effect. */

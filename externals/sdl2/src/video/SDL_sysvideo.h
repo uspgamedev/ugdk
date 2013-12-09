@@ -224,6 +224,7 @@ struct SDL_VideoDevice
     void (*GL_UnloadLibrary) (_THIS);
       SDL_GLContext(*GL_CreateContext) (_THIS, SDL_Window * window);
     int (*GL_MakeCurrent) (_THIS, SDL_Window * window, SDL_GLContext context);
+    void (*GL_GetDrawableSize) (_THIS, SDL_Window * window, int *w, int *h);
     int (*GL_SetSwapInterval) (_THIS, int interval);
     int (*GL_GetSwapInterval) (_THIS);
     void (*GL_SwapWindow) (_THIS, SDL_Window * window);
@@ -291,8 +292,8 @@ struct SDL_VideoDevice
         int minor_version;
         int flags;
         int profile_mask;
-        int use_egl;
         int share_with_current_context;
+        int framebuffer_srgb_capable;
         int retained_backing;
         int driver_loaded;
         char driver_path[256];
@@ -313,7 +314,11 @@ struct SDL_VideoDevice
     /* Data private to this driver */
     void *driverdata;
     struct SDL_GLDriverData *gl_data;
-
+    
+#if SDL_VIDEO_OPENGL_EGL
+    struct SDL_EGL_VideoData *egl_data;
+#endif
+    
 #if SDL_VIDEO_OPENGL_ES || SDL_VIDEO_OPENGL_ES2
     struct SDL_PrivateGLESData *gles_data;
 #endif
@@ -343,8 +348,8 @@ extern VideoBootStrap DirectFB_bootstrap;
 #if SDL_VIDEO_DRIVER_WINDOWS
 extern VideoBootStrap WINDOWS_bootstrap;
 #endif
-#if SDL_VIDEO_DRIVER_BWINDOW
-extern VideoBootStrap BWINDOW_bootstrap;
+#if SDL_VIDEO_DRIVER_HAIKU
+extern VideoBootStrap HAIKU_bootstrap;
 #endif
 #if SDL_VIDEO_DRIVER_PANDORA
 extern VideoBootStrap PND_bootstrap;
@@ -358,6 +363,9 @@ extern VideoBootStrap Android_bootstrap;
 #if SDL_VIDEO_DRIVER_PSP
 extern VideoBootStrap PSP_bootstrap;
 #endif
+#if SDL_VIDEO_DRIVER_RPI
+extern VideoBootStrap RPI_bootstrap;
+#endif
 #if SDL_VIDEO_DRIVER_DUMMY
 extern VideoBootStrap DUMMY_bootstrap;
 #endif
@@ -367,6 +375,7 @@ extern int SDL_AddBasicVideoDisplay(const SDL_DisplayMode * desktop_mode);
 extern int SDL_AddVideoDisplay(const SDL_VideoDisplay * display);
 extern SDL_bool SDL_AddDisplayMode(SDL_VideoDisplay *display, const SDL_DisplayMode * mode);
 extern SDL_VideoDisplay *SDL_GetDisplayForWindow(SDL_Window *window);
+extern void *SDL_GetDisplayDriverData( int displayIndex );
 
 extern int SDL_RecreateWindow(SDL_Window * window, Uint32 flags);
 

@@ -42,12 +42,11 @@
 @end
 
 @interface SDLAppDelegate : NSObject {
+@public
     BOOL seenFirstActivate;
 }
 
 - (id)init;
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
-- (void)applicationDidBecomeActive:(NSNotification *)aNotification;
 @end
 
 @implementation SDLAppDelegate : NSObject
@@ -57,9 +56,19 @@
 
     if (self) {
         seenFirstActivate = NO;
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(focusSomeWindow:)
+                                                     name:NSApplicationDidBecomeActiveNotification
+                                                   object:nil];
     }
 
     return self;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [super dealloc];
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
@@ -68,7 +77,7 @@
     return NSTerminateCancel;
 }
 
-- (void)applicationDidBecomeActive:(NSNotification *)aNotification
+- (void)focusSomeWindow:(NSNotification *)aNotification
 {
     /* HACK: Ignore the first call. The application gets a
      * applicationDidBecomeActive: a little bit after the first window is
@@ -111,6 +120,8 @@
 }
 @end
 
+static SDLAppDelegate *appDelegate = nil;
+
 static NSString *
 GetApplicationName(void)
 {
@@ -136,6 +147,7 @@ CreateApplicationMenus(void)
     NSMenu *appleMenu;
     NSMenu *serviceMenu;
     NSMenu *windowMenu;
+    NSMenu *viewMenu;
     NSMenuItem *menuItem;
 
     if (NSApp == nil) {
@@ -209,6 +221,25 @@ CreateApplicationMenus(void)
     /* Tell the application object that this is now the window menu */
     [NSApp setWindowsMenu:windowMenu];
     [windowMenu release];
+
+
+    /* Add the fullscreen view toggle menu option, if supported */
+    if ([NSApp respondsToSelector:@selector(setPresentationOptions:)]) {
+        /* Create the view menu */
+        viewMenu = [[NSMenu alloc] initWithTitle:@"View"];
+
+        /* Add menu items */
+        menuItem = [viewMenu addItemWithTitle:@"Toggle Full Screen" action:@selector(toggleFullScreen:) keyEquivalent:@"f"];
+        [menuItem setKeyEquivalentModifierMask:NSControlKeyMask | NSCommandKeyMask];
+
+        /* Put menu into the menubar */
+        menuItem = [[NSMenuItem alloc] initWithTitle:@"View" action:nil keyEquivalent:@""];
+        [menuItem setSubmenu:viewMenu];
+        [[NSApp mainMenu] addItem:menuItem];
+        [menuItem release];
+
+        [viewMenu release];
+    }
 }
 
 void
@@ -231,9 +262,21 @@ Cocoa_RegisterApp(void)
             CreateApplicationMenus();
         }
         [NSApp finishLaunching];
+        NSDictionary *appDefaults = [NSDictionary dictionaryWithObject:@"NO" forKey:@"AppleMomentumScrollSupported"];
+        [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+
     }
-    if (NSApp && ![NSApp delegate]) {
-        [NSApp setDelegate:[[SDLAppDelegate alloc] init]];
+    if (NSApp && !appDelegate) {
+        appDelegate = [[SDLAppDelegate alloc] init];
+
+        /* If someone else has an app delegate, it means we can't turn a
+         * termination into SDL_Quit, and we can't handle application:openFile:
+         */
+        if (![NSApp delegate]) {
+            [NSApp setDelegate:appDelegate];
+        } else {
+            appDelegate->seenFirstActivate = YES;
+        }
     }
     [pool release];
 }
@@ -248,7 +291,7 @@ Cocoa_PumpEvents(_THIS)
         SDL_VideoData *data = (SDL_VideoData *)_this->driverdata;
         Uint32 now = SDL_GetTicks();
         if (!data->screensaver_activity ||
-            (int)(now-data->screensaver_activity) >= 30000) {
+            SDL_TICKS_PASSED(now, data->screensaver_activity + 30000)) {
             UpdateSystemActivity(UsrActivity);
             data->screensaver_activity = now;
         }
