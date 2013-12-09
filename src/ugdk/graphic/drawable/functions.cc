@@ -37,7 +37,7 @@ void DrawSquare(const Geometry& geometry, const VisualEffect& effect, const Text
     shader_use.SendVertexBuffer(opengl::VertexBuffer::CreateDefault(), opengl::TEXTURE, 0);
 
     // Use the 4 vertices to draw a square.
-    glDrawArrays(GL_QUADS, 0, 4);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 }  // namespace graphic

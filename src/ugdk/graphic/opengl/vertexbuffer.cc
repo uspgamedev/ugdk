@@ -47,7 +47,10 @@ namespace opengl {
     const VertexBuffer *VertexBuffer::CreateDefault() {
         static opengl::VertexBuffer* buffer = nullptr;
         static const GLfloat buffer_data[] = { 
-            0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f
         };
         if(buffer) return buffer;
         buffer = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
