@@ -1,0 +1,6 @@
+#ifndef UGDK_INTERNAL_OPENGL_H_
+#define UGDK_INTERNAL_OPENGL_H_
+
+#include <GLES2/gl2.h> //FIXME
+
+#endif // UGDK_INTERNAL_SDLEVENTHANDLER_H_

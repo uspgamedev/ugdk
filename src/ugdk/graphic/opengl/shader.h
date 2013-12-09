@@ -2,8 +2,7 @@
 #define UGDK_GRAPHIC_OPENGL_SHADER_H_
 
 #include <string>
-#include "GL/glew.h"
-#define NO_SDL_GLEXT
+#include <ugdk/internal/opengl.h>
 
 namespace ugdk {
 namespace graphic {

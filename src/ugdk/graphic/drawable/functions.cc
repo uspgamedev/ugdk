@@ -1,9 +1,8 @@
 #include <ugdk/graphic/drawable/functions.h>
 
-#include <GL/glew.h>
-#define NO_SDL_GLEXT
 #include <glm/glm.hpp>
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/geometry.h>

@@ -1,9 +1,8 @@
 #include <ugdk/graphic/defaultshaders.h>
 
-#include "GL/glew.h"
-#define NO_SDL_GLEXT
 #include <cassert>
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/opengl/shader.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 

@@ -1,12 +1,9 @@
 #ifndef UGDK_GRAPHIC_TEXTURE_H_
 #define UGDK_GRAPHIC_TEXTURE_H_
 
-#ifndef NO_SDL_GLEXT
-#define NO_SDL_GLEXT
-#endif // NO_SDL_GLEXT
+#include <ugdk/internal/opengl.h>
 
 #include <string>
-#include "GL/glew.h"
 #include "SDL_video.h"
 
 namespace ugdk {

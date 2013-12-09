@@ -3,9 +3,9 @@
 #include <cmath>
 #include <cassert>
 
-#include "GL/glew.h"
 #include "SDL_video.h"
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/desktop/window.h>
 
@@ -32,16 +32,16 @@ std::shared_ptr<Canvas> Canvas::Create(const std::weak_ptr<desktop::Window>& win
     
     std::shared_ptr<Canvas> canvas(new Canvas(context));
     
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-        return std::shared_ptr<Canvas>(); //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
+    //GLenum err = glewInit(); FIXME
+    //if (GLEW_OK != err)
+    //    return std::shared_ptr<Canvas>(); //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
     
     canvas->AttachTo(window_weak);
     canvas->Resize(size);
        
     // This hint can improve the speed of texturing when perspective-correct texture coordinate interpolation isn't needed, such as when using a glOrtho() projection.
     // From http://www.mesa3d.org/brianp/sig97/perfopt.htm
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+    //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST); FIXME
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -87,7 +87,7 @@ void Canvas::UpdateViewport() {
 }
 void Canvas::SaveToTexture(Texture* texture) {
     glBindTexture(GL_TEXTURE_2D, texture->gltexture());
-    glReadBuffer(GL_BACK);
+    //glReadBuffer(GL_BACK); FIXME
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, texture->width(), texture->height());
     glBindTexture(GL_TEXTURE_2D, 0);
 }

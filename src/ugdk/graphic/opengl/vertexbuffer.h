@@ -26,7 +26,7 @@
 //#include <graphics/Volatile.h>
 
 // OpenGL
-#include "GL/glew.h"
+#include <ugdk/internal/opengl.h>
 
 namespace ugdk {
 namespace graphic {
