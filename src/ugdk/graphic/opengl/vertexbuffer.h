@@ -249,6 +249,7 @@ namespace opengl {
 		char *buf;
 	};
 
+#ifndef ANDROID
 	/**
 	 * Vertex Buffer Object (VBO) implementation of VertexBuffer.
 	 *
@@ -309,6 +310,7 @@ namespace opengl {
 		// not mapped.
 		void *mapped;
 	};
+#endif // ANDROID
 
 } // namespace opengl
 } // namespace graphic
