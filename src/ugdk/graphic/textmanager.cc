@@ -6,7 +6,7 @@
 #include <clocale>
 #include <cwchar>
 
-#include <freetype-gl++/texture-font.hpp>
+//#include <freetypefreetype-gl++/texture-font.hpp> FIXME
 
 #include <ugdk/system/engine.h>
 #include <ugdk/desktop/module.h>
