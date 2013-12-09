@@ -1,11 +1,10 @@
 #include <ugdk/graphic/drawable/label.h>
 
 #include <algorithm>
-#include "GL/glew.h"
-#define NO_SDL_GLEXT
-#include <freetype-gl++/texture-font.hpp>
-#include <freetype-gl++/vec234.hpp>
+//#include <freetype-gl++/texture-font.hpp> FIXME
+//#include <freetype-gl++/vec234.hpp> FIXME
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/graphic/defaultshaders.h>
@@ -49,6 +48,7 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
     delete vertex_buffer_;
     delete texture_buffer_;
     indices_.clear();
+    /*FIXME
 
     num_characters_ = ucs4_message.size();
     size_ = math::Vector2D(0, font_->height());
@@ -103,7 +103,7 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
         pen.x += glyph->advance_x();
         buffer_offset += 4;
     }
-    size_.x = pen.x;
+    size_.x = pen.x;*/
 }
 
 const ugdk::math::Vector2D& Label::size() const {
@@ -124,7 +124,7 @@ void Label::Draw(Canvas& canvas) const {
     shader_use.SendEffect(canvas.current_visualeffect());
 
     // Bind our texture in Texture Unit 0
-    shader_use.SendTexture(0, font_->freetype_font()->atlas()->id());
+    //shader_use.SendTexture(0, font_->freetype_font()->atlas()->id()); FIXME
 
     // 1rst attribute buffer : vertices
     shader_use.SendVertexBuffer(vertex_buffer_, opengl::VERTEX, 0);

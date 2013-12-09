@@ -3,7 +3,7 @@
 #include <sstream>
 #include <iterator>
 #include <algorithm>
-#include <freetype-gl++/texture-font.hpp>
+//#include <freetype-gl++/texture-font.hpp> FIXME
 
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/geometry.h>
@@ -103,6 +103,7 @@ double TextBox::calculateWidth(std::u32string::const_iterator start, std::u32str
     bool has_previous = false;
     std::u32string::const_iterator previous;
     for(auto step = start; step != end; previous = step++) {
+        /*FIXME
         freetypeglxx::TextureGlyph* glyph = font_->freetype_font()->GetGlyph(*step);
         if(!glyph) continue;
 
@@ -113,7 +114,7 @@ double TextBox::calculateWidth(std::u32string::const_iterator start, std::u32str
             has_previous = true;
 
         width += kerning;
-        width += glyph->advance_x();
+        width += glyph->advance_x();*/
     }
     return width;
 }
