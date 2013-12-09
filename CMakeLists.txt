@@ -59,7 +59,7 @@ ENDIF ()
 set (SRC_DIR src)
 
 if(ANDROID)
-    set (LIB_DIR android/libs)
+    set (LIB_DIR lib)
 else()
     set (LIB_DIR lib)
 endif()
@@ -191,11 +191,21 @@ if(NOT ANDROID)
     set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
 else()
     include(externals/android_sdl.cmake)
+    set(SDL2_LIBRARY SDL2)
+    set(UGDK_DEPENDENCIES_SDL2_LIBRARIES ${SDL2_LIBRARY})
+    
     include_directories(SYSTEM externals/sdl2/include)
+    
+    add_subdirectory(externals/sdl2-image)
+    set(UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES    SDL2-image)
+    
+    add_subdirectory(externals/sdl2-mixer)
+    set(UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES    SDL2-mixer)
+    
     include_directories(SYSTEM externals/sdl2-image/include)
     include_directories(SYSTEM externals/sdl2-mixer/include)
+    
     set(OPENGL_LIBRARIES "-lGLESv2")
-    set(UGDK_DEPENDENCIES_SDL2_LIBRARIES SDL2)
 endif(NOT ANDROID)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
