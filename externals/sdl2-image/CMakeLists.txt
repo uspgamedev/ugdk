@@ -40,3 +40,4 @@ include_directories(include)
 
 add_library(SDL2-image ${SDL2-image-sources})
 target_link_libraries(SDL2-image ${SDL2_LIBRARY} ${SDLIMAGE_LIBPNG})
+SET_TARGET_PROPERTIES(SDL2-image PROPERTIES COMPILE_FLAGS "-fstrict-aliasing -fprefetch-loop-arrays")

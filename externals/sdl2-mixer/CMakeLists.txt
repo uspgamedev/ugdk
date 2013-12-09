@@ -7,7 +7,7 @@ set(SDL2-mixer-sources dynamic_flac.c dynamic_fluidsynth.c dynamic_mod.c dynamic
                        load_aiff.c load_flac.c load_ogg.c load_voc.c
                        mixer.c
                        music.c music_cmd.c music_flac.c music_mad.c music_mod.c  music_modplug.c music_ogg.c
-                       playmus.c playwave.c wavestream.c
+                       wavestream.c
                        
                        dynamic_flac.h dynamic_fluidsynth.h dynamic_mod.h dynamic_modplug.h dynamic_mp3.h dynamic_ogg.h
                        effects_internal.h fluidsynth.h
