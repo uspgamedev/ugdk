@@ -3,8 +3,8 @@
 #include <algorithm>
 #include <cfloat>
 #include <cmath>
-#include <GL/glew.h>
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/drawable.h>

@@ -1,8 +1,6 @@
-#include <GL/glew.h>
-#define NO_SDL_GLEXT
-
 #include <ugdk/graphic/light.h>
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/geometry.h>

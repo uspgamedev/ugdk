@@ -1,10 +1,9 @@
-#include <GL/glew.h>
-#define NO_SDL_GLEXT
 #include <ugdk/graphic/drawable/texturedrectangle.h>
 
 //#define GLM_SWIZZLE 
 #include <glm/glm.hpp>
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/drawable/functions.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/module.h>
