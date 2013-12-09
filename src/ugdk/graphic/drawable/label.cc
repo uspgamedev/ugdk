@@ -48,6 +48,7 @@ void Label::ChangeMessage(const std::string& utf8_message) {
 void Label::ChangeMessage(const std::u32string& ucs4_message) {
     delete vertex_buffer_;
     delete texture_buffer_;
+    indices_.clear();
 
     num_characters_ = ucs4_message.size();
     size_ = math::Vector2D(0, font_->height());
@@ -91,6 +92,14 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
             points[3] = freetypeglxx::vec2(glyph->s0(),glyph->t1());
             texture_buffer_->fill(buffer_offset * sizeof(freetypeglxx::vec2), sizeof(points), points);
         }
+
+        indices_.push_back(i * 4 + 0);
+        indices_.push_back(i * 4 + 1);
+        indices_.push_back(i * 4 + 2);
+        indices_.push_back(i * 4 + 0);
+        indices_.push_back(i * 4 + 2);
+        indices_.push_back(i * 4 + 3);
+
         pen.x += glyph->advance_x();
         buffer_offset += 4;
     }
@@ -125,7 +134,7 @@ void Label::Draw(const Geometry& geometry, const VisualEffect& effect) const {
     shader_use.SendVertexBuffer(texture_buffer_, opengl::TEXTURE, 0);
 
     // Draw the triangle !
-    glDrawArrays(GL_QUADS, 0, static_cast<GLsizei>(num_characters_ * 4)); // 12*3 indices starting at 0 -> 12 triangles
+    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(num_characters_ * 6), GL_UNSIGNED_SHORT, indices_.data()); // 12*3 indices starting at 0 -> 12 triangles
     
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
 }

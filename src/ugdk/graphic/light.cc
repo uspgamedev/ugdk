@@ -17,9 +17,9 @@ namespace graphic {
 Light::Light() : dimension_(1.0, 1.0) {
     static const GLfloat buffer_data[] = { 
         -1.0f,-1.0f, 
+        -1.0f, 1.0f,
          1.0f,-1.0f, 
-         1.0f, 1.0f, 
-        -1.0f, 1.0f
+         1.0f, 1.0f 
     };
     vertexbuffer_ = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
     {
@@ -48,7 +48,7 @@ void Light::Draw(const Geometry& geometry) {
     shader_use.SendVertexBuffer(vertexbuffer_, opengl::VERTEX, 0);
 
     // Draw the triangle !
-    glDrawArrays(GL_QUADS, 0, 4); // 12*3 indices starting at 0 -> 12 triangles
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4); // 12*3 indices starting at 0 -> 12 triangles
 }
 
 }  // namespace graphic

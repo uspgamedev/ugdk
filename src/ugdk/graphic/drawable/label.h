@@ -5,9 +5,11 @@
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/util/utf8.h>
+#include <ugdk/structure/types.h>
 
 #include <string>
 #include <cstddef>
+#include <vector>
 
 namespace ugdk {
 namespace graphic {
@@ -30,6 +32,7 @@ class Label : public Drawable {
     Font* font_;
     opengl::VertexBuffer* vertex_buffer_;
     opengl::VertexBuffer* texture_buffer_;
+    std::vector<uint16> indices_;
 
     ugdk::math::Vector2D size_;
     std::size_t num_characters_;
