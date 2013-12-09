@@ -28,6 +28,8 @@ option(UGDK_BUILD_EXAMPLES       "Set to ON to enable building examples." ON)
 option(UGDK_CREATE_BINDINGS      "Set to ON to generate bindings for supported script languages." ON)
 option(UGDK_LUA_BINDINGS         "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS      "Set to ON to enable Python as one of the languages to create bindings." ON)
+option(UGDK_ANDROID              "Set to ON to build for Android." OFF)
+
 option(UGDK_INTERNAL_GLEW        "Set to ON to use an internal GLEW instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2        "Set to ON to use an internal SDL2 instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2_IMAGE   "Set to ON to use an internal SDL2_image instead of the system one." OFF)
@@ -79,103 +81,109 @@ set(GLM_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/externals/glm-0.9.4.2")
 
 include(cmake/ugdk.cmake)
 
-find_package(SDL2 QUIET)
-if(NOT SDL2_FOUND)
-    message("-- SDL2 not found, forcing internal.")
-    set(UGDK_INTERNAL_SDL2 ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
-endif(NOT SDL2_FOUND)
+if(NOT ANDROID)
+    find_package(SDL2 QUIET)
+    if(NOT SDL2_FOUND)
+        message("-- SDL2 not found, forcing internal.")
+        set(UGDK_INTERNAL_SDL2 ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
+    endif(NOT SDL2_FOUND)
 
-find_package(SDL2_image QUIET)
-if(NOT SDL2_IMAGE_FOUND)
-    message("-- SDL2_image not found, forcing internal.")
-    set(UGDK_INTERNAL_SDL2_IMAGE ON CACHE BOOL "Set to ON to use an internal SDL2_image instead of the system one." FORCE)
-endif(NOT SDL2_IMAGE_FOUND)
+    find_package(SDL2_image QUIET)
+    if(NOT SDL2_IMAGE_FOUND)
+        message("-- SDL2_image not found, forcing internal.")
+        set(UGDK_INTERNAL_SDL2_IMAGE ON CACHE BOOL "Set to ON to use an internal SDL2_image instead of the system one." FORCE)
+    endif(NOT SDL2_IMAGE_FOUND)
 
-find_package(SDL2_mixer QUIET)
-if(NOT SDL2_MIXER_FOUND)
-    message("-- SDL2_mixer not found, forcing internal.")
-    set(UGDK_INTERNAL_SDL2_MIXER ON CACHE BOOL "Set to ON to use an internal SDL2_mixer instead of the system one." FORCE)
-endif(NOT SDL2_MIXER_FOUND)
+    find_package(SDL2_mixer QUIET)
+    if(NOT SDL2_MIXER_FOUND)
+        message("-- SDL2_mixer not found, forcing internal.")
+        set(UGDK_INTERNAL_SDL2_MIXER ON CACHE BOOL "Set to ON to use an internal SDL2_mixer instead of the system one." FORCE)
+    endif(NOT SDL2_MIXER_FOUND)
 
-########################
-## SDL2
-########################
-if(UGDK_INTERNAL_SDL2)
-    set(SDL_SHARED OFF CACHE BOOL "Build a shared version of the library")
-    set(DIRECTX    OFF CACHE BOOL "Use DirectX for Windows audio/video" FORCE)
-    set(RENDER_D3D OFF CACHE BOOL "Enable the Direct3D render driver" FORCE)
-    add_subdirectory(externals/sdl2 externals/sdl2-build)
+    ########################
+    ## SDL2
+    ########################
+    if(UGDK_INTERNAL_SDL2)
+        set(SDL_SHARED OFF CACHE BOOL "Build a shared version of the library")
+        set(DIRECTX    OFF CACHE BOOL "Use DirectX for Windows audio/video" FORCE)
+        set(RENDER_D3D OFF CACHE BOOL "Enable the Direct3D render driver" FORCE)
+        add_subdirectory(externals/sdl2 externals/sdl2-build)
 
-    set(UGDK_DEPENDENCIES_SDL2_LIBRARIES    SDL2-static)
-    set(UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS ${SDL2_SOURCE_DIR}/include)
-else(UGDK_INTERNAL_SDL2)
-    set(UGDK_DEPENDENCIES_SDL2_LIBRARIES    ${SDL2_LIBRARIES})
-    set(UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIRS})
-endif(UGDK_INTERNAL_SDL2)
-include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS})
+        set(UGDK_DEPENDENCIES_SDL2_LIBRARIES    SDL2-static)
+        set(UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS ${SDL2_SOURCE_DIR}/include)
+    else(UGDK_INTERNAL_SDL2)
+        set(UGDK_DEPENDENCIES_SDL2_LIBRARIES    ${SDL2_LIBRARIES})
+        set(UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIRS})
+    endif(UGDK_INTERNAL_SDL2)
+    include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS})
 
-########################
-## SDL2_IMAGE
-########################
-if(UGDK_INTERNAL_SDL2_IMAGE)
-    add_subdirectory(externals/sdl2-image)
-    set(UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES    SDL2-image)
-    set(UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS ${SDL2-image_SOURCE_DIR}/include)
+    ########################
+    ## SDL2_IMAGE
+    ########################
+    if(UGDK_INTERNAL_SDL2_IMAGE)
+        add_subdirectory(externals/sdl2-image)
+        set(UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES    SDL2-image)
+        set(UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS ${SDL2-image_SOURCE_DIR}/include)
 
-else(UGDK_INTERNAL_SDL2_IMAGE)
-    set(UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES    ${SDL2_IMAGE_LIBRARIES})
-    set(UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS ${SDL2_IMAGE_INCLUDE_DIRS})
-endif(UGDK_INTERNAL_SDL2_IMAGE)
-include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS})
+    else(UGDK_INTERNAL_SDL2_IMAGE)
+        set(UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES    ${SDL2_IMAGE_LIBRARIES})
+        set(UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS ${SDL2_IMAGE_INCLUDE_DIRS})
+    endif(UGDK_INTERNAL_SDL2_IMAGE)
+    include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS})
 
-########################
-## SDL2_MIXER
-########################
-if(UGDK_INTERNAL_SDL2_MIXER)
-    add_subdirectory(externals/sdl2-mixer)
-    set(UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES    SDL2-mixer)
-    set(UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS ${SDL2-mixer_SOURCE_DIR}/include)
+    ########################
+    ## SDL2_MIXER
+    ########################
+    if(UGDK_INTERNAL_SDL2_MIXER)
+        add_subdirectory(externals/sdl2-mixer)
+        set(UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES    SDL2-mixer)
+        set(UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS ${SDL2-mixer_SOURCE_DIR}/include)
 
-else(UGDK_INTERNAL_SDL2_MIXER)
-    set(UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES    ${SDL2_MIXER_LIBRARIES})
-    set(UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS ${SDL2_MIXER_INCLUDE_DIRS})
-endif(UGDK_INTERNAL_SDL2_MIXER)
-include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS})
+    else(UGDK_INTERNAL_SDL2_MIXER)
+        set(UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES    ${SDL2_MIXER_LIBRARIES})
+        set(UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS ${SDL2_MIXER_INCLUDE_DIRS})
+    endif(UGDK_INTERNAL_SDL2_MIXER)
+    include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS})
 
-# We set the UGDK_EXTERNALS_SDL_INCLUDE_DIRS variable for users building UGDK with add_subdirectory
-set(UGDK_EXTERNALS_SDL_INCLUDE_DIRS ${UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS};${UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS})
+    # We set the UGDK_EXTERNALS_SDL_INCLUDE_DIRS variable for users building UGDK with add_subdirectory
+    set(UGDK_EXTERNALS_SDL_INCLUDE_DIRS ${UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS};${UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS})
 
-# Other libs
-find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIR})
+    # Other libs
+    find_package(OpenGL REQUIRED)
+    include_directories(${OPENGL_INCLUDE_DIR})
 
-find_package(GLEW 1.5 QUIET)
-if(NOT GLEW_FOUND)
-    message("-- GLEW not found, forcing internal.")
-    set(UGDK_INTERNAL_GLEW ON CACHE BOOL "Set to ON to use the internal GLEW." FORCE)
-endif(NOT GLEW_FOUND)
+    find_package(GLEW 1.5 QUIET)
+    if(NOT GLEW_FOUND)
+        message("-- GLEW not found, forcing internal.")
+        set(UGDK_INTERNAL_GLEW ON CACHE BOOL "Set to ON to use the internal GLEW." FORCE)
+    endif(NOT GLEW_FOUND)
 
-if(UGDK_INTERNAL_GLEW)
-    add_definitions(-DGLEW_STATIC)
-    add_subdirectory(externals/glew)
-    set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
-    set(GLEW_LIBRARIES ${GLEW_LIBRARY})
-endif(UGDK_INTERNAL_GLEW)
-include_directories(${GLEW_INCLUDE_DIRS})
+    if(UGDK_INTERNAL_GLEW)
+        add_definitions(-DGLEW_STATIC)
+        add_subdirectory(externals/glew)
+        set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
+        set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+    endif(UGDK_INTERNAL_GLEW)
+    include_directories(${GLEW_INCLUDE_DIRS})
 
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/externals/freetype-glpp/CMakeLists.txt")
-    find_package(Git)
-    if(GIT_FOUND)
-        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init
-                        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-    else(GIT_FOUND)
-        message(FATAL_ERROR "Git submodule 'externals/freetype-glpp' not initialized and git not found.")
-    endif(GIT_FOUND)
-endif()
+    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/externals/freetype-glpp/CMakeLists.txt")
+        find_package(Git)
+        if(GIT_FOUND)
+            execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init
+                            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+        else(GIT_FOUND)
+            message(FATAL_ERROR "Git submodule 'externals/freetype-glpp' not initialized and git not found.")
+        endif(GIT_FOUND)
+    endif()
 
-add_subdirectory(externals/freetype-glpp)
-include_directories("externals/freetype-glpp/include")
-set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
+    add_subdirectory(externals/freetype-glpp)
+    include_directories("externals/freetype-glpp/include")
+    set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
+else()
+    include_directories(SYSTEM externals/sdl2/include)
+    include_directories(SYSTEM externals/sdl2-image/include)
+    include_directories(SYSTEM externals/sdl2-mixer/include)
+endif(NOT ANDROID)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR})
@@ -239,7 +247,7 @@ endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 if (UNIX OR MINGW)
-    add_definitions(-ansi -U_FORTIFY_SOURCE -msse2 -std=c++0x -DUGDK_USING_VARIADIC)
+    add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++0x -DUGDK_USING_VARIADIC)
     add_definitions(-Wall
         # TODO: would like these but they produce overwhelming amounts of warnings
         #-Wshadow                       # GLM causes many warnings with this
