@@ -55,8 +55,11 @@ bool Shader::Compile() const {
         const char *strShaderType = nullptr;
         switch(type_) {
         case GL_VERTEX_SHADER: strShaderType = "vertex"; break;
+#ifndef ANDROID
         case GL_GEOMETRY_SHADER: strShaderType = "geometry"; break;
+#endif
         case GL_FRAGMENT_SHADER: strShaderType = "fragment"; break;
+        default: strShaderType = "unknown"; break;
         }
 
         fprintf(stderr, "Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
