@@ -1,14 +1,10 @@
 #include <ugdk/graphic/spritesheet.h>
 
-#include <GL/glew.h>
-
 #include <ugdk/math/integer2D.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/spritesheetdata.h>
 #include <ugdk/internal/pixelsurface.h>
-#include <ugdk/graphic/opengl/shaderprogram.h>
-#include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/system/engine.h>
 
 #include "SDL_image.h"
