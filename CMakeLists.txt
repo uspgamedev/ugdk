@@ -1,5 +1,8 @@
 cmake_minimum_required (VERSION 2.8.7)
 
+set( UGDK_ANDROID_DIR "${CMAKE_SOURCE_DIR}/android" )
+set( LIBRARY_OUTPUT_PATH_ROOT "${UGDK_ANDROID_DIR}" CACHE PATH "root for library output, set this to change where android libs are installed to" FORCE)
+
 project (ugdk CXX C)
 set (UGDK_VERSION_MAJOR 0)
 set (UGDK_VERSION_MINOR 5)
@@ -251,20 +254,22 @@ if (UGDK_CREATE_BINDINGS)
     ugdk_setup_package(SWIG)
 endif (UGDK_CREATE_BINDINGS)
 
-# Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
-# Code found on http://stackoverflow.com/questions/7747857/in-cmake-how-do-i-work-around-the-debug-and-release-directories-visual-studio-2
+if(NOT ANDROID)
+    # Bit hacky way so all the output files are placed on the ${LIB_DIR} folder.
+    # Code found on http://stackoverflow.com/questions/7747857/in-cmake-how-do-i-work-around-the-debug-and-release-directories-visual-studio-2
 
-# First for the generic no-config case (e.g. with mingw)
-set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "" )
-set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR} )
-set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR} )
-# Second, for multi-config builds (e.g. msvc)
-foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
-    string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
-    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "" )
-    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
-    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
-endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+    # First for the generic no-config case (e.g. with mingw)
+    set( CMAKE_RUNTIME_OUTPUT_DIRECTORY "" )
+    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${LIB_DIR} )
+    set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${LIB_DIR} )
+    # Second, for multi-config builds (e.g. msvc)
+    foreach( OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES} )
+        string( TOUPPER ${OUTPUTCONFIG} OUTPUTCONFIG )
+        set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} "" )
+        set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+        set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${LIB_DIR} )
+    endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
+endif(NOT ANDROID)
 
 
 
@@ -334,8 +339,8 @@ set_target_properties (libugdk PROPERTIES
     PROJECT_NAME UGDK
     OUTPUT_NAME ugdk${UGDK_BIGVERSION}
     OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-dbg
-    SOVERSION ${UGDK_VERSION_PATCH}
-    VERSION ${UGDK_VERSION}
+    #SOVERSION ${UGDK_VERSION_PATCH}
+    #VERSION ${UGDK_VERSION}
 )
 
 if(UGDK_BUILD_TESTS)
