@@ -9,53 +9,19 @@
 #include <ugdk/graphic/drawable/texturedrectangle.h>
 #include <ugdk/graphic/module.h>
 
+#ifdef ANDROID
+#include <jni.h>
+#include <string.h>
+#include <android/log.h>
+
+#define LOG_TAG "UGDK"
+#define printf(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#endif
+
 using namespace ugdk;
 
-class Rectangle : public action::Entity {
-  public:
-    Rectangle() 
-      : velocity_(500.0), 
-        drawable_(new graphic::TexturedRectangle(graphic::manager()->white_texture(), math::Vector2D(50.0, 50.0))) {
-    }
-    ~Rectangle() {
-        delete drawable_;
-    }
-
-    void Update(double dt) override {
-        auto manager = input::manager();
-        if(manager->keyboard().IsDown(input::Scancode::A))
-            MoveLeft(dt);
-        if(manager->keyboard().IsDown(input::Scancode::D))
-            MoveRight(dt);
-        if(manager->keyboard().IsDown(input::Scancode::W))
-            MoveUp(dt);
-        if(manager->keyboard().IsDown(input::Scancode::S))
-            MoveDown(dt);
-    }
-    
-    void MoveLeft(double dt) {
-        position_.x -= dt*velocity_;
-    }
-    void MoveRight(double dt) {
-        position_.x += dt*velocity_;
-    }
-    void MoveUp(double dt) {
-        position_.y -= dt*velocity_;
-    }
-    void MoveDown(double dt) {
-        position_.y += dt*velocity_;
-    }
-
-    const math::Vector2D& position() const { return position_; }
-    graphic::TexturedRectangle* drawable() { return drawable_; }
-
-  private:
-    math::Vector2D position_;
-    double velocity_;
-    graphic::TexturedRectangle* drawable_;
-};
-
 extern "C" int SDL_main(int argc, char *argv[]) {
+
     system::Initialize();
 
     action::Scene* scene = new action::Scene();
