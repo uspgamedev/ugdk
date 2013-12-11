@@ -19,4 +19,14 @@
 #cmakedefine UGDK_PYTHON_ENABLED
 #define UGDK_ENABLED(X) UGDK_##X##_ENABLED
 
+#ifdef ANDROID
+#include <cstdio>
+#include <jni.h>
+#include <string.h>
+#include <android/log.h>
+
+#define LOG_TAG "SDL_android"
+#define printf(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#endif
+
 #endif // UGDK_COMMON_CONFIG_H_
