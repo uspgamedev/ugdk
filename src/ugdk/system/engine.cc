@@ -163,6 +163,11 @@ bool Initialize(const Configuration& configuration) {
     return true;
 }
 
+bool Initialize() {
+    Configuration defaults;
+    return Initialize(defaults);
+}
+
 void Run() {
     double delta_t;
 

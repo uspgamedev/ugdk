@@ -42,10 +42,7 @@ std::string ResolvePath(const std::string& path);
 bool Initialize(const Configuration& configuration);
 
 /// Initializes the engine. Calls the other Initialize method with all default arguments.
-inline bool Initialize() {
-    Configuration defaults;
-    return Initialize(defaults);
-}
+bool Initialize();
 
 /// Starts running the engine.
 void Run();
