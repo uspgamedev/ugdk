@@ -128,7 +128,7 @@ namespace opengl {
 		, buffer_copy(nullptr)
 		, mapped(nullptr)
 	{
-		if (!(GLEW__vertex_buffer_object || GLEW_VERSION_1_5))
+		if (!GLEW_VERSION_1_5)
 			throw love::Exception("Not supported");
 
 		bool ok = load(false);
