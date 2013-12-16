@@ -18,7 +18,7 @@ Scene::Scene()
   , visible_(true)
   , background_music_(nullptr) 
   , stops_previous_music_(true)
-  , event_handler_(this)
+  , event_handler_()
 {
     AddTask(system::Task([&](double dt) {
         media_manager_.Update(dt);
