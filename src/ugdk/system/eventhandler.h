@@ -40,10 +40,10 @@ class EventHandler {
 
     template<class Event, class Handler>
     IListener* AddListener(Handler handler) {
-        return AddListener(typeid(Event), new Listener<Event>(handler));
+        return AddRawListener(typeid(Event), new Listener<Event>(handler));
     }
 
-    IListener* AddListener(const std::type_index& type, IListener* listener) {
+    IListener* AddRawListener(const std::type_index& type, IListener* listener) {
         event_handlers_[type].emplace_back(listener);
         return listener;
     }
@@ -82,7 +82,9 @@ class EventHandler {
     }
 
   private:
-    std::unordered_map<std::type_index, std::vector<std::shared_ptr<IListener>> > event_handlers_;
+    typedef std::vector< std::shared_ptr<IListener> > ListenerVector;
+
+    std::unordered_map<std::type_index, ListenerVector> event_handlers_;
 };
 
 } // namespace system
