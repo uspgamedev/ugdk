@@ -1,25 +1,23 @@
 #include <ugdk/system/engine.h>
 
+#include <ugdk/input/module.h>
+#include <ugdk/graphic/module.h>
+#include <ugdk/audio/module.h>
+#include <ugdk/resource/module.h>
+#include <ugdk/time/module.h>
+#include <ugdk/desktop/module.h>
+
+#include <ugdk/action/scene.h>
+#include <ugdk/graphic/textmanager.h>
+#include <ugdk/graphic/canvas.h>
+#include <ugdk/internal/sdleventhandler.h>
+#include <ugdk/util/languagemanager.h>
+#include <ugdk/script/scriptmanager.h>
+
 #include <string>
 #include <algorithm>
 #include <list>
 #include "SDL.h"
-
-#include <ugdk/action/scene.h>
-#include <ugdk/audio/module.h>
-#include <ugdk/audio/manager.h>
-#include <ugdk/graphic/module.h>
-#include <ugdk/graphic/manager.h>
-#include <ugdk/graphic/textmanager.h>
-#include <ugdk/input/module.h>
-#include <ugdk/input/manager.h>
-#include <ugdk/internal/sdleventhandler.h>
-#include <ugdk/resource/module.h>
-#include <ugdk/resource/manager.h>
-#include <ugdk/time/module.h>
-#include <ugdk/time/manager.h>
-#include <ugdk/util/languagemanager.h>
-#include <ugdk/script/scriptmanager.h>
 
 namespace ugdk {
 namespace system {
@@ -30,7 +28,8 @@ namespace {
 
 graphic:: TextManager *        text_manager_;
       LanguageManager *    language_manager_;
-bool quit_;
+
+bool                      quit_;
 std::list<action::Scene*> scene_list_;
 std::list<SceneFactory>   queued_scene_list_;
 action::Scene*            previous_focused_scene_;
@@ -112,31 +111,39 @@ std::string ResolvePath(const std::string& path) {
 
 bool Initialize(const Configuration& configuration) {
     quit_ = false;
+    scene_list_.clear();
+
+    // Init SDL, but don't load any modules.
     SDL_Init(0);
 
     configuration_ = configuration;
 
-    language_manager_ = new       LanguageManager(configuration.default_language);
-    
-    if(configuration.graphic_enabled)
-        if(!graphic::Initialize(new graphic::Manager(graphic::VideoSettings(
-            configuration.window_title,
-            (configuration.window_icon.length() > 0) ? ResolvePath(configuration.window_icon) : "",
-            configuration.window_resolution,
-            configuration.fullscreen,
-            true,
-            false
-        )))) return false;
+    sdlevent_handlers_.push_back(&system_sdlevent_handler);
+
+    language_manager_ = new LanguageManager(configuration.default_language);
+
+    if(!configuration.windows_list.empty()) {
+        if(!desktop::Initialize(new desktop::Manager))
+            return false;
+
+        for(const auto& window_config : configuration.windows_list)
+            desktop::manager()->CreateWindow(window_config);
+
+        if(!graphic::Initialize(new graphic::Manager(
+                                    desktop::manager()->primary_window(),
+                                    configuration.canvas_size)))
+            return false;
+    }
     
     if(configuration.audio_enabled)
         if(!audio::Initialize(new audio::Manager))
             return false;
     
-    if(configuration.input_enabled)
+    if(configuration.input_enabled) {
         if(!input::Initialize(new input::Manager))
             return false;
-        else
-            sdlevent_handlers_.push_back(input::manager()->sdlevent_handler());
+        sdlevent_handlers_.push_back(input::manager()->sdlevent_handler());
+    }
 
     if(configuration.time_enabled)
         if(!time::Initialize(new time::Manager))
@@ -152,10 +159,6 @@ bool Initialize(const Configuration& configuration) {
 
     if (!SCRIPT_MANAGER()->Initialize())
         return false;
-
-    scene_list_.clear();
-
-    sdlevent_handlers_.push_back(&system_sdlevent_handler);
 
     return true;
 }
@@ -197,8 +200,15 @@ void Run() {
             for(action::Scene* it : scene_list_)
                 it->Update(delta_t);
 
-            if(graphic::manager())
-                graphic::manager()->Render(scene_list_);
+            if(desktop::manager()) {
+                if(graphic::manager()) {
+                    auto canvas = graphic::manager()->canvas().lock();
+                    canvas->Clear();
+                    for(action::Scene* it : scene_list_)
+                        it->Render(*canvas);
+                }
+                desktop::manager()->PresentAll();
+            }
         }
     }
     quit_ = true;
@@ -223,6 +233,7 @@ void Release() {
     resource::Release();
     time::Release();
     graphic::Release();
+    desktop::Release();
 
     SCRIPT_MANAGER()->Finalize();
     delete SCRIPT_MANAGER();

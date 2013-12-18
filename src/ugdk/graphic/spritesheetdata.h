@@ -1,14 +1,16 @@
 #ifndef UGDK_GRAPHIC_SPRITESHEETDATA_H_
 #define UGDK_GRAPHIC_SPRITESHEETDATA_H_
 
+#include <ugdk/structure/types.h>
+#include <ugdk/math/vector2D.h>
+
+#include <ugdk/graphic.h>
+#include <ugdk/internal.h>
+
 #include <string>
 #include <list>
 #include <vector>
 #include <utility>
-
-#include <ugdk/structure/types.h>
-#include <ugdk/graphic.h>
-#include <ugdk/math/vector2D.h>
 
 #ifdef SWIG
 #pragma SWIG nowarn=325
@@ -17,16 +19,14 @@
 namespace ugdk {
 namespace graphic {
 
-struct PixelSurface;
-
 /// Container for an unoptimized FixedSpritesheet data. May freely add new frames.
 class SpritesheetData {
   public:
     struct SpritesheetFrame {
-        PixelSurface* surface;
+        internal::PixelSurface* surface;
         ugdk::math::Vector2D hotspot;
 
-        SpritesheetFrame(PixelSurface* _surface, const ugdk::math::Vector2D& _hotspot)
+        SpritesheetFrame(internal::PixelSurface* _surface, const ugdk::math::Vector2D& _hotspot)
             : surface(_surface), hotspot(_hotspot) {}
         ~SpritesheetFrame();
     };
@@ -49,7 +49,7 @@ class SpritesheetData {
     const std::list<SpritesheetFrame>& frames() const { return frames_; }
 
   private:
-    std::vector<PixelSurface*> file_data_;
+    std::vector<internal::PixelSurface*> file_data_;
     std::list<SpritesheetFrame> frames_;
 };
 

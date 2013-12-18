@@ -3,12 +3,13 @@
 #include <algorithm>
 #include <cfloat>
 #include <cmath>
-#include "SDL_opengl.h"
+#include <GL/glew.h>
 
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/light.h>
+#include <ugdk/graphic/canvas.h>
 
 namespace ugdk {
 namespace graphic {
@@ -30,46 +31,59 @@ Node::~Node() {
     }
 }
 
-void Node::Render(const Geometry& parent, const VisualEffect& parent_effect) const {
+void Node::Render(Canvas& canvas) const {
     if(!active_) return;
     if(childs_.empty() && !drawable_) return; // optimization!
 
     if(must_sort_) // Lazyness usually breaks const-ness...
         const_cast<Node*>(this)->SortChildren();
 
-    VisualEffect compose_effect = (ignores_effect_) ? effect_ : parent_effect;
-    if(!ignores_effect_) compose_effect.Compose(effect_);
+    if(!ignores_effect_)
+        canvas.PushAndCompose(effect_);
     
-    if(!compose_effect.visible()) return;
+    if(!canvas.current_visualeffect().visible()) {
+        if(!ignores_effect_)
+            canvas.PopVisualEffect();
+        return;
+    }
 
-    Geometry compose(parent);
-    compose.Compose(geometry_);
+    canvas.PushAndCompose(geometry_);
 
     if(drawable_)
-        drawable_->Draw(compose, compose_effect);
+        drawable_->Draw(canvas);
 
-    NodeSet::const_iterator it;
-    for(it = childs_.begin(); it != childs_.end(); ++it)
-        (*it)->Render(compose, compose_effect);
+    for(Node* child : childs_)
+        child->Render(canvas);
+        
+    canvas.PopGeometry();
+    if(!ignores_effect_)
+        canvas.PopVisualEffect();
 }
 
-void Node::RenderLight(const Geometry& parent, const VisualEffect& parent_effect) const {
+void Node::RenderLight(Canvas& canvas) const {
     if(!active_) return;
     if(childs_.empty() && !light_) return; // optimization!
 
-    VisualEffect compose_effect = (ignores_effect_) ? effect_ : (parent_effect * effect_);
-    if(!compose_effect.visible())
-        return;
+    if(!ignores_effect_)
+        canvas.PushAndCompose(effect_);
     
-    Geometry compose(parent);
-    compose.Compose(geometry_);
+    if(!canvas.current_visualeffect().visible()) {
+        if(!ignores_effect_)
+            canvas.PopVisualEffect();
+        return;
+    }
+    
+    canvas.PushAndCompose(geometry_);
 
     if(light_) 
-        light_->Draw(compose);
+        light_->Draw(canvas.current_geometry());
 
-    NodeSet::const_iterator it;
-    for(it = childs_.begin(); it != childs_.end(); ++it)
-        (*it)->RenderLight(compose, compose_effect);
+    for(Node* child : childs_)
+        child->RenderLight(canvas);
+        
+    canvas.PopGeometry();
+    if(!ignores_effect_)
+        canvas.PopVisualEffect();
 }
 
 void Node::set_zindex(const double zindex) {
@@ -78,8 +92,7 @@ void Node::set_zindex(const double zindex) {
 }
 
 void Node::RemoveChild(Node *child) {
-    NodeSet::iterator it = childs_.begin();
-    while(it != childs_.end() && *it != child) ++it;
+    auto it = std::find(childs_.begin(), childs_.end(), child);
     if(it != childs_.end())
         childs_.erase(it);
     child->parent_ = nullptr;

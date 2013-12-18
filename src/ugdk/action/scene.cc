@@ -89,9 +89,9 @@ void Scene::Update(double dt) {
     TaskPlayer::Update(dt);
 }
 
-void Scene::Render(const graphic::Geometry& geometry, const graphic::VisualEffect& effect) const {
+void Scene::Render(graphic::Canvas& canvas) const {
     if(!finished_ && visible_ && render_function_)
-        render_function_(geometry, effect);
+        render_function_(canvas);
 }
 
 void Scene::End() {

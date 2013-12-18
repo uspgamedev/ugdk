@@ -22,6 +22,7 @@
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/light.h>
 #include <ugdk/graphic/node.h>
+#include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/spritesheetdata.h>
 #include <ugdk/graphic/textmanager.h>
@@ -32,6 +33,7 @@
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 %import(module="ugdk_math") <ugdk/math/frame.h>
+%import(module="ugdk_desktop") <ugdk/desktop.h>
 
 %ignore ugdk::graphic::Texture::CreateFromSurface(SDL_Surface* data);
 %ignore ugdk::graphic::Manager::PushAndApplyModifier(const Geometry& apply);
@@ -51,16 +53,17 @@
 %rename(ComposeNew) ugdk::graphic::Geometry::Compose(const Geometry* mod1, const Geometry* mod2);
 %rename(GetTextWithFont) ugdk::graphic::TextManager::GetText(const std::wstring& text, const std::string& font, int width = -1);
 
+%include <ugdk/graphic.h>
+
 %include <ugdk/graphic/geometry.h>
 %include <ugdk/graphic/visualeffect.h>
-
 %include <ugdk/graphic/drawable.h>
 
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_drawable") <ugdk/graphic/drawable/textbox.h> //this needs to go after the include drawable.h
 
-%include <ugdk/graphic.h>
+%include <ugdk/graphic/canvas.h>
 %include <ugdk/graphic/texture.h>
 %include <ugdk/graphic/font.h>
 %include <ugdk/graphic/light.h>
@@ -77,6 +80,7 @@ disable_disown(ugdk::graphic::Node* new_child)
 
 namespace ugdk {
 namespace graphic {
+    export_class(Canvas)
     export_class(Drawable)
     export_class(Texture)
     export_class(Font)
