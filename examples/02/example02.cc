@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
     Rectangle* r = new Rectangle;
 
     scene->event_handler().AddListener<input::KeyPressedEvent>(
-        [scene](const input::KeyPressedEvent& ev) {
+        [scene](const input::KeyPressedEvent& ev) -> void {
             if(ev.scancode == input::Scancode::ESCAPE)
                 scene->Finish();
         });
