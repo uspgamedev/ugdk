@@ -23,8 +23,8 @@ class Manager {
     void set_primary_window(const std::weak_ptr<Window>& window) {
         primary_window_ = window;
     }
-    std::weak_ptr<Window> primary_window() const { return primary_window_; }
-    std::weak_ptr<Window> window(size_t index) const { return windows_[index]; }
+    std::shared_ptr<Window> primary_window() const { return primary_window_.lock(); }
+    std::shared_ptr<Window> window(size_t index) const { return windows_[index]; }
 
     void PresentAll();
 

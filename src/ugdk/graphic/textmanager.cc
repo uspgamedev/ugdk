@@ -44,7 +44,7 @@ bool TextManager::Release() {
 
 TextBox* TextManager::GetText(const std::string& text, const std::string& fonttag, int width) {
     Font *font = fonttag.size() > 0 ? fonts_[fonttag] : current_font_;
-    return new TextBox(text, (width == -1) ? desktop::manager()->primary_window().lock()->size().x : width, font);
+    return new TextBox(text, (width == -1) ? desktop::manager()->primary_window()->size().x : width, font);
 }
 
 TextBox* TextManager::GetText(const std::string& text) {

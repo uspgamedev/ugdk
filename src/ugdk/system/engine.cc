@@ -202,7 +202,7 @@ void Run() {
 
             if(desktop::manager()) {
                 if(graphic::manager()) {
-                    auto canvas = graphic::manager()->canvas().lock();
+                    auto canvas = graphic::manager()->canvas();
                     canvas->Clear();
                     for(action::Scene* it : scene_list_)
                         it->Render(*canvas);

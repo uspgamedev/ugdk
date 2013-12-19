@@ -67,7 +67,7 @@ class Manager {
         friend class Manager;
     };
 
-    std::weak_ptr<Canvas> canvas() const { return canvas_; }
+    std::shared_ptr<Canvas> canvas() const { return canvas_; }
     Texture* light_buffer() { return light_buffer_; }
     Texture* white_texture() { return white_texture_; }
     Shaders& shaders() { return shaders_; }
