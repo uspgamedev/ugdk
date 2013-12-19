@@ -50,7 +50,7 @@ std::string CheckAndCast<std::string, const char*> (const char* value) {
     class VirtualPrimitive<type> { \
       public: \
         static type value(const VirtualData::Ptr data, bool) { \
-            return static_cast<type>(data->Unwrap##name()); \
+            return CheckAndCast<type>(data->Unwrap##name()); \
         } \
         static void set_value(const VirtualData::Ptr data, type value) { \
             data->Wrap##name(arg);  \
