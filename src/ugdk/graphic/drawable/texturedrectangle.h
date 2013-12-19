@@ -13,9 +13,9 @@ class TexturedRectangle : public Drawable {
     TexturedRectangle(Texture* texture, const math::Vector2D& _size);
     ~TexturedRectangle();
 
-    void Draw(Canvas& canvas) const;
+    void Draw(Canvas& canvas) const override;
 
-    const ugdk::math::Vector2D& size() const {
+    const ugdk::math::Vector2D& size() const override {
         return size_;
     }
 

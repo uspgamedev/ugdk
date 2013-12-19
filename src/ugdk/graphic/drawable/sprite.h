@@ -21,8 +21,8 @@ class Sprite : public Drawable {
     explicit Sprite(const Spritesheet *spritesheet, const std::string& animation_set_tag);
     virtual ~Sprite();
 
-    void Draw(Canvas&) const;
-    const ugdk::math::Vector2D& size() const;
+    void Draw(Canvas&) const override;
+    const ugdk::math::Vector2D& size() const override;
 
     const action::SpriteAnimationFrame& current_animation_frame() const;
     const action::SpriteAnimationPlayer& animation_player() const;

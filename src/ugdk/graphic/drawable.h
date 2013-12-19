@@ -3,6 +3,7 @@
 
 #include <functional>
 
+#include <ugdk/system/compatibility.h>
 #include <ugdk/graphic.h>
 #include <ugdk/math/vector2D.h>
 

@@ -24,9 +24,8 @@ class Label : public Drawable {
     void ChangeMessage(const std::string& utf8_message);
     void ChangeMessage(const std::u32string& ucs4_message);
 
-    void Draw(Canvas&) const;
-
-    const ugdk::math::Vector2D& size() const;
+    void Draw(Canvas&) const override;
+    const ugdk::math::Vector2D& size() const override;
 
   private:
     Font* font_;

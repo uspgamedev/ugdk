@@ -30,12 +30,12 @@ class TextBox : public Drawable {
     /// This operation is slow.
     void ChangeMessage(const std::string& message);
 
-    void Draw(Canvas&) const;
+    void Draw(Canvas&) const override;
 
     void set_ident_style(IdentStyle style) { ident_style_ = style; }
 
     double width() const { return width_; }
-    const ugdk::math::Vector2D& size() const { return size_; }
+    const ugdk::math::Vector2D& size() const override { return size_; }
     IdentStyle ident_style() const { return ident_style_; }
 
   private:
