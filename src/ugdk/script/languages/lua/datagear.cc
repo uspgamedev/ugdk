@@ -81,6 +81,14 @@ int DataGear::WrapData(lua_State* L) {
     GETARGPTR(L_, 4, swig_type_info, type);
     L_.settop(0);
 
+    if (!type) {
+        return luaL_error(
+            L,
+            "Unknown SWIG type, cannot wrap data into Lua VM."
+            "Did you forget to load the respective module?"
+        );
+    }
+
     SWIG_NewPointerObj(L_, data, type, 0);
     if (!dtgear.SetData(id))
         return luaL_error(L, "Could not set data with id #%d", id);
