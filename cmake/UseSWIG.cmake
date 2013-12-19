@@ -160,7 +160,7 @@ MACRO(SWIG_ADD_SOURCE_TO_MODULE name outfiles infile)
     SET(swig_include_dirs ${swig_include_dirs} "-I${it}")
   ENDFOREACH(it)
 
-  SET(swig_special_flags)
+  SET(swig_special_flags "-Doverride")
   # default is c, so add c++ flag if it is c++
   IF(swig_source_file_cplusplus)
     SET(swig_special_flags ${swig_special_flags} "-c++")
