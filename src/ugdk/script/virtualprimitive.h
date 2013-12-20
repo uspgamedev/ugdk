@@ -1,4 +1,3 @@
-
 #ifndef UGDK_SCRIPT_VIRTUALPRIMITIVE_H_
 #define UGDK_SCRIPT_VIRTUALPRIMITIVE_H_
 
@@ -36,12 +35,12 @@ class VirtualPrimitive<T*> {
 };
 
 template <typename T, typename S>
-T CheckAndCast (S value) {
+inline T CheckAndCast (S value) {
     return static_cast<T>(value);
 }
 
 template <>
-std::string CheckAndCast<std::string, const char*> (const char* value) {
+inline std::string CheckAndCast<std::string, const char*> (const char* value) {
     return value ? value : "";
 }
 
