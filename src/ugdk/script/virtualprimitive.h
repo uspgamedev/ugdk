@@ -1,4 +1,3 @@
-
 #ifndef UGDK_SCRIPT_VIRTUALPRIMITIVE_H_
 #define UGDK_SCRIPT_VIRTUALPRIMITIVE_H_
 
@@ -17,10 +16,10 @@ namespace script {
     definition(float, Number); \
     definition(double, Number);
 
-template <class T>
+template <typename T>
 class VirtualPrimitive { private: VirtualPrimitive() {} };
 
-template <class T>
+template <typename T>
 class VirtualPrimitive<T*> {
   public:
     static T* value(const VirtualData::Ptr data, bool disown) {
@@ -35,12 +34,22 @@ class VirtualPrimitive<T*> {
     VirtualPrimitive() {}
 };
 
+template <typename T, typename S>
+inline T CheckAndCast (S value) {
+    return static_cast<T>(value);
+}
+
+template <>
+inline std::string CheckAndCast<std::string, const char*> (const char* value) {
+    return value ? value : "";
+}
+
 #define DEFINE_SCRIPT_PRIMITIVE_VALUE(type, name, arg) \
     template <> \
     class VirtualPrimitive<type> { \
       public: \
         static type value(const VirtualData::Ptr data, bool) { \
-            return static_cast<type>(data->Unwrap##name()); \
+            return CheckAndCast<type>(data->Unwrap##name()); \
         } \
         static void set_value(const VirtualData::Ptr data, type value) { \
             data->Wrap##name(arg);  \
