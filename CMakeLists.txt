@@ -218,7 +218,7 @@ target_link_libraries (libugdk LINK_PUBLIC ${EXTRA_LIBRARIES} ${UGDK_LIBRARIES})
 target_link_libraries (libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2)
 
 if(NOT ANDROID) # Glew is not necessary for android builds.
-    target_link_libraries(libugdk LINK_PUBLIC glew ${FREETYPE_GLPP_LIBRARIES})
+    target_link_libraries(libugdk LINK_PUBLIC glew freetype-gl++)
 endif()
                       
 set_target_properties (libugdk PROPERTIES 

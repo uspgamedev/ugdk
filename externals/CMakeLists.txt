@@ -11,7 +11,6 @@ if(ANDROID)
     set(UGDK_INTERNAL_SDL2_MIXER ON CACHE BOOL "Set to ON to use an internal SDL2_mixer instead of the system one." FORCE)
 else()
 
-    # TODO: macro for simplicity
     macro(check_package OPTION_VAR PKG_NAME)
         find_package(${PKG_NAME} ${ARGN} QUIET)
         if(NOT ${OPTION_VAR}_FOUND)
@@ -85,7 +84,6 @@ if(NOT ANDROID)
     include_directories(${OPENGL_INCLUDE_DIR})
 
     if(UGDK_INTERNAL_GLEW)
-        add_definitions(-DGLEW_STATIC)
         add_subdirectory(glew) # Defines 'glew'
     else(UGDK_INTERNAL_GLEW)
         add_library(glew SHARED IMPORTED GLOBAL)
