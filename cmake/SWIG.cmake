@@ -44,7 +44,7 @@ if (SWIG_FOUND)
     
     set(LANGUAGES_LIST "")
     foreach(it ${UGDK_LANGUAGES_LIST})
-        ugdk_setup_package (${it})
+        include(cmake/${it}.cmake)
         string(TOUPPER ${it} itUPPER)
         if(UGDK_${itUPPER}_ENABLED)
             set(LANGUAGES_LIST "${LANGUAGES_LIST} \\\n    ACTION(${itUPPER})")
