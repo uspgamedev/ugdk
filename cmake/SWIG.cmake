@@ -1,6 +1,6 @@
 
 #set (CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/${GENERATED_DIR}")
-set (CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR}/generated")
+set (CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}/src/generated")
 set (GENERATED_SRC "")
 
 # Does this work everywhere?
@@ -22,7 +22,8 @@ endmacro (ugdk_add_scriptlang lang)
 
 if (SWIG_FOUND)
 
-    file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR}/module")
+    file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/src/module")
+    set(CMAKE_SWIG_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}/src")
 
     include (cmake/UseSWIG.cmake)
 
