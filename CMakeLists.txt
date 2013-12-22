@@ -193,7 +193,7 @@ if(NOT ANDROID)
     include_directories("externals/freetype-glpp/include")
     set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
 else()
-    include(externals/android_sdl.cmake)
+    add_subdirectory(externals)
     set(SDL2_LIBRARY SDL2)
     set(UGDK_DEPENDENCIES_SDL2_LIBRARIES ${SDL2_LIBRARY})
     
