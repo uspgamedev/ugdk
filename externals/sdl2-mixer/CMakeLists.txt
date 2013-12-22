@@ -22,7 +22,8 @@ if(MSVC)
 endif(MSVC)
 
 add_library(SDL2-mixer ${SDL2-mixer-sources})
-set_target_properties(SDL2-mixer PROPERTIES COMPILE_FLAGS "-DWAV_MUSIC")
-
+target_compile_definitions(SDL2-mixer PRIVATE
+    WAV_MUSIC)
 target_link_libraries(     SDL2-mixer LINK_PUBLIC SDL2)
 target_include_directories(SDL2-mixer PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include") # TODO: add 'SYSTEM' flag when we have cmake 2.8.12
+
