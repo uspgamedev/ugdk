@@ -9,6 +9,9 @@ cache: apt
 before_script:
   - sudo apt-get update
   - sudo apt-get install swig2.0 liblua5.1-0-dev python-dev libpng12-dev 
+  - sudo apt-get install emacsen-common
+  - wget http://uspgamedev.org/downloads/libs/ubuntu/cmake_2.8.11.2-1ubuntu5_amd64.deb http://uspgamedev.org/downloads/libs/ubuntu/cmake-data_2.8.11.2-1ubuntu5_all.deb
+  - sudo dpkg -i cmake_*.deb cmake-data_*.deb
 
 script:
   - cmake .

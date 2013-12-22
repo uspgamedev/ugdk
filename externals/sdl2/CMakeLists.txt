@@ -1198,6 +1198,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
 add_library(SDL2main STATIC ${SDLMAIN_SOURCES})
 set(_INSTALL_LIBS "SDL2main")
 
+if(SDL_SHARED AND SDL_STATIC)
+    message(FATAL_ERROR "Can't build both SHARED and STATIC with this modifiation.")
+endif()
+
 if(SDL_SHARED)
   add_library(SDL2 SHARED ${SOURCE_FILES})
   if(UNIX)
@@ -1216,12 +1220,12 @@ if(SDL_SHARED)
 endif(SDL_SHARED)
 
 if(SDL_STATIC)
-  add_library(SDL2-static STATIC ${SOURCE_FILES})
-  set_target_properties(SDL2-static PROPERTIES OUTPUT_NAME "SDL2")
+  add_library(SDL2 STATIC ${SOURCE_FILES})
+  set_target_properties(SDL2 PROPERTIES OUTPUT_NAME "SDL2")
   # TODO: Win32 platforms keep the same suffix .lib for import and static
   # libraries - do we need to consider this?
-  set(_INSTALL_LIBS "SDL2-static" ${_INSTALL_LIBS})
-  target_link_libraries(SDL2-static ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
+  set(_INSTALL_LIBS "SDL2" ${_INSTALL_LIBS})
+  target_link_libraries(SDL2 ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
 endif(SDL_STATIC)
 
 ##### Installation targets #####

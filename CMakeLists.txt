@@ -1,4 +1,5 @@
-cmake_minimum_required (VERSION 2.8.7)
+cmake_minimum_required (VERSION 2.8.11)
+# 2.8.11 for target_include_directories
 
 set( UGDK_ANDROID_DIR "${CMAKE_SOURCE_DIR}/android" )
 set( LIBRARY_OUTPUT_PATH_ROOT "${UGDK_ANDROID_DIR}" CACHE PATH "root for library output, set this to change where android libs are installed to" FORCE)
@@ -94,122 +95,7 @@ set(GLM_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/externals/glm-0.9.4.2")
 
 include(cmake/ugdk.cmake)
 
-if(NOT ANDROID)
-    find_package(SDL2 QUIET)
-    if(NOT SDL2_FOUND)
-        message("-- SDL2 not found, forcing internal.")
-        set(UGDK_INTERNAL_SDL2 ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
-    endif(NOT SDL2_FOUND)
-
-    find_package(SDL2_image QUIET)
-    if(NOT SDL2_IMAGE_FOUND)
-        message("-- SDL2_image not found, forcing internal.")
-        set(UGDK_INTERNAL_SDL2_IMAGE ON CACHE BOOL "Set to ON to use an internal SDL2_image instead of the system one." FORCE)
-    endif(NOT SDL2_IMAGE_FOUND)
-
-    find_package(SDL2_mixer QUIET)
-    if(NOT SDL2_MIXER_FOUND)
-        message("-- SDL2_mixer not found, forcing internal.")
-        set(UGDK_INTERNAL_SDL2_MIXER ON CACHE BOOL "Set to ON to use an internal SDL2_mixer instead of the system one." FORCE)
-    endif(NOT SDL2_MIXER_FOUND)
-
-    ########################
-    ## SDL2
-    ########################
-    if(UGDK_INTERNAL_SDL2)
-        set(SDL_SHARED OFF CACHE BOOL "Build a shared version of the library")
-        set(DIRECTX    OFF CACHE BOOL "Use DirectX for Windows audio/video" FORCE)
-        set(RENDER_D3D OFF CACHE BOOL "Enable the Direct3D render driver" FORCE)
-        add_subdirectory(externals/sdl2 externals/sdl2-build)
-
-        set(UGDK_DEPENDENCIES_SDL2_LIBRARIES    SDL2-static)
-        set(UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS ${SDL2_SOURCE_DIR}/include)
-    else(UGDK_INTERNAL_SDL2)
-        set(UGDK_DEPENDENCIES_SDL2_LIBRARIES    ${SDL2_LIBRARIES})
-        set(UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS ${SDL2_INCLUDE_DIRS})
-    endif(UGDK_INTERNAL_SDL2)
-    include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS})
-
-    ########################
-    ## SDL2_IMAGE
-    ########################
-    if(UGDK_INTERNAL_SDL2_IMAGE)
-        add_subdirectory(externals/sdl2-image)
-        set(UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES    SDL2-image)
-        set(UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS ${SDL2-image_SOURCE_DIR}/include)
-
-    else(UGDK_INTERNAL_SDL2_IMAGE)
-        set(UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES    ${SDL2_IMAGE_LIBRARIES})
-        set(UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS ${SDL2_IMAGE_INCLUDE_DIRS})
-    endif(UGDK_INTERNAL_SDL2_IMAGE)
-    include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS})
-
-    ########################
-    ## SDL2_MIXER
-    ########################
-    if(UGDK_INTERNAL_SDL2_MIXER)
-        add_subdirectory(externals/sdl2-mixer)
-        set(UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES    SDL2-mixer)
-        set(UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS ${SDL2-mixer_SOURCE_DIR}/include)
-
-    else(UGDK_INTERNAL_SDL2_MIXER)
-        set(UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES    ${SDL2_MIXER_LIBRARIES})
-        set(UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS ${SDL2_MIXER_INCLUDE_DIRS})
-    endif(UGDK_INTERNAL_SDL2_MIXER)
-    include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS})
-
-    # We set the UGDK_EXTERNALS_SDL_INCLUDE_DIRS variable for users building UGDK with add_subdirectory
-    set(UGDK_EXTERNALS_SDL_INCLUDE_DIRS ${UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS};${UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS})
-
-    # Other libs
-    find_package(OpenGL REQUIRED)
-    include_directories(${OPENGL_INCLUDE_DIR})
-
-    find_package(GLEW 1.5 QUIET)
-    if(NOT GLEW_FOUND)
-        message("-- GLEW not found, forcing internal.")
-        set(UGDK_INTERNAL_GLEW ON CACHE BOOL "Set to ON to use the internal GLEW." FORCE)
-    endif(NOT GLEW_FOUND)
-
-    if(UGDK_INTERNAL_GLEW)
-        add_definitions(-DGLEW_STATIC)
-        add_subdirectory(externals/glew)
-        set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
-        set(GLEW_LIBRARIES ${GLEW_LIBRARY})
-    endif(UGDK_INTERNAL_GLEW)
-    include_directories(${GLEW_INCLUDE_DIRS})
-
-    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/externals/freetype-glpp/CMakeLists.txt")
-        find_package(Git)
-        if(GIT_FOUND)
-            execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init
-                            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-        else(GIT_FOUND)
-            message(FATAL_ERROR "Git submodule 'externals/freetype-glpp' not initialized and git not found.")
-        endif(GIT_FOUND)
-    endif()
-
-    add_subdirectory(externals/freetype-glpp)
-    include_directories("externals/freetype-glpp/include")
-    set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
-else()
-    add_subdirectory(externals)
-    set(SDL2_LIBRARY SDL2)
-    set(UGDK_DEPENDENCIES_SDL2_LIBRARIES ${SDL2_LIBRARY})
-    
-    include_directories(SYSTEM externals/sdl2/include)
-    
-    add_subdirectory(externals/sdl2-image)
-    set(UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES    SDL2-image)
-    
-    add_subdirectory(externals/sdl2-mixer)
-    set(UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES    SDL2-mixer)
-    
-    include_directories(SYSTEM externals/sdl2-image/include)
-    include_directories(SYSTEM externals/sdl2-mixer/include)
-    
-    set(OPENGL_LIBRARIES "-lGLESv2")
-endif(NOT ANDROID)
+add_subdirectory(externals)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${SRC_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/${SRC_DIR})
@@ -282,14 +168,18 @@ if (UNIX OR MINGW)
         #-Wshadow                       # GLM causes many warnings with this
         #-Wextra                        # implies -Wunused-parameter
         -Wmissing-field-initializers
-        -Wswitch-default
+        #-Wswitch-default               # Currently ignored.
         #-Wconversion                   # GLM causes many warnings with this
         #-Wzero-as-null-pointer-constant
         -Wtype-limits
         -Wsign-compare
         -Wignored-qualifiers
         -Wuninitialized
-        -Winit-self)
+        -Winit-self
+
+        # And we ignore these warnings...
+        -Wno-switch-default # SDL includes causes these. Awaiting CMake 2.8.12 to ignore these properly. TODO
+    )
         
     set_source_files_properties(${GENERATED_SRC}
         PROPERTIES 
@@ -322,17 +212,14 @@ if (WIN32)
     set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES}) 
 endif (WIN32)
 
+target_link_libraries (libugdk LINK_PUBLIC ${EXTRA_LIBRARIES} ${UGDK_LIBRARIES})
 
-target_link_libraries (libugdk LINK_PUBLIC
-                        ${EXTRA_LIBRARIES}
-                        # SDL-mixer must come before SDL itself, or else we may have linking errors.
-                        ${UGDK_DEPENDENCIES_SDL2_MIXER_LIBRARIES}
-                        ${UGDK_DEPENDENCIES_SDL2_IMAGE_LIBRARIES}
-                        ${UGDK_DEPENDENCIES_SDL2_LIBRARIES}
-                        ${GLEW_LIBRARIES}
-                        ${OPENGL_LIBRARIES}
-                        ${FREETYPE_GLPP_LIBRARIES}
-                        ${UGDK_LIBRARIES})
+# SDL-mixer must come before SDL itself, or else we may have linking errors.
+target_link_libraries (libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2)
+
+if(NOT ANDROID) # Glew is not necessary for android builds.
+    target_link_libraries(libugdk LINK_PUBLIC glew freetype-gl++)
+endif()
                       
 set_target_properties (libugdk PROPERTIES 
     LINK_FLAGS "${LDFLAGS}"
