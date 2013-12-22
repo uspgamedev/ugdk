@@ -75,7 +75,7 @@ static bool ConvertSurfaceToTexture(SDL_Surface* data, GLuint* texture_, int* te
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
-#ifndef ANDROID
+#ifndef UGDK_USING_GLES
     glHint(GL_TEXTURE_COMPRESSION_HINT, GL_NICEST);
 #endif
 

@@ -1,9 +1,11 @@
 #ifndef UGDK_GRAPHIC_FONT_H_
 #define UGDK_GRAPHIC_FONT_H_
 
-#include <string>
 #include <ugdk/graphic.h>
 #include <ugdk/math/vector2D.h>
+
+#include <memory>
+#include <string>
 
 namespace freetypeglxx {
     class TextureAtlas;
@@ -24,12 +26,18 @@ class Font {
     /// Generates all glyphs in the given string and caches then for later use.
     void HintString(const std::wstring&);
 
-    freetypeglxx::TextureFont* freetype_font() { return freetype_font_; }
+    freetypeglxx::TextureFont* freetype_font() {
+#ifndef UGDK_USING_GLES
+        return freetype_font_.get();
+#endif
+    }
 
   private:
-    freetypeglxx::TextureAtlas* atlas_;
-    freetypeglxx::TextureFont* freetype_font_;
     double size_;
+#ifndef UGDK_USING_GLES
+    std::unique_ptr<freetypeglxx::TextureAtlas> atlas_;
+    std::unique_ptr<freetypeglxx::TextureFont> freetype_font_;
+#endif
 };
 
 }  // namespace graphic

@@ -1,8 +1,8 @@
 #ifndef UGDK_INTERNAL_OPENGL_H_
 #define UGDK_INTERNAL_OPENGL_H_
 
-#ifdef ANDROID
-#include <GLES2/gl2.h> //FIXME
+#ifdef UGDK_USING_GLES
+#include <GLES2/gl2.h>
 #else
 #include <GL/glew.h>
 #endif

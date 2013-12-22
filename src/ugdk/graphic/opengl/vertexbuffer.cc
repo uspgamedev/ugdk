@@ -33,14 +33,14 @@ namespace opengl {
 
 	VertexBuffer *VertexBuffer::Create(size_t size, GLenum target, GLenum usage)
 	{
-#ifndef ANDROID
+#ifndef UGDK_USING_GLES
 		try
 		{
 			// Try to create a VBO.
 			return new VBO(size, target, usage);
 		}
 		catch (const love::Exception &)
-#endif // ANDROID
+#endif // UGDK_USING_GLES
 		{
 			// VBO not supported ... create regular array.
 			return new VertexArray(size, target, usage);
@@ -119,7 +119,7 @@ namespace opengl {
 		return buf + offset;
 	}
 
-#ifndef ANDROID
+#ifndef UGDK_USING_GLES
 	// VBO
 
 	VBO::VBO(size_t size, GLenum target, GLenum usage)
@@ -247,7 +247,7 @@ namespace opengl {
 		glDeleteBuffers(1, &vbo);
 		vbo = 0;
 	}
-#endif // ANDROID
+#endif // UGDK_USING_GLES
 
 } // namespace opengl
 } // namespace graphic

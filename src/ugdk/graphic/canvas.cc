@@ -1,13 +1,13 @@
 #include <ugdk/graphic/canvas.h>
 
-#include <cmath>
-#include <cassert>
-
-#include "SDL_video.h"
-
 #include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/desktop/window.h>
+
+#include "SDL_video.h"
+
+#include <cmath>
+#include <cassert>
 
 namespace ugdk {
 namespace graphic {
@@ -32,9 +32,11 @@ std::shared_ptr<Canvas> Canvas::Create(const std::weak_ptr<desktop::Window>& win
     
     std::shared_ptr<Canvas> canvas(new Canvas(context));
     
-    //GLenum err = glewInit(); FIXME
-    //if (GLEW_OK != err)
-    //    return std::shared_ptr<Canvas>(); //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
+#ifndef UGDK_USING_GLES
+    GLenum err = glewInit();
+    if (GLEW_OK != err)
+        return std::shared_ptr<Canvas>(); //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
+#endif
     
     canvas->AttachTo(window_weak);
     canvas->Resize(size);
@@ -84,7 +86,8 @@ void Canvas::AttachTo(const std::weak_ptr<desktop::Window>& window_weak) {
 void Canvas::UpdateViewport() {
     if(auto window = attached_window_.lock())
         glViewport(0, 0, window->size().x, window->size().y);
-}
+}
+
 void Canvas::SaveToTexture(Texture* texture) {
     glBindTexture(GL_TEXTURE_2D, texture->gltexture());
     //glReadBuffer(GL_BACK); FIXME

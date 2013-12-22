@@ -19,7 +19,7 @@ Shader::~Shader() {
 }
 
 void Shader::GenerateSource() {
-#ifdef ANDROID
+#ifdef UGDK_USING_GLES
     source_ = "#version 100" "\n";
 #else
     source_ = "#version 120" "\n";
@@ -64,9 +64,6 @@ bool Shader::Compile() const {
         const char *strShaderType = nullptr;
         switch(type_) {
         case GL_VERTEX_SHADER: strShaderType = "vertex"; break;
-#ifndef ANDROID
-        case GL_GEOMETRY_SHADER: strShaderType = "geometry"; break;
-#endif
         case GL_FRAGMENT_SHADER: strShaderType = "fragment"; break;
         default: strShaderType = "unknown"; break;
         }

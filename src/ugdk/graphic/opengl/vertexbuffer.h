@@ -249,7 +249,7 @@ namespace opengl {
 		char *buf;
 	};
 
-#ifndef ANDROID
+#ifndef UGDK_USING_GLES
 	/**
 	 * Vertex Buffer Object (VBO) implementation of VertexBuffer.
 	 *
@@ -310,7 +310,7 @@ namespace opengl {
 		// not mapped.
 		void *mapped;
 	};
-#endif // ANDROID
+#endif // UGDK_USING_GLES
 
 } // namespace opengl
 } // namespace graphic
