@@ -202,7 +202,7 @@ install(DIRECTORY src/ugdk src/pyramidworks # TODO: change to only 'include/'
         FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
 
 if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
-    install(DIRECTORY src/generated/ 
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src/generated/ 
             DESTINATION ${UGDK_INSTALL_LOCATION_RELATIVE}/${UGDK_BIGVERSION}/python
             FILES_MATCHING PATTERN "*.py")
 endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
