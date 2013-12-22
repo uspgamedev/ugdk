@@ -36,8 +36,9 @@ else(PNG_FOUND)
     add_definitions(-DLOAD_PNG)
 endif(PNG_FOUND)
 
-include_directories(include)
-
 add_library(SDL2-image ${SDL2-image-sources})
-target_link_libraries(SDL2-image ${SDL2_LIBRARY} ${SDLIMAGE_LIBPNG})
 SET_TARGET_PROPERTIES(SDL2-image PROPERTIES COMPILE_FLAGS "-fstrict-aliasing -fprefetch-loop-arrays")
+
+target_link_libraries(     SDL2-image LINK_PUBLIC SDL2 ${SDLIMAGE_LIBPNG})
+target_include_directories(SDL2-image PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include") # TODO: add 'SYSTEM' flag when we have cmake 2.8.12
+
