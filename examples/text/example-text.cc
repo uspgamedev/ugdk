@@ -3,6 +3,7 @@
 #include <ugdk/input/events.h>
 #include <ugdk/graphic/textmanager.h>
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/drawable/label.h>
 #include <ugdk/graphic/drawable/textbox.h>
 #include <ugdk/util/utf8.h>
@@ -45,9 +46,11 @@ int main(int argc, char* argv[]) {
                 if(ev.scancode == input::Scancode::ESCAPE)
                     scene->Finish();
             });
-        scene->set_render_function([&](const graphic::Geometry& g, const graphic::VisualEffect& e) {
-            label1.Draw(g, e);
-            box->Draw(g * graphic::Geometry(math::Vector2D(0, label1.height() + 50)), e);
+        scene->set_render_function([&](graphic::Canvas& canvas) {
+            label1.Draw(canvas);
+            canvas.PushAndCompose(graphic::Geometry(math::Vector2D(0, label1.height() + 50)));
+            box->Draw(canvas);
+            canvas.PopGeometry();
         });
 
         system::PushScene(scene);
