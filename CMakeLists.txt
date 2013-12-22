@@ -212,16 +212,14 @@ if (WIN32)
     set (EXTRA_LIBRARIES Ws2_32 ${EXTRA_LIBRARIES}) 
 endif (WIN32)
 
-target_link_libraries (libugdk LINK_PUBLIC
-                        ${EXTRA_LIBRARIES}
-                        # SDL-mixer must come before SDL itself, or else we may have linking errors.
-                        SDL2-mixer
-                        SDL2-image
-                        SDL2
-                        ${GLEW_LIBRARIES}
-                        ${OPENGL_LIBRARIES}
-                        ${FREETYPE_GLPP_LIBRARIES}
-                        ${UGDK_LIBRARIES})
+target_link_libraries (libugdk LINK_PUBLIC ${EXTRA_LIBRARIES} ${UGDK_LIBRARIES})
+
+# SDL-mixer must come before SDL itself, or else we may have linking errors.
+target_link_libraries (libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2)
+
+if(NOT ANDROID) # Glew is not necessary for android builds.
+    target_link_libraries(libugdk LINK_PUBLIC glew ${FREETYPE_GLPP_LIBRARIES})
+endif()
                       
 set_target_properties (libugdk PROPERTIES 
     LINK_FLAGS "${LDFLAGS}"

@@ -13,7 +13,7 @@ else()
 
     # TODO: macro for simplicity
     macro(check_package OPTION_VAR PKG_NAME)
-        find_package(${PKG_NAME} QUIET)
+        find_package(${PKG_NAME} ${ARGN} QUIET)
         if(NOT ${OPTION_VAR}_FOUND)
             message("-- ${PKG_NAME} not found, forcing internal.")
             set(UGDK_INTERNAL_${OPTION_VAR} ON CACHE BOOL "Set to ON to use an internal ${PKG_NAME} instead of the system one." FORCE)
@@ -23,6 +23,7 @@ else()
     check_package(SDL2 SDL2)
     check_package(SDL2_IMAGE SDL2_image)
     check_package(SDL2_MIXER SDL2_mixer)
+    check_package(GLEW GLEW 1.5)
 endif()
 
 ########################
@@ -41,17 +42,15 @@ if(UGDK_INTERNAL_SDL2)
         set(RENDER_D3D OFF CACHE BOOL "Enable the Direct3D render driver" FORCE)
         add_subdirectory(sdl2 sdl2-build)
 
-        target_link_libraries(     dependency-SDL2 LINK_PUBLIC SDL2-static)
-        target_include_directories(dependency-SDL2 INTERFACE "${SDL2_SOURCE_DIR}/include")
-
-        add_library(SDL2 STATIC IMPORTED)
+        target_include_directories(SDL2 PUBLIC "${SDL2_SOURCE_DIR}/include") # TODO: add 'SYSTEM' flag when we have cmake 2.8.12
     endif()
 
 else(UGDK_INTERNAL_SDL2)
-    add_library(SDL2 UNKNOWN IMPORTED)
+    add_library(SDL2 STATIC IMPORTED GLOBAL)
     set_target_properties(SDL2 PROPERTIES
-        IMPORTED_LOCATION "${SDL2_LIBRARIES}"
-        INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIRS}")
+        IMPORTED_LOCATION "${SDL2_LIBRARY_PRIMARY}"
+        IMPORTED_LINK_INTERFACE_LIBRARIES "${SDL2_DEPENDENCIES}"
+        INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_SDL2)
 
 ########################
@@ -61,23 +60,23 @@ if(UGDK_INTERNAL_SDL2_IMAGE)
     add_subdirectory(sdl2-image) # Defines 'SDL2-image'
 
 else(UGDK_INTERNAL_SDL2_IMAGE)
-    add_library(SDL2-image UNKNOWN IMPORTED)
+    add_library(SDL2-image SHARED IMPORTED GLOBAL)
     set_target_properties(SDL2-image PROPERTIES
         IMPORTED_LOCATION "${SDL2_IMAGE_LIBRARIES}"
-        INCLUDE_DIRECTORIES "${SDL2_IMAGE_INCLUDE_DIRS}")
+        INTERFACE_INCLUDE_DIRECTORIES "${SDL2_IMAGE_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_SDL2_IMAGE)
 
 ########################
 ## SDL2_MIXER
 ########################
 if(UGDK_INTERNAL_SDL2_MIXER)
-    add_subdirectory(sdl2-mixer) #  SDL2-mixer
+    add_subdirectory(sdl2-mixer) # Defines 'SDL2-mixer'
 
 else(UGDK_INTERNAL_SDL2_MIXER)
-    add_library(SDL2-image-mixer UNKNOWN IMPORTED)
+    add_library(SDL2-mixer SHARED IMPORTED GLOBAL)
     set_target_properties(SDL2-mixer PROPERTIES
         IMPORTED_LOCATION "${SDL2_MIXER_LIBRARIES}"
-        INCLUDE_DIRECTORIES "${SDL2_MIXER_INCLUDE_DIRS}")
+        INTERFACE_INCLUDE_DIRECTORIES "${SDL2_MIXER_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_SDL2_MIXER)
 
 if(NOT ANDROID)
@@ -85,19 +84,15 @@ if(NOT ANDROID)
     find_package(OpenGL REQUIRED)
     include_directories(${OPENGL_INCLUDE_DIR})
 
-    find_package(GLEW 1.5 QUIET)
-    if(NOT GLEW_FOUND)
-        message("-- GLEW not found, forcing internal.")
-        set(UGDK_INTERNAL_GLEW ON CACHE BOOL "Set to ON to use the internal GLEW." FORCE)
-    endif(NOT GLEW_FOUND)
-
     if(UGDK_INTERNAL_GLEW)
         add_definitions(-DGLEW_STATIC)
-        add_subdirectory(glew)
-        set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
-        set(GLEW_LIBRARIES ${GLEW_LIBRARY})
+        add_subdirectory(glew) # Defines 'glew'
+    else(UGDK_INTERNAL_GLEW)
+        add_library(glew SHARED IMPORTED GLOBAL)
+        set_target_properties(glew PROPERTIES
+            IMPORTED_LOCATION "${GLEW_LIBRARIES}"
+            INTERFACE_INCLUDE_DIRECTORIES "${GLEW_INCLUDE_DIRS}")
     endif(UGDK_INTERNAL_GLEW)
-    include_directories(${GLEW_INCLUDE_DIRS})
 
     if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/freetype-glpp/CMakeLists.txt")
         find_package(Git)
