@@ -12,24 +12,17 @@ if(ANDROID)
 else()
 
     # TODO: macro for simplicity
+    macro(check_package OPTION_VAR PKG_NAME)
+        find_package(${PKG_NAME} QUIET)
+        if(NOT ${OPTION_VAR}_FOUND)
+            message("-- ${PKG_NAME} not found, forcing internal.")
+            set(UGDK_INTERNAL_${OPTION_VAR} ON CACHE BOOL "Set to ON to use an internal ${PKG_NAME} instead of the system one." FORCE)
+        endif()
+    endmacro(check_package)
 
-    find_package(SDL2 QUIET)
-    if(NOT SDL2_FOUND)
-        message("-- SDL2 not found, forcing internal.")
-        set(UGDK_INTERNAL_SDL2 ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
-    endif(NOT SDL2_FOUND)
-
-    find_package(SDL2_image QUIET)
-    if(NOT SDL2_IMAGE_FOUND)
-        message("-- SDL2_image not found, forcing internal.")
-        set(UGDK_INTERNAL_SDL2_IMAGE ON CACHE BOOL "Set to ON to use an internal SDL2_image instead of the system one." FORCE)
-    endif(NOT SDL2_IMAGE_FOUND)
-
-    find_package(SDL2_mixer QUIET)
-    if(NOT SDL2_MIXER_FOUND)
-        message("-- SDL2_mixer not found, forcing internal.")
-        set(UGDK_INTERNAL_SDL2_MIXER ON CACHE BOOL "Set to ON to use an internal SDL2_mixer instead of the system one." FORCE)
-    endif(NOT SDL2_MIXER_FOUND)
+    check_package(SDL2 SDL2)
+    check_package(SDL2_IMAGE SDL2_image)
+    check_package(SDL2_MIXER SDL2_mixer)
 endif()
 
 ########################
@@ -60,7 +53,6 @@ else(UGDK_INTERNAL_SDL2)
         IMPORTED_LOCATION "${SDL2_LIBRARIES}"
         INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_SDL2)
-#include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_INCLUDE_DIRS})
 
 ########################
 ## SDL2_IMAGE
@@ -74,7 +66,6 @@ else(UGDK_INTERNAL_SDL2_IMAGE)
         IMPORTED_LOCATION "${SDL2_IMAGE_LIBRARIES}"
         INCLUDE_DIRECTORIES "${SDL2_IMAGE_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_SDL2_IMAGE)
-#include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_IMAGE_INCLUDE_DIRS})
 
 ########################
 ## SDL2_MIXER
@@ -87,9 +78,7 @@ else(UGDK_INTERNAL_SDL2_MIXER)
     set_target_properties(SDL2-mixer PROPERTIES
         IMPORTED_LOCATION "${SDL2_MIXER_LIBRARIES}"
         INCLUDE_DIRECTORIES "${SDL2_MIXER_INCLUDE_DIRS}")
-
 endif(UGDK_INTERNAL_SDL2_MIXER)
-#include_directories(SYSTEM ${UGDK_DEPENDENCIES_SDL2_MIXER_INCLUDE_DIRS})
 
 if(NOT ANDROID)
     # Other libs
@@ -123,6 +112,4 @@ if(NOT ANDROID)
     add_subdirectory(freetype-glpp)
     include_directories("freetype-glpp/include")
     set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
-else()
-    set(OPENGL_LIBRARIES "-lGLESv2")
 endif(NOT ANDROID)
