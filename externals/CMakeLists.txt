@@ -45,11 +45,13 @@ if(UGDK_INTERNAL_SDL2)
     endif()
 
 else(UGDK_INTERNAL_SDL2)
+    find_package(OpenGL REQUIRED)
+
     add_library(SDL2 STATIC IMPORTED GLOBAL)
     set_target_properties(SDL2 PROPERTIES
         IMPORTED_LOCATION "${SDL2_LIBRARY_PRIMARY}"
-        IMPORTED_LINK_INTERFACE_LIBRARIES "${SDL2_DEPENDENCIES}"
-        INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIRS}")
+        IMPORTED_LINK_INTERFACE_LIBRARIES "${SDL2_DEPENDENCIES};${OPENGL_LIBRARIES}"
+        INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIRS};${OPENGL_INCLUDE_DIR}")
 endif(UGDK_INTERNAL_SDL2)
 
 ########################
@@ -59,7 +61,7 @@ if(UGDK_INTERNAL_SDL2_IMAGE)
     add_subdirectory(sdl2-image) # Defines 'SDL2-image'
 
 else(UGDK_INTERNAL_SDL2_IMAGE)
-    add_library(SDL2-image SHARED IMPORTED GLOBAL)
+    add_library(SDL2-image STATIC IMPORTED GLOBAL)
     set_target_properties(SDL2-image PROPERTIES
         IMPORTED_LOCATION "${SDL2_IMAGE_LIBRARIES}"
         INTERFACE_INCLUDE_DIRECTORIES "${SDL2_IMAGE_INCLUDE_DIRS}")
@@ -72,17 +74,13 @@ if(UGDK_INTERNAL_SDL2_MIXER)
     add_subdirectory(sdl2-mixer) # Defines 'SDL2-mixer'
 
 else(UGDK_INTERNAL_SDL2_MIXER)
-    add_library(SDL2-mixer SHARED IMPORTED GLOBAL)
+    add_library(SDL2-mixer STATIC IMPORTED GLOBAL)
     set_target_properties(SDL2-mixer PROPERTIES
         IMPORTED_LOCATION "${SDL2_MIXER_LIBRARIES}"
         INTERFACE_INCLUDE_DIRECTORIES "${SDL2_MIXER_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_SDL2_MIXER)
 
 if(NOT ANDROID)
-    # Other libs
-    find_package(OpenGL REQUIRED)
-    include_directories(${OPENGL_INCLUDE_DIR})
-
     if(UGDK_INTERNAL_GLEW)
         add_subdirectory(glew) # Defines 'glew'
     else(UGDK_INTERNAL_GLEW)
@@ -96,7 +94,8 @@ if(NOT ANDROID)
         find_package(Git)
         if(GIT_FOUND)
             execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init
-                            WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+                            WORKING_DIRECTORY 
+                            "${CMAKE_CURRENT_SOURCE_DIR}")
         else(GIT_FOUND)
             message(FATAL_ERROR "Git submodule 'freetype-glpp' not initialized and git not found.")
         endif(GIT_FOUND)
