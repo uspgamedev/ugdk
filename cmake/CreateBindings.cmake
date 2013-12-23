@@ -3,8 +3,6 @@
 set (CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_BINARY_DIR}/src/generated")
 set (GENERATED_SRC "")
 
-# Does this work everywhere?
-find_package (SWIG)
 
 macro (ugdk_add_scriptlang lang)
 
@@ -20,8 +18,9 @@ macro (ugdk_add_scriptlang lang)
 
 endmacro (ugdk_add_scriptlang lang)
 
-if (SWIG_FOUND)
+find_package (SWIG)
 
+if (SWIG_FOUND)
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/src/module")
     set(CMAKE_SWIG_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}/src")
 
@@ -57,8 +56,6 @@ if (SWIG_FOUND)
     configure_file(${CMAKE_CURRENT_LIST_DIR}/modules.cc.in modules.cc)
   
 else (SWIG_FOUND)
-
-  message (WARNING "Could NOT find SWIG. No script modules will be compiled.")
-
+    message ("--- SWIG not found, ignoring UGDK_CREATE_BINDINGS.")
 endif (SWIG_FOUND)
 

@@ -38,9 +38,9 @@ if(NOT ${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.gitignore "*")
 endif()
 
-#if(UGDK_ANDROID AND ${ANDROID_NATIVE_API_LEVEL} LESS 9)
-#    message(FATAL_ERROR "ANDROID_NATIVE_API_LEVEL must be at least 9")
-#endif()
+if(ANDROID AND ${ANDROID_NATIVE_API_LEVEL} LESS 9)
+    message(FATAL_ERROR "ANDROID_NATIVE_API_LEVEL must be at least 9")
+endif()
 
 CONFIGURE_FILE(
     "doxystuff/Doxyfile.in"
@@ -82,7 +82,7 @@ if (UGDK_CREATE_BINDINGS)
     if (UGDK_PYTHON_BINDINGS)
         list(APPEND UGDK_LANGUAGES_LIST Python)
     endif()
-    include(cmake/SWIG.cmake)
+    include(cmake/CreateBindings.cmake)
 endif (UGDK_CREATE_BINDINGS)
 #########################################################
 
@@ -202,7 +202,6 @@ else(ANDROID)
         target_link_libraries(${NAME} libugdk)
     endmacro(add_ugdk_executable)
 endif(ANDROID)
-
 
 if (UNIX AND PYTHONLIBS_FOUND)
     set(UGDK_INSTALL_LOCATION "${CMAKE_INSTALL_PREFIX}/${UGDK_INSTALL_LOCATION_RELATIVE}")
