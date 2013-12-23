@@ -64,7 +64,7 @@ std::weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
         SDL_FreeSurface(icon);
     }
 
-    windows_.emplace_back(new Window(window, settings.title, settings.size, settings.fullscreen));
+    windows_.emplace_back(new Window(window));
     if(!primary_window_.lock())
         primary_window_ = windows_.back();
 

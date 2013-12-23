@@ -7,12 +7,13 @@
 namespace ugdk {
 namespace desktop {
 
-Window::Window(SDL_Window* sdl_window, const std::string& title, const math::Integer2D& size, bool fullscreen)
+Window::Window(SDL_Window* sdl_window)
     : sdl_window_(sdl_window)
-    , title_(title)
-    , size_(size)
-    , fullscreen_(fullscreen)
-    {}
+    , title_(SDL_GetWindowTitle(sdl_window))
+    , fullscreen_((SDL_GetWindowFlags(sdl_window) & SDL_WINDOW_FULLSCREEN) != 0)
+{
+    SDL_GetWindowSize(sdl_window, &size_.x, &size_.y);
+}
     
 Window::~Window() {
     SDL_DestroyWindow(sdl_window_);
@@ -24,7 +25,6 @@ void Window::Present() {
 }
 
 void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen) {
-    size_ = size;
     fullscreen_ = fullscreen;
 
     // SDL_SetWindowSize fails silently when the window is fullscreen.
@@ -39,6 +39,9 @@ void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen) {
     // the requested resolution, but SDL_SetWindowFullscreen reports no errors in such cases.
     if(fullscreen)
         SDL_SetWindowFullscreen(sdl_window_, SDL_WINDOW_FULLSCREEN);
+    
+    // Update the stored size from the actual window and not the requested size.
+    SDL_GetWindowSize(sdl_window_, &size_.x, &size_.y);
 
     if(auto canvas = this->attached_canvas_.lock())
         canvas->UpdateViewport();
