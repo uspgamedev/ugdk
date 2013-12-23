@@ -12,6 +12,11 @@ class MouseInputSDLEventHandler : public internal::SDLEventHandler {
   public:
     MouseInputSDLEventHandler(Mouse& mouse) : mouse_(mouse) {}
 
+    static system::EventHandler& handler() {
+        return system::CurrentScene()->event_handler();
+    }
+
+
     bool CanHandle(const ::SDL_Event& sdlevent) const {
         return sdlevent.type == SDL_MOUSEMOTION
             || sdlevent.type == SDL_MOUSEBUTTONDOWN
@@ -35,20 +40,25 @@ class MouseInputSDLEventHandler : public internal::SDLEventHandler {
     void MouseMotionHandler(const ::SDL_Event& sdlevent) const {
         mouse_.position_.x = sdlevent.motion.x;
         mouse_.position_.y = sdlevent.motion.y;
-        system::CurrentScene()->event_handler().RaiseEvent(MouseMotionEvent(
+        handler().RaiseEvent(MouseMotionEvent(
+            mouse_.position_,
             math::Integer2D(sdlevent.motion.xrel, sdlevent.motion.yrel)
         ));
     }
 
     void MouseButtonDownHandler(const ::SDL_Event& sdlevent) const {
+        mouse_.position_.x = sdlevent.button.x;
+        mouse_.position_.y = sdlevent.button.y;
         MouseButton button = static_cast<MouseButton>(sdlevent.button.button-1);
-        system::CurrentScene()->event_handler().RaiseEvent(MouseButtonPressedEvent(button));
+        handler().RaiseEvent(MouseButtonPressedEvent(mouse_.position_, button));
         mouse_.state_.insert(button);
     }
 
     void MouseButtonUpHandler(const ::SDL_Event& sdlevent) const {
+        mouse_.position_.x = sdlevent.button.x;
+        mouse_.position_.y = sdlevent.button.y;
         MouseButton button = static_cast<MouseButton>(sdlevent.button.button-1);
-        system::CurrentScene()->event_handler().RaiseEvent(MouseButtonReleasedEvent(button));
+        handler().RaiseEvent(MouseButtonReleasedEvent(mouse_.position_, button));
         mouse_.state_.erase(button);
     }
 
