@@ -8,19 +8,11 @@
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/drawable/texturedrectangle.h>
 #include <ugdk/graphic/module.h>
-
-#ifdef ANDROID
-#include <jni.h>
-#include <string.h>
-#include <android/log.h>
-
-#define LOG_TAG "UGDK"
-#define printf(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#endif
+#include <ugdk/system/config.h>
 
 using namespace ugdk;
 
-extern "C" int SDL_main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
 
     system::Initialize();
 

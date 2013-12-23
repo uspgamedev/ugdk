@@ -29,6 +29,8 @@ class Font {
     freetypeglxx::TextureFont* freetype_font() {
 #ifndef UGDK_USING_GLES
         return freetype_font_.get();
+#else
+        return nullptr;
 #endif
     }
 

@@ -1,5 +1,3 @@
 
-add_definitions(-DEXAMPLE_LOCATION="${CMAKE_CURRENT_SOURCE_DIR}")
-
-add_executable (example-text example-text.cc)
-target_link_libraries(example-text libugdk)
+add_ugdk_executable(example-text text.cc)
+target_compile_definitions(example-text PRIVATE EXAMPLE_LOCATION="${CMAKE_CURRENT_SOURCE_DIR}")

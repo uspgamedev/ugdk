@@ -184,8 +184,27 @@ set_target_properties(libugdk PROPERTIES
 )
 
 if(ANDROID)
-    target_compile_definitions(libugdk PUBLIC UGDK_USING_GLES)
+    target_compile_definitions(libugdk PUBLIC 
+        UGDK_USING_GLES
+    )
 endif(ANDROID)
+
+
+if(ANDROID)
+    macro(add_ugdk_executable NAME SOURCES)
+        add_library(${NAME} SHARED
+            ${SOURCES}
+            ${CMAKE_SOURCE_DIR}/src/android/main.cc
+        )
+        target_link_libraries(${NAME} libugdk)
+    endmacro(add_ugdk_executable)
+else(ANDROID)
+    macro(add_ugdk_executable NAME SOURCES)
+        add_executable(${NAME} ${SOURCES})
+        target_link_libraries(${NAME} libugdk)
+    endmacro(add_ugdk_executable)
+endif(ANDROID)
+
 
 if (UNIX AND PYTHONLIBS_FOUND)
     set(UGDK_INSTALL_LOCATION "${CMAKE_INSTALL_PREFIX}/${UGDK_INSTALL_LOCATION_RELATIVE}")
