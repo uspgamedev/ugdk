@@ -49,7 +49,7 @@ public class SDLActivity extends Activity {
         //System.loadLibrary("SDL2_net");
         //System.loadLibrary("SDL2_ttf");
         //System.loadLibrary("ugdk0.5");
-        System.loadLibrary("example-blank-window");
+        System.loadLibrary("example-draggable-box");
     }
 
     // Setup
