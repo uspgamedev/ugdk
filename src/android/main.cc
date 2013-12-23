@@ -1,22 +1,20 @@
 
-#include "SDL_config.h"
-
-#ifdef __ANDROID__
-
-/* Include the SDL main definition header */
-#include "SDL_main.h"
-
-#undef main
+#ifdef ANDROID
 
 /*******************************************************************************
                  Functions called by JNI
 *******************************************************************************/
 #include <jni.h>
 
+// The main function defined by client code.
 int main(int argc, char** argv);
 
 /* Called before SDL_main() to initialize JNI bindings in SDL library */
 extern "C" void SDL_Android_Init(JNIEnv* env, jclass cls);
+
+/* SDL_main declarations. */
+extern "C" void SDL_SetMainReady(void);
+extern "C" char * SDL_strdup(const char *str);
 
 /* Start up the SDL app */
 extern "C" void Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jclass cls, jobject obj)
@@ -29,7 +27,7 @@ extern "C" void Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jclass c
     /* Run the application code! */
     char *argv[2];
     argv[0] = SDL_strdup("UGDK_app");
-    argv[1] = NULL;
+    argv[1] = nullptr;
     
     /* int status = */ main(1, argv);
 
@@ -37,4 +35,4 @@ extern "C" void Java_org_libsdl_app_SDLActivity_nativeInit(JNIEnv* env, jclass c
     /* exit(status); */
 }
 
-#endif /* __ANDROID__ */
+#endif /* ANDROID */

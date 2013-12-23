@@ -13,6 +13,7 @@
 #include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
+#include <ugdk/system/config.h>
 
 #include <string>
 #include <algorithm>
