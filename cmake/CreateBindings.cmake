@@ -18,7 +18,7 @@ macro (ugdk_add_scriptlang lang)
 
 endmacro (ugdk_add_scriptlang lang)
 
-find_package (SWIG)
+find_host_package (SWIG)
 
 if (SWIG_FOUND)
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/src/module")
@@ -44,7 +44,7 @@ if (SWIG_FOUND)
     
     set(LANGUAGES_LIST "")
     foreach(it ${UGDK_LANGUAGES_LIST})
-        include(cmake/${it}.cmake)
+        include(cmake/languages/${it}.cmake)
         string(TOUPPER ${it} itUPPER)
         if(UGDK_${itUPPER}_ENABLED)
             set(LANGUAGES_LIST "${LANGUAGES_LIST} \\\n    ACTION(${itUPPER})")
