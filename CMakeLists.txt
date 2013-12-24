@@ -195,16 +195,16 @@ endif(ANDROID)
 
 
 if(ANDROID)
-    macro(add_ugdk_executable NAME SOURCES)
+    macro(add_ugdk_executable NAME)
         add_library(${NAME} SHARED
-            ${SOURCES}
-            ${CMAKE_SOURCE_DIR}/src/android/main.cc
+            ${ARGN}
+            ${ugdk_SOURCE_DIR}/src/android/main.cc
         )
         target_link_libraries(${NAME} libugdk)
     endmacro(add_ugdk_executable)
 else(ANDROID)
-    macro(add_ugdk_executable NAME SOURCES)
-        add_executable(${NAME} ${SOURCES})
+    macro(add_ugdk_executable NAME)
+        add_executable(${NAME} ${ARGN})
         target_link_libraries(${NAME} libugdk)
     endmacro(add_ugdk_executable)
 endif(ANDROID)
