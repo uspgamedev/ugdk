@@ -1,8 +1,8 @@
 
 
-include(${CMAKE_SOURCE_DIR}/src/lua_src_list.cmake)
+include(${PROJECT_SOURCE_DIR}/src/lua_src_list.cmake)
 if(NOT UGDK_LUA_SRC)
-    message(FATAL_ERROR "${CMAKE_SOURCE_DIR}/src/lua_src_list.cmake did not define UGDK_LUA_SRC.")
+    message(FATAL_ERROR "${PROJECT_SOURCE_DIR}/src/lua_src_list.cmake did not define UGDK_LUA_SRC.")
 endif()
 
 add_subdirectory(externals/lua-5.1)
