@@ -5,10 +5,9 @@ GNU/Linux:
 1) Get CMake 2.8 or a higher version
 
 2a) Get the folowing libraries: (Debian packages for reference)
- * libsdl1.2-dev
- * libsdl-image1.2-dev
- * libsdl-mixer1.2-dev
- * libsdl-ttf2.0-dev
+ * libsdl2-dev
+ * libsdl-image2-dev
+ * libsdl-mixer2-dev
 
 2b) Optionally install the following packages:
  * liblua5.1-dev
@@ -54,19 +53,40 @@ Windows
 =======
 
 1) Have the following software installed:
-- CMake 2.8 or higher
-- Python 2.7 (must have registry entry)
-- Lua 5.1 (must have LUA_DIR set)
-- SWIG 2.0.4 (must be on PATH)
+- CMake 2.8.11 or higher
 
-2) Set the CMAKE_PREFIX_PATH variable to a folder that contains a include and a lib directories,
+1.1) Optional software:
+- SWIG 2.0.4 (must be on PATH)
+- Python 2.6 (must have registry entry)
+- Lua 5.1 (must have LUA_DIR set)
+
+2) Set the SDL2DIR variable to a folder that contains a include and a lib directories,
 containing the following libraries:
-- SDL 1.2
-- SDL_Image 1.2
-- SDL_Mixer 1.2
-- SDL_TTF 2.0
+- SDL 2.0
+- SDL_Image 2.0
+- SDL_Mixer 2.0
 
 3) Using CMake, generate the project files for the IDE you wish to use.
 
 4) Build using the generated project.
+
+
+=======
+Android
+=======
+
+1) Have the following software installed:
+- CMake 2.8.11 or higher
+- Android SDK Tools 20131030 or higher (https://developer.android.com/sdk/index.html)
+- Android NDK r9 or higher (http://developer.android.com/tools/sdk/ndk/index.html)
+
+2) Set the enviroment variable ANDROID_NDK to the directory you installed the Android NDK.
+
+3) Run the following:
+  $ mkdir build && cd build
+  $ cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_TOOLCHAIN_FILE=../cmake/android.toolchain.cmake -DANDROID_NATIVE_API_LEVEL=android-9 ..
+
+4) ....
+
+5) Profit! (Aka TODO)
 

@@ -39,22 +39,25 @@ struct KeyReleasedEvent {
 };
 
 struct MouseMotionEvent {
+    math::Integer2D position;
     math::Integer2D motion;
     
-    MouseMotionEvent(const math::Integer2D& _motion)
-        : motion(_motion) {}
+    MouseMotionEvent(const math::Integer2D& _position, const math::Integer2D& _motion)
+        : position(_position), motion(_motion) {}
 };
 struct MouseButtonPressedEvent {
+    math::Integer2D position;
     MouseButton button;
 
-    MouseButtonPressedEvent(const MouseButton& _button)
-        : button(_button) {}
+    MouseButtonPressedEvent(const math::Integer2D& _position, const MouseButton& _button)
+        : position(_position), button(_button) {}
 };
 struct MouseButtonReleasedEvent {
+    math::Integer2D position;
     MouseButton button;
 
-    MouseButtonReleasedEvent(const MouseButton& _button)
-        : button(_button) {}
+    MouseButtonReleasedEvent(const math::Integer2D& _position, const MouseButton& _button)
+        : position(_position), button(_button) {}
 };
 struct MouseWheelEvent {
     math::Integer2D scroll;

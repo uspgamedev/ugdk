@@ -56,7 +56,7 @@ extern AudioBootStrap XAUDIO2_bootstrap;
 extern AudioBootStrap DSOUND_bootstrap;
 extern AudioBootStrap WINMM_bootstrap;
 extern AudioBootStrap PAUDIO_bootstrap;
-extern AudioBootStrap BEOSAUDIO_bootstrap;
+extern AudioBootStrap HAIKUAUDIO_bootstrap;
 extern AudioBootStrap COREAUDIO_bootstrap;
 extern AudioBootStrap SNDMGR_bootstrap;
 extern AudioBootStrap DISKAUD_bootstrap;
@@ -113,8 +113,8 @@ static const AudioBootStrap *const bootstrap[] = {
 #if SDL_AUDIO_DRIVER_PAUDIO
     &PAUDIO_bootstrap,
 #endif
-#if SDL_AUDIO_DRIVER_BEOSAUDIO
-    &BEOSAUDIO_bootstrap,
+#if SDL_AUDIO_DRIVER_HAIKU
+    &HAIKUAUDIO_bootstrap,
 #endif
 #if SDL_AUDIO_DRIVER_COREAUDIO
     &COREAUDIO_bootstrap,
@@ -300,9 +300,7 @@ SDL_StreamInit(SDL_AudioStreamer * stream, int max_len, Uint8 silence)
 static void
 SDL_StreamDeinit(SDL_AudioStreamer * stream)
 {
-    if (stream->buffer != NULL) {
-        SDL_free(stream->buffer);
-    }
+    SDL_free(stream->buffer);
 }
 
 #if defined(ANDROID)
@@ -419,7 +417,7 @@ SDL_RunAudio(void *devicep)
                     if (istream == NULL) {
                         istream = device->fake_stream;
                     }
-                    /*SDL_memcpy(istream, device->convert.buf, device->convert.len_cvt); */
+                    /* SDL_memcpy(istream, device->convert.buf, device->convert.len_cvt); */
                     SDL_StreamWrite(&device->streamer, device->convert.buf,
                                     device->convert.len_cvt);
                 } else {
@@ -632,9 +630,7 @@ free_device_list(char ***devices, int *devCount)
         }
     }
 
-    if (*devices != NULL) {
-        SDL_free(*devices);
-    }
+    SDL_free(*devices);
 
     *devices = NULL;
     *devCount = 0;
@@ -726,10 +722,16 @@ SDL_GetAudioDeviceName(int index, int iscapture)
     }
 
     if ((iscapture) && (current_audio.impl.OnlyHasDefaultInputDevice)) {
+        if (index > 0) {
+            goto no_such_device;
+        }
         return DEFAULT_INPUT_DEVNAME;
     }
 
     if ((!iscapture) && (current_audio.impl.OnlyHasDefaultOutputDevice)) {
+        if (index > 0) {
+            goto no_such_device;
+        }
         return DEFAULT_OUTPUT_DEVNAME;
     }
 
@@ -761,9 +763,7 @@ close_audio_device(SDL_AudioDevice * device)
     if (device->mixer_lock != NULL) {
         SDL_DestroyMutex(device->mixer_lock);
     }
-    if (device->fake_stream != NULL) {
-        SDL_FreeAudioMem(device->fake_stream);
-    }
+    SDL_FreeAudioMem(device->fake_stream);
     if (device->convert.needed) {
         SDL_FreeAudioMem(device->convert.buf);
     }

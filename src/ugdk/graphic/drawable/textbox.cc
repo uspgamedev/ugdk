@@ -1,14 +1,17 @@
 #include <ugdk/graphic/drawable/textbox.h>
 
-#include <sstream>
-#include <iterator>
-#include <algorithm>
-#include <freetype-gl++/texture-font.hpp>
-
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/drawable/label.h>
 #include <ugdk/graphic/canvas.h>
+
+#ifndef UGDK_USING_GLES
+#include <freetype-gl++/texture-font.hpp>
+#endif
+
+#include <sstream>
+#include <iterator>
+#include <algorithm>
 
 namespace ugdk {
 namespace graphic {
@@ -99,7 +102,7 @@ void TextBox::splitString(const std::u32string& ucs4_message, std::list<std::u32
 
 double TextBox::calculateWidth(std::u32string::const_iterator start, std::u32string::const_iterator end) {
     double width = 0.0;
-
+#ifndef UGDK_USING_GLES
     bool has_previous = false;
     std::u32string::const_iterator previous;
     for(auto step = start; step != end; previous = step++) {
@@ -115,6 +118,7 @@ double TextBox::calculateWidth(std::u32string::const_iterator start, std::u32str
         width += kerning;
         width += glyph->advance_x();
     }
+#endif
     return width;
 }
 

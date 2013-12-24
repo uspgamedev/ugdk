@@ -1,11 +1,11 @@
 #include <ugdk/graphic/drawable/label.h>
 
-#include <algorithm>
-#include "GL/glew.h"
-#define NO_SDL_GLEXT
+#ifndef UGDK_USING_GLES
 #include <freetype-gl++/texture-font.hpp>
 #include <freetype-gl++/vec234.hpp>
+#endif
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/graphic/defaultshaders.h>
@@ -16,8 +16,9 @@
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/canvas.h>
-
 #include <ugdk/util/utf8.h>
+
+#include <algorithm>
 
 namespace ugdk {
 namespace graphic {
@@ -49,7 +50,8 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
     delete vertex_buffer_;
     delete texture_buffer_;
     indices_.clear();
-
+    
+#ifndef UGDK_USING_GLES
     num_characters_ = ucs4_message.size();
     size_ = math::Vector2D(0, font_->height());
 
@@ -104,6 +106,7 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
         buffer_offset += 4;
     }
     size_.x = pen.x;
+#endif
 }
 
 const ugdk::math::Vector2D& Label::size() const {
@@ -111,6 +114,7 @@ const ugdk::math::Vector2D& Label::size() const {
 }
 
 void Label::Draw(Canvas& canvas) const {
+#ifndef UGDK_USING_GLES
     canvas.PushAndCompose(Geometry(-hotspot_));
     
     if(draw_setup_function_) draw_setup_function_(this, canvas);
@@ -138,6 +142,7 @@ void Label::Draw(Canvas& canvas) const {
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
 
     canvas.PopGeometry();
+#endif
 }
 
 }  // namespace graphic

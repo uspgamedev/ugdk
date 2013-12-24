@@ -9,6 +9,8 @@
 #include <ugdk/graphic/opengl/shader.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 
+#include <ugdk/system/config.h>
+
 namespace ugdk {
 namespace graphic {
 namespace opengl {
@@ -129,7 +131,7 @@ bool ShaderProgram::SetupProgram() {
 
         GLchar *strInfoLog = new GLchar[infoLogLength + 1];
         glGetProgramInfoLog(id_, infoLogLength, nullptr, strInfoLog);
-        fprintf(stderr, "Linker failure: %s\n", strInfoLog);
+        printf("Linker failure: %s\n", strInfoLog);
         delete[] strInfoLog;
     } else {
         matrix_location_ = UniformLocation("geometry_matrix");

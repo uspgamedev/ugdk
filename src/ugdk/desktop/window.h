@@ -15,7 +15,7 @@ namespace desktop {
 
 class Window {
   private:
-    Window(SDL_Window* sdl_window, const std::string& title, const math::Integer2D& size, bool fullscreen);
+    Window(SDL_Window* sdl_window);
 
   public:
     ~Window();

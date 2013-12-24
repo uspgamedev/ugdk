@@ -1,8 +1,6 @@
-#include <GL/glew.h>
-#define NO_SDL_GLEXT
-
 #include <ugdk/graphic/light.h>
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/geometry.h>
@@ -40,6 +38,8 @@ void Light::Draw(const Geometry& geometry) {
     opengl::ShaderProgram* shader = graphic::manager()->light_shader();
     opengl::ShaderProgram::Use shader_use(shader);
 
+    shader_use.SendUniform("decayment", 2.4f);
+    shader_use.SendUniform("minimum_radius", 0.05f);
     shader_use.SendGeometry(geometry * Geometry(math::Vector2D(), dimension_));
     shader_use.SendEffect(VisualEffect(color_));
 

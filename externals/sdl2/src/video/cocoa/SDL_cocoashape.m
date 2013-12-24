@@ -82,8 +82,8 @@ Cocoa_SetWindowShape(SDL_WindowShaper *shaper,SDL_Surface *shape,SDL_WindowShape
         data->saved = SDL_FALSE;
     }
 
-    //[data->context saveGraphicsState];
-    //data->saved = SDL_TRUE;
+    /*[data->context saveGraphicsState];*/
+    /*data->saved = SDL_TRUE;*/
     [NSGraphicsContext setCurrentContext:data->context];
 
     [[NSColor clearColor] set];
@@ -92,7 +92,7 @@ Cocoa_SetWindowShape(SDL_WindowShaper *shaper,SDL_Surface *shape,SDL_WindowShape
 
     pool = [[NSAutoreleasePool alloc] init];
     closure.view = [windata->nswindow contentView];
-    closure.path = [[NSBezierPath bezierPath] autorelease];
+    closure.path = [[NSBezierPath bezierPath] init];
     closure.window = shaper->window;
     SDL_TraverseShapeTree(data->shape,&ConvertRects,&closure);
     [closure.path addClip];

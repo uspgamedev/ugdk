@@ -1,0 +1,1 @@
+add_ugdk_executable(example-blank-window blank-window.cc)

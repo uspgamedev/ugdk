@@ -33,12 +33,14 @@ namespace opengl {
 
 	VertexBuffer *VertexBuffer::Create(size_t size, GLenum target, GLenum usage)
 	{
+#ifndef UGDK_USING_GLES
 		try
 		{
 			// Try to create a VBO.
 			return new VBO(size, target, usage);
 		}
 		catch (const love::Exception &)
+#endif // UGDK_USING_GLES
 		{
 			// VBO not supported ... create regular array.
 			return new VertexArray(size, target, usage);
@@ -117,6 +119,7 @@ namespace opengl {
 		return buf + offset;
 	}
 
+#ifndef UGDK_USING_GLES
 	// VBO
 
 	VBO::VBO(size_t size, GLenum target, GLenum usage)
@@ -125,7 +128,7 @@ namespace opengl {
 		, buffer_copy(nullptr)
 		, mapped(nullptr)
 	{
-		if (!(GLEW_ARB_vertex_buffer_object || GLEW_VERSION_1_5))
+		if (!GLEW_VERSION_1_5)
 			throw love::Exception("Not supported");
 
 		bool ok = load(false);
@@ -149,26 +152,26 @@ namespace opengl {
 		mapped = malloc(getSize());
 		if (!mapped)
 			throw love::Exception("Out of memory (oh the humanity!)");
-		glGetBufferSubDataARB(getTarget(), 0, getSize(), mapped);
+		glGetBufferSubData(getTarget(), 0, getSize(), mapped);
 
 		return mapped;
 	}
 
 	void VBO::unmap()
 	{
-		glBufferSubDataARB(getTarget(), 0, getSize(), mapped);
+		glBufferSubData(getTarget(), 0, getSize(), mapped);
 		free(mapped);
 		mapped = nullptr;
 	}
 
 	void VBO::bind() const
 	{
-		glBindBufferARB(getTarget(), vbo);
+		glBindBuffer(getTarget(), vbo);
 	}
 
 	void VBO::unbind() const
 	{
-		glBindBufferARB(getTarget(), 0);
+		glBindBuffer(getTarget(), 0);
 	}
 
 	void VBO::fill(size_t offset, size_t size, const void *data)
@@ -176,7 +179,7 @@ namespace opengl {
 		if (mapped)
 			memcpy(static_cast<char*>(mapped) + offset, data, size);
 		else
-			glBufferSubDataARB(getTarget(), offset, size, data);
+			glBufferSubData(getTarget(), offset, size, data);
 	}
 
 	const void *VBO::getPointer(size_t offset) const
@@ -196,7 +199,7 @@ namespace opengl {
 
 	bool VBO::load(bool restore)
 	{
-		glGenBuffersARB(1, &vbo);
+		glGenBuffers(1, &vbo);
 
 		VertexBuffer::Bind bind(*this);
 
@@ -207,7 +210,7 @@ namespace opengl {
 			/* clear error messages */;
 
 		// Note that if 'src' is '0', no data will be copied.
-		glBufferDataARB(getTarget(), getSize(), src, getUsage());
+		glBufferData(getTarget(), getSize(), src, getUsage());
 		GLenum err = glGetError();
 
 		// Clean up buffer_copy, if it exists.
@@ -229,7 +232,7 @@ namespace opengl {
 			VertexBuffer::Bind bind(*this);
 
 			GLint size;
-			glGetBufferParameterivARB(getTarget(), GL_BUFFER_SIZE, &size);
+			glGetBufferParameteriv(getTarget(), GL_BUFFER_SIZE, &size);
 
 			const char *src = static_cast<char *>(map());
 
@@ -244,6 +247,7 @@ namespace opengl {
 		glDeleteBuffers(1, &vbo);
 		vbo = 0;
 	}
+#endif // UGDK_USING_GLES
 
 } // namespace opengl
 } // namespace graphic

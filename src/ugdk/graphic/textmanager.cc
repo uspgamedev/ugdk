@@ -1,13 +1,5 @@
 #include <ugdk/graphic/textmanager.h>
 
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
-#include <clocale>
-#include <cwchar>
-
-#include <freetype-gl++/texture-font.hpp>
-
 #include <ugdk/system/engine.h>
 #include <ugdk/desktop/module.h>
 #include <ugdk/desktop/window.h>
@@ -16,6 +8,12 @@
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/util/utf8.h>
+
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <clocale>
+#include <cwchar>
 
 //Tamanho máximo de uma linha do arquivo de entrada
 #define MAXLINE 1024

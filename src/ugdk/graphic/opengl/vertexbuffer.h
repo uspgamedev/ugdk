@@ -26,7 +26,7 @@
 //#include <graphics/Volatile.h>
 
 // OpenGL
-#include "GL/glew.h"
+#include <ugdk/internal/opengl.h>
 
 namespace ugdk {
 namespace graphic {
@@ -249,6 +249,7 @@ namespace opengl {
 		char *buf;
 	};
 
+#ifndef UGDK_USING_GLES
 	/**
 	 * Vertex Buffer Object (VBO) implementation of VertexBuffer.
 	 *
@@ -309,6 +310,7 @@ namespace opengl {
 		// not mapped.
 		void *mapped;
 	};
+#endif // UGDK_USING_GLES
 
 } // namespace opengl
 } // namespace graphic

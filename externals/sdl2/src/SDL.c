@@ -20,6 +20,10 @@
 */
 #include "SDL_config.h"
 
+#if defined(__WIN32__)
+#include "core/windows/SDL_windows.h"
+#endif
+
 /* Initialization code for SDL */
 
 #include "SDL.h"
@@ -111,9 +115,11 @@ SDL_InitSubSystem(Uint32 flags)
     SDL_ClearError();
 
 #if SDL_VIDEO_DRIVER_WINDOWS
-    if (SDL_HelperWindowCreate() < 0) {
-        return -1;
-    }
+	if ((flags & (SDL_INIT_HAPTIC|SDL_INIT_JOYSTICK))) {
+		if (SDL_HelperWindowCreate() < 0) {
+			return -1;
+		}
+	}
 #endif
 
 #if !SDL_TIMERS_DISABLED
@@ -390,8 +396,6 @@ SDL_GetPlatform()
     return "AIX";
 #elif __ANDROID__
     return "Android";
-#elif __BEOS__
-    return "BeOS";
 #elif __BSDI__
     return "BSDI";
 #elif __DREAMCAST__
@@ -441,7 +445,6 @@ SDL_GetPlatform()
 
 #if !defined(HAVE_LIBC) || (defined(__WATCOMC__) && defined(BUILD_DLL))
 /* Need to include DllMain() on Watcom C for some reason.. */
-#include "core/windows/SDL_windows.h"
 
 BOOL APIENTRY
 _DllMainCRTStartup(HANDLE hModule,

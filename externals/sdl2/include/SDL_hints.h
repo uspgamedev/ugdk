@@ -95,6 +95,17 @@ extern "C" {
 #define SDL_HINT_RENDER_OPENGL_SHADERS      "SDL_RENDER_OPENGL_SHADERS"
 
 /**
+ *  \brief  A variable controlling whether the Direct3D device is initialized for thread-safe operations.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - Thread-safety is not enabled (faster)
+ *    "1"       - Thread-safety is enabled
+ *
+ *  By default the Direct3D device is created with thread-safety disabled.
+ */
+#define SDL_HINT_RENDER_DIRECT3D_THREADSAFE "SDL_RENDER_DIRECT3D_THREADSAFE"
+
+/**
  *  \brief  A variable controlling the scaling quality
  *
  *  This variable can be set to the following values:
@@ -167,6 +178,16 @@ extern "C" {
  */
 #define SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS   "SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS"
 
+/**
+ *  \brief Set whether windows go fullscreen in their own spaces on Mac OS X
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - Fullscreen windows will use the classic fullscreen mode
+ *    "1"       - Fullscreen windows will use fullscreen spaces
+ *
+ *  By default SDL will use the classic fullscreen mode.
+ */
+#define SDL_HINT_VIDEO_FULLSCREEN_SPACES   "SDL_VIDEO_FULLSCREEN_SPACES"
 
 /**
  *  \brief  A variable controlling whether the idle timer is disabled on iOS.
@@ -192,6 +213,16 @@ extern "C" {
  *    "LandscapeLeft", "LandscapeRight", "Portrait" "PortraitUpsideDown"
  */
 #define SDL_HINT_ORIENTATIONS "SDL_IOS_ORIENTATIONS"
+    
+/**
+ *  \brief  A variable controlling whether an Android built-in accelerometer should be
+ *  listed as a joystick device, rather than listing actual joysticks only.
+ *
+ *  This variable can be set to the following values:
+ *    "0"       - List only real joysticks and accept input from them
+ *    "1"       - List real joysticks along with the accelerometer as if it were a 3 axis joystick (the default).
+ */
+#define SDL_HINT_ACCEL_AS_JOY "SDL_ACCEL_AS_JOY"
 
 
 /**
@@ -257,6 +288,34 @@ extern "C" {
 #define SDL_HINT_TIMER_RESOLUTION "SDL_TIMER_RESOLUTION"
 
 
+/**
+ *  \brief If set to 1, then do not allow high-DPI windows. ("Retina" on Mac)
+ */
+#define SDL_HINT_VIDEO_HIGHDPI_DISABLED "SDL_VIDEO_HIGHDPI_DISABLED"
+
+/**
+ *  \brief A variable that determines whether ctrl+click should generate a right-click event on Mac
+ *  
+ *  If present, holding ctrl while left clicking will generate a right click
+ *  event when on Mac.
+ */
+#define SDL_HINT_MAC_CTRL_CLICK_EMULATE_RIGHT_CLICK "SDL_MAC_CTRL_CLICK_EMULATE_RIGHT_CLICK"
+
+/**
+*  \brief  A variable specifying which shader compiler to preload when using the Chrome ANGLE binaries
+*
+*  SDL has EGL and OpenGL ES2 support on Windows via the ANGLE project. It
+*  can use two different sets of binaries, those compiled by the user from source
+*  or those provided by the Chrome browser. In the later case, these binaries require
+*  that SDL loads 
+*
+*  This variable can be set to the following values:
+*    "d3dcompiler_46.dll" - default, best for Vista or later.
+*    "d3dcompiler_43.dll" - for XP support.
+*    "none" - do not load any library, useful if you compiled ANGLE from source and included the compiler in your binaries.
+*
+*/
+#define SDL_HINT_VIDEO_WIN_D3DCOMPILER              "SDL_VIDEO_WIN_D3DCOMPILER"
 
 /**
  *  \brief  An enumeration of hint priorities

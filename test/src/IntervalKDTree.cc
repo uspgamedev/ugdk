@@ -5,7 +5,11 @@
 #include <algorithm>
 
 ugdk::structure::Box<2> makeMyBox(double a1, double a2, double b1, double b2) {
-    std::array<double, 2> min = { a1, a2 }, max = { b1, b2 };
+    std::array<double, 2> min, max;
+    min[0] = a1;
+    min[1] = a2;
+    max[0] = b1;
+    max[1] = b2;
     return ugdk::structure::Box<2>(min, max);
 }
 template<class T, class Container>
@@ -28,7 +32,7 @@ TEST(IntervalKDTree, InsertFind) {
         EXPECT_TRUE(contains(v, 1));
         EXPECT_TRUE(contains(v, 2));
         EXPECT_FALSE(contains(v, 3));
-        EXPECT_EQ(2, v.size());
+        EXPECT_EQ(2u, v.size());
     }
 
     ikd.Update(makeMyBox(0.5, 0.5, 0.5, 1.0), 3);
@@ -38,7 +42,7 @@ TEST(IntervalKDTree, InsertFind) {
         EXPECT_TRUE(contains(v, 1));
         EXPECT_TRUE(contains(v, 2));
         EXPECT_TRUE(contains(v, 3));
-        EXPECT_EQ(3, v.size());
+        EXPECT_EQ(3u, v.size());
     }
 }
 

@@ -1,7 +1,7 @@
-#include <GL/glew.h>
 #include "SDL_endian.h"
 #include "SDL_image.h"
 
+#include <ugdk/internal/opengl.h>
 #include <cstdlib>
 #include <cstdio>
 #include <ugdk/graphic/texture.h>
@@ -75,7 +75,9 @@ static bool ConvertSurfaceToTexture(SDL_Surface* data, GLuint* texture_, int* te
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 
+#ifndef UGDK_USING_GLES
     glHint(GL_TEXTURE_COMPRESSION_HINT, GL_NICEST);
+#endif
 
     GLenum errorCode = glGetError();
     if ( errorCode != 0 ) {
@@ -86,8 +88,7 @@ static bool ConvertSurfaceToTexture(SDL_Surface* data, GLuint* texture_, int* te
         free(raw);
         return false;
     }
-    // Many VGA works faster if you use BGR instead of RGB
-    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA8, *texture_width_, *texture_height_, 0, GL_BGRA, GL_UNSIGNED_BYTE, raw);
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, *texture_width_, *texture_height_, 0, GL_RGBA, GL_UNSIGNED_BYTE, raw);
     free(raw);
 
     errorCode = glGetError();

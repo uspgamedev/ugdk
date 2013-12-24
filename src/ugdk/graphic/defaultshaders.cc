@@ -1,11 +1,12 @@
 #include <ugdk/graphic/defaultshaders.h>
 
-#include "GL/glew.h"
-#define NO_SDL_GLEXT
 #include <cassert>
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/opengl/shader.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
+
+#include <ugdk/system/config.h>
 
 namespace ugdk {
 namespace graphic {
@@ -16,9 +17,9 @@ opengl::ShaderProgram* CreateShader(bool light_system, bool color_text_mode) {
     opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
     // VERTEX
-    vertex_shader.AddCodeBlock("out vec2 UV;" "\n");
+    vertex_shader.AddCodeBlock("out highp vec2 UV;" "\n");
     if(light_system)
-        vertex_shader.AddCodeBlock("out vec2 lightUV;" "\n"
+        vertex_shader.AddCodeBlock("out highp vec2 lightUV;" "\n"
                                    "void calculateLightUV() {" "\n"
                                    "   lightUV = (gl_Position.xy + vec2(1, 1)) * 0.5;" "\n"
                                    "}" "\n");
@@ -30,18 +31,18 @@ opengl::ShaderProgram* CreateShader(bool light_system, bool color_text_mode) {
     vertex_shader.GenerateSource();
 
     // FRAGMENT
-    fragment_shader.AddCodeBlock("in vec2 UV;" "\n"
-                                 "uniform sampler2D drawable_texture;" "\n"
-                                 "uniform vec4 effect_color;" "\n");
+    fragment_shader.AddCodeBlock("in highp vec2 UV;" "\n"
+                                 "uniform highp sampler2D drawable_texture;" "\n"
+                                 "uniform highp vec4 effect_color;" "\n");
 
     if(light_system)
-        fragment_shader.AddCodeBlock("in vec2 lightUV;" "\n"
-                                     "uniform sampler2D light_texture;" "\n");
+        fragment_shader.AddCodeBlock("in highp vec2 lightUV;" "\n"
+                                     "uniform highp sampler2D light_texture;" "\n");
 
     if(color_text_mode)
-        fragment_shader.AddLineInMain("	vec4 color = vec4(effect_color.rgb, texture2D( drawable_texture, UV ).a * effect_color.a);" "\n");
+        fragment_shader.AddLineInMain("	highp vec4 color = vec4(effect_color.rgb, texture2D( drawable_texture, UV ).a * effect_color.a);" "\n");
     else
-        fragment_shader.AddLineInMain("	vec4 color = texture2D( drawable_texture, UV ) * effect_color;" "\n");
+        fragment_shader.AddLineInMain("	highp vec4 color = texture2D( drawable_texture, UV ) * effect_color;" "\n");
     if(light_system)
         fragment_shader.AddLineInMain("	color *= vec4(texture2D(light_texture, lightUV).rgb, 1.0);" "\n");
     fragment_shader.AddLineInMain(" gl_FragColor = color;" "\n");
@@ -82,15 +83,15 @@ opengl::ShaderProgram* LightShader() {
     if(!myprogram) {
         opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
-        vertex_shader.AddCodeBlock("out vec2 lightPosition;" "\n");
-        vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition*4,0,1);" "\n");
-        vertex_shader.AddLineInMain("   lightPosition = vertexPosition*4;" "\n");
+        vertex_shader.AddCodeBlock("out highp vec2 lightPosition;" "\n");
+        vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition*4.0,0,1);" "\n");
+        vertex_shader.AddLineInMain("   lightPosition = vertexPosition*4.0;" "\n");
         vertex_shader.GenerateSource();
 
-        fragment_shader.AddCodeBlock("in vec2 lightPosition;" "\n"
-                                     "uniform vec4 effect_color;" "\n"
-                                     "uniform float decayment = 2.4;" "\n"
-                                     "uniform float minimum_radius = 0.05;" "\n");
+        fragment_shader.AddCodeBlock("in highp vec2 lightPosition;" "\n"
+                                     "uniform highp vec4 effect_color;" "\n"
+                                     "uniform highp float decayment;" "\n"
+                                     "uniform highp float minimum_radius;" "\n");
         fragment_shader.AddLineInMain(" gl_FragColor = effect_color * exp(-decayment * (length(lightPosition) - minimum_radius));" "\n");
         fragment_shader.GenerateSource();
 

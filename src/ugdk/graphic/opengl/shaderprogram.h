@@ -3,9 +3,8 @@
 
 #include <string>
 #include <list>
-#include "GL/glew.h"
-#define NO_SDL_GLEXT
 
+#include <ugdk/internal/opengl.h>
 #include <ugdk/graphic.h>
 #include <glm/glm.hpp>
 

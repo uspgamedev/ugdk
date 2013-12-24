@@ -4,6 +4,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <ugdk/system/config.h>
+
 namespace ugdk {
 namespace graphic {
 namespace opengl {
@@ -17,7 +19,14 @@ Shader::~Shader() {
 }
 
 void Shader::GenerateSource() {
+#ifdef UGDK_USING_GLES
+    source_ = "#version 100" "\n";
+#else
     source_ = "#version 120" "\n";
+    source_ += "#define highp " "\n";
+    source_ += "#define mediump " "\n";
+    source_ += "#define lowp " "\n";
+#endif
     if(type_ == GL_VERTEX_SHADER) {
         source_ += "#define in attribute" "\n";
         source_ += "#define out varying" "\n";
@@ -25,11 +34,11 @@ void Shader::GenerateSource() {
         source_ += "#define in varying" "\n";
     }
     
-    source_ += "uniform mat4 geometry_matrix;" "\n";
+    source_ += "uniform highp mat4 geometry_matrix;" "\n";
 
     if(type_ == GL_VERTEX_SHADER) {
-        source_ += "in vec2 vertexPosition;" "\n";
-        source_ += "in vec2 vertexUV;" "\n";
+        source_ += "in highp vec2 vertexPosition;" "\n";
+        source_ += "in highp vec2 vertexUV;" "\n";
     }
 
     source_ += blocks_;
@@ -55,11 +64,12 @@ bool Shader::Compile() const {
         const char *strShaderType = nullptr;
         switch(type_) {
         case GL_VERTEX_SHADER: strShaderType = "vertex"; break;
-        case GL_GEOMETRY_SHADER: strShaderType = "geometry"; break;
         case GL_FRAGMENT_SHADER: strShaderType = "fragment"; break;
+        default: strShaderType = "unknown"; break;
         }
 
-        fprintf(stderr, "Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
+        printf("Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
+        printf("============ SOURCE: \n%s\n", source_.c_str()); 
         delete[] strInfoLog;
     }
     return status == GL_TRUE;

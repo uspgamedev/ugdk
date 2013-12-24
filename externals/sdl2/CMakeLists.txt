@@ -29,9 +29,9 @@ include(${SDL2_SOURCE_DIR}/cmake/sdlchecks.cmake)
 # set SDL_BINARY_AGE and SDL_INTERFACE_AGE to 0.
 set(SDL_MAJOR_VERSION 2)
 set(SDL_MINOR_VERSION 0)
-set(SDL_MICRO_VERSION 0)
+set(SDL_MICRO_VERSION 1)
 set(SDL_INTERFACE_AGE 0)
-set(SDL_BINARY_AGE 0)
+set(SDL_BINARY_AGE 1)
 set(SDL_VERSION "${SDL_MAJOR_VERSION}.${SDL_MINOR_VERSION}.${SDL_MICRO_VERSION}")
 
 # Calculate a libtool-like version number
@@ -95,8 +95,10 @@ elseif(APPLE)
     set(MACOSX TRUE)
   endif()
   # TODO: iOS?
-elseif(CMAKE_SYSTEM_NAME MATCHES "Haiku.*|BeOS.*")
-  set(BEOS TRUE)
+elseif(CMAKE_SYSTEM_NAME MATCHES "BeOS.*")
+  message_error("BeOS support has been removed as of SDL 2.0.2.")
+elseif(CMAKE_SYSTEM_NAME MATCHES "Haiku.*")
+  set(HAIKU TRUE)
 endif()
 
 # Don't mistake osx for unix
@@ -172,7 +174,7 @@ include_directories(${SDL2_BINARY_DIR}/include ${SDL2_SOURCE_DIR}/include)
 
 set(SDL_SUBSYSTEMS
     Atomic Audio Video Render Events Joystick Haptic Power Threads Timers
-    File Loadso CPUinfo)
+    File Loadso CPUinfo Filesystem)
 foreach(_SUB ${SDL_SUBSYSTEMS})
   string(TOUPPER ${_SUB} _OPT)
   option(SDL_${_OPT} "Enable the ${_SUB} subsystem" ON)
@@ -264,7 +266,7 @@ endif(ASSERTIONS STREQUAL "auto")
 set(HAVE_ASSERTIONS ${ASSERTIONS})
 
 # Compiler option evaluation
-if(USE_GCC)
+if(USE_GCC OR USE_CLANG)
   if(DEPENDENCY_TRACKING)
     check_c_source_compiles("
         #if !defined(__GNUC__) || __GNUC__ < 3
@@ -308,11 +310,11 @@ if(USE_GCC)
 
   check_c_compiler_flag(-Wall HAVE_GCC_WALL)
   if(HAVE_GCC_WALL)
-    if(CMAKE_SYSTEM_NAME MATCHES "Haiku|BeOS")
+    if(HAIKU)
       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-multichar")
-    endif(CMAKE_SYSTEM_NAME MATCHES "Haiku|BeOS")
+    endif(HAIKU)
   endif(HAVE_GCC_WALL)
-endif(USE_GCC)
+endif(USE_GCC OR USE_CLANG)
 
 if(ASSEMBLY)
   if(USE_GCC OR USE_CLANG)
@@ -648,6 +650,21 @@ if(UNIX AND NOT APPLE)
         #error EVIOCGNAME() ioctl not available
         #endif
         int main(int argc, char** argv) {}" HAVE_INPUT_EVENTS)
+
+    check_c_source_compiles("
+        #include <linux/kd.h>
+        #include <linux/keyboard.h>
+
+        int main(int argc, char **argv) 
+        {
+            struct kbentry kbe;
+            kbe.kb_table = KG_CTRL;
+            ioctl(0, KDGKBENT, &kbe);
+        }" HAVE_INPUT_KD)
+
+    file(GLOB CORE_SOURCES ${SDL2_SOURCE_DIR}/src/core/linux/*.c)
+    set(SOURCE_FILES ${SOURCE_FILES} ${CORE_SOURCES})
+
     if(HAVE_INPUT_EVENTS)
       set(SDL_INPUT_LINUXEV 1)
     endif(HAVE_INPUT_EVENTS)
@@ -658,6 +675,10 @@ if(UNIX AND NOT APPLE)
       set(SOURCE_FILES ${SOURCE_FILES} ${HAPTIC_SOURCES})
       set(HAVE_SDL_HAPTIC TRUE)
     endif(SDL_HAPTIC AND HAVE_INPUT_EVENTS)
+
+    if(HAVE_INPUT_KD)
+      set(SDL_INPUT_LINUXKD 1)
+    endif(HAVE_INPUT_KD)
 
     check_include_file("libudev.h" HAVE_LIBUDEV_H)
 
@@ -714,6 +735,13 @@ if(UNIX AND NOT APPLE)
     endif(LINUX)
   endif(SDL_POWER)
 
+  if(SDL_FILESYSTEM)
+    set(SDL_FILESYSTEM_UNIX 1)
+    file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/unix/*.c)
+    set(SOURCE_FILES ${SOURCE_FILES} ${FILESYSTEM_SOURCES})
+    set(HAVE_SDL_FILESYSTEM TRUE)
+  endif(SDL_FILESYSTEM)
+
   if(SDL_TIMERS)
     set(SDL_TIMER_UNIX 1)
     file(GLOB TIMER_SOURCES ${SDL2_SOURCE_DIR}/src/timer/unix/*.c)
@@ -739,8 +767,8 @@ elseif(WINDOWS)
     #include <windows.h>
     int main(int argc, char **argv) { }" HAVE_WIN32_CC)
 
-  file(GLOB WIN_SOURCES ${SDL2_SOURCE_DIR}/src/core/windows/*.c)
-  set(SOURCE_FILES ${SOURCE_FILES} ${WIN_SOURCES})
+  file(GLOB CORE_SOURCES ${SDL2_SOURCE_DIR}/src/core/windows/*.c)
+  set(SOURCE_FILES ${SOURCE_FILES} ${CORE_SOURCES})
 
   # Check for DirectX
   if(DIRECTX)
@@ -813,6 +841,13 @@ elseif(WINDOWS)
     set(SOURCE_FILES ${SOURCE_FILES} ${SDL2_SOURCE_DIR}/src/power/windows/SDL_syspower.c)
     set(HAVE_SDL_POWER TRUE)
   endif(SDL_POWER)
+
+  if(SDL_FILESYSTEM)
+    set(SDL_FILESYSTEM_WINDOWS 1)
+    file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/windows/*.c)
+    set(SOURCE_FILES ${SOURCE_FILES} ${FILESYSTEM_SOURCES})
+    set(HAVE_SDL_FILESYSTEM TRUE)
+  endif(SDL_FILESYSTEM)
 
   # Libraries for Win32 native and MinGW
   list(APPEND EXTRA_LIBS user32 gdi32 winmm imm32 ole32 oleaut32 version uuid)
@@ -924,6 +959,13 @@ elseif(APPLE)
     set(SDL_FRAMEWORK_IOKIT 1)
   endif()
 
+  if(SDL_FILESYSTEM)
+    set(SDL_FILESYSTEM_COCOA 1)
+    file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/cocoa/*.m)
+    set(SOURCE_FILES ${SOURCE_FILES} ${FILESYSTEM_SOURCES})
+    set(HAVE_SDL_FILESYSTEM TRUE)
+  endif()
+
   # Actually load the frameworks at the end so we don't duplicate include.
   if(SDL_FRAMEWORK_COCOA)
     find_library(COCOA_LIBRARY Cocoa)
@@ -966,12 +1008,17 @@ elseif(APPLE)
   endif(SDL_VIDEO)
 
   CheckPTHREAD()
-elseif(BEOS)
+elseif(HAIKU)
   if(SDL_VIDEO)
-    set(SDL_VIDEO_DRIVER_BWINDOW 1)
-    file(GLOB BWINDOW_SOURCES ${SDL2_SOURCE_DIR}/src/video/bwindow/*.c)
-    set(SOURCE_FILES ${SOURCE_FILES} ${BWINDOW_SOURCES})
+    set(SDL_VIDEO_DRIVER_HAIKU 1)
+    file(GLOB HAIKUVIDEO_SOURCES ${SDL2_SOURCE_DIR}/src/video/haiku/*.c)
+    set(SOURCE_FILES ${SOURCE_FILES} ${HAIKUVIDEO_SOURCES})
     set(HAVE_SDL_VIDEO TRUE)
+
+    set(SDL_FILESYSTEM_HAIKU 1)
+    file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/haiku/*.cc)
+    set(SOURCE_FILES ${SOURCE_FILES} ${FILESYSTEM_SOURCES})
+    set(HAVE_SDL_FILESYSTEM TRUE)
 
     if(VIDEO_OPENGL)
       # TODO: Use FIND_PACKAGE(OpenGL) instead
@@ -982,6 +1029,8 @@ elseif(BEOS)
       set(HAVE_VIDEO_OPENGL TRUE)
     endif(VIDEO_OPENGL)
   endif(SDL_VIDEO)
+
+  CheckPTHREAD()
 endif()
 
 # Dummies
@@ -1008,8 +1057,13 @@ endif(NOT HAVE_SDL_HAPTIC)
 if(NOT HAVE_SDL_LOADSO)
   set(SDL_LOADSO_DISABLED 1)
   file(GLOB LOADSO_SOURCES ${SDL2_SOURCE_DIR}/src/loadso/dummy/*.c)
-  set(SOURCE_FILES ${SOURCE_FILES} ${JOYSTICK_SOURCES})
+  set(SOURCE_FILES ${SOURCE_FILES} ${LOADSO_SOURCES})
 endif(NOT HAVE_SDL_LOADSO)
+if(NOT HAVE_SDL_FILESYSTEM)
+  set(SDL_FILESYSTEM_DISABLED 1)
+  file(GLOB FILESYSTEM_SOURCES ${SDL2_SOURCE_DIR}/src/filesystem/dummy/*.c)
+  set(SOURCE_FILES ${SOURCE_FILES} ${FILESYSTEM_SOURCES})
+endif(NOT HAVE_SDL_FILESYSTEM)
 
 # We always need to have threads and timers around
 if(NOT HAVE_SDL_THREADS)
@@ -1144,6 +1198,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_CFLAGS}")
 add_library(SDL2main STATIC ${SDLMAIN_SOURCES})
 set(_INSTALL_LIBS "SDL2main")
 
+if(SDL_SHARED AND SDL_STATIC)
+    message(FATAL_ERROR "Can't build both SHARED and STATIC with this modifiation.")
+endif()
+
 if(SDL_SHARED)
   add_library(SDL2 SHARED ${SOURCE_FILES})
   if(UNIX)
@@ -1162,12 +1220,12 @@ if(SDL_SHARED)
 endif(SDL_SHARED)
 
 if(SDL_STATIC)
-  add_library(SDL2-static STATIC ${SOURCE_FILES})
-  set_target_properties(SDL2-static PROPERTIES OUTPUT_NAME "SDL2")
+  add_library(SDL2 STATIC ${SOURCE_FILES})
+  set_target_properties(SDL2 PROPERTIES OUTPUT_NAME "SDL2")
   # TODO: Win32 platforms keep the same suffix .lib for import and static
   # libraries - do we need to consider this?
-  set(_INSTALL_LIBS "SDL2-static" ${_INSTALL_LIBS})
-  target_link_libraries(SDL2-static ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
+  set(_INSTALL_LIBS "SDL2" ${_INSTALL_LIBS})
+  target_link_libraries(SDL2 ${EXTRA_LIBS} ${EXTRA_LDFLAGS})
 endif(SDL_STATIC)
 
 ##### Installation targets #####
