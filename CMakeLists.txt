@@ -42,6 +42,10 @@ if(ANDROID)
     if(${ANDROID_NATIVE_API_LEVEL} LESS 9)
         message(FATAL_ERROR "ANDROID_NATIVE_API_LEVEL must be at least 9")
     endif()
+else()
+    macro(find_host_package)
+        find_package(${ARGN})
+    endmacro(find_host_package)
 endif()
 
 CONFIGURE_FILE(

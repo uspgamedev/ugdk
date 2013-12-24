@@ -91,7 +91,7 @@ if(NOT ANDROID)
     endif(UGDK_INTERNAL_GLEW)
 
     if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/freetype-glpp/CMakeLists.txt")
-        find_package(Git)
+        find_host_package(Git)
         if(GIT_FOUND)
             execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init
                             WORKING_DIRECTORY 
