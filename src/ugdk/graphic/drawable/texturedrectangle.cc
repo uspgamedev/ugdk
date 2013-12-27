@@ -16,12 +16,14 @@ namespace ugdk {
 namespace graphic {
     
 TexturedRectangle::TexturedRectangle(Texture* texture) 
-    : size_(math::Integer2D(texture->width(), texture->height()))
-    , texture_(texture) {}
+    : texture_(texture) {
+        assert(texture_);
+        size_ = math::Integer2D(texture->width(), texture->height());
+    }
 
 TexturedRectangle::TexturedRectangle(Texture* texture, const math::Vector2D& _size) 
     : size_(_size)
-    , texture_(texture) {}
+    , texture_(texture) { assert(texture_); }
 
 TexturedRectangle::~TexturedRectangle() {}
 
