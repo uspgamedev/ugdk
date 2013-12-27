@@ -17,6 +17,7 @@
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/util/utf8.h>
+#include <ugdk/graphic/drawable/functions.h>
 
 #include <algorithm>
 
@@ -106,6 +107,8 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
         buffer_offset += 4;
     }
     size_.x = pen.x;
+#else
+    size_ = math::Vector2D(200.0, 50.0);
 #endif
 }
 
@@ -142,6 +145,8 @@ void Label::Draw(Canvas& canvas) const {
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
 
     canvas.PopGeometry();
+#else
+    DrawSquare(canvas.current_geometry() * Geometry(-hotspot_, size_), canvas.current_visualeffect(), manager()->white_texture());
 #endif
 }
 
