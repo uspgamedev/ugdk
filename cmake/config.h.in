@@ -27,6 +27,8 @@
 
 #define LOG_TAG "UGDK"
 #define printf(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
+#define fprintf(A, ...) printf(__VA_ARGS__)
+
 #endif
 
 #endif // UGDK_COMMON_CONFIG_H_
