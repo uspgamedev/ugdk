@@ -11,6 +11,8 @@
 #define TOSTRING(X) typeid(X).name()
 #endif
 
+#include <ugdk/system/config.h>
+
 namespace ugdk {
 namespace resource {
 
@@ -111,6 +113,11 @@ class GenericContainer<T*, T* (*) (const std::string&)> : public virtual Resourc
     virtual T* Load(const std::string& filepath, const std::string& tag) {
         if(Exists(tag)) return Find(tag);
         T* obj = loader_(filepath);
+        #ifdef DEBUG
+        if(!obj) {
+            fprintf(stderr, "UGDK::GenericContainer<%s> Error - loader_ for '%s' returned nullptr.\n", TOSTRING(T), tag.c_str());
+        }
+        #endif
         Insert(tag, obj);
         return obj;
     }
