@@ -6,6 +6,8 @@
 #include <cstdio>
 #include <ugdk/graphic/texture.h>
 #include <ugdk/system/engine.h>
+#include <ugdk/system/config.h>
+
 
 namespace ugdk {
 namespace graphic {
@@ -54,7 +56,7 @@ static bool ConvertSurfaceToTexture(SDL_Surface* data, GLuint* texture_, int* te
                 break;
             }
             // Changing pixel order from RGBA to BGRA.
-            SDL_GetRGBA( truePixel, data->format, &(dstPixel[2]), &(dstPixel[1]), &(dstPixel[0]), &(dstPixel[3]));
+            SDL_GetRGBA( truePixel, data->format, &(dstPixel[0]), &(dstPixel[1]), &(dstPixel[2]), &(dstPixel[3]));
             dstPixel++;
             dstPixel++;
             dstPixel++;
