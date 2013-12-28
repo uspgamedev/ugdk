@@ -107,6 +107,8 @@ LanguageManager* language_manager() {
 }
 
 std::string ResolvePath(const std::string& path) {
+    if(path.compare(0, configuration_.base_path.size(), configuration_.base_path) == 0)
+        return path;
     return configuration_.base_path + path;
 }
 
