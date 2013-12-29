@@ -55,7 +55,7 @@ set(BASE_SRCS
 )
 
 add_library(freetype ${BASE_SRCS})
-target_compile_definitions(freetype PRIVATE "-DFT2_BUILD_LIBRARY")
+target_compile_definitions(freetype PRIVATE "FT2_BUILD_LIBRARY")
 target_include_directories(freetype 
     PUBLIC 
         "${freetype_SOURCE_DIR}/include"
@@ -69,3 +69,10 @@ target_include_directories(freetype
         "src/psaux"
         "src/psnames"
     )
+
+if(ANDROID)
+    find_package(ZLIB REQUIRED)
+    target_compile_definitions(freetype PRIVATE "FT_CONFIG_OPTION_SYSTEM_ZLIB")
+    target_link_libraries(freetype LINK_PRIVATE ${ZLIB_LIBRARY})
+endif()
+    
