@@ -36,7 +36,9 @@ else(PNG_FOUND)
 endif(PNG_FOUND)
 
 add_library(SDL2-image ${SDL2-image-sources})
-set_target_properties(SDL2-image PROPERTIES COMPILE_FLAGS "-fstrict-aliasing -fprefetch-loop-arrays")
+if(CMAKE_COMPILER_IS_GNUCC)
+    set_target_properties(SDL2-image PROPERTIES COMPILE_FLAGS "-fstrict-aliasing -fprefetch-loop-arrays -fPIC")
+endif()
 
 target_compile_definitions(SDL2-image PRIVATE
     LOAD_TGA
