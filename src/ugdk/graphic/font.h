@@ -25,22 +25,16 @@ class Font {
     void HintString(const std::wstring&);
 
     texture_font_t* freetype_font() {
-#ifndef UGDK_USING_GLES
         return freetype_font_;
-#else
-        return nullptr;
-#endif
     }
 
   private:
     double size_;
-#ifndef UGDK_USING_GLES
     texture_atlas_t* atlas_;
     texture_font_t* freetype_font_;
-#endif
 };
 
 }  // namespace graphic
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_GRAPHIC_FONT_H_

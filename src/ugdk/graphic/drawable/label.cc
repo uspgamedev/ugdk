@@ -1,10 +1,5 @@
 #include <ugdk/graphic/drawable/label.h>
 
-#ifndef UGDK_USING_GLES
-#include <texture-font.h>
-#include <vec234.h>
-#endif
-
 #include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
@@ -18,6 +13,9 @@
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/util/utf8.h>
 #include <ugdk/graphic/drawable/functions.h>
+
+#include <texture-font.h>
+#include <vec234.h>
 
 #include <algorithm>
 
@@ -52,7 +50,6 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
     delete texture_buffer_;
     indices_.clear();
     
-#ifndef UGDK_USING_GLES
     num_characters_ = ucs4_message.size();
     size_ = math::Vector2D(0, font_->height());
 
@@ -122,9 +119,6 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
         buffer_offset += 4;
     }
     size_.x = pen.x;
-#else
-    size_ = math::Vector2D(200.0, 50.0);
-#endif
 }
 
 const ugdk::math::Vector2D& Label::size() const {
@@ -132,7 +126,6 @@ const ugdk::math::Vector2D& Label::size() const {
 }
 
 void Label::Draw(Canvas& canvas) const {
-#ifndef UGDK_USING_GLES
     canvas.PushAndCompose(Geometry(-hotspot_));
     
     if(draw_setup_function_) draw_setup_function_(this, canvas);
@@ -160,9 +153,6 @@ void Label::Draw(Canvas& canvas) const {
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
 
     canvas.PopGeometry();
-#else
-    DrawSquare(canvas.current_geometry() * Geometry(-hotspot_, size_), canvas.current_visualeffect(), manager()->white_texture());
-#endif
 }
 
 }  // namespace graphic

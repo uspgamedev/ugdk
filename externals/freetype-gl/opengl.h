@@ -34,7 +34,9 @@
 #ifndef __OPEN_GL_H__
 #define __OPEN_GL_H__
 
-#if defined(__APPLE__)
+#if defined(ANDROID)
+#   include <GLES2/gl2.h>
+#elif defined(__APPLE__)
 #   include <GL/glew.h>
 #  ifdef GL_ES_VERSION_2_0
 #    include <OpenGLES/ES2/gl.h>

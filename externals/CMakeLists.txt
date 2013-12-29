@@ -102,6 +102,6 @@ if(NOT ANDROID)
             IMPORTED_LOCATION "${GLEW_LIBRARIES}"
             INTERFACE_INCLUDE_DIRECTORIES "${GLEW_INCLUDE_DIRS}")
     endif(UGDK_INTERNAL_GLEW)
-
-    add_subdirectory(freetype-gl)
 endif(NOT ANDROID)
+
+add_subdirectory(freetype-gl)

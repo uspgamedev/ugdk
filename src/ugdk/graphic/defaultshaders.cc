@@ -40,7 +40,7 @@ opengl::ShaderProgram* CreateShader(bool light_system, bool color_text_mode) {
                                      "uniform highp sampler2D light_texture;" "\n");
 
     if(color_text_mode)
-        fragment_shader.AddLineInMain("	highp vec4 color = vec4(effect_color.rgb, texture2D( drawable_texture, UV ).r * effect_color.a);" "\n");
+        fragment_shader.AddLineInMain("	highp vec4 color = vec4(effect_color.rgb, texture2D( drawable_texture, UV ).a * effect_color.a);" "\n");
     else
         fragment_shader.AddLineInMain("	highp vec4 color = texture2D( drawable_texture, UV ) * effect_color;" "\n");
     if(light_system)

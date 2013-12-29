@@ -44,6 +44,15 @@ SET( FREETYPE_GL_SRC freetype-gl.h
 
 add_library( freetype-gl ${FREETYPE_GL_SRC} )
 
-target_link_libraries( freetype-gl LINK_PUBLIC freetype glew)
+target_link_libraries(freetype-gl LINK_PUBLIC freetype)
+if(CMAKE_COMPILER_IS_GNUCC)
+    target_link_libraries(freetype-gl LINK_PUBLIC m)
+endif()
+if(ANDROID)
+    target_link_libraries(freetype-gl LINK_PUBLIC GLESv2)
+else()
+    target_link_libraries(freetype-gl LINK_PUBLIC glew)
+endif()
+
 target_include_directories(freetype-gl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
