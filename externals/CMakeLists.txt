@@ -103,6 +103,5 @@ if(NOT ANDROID)
             INTERFACE_INCLUDE_DIRECTORIES "${GLEW_INCLUDE_DIRS}")
     endif(UGDK_INTERNAL_GLEW)
 
-    #add_subdirectory(freetype-glpp)
-    #include_directories("freetype-glpp/include")
+    add_subdirectory(freetype-gl)
 endif(NOT ANDROID)
