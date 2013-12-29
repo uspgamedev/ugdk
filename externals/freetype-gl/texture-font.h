@@ -216,7 +216,7 @@ typedef struct
 /**
  *  Texture font structure.
  */
-typedef struct
+typedef struct texture_font_t
 {
     /**
      * Vector of glyphs contained in this font.

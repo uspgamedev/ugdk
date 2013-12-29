@@ -6,7 +6,7 @@
 #include <ugdk/graphic/canvas.h>
 
 #ifndef UGDK_USING_GLES
-#include <freetype-gl++/texture-font.hpp>
+#include <texture-font.h>
 #endif
 
 #include <sstream>
@@ -106,17 +106,17 @@ double TextBox::calculateWidth(std::u32string::const_iterator start, std::u32str
     bool has_previous = false;
     std::u32string::const_iterator previous;
     for(auto step = start; step != end; previous = step++) {
-        freetypeglxx::TextureGlyph* glyph = font_->freetype_font()->GetGlyph(*step);
+        texture_glyph_t *glyph = texture_font_get_glyph(font_->freetype_font(), *step);
         if(!glyph) continue;
 
         double kerning = 0;
         if(has_previous)
-            kerning = glyph->GetKerning(*previous);
+            kerning = texture_glyph_get_kerning(glyph, static_cast<wchar_t>( *previous ));
         else
             has_previous = true;
 
         width += kerning;
-        width += glyph->advance_x();
+        width += glyph->advance_x;
     }
 #endif
     return width;
