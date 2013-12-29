@@ -1,12 +1,14 @@
 
 option(UGDK_INTERNAL_GLEW        "Set to ON to use an internal GLEW instead of the system one." OFF)
+option(UGDK_INTERNAL_FREETYPE    "Set to ON to use an internal freetype instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2        "Set to ON to use an internal SDL2 instead of the system one." OFF)
-option(UGDK_INTERNAL_SDL2_IMAGE   "Set to ON to use an internal SDL2_image instead of the system one." OFF)
-option(UGDK_INTERNAL_SDL2_MIXER   "Set to ON to use an internal SDL2_mixer instead of the system one." OFF)
+option(UGDK_INTERNAL_SDL2_IMAGE  "Set to ON to use an internal SDL2_image instead of the system one." OFF)
+option(UGDK_INTERNAL_SDL2_MIXER  "Set to ON to use an internal SDL2_mixer instead of the system one." OFF)
 
 if(ANDROID)
     # Always compile all externals for Android.
-    set(UGDK_INTERNAL_SDL2 ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
+    set(UGDK_INTERNAL_FREETYPE   ON CACHE BOOL "Set to ON to use an internal freetype instead of the system one." FORCE)
+    set(UGDK_INTERNAL_SDL2       ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
     set(UGDK_INTERNAL_SDL2_IMAGE ON CACHE BOOL "Set to ON to use an internal SDL2_image instead of the system one." FORCE)
     set(UGDK_INTERNAL_SDL2_MIXER ON CACHE BOOL "Set to ON to use an internal SDL2_mixer instead of the system one." FORCE)
 else()
@@ -19,6 +21,7 @@ else()
         endif()
     endmacro(check_package)
 
+    check_package(FREETYPE Freetype)
     check_package(SDL2 SDL2)
     check_package(SDL2_IMAGE SDL2_image)
     check_package(SDL2_MIXER SDL2_mixer)
@@ -80,6 +83,16 @@ else(UGDK_INTERNAL_SDL2_MIXER)
         INTERFACE_INCLUDE_DIRECTORIES "${SDL2_MIXER_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_SDL2_MIXER)
 
+if(UGDK_INTERNAL_FREETYPE)
+    add_subdirectory(freetype) # Defines 'SDL2-image'
+
+else(UGDK_INTERNAL_FREETYPE)
+    add_library(freetype STATIC IMPORTED GLOBAL)
+    set_target_properties(freetype PROPERTIES
+        IMPORTED_LOCATION "${FREETYPE_LIBRARIES}"
+        INTERFACE_INCLUDE_DIRECTORIES "${FREETYPE_INCLUDE_DIRS}")
+endif(UGDK_INTERNAL_FREETYPE)
+
 if(NOT ANDROID)
     if(UGDK_INTERNAL_GLEW)
         add_subdirectory(glew) # Defines 'glew'
@@ -90,18 +103,6 @@ if(NOT ANDROID)
             INTERFACE_INCLUDE_DIRECTORIES "${GLEW_INCLUDE_DIRS}")
     endif(UGDK_INTERNAL_GLEW)
 
-    if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/freetype-glpp/CMakeLists.txt")
-        find_host_package(Git)
-        if(GIT_FOUND)
-            execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init
-                            WORKING_DIRECTORY 
-                            "${CMAKE_CURRENT_SOURCE_DIR}")
-        else(GIT_FOUND)
-            message(FATAL_ERROR "Git submodule 'freetype-glpp' not initialized and git not found.")
-        endif(GIT_FOUND)
-    endif()
-
-    add_subdirectory(freetype-glpp)
-    include_directories("freetype-glpp/include")
-    set(FREETYPE_GLPP_LIBRARIES freetype-gl++)
+    #add_subdirectory(freetype-glpp)
+    #include_directories("freetype-glpp/include")
 endif(NOT ANDROID)
