@@ -50,6 +50,8 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
     delete texture_buffer_;
     indices_.clear();
     
+    assert(font_);
+    
     num_characters_ = ucs4_message.size();
     size_ = math::Vector2D(0, font_->height());
 
