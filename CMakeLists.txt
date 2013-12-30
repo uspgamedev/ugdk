@@ -173,12 +173,12 @@ endif (WIN32)
 # Libraries for the scripts.
 target_link_libraries(libugdk LINK_PUBLIC ${UGDK_LIBRARIES})
 
-# SDL-mixer must come before SDL itself, or else we may have linking errors.
-target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2)
-
 if(NOT ANDROID) # Glew is not necessary for android builds.
-    target_link_libraries(libugdk LINK_PUBLIC glew freetype-gl++) # TODO: fix freetype-gl for android.
+    target_link_libraries(libugdk LINK_PUBLIC glew)
 endif()
+
+# SDL-mixer must come before SDL itself, or else we may have linking errors.
+target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 freetype-gl)
 
 set_target_properties(libugdk PROPERTIES 
     LINK_FLAGS "${LDFLAGS}"

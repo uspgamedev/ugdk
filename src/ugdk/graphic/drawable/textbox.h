@@ -11,10 +11,6 @@
 #include <string>
 #include <memory>
 
-namespace freetypeglxx {
-    class TextureFont;
-}
-
 namespace ugdk {
 namespace graphic {
 

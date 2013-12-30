@@ -7,10 +7,8 @@
 #include <memory>
 #include <string>
 
-namespace freetypeglxx {
-    class TextureAtlas;
-    class TextureFont;
-}
+struct texture_atlas_t;
+struct texture_font_t;
 
 namespace ugdk {
 namespace graphic {
@@ -26,23 +24,17 @@ class Font {
     /// Generates all glyphs in the given string and caches then for later use.
     void HintString(const std::wstring&);
 
-    freetypeglxx::TextureFont* freetype_font() {
-#ifndef UGDK_USING_GLES
-        return freetype_font_.get();
-#else
-        return nullptr;
-#endif
+    texture_font_t* freetype_font() {
+        return freetype_font_;
     }
 
   private:
     double size_;
-#ifndef UGDK_USING_GLES
-    std::unique_ptr<freetypeglxx::TextureAtlas> atlas_;
-    std::unique_ptr<freetypeglxx::TextureFont> freetype_font_;
-#endif
+    texture_atlas_t* atlas_;
+    texture_font_t* freetype_font_;
 };
 
 }  // namespace graphic
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_GRAPHIC_FONT_H_

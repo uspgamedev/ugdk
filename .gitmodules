@@ -1,3 +1,0 @@
-[submodule "externals/freetype-glpp"]
-	path = externals/freetype-glpp
-	url = git://github.com/henriquegemignani/freetype-glpp.git

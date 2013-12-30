@@ -1,50 +1,43 @@
 #include <ugdk/graphic/font.h>
 
-#ifndef UGDK_USING_GLES // TODO: freetype-gl for android
-#include <freetype-gl++/texture-atlas.hpp>
-#include <freetype-gl++/texture-font.hpp>
-#endif
-
 #include <ugdk/system/engine.h>
+#include <texture-atlas.h>
+#include <texture-font.h>
 
 namespace ugdk {
 namespace graphic {
 
 using std::string;
 using std::wstring;
-using freetypeglxx::TextureFont;
 using math::Vector2D;
 
 Font::Font(const string& path, double size, int num_glyphs) 
     : size_(size) 
-
-#ifndef UGDK_USING_GLES
-    , atlas_(new freetypeglxx::TextureAtlas(512, 512, 1))
-#endif
     {
     
     std::string fullpath = ugdk::system::ResolvePath(path);
-#ifndef UGDK_USING_GLES
-    freetype_font_.reset(new TextureFont(atlas_.get(), fullpath, static_cast<float>(size)));
-#endif
+
+    atlas_ = texture_atlas_new(512, 512, 1);
+
+    freetype_font_ = texture_font_new_from_file(
+                            atlas_,
+                            static_cast<float>(size),
+                            fullpath.c_str());
 }
 
-Font::~Font() {}
+Font::~Font() {
+    texture_atlas_delete(atlas_);
+    texture_font_delete(freetype_font_);
+}
 
 double Font::height() const {
-#ifndef UGDK_USING_GLES
-    return static_cast<double>(freetype_font_->height());
-#else
-    return 0;
-#endif
+    return static_cast<double>(freetype_font_->height);
 }
     
 void Font::HintString(const wstring& string) {
-#ifndef UGDK_USING_GLES
-    if(freetype_font_->LoadGlyphs(string.c_str()) > 0) {
+    if(texture_font_load_glyphs(freetype_font_, string.c_str()) > 0) {
         // TODO: Could not generate all glyphs!
     }
-#endif
 }
 
 } // namespace graphic
