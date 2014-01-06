@@ -71,7 +71,7 @@ add_subdirectory(externals)
 # We can't create a target for a header-only library, so we have to do this...
 # TODO: CMake 3.0 will add INTERFACE to add_library (http://www.kdab.com/modern-cmake-with-qt-and-boost/)
 set(GLM_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/externals/glm-0.9.4.2")
-include_directories(SYSTEM ${GLM_LOCATION})
+#include_directories(SYSTEM ${GLM_LOCATION}) ## FIXME
 
 # CPack configuration.
 include(cmake/Package.cmake)
@@ -157,6 +157,7 @@ endif ()
 add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
 
 target_include_directories(libugdk
+    PUBLIC ${GLM_LOCATION} # FIXME
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src" # TODO: should be /include
     PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/src" # TODO: should be /include
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
