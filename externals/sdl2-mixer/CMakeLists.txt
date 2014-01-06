@@ -14,16 +14,25 @@ set(SDL2-mixer-sources dynamic_flac.c dynamic_fluidsynth.c dynamic_mod.c dynamic
                        load_aiff.h load_flac.h load_ogg.h load_voc.h
                        music_cmd.h music_flac.h music_mad.h music_mod.h music_modplug.h music_ogg.h
                        wavestream.h
+
                        include/SDL_mixer.h
-                       )
-                       
+)
+
+find_package(Vorbis)
+find_package(VorbisFile)
+
 if(MSVC)
     list(APPEND SDL2-mixer-sources version.rc)
 endif(MSVC)
 
 add_library(SDL2-mixer ${SDL2-mixer-sources})
-target_compile_definitions(SDL2-mixer PRIVATE
-    WAV_MUSIC)
+target_compile_definitions(SDL2-mixer PRIVATE WAV_MUSIC)
 target_link_libraries(     SDL2-mixer LINK_PUBLIC SDL2)
 target_include_directories(SDL2-mixer PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include") # TODO: add 'SYSTEM' flag when we have cmake 2.8.12
+
+if(VORBIS_FOUND AND VORBISFILE_FOUND)
+    target_compile_definitions(SDL2-mixer PRIVATE     OGG_MUSIC)
+    target_link_libraries(     SDL2-mixer LINK_PUBLIC ${VORBIS_LIBRARIES} ${VORBISFILE_LIBRARIES})
+    target_include_directories(SDL2-mixer PRIVATE     ${VORBIS_INCLUDE_DIRS} ${VORBISFILE_INCLUDE_DIRS})
+endif()
 
