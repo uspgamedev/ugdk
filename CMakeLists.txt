@@ -28,7 +28,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Mo
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
 option(UGDK_BUILD_TESTS          "Set to ON to enable building tests." ON)
-option(UGDK_BUILD_EXAMPLES       "Set to ON to enable building examples." ON)
 option(UGDK_CREATE_BINDINGS      "Set to ON to generate bindings for supported script languages." ON)
 option(UGDK_LUA_BINDINGS         "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS      "Set to ON to enable Python as one of the languages to create bindings." ON)
@@ -238,8 +237,4 @@ endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}
 if(UGDK_BUILD_TESTS)
     add_subdirectory(test)
 endif(UGDK_BUILD_TESTS)
-
-if(UGDK_BUILD_EXAMPLES)
-    add_subdirectory(examples EXCLUDE_FROM_ALL)
-endif(UGDK_BUILD_EXAMPLES)
 

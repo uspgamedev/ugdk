@@ -1,1 +1,0 @@
-add_ugdk_executable(example-keyboard-box keyboard-box.cc)
