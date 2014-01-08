@@ -29,7 +29,7 @@ enum LogLevel {
     @param level The target log level
     @return The string associated with the level */
 #define CASE_LOG(X) case X: return #X;
-const char* ConvertLogToString(LogLevel level) {
+inline const char* ConvertLogToString(LogLevel level) {
     switch(level) {
     LOG_LEVELS(CASE_LOG)
     default: return "";
