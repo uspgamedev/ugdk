@@ -35,6 +35,8 @@ SET(UGDK_SRC
     src/ugdk/audio/music.h 
     src/ugdk/audio/sample.cc 
     src/ugdk/audio/sample.h 
+    src/ugdk/debug/log.cc 
+    src/ugdk/debug/log.h 
     src/ugdk/desktop.h 
     src/ugdk/desktop/manager.cc 
     src/ugdk/desktop/manager.h 
