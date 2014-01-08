@@ -10,11 +10,15 @@
 namespace ugdk {
 namespace debug {
 
-struct ProfileData;
-struct ProfileData {
+struct SectionData;
+struct SectionData {
+
+    /// Name of this section.
     std::string name;
+
+    /// Length of this section, in microseconds.
     uint64 duration_;
-    std::vector< std::shared_ptr<ProfileData> > subdata;
+    std::vector< std::shared_ptr<SectionData> > subdata;
 };
 
 class ProfileSection {
@@ -22,12 +26,12 @@ class ProfileSection {
     ProfileSection(const std::string& section_name);
     ~ProfileSection();
 
-    std::shared_ptr<const ProfileData> data() const { return data_; }
+    std::shared_ptr<const SectionData> data() const { return data_; }
 
   private:
     ProfileSection* parent_section_;
     uint64 start_time_;
-    std::shared_ptr<ProfileData> data_;
+    std::shared_ptr<SectionData> data_;
 };
 
 }  // namespace debug

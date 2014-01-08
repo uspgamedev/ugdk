@@ -4,6 +4,7 @@
 #include <ugdk/audio/module.h>
 #include <ugdk/audio/music.h>
 #include <ugdk/graphic/node.h>
+#include <ugdk/debug/profiler.h>
 
 #include <algorithm>
 
@@ -86,12 +87,16 @@ void Scene::RemoveAllEntities() {
 void Scene::Update(double dt) {
     if(finished_ || !active_)
         return;
+    
+    debug::ProfileSection section("Scene '" + identifier_ + "'");
     TaskPlayer::Update(dt);
 }
 
 void Scene::Render(graphic::Canvas& canvas) const {
-    if(!finished_ && visible_ && render_function_)
+    if(!finished_ && visible_ && render_function_) {
+        debug::ProfileSection section("Scene '" + identifier_ + "'");
         render_function_(canvas);
+    }
 }
 
 void Scene::End() {

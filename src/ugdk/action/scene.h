@@ -13,6 +13,7 @@
 #include <functional>
 #include <list>
 #include <queue>
+#include <string>
 
 namespace ugdk {
 namespace action {
@@ -65,6 +66,9 @@ class Scene : public system::TaskPlayer {
     /** @name Getters and Setters
     @{
     */
+    const std::string& identifier() const { return identifier_; }
+    void set_identifier(const std::string& new_identifier) { identifier_ = new_identifier; }
+
     bool finished() const { return finished_; }
 
     bool active() const { return active_; }
@@ -99,6 +103,9 @@ class Scene : public system::TaskPlayer {
     /// Ends the scene activity.
     /** Note: do not release any resources in this method. */
     virtual void End();
+
+    /// Used to identify the scene internally.
+    std::string identifier_;
     
     /// Tells whether the scene is currently running or not.
     bool active_;

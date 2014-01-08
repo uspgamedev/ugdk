@@ -3,6 +3,7 @@
 #include "SDL_video.h"
 
 #include <ugdk/graphic/canvas.h>
+#include <ugdk/debug/profiler.h>
 
 namespace ugdk {
 namespace desktop {
@@ -20,6 +21,8 @@ Window::~Window() {
 }
 
 void Window::Present() {
+    debug::ProfileSection section("Present window '" + title_ + "'");
+
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapWindow(sdl_window_);
 }
