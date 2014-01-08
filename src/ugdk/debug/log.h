@@ -1,10 +1,10 @@
-#ifndef UGDK_LOG_H_
-#define UGDK_LOG_H_
+#ifndef UGDK_DEBUG_LOG_H_
+#define UGDK_DEBUG_LOG_H_
 
 #include <string>
 
 namespace ugdk {
-namespace log {
+namespace debug {
 
 /// These are the log levels.
 #define LOG_LEVELS(ACTION)  \
@@ -14,8 +14,8 @@ namespace log {
     ACTION(ERROR) \
     ACTION(WARNING) \
     ACTION(NOTICE) \
-    ACTION(INFO) \
-    ACTION(DEBUG)
+    ACTION(INFO)
+    //ACTION(DEBUG)
 
 /// Through macro wizardy(tm), fill the LogLevel enum.    
 #define LIST(X) X, 
@@ -37,30 +37,25 @@ const char* ConvertLogToString(LogLevel level) {
 }
 #undef CASE_LOG
 
-void Log(LogLevel, const std::string& message);
 void Log(LogLevel, const std::string& owner, const std::string& message);
 
+inline void Log(LogLevel level, const std::string& message) {
+    Log(level, "UGDK", message);
+}
 
-void DebugLog(LogLevel level, const std::string& message) {
-#ifdef DEBUG 
+inline void DebugLog(LogLevel level, const std::string& message) {
+#ifdef _DEBUG
     Log(level, message);
 #endif
 }
 
-void DebugLog(LogLevel level, const std::string& owner, const std::string& message) {
-#ifdef DEBUG 
+inline void DebugLog(LogLevel level, const std::string& owner, const std::string& message) {
+#ifdef _DEBUG
     Log(level, owner, message);
 #endif
 }
 
-void DebugLog(const std::string& message) { 
-    DebugLog(DEBUG, message);
-}
-void DebugLog(const std::string& owner, const std::string& message) { 
-    DebugLog(DEBUG, owner, message);
-}
-
-}  // namespace log
+}  // namespace debug
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_DEBUG_LOG_H_
