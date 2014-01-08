@@ -39,9 +39,7 @@ const char* ConvertLogToString(LogLevel level) {
 
 void Log(LogLevel, const std::string& owner, const std::string& message);
 
-inline void Log(LogLevel level, const std::string& message) {
-    Log(level, "UGDK", message);
-}
+void Log(LogLevel level, const std::string& message);
 
 inline void DebugLog(LogLevel level, const std::string& message) {
 #ifdef _DEBUG
