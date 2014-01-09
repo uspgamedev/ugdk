@@ -24,7 +24,7 @@ class Font {
     /// Generates all glyphs in the given string and caches then for later use.
     void HintString(const std::wstring&);
 
-    texture_font_t* freetype_font() {
+    texture_font_t* freetype_font() const {
         return freetype_font_;
     }
 

@@ -54,59 +54,17 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
     size_ = math::Vector2D(0, font_->height());
 
     buffer_ = opengl::VertexBuffer::Create(num_characters_ * 8 * sizeof(vec2), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-    // Leaving the buffer bound may cause texture_font_get_glyph to crash.
-    opengl::VertexBuffer::Bind bind(*buffer_);
-    opengl::VertexBuffer::Mapper mapper(*buffer_);
-    auto buf = static_cast<vec2*>(mapper.get());
-
-    vec2 pen = {0.0f, 0.0f};
-    size_t buffer_offset = 0;
-    for(size_t i = 0; i < ucs4_message.size(); ++i ) {
-        texture_glyph_t *glyph = texture_font_get_glyph(font_->freetype_font(),
-                                                        static_cast<wchar_t>(ucs4_message[i]));
-        if(!glyph) continue;
-        float kerning = 0;
-        if(i > 0)
-            kerning = texture_glyph_get_kerning(glyph, static_cast<wchar_t>( ucs4_message[i-1] ));
-        
-        pen.x += kerning;
-        float x0  = pen.x + glyph->offset_x;
-        float y0  = static_cast<float>(glyph->offset_y);
-        float x1  = x0 + glyph->width;
-        float y1  = y0 - glyph->height;
-        y0 = pen.y + font_->freetype_font()->height - y0;
-        y1 = pen.y + font_->freetype_font()->height - y1;
-        {
-            buf[buffer_offset + 0].x = x0;
-            buf[buffer_offset + 0].y = y0;
-            buf[buffer_offset + 1].x = glyph->s0;
-            buf[buffer_offset + 1].y = glyph->t0;
-
-            buf[buffer_offset + 2].x = x1;
-            buf[buffer_offset + 2].y = y0;
-            buf[buffer_offset + 3].x = glyph->s1;
-            buf[buffer_offset + 3].y = glyph->t0;
-
-            buf[buffer_offset + 4].x = x0;
-            buf[buffer_offset + 4].y = y1;
-            buf[buffer_offset + 5].x = glyph->s0;
-            buf[buffer_offset + 5].y = glyph->t1;
-
-            buf[buffer_offset + 6].x = x1;
-            buf[buffer_offset + 6].y = y1;
-            buf[buffer_offset + 7].x = glyph->s1;
-            buf[buffer_offset + 7].y = glyph->t1;
-
-            buffer_offset += 8;
-        }
-        pen.x += glyph->advance_x;
+    {
+        opengl::VertexBuffer::Bind bind(*buffer_);
+        opengl::VertexBuffer::Mapper mapper(*buffer_);
+        // Leaving the buffer bound may cause texture_font_get_glyph to crash.
+        size_.x = FillBufferWithText(font_, ucs4_message, mapper.get(), 0.0f);
     }
-    size_.x = pen.x;
 
-    first_vector_.reserve(ucs4_message.size());
-    for(size_t i = 0; i < ucs4_message.size(); ++i )
-        first_vector_.push_back(i * 4);
-    size_vector_.resize(ucs4_message.size(), 4);
+    first_vector_.reserve(num_characters_);
+    for(size_t i = 0; i < num_characters_; ++i )
+        first_vector_.push_back(int(i) * 4);
+    size_vector_.resize(num_characters_, 4);
 }
 
 const ugdk::math::Vector2D& Label::size() const {
