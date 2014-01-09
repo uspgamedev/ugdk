@@ -79,7 +79,7 @@ void ShaderProgram::Use::SendTexture(GLint slot, GLuint texture, const std::stri
     SendTexture(slot, texture, program_->UniformLocation(location));
 }
 
-void ShaderProgram::Use::SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size) {
+void ShaderProgram::Use::SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size, GLsizei stride) {
     VertexBuffer::Bind bind(*buffer);
 #ifdef DEBUG
     if(last_attribute_ >= MAX_ATTRIBUTES)
@@ -93,9 +93,10 @@ void ShaderProgram::Use::SendVertexBuffer(const VertexBuffer* buffer, VertexType
         size,               // size
         GL_FLOAT,           // type
         GL_FALSE,           // normalized?
-        0,                  // stride
+        stride,             // stride
         buffer->getPointer(offset) // array buffer offset
     );
+    assert(glGetError() == GL_NO_ERROR);
     active_attributes_[last_attribute_++] = location;
 }
 
