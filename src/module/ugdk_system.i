@@ -30,6 +30,7 @@
 
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
+%import(module="ugdk_debug") <ugdk/debug.h>
 %import(module="ugdk_desktop") <ugdk/desktop.h>
 %import(module="ugdk_input") <ugdk/input.h>
 %import(module="ugdk_time") <ugdk/time.h>
