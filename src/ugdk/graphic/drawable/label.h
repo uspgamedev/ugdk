@@ -30,7 +30,7 @@ class Label : public Drawable {
   private:
     Font* font_;
     opengl::VertexBuffer* buffer_;
-    std::vector<uint16> indices_;
+    std::vector<int> first_vector_, size_vector_;
 
     ugdk::math::Vector2D size_;
     std::size_t num_characters_;
