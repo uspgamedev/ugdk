@@ -14,6 +14,7 @@
 #include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/system/config.h>
+#include <ugdk/debug/profiler.h>
 
 #include <string>
 #include <algorithm>
@@ -33,6 +34,7 @@ graphic:: TextManager *        text_manager_;
 bool                      quit_;
 std::list<action::Scene*> scene_list_;
 std::list<SceneFactory>   queued_scene_list_;
+std::list<std::shared_ptr<const debug::SectionData>> profile_data_list_;
 action::Scene*            previous_focused_scene_;
 Configuration configuration_;
 
@@ -205,10 +207,15 @@ void Run() {
         HandleSDLEvents();
 
         if (!quit_) {
-            for(action::Scene* it : scene_list_)
-                it->Update(delta_t);
+            debug::ProfileSection section("Frame");
+            {
+                debug::ProfileSection section("Update");
+                for(action::Scene* it : scene_list_)
+                    it->Update(delta_t);
+            }
 
             if(desktop::manager()) {
+                debug::ProfileSection section("Render");
                 if(graphic::manager()) {
                     auto canvas = graphic::manager()->canvas();
                     canvas->Clear();
@@ -217,7 +224,10 @@ void Run() {
                 }
                 desktop::manager()->PresentAll();
             }
+            profile_data_list_.push_back(section.data());
         }
+        while(profile_data_list_.size() > 10)
+            profile_data_list_.pop_front();
     }
     quit_ = true;
     for(action::Scene* it : scene_list_) {
@@ -263,6 +273,10 @@ action::Scene* CurrentScene() {
 
 const std::list<action::Scene*>& scene_list() {
     return scene_list_;
+}
+
+const std::list< std::shared_ptr<const debug::SectionData> >& profile_data_list() {
+    return profile_data_list_;
 }
 
 void Quit() {

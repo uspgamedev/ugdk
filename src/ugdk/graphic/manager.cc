@@ -49,6 +49,7 @@ void Manager::Release() {
 
 action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> render_light_function) {
     action::Scene* light_scene = new action::Scene;
+    light_scene->set_identifier("Light Rendering Scene");
     // This scene has no logic, so quit if you ask for it to be only scene.
     light_scene->set_focus_callback([](action::Scene* scene) { scene->Finish(); });
     light_scene->set_render_function([render_light_function](graphic::Canvas& canvas) {

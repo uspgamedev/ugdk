@@ -29,9 +29,8 @@ class Label : public Drawable {
 
   private:
     Font* font_;
-    opengl::VertexBuffer* vertex_buffer_;
-    opengl::VertexBuffer* texture_buffer_;
-    std::vector<uint16> indices_;
+    opengl::VertexBuffer* buffer_;
+    std::vector<int> first_vector_, size_vector_;
 
     ugdk::math::Vector2D size_;
     std::size_t num_characters_;

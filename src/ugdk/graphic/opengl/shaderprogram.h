@@ -50,7 +50,7 @@ class ShaderProgram {
         void SendTexture(GLint slot, GLuint texture, GLuint location);
         void SendTexture(GLint slot, GLuint texture, const std::string& location);
 
-        void SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2);
+        void SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2, GLsizei stride = 0);
 
       private:
         static const int MAX_ATTRIBUTES = 4;

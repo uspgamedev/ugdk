@@ -1,15 +1,18 @@
 #ifndef UGDK_SYSTEM_ENGINE_H_
 #define UGDK_SYSTEM_ENGINE_H_
 
-#include <list>
-#include <string>
-#include <functional>
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
 #include <ugdk/system.h>
+#include <ugdk/debug.h>
 #include <ugdk/structure/types.h>
 #include <ugdk/system/configuration.h>
+
+#include <list>
+#include <string>
+#include <functional>
+#include <memory>
 
 namespace ugdk {
 namespace system {
@@ -71,6 +74,9 @@ action::Scene* CurrentScene();
 /// Returns the scene list.
 /** The list is changed when PushScene is called. */
 const std::list<action::Scene*>& scene_list();
+
+
+const std::list< std::shared_ptr<const debug::SectionData> >& profile_data_list();
 
 /** @}
  */
