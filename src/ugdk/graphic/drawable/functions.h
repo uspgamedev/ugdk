@@ -10,7 +10,7 @@ namespace graphic {
 float FillBufferWithText(const Font*, const std::u32string&, void* buf, float y = 0.0f);
 
 void DrawSquare(const Geometry& geometry, const VisualEffect&, const Texture*);
-void DrawLine(const Geometry& geometry, const VisualEffect&, const Font*, const std::string& msg);
+void DrawTextLine(const Geometry& geometry, const VisualEffect&, const Font*, const std::string& utf8_message);
 
 }  // namespace graphic
 }  // namespace ugdk

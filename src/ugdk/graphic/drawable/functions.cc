@@ -92,7 +92,7 @@ void DrawSquare(const Geometry& geometry, const VisualEffect& effect, const Text
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void DrawLine(const Geometry& geometry, const VisualEffect& effect, const Font* font, const std::string& utf8_message) {
+void DrawTextLine(const Geometry& geometry, const VisualEffect& effect, const Font* font, const std::string& utf8_message) {
     auto ucs_msg = utf8_to_ucs4(utf8_message);
 
     opengl::VertexArray buffer(utf8_message.size() * 8 * sizeof(vec2), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
