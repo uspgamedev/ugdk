@@ -48,8 +48,6 @@ std::shared_ptr<Canvas> Canvas::Create(const std::weak_ptr<desktop::Window>& win
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    SDL_GL_SetSwapInterval(true ? 1 : 0);
-
     return canvas;
 }
 
@@ -84,8 +82,10 @@ void Canvas::AttachTo(const std::weak_ptr<desktop::Window>& window_weak) {
 }
     
 void Canvas::UpdateViewport() {
-    if(auto window = attached_window_.lock())
+    if (auto window = attached_window_.lock()) {
+        SDL_GL_SetSwapInterval(window->vsync() ? 1 : 0);
         glViewport(0, 0, window->size().x, window->size().y);
+    }
 }
 
 void Canvas::SaveToTexture(Texture* texture) {

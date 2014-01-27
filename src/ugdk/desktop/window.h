@@ -26,17 +26,19 @@ class Window {
     /// Updates the settings and applies the changes.
     /** Warning: some fullscreen/resolution combinations may be unsupported by the display, resulting
         in unoperable windows. */
-    void ChangeSettings(const math::Integer2D& size, bool fullscreen);
+    void ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync);
 
     const std::string& title() const { return title_; }
     const math::Integer2D& size() const { return size_; }
     bool fullscreen() const { return fullscreen_; }
+    bool vsync() const { return vsync_; }
 
   private:
     SDL_Window* sdl_window_;
     std::string title_;
     math::Integer2D size_;
     bool fullscreen_;
+    bool vsync_;
     std::weak_ptr<graphic::Canvas> attached_canvas_;
 
     friend class ::ugdk::desktop::Manager;

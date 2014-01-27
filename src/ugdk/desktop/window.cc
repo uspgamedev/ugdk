@@ -27,8 +27,9 @@ void Window::Present() {
     SDL_GL_SwapWindow(sdl_window_);
 }
 
-void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen) {
+void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync) {
     fullscreen_ = fullscreen;
+    vsync_ = vsync;
 
     // SDL_SetWindowSize fails silently when the window is fullscreen.
     // So, first remove fullscreen.
