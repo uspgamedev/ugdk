@@ -138,6 +138,8 @@ bool Initialize(const Configuration& configuration) {
                                     desktop::manager()->primary_window(),
                                     configuration.canvas_size)))
             return false;
+
+        sdlevent_handlers_.push_back(desktop::manager()->sdlevent_handler());
     }
     
     if(configuration.audio_enabled)

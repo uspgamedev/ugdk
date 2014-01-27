@@ -9,6 +9,7 @@
 #include <ugdk/desktop/window.h>
 #include <ugdk/desktop/windowsettings.h>
 #include <ugdk/system/engine.h>
+#include <ugdk/internal/sdleventhandler.h>
 
 namespace ugdk {
 namespace desktop {
@@ -25,6 +26,24 @@ Manager::Manager() {}
 Manager::~Manager() {
 }
 
+class DesktopSDLEventHandler : public internal::SDLEventHandler {
+public:
+    DesktopSDLEventHandler() {}
+
+    bool CanHandle(const ::SDL_Event& sdlevent) const {
+        return sdlevent.type == SDL_WINDOWEVENT;
+    }
+
+    void Handle(const ::SDL_Event& sdlevent) const {
+        //switch (sdlevent.window.event) {
+
+        //}
+    }
+
+private:
+    void operator=(const DesktopSDLEventHandler&);
+};
+
 bool Manager::Initialize() {
     if(SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
         return errlog("Failed to initialize SDL_VIDEO: " + std::string(SDL_GetError()));
@@ -33,6 +52,7 @@ bool Manager::Initialize() {
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
+    sdlevent_handler_.reset(new DesktopSDLEventHandler);
     return true;
 }
 
@@ -64,16 +84,26 @@ std::weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
         SDL_FreeSurface(icon);
     }
 
-    windows_.emplace_back(new Window(window));
-    if(!primary_window_.lock())
-        primary_window_ = windows_.back();
+    std::shared_ptr<Window> new_window(new Window(window));
 
-    return windows_.back();
+    windows_[new_window->id()] = new_window;
+
+    if(!primary_window_.lock())
+        primary_window_ = new_window;
+
+    return new_window;
+}
+    
+std::shared_ptr<Window> Manager::window(uint32 index) const {
+    auto it = windows_.find(index);
+    if (it == windows_.end())
+        return nullptr;
+    return it->second;
 }
     
 void Manager::PresentAll() {
     for(const auto& window : windows_)
-        window->Present();
+        window.second->Present();
 }
 
 }  // namespace desktop

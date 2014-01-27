@@ -10,25 +10,20 @@ namespace desktop {
 
 Window::Window(SDL_Window* sdl_window)
     : sdl_window_(sdl_window)
-    , title_(SDL_GetWindowTitle(sdl_window))
-    , fullscreen_((SDL_GetWindowFlags(sdl_window) & SDL_WINDOW_FULLSCREEN) != 0)
-{
-    SDL_GetWindowSize(sdl_window, &size_.x, &size_.y);
-}
+{}
     
 Window::~Window() {
     SDL_DestroyWindow(sdl_window_);
 }
 
 void Window::Present() {
-    debug::ProfileSection section("Present window '" + title_ + "'");
+    debug::ProfileSection section("Present window '" + std::string(this->title()) + "'");
 
     // Swap the buffers to show the backbuffer to the user.
     SDL_GL_SwapWindow(sdl_window_);
 }
 
 void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync) {
-    fullscreen_ = fullscreen;
     vsync_ = vsync;
 
     // SDL_SetWindowSize fails silently when the window is fullscreen.
@@ -44,11 +39,26 @@ void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen, bool v
     if(fullscreen)
         SDL_SetWindowFullscreen(sdl_window_, SDL_WINDOW_FULLSCREEN);
     
-    // Update the stored size from the actual window and not the requested size.
-    SDL_GetWindowSize(sdl_window_, &size_.x, &size_.y);
-
     if(auto canvas = this->attached_canvas_.lock())
         canvas->UpdateViewport();
+}
+    
+uint32 Window::id() const {
+    return SDL_GetWindowID(sdl_window_);
+}
+    
+const char* Window::title() const {
+    return SDL_GetWindowTitle(sdl_window_);
+}
+
+math::Integer2D Window::size() const {
+    math::Integer2D result;
+    SDL_GetWindowSize(sdl_window_, &result.x, &result.y);
+    return result;
+}
+
+bool Window::fullscreen() const {
+    return SDL_GetWindowFlags(sdl_window_) & SDL_WINDOW_FULLSCREEN != 0;
 }
 
 }  // namespace desktop

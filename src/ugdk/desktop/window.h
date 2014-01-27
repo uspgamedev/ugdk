@@ -4,6 +4,7 @@
 #include <ugdk/math/integer2D.h>
 #include <ugdk/desktop.h>
 #include <ugdk/graphic.h>
+#include <ugdk/structure/types.h>
 
 #include <string>
 #include <memory>
@@ -28,16 +29,14 @@ class Window {
         in unoperable windows. */
     void ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync);
 
-    const std::string& title() const { return title_; }
-    const math::Integer2D& size() const { return size_; }
-    bool fullscreen() const { return fullscreen_; }
+    uint32 id() const;
+    const char* title() const;
+    math::Integer2D size() const;
+    bool fullscreen() const;
     bool vsync() const { return vsync_; }
 
   private:
     SDL_Window* sdl_window_;
-    std::string title_;
-    math::Integer2D size_;
-    bool fullscreen_;
     bool vsync_;
     std::weak_ptr<graphic::Canvas> attached_canvas_;
 

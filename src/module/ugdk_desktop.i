@@ -13,6 +13,7 @@
 
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_math") <ugdk/math.h>
+%include <ugdk/internal.h>
 
 %include <ugdk/desktop/window.h>
 %include <ugdk/desktop/windowsettings.h>
