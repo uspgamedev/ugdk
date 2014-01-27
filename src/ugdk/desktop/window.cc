@@ -58,7 +58,7 @@ math::Integer2D Window::size() const {
 }
 
 bool Window::fullscreen() const {
-    return SDL_GetWindowFlags(sdl_window_) & SDL_WINDOW_FULLSCREEN != 0;
+    return (SDL_GetWindowFlags(sdl_window_) & SDL_WINDOW_FULLSCREEN) != 0;
 }
 
 }  // namespace desktop

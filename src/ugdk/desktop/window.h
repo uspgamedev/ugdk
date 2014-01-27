@@ -34,6 +34,7 @@ class Window {
     math::Integer2D size() const;
     bool fullscreen() const;
     bool vsync() const { return vsync_; }
+    std::weak_ptr<graphic::Canvas> attached_canvas() const { return attached_canvas_; }
 
   private:
     SDL_Window* sdl_window_;

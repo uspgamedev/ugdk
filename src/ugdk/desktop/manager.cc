@@ -8,6 +8,7 @@
 
 #include <ugdk/desktop/window.h>
 #include <ugdk/desktop/windowsettings.h>
+#include <ugdk/graphic/canvas.h>
 #include <ugdk/system/engine.h>
 #include <ugdk/internal/sdleventhandler.h>
 
@@ -28,20 +29,31 @@ Manager::~Manager() {
 
 class DesktopSDLEventHandler : public internal::SDLEventHandler {
 public:
-    DesktopSDLEventHandler() {}
+    DesktopSDLEventHandler(Manager& manager) : manager_(manager) {}
 
     bool CanHandle(const ::SDL_Event& sdlevent) const {
         return sdlevent.type == SDL_WINDOWEVENT;
     }
 
     void Handle(const ::SDL_Event& sdlevent) const {
-        //switch (sdlevent.window.event) {
+        switch (sdlevent.window.event) {
+            case SDL_WINDOWEVENT_RESIZED:
+                if (auto canvas = manager_.window(sdlevent.window.windowID)->attached_canvas().lock())
+                    canvas->UpdateViewport();
+                break;
 
-        //}
+            case SDL_WINDOWEVENT_CLOSE:
+                manager_.windows_.erase(sdlevent.window.windowID);
+                break;
+
+            default:
+                break; // ignore
+        }
     }
 
 private:
     void operator=(const DesktopSDLEventHandler&);
+    Manager& manager_;
 };
 
 bool Manager::Initialize() {
@@ -52,7 +64,7 @@ bool Manager::Initialize() {
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
-    sdlevent_handler_.reset(new DesktopSDLEventHandler);
+    sdlevent_handler_.reset(new DesktopSDLEventHandler(*this));
     return true;
 }
 
