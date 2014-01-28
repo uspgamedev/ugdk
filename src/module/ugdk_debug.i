@@ -1,6 +1,6 @@
 %module ugdk_debug
 
-%include <module/export.swig>
+%include <module/util_ugdk.swig>
 
 %{
 

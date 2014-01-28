@@ -1,16 +1,10 @@
 
 %module ugdk_drawable
 
-%include <module/export.swig>
-%include <module/proxy.swig>
-%include <module/widetypes.swig>
+%include <module/util_ugdk.swig>
+
 %include "std_string.i"
 %include "std_vector.i"
-
-// Manually including cmath in the beginning prevents errors on some compilers
-%begin %{
-#include <cmath>
-%}
 
 %{
 

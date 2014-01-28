@@ -1,6 +1,6 @@
 %module ugdk_input
 
-%include <module/export.swig>
+%include <module/util_ugdk.swig>
 
 %{
 

@@ -1,13 +1,9 @@
 %module ugdk_util
 
-%include <module/export.swig>
+%include <module/util_ugdk.swig>
+
 %include "std_map.i"
 %include "std_string.i"
-
-// Manually including cmath in the beginning prevents errors on some compilers
-%begin %{
-#include <cmath>
-%}
 
 %{
 

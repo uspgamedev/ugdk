@@ -1,17 +1,11 @@
 %module pyramidworks_collision
 
-%include <module/export.swig>
-%include <module/ownership.swig>
-%include <module/proxy.swig>
+%include <module/util_ugdk.swig>
+
 %include "std_string.i"
 %include "std_map.i"
 %include "std_vector.i"
 %include "std_pair.i"
-
-// Manually including cmath in the beginning prevents errors on some compilers
-%begin %{
-#include <cmath>
-%}
 
 %{
 

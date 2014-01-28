@@ -1,13 +1,9 @@
 
 %module ugdk_math
 
-%include <module/export.swig>
-%include "std_vector.i"
+%include <module/util_ugdk.swig>
 
-// Manually including cmath in the beginning prevents errors on some compilers
-%begin %{
-#include <cmath>
-%}
+%include "std_vector.i"
 
 %{
 
