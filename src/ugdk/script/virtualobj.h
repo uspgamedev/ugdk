@@ -60,8 +60,8 @@ class VirtualObj {
     }
 
     template <class T>
-    void set_value(T val) {
-        VirtualPrimitive<T>::set_value(data_, val);
+    void set_value(T val, bool disown = false) {
+        VirtualPrimitive<T>::set_value(data_, val, disown);
     }
 
     template <class T>

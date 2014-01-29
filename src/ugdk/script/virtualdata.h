@@ -86,7 +86,7 @@ class VirtualData : public std::enable_shared_from_this<VirtualData> {
      ** @see ugdk::script::TypeRegistry
      ** @depracated
      */
-    virtual void Wrap(void* data, const VirtualType& type) = 0;
+    virtual void Wrap(void* data, const VirtualType& type, bool disown) = 0;
     virtual void WrapString(const char* str) = 0;
     virtual void WrapBoolean(bool boolean) = 0;
     virtual void WrapInteger(int number) = 0;

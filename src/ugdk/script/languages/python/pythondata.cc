@@ -100,14 +100,14 @@ VirtualData::Map PythonData::UnwrapMap() const {
 
 
 /// Tries to wrap the given data with the given type into this object.
-void PythonData::Wrap(void* data, const VirtualType& type) {
+void PythonData::Wrap(void* data, const VirtualType& type, bool disown) {
     if (py_data_ != nullptr && own_ref_) {
         Py_DECREF(py_data_);
         py_data_ = nullptr;
     }
 
-    py_data_ = SWIG_NewInstanceObj(data, type.FromLang(LANG(Python)), 1);
-    own_ref_ = true;
+    py_data_ = SWIG_NewInstanceObj(data, type.FromLang(LANG(Python)), disown ? SWIG_POINTER_OWN : 0);
+    own_ref_ = disown;
     /*Apparently, the PyObject return by the SWIG conversion function is a new reference.
       So our PyVData needs to handle it.*/
 }

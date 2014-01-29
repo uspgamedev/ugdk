@@ -2,9 +2,12 @@
 #define UGDK_SCRIPT_PYTHON_PYTHONDATA_H_
 
 #include <Python.h>
-#include <vector>
+
+#include <ugdk/system/compatibility.h>
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/languages/python/pythonwrapper.h>
+
+#include <vector>
 
 namespace ugdk {
 namespace script {
@@ -25,21 +28,21 @@ class PythonData : public VirtualData {
     }
 
     /// Tries to unwrap the data contained in this object using the given type.
-    virtual void* Unwrap(const VirtualType& type, bool disown) const;
-    const char* UnwrapString() const;
-    bool UnwrapBoolean() const;
-    int UnwrapInteger() const;
-    double UnwrapNumber() const;
-    Vector UnwrapVector() const;
-    List UnwrapList() const;
-    Map UnwrapMap() const;
+    virtual void* Unwrap(const VirtualType& type, bool disown) const override;
+    const char* UnwrapString() const override;
+    bool UnwrapBoolean() const override;
+    int UnwrapInteger() const override;
+    double UnwrapNumber() const override;
+    Vector UnwrapVector() const override;
+    List UnwrapList() const override;
+    Map UnwrapMap() const override;
 
     /// Tries to wrap the given data with the given type into this object.
-    virtual void Wrap(void* data, const VirtualType& type);
-    virtual void WrapString(const char* str);
-    virtual void WrapBoolean(bool boolean);
-    virtual void WrapInteger(int number);
-    virtual void WrapNumber(double number);
+    virtual void Wrap(void* data, const VirtualType& type, bool disown) override;
+    virtual void WrapString(const char* str) override;
+    virtual void WrapBoolean(bool boolean) override;
+    virtual void WrapInteger(int number) override;
+    virtual void WrapNumber(double number) override;
 
     virtual LangWrapper* wrapper () const { return wrapper_; }
 

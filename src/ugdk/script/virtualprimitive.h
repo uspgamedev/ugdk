@@ -27,8 +27,8 @@ class VirtualPrimitive<T*> {
             data->Unwrap(TypeRegistry<T>::type(), disown)
         );
     }
-    static void set_value(const VirtualData::Ptr data, T* value) {
-        data->Wrap(value, TypeRegistry<T>::type());
+    static void set_value(const VirtualData::Ptr data, T* value, bool disown) {
+        data->Wrap(value, TypeRegistry<T>::type(), disown);
     }
   private:
     VirtualPrimitive() {}
@@ -51,7 +51,7 @@ inline std::string CheckAndCast<std::string, const char*> (const char* value) {
         static type value(const VirtualData::Ptr data, bool) { \
             return CheckAndCast<type>(data->Unwrap##name()); \
         } \
-        static void set_value(const VirtualData::Ptr data, type value) { \
+        static void set_value(const VirtualData::Ptr data, type value, bool) { \
             data->Wrap##name(arg);  \
         } \
       private: \

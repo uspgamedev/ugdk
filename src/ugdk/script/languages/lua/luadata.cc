@@ -96,12 +96,13 @@ LuaData::Map LuaData::UnwrapMap() const {
     return data_table;
 }
 
-void LuaData::Wrap(void* data, const VirtualType& type) {
+void LuaData::Wrap(void* data, const VirtualType& type, bool disown) {
     if (!wrapper_->data_gear()
         .SafeCall(DataGear::WrapData)
         .Arg(id_)
         .Arg(data)
         .Arg(type.FromLang(LANG(Lua)))
+        .Arg(disown)
         .NoResult())
         return; // TODO deal with error.
 }

@@ -74,11 +74,12 @@ int DataGear::DestroyID(lua_State* L) {
 int DataGear::WrapData(lua_State* L) {
     State L_(L);
 
-    L_.settop(4);
+    L_.settop(5);
     GETARG(L_, 1, DataGear, dtgear);
     DataID id = L_.aux().checkintteger(2);
     UData data = L_.touserdata(3);
     GETARGPTR(L_, 4, swig_type_info, type);
+    bool disown = L_.toboolean(5);
     L_.settop(0);
 
     if (!type) {
@@ -89,7 +90,7 @@ int DataGear::WrapData(lua_State* L) {
         );
     }
 
-    SWIG_NewPointerObj(L_, data, type, 0);
+    SWIG_NewPointerObj(L_, data, type, disown ? 1 : 0);
     if (!dtgear.SetData(id))
         return luaL_error(L, "Could not set data with id #%d", id);
 

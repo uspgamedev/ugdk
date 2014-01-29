@@ -2,6 +2,7 @@
 #ifndef UGDK_SCRIPT_LUA_LUADATA_H_
 #define UGDK_SCRIPT_LUA_LUADATA_H_
 
+#include <ugdk/system/compatibility.h>
 #include <ugdk/script/type.h>
 #include <ugdk/script/virtualdata.h>
 
@@ -22,20 +23,20 @@ class LuaData : public VirtualData {
 
     ~LuaData();
 
-    void* Unwrap(const VirtualType& type, bool disown) const;
-    const char* UnwrapString() const;
-    bool UnwrapBoolean() const;
-    int UnwrapInteger() const;
-    double UnwrapNumber() const;
-    Vector UnwrapVector() const;
-    List UnwrapList() const;
-    Map UnwrapMap() const;
+    void* Unwrap(const VirtualType& type, bool disown) const override;
+    const char* UnwrapString() const override;
+    bool UnwrapBoolean() const override;
+    int UnwrapInteger() const override;
+    double UnwrapNumber() const override;
+    Vector UnwrapVector() const override;
+    List UnwrapList() const override;
+    Map UnwrapMap() const override;
 
-    void Wrap(void* data, const VirtualType& type);
-    void WrapString(const char* str);
-    void WrapBoolean(bool boolean);
-    void WrapInteger(int number);
-    void WrapNumber(double number);
+    void Wrap(void* data, const VirtualType& type, bool disown) override;
+    void WrapString(const char* str) override;
+    void WrapBoolean(bool boolean) override;
+    void WrapInteger(int number) override;
+    void WrapNumber(double number) override;
 
     LangWrapper* wrapper () const { return wrapper_; }
 
