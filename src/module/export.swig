@@ -22,7 +22,7 @@
 #endif
 
 %define export_class(T)
-%typemap(in) T* tp {
+%typemap(in) SWIGTYPE* tp {
     /// Code to register type T.
     /// First get the T's virtual type.
     ugdk::script::VirtualType& t = ugdk::script::TypeRegistry<$*1_type>::type();
@@ -34,7 +34,7 @@
     $1 = NULL;
 }
 %template(RegisterType_##T) ::RegisterType<T>;
-%typemap(in) T* tp;
+%typemap(in) SWIGTYPE* tp;
 %template(GetNull_##T) ::GetNull<T>;
 %enddef
 
