@@ -14,7 +14,6 @@
 namespace pyramidworks {
 namespace collision {
 
-/// \class CollisionObject collisionobject.h "pyramidworks/collision/collisionobject.h"
 /// A class that knows how to manage collisions.
 /** It encapsulates everything that is related to collisions, from finding the
   * collisions to calling the corresponding methods. */
@@ -90,6 +89,9 @@ class CollisionObject {
     
     /// Changes the offset of this object.
     void set_offset(const ugdk::math::Vector2D& _offset) { offset_ = _offset; }
+
+    /// Changes the owner of this object.
+    void set_owner(ugdk::action::Entity* owner) { owner_ = owner; }
 
   private:
     std::string collision_class_;
