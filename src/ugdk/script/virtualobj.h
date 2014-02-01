@@ -175,10 +175,19 @@ class VirtualObj {
     struct function_helper;
 
     template<typename R, typename ...Args>
-    struct function_helper<R(Args...)> {
+    struct function_helper<R (Args...)> {
         static std::function<R(Args...)> CreateFunction(const VirtualObj& data) {
             return [data](Args... args) -> R {
                 return data.Call(args...).template value<R>(false);
+            };
+        }
+    };
+
+    template<typename ...Args>
+    struct function_helper<void (Args...)> {
+        static std::function<void (Args...)> CreateFunction(const VirtualObj& data) {
+            return [data](Args... args) {
+                data.Call(args...);
             };
         }
     };
