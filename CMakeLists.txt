@@ -111,7 +111,7 @@ endif(NOT ANDROID)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 if (UNIX OR MINGW)
-    add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++0x -DUGDK_USING_VARIADIC)
+    add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++0x)
     #add_definitions(-msse2)
     add_definitions(-Wall
         # TODO: would like these but they produce overwhelming amounts of warnings
@@ -147,9 +147,6 @@ endif ()
 
 if (MSVC) 
     add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
-    if (NOT MSVC_VERSION LESS 1800)
-        add_definitions(/DUGDK_USING_VARIADIC)
-    endif()
 endif ()
 
 # =============================
@@ -186,6 +183,12 @@ set_target_properties(libugdk PROPERTIES
     OUTPUT_NAME ugdk${UGDK_BIGVERSION}
     OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-dbg
 )
+
+if (UNIX OR MINGW OR (MSVC AND (NOT MSVC_VERSION LESS 1800)))
+    target_compile_definitions(libugdk PUBLIC 
+        UGDK_USING_VARIADIC
+    )
+endif()
 
 if(ANDROID)
     target_compile_definitions(libugdk PUBLIC 
