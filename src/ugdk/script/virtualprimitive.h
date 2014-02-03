@@ -27,10 +27,25 @@ class VirtualPrimitive<T*> {
             data->Unwrap(TypeRegistry<T>::type(), disown)
         );
     }
-    static void set_value(const VirtualData::Ptr data, T* value, bool disown) {
-        data->Wrap(value, TypeRegistry<T>::type(), disown);
+    static void set_value(const VirtualData::Ptr data, const T* value, bool disown) {
+        data->Wrap(const_cast<void*>(static_cast<const void*>(value)), TypeRegistry<T>::type(), disown);
     }
   private:
+    VirtualPrimitive() {}
+};
+
+template <typename T>
+class VirtualPrimitive<T&> {
+public:
+    static T& value(const VirtualData::Ptr data, bool disown) {
+        return *static_cast<T*>(
+            data->Unwrap(TypeRegistry<T>::type(), disown)
+        );
+    }
+    static void set_value(const VirtualData::Ptr data, const T& value, bool disown) {
+        data->Wrap(const_cast<void*>(static_cast<const void*>(&value)), TypeRegistry<T>::type(), disown);
+    }
+private:
     VirtualPrimitive() {}
 };
 

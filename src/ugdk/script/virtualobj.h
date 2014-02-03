@@ -150,25 +150,29 @@ class VirtualObj {
     template<typename ...Args>
     VirtualObj Call(Args... args) const {
         VirtualData::Vector arguments;
-        createArgumentsVector(arguments, wrapper(), args...);
+        createArgumentsVector<Args...>(arguments, wrapper(), args...);
         return VirtualObj(data_->Execute(arguments));
     }
 #endif
 
   private:
 #ifdef UGDK_USING_VARIADIC
+    
+    template<typename ...Args>
     static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper) { return true; }
 
     template<typename T, typename ...Args>
-    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, const T& t, Args... args) {
-        return createArgumentsVector(v, wrapper, VirtualObj(wrapper, t), args...);
+    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, T t, Args... args) {
+        VirtualObj vobj(wrapper);
+        vobj.set_value<T>(t);
+        return createArgumentsVector<Args...>(v, wrapper, vobj, args...);
     }
 
     template<typename ...Args>
     static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, const VirtualObj& t, Args... args) {
         if(!t || t.wrapper() != wrapper) return false;
         v.emplace_back(t.data_);
-        return createArgumentsVector(v, wrapper, args...);
+        return createArgumentsVector<Args...>(v, wrapper, args...);
     }
 
     template<typename signature>
@@ -178,7 +182,8 @@ class VirtualObj {
     struct function_helper<R (Args...)> {
         static std::function<R(Args...)> CreateFunction(const VirtualObj& data) {
             return [data](Args... args) -> R {
-                return data.Call(args...).template value<R>(false);
+                auto callf = std::mem_fn(&(VirtualObj::Call<Args...>));
+                return callf(data, args...).template value<R>(false);
             };
         }
     };
@@ -187,7 +192,8 @@ class VirtualObj {
     struct function_helper<void (Args...)> {
         static std::function<void (Args...)> CreateFunction(const VirtualObj& data) {
             return [data](Args... args) {
-                data.Call(args...);
+                auto callf = std::mem_fn(&(VirtualObj::Call<Args...>));
+                callf(data, args...);
             };
         }
     };
