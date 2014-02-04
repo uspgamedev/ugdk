@@ -150,7 +150,7 @@ class VirtualObj {
     template<typename ...Args>
     VirtualObj Call(Args... args) const {
         VirtualData::Vector arguments;
-        createArgumentsVector<Args...>(arguments, wrapper(), args...);
+        arguments_helper<Args...>::add_to_vector(arguments, wrapper(), args...);
         return VirtualObj(data_->Execute(arguments));
     }
 #endif
@@ -159,21 +159,25 @@ class VirtualObj {
 #ifdef UGDK_USING_VARIADIC
     
     template<typename ...Args>
-    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper) { return true; }
-
+    struct arguments_helper;
+    
     template<typename T, typename ...Args>
-    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, T t, Args... args) {
-        VirtualObj vobj(wrapper);
-        vobj.set_value<T>(t);
-        return createArgumentsVector<Args...>(v, wrapper, vobj, args...);
-    }
+    struct arguments_helper<T, Args...> {
+        static bool add_to_vector(VirtualData::Vector& v, LangWrapper* wrapper, T t, Args... args) {
+            VirtualObj vobj(wrapper);
+            vobj.set_value<T>(t);
+            return arguments_helper<VirtualObj, Args...>::add_to_vector(v, wrapper, vobj, args...);
+        }
+    };
 
     template<typename ...Args>
-    static bool createArgumentsVector(VirtualData::Vector& v, LangWrapper* wrapper, const VirtualObj& t, Args... args) {
-        if(!t || t.wrapper() != wrapper) return false;
-        v.emplace_back(t.data_);
-        return createArgumentsVector<Args...>(v, wrapper, args...);
-    }
+    struct arguments_helper<VirtualObj, Args...> {
+        static bool add_to_vector(VirtualData::Vector& v, LangWrapper* wrapper, VirtualObj t, Args... args) {
+            if(!t || t.wrapper() != wrapper) return false;
+            v.emplace_back(t.data_);
+            return arguments_helper<Args...>::add_to_vector(v, wrapper, args...);
+        }
+    };
 
     template<typename signature>
     struct function_helper;
@@ -203,6 +207,12 @@ class VirtualObj {
 
 };
 
+template<>
+struct VirtualObj::arguments_helper<> {
+    static bool add_to_vector(VirtualData::Vector& v, LangWrapper* wrapper) {
+        return true;
+    }
+};
 
 
 template <class T, class U>
