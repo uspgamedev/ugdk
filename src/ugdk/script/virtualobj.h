@@ -182,7 +182,7 @@ class VirtualObj {
     struct function_helper<R (Args...)> {
         static std::function<R(Args...)> CreateFunction(const VirtualObj& data) {
             return [data](Args... args) -> R {
-                auto callf = std::mem_fn(&(VirtualObj::Call<Args...>));
+                auto callf = std::mem_fn(&VirtualObj::Call<Args...>);
                 return callf(data, args...).template value<R>(false);
             };
         }
@@ -192,7 +192,7 @@ class VirtualObj {
     struct function_helper<void (Args...)> {
         static std::function<void (Args...)> CreateFunction(const VirtualObj& data) {
             return [data](Args... args) {
-                auto callf = std::mem_fn(&(VirtualObj::Call<Args...>));
+                auto callf = std::mem_fn(&VirtualObj::Call<Args...>);
                 callf(data, args...);
             };
         }
