@@ -14,7 +14,7 @@ class SceneProxy : public Scene, public ugdk::script::BaseProxy<SceneProxy> {
     SceneProxy(const ugdk::script::VirtualObj& proxy) :
         Scene(), ugdk::script::BaseProxy<SceneProxy>(proxy) {
             this->AddTask([&](double dt){
-                ( proxy_ | "Update" )(ugdk::script::VirtualObj(proxy_.wrapper(), dt));
+                ( proxy_ | "Update" )(dt);
                 return true;
             });
         }

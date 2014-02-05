@@ -184,12 +184,6 @@ set_target_properties(libugdk PROPERTIES
     OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-dbg
 )
 
-if (UNIX OR MINGW OR (MSVC AND (NOT MSVC_VERSION LESS 1800)))
-    target_compile_definitions(libugdk PUBLIC 
-        UGDK_USING_VARIADIC
-    )
-endif()
-
 if(ANDROID)
     target_compile_definitions(libugdk PUBLIC 
         UGDK_USING_GLES

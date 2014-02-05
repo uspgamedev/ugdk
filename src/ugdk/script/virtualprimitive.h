@@ -17,7 +17,18 @@ namespace script {
     definition(double, Number);
 
 template <typename T>
-class VirtualPrimitive { private: VirtualPrimitive() {} };
+class VirtualPrimitive { 
+  public:
+    static T value(const VirtualData::Ptr data, bool disown) {
+        static_assert(false, "Unsupported type.");
+        return T();
+    }
+    static void set_value(const VirtualData::Ptr data, T value, bool disown) {
+        static_assert(false, "Unsupported type.");
+    }
+  private:
+    VirtualPrimitive() {} 
+};
 
 template <typename T>
 class VirtualPrimitive<T*> {

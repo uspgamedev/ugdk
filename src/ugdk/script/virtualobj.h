@@ -6,7 +6,6 @@
 #include <ugdk/script/type.h>
 #include <ugdk/script/langwrapper.h>
 #include <ugdk/script/virtualprimitive.h>
-#include <ugdk/util/uncopyable.h>
 
 #include <list>
 #include <vector>
@@ -20,7 +19,6 @@ namespace script {
 
 class VirtualObj;
 class Bind;
-class TempList;
 
 /// A proxy class wich represents virtual objects from scripting languages.
 /**
@@ -29,10 +27,7 @@ class TempList;
  ** TODO: explanations and examples.
  */
 class VirtualObj {
-
   public:
-
-    typedef std::pair<VirtualObj,VirtualObj>    VirtualEntry;
     typedef std::list<VirtualObj>               List;
     typedef std::vector<VirtualObj>             Vector;
     typedef std::map<VirtualObj,VirtualObj>     Map;
@@ -47,12 +42,23 @@ class VirtualObj {
 
     explicit VirtualObj(LangWrapper* wrapper) : data_(wrapper->NewData()) {}
 
-    template <class T>
-    explicit VirtualObj(LangWrapper* wrapper, T val) : data_(wrapper->NewData()) {
-        set_value<T>(val);
+    ~VirtualObj() {}
+
+    static VirtualObj Create(const char* obj, LangWrapper* wrapper) {
+        if (!wrapper) return VirtualObj();
+        VirtualObj result(wrapper);
+        result.data_->WrapString(obj);
+        return result;
     }
 
-    ~VirtualObj() {}
+    static VirtualObj Create (const std::string& str, LangWrapper* wrapper) {
+        return Create(str.c_str(), wrapper);
+    }
+
+    /// Acessing
+
+    LangWrapper* wrapper() const { return data_->wrapper(); }
+    void* unsafe_data() const { return data_->unsafe_data(); }
 
     template <class T>
     T value(bool disown = false) const {
@@ -64,84 +70,18 @@ class VirtualObj {
         VirtualPrimitive<T>::set_value(data_, val, disown);
     }
 
-    template <class T>
-    VirtualObj& operator=(T* obj) {
-        data_->Wrap(
-            static_cast<void*>(obj),
-            TypeRegistry<T>::type()
-        );
-        return *this;
-    }
-
-    LangWrapper* wrapper() const { return data_->wrapper(); }
-
     bool valid() const { return static_cast<bool>(data_); }
-
-    operator bool() const { return valid(); }
-
-    bool operator<(const VirtualObj& rhs) const {
-        return data_.get() < rhs.data_.get();
-    }
-
-    VirtualObj operator() (const List& args = List()) const;
-    VirtualObj operator() (const VirtualObj& arg) const;
 
     VirtualObj attribute(const VirtualObj& key) const {
         return VirtualObj(data_->GetAttribute(key.data_));
     }
 
-    VirtualObj operator[] (const VirtualObj& key) const {
-        return attribute(key);
-    }
-    VirtualObj operator[] (const char* key) const {
-        return attribute(Create(key, wrapper()));
-    }
-    VirtualObj operator[] (const std::string& key) const {
-        return (*this)[key.c_str()];
-    }
-    
     VirtualObj set_attribute (const VirtualObj& key, const VirtualObj& value) {
         return VirtualObj(
             data_->SetAttribute(key.data_, value.data_)
         );
-    }
+    }             
 
-    TempList operator,(const VirtualObj& rhs) const;
-
-    List& operator,(List& rhs) const {
-        rhs.push_front(*this);
-        return rhs;
-    }
-
-    Bind operator|(const std::string& method_name);
-
-    VirtualObj operator<<(const List& entry) {
-        List::const_iterator it = entry.begin();
-        return set_attribute(*(it), *(++it));
-    }
-
-    template <class T>
-    static VirtualObj Create (T* obj, LangWrapper* wrapper) {
-        if (!wrapper) return VirtualObj();
-        VirtualData::Ptr new_data = wrapper->NewData();
-        new_data->Wrap(
-            static_cast<void*>(obj),
-            TypeRegistry<T>::type()
-        );
-        return VirtualObj(new_data);
-    }
-
-    static VirtualObj Create (const char* obj, LangWrapper* wrapper);
-
-    static VirtualObj Create (const std::string& str, LangWrapper* wrapper) {
-        return Create(str.c_str(), wrapper);
-    }
-    
-    void* unsafe_data() const {
-        return data_->unsafe_data();
-    }
-
-#ifdef UGDK_USING_VARIADIC
     template<typename signature>
     std::function<signature> AsFunction() const {
         return function_helper<signature>::CreateFunction(*this);
@@ -150,14 +90,34 @@ class VirtualObj {
     template<typename ...Args>
     VirtualObj Call(Args... args) const {
         VirtualData::Vector arguments;
-        arguments_helper<Args...>::add_to_vector(arguments, wrapper(), args...);
+        arguments.reserve(sizeof...(Args));
+        arguments_helper<Args...>::add_to_vector(arguments, this->wrapper(), args...);
         return VirtualObj(data_->Execute(arguments));
     }
-#endif
+
+    // Operators
+
+    operator bool() const { return valid(); }
+
+    bool operator<(const VirtualObj& rhs) const {
+        return data_.get() < rhs.data_.get();
+    }
+    template<typename ...Args>
+    VirtualObj operator() (Args... args) const {
+        return Call<Args...>(args...); 
+    }
+    VirtualObj operator[] (const VirtualObj& key) const {
+        return attribute(key);
+    }
+    VirtualObj operator[] (const char* key) const {
+        return attribute(Create(key, wrapper()));
+    }
+    VirtualObj operator[] (const std::string& key) const {
+        return attribute(Create(key, wrapper()));
+    }
+    Bind operator|(const std::string& method_name);
 
   private:
-#ifdef UGDK_USING_VARIADIC
-    
     template<typename ...Args>
     struct arguments_helper;
     
@@ -166,7 +126,8 @@ class VirtualObj {
         static bool add_to_vector(VirtualData::Vector& v, LangWrapper* wrapper, T t, Args... args) {
             VirtualObj vobj(wrapper);
             vobj.set_value<T>(t);
-            return arguments_helper<VirtualObj, Args...>::add_to_vector(v, wrapper, vobj, args...);
+            v.emplace_back(vobj.data_);
+            return arguments_helper<Args...>::add_to_vector(v, wrapper, args...);
         }
     };
 
@@ -201,10 +162,8 @@ class VirtualObj {
             };
         }
     };
-#endif
 
     VirtualData::Ptr data_;
-
 };
 
 template<>
@@ -223,10 +182,6 @@ T ConvertSequence (const U& data_seq) {
         obj_seq.push_back(VirtualObj(*it));
     return obj_seq;
 }
-
-/*static bool VObjLess (const VirtualObj& lhs, const VirtualObj& rhs) {
-    return lhs<rhs;
-}*/
 
 template <class T, class U>
 T ConvertTable (const U& data_map) {
@@ -259,9 +214,12 @@ class Bind {
   public:
     Bind(VirtualObj& obj, const std::string& method_name);
 
-    VirtualObj operator() () const;
-    VirtualObj operator() (const VirtualObj& arg) const;
-    VirtualObj operator() (std::list<VirtualObj>& args) const;
+    template<typename ...Args>
+    VirtualObj operator() (Args... args) const {
+        VirtualObj method = obj_[method_name_];
+        auto callf = std::mem_fn(&VirtualObj::Call<VirtualObj, Args...>);
+        return callf(method, obj_, args...);
+    }
 
   private:
     Bind& operator=(Bind&); // Bind cannot be copied.
@@ -269,27 +227,6 @@ class Bind {
     VirtualObj&   obj_;
     VirtualObj    method_name_;
 };
-
-class TempList {
-  public:
-    operator VirtualObj::List&() { return l_; }
-    TempList& operator,(const VirtualObj& rhs) {
-        l_.push_back(rhs);
-        return *this;
-    }
-  private:
-    friend class VirtualObj;
-    TempList(const VirtualObj& first, const VirtualObj& second) :
-        l_() {
-        l_.push_back(first);
-        l_.push_back(second);
-    }
-    VirtualObj::List l_;
-};
-
-inline TempList VirtualObj::operator,(const VirtualObj& rhs) const {
-    return TempList(*this, rhs);
-}
 
 inline Bind VirtualObj::operator|(const std::string& method_name) {
     Bind result(*this, method_name);
