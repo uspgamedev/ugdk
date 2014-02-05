@@ -141,7 +141,6 @@ class VirtualObj {
         return data_->unsafe_data();
     }
 
-#ifdef UGDK_USING_VARIADIC
     template<typename signature>
     std::function<signature> AsFunction() const {
         return function_helper<signature>::CreateFunction(*this);
@@ -153,11 +152,8 @@ class VirtualObj {
         arguments_helper<Args...>::add_to_vector(arguments, wrapper(), args...);
         return VirtualObj(data_->Execute(arguments));
     }
-#endif
 
   private:
-#ifdef UGDK_USING_VARIADIC
-    
     template<typename ...Args>
     struct arguments_helper;
     
@@ -201,10 +197,8 @@ class VirtualObj {
             };
         }
     };
-#endif
 
     VirtualData::Ptr data_;
-
 };
 
 template<>

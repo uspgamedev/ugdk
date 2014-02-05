@@ -18,14 +18,10 @@ static bool LuaTests() {
     if(!main) return false;
     VirtualObj val = main["integer"];
 
-#ifdef UGDK_USING_VARIADIC
     auto f = main["soma"].AsFunction<int (int, int)>();
     assert(f(13, 25) == 38);
     assert(main["soma"].Call(3, val).value<int>() == 45);
     return main["soma"].Call(3, 8).value<int>() == 11;
-#else
-    return true;
-#endif
 }
 
 static bool PythonTests() {
