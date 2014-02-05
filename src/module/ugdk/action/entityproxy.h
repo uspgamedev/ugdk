@@ -23,29 +23,18 @@ public:
 	}
 
     virtual void Update(double dt) {
-		if (to_be_removed())	return;
-        ugdk::script::VirtualObj vdt = ugdk::script::VirtualObj(proxy_.wrapper());
-        vdt.set_value(dt);
-        std::list<ugdk::script::VirtualObj> args;
-        args.push_back(vdt);
-        ( proxy_ | "Update" )(args);
+		if (to_be_removed()) return;
+        ( proxy_ | "Update" )(dt);
     }
 
     virtual void OnSceneAdd(Scene* scene) {
-        std::list<ugdk::script::VirtualObj> args;
-
         SceneProxy* sceneproxy = dynamic_cast<SceneProxy*>(scene);
-        if (sceneproxy != NULL) {
-            args.push_back( sceneproxy->get_proxy_vobj() );
+        if (sceneproxy != nullptr) {
+            (proxy_ | "OnSceneAdd")(sceneproxy->get_proxy_vobj());
         }
         else {
-            ugdk::script::VirtualObj vscene = ugdk::script::VirtualObj(proxy_.wrapper());
-            vscene.set_value<Scene*>(scene);
-            args.push_back( vscene );
+            (proxy_ | "OnSceneAdd")(scene);
         }
-
-        if(proxy_["OnSceneAdd"])
-            ( proxy_ | "OnSceneAdd" )(args);
     }
     
 };

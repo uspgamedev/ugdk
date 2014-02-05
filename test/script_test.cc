@@ -29,9 +29,7 @@ static bool PythonTests() {
     if(!wassup) return false;
     if(!wassup["supimpa"]) return false;
 
-    VirtualObj::List args;
-    args.push_back(wassup["vecx"]);
-    return wassup["supimpa"](args).valid();
+    return wassup["supimpa"](wassup["vecx"]).valid();
 }
 
 int main(int argc, char **argv) {

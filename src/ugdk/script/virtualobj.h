@@ -91,7 +91,7 @@ class VirtualObj {
     VirtualObj Call(Args... args) const {
         VirtualData::Vector arguments;
         arguments.reserve(sizeof...(Args));
-        arguments_helper<Args...>::add_to_vector(arguments, wrapper(), args...);
+        arguments_helper<Args...>::add_to_vector(arguments, this->wrapper(), args...);
         return VirtualObj(data_->Execute(arguments));
     }
 
@@ -126,7 +126,8 @@ class VirtualObj {
         static bool add_to_vector(VirtualData::Vector& v, LangWrapper* wrapper, T t, Args... args) {
             VirtualObj vobj(wrapper);
             vobj.set_value<T>(t);
-            return arguments_helper<VirtualObj, Args...>::add_to_vector(v, wrapper, vobj, args...);
+            v.emplace_back(vobj.data_);
+            return arguments_helper<Args...>::add_to_vector(v, wrapper, args...);
         }
     };
 
@@ -215,7 +216,9 @@ class Bind {
 
     template<typename ...Args>
     VirtualObj operator() (Args... args) const {
-        return obj_[method_name_].Call<Args...>(obj_, args...); 
+        VirtualObj method = obj_[method_name_];
+        auto callf = std::mem_fn(&VirtualObj::Call<VirtualObj, Args...>);
+        return callf(method, obj_, args...);
     }
 
   private:
