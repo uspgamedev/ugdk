@@ -95,6 +95,14 @@ class VirtualObj {
         return VirtualObj(data_->Execute(arguments));
     }
 
+    VirtualObj Call(const List& vobj_list) const {
+        VirtualData::Vector data_vector;
+        data_vector.reserve(vobj_list.size());
+        for (const auto& vobj : vobj_list)
+            data_vector.push_back(vobj.data_);
+        return VirtualObj(data_->Execute(data_vector));
+    }
+
     // Operators
 
     operator bool() const { return valid(); }
