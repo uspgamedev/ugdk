@@ -18,11 +18,13 @@ namespace script {
 
 template <typename T>
 class VirtualPrimitive { 
+  public:
     static T value(const VirtualData::Ptr data, bool disown) {
         static_assert(false, "Unsupported type.");
         return T();
     }
     static void set_value(const VirtualData::Ptr data, T value, bool disown) {
+        static_assert(false, "Unsupported type.");
     }
   private:
     VirtualPrimitive() {} 
