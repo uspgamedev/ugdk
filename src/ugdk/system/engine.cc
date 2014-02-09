@@ -15,6 +15,7 @@
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/system/config.h>
 #include <ugdk/debug/profiler.h>
+#include <ugdk/debug/log.h>
 
 #include <string>
 #include <algorithm>
@@ -39,6 +40,11 @@ action::Scene*            previous_focused_scene_;
 Configuration configuration_;
 
 std::vector<const internal::SDLEventHandler*> sdlevent_handlers_;
+
+bool ErrorLog(const std::string& err_msg) {
+    debug::Log(debug::CRITICAL, err_msg);
+    return false;
+}
 
 void AddPendingScenes() {
     // Insert all queued Scenes at the end of the scene list.
@@ -129,7 +135,7 @@ bool Initialize(const Configuration& configuration) {
 
     if(!configuration.windows_list.empty()) {
         if(!desktop::Initialize(new desktop::Manager))
-            return false;
+            return ErrorLog("system::Initialize failed - desktop::Initialize returned false.");
 
         for(const auto& window_config : configuration.windows_list)
             desktop::manager()->CreateWindow(window_config);
@@ -137,27 +143,27 @@ bool Initialize(const Configuration& configuration) {
         if(!graphic::Initialize(new graphic::Manager(
                                     desktop::manager()->primary_window(),
                                     configuration.canvas_size)))
-            return false;
+            return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
 
         sdlevent_handlers_.push_back(desktop::manager()->sdlevent_handler());
     }
     
     if(configuration.audio_enabled)
         if(!audio::Initialize(new audio::Manager))
-            return false;
+            return ErrorLog("system::Initialize failed - audio::Initialize returned false.");
     
     if(configuration.input_enabled) {
         if(!input::Initialize(new input::Manager))
-            return false;
+            return ErrorLog("system::Initialize failed - input::Initialize returned false.");
         sdlevent_handlers_.push_back(input::manager()->sdlevent_handler());
     }
 
     if(configuration.time_enabled)
         if(!time::Initialize(new time::Manager))
-            return false;
+            return ErrorLog("system::Initialize failed - time::Initialize returned false.");
 
     if(!resource::Initialize(new resource::Manager))
-        return false;
+        return ErrorLog("system::Initialize failed - resource::Initialize returned false.");
 
     if(graphic::manager()) {
         text_manager_ = new graphic::TextManager;
@@ -165,7 +171,7 @@ bool Initialize(const Configuration& configuration) {
     }
 
     if (!SCRIPT_MANAGER()->Initialize())
-        return false;
+        return ErrorLog("system::Initialize failed - SCRIPT_MANAGER()->Initialize returned false.");
 
     return true;
 }
