@@ -6,9 +6,18 @@
 #include <ugdk/system/engine.h>
 #include <ugdk/audio/sample.h>
 #include <ugdk/audio/music.h>
+#include <ugdk/debug/log.h>
 
 namespace ugdk {
 namespace audio {
+
+namespace {
+
+bool ErrorLog(const std::string& err_msg) {
+    debug::Log(debug::CRITICAL, err_msg);
+    return false;
+}
+}
 
 Manager::Manager() {
 }
@@ -19,11 +28,11 @@ Manager::~Manager() {
 bool Manager::Initialize() {
 
     if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
-        return false;
+        return ErrorLog("Failed to initialize SDL_AUDIO: " + std::string(SDL_GetError()));
 
     // inicializa SDL_mixer
     if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) != 0)
-        return false;
+        return ErrorLog("Failed to initialize SDL_Mixer: " + std::string(Mix_GetError()));
 
     // aloca canais de audio
     Mix_AllocateChannels(NUM_CHANNELS);
