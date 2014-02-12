@@ -1,11 +1,13 @@
 #ifndef UGDK_GRAPHIC_GEOMETRY_H_
 #define UGDK_GRAPHIC_GEOMETRY_H_
 
+#include <ugdk/math/vector2D.h>
+
 #include <cmath>
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-#include <ugdk/math/vector2D.h>
 
 namespace ugdk {
 namespace graphic {
