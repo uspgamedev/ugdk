@@ -94,7 +94,13 @@ void Label::Draw(Canvas& canvas) const {
     shader_use.SendVertexBuffer(buffer_, opengl::TEXTURE, sizeof(vec2), 2, 2 * sizeof(vec2));
 
     // Draw the line!
+#ifdef UGDK_USING_GLES
+    for(size_t i = 0; i < num_characters_; ++i) {
+        glDrawArrays(GL_TRIANGLE_STRIP, i * 4, 4);
+    }
+#else
     glMultiDrawArrays(GL_TRIANGLE_STRIP, first_vector_.data(), size_vector_.data(), num_characters_);
+#endif
     
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
 

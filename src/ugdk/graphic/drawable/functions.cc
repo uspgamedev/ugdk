@@ -118,7 +118,13 @@ void DrawTextLine(const Geometry& geometry, const VisualEffect& effect, const Fo
     shader_use.SendVertexBuffer(&buffer, opengl::VERTEX,             0, 2, 2 * sizeof(vec2));
     shader_use.SendVertexBuffer(&buffer, opengl::TEXTURE, sizeof(vec2), 2, 2 * sizeof(vec2));
 
+#ifdef UGDK_USING_GLES
+    for(size_t i = 0; i < ucs_msg.size(); ++i) {
+        glDrawArrays(GL_TRIANGLE_STRIP, i * 4, 4);
+    }
+#else
     glMultiDrawArrays(GL_TRIANGLE_STRIP, first_vector.data(), size_vector.data(), ucs_msg.size());
+#endif
 
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
 }
