@@ -11,6 +11,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <type_traits>
 
 #include <cstdio>
 
@@ -148,12 +149,12 @@ class VirtualObj {
         }
     };
 
-    template<typename signature>
+    template<typename signature, typename Helper = void>
     struct function_helper;
 
     template<typename R, typename ...Args>
-    struct function_helper<R (Args...)> {
-        static std::function<R(Args...)> CreateFunction(const VirtualObj& data) {
+    struct function_helper<R(Args...), typename std::enable_if<is_virtual_primitive<R>::value>::type> {
+        static std::function< R(Args...)> CreateFunction(const VirtualObj& data) {
             return [data](Args... args) -> R {
                 auto callf = std::mem_fn(&VirtualObj::Call<Args...>);
                 return callf(data, args...).template value<R>(false);
@@ -161,8 +162,18 @@ class VirtualObj {
         }
     };
 
+    template<typename R, typename ...Args>
+    struct function_helper<R(Args...), typename std::enable_if<!is_virtual_primitive<R>::value>::type> {
+        static std::function< R(Args...)> CreateFunction(const VirtualObj& data) {
+            return [data](Args... args) -> R {
+                auto callf = std::mem_fn(&VirtualObj::Call<Args...>);
+                return *callf(data, args...).template value<R*>(false);
+            };
+        }
+    };
+
     template<typename ...Args>
-    struct function_helper<void (Args...)> {
+    struct function_helper<void(Args...), void> {
         static std::function<void (Args...)> CreateFunction(const VirtualObj& data) {
             return [data](Args... args) {
                 auto callf = std::mem_fn(&VirtualObj::Call<Args...>);

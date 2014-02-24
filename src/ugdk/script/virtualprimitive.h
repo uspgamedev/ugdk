@@ -17,12 +17,12 @@ namespace script {
     definition(double, Number);
 
 template <typename T>
-struct dependent_false { enum { value = false }; };
+struct is_virtual_primitive { static const bool value = false; };
 
 template <typename T>
 class VirtualPrimitive { 
   public:
-    static_assert(dependent_false<T>::value, "Unsupported type.");
+    static_assert(is_virtual_primitive<T>::value, "Unsupported type.");
 };
 
 template <typename T>
@@ -41,6 +41,9 @@ class VirtualPrimitive<T*> {
 };
 
 template <typename T>
+struct is_virtual_primitive<T*> { static const bool value = true; };
+
+template <typename T>
 class VirtualPrimitive<T&> {
 public:
     static T& value(const VirtualData::Ptr data, bool disown) {
@@ -54,6 +57,9 @@ public:
 private:
     VirtualPrimitive() {}
 };
+
+template <typename T>
+struct is_virtual_primitive<T&> { static const bool value = true; };
 
 template <typename T, typename S>
 inline T CheckAndCast (S value) {
@@ -77,7 +83,9 @@ inline std::string CheckAndCast<std::string, const char*> (const char* value) {
         } \
       private: \
         VirtualPrimitive() {} \
-    }
+    }; \
+    template <> \
+    struct is_virtual_primitive<type> { static const bool value = true; }
 
 #define DEFINE_SCRIPT_SIMPLE_PRIMITIVE_VALUE(type, name) \
     DEFINE_SCRIPT_PRIMITIVE_VALUE(type, name, value)
