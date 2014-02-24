@@ -38,6 +38,10 @@ if(UGDK_INTERNAL_SDL2)
         include(android-sdl2.cmake)
 
     else()
+        if(WIN32)
+            find_package(OpenGL REQUIRED)
+            list(APPEND EXTRA_LIBS ${OPENGL_LIBRARIES})
+        endif()
         # Set some options for the SDL's CMakeLists.
         if(${BUILD_SHARED_LIBS})
             set(SDL_SHARED ON  CACHE BOOL "Build a shared version of the library" FORCE)
