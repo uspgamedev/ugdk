@@ -6,6 +6,7 @@
 #include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/shaderuse.h>
 
 #include "SDL_video.h"
 
@@ -71,9 +72,9 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Bind the light texture to all shaders that USE_LIGHT_BUFFER.
-        opengl::ShaderProgram::Use(manager->shaders().GetSpecificShader((1 << 0) + (0 << 1)))
+        opengl::ShaderUse(manager->shaders().GetSpecificShader((1 << 0) + (0 << 1)))
             .SendTexture(1, manager->light_buffer(), "light_texture");
-        opengl::ShaderProgram::Use(manager->shaders().GetSpecificShader((1 << 0) + (1 << 1)))
+        opengl::ShaderUse(manager->shaders().GetSpecificShader((1 << 0) + (1 << 1)))
             .SendTexture(1, manager->light_buffer(), "light_texture");
     });
 

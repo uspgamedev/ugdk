@@ -6,6 +6,7 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/shaderuse.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 
 namespace ugdk {
@@ -36,7 +37,7 @@ Light::~Light() {
 void Light::Draw(const Geometry& geometry) {
     // Use our shader
     opengl::ShaderProgram* shader = graphic::manager()->light_shader();
-    opengl::ShaderProgram::Use shader_use(shader);
+    opengl::ShaderUse shader_use(shader);
 
     shader_use.SendUniform("decayment", 2.4f);
     shader_use.SendUniform("minimum_radius", 0.05f);
