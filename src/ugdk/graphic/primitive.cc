@@ -1,6 +1,7 @@
 #include <ugdk/graphic/primitive.h>
 
-#include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/vertexdata.h>
+#include <ugdk/graphic/opengl/shaderuse.h>
 
 namespace ugdk {
 namespace graphic {
@@ -10,8 +11,9 @@ Primitive::Primitive(const Texture* texture, const std::shared_ptr<const VertexD
     ,   vertexdata_(data)
 {}
 
-void Primitive::Draw(opengl::ShaderUse& use) const {
-    
+void Primitive::Draw(opengl::ShaderUse& shader_use) const {
+    shader_use.SendTexture(0, texture_);
+    vertexdata_->Draw(shader_use);
 }
     
 }  // namespace graphic
