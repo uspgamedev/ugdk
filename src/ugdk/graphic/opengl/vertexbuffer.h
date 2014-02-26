@@ -27,6 +27,7 @@
 
 // OpenGL
 #include <ugdk/internal/opengl.h>
+#include <memory>
 
 namespace ugdk {
 namespace graphic {
@@ -58,6 +59,7 @@ namespace opengl {
 		 */
 		static VertexBuffer *Create(size_t size, GLenum target, GLenum usage);
 
+        static std::shared_ptr<const VertexBuffer> CreateDefaultShared();
         static const VertexBuffer *CreateDefault();
 
 		/**

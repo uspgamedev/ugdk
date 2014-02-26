@@ -87,6 +87,8 @@ SET(UGDK_SRC
     src/ugdk/graphic/opengl/shaderuse.h 
     src/ugdk/graphic/opengl/vertexbuffer.cc 
     src/ugdk/graphic/opengl/vertexbuffer.h 
+    src/ugdk/graphic/opengl/vertexdata_rectangle.cc 
+    src/ugdk/graphic/opengl/vertexdata_rectangle.h 
     src/ugdk/graphic/primitive.cc 
     src/ugdk/graphic/primitive.h 
     src/ugdk/graphic/spritesheet.cc 
