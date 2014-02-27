@@ -5,6 +5,8 @@
 #include <ugdk/graphic/opengl/shaderuse.h>
 #include <ugdk/math/vector2D.h>
 
+#include <cstring>
+
 namespace ugdk {
 namespace graphic {
 namespace opengl {
@@ -19,9 +21,9 @@ VertexDataRectangle::VertexDataRectangle(const math::Vector2D& size)
 {
     GLfloat buffer_data[] = {
           0.0f,   0.0f,
-          0.0f, size.y,
-        size.x,   0.0f,
-        size.x, size.y
+          0.0f, float(size.y),
+        float(size.x),   0.0f,
+        float(size.x), float(size.y)
     };
     std::shared_ptr<VertexBuffer> ptr(opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW));
     position_ = ptr;
