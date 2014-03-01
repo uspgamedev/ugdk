@@ -7,6 +7,7 @@ namespace graphic {
 // Data
 class Geometry;
 class VisualEffect;
+class VertexData;
 
 // Drawables
 class Drawable;
@@ -32,6 +33,7 @@ class Manager;
 namespace opengl {
 class Shader;
 class ShaderProgram;
+class ShaderUse;
 class VertexBuffer;
 }  // namespace opengl
 

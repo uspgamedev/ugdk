@@ -8,6 +8,7 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/font.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/shaderuse.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/util/utf8.h>
 
@@ -72,7 +73,7 @@ void DrawSquare(const Geometry& geometry, const VisualEffect& effect, const Text
         return;
     
     // Use our shader
-    opengl::ShaderProgram::Use shader_use(graphic::manager()->shaders().current_shader());
+    opengl::ShaderUse shader_use(graphic::manager()->shaders().current_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
@@ -110,7 +111,7 @@ void DrawTextLine(const Geometry& geometry, const VisualEffect& effect, const Fo
     
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
 
-    opengl::ShaderProgram::Use shader_use(graphic::manager()->shaders().current_shader());
+    opengl::ShaderUse shader_use(graphic::manager()->shaders().current_shader());
     shader_use.SendGeometry(geometry);
     shader_use.SendEffect(effect);
     shader_use.SendTexture(0, font->freetype_font()->atlas->id);

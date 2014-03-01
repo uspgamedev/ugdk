@@ -35,6 +35,7 @@ SET(UGDK_SRC
     src/ugdk/audio/music.h 
     src/ugdk/audio/sample.cc 
     src/ugdk/audio/sample.h 
+    src/ugdk/debug.h 
     src/ugdk/debug/log.cc 
     src/ugdk/debug/log.h 
     src/ugdk/debug/profiler.cc 
@@ -64,6 +65,7 @@ SET(UGDK_SRC
     src/ugdk/graphic/drawable/textbox.h 
     src/ugdk/graphic/drawable/texturedrectangle.cc 
     src/ugdk/graphic/drawable/texturedrectangle.h 
+    src/ugdk/graphic/drawableprimitve.h 
     src/ugdk/graphic/font.cc 
     src/ugdk/graphic/font.h 
     src/ugdk/graphic/geometry.h 
@@ -81,8 +83,14 @@ SET(UGDK_SRC
     src/ugdk/graphic/opengl/shader.h 
     src/ugdk/graphic/opengl/shaderprogram.cc 
     src/ugdk/graphic/opengl/shaderprogram.h 
+    src/ugdk/graphic/opengl/shaderuse.cc 
+    src/ugdk/graphic/opengl/shaderuse.h 
     src/ugdk/graphic/opengl/vertexbuffer.cc 
     src/ugdk/graphic/opengl/vertexbuffer.h 
+    src/ugdk/graphic/opengl/vertexdata_rectangle.cc 
+    src/ugdk/graphic/opengl/vertexdata_rectangle.h 
+    src/ugdk/graphic/primitive.cc 
+    src/ugdk/graphic/primitive.h 
     src/ugdk/graphic/spritesheet.cc 
     src/ugdk/graphic/spritesheet.h 
     src/ugdk/graphic/spritesheetdata.cc 
@@ -91,6 +99,7 @@ SET(UGDK_SRC
     src/ugdk/graphic/textmanager.h 
     src/ugdk/graphic/texture.cc 
     src/ugdk/graphic/texture.h 
+    src/ugdk/graphic/vertexdata.h 
     src/ugdk/graphic/visualeffect.h 
     src/ugdk/input.h 
     src/ugdk/input/events.h 

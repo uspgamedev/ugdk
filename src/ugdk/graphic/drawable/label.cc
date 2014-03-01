@@ -2,6 +2,7 @@
 
 #include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/shaderuse.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/graphic/defaultshaders.h>
 
@@ -77,7 +78,7 @@ void Label::Draw(Canvas& canvas) const {
     if(draw_setup_function_) draw_setup_function_(this, canvas);
 
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
-    opengl::ShaderProgram::Use shader_use(graphic::manager()->shaders().current_shader());
+    opengl::ShaderUse shader_use(graphic::manager()->shaders().current_shader());
 
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform

@@ -46,25 +46,34 @@ namespace opengl {
 			return new VertexArray(size, target, usage);
 		}
 	}
-    const VertexBuffer *VertexBuffer::CreateDefault() {
-        static opengl::VertexBuffer* buffer = nullptr;
-        static const GLfloat buffer_data[] = { 
+
+    std::shared_ptr<const VertexBuffer> VertexBuffer::CreateDefaultShared() {
+        static std::weak_ptr<const VertexBuffer> buffer;
+        if (auto ptr = buffer.lock())
+            return ptr;
+
+        GLfloat buffer_data[] = {
             0.0f, 0.0f,
             0.0f, 1.0f,
             1.0f, 0.0f,
             1.0f, 1.0f
         };
-        if(buffer) return buffer;
-        buffer = opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+        std::shared_ptr<VertexBuffer> ptr(opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW));
         {
-            opengl::VertexBuffer::Bind bind(*buffer);
-            opengl::VertexBuffer::Mapper mapper(*buffer);
+            opengl::VertexBuffer::Bind bind(*ptr);
+            opengl::VertexBuffer::Mapper mapper(*ptr);
 
             GLfloat *indices = static_cast<GLfloat*>(mapper.get());
             if (indices)
                 memcpy(indices, buffer_data, sizeof(buffer_data));
         }
-        return buffer;
+        buffer = ptr;
+        return ptr;
+    }
+
+    const VertexBuffer* VertexBuffer::CreateDefault() {
+        static std::shared_ptr<const VertexBuffer> buffer = CreateDefaultShared();
+        return buffer.get();
     }
 
 
