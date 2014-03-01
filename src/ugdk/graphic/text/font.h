@@ -15,7 +15,7 @@ namespace graphic {
 
 class Font {
   public:
-    Font(const std::string& path, double size, int num_glyphs = 128);
+    Font(const std::string& path, double size);
     ~Font();
 
     double size() const { return size_; }

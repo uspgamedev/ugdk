@@ -1,8 +1,8 @@
 #include <ugdk/util/languageword.h>
 
 #include <ugdk/system/engine.h>
-#include <ugdk/graphic/textmanager.h>
-#include <ugdk/graphic/drawable/label.h>
+#include <ugdk/graphic/text/textmanager.h>
+#include <ugdk/graphic/text/label.h>
 
 namespace ugdk {
 

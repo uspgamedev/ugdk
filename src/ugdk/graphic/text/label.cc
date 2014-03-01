@@ -1,4 +1,4 @@
-#include <ugdk/graphic/drawable/label.h>
+#include <ugdk/graphic/text/label.h>
 
 #include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
@@ -10,8 +10,8 @@
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
-#include <ugdk/graphic/font.h>
 #include <ugdk/graphic/canvas.h>
+#include <ugdk/graphic/text/font.h>
 #include <ugdk/util/utf8.h>
 #include <ugdk/graphic/drawable/functions.h>
 

@@ -1,12 +1,12 @@
-#include <ugdk/graphic/textmanager.h>
+#include <ugdk/graphic/text/textmanager.h>
 
 #include <ugdk/system/engine.h>
 #include <ugdk/desktop/module.h>
 #include <ugdk/desktop/window.h>
-#include <ugdk/graphic/drawable/label.h>
-#include <ugdk/graphic/drawable/textbox.h>
-#include <ugdk/graphic/font.h>
 #include <ugdk/graphic/texture.h>
+#include <ugdk/graphic/text/label.h>
+#include <ugdk/graphic/text/textbox.h>
+#include <ugdk/graphic/text/font.h>
 #include <ugdk/util/utf8.h>
 
 #include <iostream>

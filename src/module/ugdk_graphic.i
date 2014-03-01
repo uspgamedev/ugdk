@@ -13,15 +13,17 @@
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/texture.h>
-#include <ugdk/graphic/font.h>
 #include <ugdk/graphic/light.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/spritesheetdata.h>
-#include <ugdk/graphic/textmanager.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/module.h>
+#include <ugdk/graphic/vertexdata.h>
+#include <ugdk/graphic/primitive.h>
+#include <ugdk/graphic/text/font.h>
+#include <ugdk/graphic/text/textmanager.h>
 
 %}
 
@@ -55,11 +57,10 @@
 
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
-%import(module="ugdk_drawable") <ugdk/graphic/drawable/textbox.h> //this needs to go after the include drawable.h
+%import(module="ugdk_drawable") <ugdk/graphic/text/textbox.h> //this needs to go after the include drawable.h
 
 %include <ugdk/graphic/canvas.h>
 %include <ugdk/graphic/texture.h>
-%include <ugdk/graphic/font.h>
 %include <ugdk/graphic/light.h>
 enable_disown(ugdk::graphic::Node* new_child)
 enable_disown(ugdk::graphic::Drawable* drawable)
@@ -68,7 +69,12 @@ disable_disown(ugdk::graphic::Drawable* drawable)
 disable_disown(ugdk::graphic::Node* new_child)
 %include <ugdk/graphic/spritesheet.h>
 
-%include <ugdk/graphic/textmanager.h>
+%include <ugdk/graphic/vertexdata.h>
+%include <ugdk/graphic/primitive.h>
+
+%include <ugdk/graphic/text/font.h>
+%include <ugdk/graphic/text/textmanager.h>
+
 %include <ugdk/graphic/manager.h>
 %include <ugdk/graphic/module.h>
 
@@ -85,6 +91,8 @@ namespace graphic {
     export_class(Spritesheet)
     export_class(TextManager)
     export_class(Manager)
+    export_class(Primitive)
+    export_class(VertexData)
 }
 }
 

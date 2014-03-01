@@ -1,8 +1,8 @@
-#include <ugdk/graphic/drawable/textbox.h>
+#include <ugdk/graphic/text/textbox.h>
 
-#include <ugdk/graphic/font.h>
 #include <ugdk/graphic/geometry.h>
-#include <ugdk/graphic/drawable/label.h>
+#include <ugdk/graphic/text/font.h>
+#include <ugdk/graphic/text/label.h>
 #include <ugdk/graphic/canvas.h>
 
 #include <texture-font.h>

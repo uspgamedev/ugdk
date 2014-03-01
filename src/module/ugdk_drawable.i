@@ -9,9 +9,9 @@
 %{
 
 #include <ugdk/graphic/drawable/sprite.h>
-#include <ugdk/graphic/drawable/label.h>
-#include <ugdk/graphic/drawable/textbox.h>
 #include <ugdk/graphic/drawable/texturedrectangle.h>
+#include <ugdk/graphic/text/label.h>
+#include <ugdk/graphic/text/textbox.h>
 
 #include <module/ugdk/action/observerproxy.h>
 
@@ -25,7 +25,7 @@
 %import(module="ugdk_graphic") <ugdk/graphic/drawable.h>
 %import(module="ugdk_graphic") <ugdk/graphic/spritesheet.h>
 %import(module="ugdk_graphic") <ugdk/graphic/texture.h>
-%import(module="ugdk_graphic") <ugdk/graphic/font.h>
+%import(module="ugdk_graphic") <ugdk/graphic/text/font.h>
 
 %ignore ugdk::graphic::Text::SetMessage(const std::vector<std::wstring>& message);
 
@@ -33,8 +33,8 @@ proxy_class(ugdk::action::Observer)
 
 %include <ugdk/graphic/drawable/sprite.h>
 %include <ugdk/graphic/drawable/texturedrectangle.h>
-%include <ugdk/graphic/drawable/label.h>
-%include <ugdk/graphic/drawable/textbox.h>
+%include <ugdk/graphic/text/label.h>
+%include <ugdk/graphic/text/textbox.h>
 
 
 namespace ugdk {

@@ -57,17 +57,10 @@ SET(UGDK_SRC
     src/ugdk/graphic/drawable.h 
     src/ugdk/graphic/drawable/functions.cc 
     src/ugdk/graphic/drawable/functions.h 
-    src/ugdk/graphic/drawable/label.cc 
-    src/ugdk/graphic/drawable/label.h 
     src/ugdk/graphic/drawable/sprite.cc 
     src/ugdk/graphic/drawable/sprite.h 
-    src/ugdk/graphic/drawable/textbox.cc 
-    src/ugdk/graphic/drawable/textbox.h 
     src/ugdk/graphic/drawable/texturedrectangle.cc 
     src/ugdk/graphic/drawable/texturedrectangle.h 
-    src/ugdk/graphic/drawableprimitve.h 
-    src/ugdk/graphic/font.cc 
-    src/ugdk/graphic/font.h 
     src/ugdk/graphic/geometry.h 
     src/ugdk/graphic/light.cc 
     src/ugdk/graphic/light.h 
@@ -95,8 +88,14 @@ SET(UGDK_SRC
     src/ugdk/graphic/spritesheet.h 
     src/ugdk/graphic/spritesheetdata.cc 
     src/ugdk/graphic/spritesheetdata.h 
-    src/ugdk/graphic/textmanager.cc 
-    src/ugdk/graphic/textmanager.h 
+    src/ugdk/graphic/text/font.cc 
+    src/ugdk/graphic/text/font.h 
+    src/ugdk/graphic/text/label.cc 
+    src/ugdk/graphic/text/label.h 
+    src/ugdk/graphic/text/textbox.cc 
+    src/ugdk/graphic/text/textbox.h 
+    src/ugdk/graphic/text/textmanager.cc 
+    src/ugdk/graphic/text/textmanager.h 
     src/ugdk/graphic/texture.cc 
     src/ugdk/graphic/texture.h 
     src/ugdk/graphic/vertexdata.h 

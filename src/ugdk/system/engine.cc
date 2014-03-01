@@ -8,7 +8,7 @@
 #include <ugdk/desktop/module.h>
 
 #include <ugdk/action/scene.h>
-#include <ugdk/graphic/textmanager.h>
+#include <ugdk/graphic/text/textmanager.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/util/languagemanager.h>

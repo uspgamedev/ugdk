@@ -3,10 +3,10 @@
 #include <utility>
 #include <algorithm>
 #include "language.h"
-#include <ugdk/graphic/textmanager.h>
+#include <ugdk/graphic/text/textmanager.h>
 #include <ugdk/resource/module.h>
-#include <ugdk/graphic/drawable/label.h>
-#include <ugdk/graphic/drawable/textbox.h>
+#include <ugdk/graphic/text/label.h>
+#include <ugdk/graphic/text/textbox.h>
 #include <ugdk/system/engine.h>
 #include <ugdk/util/languageword.h>
 #include <ugdk/util/utf8.h>

@@ -1,4 +1,4 @@
-#include <ugdk/graphic/font.h>
+#include <ugdk/graphic/text/font.h>
 
 #include <ugdk/system/engine.h>
 #include <texture-atlas.h>
@@ -11,7 +11,7 @@ using std::string;
 using std::wstring;
 using math::Vector2D;
 
-Font::Font(const string& path, double size, int num_glyphs) 
+Font::Font(const string& path, double size) 
     : size_(size) 
     {
     
