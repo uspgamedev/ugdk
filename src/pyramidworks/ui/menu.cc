@@ -1,10 +1,6 @@
 
-#include <vector>
-#include <algorithm>
-#include <iterator>
-
-#include <ugdk/ui/menu.h>
-#include <ugdk/ui/uielement.h>
+#include <pyramidworks/ui/menu.h>
+#include <pyramidworks/ui/uielement.h>
 
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/drawable.h>
@@ -14,12 +10,17 @@
 #include <ugdk/input/events.h>
 #include <ugdk/structure/intervalkdtree.h>
 
+#include <vector>
+#include <algorithm>
+#include <iterator>
+
 using std::mem_fn;
 using std::placeholders::_1;
 
-namespace ugdk {
+namespace pyramidworks {
 namespace ui {
 
+using namespace ugdk;
 const MenuCallback Menu::FINISH_MENU(mem_fn(&Menu::FinishScene));
 const MenuCallback Menu::INTERACT_MENU(mem_fn(&Menu::InteractWithFocused));
 
@@ -40,33 +41,29 @@ private:
 };
 
 Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
-  : node_(new graphic::Node()),
-    owner_scene_(nullptr),
-    focused_element_(nullptr),
-    objects_tree_(new ObjectTree(tree_bounding_box,5)),
-    hook_(hook) {
-      node_->geometry().ChangeOffset(offset);
-      option_node_[0] = nullptr;
-      option_node_[1] = nullptr;
-      //std::function<bool (double)> func = std::bind(&CheckMouse, this, _1);
-      //this->AddTask(new action::GenericTask(func));
-      //this->AddTask(new CallbackCheckTask(this));
+  : node_(new graphic::Node())
+  , owner_scene_(nullptr)
+  , focused_element_(nullptr)
+  , objects_tree_(new ObjectTree(tree_bounding_box,5))
+  , hook_(hook) 
+{
+    node_->geometry().ChangeOffset(offset);
+    option_node_[0] = nullptr;
+    option_node_[1] = nullptr;
 }
 
 Menu::~Menu() {
-    if(option_node_[0]) delete option_node_[0];
-    if(option_node_[1]) delete option_node_[1];
-    delete objects_tree_;
+    delete option_node_[0];
+    delete option_node_[1];
 }
 
 void Menu::Update(double) {
     input::Manager* input = input::manager();
     ugdk::math::Vector2D mouse_pos = input->mouse().position();
     if((mouse_pos - last_mouse_position_).NormOne() > 10e-10) {
-        std::vector<UIElement *> *intersecting_uielements = GetMouseCollision();
+        auto intersecting_uielements = GetMouseCollision();
         if(intersecting_uielements->size() > 0)
             SelectUIElement((*intersecting_uielements)[0]);
-        delete intersecting_uielements;
     }
     last_mouse_position_ = mouse_pos;
     if(input->mouse().IsReleased(input::MouseButton::LEFT))
@@ -129,7 +126,7 @@ void Menu::FinishScene() const {
     owner_scene_->Finish();
 }
 
-std::vector<UIElement *>* Menu::GetMouseCollision() {
+std::shared_ptr< std::vector<UIElement *> > Menu::GetMouseCollision() {
     math::Vector2D mouse_pos = input::manager()->mouse().position();
     std::array<double, 2> min_coords, max_coords;
     min_coords[0] = mouse_pos.x - 0.5;
@@ -138,7 +135,7 @@ std::vector<UIElement *>* Menu::GetMouseCollision() {
     max_coords[1] = min_coords[1] + 1;
     ugdk::structure::Box<2> box(min_coords, max_coords);
 
-    std::vector<UIElement *>* results = new std::vector<UIElement *>;
+    auto results = std::make_shared< std::vector<UIElement *> >();
     objects_tree_->FindIntersectingItems(box, std::back_inserter(*results));
     return results;
 }
@@ -149,10 +146,9 @@ void Menu::InteractWithFocused() {
 }
 
 void Menu::CheckInteraction(const ugdk::math::Vector2D &mouse_pos) {
-    std::vector<UIElement *>* intersecting_uielements = GetMouseCollision();
+    auto intersecting_uielements = GetMouseCollision();
     if(intersecting_uielements->size() > 0)
         (*intersecting_uielements)[0]->Interact();
-    delete intersecting_uielements;
 }
 
 void Menu::AddObject(UIElement *obj) {
@@ -175,8 +171,5 @@ void Menu::RefreshObject(UIElement *obj) {
     objects_tree_->Update(obj->GetBoundingBox(), obj);
 }
 
-//static MenuCallback FINISH_MENU(&Menu::FinishScene);
-
-
 } // namespace ui
-} // namespace ugdk
+} // namespace pyramidworks

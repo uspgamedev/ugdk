@@ -14,6 +14,13 @@ SET(UGDK_SRC
     src/pyramidworks/geometry/geometricshape.h 
     src/pyramidworks/geometry/rect.cc 
     src/pyramidworks/geometry/rect.h 
+    src/pyramidworks/ui.h 
+    src/pyramidworks/ui/button.cc 
+    src/pyramidworks/ui/button.h 
+    src/pyramidworks/ui/menu.cc 
+    src/pyramidworks/ui/menu.h 
+    src/pyramidworks/ui/uielement.cc 
+    src/pyramidworks/ui/uielement.h 
     src/ugdk/action.h 
     src/ugdk/action/animationplayer.h 
     src/ugdk/action/entity.h 
@@ -169,13 +176,6 @@ SET(UGDK_SRC
     src/ugdk/time/module.h 
     src/ugdk/time/timeaccumulator.cc 
     src/ugdk/time/timeaccumulator.h 
-    src/ugdk/ui.h 
-    src/ugdk/ui/button.cc 
-    src/ugdk/ui/button.h 
-    src/ugdk/ui/menu.cc 
-    src/ugdk/ui/menu.h 
-    src/ugdk/ui/uielement.cc 
-    src/ugdk/ui/uielement.h 
     src/ugdk/util.h 
     src/ugdk/util/animationprotocol.cc 
     src/ugdk/util/animationprotocol.h 

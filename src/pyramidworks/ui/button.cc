@@ -1,18 +1,20 @@
-#include <ugdk/ui/button.h>
+#include <pyramidworks/ui/button.h>
 
 #include <ugdk/graphic/drawable.h>
-#include <ugdk/ui/menu.h>
+#include <pyramidworks/ui/menu.h>
 #include <ugdk/structure/intervalkdtree.h>
 
-namespace ugdk {
+namespace pyramidworks {
 namespace ui {
 
+using namespace ugdk;
+
 Button::Button(const ugdk::math::Vector2D& top_left, graphic::Drawable* drawable, const ButtonCallback& function)
-  : UIElement(),
-    function_(function),
-    top_left_(top_left) {
-        node_->set_drawable(drawable);
-        node_->geometry().ChangeOffset(top_left_);
+  : function_(function)
+  , top_left_(top_left)
+{
+    node_->set_drawable(drawable);
+    node_->geometry().ChangeOffset(top_left_);
 }
 
 Button::~Button() {
@@ -29,4 +31,4 @@ structure::Box<2> Button::GetBoundingBox() const {
 }
 
 } // namespace ui
-} // namespace ugdk
+} // namespace pyramidworks
