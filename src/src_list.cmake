@@ -89,6 +89,7 @@ SET(UGDK_SRC
     src/ugdk/graphic/opengl/vertexdata_rectangle.h 
     src/ugdk/graphic/primitive.cc 
     src/ugdk/graphic/primitive.h 
+    src/ugdk/graphic/primitivecontroller.h 
     src/ugdk/graphic/sprite.cc 
     src/ugdk/graphic/sprite.h 
     src/ugdk/graphic/spritesheet.cc 

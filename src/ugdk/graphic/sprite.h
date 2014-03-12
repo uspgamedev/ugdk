@@ -6,6 +6,7 @@
 
 #include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/vertexdata.h>
+#include <ugdk/graphic/primitivecontroller.h>
 #include <ugdk/action/animationplayer.h>
 #include <ugdk/action/spritetypes.h>
 #include <string>
@@ -13,19 +14,21 @@
 namespace ugdk {
 namespace graphic {
 
-class Sprite {
+class Sprite : public PrimitiveControllerPosition {
     class SpriteData : public VertexData {
       public:
         ~SpriteData();
 
-        void SetToGeometry(const math::Vector2D& size, const math::Vector2D& hotspot, const Geometry& geometry);
+        void ApplyPositionOffset(const math::Vector2D& offset);
+        void SetToGeometry(const math::Vector2D& position, const math::Vector2D& size, const math::Vector2D& hotspot, const Geometry& geometry);
         void Draw(opengl::ShaderUse&) const;
 
       private:
         friend class Sprite;
         SpriteData();
 
-        std::shared_ptr<const opengl::VertexBuffer> position_, uv_;
+        std::shared_ptr<opengl::VertexBuffer> position_;
+        std::shared_ptr<const opengl::VertexBuffer> uv_;
     };
 
   public:
@@ -37,17 +40,19 @@ class Sprite {
     Sprite(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table);
     ~Sprite();
 
-    const Primitive& primitive() const;
+    std::shared_ptr<Primitive> primitive() const;
     const action::SpriteAnimationPlayer& animation_player() const;
     action::SpriteAnimationPlayer& animation_player();
 
     void ChangeToFrame(const action::SpriteAnimationFrame& frame);
+    void ChangePosition(const math::Vector2D& position); // TODO overide
        
   private:
     std::shared_ptr<SpriteData> sprite_data_;
     const Spritesheet *spritesheet_;
-    Primitive primitive_;
+    std::shared_ptr<Primitive> primitive_;
     action::SpriteAnimationPlayer animation_player_;
+    math::Vector2D position_;
 };
 
 }  // namespace graphic

@@ -17,16 +17,29 @@ namespace graphic {
 using action::SpriteAnimationPlayer;
         
 Sprite::SpriteData::SpriteData()
-: position_(opengl::VertexBuffer::CreateDefaultShared())
+: position_(opengl::VertexBuffer::Create(sizeof(GLfloat) * 2 * 4, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW))
 , uv_(opengl::VertexBuffer::CreateDefaultShared())
 {}
 
 Sprite::SpriteData::~SpriteData() {}
+        
+void Sprite::SpriteData::ApplyPositionOffset(const math::Vector2D& offset) {
+    opengl::VertexBuffer::Bind bind(*position_);
+    opengl::VertexBuffer::Mapper mapper(*position_);
 
-void Sprite::SpriteData::SetToGeometry(const math::Vector2D& size, const math::Vector2D& hotspot, const Geometry& geometry) {
+    GLfloat *indices = static_cast<GLfloat*>(mapper.get());
+    if (indices) {
+        for (int i = 0; i < 4; ++i) {
+            indices[2 * i + 0] += offset.x;
+            indices[2 * i + 1] += offset.y;
+        }
+    }
+}
 
-    glm::vec4 top_left(-hotspot.x, -hotspot.y, 0.0, 1.0);
-    glm::vec4 bottom_right(size.x - hotspot.x, size.y - hotspot.y, 0.0, 1.0);
+void Sprite::SpriteData::SetToGeometry(const math::Vector2D& position, const math::Vector2D& size, const math::Vector2D& hotspot, const Geometry& geometry) {
+
+    glm::vec4 top_left(position.x - hotspot.x, position.x - hotspot.y, 0.0, 1.0);
+    glm::vec4 bottom_right(top_left.x + size.x, top_left.y + size.y, 0.0, 1.0);
 
     const glm::mat4& mat = geometry.AsMat4();
     top_left = mat * top_left;
@@ -38,11 +51,9 @@ void Sprite::SpriteData::SetToGeometry(const math::Vector2D& size, const math::V
         float(bottom_right.x), float(top_left.y),
         float(bottom_right.x), float(bottom_right.y)
     };
-    std::shared_ptr<opengl::VertexBuffer> ptr(opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW));
-    position_ = ptr;
     {
-        opengl::VertexBuffer::Bind bind(*ptr);
-        opengl::VertexBuffer::Mapper mapper(*ptr);
+        opengl::VertexBuffer::Bind bind(*position_);
+        opengl::VertexBuffer::Mapper mapper(*position_);
 
         GLfloat *indices = static_cast<GLfloat*>(mapper.get());
         if (indices)
@@ -75,13 +86,13 @@ Sprite* Sprite::Create(const Spritesheet *spritesheet, const std::string& animat
 Sprite::Sprite(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) 
 : sprite_data_(new Sprite::SpriteData)
 , spritesheet_(spritesheet)
-, primitive_(nullptr, sprite_data_)
+, primitive_(new Primitive(nullptr, sprite_data_))
 , animation_player_(table)
 {}
 
 Sprite::~Sprite() {}
 
-const Primitive& Sprite::primitive() const {
+std::shared_ptr<Primitive> Sprite::primitive() const {
     return primitive_;
 }
     
@@ -96,8 +107,13 @@ action::SpriteAnimationPlayer& Sprite::animation_player() {
 void Sprite::ChangeToFrame(const action::SpriteAnimationFrame& frame) {
     const auto& spritesheet_frame = spritesheet_->frame(frame.spritesheet_frame());
 
-    primitive_.set_texture(spritesheet_frame.texture.get());
-    sprite_data_->SetToGeometry(spritesheet_frame.size, spritesheet_frame.hotspot, frame.geometry());
+    primitive_->set_texture(spritesheet_frame.texture.get());
+    sprite_data_->SetToGeometry(position_, spritesheet_frame.size, spritesheet_frame.hotspot, frame.geometry());
+}
+    
+void Sprite::ChangePosition(const math::Vector2D& position) {
+    sprite_data_->ApplyPositionOffset(position - position_);
+    position_ = position;
 }
 
 }  // namespace graphic
