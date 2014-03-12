@@ -64,8 +64,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/drawable.h 
     src/ugdk/graphic/drawable/functions.cc 
     src/ugdk/graphic/drawable/functions.h 
-    src/ugdk/graphic/drawable/sprite.cc 
-    src/ugdk/graphic/drawable/sprite.h 
     src/ugdk/graphic/drawable/texturedrectangle.cc 
     src/ugdk/graphic/drawable/texturedrectangle.h 
     src/ugdk/graphic/geometry.h 
@@ -91,6 +89,8 @@ SET(UGDK_SRC
     src/ugdk/graphic/opengl/vertexdata_rectangle.h 
     src/ugdk/graphic/primitive.cc 
     src/ugdk/graphic/primitive.h 
+    src/ugdk/graphic/sprite.cc 
+    src/ugdk/graphic/sprite.h 
     src/ugdk/graphic/spritesheet.cc 
     src/ugdk/graphic/spritesheet.h 
     src/ugdk/graphic/spritesheetdata.cc 
