@@ -1,6 +1,8 @@
 #ifndef UGDK_GRAPHIC_PRIMITIVE_CONTROLLER_H_
 #define UGDK_GRAPHIC_PRIMITIVE_CONTROLLER_H_
 
+#include <ugdk/math.h>
+
 namespace ugdk {
 namespace graphic {
 

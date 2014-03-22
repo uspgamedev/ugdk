@@ -8,6 +8,7 @@
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/opengl/shaderuse.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
+#include <ugdk/graphic/opengl/Exception.h>
 #include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/action/animationplayer.h>
 
@@ -16,27 +17,22 @@ namespace graphic {
 
 using action::SpriteAnimationPlayer;
         
-Sprite::SpriteData::SpriteData()
-: position_(opengl::VertexBuffer::Create(sizeof(GLfloat) * 2 * 4, GL_ARRAY_BUFFER, GL_DYNAMIC_DRAW))
-, uv_(opengl::VertexBuffer::CreateDefaultShared())
-{}
+void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset) {
+    data.CheckSizes("ApplyPositionOffset", 0, 2 * sizeof(GLfloat));
 
-Sprite::SpriteData::~SpriteData() {}
-        
-void Sprite::SpriteData::ApplyPositionOffset(const math::Vector2D& offset) {
-    opengl::VertexBuffer::Bind bind(*position_);
-    opengl::VertexBuffer::Mapper mapper(*position_);
+    opengl::VertexBuffer::Bind bind(*data.buffer());
+    opengl::VertexBuffer::Mapper mapper(*data.buffer());
 
-    GLfloat *indices = static_cast<GLfloat*>(mapper.get());
-    if (indices) {
-        for (int i = 0; i < 4; ++i) {
-            indices[2 * i + 0] += offset.x;
-            indices[2 * i + 1] += offset.y;
-        }
+    uint8* ptr = static_cast<uint8*>(mapper.get());
+    for (std::size_t i = 0; i < data.num_vertices(); ++i) {
+        GLfloat* v = reinterpret_cast<GLfloat*>(ptr + i * data.vertex_size());
+        v[0] += GLfloat(offset.x);
+        v[1] += GLfloat(offset.y);
     }
 }
 
-void Sprite::SpriteData::SetToGeometry(const math::Vector2D& position, const math::Vector2D& size, const math::Vector2D& hotspot, const Geometry& geometry) {
+void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, const math::Vector2D& size, const math::Vector2D& hotspot, const Geometry& geometry) {
+    data.CheckSizes("SpriteDataSetToGeometry", 4, 2 * sizeof(GLfloat));
 
     glm::vec4 top_left(position.x - hotspot.x, position.x - hotspot.y, 0.0, 1.0);
     glm::vec4 bottom_right(top_left.x + size.x, top_left.y + size.y, 0.0, 1.0);
@@ -45,28 +41,30 @@ void Sprite::SpriteData::SetToGeometry(const math::Vector2D& position, const mat
     top_left = mat * top_left;
     bottom_right = mat * bottom_right;
 
-    GLfloat buffer_data[] = {
-        float(top_left.x),     float(top_left.y),
-        float(top_left.x),     float(bottom_right.y),
-        float(bottom_right.x), float(top_left.y),
-        float(bottom_right.x), float(bottom_right.y)
-    };
     {
-        opengl::VertexBuffer::Bind bind(*position_);
-        opengl::VertexBuffer::Mapper mapper(*position_);
+        opengl::VertexBuffer::Bind bind(*data.buffer());
+        opengl::VertexBuffer::Mapper mapper(*data.buffer());
 
-        GLfloat *indices = static_cast<GLfloat*>(mapper.get());
-        if (indices)
-            memcpy(indices, buffer_data, sizeof(buffer_data));
+        uint8* ptr = static_cast<uint8*>(mapper.get());
+
+        GLfloat* v1 = reinterpret_cast<GLfloat*>(ptr + 0 * data.vertex_size());
+        v1[0] = float(top_left.x);
+        v1[1] = float(top_left.y);
+
+        GLfloat* v2 = reinterpret_cast<GLfloat*>(ptr + 1 * data.vertex_size());
+        v2[0] = float(top_left.x);
+        v2[1] = float(bottom_right.y);
+
+        GLfloat* v3 = reinterpret_cast<GLfloat*>(ptr + 2 * data.vertex_size());
+        v3[2 * 4 + 0] = float(bottom_right.x);
+        v3[2 * 4 + 1] = float(top_left.y);
+
+        GLfloat* v4 = reinterpret_cast<GLfloat*>(ptr + 3 * data.vertex_size());
+        v4[0] = float(bottom_right.x);
+        v4[1] = float(bottom_right.y);
     }
 }
         
-void Sprite::SpriteData::Draw(opengl::ShaderUse& shader_use) const {
-    shader_use.SendVertexBuffer(position_.get(), opengl::VERTEX, 0);
-    shader_use.SendVertexBuffer(uv_.get(), opengl::TEXTURE, 0);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-}
-    
 Sprite* Sprite::Create(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) {
     return new Sprite(spritesheet, table);
 }
@@ -84,9 +82,8 @@ Sprite* Sprite::Create(const Spritesheet *spritesheet, const std::string& animat
 }
 
 Sprite::Sprite(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) 
-: sprite_data_(new Sprite::SpriteData)
-, spritesheet_(spritesheet)
-, primitive_(new Primitive(nullptr, sprite_data_))
+: spritesheet_(spritesheet)
+, primitive_(new Primitive(nullptr, std::make_shared<VertexData>(4, 2 * 2 * sizeof(GLfloat), true)))
 , animation_player_(table)
 {}
 
@@ -108,11 +105,11 @@ void Sprite::ChangeToFrame(const action::SpriteAnimationFrame& frame) {
     const auto& spritesheet_frame = spritesheet_->frame(frame.spritesheet_frame());
 
     primitive_->set_texture(spritesheet_frame.texture.get());
-    sprite_data_->SetToGeometry(position_, spritesheet_frame.size, spritesheet_frame.hotspot, frame.geometry());
+    SpriteDataSetToGeometry(*primitive_->vertexdata(), position_, spritesheet_frame.size, spritesheet_frame.hotspot, frame.geometry());
 }
     
 void Sprite::ChangePosition(const math::Vector2D& position) {
-    sprite_data_->ApplyPositionOffset(position - position_);
+    ApplyPositionOffset(*primitive_->vertexdata(), position - position_);
     position_ = position;
 }
 

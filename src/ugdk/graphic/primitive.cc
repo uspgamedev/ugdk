@@ -6,14 +6,14 @@
 namespace ugdk {
 namespace graphic {
 
-Primitive::Primitive(const Texture* texture, const std::shared_ptr<const VertexData>& data)
+Primitive::Primitive(const Texture* texture, const std::shared_ptr<VertexData>& data)
     :   texture_(texture)
     ,   vertexdata_(data)
 {}
 
 void Primitive::Draw(opengl::ShaderUse& shader_use) const {
     shader_use.SendTexture(0, texture_);
-    vertexdata_->Draw(shader_use);
+    drawfunction_(*this, shader_use);
 }
     
 }  // namespace graphic

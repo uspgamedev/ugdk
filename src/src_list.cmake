@@ -108,6 +108,7 @@ SET(UGDK_SRC
     src/ugdk/graphic/texture.h 
     src/ugdk/graphic/textureatlas.cc 
     src/ugdk/graphic/textureatlas.h 
+    src/ugdk/graphic/vertexdata.cc 
     src/ugdk/graphic/vertexdata.h 
     src/ugdk/graphic/visualeffect.h 
     src/ugdk/input.h 

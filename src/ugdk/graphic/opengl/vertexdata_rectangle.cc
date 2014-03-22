@@ -1,8 +1,11 @@
 
 #include <ugdk/graphic/opengl/vertexdata_rectangle.h>
 
+#include <ugdk/graphic/vertexdata.h>
+#include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/graphic/opengl/shaderuse.h>
+#include <ugdk/graphic/opengl/Exception.h>
 #include <ugdk/math/vector2D.h>
 
 #include <cstring>
@@ -11,37 +14,43 @@ namespace ugdk {
 namespace graphic {
 namespace opengl {
 
-VertexDataRectangle::VertexDataRectangle()
-    : position_(VertexBuffer::CreateDefaultShared())
-    , uv_(VertexBuffer::CreateDefaultShared())
-{}
+void PrepareVertexDataAsRectangle(VertexData& data, const math::Vector2D& size) {
+    data.CheckSizes("PrepareVertexDataAsRectangle", 4, 2 * 2 * sizeof(GLfloat));
 
-VertexDataRectangle::VertexDataRectangle(const math::Vector2D& size)
-    : uv_(VertexBuffer::CreateDefaultShared())
-{
-    GLfloat buffer_data[] = {
-          0.0f,   0.0f,
-          0.0f, float(size.y),
-        float(size.x),   0.0f,
-        float(size.x), float(size.y)
-    };
-    std::shared_ptr<VertexBuffer> ptr(opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW));
-    position_ = ptr;
-    {
-        opengl::VertexBuffer::Bind bind(*ptr);
-        opengl::VertexBuffer::Mapper mapper(*ptr);
+    opengl::VertexBuffer::Bind bind(*data.buffer());
+    opengl::VertexBuffer::Mapper mapper(*data.buffer());
 
-        GLfloat *indices = static_cast<GLfloat*>(mapper.get());
-        if (indices)
-            memcpy(indices, buffer_data, sizeof(buffer_data));
-    }
+    uint8* ptr = static_cast<uint8*>(mapper.get());
+
+    GLfloat* v1 = reinterpret_cast<GLfloat*>(ptr + 0 * data.vertex_size());
+    v1[0] = 0.0f;
+    v1[1] = 0.0f;
+    v1[2] = 0.0f;
+    v1[3] = 0.0f;
+
+    GLfloat* v2 = reinterpret_cast<GLfloat*>(ptr + 1 * data.vertex_size());
+    v2[0] = 0.0f;
+    v2[1] = float(size.y);
+    v2[2] = 0.0f;
+    v2[3] = 1.0f;
+    
+    GLfloat* v3 = reinterpret_cast<GLfloat*>(ptr + 2 * data.vertex_size());
+    v3[2 * 4 + 0] = float(size.x);
+    v3[2 * 4 + 1] = 0.0f;
+    v3[2 * 4 + 2] = 1.0f;
+    v3[2 * 4 + 3] = 0.0f;
+    
+    GLfloat* v4 = reinterpret_cast<GLfloat*>(ptr + 3 * data.vertex_size());
+    v4[0] = float(size.x);
+    v4[1] = float(size.y);
+    v4[2] = 1.0f;
+    v4[3] = 1.0f;
 }
 
-VertexDataRectangle::~VertexDataRectangle() {}
-
-void VertexDataRectangle::Draw(opengl::ShaderUse& shader_use) const {
-    shader_use.SendVertexBuffer(position_.get(), opengl::VERTEX, 0);
-    shader_use.SendVertexBuffer(uv_.get(), opengl::TEXTURE, 0);
+void RenderPrimitiveAsRectangle(const Primitive& primitive, opengl::ShaderUse& shader_use) {
+    auto data = primitive.vertexdata();
+    shader_use.SendVertexBuffer(data->buffer().get(), opengl::VERTEX , 0                , 2, data->vertex_size());
+    shader_use.SendVertexBuffer(data->buffer().get(), opengl::TEXTURE, 2*sizeof(GLfloat), 2, data->vertex_size());
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
