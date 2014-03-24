@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vector>
 #include <utility>
+#include <cstdlib>
 #include <cstdio>
 #include <tuple>
 
