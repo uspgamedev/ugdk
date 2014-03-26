@@ -2,6 +2,7 @@
 
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/graphic/opengl/shaderuse.h>
+#include <ugdk/graphic/primitivecontroller.h>
 
 namespace ugdk {
 namespace graphic {
@@ -11,10 +12,12 @@ Primitive::Primitive(const Texture* texture, const std::shared_ptr<VertexData>& 
     ,   vertexdata_(data)
 {}
 
-void Primitive::Draw(opengl::ShaderUse& shader_use) const {
-    shader_use.SendTexture(0, texture_);
-    drawfunction_(*this, shader_use);
+Primitive::~Primitive() {}
+
+void Primitive::set_controller(std::unique_ptr<PrimitiveControllerPosition>&& controller) {
+    controller_ = std::move(controller);
+    controller_->set_owner(this);
 }
-    
+
 }  // namespace graphic
 }  // namespace ugdk

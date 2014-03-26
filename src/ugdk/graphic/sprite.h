@@ -9,6 +9,8 @@
 #include <ugdk/graphic/primitivecontroller.h>
 #include <ugdk/action/animationplayer.h>
 #include <ugdk/action/spritetypes.h>
+#include <ugdk/system/compatibility.h>
+
 #include <string>
 
 namespace ugdk {
@@ -19,27 +21,23 @@ void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, c
 
 class Sprite : public PrimitiveControllerPosition {
   public:
-    static Sprite* Create(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table = nullptr);
-    static Sprite* Create(const std::string& spritesheet_tag, const action::SpriteAnimationTable* table = nullptr);
-    static Sprite* Create(const std::string& spritesheet_tag, const std::string& animation_set_tag);
-    static Sprite* Create(const Spritesheet *spritesheet, const std::string& animation_set_tag);
+    typedef std::tuple< std::shared_ptr<Primitive>, std::shared_ptr<action::SpriteAnimationPlayer> > SpriteCreateTuple;
+    static SpriteCreateTuple Create(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table);
 
-    Sprite(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table);
     ~Sprite();
 
-    std::shared_ptr<Primitive> primitive() const;
-    const action::SpriteAnimationPlayer& animation_player() const;
-    action::SpriteAnimationPlayer& animation_player();
-
+    void set_owner(Primitive*) override;
     void ChangeToFrame(const action::SpriteAnimationFrame& frame);
-    void ChangePosition(const math::Vector2D& position); // TODO overide
+    void ChangePosition(const math::Vector2D& position) override;
        
   private:
+    Sprite(const Spritesheet *spritesheet);
+
     const Spritesheet *spritesheet_;
-    std::shared_ptr<Primitive> primitive_;
-    action::SpriteAnimationPlayer animation_player_;
     math::Vector2D position_;
+    Primitive* owner_;
 };
+
 
 }  // namespace graphic
 }  // namespace ugdk

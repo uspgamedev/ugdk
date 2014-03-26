@@ -6,6 +6,7 @@
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/drawable/functions.h>
 #include <ugdk/graphic/canvas.h>
+#include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/opengl/shaderuse.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/graphic/opengl/Exception.h>
@@ -64,53 +65,46 @@ void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, c
         v4[1] = float(bottom_right.y);
     }
 }
-        
-Sprite* Sprite::Create(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) {
-    return new Sprite(spritesheet, table);
-}
 
-Sprite* Sprite::Create(const std::string& spritesheet_tag, const action::SpriteAnimationTable* table) {
-    return new Sprite(resource::GetSpritesheetFromTag(spritesheet_tag), table);
-}
-
-Sprite* Sprite::Create(const std::string& spritesheet_tag, const std::string& animation_set_tag) {
-    return new Sprite(resource::GetSpritesheetFromTag(spritesheet_tag), resource::GetSpriteAnimationTableFromFile(animation_set_tag));
-}
-
-Sprite* Sprite::Create(const Spritesheet *spritesheet, const std::string& animation_set_tag) {
-    return new Sprite(spritesheet, resource::GetSpriteAnimationTableFromFile(animation_set_tag));
-}
-
-Sprite::Sprite(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) 
+Sprite::Sprite(const Spritesheet *spritesheet)
 : spritesheet_(spritesheet)
-, primitive_(new Primitive(nullptr, std::make_shared<VertexData>(4, 2 * 2 * sizeof(GLfloat), true)))
-, animation_player_(table)
+, owner_(nullptr)
 {}
 
 Sprite::~Sprite() {}
 
-std::shared_ptr<Primitive> Sprite::primitive() const {
-    return primitive_;
-}
-    
-const action::SpriteAnimationPlayer& Sprite::animation_player() const { 
-    return animation_player_;
+void Sprite::set_owner(Primitive* owner) {
+    owner_ = owner;
 }
 
-action::SpriteAnimationPlayer& Sprite::animation_player() { 
-    return animation_player_;
-}
-    
 void Sprite::ChangeToFrame(const action::SpriteAnimationFrame& frame) {
     const auto& spritesheet_frame = spritesheet_->frame(frame.spritesheet_frame());
 
-    primitive_->set_texture(spritesheet_frame.texture.get());
-    SpriteDataSetToGeometry(*primitive_->vertexdata(), position_, spritesheet_frame.size, spritesheet_frame.hotspot, frame.geometry());
+    owner_->set_texture(spritesheet_frame.texture.get());
+    SpriteDataSetToGeometry(*owner_->vertexdata(), position_, spritesheet_frame.size, spritesheet_frame.hotspot, frame.geometry());
 }
     
 void Sprite::ChangePosition(const math::Vector2D& position) {
-    ApplyPositionOffset(*primitive_->vertexdata(), position - position_);
+    ApplyPositionOffset(*owner_->vertexdata(), position - position_);
     position_ = position;
+}
+
+Sprite::SpriteCreateTuple Sprite::Create(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) {
+    std::shared_ptr<Primitive> primitive(new Primitive(spritesheet->frame(0).texture.get(), std::make_shared<VertexData>(4, 2 * 2 * sizeof(GLfloat), true)));
+    std::shared_ptr<action::SpriteAnimationPlayer> player(new action::SpriteAnimationPlayer(table));
+
+    primitive->set_controller(std::unique_ptr<Sprite>(new Sprite(spritesheet)));
+
+    std::weak_ptr<Primitive> weak_primitive(primitive);
+    player->set_frame_change_callback([weak_primitive](const action::SpriteAnimationFrame& frame) {
+        if (auto primitive_spr = weak_primitive.lock()) {
+            if (Sprite* sprite = dynamic_cast<Sprite*>(primitive_spr->controller().get())) {
+                sprite->ChangeToFrame(frame);
+            }
+        }
+    });
+
+    return std::make_tuple(primitive, player);
 }
 
 }  // namespace graphic

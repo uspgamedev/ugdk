@@ -9,6 +9,7 @@ class Geometry;
 class VisualEffect;
 class VertexData;
 class Primitive;
+class PrimitiveController;
 class PrimitiveControllerPosition;
 
 // Drawables
