@@ -8,8 +8,10 @@ namespace ugdk {
 namespace graphic {
 
 Primitive::Primitive(const Texture* texture, const std::shared_ptr<VertexData>& data)
-    :   texture_(texture)
-    ,   vertexdata_(data)
+    : texture_(texture)
+    , vertexdata_(data)
+    , controller_(nullptr)
+    , shader_program_(nullptr)
 {}
 
 Primitive::~Primitive() {}
