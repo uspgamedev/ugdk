@@ -12,6 +12,7 @@
 #include <ugdk/system/compatibility.h>
 
 #include <string>
+#include <utility>
 
 namespace ugdk {
 namespace graphic {
@@ -19,11 +20,17 @@ namespace graphic {
 void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset);
 void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, const math::Vector2D& size, const math::Vector2D& hotspot, const Geometry& geometry);
 
+std::shared_ptr<VertexData> CreateSpriteCompatibleVertexData();
+std::tuple< 
+    std::shared_ptr<Primitive>, 
+    std::shared_ptr<action::SpriteAnimationPlayer>
+> CreateSpritePrimitive(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table);
+std::shared_ptr<action::SpriteAnimationPlayer> CreateSpriteAnimationPlayerForPrimitive(const std::shared_ptr<Primitive>&, const action::SpriteAnimationTable* table);
+
 class Sprite : public PrimitiveControllerPosition {
   public:
-    typedef std::tuple< std::shared_ptr<Primitive>, std::shared_ptr<action::SpriteAnimationPlayer> > SpriteCreateTuple;
-    static SpriteCreateTuple Create(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table);
 
+    Sprite(const Spritesheet *spritesheet);
     ~Sprite();
 
     void set_owner(Primitive*) override;
@@ -31,7 +38,6 @@ class Sprite : public PrimitiveControllerPosition {
     void ChangePosition(const math::Vector2D& position) override;
        
   private:
-    Sprite(const Spritesheet *spritesheet);
 
     const Spritesheet *spritesheet_;
     math::Vector2D position_;

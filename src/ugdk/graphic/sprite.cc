@@ -89,22 +89,31 @@ void Sprite::ChangePosition(const math::Vector2D& position) {
     position_ = position;
 }
 
-Sprite::SpriteCreateTuple Sprite::Create(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) {
-    std::shared_ptr<Primitive> primitive(new Primitive(spritesheet->frame(0).texture.get(), std::make_shared<VertexData>(4, 2 * 2 * sizeof(GLfloat), true)));
-    std::shared_ptr<action::SpriteAnimationPlayer> player(new action::SpriteAnimationPlayer(table));
-
+std::shared_ptr<VertexData> CreateSpriteCompatibleVertexData() {
+    return std::make_shared<VertexData>(4, 2 * 2 * sizeof(GLfloat), true);
+}
+std::tuple<
+    std::shared_ptr<Primitive>,
+    std::shared_ptr<action::SpriteAnimationPlayer>
+> CreateSpritePrimitive(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) {
+    std::shared_ptr<Primitive> primitive(new Primitive(spritesheet->frame(0).texture.get(), CreateSpriteCompatibleVertexData()));
     primitive->set_controller(std::unique_ptr<Sprite>(new Sprite(spritesheet)));
 
-    std::weak_ptr<Primitive> weak_primitive(primitive);
+    return std::make_tuple(primitive, CreateSpriteAnimationPlayerForPrimitive(primitive, table));
+}
+
+std::shared_ptr<action::SpriteAnimationPlayer> CreateSpriteAnimationPlayerForPrimitive(const std::shared_ptr<Primitive>& primitive_shared, const action::SpriteAnimationTable* table) {
+    std::weak_ptr<Primitive> weak_primitive(primitive_shared);
+
+    std::shared_ptr<action::SpriteAnimationPlayer> player(new action::SpriteAnimationPlayer(table));
     player->set_frame_change_callback([weak_primitive](const action::SpriteAnimationFrame& frame) {
-        if (auto primitive_spr = weak_primitive.lock()) {
-            if (Sprite* sprite = dynamic_cast<Sprite*>(primitive_spr->controller().get())) {
+        if (auto primitive = weak_primitive.lock()) {
+            if (Sprite* sprite = dynamic_cast<Sprite*>(primitive->controller().get())) {
                 sprite->ChangeToFrame(frame);
             }
         }
     });
-
-    return std::make_tuple(primitive, player);
+    return player;
 }
 
 }  // namespace graphic

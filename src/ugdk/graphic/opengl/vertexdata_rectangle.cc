@@ -3,6 +3,7 @@
 
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/graphic/primitive.h>
+#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/graphic/opengl/shaderuse.h>
 #include <ugdk/graphic/opengl/Exception.h>
@@ -52,6 +53,21 @@ void RenderPrimitiveAsRectangle(const Primitive& primitive, opengl::ShaderUse& s
     shader_use.SendVertexBuffer(data->buffer().get(), opengl::VERTEX , 0                , 2, data->vertex_size());
     shader_use.SendVertexBuffer(data->buffer().get(), opengl::TEXTURE, 2*sizeof(GLfloat), 2, data->vertex_size());
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
+std::shared_ptr<Primitive> CreateTexturedRectanglePrimitive(const Texture* texture, const math::Vector2D& size) {
+
+    std::shared_ptr<VertexData> data(new VertexData(4, 2 * 2 * sizeof(GLfloat), false));
+    PrepareVertexDataAsRectangle(*data, size);
+
+    std::shared_ptr<Primitive> primitive(new Primitive(texture, data));
+    primitive->set_drawfunction(RenderPrimitiveAsRectangle);
+
+    return primitive;
+}
+
+std::shared_ptr<Primitive> CreateTexturedRectanglePrimitive(const Texture* texture) {
+    return CreateTexturedRectanglePrimitive(texture, math::Vector2D(texture->width(), texture->height()));
 }
 
 }  // namespace opengl
