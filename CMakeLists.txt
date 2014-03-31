@@ -32,6 +32,8 @@ option(UGDK_CREATE_BINDINGS      "Set to ON to generate bindings for supported s
 option(UGDK_LUA_BINDINGS         "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS      "Set to ON to enable Python as one of the languages to create bindings." ON)
 
+option(UGDK_3D_ENABLED           "Set to ON to enable the 3D module - Ogre rendering + Bullet physics." ON)
+
 if(NOT ${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
     # Don't polute the git repository with the generated files for out-of-source builds
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/.gitignore "*")
@@ -186,6 +188,10 @@ endif()
 
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
 target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 freetype-gl libjson)
+
+if (UGDK_3D_ENABLED)
+    target_link_libraries(libugdk LINK_PUBLIC ${BULLET_LIBRARIES} ${OGRE_LIBRARIES} BtOgre)
+endif (UGDK_3D_ENABLED)
 
 set_target_properties(libugdk PROPERTIES 
     LINK_FLAGS "${LDFLAGS}"

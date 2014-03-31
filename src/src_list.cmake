@@ -15,6 +15,16 @@ SET(UGDK_SRC
     src/pyramidworks/geometry/geometricshape.h 
     src/pyramidworks/geometry/rect.cc 
     src/pyramidworks/geometry/rect.h 
+    
+    src/bulletworks/camera.cc
+    src/bulletworks/camera.h
+    src/bulletworks/manager.cc
+    src/bulletworks/manager.h
+    src/bulletworks/module.cc
+    src/bulletworks/module.h
+    src/bulletworks/object.cc
+    src/bulletworks/object.h
+    
     src/ugdk/action.h 
     src/ugdk/action/animationplayer.h 
     src/ugdk/action/events.h 
