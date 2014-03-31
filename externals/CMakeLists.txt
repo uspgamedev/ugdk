@@ -5,6 +5,12 @@ option(UGDK_INTERNAL_SDL2        "Set to ON to use an internal SDL2 instead of t
 option(UGDK_INTERNAL_SDL2_IMAGE  "Set to ON to use an internal SDL2_image instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2_MIXER  "Set to ON to use an internal SDL2_mixer instead of the system one." OFF)
 
+macro(update_list LISTNAME VALUE)
+    set(${LISTNAME} "${${LISTNAME}};${VALUE}" CACHE INTERNAL "")
+endmacro()
+
+########################
+
 if(ANDROID)
     # Always compile all externals for Android.
     set(UGDK_INTERNAL_FREETYPE   ON CACHE BOOL "Set to ON to use an internal freetype instead of the system one." FORCE)
@@ -116,3 +122,30 @@ endif(NOT ANDROID)
 
 add_subdirectory(freetype-gl)
 add_subdirectory(libjson)
+
+if(UGDK_3D_ENABLED)
+    ########################
+    ## OGRE
+    ########################
+    set (OGRE_STATIC TRUE CACHE BOOL "Forcing static build" FORCE)
+    set (OGRE_ARCHIVE_OUTPUT ${LIB_DIR})
+    set (OGRE_LIBRARY_OUTPUT ${LIB_DIR})
+    set (OGRE_RUNTIME_OUTPUT ${LIB_DIR})
+    set (OGRE_INCLUDE_DIRS "" CACHE INTERNAL "Ogre external include directories")
+    set (OGRE_LIBRARIES "" CACHE INTERNAL "Compiled Ogre libraries")
+    add_subdirectory(Ogre) #generates 'all utility' target OgreAll
+
+    ########################
+    ## BULLET PHYSICS
+    ########################
+    set (BULLET_INCLUDE_DIRS "" CACHE INTERNAL "Bullet external include directories")
+    set (BULLET_LIBRARIES "" CACHE INTERNAL "Compiled Bullet libraries")
+    add_subdirectory(BulletPhysics) #generate 'all utility' target BulletAll
+
+    ########################
+    ## BtOgre
+    ########################
+    add_subdirectory(btogre) #generates target BtOgre
+    
+endif(UGDK_3D_ENABLED)
+
