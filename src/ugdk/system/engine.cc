@@ -7,6 +7,9 @@
 #include <ugdk/text/module.h>
 #include <ugdk/time/module.h>
 #include <ugdk/desktop/module.h>
+#ifdef UGDK_3D_ENABLED
+#include <ugdk/graphic/3D/module.h>
+#endif
 
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/canvas.h>
@@ -165,6 +168,15 @@ bool Initialize(const Configuration& configuration) {
             return ErrorLog("system::Initialize failed - text::Initialize returned false.");
     }
     
+    if(configuration.ogre_enabled) {
+#ifdef UGDK_3D_ENABLED
+        if(!graphic::3D::Initialize(new graphic::3D::Manager(configuration.ogre_window_title)))
+            return ErrorLog("system::Initialize failed - graphic::3D::Initialize returned false.");
+#else
+        return ErrorLog("system::Initialize failed - UGDK not compiled with 3D module.");
+#endif
+    }
+    
     if(configuration.audio_enabled)
         if(!audio::Initialize(new audio::Manager))
             return ErrorLog("system::Initialize failed - audio::Initialize returned false.");
@@ -274,6 +286,9 @@ void Release() {
     resource::Release();
     time::Release();
     graphic::Release();
+#ifdef UGDK_3D_ENABLED
+    graphic::3D::Release();
+#endif
     desktop::Release();
     text::Release();
 

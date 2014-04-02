@@ -22,6 +22,9 @@ struct Configuration {
     bool input_enabled;
 
     bool time_enabled;
+    
+    bool            ogre_enabled;
+    std::string     ogre_window_title;
 
     Configuration();
 };

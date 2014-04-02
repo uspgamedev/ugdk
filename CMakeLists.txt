@@ -66,6 +66,14 @@ if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT UGDK_SRC)
 
+if (UGDK_3D_ENABLED)
+    include (src/3d_module_src_list.cmake)
+    if (NOT UGDK_3D_SRC)
+        message (FATAL_ERROR "Error: UGDK_3D_SRC not defined! Please do so in the file src/3d_module_src_list.cmake!")
+    endif (NOT UGDK_3D_SRC)
+    set (UGDK_SRC ${UGDK_SRC} ${UGDK_3D_SRC})
+endif(UGDK_3D_ENABLED)
+
 # Create the targets for all the dependencies.
 add_subdirectory(externals)
 
