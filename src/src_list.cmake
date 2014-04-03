@@ -17,6 +17,8 @@ SET(UGDK_SRC
     src/pyramidworks/ui.h 
     src/pyramidworks/ui/button.cc 
     src/pyramidworks/ui/button.h 
+    src/pyramidworks/ui/drawable.cc 
+    src/pyramidworks/ui/drawable.h 
     src/pyramidworks/ui/menu.cc 
     src/pyramidworks/ui/menu.h 
     src/pyramidworks/ui/uielement.cc 
