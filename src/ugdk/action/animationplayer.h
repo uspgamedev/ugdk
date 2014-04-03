@@ -28,9 +28,10 @@ class AnimationPlayer : public MediaPlayer {
     }
 
     void set_current_animation(T* anim) {
-        if(anim != current_animation_)
-            RestartAnimation();
+        const T* previous_anim = current_animation_;
         current_animation_ = anim;
+        if (anim != previous_anim)
+            RestartAnimation();
     }
 
     const T* current_animation() const { return current_animation_; }
@@ -54,8 +55,8 @@ class AnimationPlayer : public MediaPlayer {
 
     /// Restarts the current animation from the first frame.
     void RestartAnimation() {
-        current_frame_ = 0;
         elapsed_time_ = 0.0;
+        ChangeCurrentFrame(0);
     }
 
     /// Change the current animation to a new animation from the previously selected AnimationSet.
@@ -78,13 +79,16 @@ class AnimationPlayer : public MediaPlayer {
     double elapsed_time_;
     const structure::IndexableTable<T*> *table_;
     FrameChangedCallback frame_change_callback_;
-            
-    void ChangeToNextFrame() {
-        current_frame_ = (current_frame_ + 1) % current_animation_->size();
-        if (current_frame_ == 0) notifyAllObservers();
 
+    void ChangeCurrentFrame(int new_frame) {
+        current_frame_ = new_frame;
         if (frame_change_callback_)
             frame_change_callback_(current_animation_frame());
+    }
+
+    void ChangeToNextFrame() {
+        ChangeCurrentFrame((current_frame_ + 1) % current_animation_->size());
+        if (current_frame_ == 0) notifyAllObservers();
     }
 };
 
