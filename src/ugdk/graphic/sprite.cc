@@ -9,6 +9,7 @@
 #include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/opengl/shaderuse.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
+#include <ugdk/graphic/opengl/vertexdata_rectangle.h>
 #include <ugdk/graphic/opengl/Exception.h>
 #include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/action/animationplayer.h>
@@ -51,18 +52,26 @@ void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, c
         GLfloat* v1 = reinterpret_cast<GLfloat*>(ptr + 0 * data.vertex_size());
         v1[0] = float(top_left.x);
         v1[1] = float(top_left.y);
+        v1[2] = 0.0f;
+        v1[3] = 0.0f;
 
         GLfloat* v2 = reinterpret_cast<GLfloat*>(ptr + 1 * data.vertex_size());
         v2[0] = float(top_left.x);
         v2[1] = float(bottom_right.y);
+        v2[2] = 0.0f;
+        v2[3] = 1.0f;
 
         GLfloat* v3 = reinterpret_cast<GLfloat*>(ptr + 2 * data.vertex_size());
-        v3[2 * 4 + 0] = float(bottom_right.x);
-        v3[2 * 4 + 1] = float(top_left.y);
+        v3[0] = float(bottom_right.x);
+        v3[1] = float(top_left.y);
+        v3[2] = 1.0f;
+        v3[3] = 0.0f;
 
         GLfloat* v4 = reinterpret_cast<GLfloat*>(ptr + 3 * data.vertex_size());
         v4[0] = float(bottom_right.x);
         v4[1] = float(bottom_right.y);
+        v4[2] = 1.0f;
+        v4[3] = 1.0f;
     }
 }
 
@@ -95,9 +104,12 @@ std::shared_ptr<VertexData> CreateSpriteCompatibleVertexData() {
 std::tuple<
     std::shared_ptr<Primitive>,
     std::shared_ptr<action::SpriteAnimationPlayer>
-> CreateSpritePrimitive(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) {
+> 
+CreateSpritePrimitive(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) {
+
     std::shared_ptr<Primitive> primitive(new Primitive(spritesheet->frame(0).texture.get(), CreateSpriteCompatibleVertexData()));
     primitive->set_controller(std::unique_ptr<Sprite>(new Sprite(spritesheet)));
+    primitive->set_drawfunction(opengl::RenderPrimitiveAsRectangle);
 
     return std::make_tuple(primitive, CreateSpriteAnimationPlayerForPrimitive(primitive, table));
 }

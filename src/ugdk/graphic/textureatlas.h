@@ -37,8 +37,9 @@ class TextureAtlas {
     }
     ~TextureAtlas();
     
-    void AddPiece(math::Vector2D& pos, math::Vector2D& size) {
+    std::size_t AddPiece(math::Vector2D& pos, math::Vector2D& size) {
         pieces_.emplace_back(pos, size);
+        return pieces_.size() - 1;
     }
     
     const Texture* texture() const { return texture_.get(); }

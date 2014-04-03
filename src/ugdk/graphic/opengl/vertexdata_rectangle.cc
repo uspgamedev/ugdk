@@ -36,10 +36,10 @@ void PrepareVertexDataAsRectangle(VertexData& data, const math::Vector2D& size) 
     v2[3] = 1.0f;
     
     GLfloat* v3 = reinterpret_cast<GLfloat*>(ptr + 2 * data.vertex_size());
-    v3[2 * 4 + 0] = float(size.x);
-    v3[2 * 4 + 1] = 0.0f;
-    v3[2 * 4 + 2] = 1.0f;
-    v3[2 * 4 + 3] = 0.0f;
+    v3[0] = float(size.x);
+    v3[1] = 0.0f;
+    v3[2] = 1.0f;
+    v3[3] = 0.0f;
     
     GLfloat* v4 = reinterpret_cast<GLfloat*>(ptr + 3 * data.vertex_size());
     v4[0] = float(size.x);
