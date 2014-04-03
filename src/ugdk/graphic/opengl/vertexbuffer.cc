@@ -33,14 +33,14 @@ namespace opengl {
 
 	VertexBuffer *VertexBuffer::Create(size_t size, GLenum target, GLenum usage)
 	{
-#ifndef UGDK_USING_GLES
+#ifdef UGDK_OPENGL_USE_VBO
 		try
 		{
 			// Try to create a VBO.
 			return new VBO(size, target, usage);
 		}
 		catch (const love::Exception &)
-#endif // UGDK_USING_GLES
+#endif
 		{
 			// VBO not supported ... create regular array.
 			return new VertexArray(size, target, usage);
