@@ -18,6 +18,15 @@ namespace ugdk {
 namespace graphic {
 
 using action::SpriteAnimationPlayer;
+
+namespace {
+    struct VertexXY {
+        GLfloat x, y;
+    };
+    struct VertexXYUV {
+        GLfloat x, y, u, v;
+    };
+}
         
 void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset) {
     data.CheckSizes("ApplyPositionOffset", 0, 2 * sizeof(GLfloat));
@@ -27,9 +36,9 @@ void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset) {
 
     uint8* ptr = static_cast<uint8*>(mapper.get());
     for (std::size_t i = 0; i < data.num_vertices(); ++i) {
-        GLfloat* v = reinterpret_cast<GLfloat*>(ptr + i * data.vertex_size());
-        v[0] += GLfloat(offset.x);
-        v[1] += GLfloat(offset.y);
+        VertexXY* v = reinterpret_cast<VertexXY*>(ptr + i * data.vertex_size());
+        v->x += GLfloat(offset.x);
+        v->y += GLfloat(offset.y);
     }
 }
 
@@ -49,29 +58,29 @@ void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, c
 
         uint8* ptr = static_cast<uint8*>(mapper.get());
 
-        GLfloat* v1 = reinterpret_cast<GLfloat*>(ptr + 0 * data.vertex_size());
-        v1[0] = float(top_left.x);
-        v1[1] = float(top_left.y);
-        v1[2] = 0.0f;
-        v1[3] = 0.0f;
+        VertexXYUV* v1 = reinterpret_cast<VertexXYUV*>(ptr + 0 * data.vertex_size());
+        v1->x = float(top_left.x);
+        v1->y = float(top_left.y);
+        v1->u = 0.0f;
+        v1->v = 0.0f;
 
-        GLfloat* v2 = reinterpret_cast<GLfloat*>(ptr + 1 * data.vertex_size());
-        v2[0] = float(top_left.x);
-        v2[1] = float(bottom_right.y);
-        v2[2] = 0.0f;
-        v2[3] = 1.0f;
+        VertexXYUV* v2 = reinterpret_cast<VertexXYUV*>(ptr + 1 * data.vertex_size());
+        v2->x = float(top_left.x);
+        v2->y = float(bottom_right.y);
+        v2->u = 0.0f;
+        v2->v = 1.0f;
 
-        GLfloat* v3 = reinterpret_cast<GLfloat*>(ptr + 2 * data.vertex_size());
-        v3[0] = float(bottom_right.x);
-        v3[1] = float(top_left.y);
-        v3[2] = 1.0f;
-        v3[3] = 0.0f;
+        VertexXYUV* v3 = reinterpret_cast<VertexXYUV*>(ptr + 2 * data.vertex_size());
+        v3->x = float(bottom_right.x);
+        v3->y = float(top_left.y);
+        v3->u = 1.0f;
+        v3->v = 0.0f;
 
-        GLfloat* v4 = reinterpret_cast<GLfloat*>(ptr + 3 * data.vertex_size());
-        v4[0] = float(bottom_right.x);
-        v4[1] = float(bottom_right.y);
-        v4[2] = 1.0f;
-        v4[3] = 1.0f;
+        VertexXYUV* v4 = reinterpret_cast<VertexXYUV*>(ptr + 3 * data.vertex_size());
+        v4->x = float(bottom_right.x);
+        v4->y = float(bottom_right.y);
+        v4->u = 1.0f;
+        v4->v = 1.0f;
     }
 }
 
