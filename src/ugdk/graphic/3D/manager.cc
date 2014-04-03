@@ -64,6 +64,10 @@ bool Manager::Initialize() {
     return true;
 }
 
+void Manager::PresentAll(double dt) {
+    root_->renderOneFrame(static_cast<Ogre::Real>(dt));
+}
+
 
 } // namespace threed
 } // namespace graphic

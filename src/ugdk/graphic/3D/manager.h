@@ -22,6 +22,7 @@ public:
 
     bool Initialize();
 
+    void PresentAll(double dt);
 
 private:
     std::string window_title_;

@@ -268,6 +268,10 @@ void Run() {
                 }
                 desktop::manager()->PresentAll();
             }
+            if(graphic::threed::manager()) {
+                debug::ProfileSection section("3DRender");
+                graphic::threed::manager()->PresentAll(delta_t);
+            }
             profile_data_list_.push_back(section.data());
         }
         while(profile_data_list_.size() > 10)
