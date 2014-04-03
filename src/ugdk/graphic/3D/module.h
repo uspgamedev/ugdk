@@ -5,7 +5,7 @@
 
 namespace ugdk {
 namespace graphic {
-namespace 3D {
+namespace threed {
 
 /// Initializes the module with the given Manager.
 bool Initialize(Manager* manager);
@@ -16,7 +16,7 @@ void Release();
 /// Getter for the manager of the module.
 Manager* manager();
 
-} // namespace 3D
+} // namespace threed
 } // namespace graphic
 } // namespace ugdk
 

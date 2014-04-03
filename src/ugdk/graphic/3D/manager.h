@@ -12,7 +12,7 @@ class RenderWindow;
 
 namespace ugdk {
 namespace graphic {
-namespace 3D {
+namespace threed {
 
 
 class Manager {
@@ -25,12 +25,12 @@ public:
 
 private:
     std::string window_title_;
-    Ogre::Root root_;
+    Ogre::Root* root_;
     Ogre::StaticPluginLoader static_loader_;
     Ogre::RenderWindow* window_;
 };
 
-} // namespace 3D
+} // namespace threed
 } // namespace graphic
 } // namespace ugdk
 #endif

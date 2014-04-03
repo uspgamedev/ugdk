@@ -24,7 +24,7 @@ Camera::~Camera() {
     //TODO: we should probably delete the camera here
 }
 
-void Camera::AttachTo(GameObject* object) {
+void Camera::AttachTo(Object* object) {
     if (parent_ != nullptr) {
         Ogre::SceneNode* oldCamNode = camera_->getParentSceneNode();
         parent_->entity()->getParentSceneNode()->removeChild( oldCamNode );

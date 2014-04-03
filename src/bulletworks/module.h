@@ -14,7 +14,6 @@ void Release();
 /// Getter for the manager of the module.
 Manager* manager();
 
-} // namespace graphic
-} // namespace ugdk
+} // namespace bulletworks
 
 #endif // BULLETWORKS_MODULE_H_

@@ -571,6 +571,6 @@ if (OGRE_BUILD_COMPONENT_OVERLAY)
     update_list(OGRE_LIBRARIES OgreOverlay)
 endif(OGRE_BUILD_COMPONENT_OVERLAY)
 
-update_list(OGRE_INCLUDE_DIRS ${OIS_INCLUDE_DIR}) #  THIS IS REALLY UGLY
-update_list(OGRE_LIBRARIES OIS)                   #
+#update_list(OGRE_INCLUDE_DIRS ${OIS_INCLUDE_DIR}) #  THIS IS REALLY UGLY
+#update_list(OGRE_LIBRARIES OIS)                   #
 

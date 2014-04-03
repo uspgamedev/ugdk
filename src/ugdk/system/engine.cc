@@ -1,5 +1,7 @@
 #include <ugdk/system/engine.h>
 
+#include <ugdk/system/config.h>
+
 #include <ugdk/input/module.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/audio/module.h>
@@ -16,7 +18,6 @@
 #include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
-#include <ugdk/system/config.h>
 #include <ugdk/debug/profiler.h>
 #include <ugdk/debug/log.h>
 #include <ugdk/graphic/opengl/Exception.h>
@@ -170,8 +171,8 @@ bool Initialize(const Configuration& configuration) {
     
     if(configuration.ogre_enabled) {
 #ifdef UGDK_3D_ENABLED
-        if(!graphic::3D::Initialize(new graphic::3D::Manager(configuration.ogre_window_title)))
-            return ErrorLog("system::Initialize failed - graphic::3D::Initialize returned false.");
+        if(!graphic::threed::Initialize(new graphic::threed::Manager(configuration.ogre_window_title)))
+            return ErrorLog("system::Initialize failed - graphic::threed::Initialize returned false.");
 #else
         return ErrorLog("system::Initialize failed - UGDK not compiled with 3D module.");
 #endif
@@ -287,7 +288,7 @@ void Release() {
     time::Release();
     graphic::Release();
 #ifdef UGDK_3D_ENABLED
-    graphic::3D::Release();
+    graphic::threed::Release();
 #endif
     desktop::Release();
     text::Release();

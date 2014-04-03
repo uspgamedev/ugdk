@@ -1,4 +1,5 @@
 #include <bulletworks/manager.h>
+#include <bulletworks/module.h>
 
 #include <bulletworks/object.h>
 
@@ -7,8 +8,6 @@
 #include <OgreSceneManager.h>
 
 namespace bulletworks {
-
-Manager* Manager::reference_ = nullptr;
 
 Manager::Manager(const btVector3& grav, Ogre::SceneManager* sceneMgr) :
     gravity_(grav), scene_mgr_(sceneMgr)
@@ -89,7 +88,7 @@ void tickCallback(btDynamicsWorld *world, btScalar timeStep) {
             //std::cout << obA->entity_name() << " IS NEAR (" << pt.getDistance() << ") " << obB->entity_name() << std::endl;
 			if (pt.getDistance() <= 0)
 			{
-                CollisionLogic& logic = Manager::reference()->collision_logic();
+                CollisionLogic& logic = manager()->collision_logic();
                 if (logic) {
                     logic(obA, obB, pt);
                 }

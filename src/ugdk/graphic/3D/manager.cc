@@ -4,9 +4,7 @@
 
 namespace ugdk {
 namespace graphic {
-namespace 3D {
-
-Manager* Manager::reference_ = nullptr;
+namespace threed {
 
 Manager::Manager(const std::string& window_title) : window_title_(window_title) {
 }
@@ -67,6 +65,6 @@ bool Manager::Initialize() {
 }
 
 
-} // namespace 3D
+} // namespace threed
 } // namespace graphic
 } // namespace ugdk

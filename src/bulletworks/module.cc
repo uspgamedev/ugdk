@@ -26,5 +26,4 @@ Manager* manager() {
     return reference_;
 }
 
-} // namespace graphic
-} // namespace ugdk
+} // namespace bulletworks

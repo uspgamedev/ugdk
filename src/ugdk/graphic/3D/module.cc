@@ -2,7 +2,7 @@
 
 namespace ugdk {
 namespace graphic {
-namespace 3D {
+namespace threed {
 
 static Manager* reference_ = nullptr;
 
@@ -28,6 +28,6 @@ Manager* manager() {
     return reference_;
 }
 
-} // namespace 3D
+} // namespace threed
 } // namespace graphic
 } // namespace ugdk
