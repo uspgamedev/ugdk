@@ -2,14 +2,37 @@
 #define UGDK_GRAPHIC_VERTEXDATA_H_
 
 #include <ugdk/graphic.h>
+#include <ugdk/structure/types.h>
+
 #include <cstddef>
 #include <memory>
+#include <typeinfo>
 
 namespace ugdk {
 namespace graphic {
 
 class VertexData {
   public:
+    class Mapper {
+    public:
+        Mapper(VertexData& data);
+        ~Mapper();
+
+        void operator=(Mapper&) = delete;
+
+        template<class T>
+        T* Get(std::size_t index) {
+            Validate(typeid(T).name(), sizeof(T), index);
+            return reinterpret_cast<T*>(mapped_ + index * data_.vertex_size());
+        }
+
+    private:
+        VertexData& data_;
+        ugdk::uint8* mapped_;
+
+        void Validate(const char* name, std::size_t size, std::size_t index);
+    };
+
     VertexData(std::size_t num_vertices, std::size_t vertex_size, bool dynamic);
     ~VertexData();
 

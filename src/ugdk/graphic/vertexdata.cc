@@ -5,6 +5,26 @@
 namespace ugdk {
 namespace graphic {
 
+VertexData::Mapper::Mapper(VertexData& data)
+: data_(data) 
+{
+    data.buffer()->bind();
+    mapped_ = static_cast<uint8*>(data.buffer()->map());
+}
+
+VertexData::Mapper::~Mapper() {
+    data_.buffer()->unmap();
+    data_.buffer()->unbind();
+}
+        
+void VertexData::Mapper::Validate(const char* name, std::size_t size, std::size_t index) {
+    if (size > data_.vertex_size())
+        throw love::Exception("Incompatible type '%s' with size %u exceeds vertex buffer size of %u.", name, size, data_.vertex_size());
+    
+    if (index >= data_.num_vertices())
+        throw love::Exception("Vertex %u is out of range. (Buffer has %u vertices)", index, data_.num_vertices());
+}
+
 VertexData::VertexData(std::size_t num_vertices, std::size_t vertex_size, bool dynamic)
 :   buffer_(opengl::VertexBuffer::Create(num_vertices * vertex_size,
                                          GL_ARRAY_BUFFER, 

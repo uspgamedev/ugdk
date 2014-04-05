@@ -53,30 +53,27 @@ void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, c
     bottom_right = mat * bottom_right;
 
     {
-        opengl::VertexBuffer::Bind bind(*data.buffer());
-        opengl::VertexBuffer::Mapper mapper(*data.buffer());
+        VertexData::Mapper mapper(data);
 
-        uint8* ptr = static_cast<uint8*>(mapper.get());
-
-        VertexXYUV* v1 = reinterpret_cast<VertexXYUV*>(ptr + 0 * data.vertex_size());
+        VertexXYUV* v1 = mapper.Get<VertexXYUV>(0);
         v1->x = float(top_left.x);
         v1->y = float(top_left.y);
         v1->u = 0.0f;
         v1->v = 0.0f;
 
-        VertexXYUV* v2 = reinterpret_cast<VertexXYUV*>(ptr + 1 * data.vertex_size());
+        VertexXYUV* v2 = mapper.Get<VertexXYUV>(1);
         v2->x = float(top_left.x);
         v2->y = float(bottom_right.y);
         v2->u = 0.0f;
         v2->v = 1.0f;
 
-        VertexXYUV* v3 = reinterpret_cast<VertexXYUV*>(ptr + 2 * data.vertex_size());
+        VertexXYUV* v3 = mapper.Get<VertexXYUV>(2);
         v3->x = float(bottom_right.x);
         v3->y = float(top_left.y);
         v3->u = 1.0f;
         v3->v = 0.0f;
 
-        VertexXYUV* v4 = reinterpret_cast<VertexXYUV*>(ptr + 3 * data.vertex_size());
+        VertexXYUV* v4 = mapper.Get<VertexXYUV>(3);
         v4->x = float(bottom_right.x);
         v4->y = float(bottom_right.y);
         v4->u = 1.0f;
