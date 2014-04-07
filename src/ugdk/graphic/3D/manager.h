@@ -1,13 +1,12 @@
 #ifndef UGDK_GRAPHIC_3D_MANAGER_H_
 #define UGDK_GRAPHIC_3D_MANAGER_H_
 
-#include <OgreStaticPluginLoader.h>
-
 #include <string>
 
 namespace Ogre {
 class Root;
 class RenderWindow;
+class StaticPluginLoader;
 }
 
 namespace ugdk {
@@ -27,7 +26,7 @@ public:
 private:
     std::string window_title_;
     Ogre::Root* root_;
-    Ogre::StaticPluginLoader static_loader_;
+    Ogre::StaticPluginLoader* static_loader_;
     Ogre::RenderWindow* window_;
 };
 

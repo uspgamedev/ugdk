@@ -59,7 +59,7 @@ THE SOFTWARE.
 #define VBO_BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 #if OGRE_THREAD_SUPPORT != 1
-GLenum GLEWAPIENTRY glewContextInit (Ogre::GLSupport *glSupport);
+GLenum GLEWAPIENTRY glewContextInit(Ogre::GLSupport *glSupport);
 #endif
 
 namespace Ogre {
@@ -1202,7 +1202,7 @@ namespace Ogre {
 
 		// Get extension function pointers
 #if OGRE_THREAD_SUPPORT != 1
-		glewContextInit(mGLSupport);
+        glewContextInit(mGLSupport);
 #endif
 
 		mStateCacheManager->switchContext((intptr_t)mCurrentContext);

@@ -99,6 +99,9 @@ else(UGDK_INTERNAL_SDL2_MIXER)
         INTERFACE_INCLUDE_DIRECTORIES "${SDL2_MIXER_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_SDL2_MIXER)
 
+########################
+## freetype
+########################
 if(UGDK_INTERNAL_FREETYPE)
     add_subdirectory(freetype) # Defines 'SDL2-image'
 
@@ -123,6 +126,9 @@ endif(NOT ANDROID)
 add_subdirectory(freetype-gl)
 add_subdirectory(libjson)
 
+########################
+## 3D Module
+########################
 if(UGDK_3D_ENABLED)
     ########################
     ## OGRE
@@ -133,6 +139,7 @@ if(UGDK_3D_ENABLED)
     set (OGRE_RUNTIME_OUTPUT ${LIB_DIR})
     set (OGRE_INCLUDE_DIRS "" CACHE INTERNAL "Ogre external include directories")
     set (OGRE_LIBRARIES "" CACHE INTERNAL "Compiled Ogre libraries")
+    set (FREETYPE_FT2BUILD_INCLUDE_DIR ${freetype_SOURCE_DIR}/include)
     add_subdirectory(Ogre) #generates 'all utility' target OgreAll
 
     ########################

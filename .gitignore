@@ -33,10 +33,14 @@ _CPack_Packages/
 install_manifest.txt
 /modules.cc
 *.a
+*.lib
+*.log
 /build
 /build-mingw
 *.exe
 *.pdb
+*.exp
+cg.dll
 
 *.ilk
 *.cache
@@ -46,6 +50,7 @@ install_manifest.txt
 /externals/Ogre/include/OgreBuildSettings.h
 /externals/Ogre/lib/
 /externals/Ogre/pkgconfig/
+/externals/Ogre/Dependencies/
 
 
 CTestTestfile.cmake

@@ -1,5 +1,6 @@
 #include <ugdk/graphic/3D/manager.h>
 
+#include <OgreStaticPluginLoader.h>
 #include <OgreSceneManager.h>
 
 namespace ugdk {
@@ -13,7 +14,8 @@ Manager::~Manager() {
     //if (mTrayMgr) delete mTrayMgr;
     //if (mCameraMan) delete mCameraMan;
     delete root_;
-    static_loader_.unload();
+    static_loader_->unload();
+    delete static_loader_;
 }
 
 bool Manager::Initialize() {
@@ -21,7 +23,8 @@ bool Manager::Initialize() {
     root_ = new Ogre::Root("");
     
     // Load static plugins
-    static_loader_.load();
+    static_loader_ = new Ogre::StaticPluginLoader();
+    static_loader_->load();
     
     // Setup resources
     Ogre::ConfigFile cf;

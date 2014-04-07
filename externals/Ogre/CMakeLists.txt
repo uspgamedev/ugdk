@@ -399,7 +399,7 @@ cmake_dependent_option(OGRE_CONFIG_ENABLE_LIBCPP_SUPPORT "Enable libc++ support 
 cmake_dependent_option(OGRE_USE_BOOST "Use Boost extensions" TRUE "Boost_FOUND" FALSE)
 
 option(OGRE_PROFILING "Enable internal profiling support." FALSE)
-cmake_dependent_option(OGRE_CONFIG_STATIC_LINK_CRT "Statically link the MS CRT dlls (msvcrt)" TRUE "MSVC" FALSE)
+cmake_dependent_option(OGRE_CONFIG_STATIC_LINK_CRT "Statically link the MS CRT dlls (msvcrt)" FALSE "MSVC" FALSE)
 set(OGRE_LIB_DIRECTORY "lib${LIB_SUFFIX}" CACHE STRING "Install path for libraries, e.g. 'lib64' on some 64-bit Linux distros.")
 
 # Unity build options
@@ -488,8 +488,8 @@ if (MSVC)
     # prefix in the path.
     ###
     # note: backslashes because this is copied verbatim to the linker and windows uses theses slashes.
-    # note2: CMAKE_BUILD_TYPE will probable be wrong...
-    update_list(OGRE_LIBRARIES "externals\\Ogre\\OgreMain\\OgreMain.dir\\${CMAKE_BUILD_TYPE}\\OgreWin32Resources.res")
+    # note2: CMAKE_BUILD_TYPE will probably be wrong...
+    #update_list(OGRE_LIBRARIES externals\\Ogre\\OgreMain\\OgreMain.dir\\${CMAKE_BUILD_TYPE}\\OgreWin32Resources.res)
 endif (MSVC)
 if (OGRE_BUILD_RENDERSYSTEM_GLES2)
     update_list(OGRE_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/RenderSystems/GLES2/src/GLSLES/include)
