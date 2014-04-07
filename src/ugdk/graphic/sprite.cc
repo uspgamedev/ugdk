@@ -42,15 +42,21 @@ void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset) {
     }
 }
 
-void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, const math::Vector2D& size, const math::Vector2D& hotspot, const Geometry& geometry) {
+void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, const action::SpriteAnimationFrame& animation_frame, const Spritesheet::Frame& spritesheet_frame) {
     data.CheckSizes("SpriteDataSetToGeometry", 4, 2 * sizeof(GLfloat));
 
-    glm::vec4 top_left(position.x - hotspot.x, position.x - hotspot.y, 0.0, 1.0);
-    glm::vec4 bottom_right(top_left.x + size.x, top_left.y + size.y, 0.0, 1.0);
+    math::Vector2D mirror_scale(
+        (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
+        (animation_frame.mirror() & ugdk::MIRROR_VFLIP) ? -1.0 : 1.0);
 
-    const glm::mat4& mat = geometry.AsMat4();
-    top_left = mat * top_left;
-    bottom_right = mat * bottom_right;
+    Geometry final_transform =
+        animation_frame.geometry()
+        * Geometry(math::Vector2D(), mirror_scale)
+        * Geometry(position - spritesheet_frame.hotspot);
+
+    const glm::mat4& mat = final_transform.AsMat4();
+    glm::vec4 top_left = mat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    glm::vec4 bottom_right = mat * glm::vec4(spritesheet_frame.size.x, spritesheet_frame.size.y, 0.0, 1.0);
 
     {
         VertexData::Mapper mapper(data);
@@ -96,7 +102,7 @@ void Sprite::ChangeToFrame(const action::SpriteAnimationFrame& frame) {
     const auto& spritesheet_frame = spritesheet_->frame(frame.spritesheet_frame());
 
     owner_->set_texture(spritesheet_frame.texture.get());
-    SpriteDataSetToGeometry(*owner_->vertexdata(), position_, spritesheet_frame.size, spritesheet_frame.hotspot, frame.geometry());
+    SpriteDataSetToGeometry(*owner_->vertexdata(), position_, frame, spritesheet_frame);
 }
     
 void Sprite::ChangePosition(const math::Vector2D& position) {

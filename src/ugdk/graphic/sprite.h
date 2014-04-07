@@ -6,6 +6,7 @@
 
 #include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/vertexdata.h>
+#include <ugdk/graphic/spritesheet.h>
 #include <ugdk/graphic/primitivecontroller.h>
 #include <ugdk/action/animationplayer.h>
 #include <ugdk/action/spritetypes.h>
@@ -18,7 +19,7 @@ namespace ugdk {
 namespace graphic {
 
 void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset);
-void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, const math::Vector2D& size, const math::Vector2D& hotspot, const Geometry& geometry);
+void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, const action::SpriteAnimationFrame&, const Spritesheet::Frame&);
 
 std::shared_ptr<VertexData> CreateSpriteCompatibleVertexData();
 std::tuple< 
