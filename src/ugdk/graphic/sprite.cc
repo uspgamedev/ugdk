@@ -102,6 +102,7 @@ void Sprite::ChangeToFrame(const action::SpriteAnimationFrame& frame) {
     const auto& spritesheet_frame = spritesheet_->frame(frame.spritesheet_frame());
 
     owner_->set_texture(spritesheet_frame.texture.get());
+    owner_->set_visualeffect(frame.effect());
     SpriteDataSetToGeometry(*owner_->vertexdata(), position_, frame, spritesheet_frame);
 }
     
