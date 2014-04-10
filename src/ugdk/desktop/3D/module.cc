@@ -1,7 +1,7 @@
-#include <ugdk/graphic/3D/module.h>
+#include <ugdk/desktop/3D/module.h>
 
 namespace ugdk {
-namespace graphic {
+namespace desktop {
 namespace threed {
 
 static Manager* reference_ = nullptr;
@@ -29,5 +29,5 @@ Manager* manager() {
 }
 
 } // namespace threed
-} // namespace graphic
+} // namespace desktop
 } // namespace ugdk

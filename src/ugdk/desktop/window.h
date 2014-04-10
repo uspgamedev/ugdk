@@ -38,6 +38,9 @@ class Window {
 
     friend class ::ugdk::desktop::Manager;
     friend class ::ugdk::graphic::Manager;
+#ifdef UGDK_3D_ENABLED
+    friend class ::ugdk::desktop::threed::Manager;
+#endif
 };
 
 }  // namespace desktop

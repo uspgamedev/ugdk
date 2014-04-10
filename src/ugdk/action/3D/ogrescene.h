@@ -22,6 +22,7 @@ class Camera;
    render, and the associated camera and viewport.
 */
 class OgreScene : public ugdk::action::Scene {
+//TODO: this does not allow showing at the same time multiple cameras from the same scene (splitscreen coop for example).
   public:
     OgreScene();
     virtual ~OgreScene();

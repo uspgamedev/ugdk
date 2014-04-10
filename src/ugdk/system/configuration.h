@@ -23,8 +23,7 @@ struct Configuration {
 
     bool time_enabled;
     
-    bool            ogre_enabled;
-    std::string     ogre_window_title;
+    bool ogre_enabled;
 
     Configuration();
 };

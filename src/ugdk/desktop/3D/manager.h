@@ -1,7 +1,8 @@
-#ifndef UGDK_GRAPHIC_3D_MANAGER_H_
-#define UGDK_GRAPHIC_3D_MANAGER_H_
+#ifndef UGDK_DESKTOP_3D_MANAGER_H_
+#define UGDK_DESKTOP_3D_MANAGER_H_
 
 #include <string>
+#include <memory>
 
 namespace Ogre {
 class Root;
@@ -10,16 +11,20 @@ class StaticPluginLoader;
 }
 
 namespace ugdk {
-namespace graphic {
-namespace threed {
+namespace desktop {
 
+class Window;
+
+namespace threed {
 
 class Manager {
 public:
-	Manager(const std::string& window_title);
+	Manager();
 	~Manager();
 
     bool Initialize();
+    
+    bool AddWindow(const std::shared_ptr<Window>& window);
 
     void PresentAll(double dt);
     
@@ -27,13 +32,14 @@ public:
     Ogre::RenderWindow* window() { return window_; }
 
 private:
-    std::string window_title_;
     Ogre::Root* root_;
     Ogre::StaticPluginLoader* static_loader_;
     Ogre::RenderWindow* window_;
+    
+    bool createWindowFromSDL(const std::shared_ptr<Window>& window);
 };
 
 } // namespace threed
-} // namespace graphic
+} // namespace desktop
 } // namespace ugdk
 #endif

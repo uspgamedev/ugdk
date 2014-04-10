@@ -1,10 +1,10 @@
-#ifndef UGDK_GRAPHIC_3D_MODULE_H_
-#define UGDK_GRAPHIC_3D_MODULE_H_
+#ifndef UGDK_DESKTOP_3D_MODULE_H_
+#define UGDK_DESKTOP_3D_MODULE_H_
 
-#include <ugdk/graphic/3D/manager.h>
+#include <ugdk/desktop/3D/manager.h>
 
 namespace ugdk {
-namespace graphic {
+namespace desktop {
 namespace threed {
 
 /// Initializes the module with the given Manager.
@@ -17,7 +17,7 @@ void Release();
 Manager* manager();
 
 } // namespace threed
-} // namespace graphic
+} // namespace desktop
 } // namespace ugdk
 
-#endif // UGDK_GRAPHIC_3D_MODULE_H_
+#endif // UGDK_DESKTOP_3D_MODULE_H_

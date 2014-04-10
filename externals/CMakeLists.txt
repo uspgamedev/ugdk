@@ -60,7 +60,7 @@ if(UGDK_INTERNAL_SDL2)
         set(RENDER_D3D OFF CACHE BOOL "Enable the Direct3D render driver" FORCE)
         add_subdirectory(sdl2 sdl2-build)
 
-        target_include_directories(SDL2 PUBLIC "${SDL2_SOURCE_DIR}/include") # TODO: add 'SYSTEM' flag when we have cmake 2.8.12
+        target_include_directories(SDL2 PUBLIC "${SDL2_SOURCE_DIR}/include" "${SDL2_BINARY_DIR}/include") # TODO: add 'SYSTEM' flag when we have cmake 2.8.12
     endif()
 
 else(UGDK_INTERNAL_SDL2)
