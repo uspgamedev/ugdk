@@ -190,7 +190,7 @@ endif (WIN32)
 # Libraries for the scripts.
 target_link_libraries(libugdk LINK_PUBLIC ${UGDK_LIBRARIES})
 
-if(NOT ANDROID) # Glew is not necessary for android builds.
+if(NOT ANDROID AND NOT UGDK_3D_ENABLED) # Glew is not necessary for android or 3D builds.
     target_link_libraries(libugdk LINK_PUBLIC glew)
 endif()
 

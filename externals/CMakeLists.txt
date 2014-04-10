@@ -112,7 +112,7 @@ else(UGDK_INTERNAL_FREETYPE)
         INTERFACE_INCLUDE_DIRECTORIES "${FREETYPE_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_FREETYPE)
 
-if(NOT ANDROID)
+if(NOT ANDROID AND NOT UGDK_3D_ENABLED)
     if(UGDK_INTERNAL_GLEW)
         add_subdirectory(glew) # Defines 'glew'
     else(UGDK_INTERNAL_GLEW)
@@ -121,7 +121,7 @@ if(NOT ANDROID)
             IMPORTED_LOCATION "${GLEW_LIBRARIES}"
             INTERFACE_INCLUDE_DIRECTORIES "${GLEW_INCLUDE_DIRS}")
     endif(UGDK_INTERNAL_GLEW)
-endif(NOT ANDROID)
+endif(NOT ANDROID AND NOT UGDK_3D_ENABLED)
 
 add_subdirectory(freetype-gl)
 add_subdirectory(libjson)
@@ -140,14 +140,14 @@ if(UGDK_3D_ENABLED)
     set (OGRE_INCLUDE_DIRS "" CACHE INTERNAL "Ogre external include directories")
     set (OGRE_LIBRARIES "" CACHE INTERNAL "Compiled Ogre libraries")
     set (FREETYPE_FT2BUILD_INCLUDE_DIR ${freetype_SOURCE_DIR}/include)
-    add_subdirectory(Ogre) #generates 'all utility' target OgreAll
+    add_subdirectory(Ogre)
 
     ########################
     ## BULLET PHYSICS
     ########################
     set (BULLET_INCLUDE_DIRS "" CACHE INTERNAL "Bullet external include directories")
     set (BULLET_LIBRARIES "" CACHE INTERNAL "Compiled Bullet libraries")
-    add_subdirectory(BulletPhysics) #generate 'all utility' target BulletAll
+    add_subdirectory(BulletPhysics)
 
     ########################
     ## BtOgre

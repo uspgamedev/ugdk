@@ -50,7 +50,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
 endif()
 if(ANDROID)
     target_link_libraries(freetype-gl LINK_PUBLIC GLESv2)
-else()
+elseif(NOT UGDK_3D_ENABLED)
     target_link_libraries(freetype-gl LINK_PUBLIC glew)
 endif()
 
