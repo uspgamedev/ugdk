@@ -63,8 +63,10 @@ bool ErrorLog(const std::string& err_msg) {
 
 void AddPendingScenes() {
     // Insert all queued Scenes at the end of the scene list.
-    for(const SceneFactory& scene_factory : queued_scene_list_)
+    for(const SceneFactory& scene_factory : queued_scene_list_) {
         scene_list_.emplace_back(scene_factory());
+        scene_list_.back()->OnPushed(scene_list_.size()-1);
+    }
     queued_scene_list_.clear();
 }
 

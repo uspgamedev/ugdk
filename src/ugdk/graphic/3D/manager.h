@@ -22,6 +22,9 @@ public:
     bool Initialize();
 
     void PresentAll(double dt);
+    
+    Ogre::Root* root() { return root_; }
+    Ogre::RenderWindow* window() { return window_; }
 
 private:
     std::string window_title_;

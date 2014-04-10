@@ -1,18 +1,21 @@
-#include <bulletworks/camera.h>
-#include <bulletworks/object.h>
+#include <ugdk/action/3D/camera.h>
+#include <ugdk/action/3D/ogreentity.h>
+#include <ugdk/action/3D/ogrescene.h>
 
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
 #include <OgreSceneManager.h>
 
-namespace bulletworks {
+namespace ugdk {
+namespace action {
+namespace threed {
 
 using Ogre::Vector3;
 using Ogre::Quaternion;
 
-Camera::Camera(Ogre::SceneManager* sceneMgr, const std::string& camName) {
+Camera::Camera(OgreScene* scene, const std::string& camName) {
     parent_ = nullptr;
-    camera_ = sceneMgr->createCamera(camName);
+    camera_ = scene->manager()->createCamera(camName);
     camera_->setNearClipDistance(1);
     dist_ = 0;
     offset_ = Vector3::ZERO;
@@ -21,18 +24,18 @@ Camera::Camera(Ogre::SceneManager* sceneMgr, const std::string& camName) {
 }
 
 Camera::~Camera() {
-    //TODO: we should probably delete the camera here
+    camera_->getSceneManager()->destroyCamera(camera_);
 }
 
-void Camera::AttachTo(Object* object) {
+void Camera::AttachTo(OgreEntity* ent) {
     if (parent_ != nullptr) {
         Ogre::SceneNode* oldCamNode = camera_->getParentSceneNode();
-        parent_->entity()->getParentSceneNode()->removeChild( oldCamNode );
+        parent_->node()->removeChild( oldCamNode );
         camera_->detachFromParent();
         delete oldCamNode;
     }
-    parent_ = object;
-    parent_->entity()->getParentSceneNode()->createChildSceneNode()->attachObject(camera_);
+    parent_ = ent;
+    parent_->node()->createChildSceneNode()->attachObject(camera_);
 
     setupTransform();
 }
@@ -51,7 +54,7 @@ Quaternion Camera::orientation() {
 }
 Quaternion Camera::actual_orientation() {
     if (parent_ != nullptr)
-        return parent_->entity()->getParentSceneNode()->getOrientation() * camera_->getParentSceneNode()->getOrientation();
+        return parent_->node()->getOrientation() * camera_->getParentSceneNode()->getOrientation();
     return Quaternion::IDENTITY;
 }
 
@@ -64,7 +67,7 @@ void Camera::SetDistance(double dist) {
     if (dist_ <= 0) dist_ = 0;
     if (dist_ > max_dist_) dist_ = max_dist_;
     if (parent_ == nullptr) return;
-    Vector3 pos = parent_->entity()->getParentSceneNode()->getOrientation() * Vector3::UNIT_Z * dist_;
+    Vector3 pos = parent_->node()->getOrientation() * Vector3::UNIT_Z * dist_;
     camera_->setPosition( pos );
 }
 void Camera::Rotate(double yaw, double pitch) {
@@ -85,7 +88,9 @@ void Camera::setupTransform() {
 
     node->setPosition( offset_ );
     node->setOrientation( Quaternion::IDENTITY );
-    camera_->setPosition( parent_->entity()->getParentSceneNode()->getOrientation() * Vector3::UNIT_Z * dist_ );
+    camera_->setPosition( parent_->node()->getOrientation() * Vector3::UNIT_Z * dist_ );
 }
 
-}
+} // namespace 3D
+} // namespace action
+} // namespace ugdk
