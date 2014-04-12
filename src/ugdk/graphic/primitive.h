@@ -31,7 +31,7 @@ class Primitive {
     void set_shader_program(const opengl::ShaderProgram* shader_program) { shader_program_ = shader_program; }
 
 #ifndef SWIG
-    void set_controller(std::unique_ptr<PrimitiveControllerPosition>&& controller);
+    void set_controller(std::unique_ptr<PrimitiveController>&& controller);
 #endif
 
   protected:

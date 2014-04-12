@@ -51,8 +51,8 @@ void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, c
 
     Geometry final_transform =
         animation_frame.geometry()
-        * Geometry(math::Vector2D(), mirror_scale)
-        * Geometry(position - spritesheet_frame.hotspot);
+        * Geometry(position, mirror_scale)
+        * Geometry(-spritesheet_frame.hotspot);
 
     const glm::mat4& mat = final_transform.AsMat4();
     glm::vec4 top_left = mat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);

@@ -16,7 +16,7 @@ Primitive::Primitive(const Texture* texture, const std::shared_ptr<VertexData>& 
 
 Primitive::~Primitive() {}
 
-void Primitive::set_controller(std::unique_ptr<PrimitiveControllerPosition>&& controller) {
+void Primitive::set_controller(std::unique_ptr<PrimitiveController>&& controller) {
     controller_ = std::move(controller);
     controller_->set_owner(this);
 }
