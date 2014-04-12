@@ -40,11 +40,10 @@ class ShaderUse {
     void SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size = 2, GLsizei stride = 0);
 
   private:
-    static const int MAX_ATTRIBUTES = 4;
+    static const int MAX_ATTRIBUTES = 3;
     static const ShaderProgram* active_program_;
     const ShaderProgram* program_;
-    int last_attribute_;
-    GLuint active_attributes_[MAX_ATTRIBUTES];
+    bool active_attributes_[MAX_ATTRIBUTES];
 };
 
 } // namespace opengl

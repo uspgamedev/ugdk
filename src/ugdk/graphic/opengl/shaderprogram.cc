@@ -36,6 +36,8 @@ void ShaderProgram::AttachShader(const Shader& shader) {
 }
 
 bool ShaderProgram::SetupProgram() {
+    glBindAttribLocation(id_, 0, "vertexPosition");
+    glBindAttribLocation(id_, 1, "vertexUV");
     glLinkProgram(id_);
 
     GLint status;
@@ -53,8 +55,6 @@ bool ShaderProgram::SetupProgram() {
         texture_location_ = UniformLocation("drawable_texture");
         color_location_ = UniformLocation("effect_color");
     }
-    glBindAttribLocation(id_, 0, "vertexPosition");
-    glBindAttribLocation(id_, 1, "vertexUV");
     return status == GL_TRUE;
 }
 

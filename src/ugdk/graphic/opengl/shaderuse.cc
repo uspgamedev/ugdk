@@ -22,20 +22,24 @@ GLuint get_vertextype_location(VertexType type) {
     case VERTEX:  return 0;
     case TEXTURE: return 1;
     case COLOR:   return 2;
-    default:      return ~0U;
+    default:
+        throw love::Exception("Unknown VertexType.");
     }
 }
 
-ShaderUse::ShaderUse(const ShaderProgram* program) : program_(program), last_attribute_(0) {
+ShaderUse::ShaderUse(const ShaderProgram* program) : program_(program) {
     if(active_program_)
         throw love::Exception("There's already a shader program in use.");
     active_program_ = program;
     glUseProgram(program->id_);
+    for (int i = 0; i < MAX_ATTRIBUTES; ++i)
+        active_attributes_[i] = false;
 }
 
 ShaderUse::~ShaderUse() {
-    for(int i = 0; i < last_attribute_; ++i)
-        glDisableVertexAttribArray(active_attributes_[i]);
+    for(int i = 0; i < MAX_ATTRIBUTES; ++i)
+        if (active_attributes_[i])
+            glDisableVertexAttribArray(i);
     active_program_ = nullptr;
     glUseProgram(0);
 }
@@ -94,13 +98,12 @@ void ShaderUse::SendTexture(GLint slot, GLuint texture, const std::string& locat
 
 void ShaderUse::SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size, GLsizei stride) {
     VertexBuffer::Bind bind(*buffer);
-#ifdef DEBUG
-    if(last_attribute_ >= MAX_ATTRIBUTES)
-        throw love::Exception("Max attributes used.");
-#endif
 
     GLuint location = get_vertextype_location(type);
-    glEnableVertexAttribArray(location);
+    if (!active_attributes_[location]) {
+        glEnableVertexAttribArray(location);
+        active_attributes_[location] = true;
+    }
     glVertexAttribPointer(
         location,           // location
         size,               // size
@@ -110,7 +113,6 @@ void ShaderUse::SendVertexBuffer(const VertexBuffer* buffer, VertexType type, si
         buffer->getPointer(offset) // array buffer offset
     );
     assert(glGetError() == GL_NO_ERROR);
-    active_attributes_[last_attribute_++] = location;
 }
 
 } // namespace opengl
