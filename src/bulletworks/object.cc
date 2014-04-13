@@ -1,5 +1,6 @@
 #include <bulletworks/object.h>
-#include <bulletworks/module.h>
+#include <bulletworks/manager.h>
+#include <bulletworks/physicscene.h>
 
 #include <btBulletDynamicsCommon.h>
 
@@ -13,52 +14,54 @@
 
 namespace bulletworks {
 
-Object::Object(Ogre::Entity* entity, double mass) 
-    : entity_(entity), mass_(mass), shape_(nullptr), body_(nullptr)
+Object::Object(Ogre::Entity* entity, const PhysicsData& physics_data)
+    : entity_(entity), physics_data_(physics_data), body_(nullptr)
 {
 }
 
 Object::~Object() {
     if (body_) {
-        manager()->RemoveBody(this);
+        parent_physics_mgr_->RemoveBody(this);
         delete body_->getMotionState();
         delete body_;
-        delete shape_;
+        delete physics_data_.shape;
     }
 
-    if (entity_->getParentSceneNode()) {
-        Ogre::SceneNode* node = entity_->getParentSceneNode();
-        Ogre::SceneManager* mgr = node->getCreator();
-        node->removeAndDestroyAllChildren();
-        mgr->destroySceneNode(node);
-        mgr->destroyEntity(entity_);
-    }
+    node_->getCreator()->destroyEntity(entity_);
+    //OgreEntity takes care of destroying our node_
 }
 
 std::string Object::entity_name() {
     return entity_->getName();
 }
 
-void Object::SetupCollision(btCollisionShape* shape, short collisionGroup, short collidesWith, const btTransform& offset) {
-    collision_group_ = collisionGroup;
-    collides_with_ = collidesWith;
-    shape_ = shape;
+void Object::OnSceneAdd(ugdk::action::Scene* scene) {
+    PhysicScene* pscene = dynamic_cast<PhysicScene*>(scene);
+    if (pscene != nullptr) {
+        node_ = pscene->manager()->getRootSceneNode()->createChildSceneNode();
+        node_->attachObject(entity_);
+        node_->setPosition(BtOgre::Convert::toOgre(physics_data_.initial.getOrigin()));
+        node_->setOrientation(BtOgre::Convert::toOgre(physics_data_.initial.getRotation()));
+        
+        if (physics_data_.shape != nullptr) {
+            this->setupCollision();
+            parent_physics_mgr_ = pscene->physics_manager();
+            parent_physics_mgr_->AddBody(this);
+        }
+    }
+}
 
-    //ObjectMotionState* motionState = new ObjectMotionState(entity);
-    Ogre::Quaternion orient = entity_->getParentSceneNode()->getOrientation();
-    Ogre::Vector3 pos = entity_->getParentSceneNode()->getPosition();
-    btTransform t = btTransform( BtOgre::Convert::toBullet(orient), BtOgre::Convert::toBullet(pos));
-    BtOgre::RigidBodyState* motionState = new BtOgre::RigidBodyState(entity_->getParentSceneNode(), t, offset);
+void Object::setupCollision() {
+    BtOgre::RigidBodyState* motionState = new BtOgre::RigidBodyState(node_, physics_data_.initial, physics_data_.offset);
 
     btVector3 inertia(0,0,0);
-    if (mass_ > 0.0)
-        shape_->calculateLocalInertia(static_cast<btScalar>(mass_),inertia);
-    btRigidBody::btRigidBodyConstructionInfo  bodyInfo(static_cast<btScalar>(mass_),motionState,shape_,inertia);
+    if (physics_data_.mass > 0.0)
+        physics_data_.shape->calculateLocalInertia(static_cast<btScalar>(physics_data_.mass), inertia);
+    btRigidBody::btRigidBodyConstructionInfo  bodyInfo(static_cast<btScalar>(physics_data_.mass), motionState, physics_data_.shape, inertia);
     body_ = new btRigidBody(bodyInfo);
     body_->setLinearFactor(btVector3(1,1,1));
 	body_->setActivationState(DISABLE_DEACTIVATION);
     body_->setUserPointer(this);
-	manager()->AddBody(this);
 }
 
 void Object::Translate(const Ogre::Vector3& move) {

@@ -59,7 +59,7 @@ if(UGDK_INTERNAL_SDL2)
         set(DIRECTX    OFF CACHE BOOL "Use DirectX for Windows audio/video" FORCE)
         set(RENDER_D3D OFF CACHE BOOL "Enable the Direct3D render driver" FORCE)
         if (MSVC)
-            set(LIBC   OFF CACHE BOOL "Use the system C library" FORCE)
+            set(LIBC   ON CACHE BOOL "Use the system C library" FORCE)
         endif(MSVC)
         add_subdirectory(sdl2 sdl2-build)
 

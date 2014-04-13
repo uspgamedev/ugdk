@@ -1,10 +1,10 @@
 SET(UGDK_3D_SRC 
     src/bulletworks/manager.cc
     src/bulletworks/manager.h
-    src/bulletworks/module.cc
-    src/bulletworks/module.h
     src/bulletworks/object.cc
     src/bulletworks/object.h
+    src/bulletworks/physicscene.cc
+    src/bulletworks/physicscene.h
     
     src/ugdk/action/3D/camera.cc
     src/ugdk/action/3D/camera.h

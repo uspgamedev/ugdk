@@ -482,15 +482,6 @@ include(FeatureSummary)
 update_list(OGRE_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/include)
 update_list(OGRE_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/OgreMain/include)
 update_list(OGRE_LIBRARIES OgreMain)
-if (MSVC)
-    # need to do this to fix using the default config dialog on windows/msvc.
-    # and we need to link to the res file using a relative path to the root project, so that's why there an 'Ogre/'
-    # prefix in the path.
-    ###
-    # note: backslashes because this is copied verbatim to the linker and windows uses theses slashes.
-    # note2: CMAKE_BUILD_TYPE will probably be wrong...
-    #update_list(OGRE_LIBRARIES externals\\Ogre\\OgreMain\\OgreMain.dir\\${CMAKE_BUILD_TYPE}\\OgreWin32Resources.res)
-endif (MSVC)
 if (OGRE_BUILD_RENDERSYSTEM_GLES2)
     update_list(OGRE_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/RenderSystems/GLES2/src/GLSLES/include)
     update_list(OGRE_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/RenderSystems/GLES2/include)
@@ -571,6 +562,17 @@ if (OGRE_BUILD_COMPONENT_OVERLAY)
     update_list(OGRE_LIBRARIES OgreOverlay)
 endif(OGRE_BUILD_COMPONENT_OVERLAY)
 
+if (MSVC)
+    # need to do this to fix using the default config dialog on windows/msvc.
+    # and we need to link to the res file using a relative path to the root project, so that's why there an 'Ogre/'
+    # prefix in the path.
+    ###
+    # note: backslashes because this is copied verbatim to the linker and windows uses theses slashes.
+    # note2: CMAKE_BUILD_TYPE will probably be wrong...
+    #update_list(OGRE_LIBRARIES "externals\\ugdk\\externals\\Ogre\\OgreMain\\OgreMain.dir\\${CMAKE_BUILD_TYPE}\\OgreWin32Resources.res")
+    #set(${LISTNAME} "${${LISTNAME}};${VALUE}" CACHE INTERNAL "")
+    #list (APPEND OGRE_LIBRARIES "externals\\ugdk\\externals\\Ogre\\OgreMain\\OgreMain.dir\\${CMAKE_BUILD_TYPE}\\OgreWin32Resources.res")
+endif (MSVC)
 #update_list(OGRE_INCLUDE_DIRS ${OIS_INCLUDE_DIR}) #  THIS IS REALLY UGLY
 #update_list(OGRE_LIBRARIES OIS)                   #
 

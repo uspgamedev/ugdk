@@ -1,5 +1,8 @@
 #include <ugdk/desktop/3D/manager.h>
+
 #include <ugdk/desktop/window.h>
+#include <ugdk/desktop/module.h>
+#include <ugdk/math/integer2D.h>
 
 #include <OgreStaticPluginLoader.h>
 #include <OgreSceneManager.h>
@@ -10,10 +13,18 @@
 #include <SDL_syswm.h>
 #include <SDL_endian.h>
 
+#include <string>
+#include <sstream>
+#include <vector>
 
 namespace ugdk {
 namespace desktop {
 namespace threed {
+
+using std::string;
+using std::vector;
+using std::stringstream;
+using std::stoi;
 
 Manager::Manager() {
 }
@@ -89,6 +100,24 @@ bool Manager::AddWindow(const std::shared_ptr<Window>& window) {
     // TODO: We might need to set resource listeners, if any, before this call.    
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
     return true;
+}
+
+void Manager::ChangeWindowSettings() {
+    auto optionsMap = root_->getRenderSystem()->getConfigOptions();
+    
+    stringstream videoMode( optionsMap["Video Mode"].currentValue );
+    string item;
+    char delim = ' ';
+    vector<string> vml;
+    while (std::getline(videoMode, item, delim)) {
+        if (!item.empty())
+            vml.push_back(item);
+    }
+    ugdk::math::Integer2D size (stoi(vml[0]), stoi(vml[2]));
+    bool fullscreen = optionsMap["Full Screen"].currentValue == "Yes";
+    bool vsync = optionsMap["VSync"].currentValue == "Yes";
+
+    ugdk::desktop::manager()->primary_window()->ChangeSettings(size, fullscreen, vsync);
 }
 
 void Manager::PresentAll(double dt) {

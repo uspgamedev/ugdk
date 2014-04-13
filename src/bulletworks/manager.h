@@ -3,14 +3,20 @@
 
 #include <functional>
 
-#include <btBulletDynamicsCommon.h>
-
 namespace BtOgre {
 class DebugDrawer;
 }
 namespace Ogre {
 class SceneManager;
 }
+
+class btVector3;
+class btBroadphaseInterface;
+class btDefaultCollisionConfiguration;
+class btCollisionDispatcher;
+class btSequentialImpulseConstraintSolver;
+class btDiscreteDynamicsWorld;
+class btManifoldPoint;
 
 namespace bulletworks {
 
@@ -23,7 +29,6 @@ public:
 	Manager(const btVector3& grav, Ogre::SceneManager* sceneMgr);
 	~Manager();
 
-    bool Initialize();
     void Update(double dt);
 
     void AddBody(Object* obj);
@@ -36,9 +41,6 @@ public:
     CollisionLogic& collision_logic() { return col_logic_; }
 
 private:
-    btVector3 gravity_;
-    Ogre::SceneManager* scene_mgr_;
-    
     btBroadphaseInterface* broadphase_;
     btDefaultCollisionConfiguration* config_;
     btCollisionDispatcher* dispatcher_;

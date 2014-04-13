@@ -25,6 +25,7 @@ public:
     bool Initialize();
     
     bool AddWindow(const std::shared_ptr<Window>& window);
+    void ChangeWindowSettings();
 
     void PresentAll(double dt);
     
