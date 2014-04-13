@@ -56,7 +56,7 @@ void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, c
 
     const glm::mat4& mat = final_transform.AsMat4();
     glm::vec4 top_left = mat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    glm::vec4 bottom_right = mat * glm::vec4(spritesheet_frame.size.x, spritesheet_frame.size.y, 0.0, 1.0);
+    glm::vec4 bottom_right = mat * glm::vec4(spritesheet_frame.piece.size().x, spritesheet_frame.piece.size().y, 0.0, 1.0);
 
     {
         VertexData::Mapper mapper(data);
@@ -64,26 +64,22 @@ void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, c
         VertexXYUV* v1 = mapper.Get<VertexXYUV>(0);
         v1->x = float(top_left.x);
         v1->y = float(top_left.y);
-        v1->u = 0.0f;
-        v1->v = 0.0f;
+        spritesheet_frame.piece.ConvertToAtlas(0.0f, 0.0f, &v1->u, &v1->v);
 
         VertexXYUV* v2 = mapper.Get<VertexXYUV>(1);
         v2->x = float(top_left.x);
         v2->y = float(bottom_right.y);
-        v2->u = 0.0f;
-        v2->v = 1.0f;
+        spritesheet_frame.piece.ConvertToAtlas(0.0f, 1.0f, &v2->u, &v2->v);
 
         VertexXYUV* v3 = mapper.Get<VertexXYUV>(2);
         v3->x = float(bottom_right.x);
         v3->y = float(top_left.y);
-        v3->u = 1.0f;
-        v3->v = 0.0f;
+        spritesheet_frame.piece.ConvertToAtlas(1.0f, 0.0f, &v3->u, &v3->v);
 
         VertexXYUV* v4 = mapper.Get<VertexXYUV>(3);
         v4->x = float(bottom_right.x);
         v4->y = float(bottom_right.y);
-        v4->u = 1.0f;
-        v4->v = 1.0f;
+        spritesheet_frame.piece.ConvertToAtlas(1.0f, 1.0f, &v4->u, &v4->v);
     }
 }
 
@@ -101,7 +97,7 @@ void Sprite::set_owner(Primitive* owner) {
 void Sprite::ChangeToFrame(const action::SpriteAnimationFrame& frame) {
     const auto& spritesheet_frame = spritesheet_->frame(frame.spritesheet_frame());
 
-    owner_->set_texture(spritesheet_frame.texture.get());
+    //owner_->set_texture(spritesheet_frame.texture.get());
     owner_->set_visualeffect(frame.effect());
     SpriteDataSetToGeometry(*owner_->vertexdata(), position_, frame, spritesheet_frame);
 }
@@ -120,7 +116,7 @@ std::tuple<
 > 
 CreateSpritePrimitive(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) {
 
-    std::shared_ptr<Primitive> primitive(new Primitive(spritesheet->frame(0).texture.get(), CreateSpriteCompatibleVertexData()));
+    std::shared_ptr<Primitive> primitive(new Primitive(spritesheet->atlas().lock()->texture(), CreateSpriteCompatibleVertexData()));
     primitive->set_controller(std::unique_ptr<Sprite>(new Sprite(spritesheet)));
     primitive->set_drawfunction(opengl::RenderPrimitiveAsRectangle);
 

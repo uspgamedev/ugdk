@@ -17,7 +17,6 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/spritesheet.h>
-#include <ugdk/graphic/spritesheetdata.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/vertexdata.h>

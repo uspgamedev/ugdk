@@ -96,8 +96,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/sprite.h 
     src/ugdk/graphic/spritesheet.cc 
     src/ugdk/graphic/spritesheet.h 
-    src/ugdk/graphic/spritesheetdata.cc 
-    src/ugdk/graphic/spritesheetdata.h 
     src/ugdk/graphic/text/font.cc 
     src/ugdk/graphic/text/font.h 
     src/ugdk/graphic/text/label.cc 
