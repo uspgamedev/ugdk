@@ -67,10 +67,10 @@ find_package(ZLIB)
 macro_log_feature(ZLIB_FOUND "zlib" "Simple data compression library" "http://www.zlib.net" FALSE "" "")
 
 if (ZLIB_FOUND)
-  # Find zziplib
-  find_package(ZZip)
-  macro_log_feature(ZZip_FOUND "zziplib" "Extract data from zip archives" "http://zziplib.sourceforge.net" FALSE "" "")
-endif ()
+    # Find zziplib
+    find_package(ZZip)
+    macro_log_feature(ZZip_FOUND "zziplib" "Extract data from zip archives" "http://zziplib.sourceforge.net" FALSE "" "")
+endif()
 
 # Find FreeImage
 find_package(FreeImage)

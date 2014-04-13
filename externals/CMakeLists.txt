@@ -58,6 +58,9 @@ if(UGDK_INTERNAL_SDL2)
         endif()
         set(DIRECTX    OFF CACHE BOOL "Use DirectX for Windows audio/video" FORCE)
         set(RENDER_D3D OFF CACHE BOOL "Enable the Direct3D render driver" FORCE)
+        if (MSVC)
+            set(LIBC   OFF CACHE BOOL "Use the system C library" FORCE)
+        endif(MSVC)
         add_subdirectory(sdl2 sdl2-build)
 
         target_include_directories(SDL2 PUBLIC "${SDL2_SOURCE_DIR}/include" "${SDL2_BINARY_DIR}/include") # TODO: add 'SYSTEM' flag when we have cmake 2.8.12

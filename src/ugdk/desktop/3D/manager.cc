@@ -135,6 +135,7 @@ bool Manager::createWindowFromSDL(const std::shared_ptr<Window>& window) {
     //TODO: externalWindowHandle is deprecated according to the source code. Figure out a way to get parentWindowHandle
     //      to work properly. On Linux/X11 it causes an occasional GLXBadDrawable error.
     params.insert(std::make_pair("externalWindowHandle",  winHandle));
+    params["externalGLControl"] = Ogre::String("True");
 
     window_ = root_->createRenderWindow(Ogre::String(window->title()), window->size().x, window->size().y, window->fullscreen(), &params);
     return true;
