@@ -7,6 +7,7 @@
 #include <OgreCamera.h>
 #include <OgreRenderWindow.h>
 #include <OgreViewport.h>
+#include <OgreOverlaySystem.h>
 
 namespace ugdk {
 namespace action {
@@ -14,8 +15,7 @@ namespace threed {
 
 OgreScene::OgreScene() {
     scene_mgr_ = ugdk::desktop::threed::manager()->root()->createSceneManager("OctreeSceneManager");
-    //mOverlaySystem = new Ogre::OverlaySystem();
-	//scene_mgr_->addRenderQueueListener(mOverlaySystem);
+	scene_mgr_->addRenderQueueListener( new Ogre::OverlaySystem() );
 	camera_ = new Camera(this);
 	z_order_ = -1;
 }

@@ -10,6 +10,7 @@ before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo add-apt-repository -y ppa:henriquegemignani/uspgamedev
   - sudo apt-get update
+  - sudo apt-get install libxaw7-dev
 
 install:
   - sudo apt-get install swig3.0 cmake
