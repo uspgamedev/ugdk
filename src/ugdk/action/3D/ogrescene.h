@@ -6,6 +6,8 @@
 namespace Ogre {
 class SceneManager;
 class Viewport;
+class Overlay;
+class OverlaySystem;
 }
 
 namespace ugdk {
@@ -30,14 +32,22 @@ class OgreScene : public ugdk::action::Scene {
     /// Method called when this scene is pushed to the Engine's Scene stack.
     virtual void OnPushed(int index);
     
+    void ShowFrameStats();
+    bool IsFrameStatsVisible();
+    void HideFrameStats();
+    
     Ogre::SceneManager* manager() const { return scene_mgr_; }
 
   protected:
     
     Ogre::SceneManager* scene_mgr_;
+    Ogre::OverlaySystem* overlay_system_;
     Camera* camera_;
     int z_order_;
     Ogre::Viewport* viewport_;
+    
+    Ogre::Overlay* fps_stats_;
+    void updateFrameStats();
 }; // class OgreScene.
 
 } // namespace 3D

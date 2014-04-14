@@ -8,6 +8,9 @@
 #include <OgreRenderWindow.h>
 #include <OgreViewport.h>
 #include <OgreOverlaySystem.h>
+#include <OgreFont.h>
+
+#include <iostream>
 
 namespace ugdk {
 namespace action {
@@ -15,9 +18,11 @@ namespace threed {
 
 OgreScene::OgreScene() {
     scene_mgr_ = ugdk::desktop::threed::manager()->root()->createSceneManager("OctreeSceneManager");
-	scene_mgr_->addRenderQueueListener( new Ogre::OverlaySystem() );
+    overlay_system_ = new Ogre::OverlaySystem();
+	scene_mgr_->addRenderQueueListener( overlay_system_ );
 	camera_ = new Camera(this);
 	z_order_ = -1;
+	fps_stats_ = nullptr;
 }
 
 OgreScene::~OgreScene() {
@@ -32,7 +37,63 @@ void OgreScene::OnPushed(int index) {
 	//TODO: we could let user set with x/y/w/h of this viewport...
 	viewport_ = ugdk::desktop::threed::manager()->window()->addViewport(camera_->camera(), z_order_, 0, 0, 1, 1);
     viewport_->setBackgroundColour(Ogre::ColourValue(0,0,0));
+    viewport_->setOverlaysEnabled(true);
     camera_->camera()->setAspectRatio(Ogre::Real(viewport_->getActualWidth()) / Ogre::Real(viewport_->getActualHeight()));
+}
+
+void OgreScene::ShowFrameStats() {
+    if (fps_stats_ == nullptr) {
+        Ogre::OverlayManager* overlay_mgr = Ogre::OverlayManager::getSingletonPtr();
+        std::string over_name = identifier() + "_FrameStats";
+        fps_stats_ = overlay_mgr->create(over_name);
+        fps_stats_->setZOrder(600);
+        
+        Ogre::TextAreaOverlayElement* avgFPS = static_cast<Ogre::TextAreaOverlayElement*>(overlay_mgr->createOverlayElement("TextArea", over_name+"/AvgFPS"));
+        avgFPS->setMetricsMode(Ogre::GMM_PIXELS);
+        avgFPS->setPosition(0.0, 0.0);
+        avgFPS->setDimensions(200, 16);
+        Ogre::FontPtr font = Ogre::FontManager::getSingleton().create("testeFont", "General");
+        font->setType(Ogre::FT_TRUETYPE);
+        font->setSource("cuckoo.ttf");
+        font->setTrueTypeSize(16);
+        font->setTrueTypeResolution(96);
+        avgFPS->setFontName("testeFont");
+        avgFPS->setCharHeight(16);
+        avgFPS->setColour(Ogre::ColourValue(1.0, 0.0, 0.0));
+        avgFPS->setCaption("Average FPS: WAT");
+        
+        Ogre::OverlayContainer* panel = static_cast<Ogre::OverlayContainer*>( overlay_mgr->createOverlayElement("Panel", over_name+"/Panel") );
+        panel->setMetricsMode(Ogre::GMM_PIXELS);
+        panel->setPosition(0.0, 0.0);
+        panel->setDimensions(200, 60);
+        panel->setMaterialName( "BaseWhite" );
+        panel->addChild(avgFPS);
+        fps_stats_->add2D(panel);
+    }
+    fps_stats_->show();
+}
+
+bool OgreScene::IsFrameStatsVisible() {
+    if (fps_stats_ != nullptr)
+        return fps_stats_->isVisible();
+    return false;
+}
+
+void OgreScene::HideFrameStats() {
+    if (fps_stats_ != nullptr)
+        fps_stats_->hide();
+}
+
+void OgreScene::updateFrameStats() {
+/*
+auto stats = ugdk::desktop::threed::manager()->window()->getStatistics();
+log("Avg FPS = " << stats.avgFPS);
+log("Best FPS = " << stats.bestFPS);
+log("Worst FPS = " << stats.worstFPS);
+log("triangle count = " << stats.triangleCount);
+log("best frame time = " << stats.bestFrameTime);
+log("worst frame time = " << stats.worstFrameTime);
+*/
 }
 
 } // namespace threed
