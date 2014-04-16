@@ -142,7 +142,15 @@ if(UGDK_3D_ENABLED)
     set (OGRE_RUNTIME_OUTPUT ${LIB_DIR})
     set (OGRE_INCLUDE_DIRS "" CACHE INTERNAL "Ogre external include directories")
     set (OGRE_LIBRARIES "" CACHE INTERNAL "Compiled Ogre libraries")
-    set (FREETYPE_FT2BUILD_INCLUDE_DIR ${freetype_SOURCE_DIR}/include)
+    set (FREETYPE_FT2BUILD_INCLUDE_DIR ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
+    set (FREETYPE_LIBRARY freetype CACHE STRING "" FORCE)
+    set (FREETYPE_LIBRARY_DBG freetype CACHE STRING "" FORCE)
+    set (FREETYPE_LIBRARY_REL freetype CACHE STRING "" FORCE)
+    set (FREETYPE_FOUND ON CACHE BOOL "" FORCE)
+    set (FREETYPE_INCLUDE_DIR ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
+    set (FREETYPE_INCLUDE_DIR_freetype2 ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
+    set (FREETYPE_INCLUDE_DIR_ft2build ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
+   
     add_subdirectory(Ogre)
 
     ########################
