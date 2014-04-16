@@ -39,6 +39,8 @@ void OgreScene::OnPushed(int index) {
     viewport_->setBackgroundColour(Ogre::ColourValue(0,0,0));
     viewport_->setOverlaysEnabled(true);
     camera_->camera()->setAspectRatio(Ogre::Real(viewport_->getActualWidth()) / Ogre::Real(viewport_->getActualHeight()));
+    std::cout << "ZOrder = " << z_order_ << std::endl;
+    std::cout << "Viewport size = " << viewport_->getActualWidth() << " x " << viewport_->getActualHeight() << std::endl;
 }
 
 void OgreScene::ShowFrameStats() {
@@ -57,6 +59,8 @@ void OgreScene::ShowFrameStats() {
         font->setSource("cuckoo.ttf");
         font->setTrueTypeSize(16);
         font->setTrueTypeResolution(96);
+        Ogre::FontManager::getSingleton().getByName("testeFont")->load();
+
         avgFPS->setFontName("testeFont");
         avgFPS->setCharHeight(16);
         avgFPS->setColour(Ogre::ColourValue(1.0, 0.0, 0.0));
@@ -69,6 +73,10 @@ void OgreScene::ShowFrameStats() {
         panel->setMaterialName( "BaseWhite" );
         panel->addChild(avgFPS);
         fps_stats_->add2D(panel);
+
+        AddTask(ugdk::system::Task([&](double dt) {
+            this->UpdateFrameStats();
+        }, 1.0));
     }
     fps_stats_->show();
 }
@@ -80,20 +88,26 @@ bool OgreScene::IsFrameStatsVisible() {
 }
 
 void OgreScene::HideFrameStats() {
-    if (fps_stats_ != nullptr)
-        fps_stats_->hide();
+    //if (fps_stats_ != nullptr)
+    //    fps_stats_->hide();
 }
 
-void OgreScene::updateFrameStats() {
-/*
-auto stats = ugdk::desktop::threed::manager()->window()->getStatistics();
-log("Avg FPS = " << stats.avgFPS);
-log("Best FPS = " << stats.bestFPS);
-log("Worst FPS = " << stats.worstFPS);
-log("triangle count = " << stats.triangleCount);
-log("best frame time = " << stats.bestFrameTime);
-log("worst frame time = " << stats.worstFrameTime);
-*/
+void OgreScene::UpdateFrameStats() {
+    if (!IsFrameStatsVisible()) return;
+    
+    auto stats = ugdk::desktop::threed::manager()->window()->getStatistics();
+    std::string over_name = identifier() + "_FrameStats";
+    Ogre::OverlayContainer* panel = fps_stats_->getChild(over_name + "/Panel");
+    Ogre::TextAreaOverlayElement* avgFPS = static_cast<Ogre::TextAreaOverlayElement*>(panel->getChild(over_name + "/AvgFPS"));
+    avgFPS->setCaption("Avg FPS = " + std::to_string(stats.avgFPS));
+    //std::cout << "Avg FPS = " << stats.avgFPS << std::endl;
+
+    /*log("Best FPS = " << stats.bestFPS);
+    log("Worst FPS = " << stats.worstFPS);
+    log("triangle count = " << stats.triangleCount);
+    log("best frame time = " << stats.bestFrameTime);
+    log("worst frame time = " << stats.worstFrameTime);*/
+    
 }
 
 } // namespace threed

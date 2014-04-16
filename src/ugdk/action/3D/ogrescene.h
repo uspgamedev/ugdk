@@ -34,9 +34,11 @@ class OgreScene : public ugdk::action::Scene {
     
     void ShowFrameStats();
     bool IsFrameStatsVisible();
+    void UpdateFrameStats();
     void HideFrameStats();
     
     Ogre::SceneManager* manager() const { return scene_mgr_; }
+    Camera* camera() const { return camera_; }
 
   protected:
     
@@ -47,7 +49,6 @@ class OgreScene : public ugdk::action::Scene {
     Ogre::Viewport* viewport_;
     
     Ogre::Overlay* fps_stats_;
-    void updateFrameStats();
 }; // class OgreScene.
 
 } // namespace 3D

@@ -11,7 +11,7 @@ class Manager;
 
 /**
    @class PhysicScene
-   @brief A game scene.
+   @brief A physics game scene.
 
    Represents a funcional 3D game scene, with 3D graphics and physics simulation support.
 */
