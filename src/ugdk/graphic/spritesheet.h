@@ -35,7 +35,7 @@ class Spritesheet {
         return frames_[frame_number];
     }
 
-    std::weak_ptr<TextureAtlas> atlas() const { return atlas_; }
+    std::shared_ptr<TextureAtlas> atlas() const { return atlas_; }
     const ugdk::math::Vector2D& frame_size(size_t frame_number) const;
 
   private:

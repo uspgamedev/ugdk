@@ -29,7 +29,7 @@ namespace {
 }
         
 void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset) {
-    data.CheckSizes("ApplyPositionOffset", 0, 2 * sizeof(GLfloat));
+    data.CheckSizes("ApplyPositionOffset", 0, sizeof(VertexXY));
 
     opengl::VertexBuffer::Bind bind(*data.buffer());
     opengl::VertexBuffer::Mapper mapper(*data.buffer());
@@ -43,7 +43,7 @@ void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset) {
 }
 
 void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, const action::SpriteAnimationFrame& animation_frame, const Spritesheet::Frame& spritesheet_frame) {
-    data.CheckSizes("SpriteDataSetToGeometry", 4, 2 * sizeof(GLfloat));
+    data.CheckSizes("SpriteDataSetToGeometry", 4, sizeof(VertexXYUV));
 
     math::Vector2D mirror_scale(
         (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
@@ -97,7 +97,6 @@ void Sprite::set_owner(Primitive* owner) {
 void Sprite::ChangeToFrame(const action::SpriteAnimationFrame& frame) {
     const auto& spritesheet_frame = spritesheet_->frame(frame.spritesheet_frame());
 
-    //owner_->set_texture(spritesheet_frame.texture.get());
     owner_->set_visualeffect(frame.effect());
     SpriteDataSetToGeometry(*owner_->vertexdata(), position_, frame, spritesheet_frame);
 }
@@ -108,30 +107,22 @@ void Sprite::ChangePosition(const math::Vector2D& position) {
 }
 
 std::shared_ptr<VertexData> CreateSpriteCompatibleVertexData() {
-    return std::make_shared<VertexData>(4, 2 * 2 * sizeof(GLfloat), true);
-}
-std::tuple<
-    std::shared_ptr<Primitive>,
-    std::shared_ptr<action::SpriteAnimationPlayer>
-> 
-CreateSpritePrimitive(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table) {
-
-    std::shared_ptr<Primitive> primitive(new Primitive(spritesheet->atlas().lock()->texture(), CreateSpriteCompatibleVertexData()));
-    primitive->set_controller(std::unique_ptr<Sprite>(new Sprite(spritesheet)));
-    primitive->set_drawfunction(opengl::RenderPrimitiveAsRectangle);
-
-    return std::make_tuple(primitive, CreateSpriteAnimationPlayerForPrimitive(primitive, table));
+    return std::make_shared<VertexData>(4, sizeof(VertexXYUV), true);
 }
 
-std::shared_ptr<action::SpriteAnimationPlayer> CreateSpriteAnimationPlayerForPrimitive(const std::shared_ptr<Primitive>& primitive_shared, const action::SpriteAnimationTable* table) {
-    std::weak_ptr<Primitive> weak_primitive(primitive_shared);
+void PreparePrimitiveForSprite(Primitive& primitive, const Spritesheet *spritesheet) {
+    primitive.set_texture(spritesheet->atlas()->texture());
+    primitive.set_vertexdata(CreateSpriteCompatibleVertexData());
+    primitive.set_controller(std::unique_ptr<Sprite>(new Sprite(spritesheet)));
+    primitive.set_drawfunction(ugdk::graphic::opengl::RenderPrimitiveAsRectangle);
+}
 
+std::shared_ptr<action::SpriteAnimationPlayer> CreateSpriteAnimationPlayerForPrimitive(Primitive& primitive, const action::SpriteAnimationTable* table) {
+    Primitive* p = &primitive;
     std::shared_ptr<action::SpriteAnimationPlayer> player(new action::SpriteAnimationPlayer(table));
-    player->set_frame_change_callback([weak_primitive](const action::SpriteAnimationFrame& frame) {
-        if (auto primitive = weak_primitive.lock()) {
-            if (Sprite* sprite = dynamic_cast<Sprite*>(primitive->controller().get())) {
-                sprite->ChangeToFrame(frame);
-            }
+    player->set_frame_change_callback([p](const action::SpriteAnimationFrame& frame) {
+        if (Sprite* sprite = dynamic_cast<Sprite*>(p->controller().get())) {
+            sprite->ChangeToFrame(frame);
         }
     });
     return player;

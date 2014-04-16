@@ -22,11 +22,8 @@ void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset);
 void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, const action::SpriteAnimationFrame&, const Spritesheet::Frame&);
 
 std::shared_ptr<VertexData> CreateSpriteCompatibleVertexData();
-std::tuple< 
-    std::shared_ptr<Primitive>, 
-    std::shared_ptr<action::SpriteAnimationPlayer>
-> CreateSpritePrimitive(const Spritesheet *spritesheet, const action::SpriteAnimationTable* table);
-std::shared_ptr<action::SpriteAnimationPlayer> CreateSpriteAnimationPlayerForPrimitive(const std::shared_ptr<Primitive>&, const action::SpriteAnimationTable* table);
+void PreparePrimitiveForSprite(Primitive&, const Spritesheet *spritesheet);
+std::shared_ptr<action::SpriteAnimationPlayer> CreateSpriteAnimationPlayerForPrimitive(Primitive&, const action::SpriteAnimationTable* table);
 
 class Sprite : public PrimitiveControllerPosition {
   public:

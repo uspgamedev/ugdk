@@ -12,8 +12,9 @@ namespace opengl {
 void PrepareVertexDataAsRectangle(VertexData& data, const math::Vector2D& size);
 void RenderPrimitiveAsRectangle(const Primitive&, opengl::ShaderUse& shader_use);
 
-std::shared_ptr<Primitive> CreateTexturedRectanglePrimitive(const Texture*, const math::Vector2D& size);
-std::shared_ptr<Primitive> CreateTexturedRectanglePrimitive(const Texture*);
+std::shared_ptr<VertexData> CreateRectangleCompatibleVertexData();
+void PreparePrimitiveForRectangle(Primitive&, const Texture*, const math::Vector2D& size);
+void PreparePrimitiveForRectangle(Primitive&, const Texture*);
 
 }  // namespace opengl
 }  // namespace graphic

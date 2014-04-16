@@ -20,6 +20,7 @@ class Primitive {
     std::shared_ptr<VertexData> vertexdata() { return vertexdata_; }
     std::shared_ptr<const VertexData> vertexdata() const { return vertexdata_; }
     const std::function<void(const Primitive&, opengl::ShaderUse&)>& drawfunction() const { return drawfunction_; }
+    std::unique_ptr<PrimitiveController>& controller() { return controller_; }
     const std::unique_ptr<PrimitiveController>& controller() const { return controller_; }
     const VisualEffect& visual_effect() const { return visual_effect_; }
     const opengl::ShaderProgram* shader_program() const { return shader_program_; }
@@ -30,6 +31,9 @@ class Primitive {
     void set_visualeffect(const VisualEffect& visual_effect) { visual_effect_ = visual_effect; }
     void set_shader_program(const opengl::ShaderProgram* shader_program) { shader_program_ = shader_program; }
 
+#if _MSC_VER <= 1800
+    Primitive& operator=(Primitive&&);
+#endif
 #ifndef SWIG
     void set_controller(std::unique_ptr<PrimitiveController>&& controller);
 #endif
