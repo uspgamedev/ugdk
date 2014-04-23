@@ -18,18 +18,11 @@
 namespace ugdk {
 namespace graphic {
 
-void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset);
-void SpriteDataSetToGeometry(VertexData& data, const math::Vector2D& position, const action::SpriteAnimationFrame&, const Spritesheet::Frame&);
-
-std::shared_ptr<VertexData> CreateSpriteCompatibleVertexData();
-void PreparePrimitiveForSprite(Primitive&, const Spritesheet *spritesheet);
-std::shared_ptr<action::SpriteAnimationPlayer> CreateSpriteAnimationPlayerForPrimitive(Primitive&, const action::SpriteAnimationTable* table);
-
-class Sprite : public PrimitiveControllerPosition {
+class PrimitiveControllerSprite : public PrimitiveControllerPosition {
   public:
 
-    Sprite(const Spritesheet *spritesheet);
-    ~Sprite();
+    PrimitiveControllerSprite(const Spritesheet *spritesheet);
+    ~PrimitiveControllerSprite();
 
     void set_owner(Primitive*) override;
     void ChangeToFrame(const action::SpriteAnimationFrame& frame);

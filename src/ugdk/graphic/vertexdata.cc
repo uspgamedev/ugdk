@@ -43,5 +43,9 @@ void VertexData::CheckSizes(const char* caller_name, std::size_t test_num_vertic
         throw love::Exception("Unsufficient vertex size for %s. Needs %u bytes, found %u.", caller_name, test_vertex_size, vertex_size_);
 }
 
+std::shared_ptr<VertexData> CreateVertexDataWithSpecification(const VertexDataSpecification& specification) {
+    return std::make_shared<VertexData>(specification.num_vertices, specification.vertex_size, specification.dynamic);
+}
+
 }  // namespace graphic
 }  // namespace ugdk

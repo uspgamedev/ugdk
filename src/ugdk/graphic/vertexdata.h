@@ -48,6 +48,17 @@ class VertexData {
     std::size_t vertex_size_;
 };
 
+struct VertexDataSpecification {
+    VertexDataSpecification(std::size_t num, std::size_t size, bool is_dynamic)
+        : num_vertices(num), vertex_size(size), dynamic(is_dynamic){}
+
+    std::size_t num_vertices;
+    std::size_t vertex_size;
+    bool dynamic;
+};
+
+std::shared_ptr<VertexData> CreateVertexDataWithSpecification(const VertexDataSpecification&);
+
 }  // namespace graphic
 }  // namespace ugdk
 
