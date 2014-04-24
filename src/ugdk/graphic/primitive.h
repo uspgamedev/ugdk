@@ -31,8 +31,10 @@ class Primitive {
     void set_visualeffect(const VisualEffect& visual_effect) { visual_effect_ = visual_effect; }
     void set_shader_program(const opengl::ShaderProgram* shader_program) { shader_program_ = shader_program; }
 
+#ifdef _MSC_VER
 #if _MSC_VER <= 1800
     Primitive& operator=(Primitive&&);
+#endif
 #endif
 #ifndef SWIG
     void set_controller(std::unique_ptr<PrimitiveController>&& controller);

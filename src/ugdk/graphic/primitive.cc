@@ -21,6 +21,7 @@ void Primitive::set_controller(std::unique_ptr<PrimitiveController>&& controller
     controller_->set_owner(this);
 }
 
+#ifdef _MSC_VER
 #if _MSC_VER <= 1800
 Primitive& Primitive::operator=(Primitive&& primitive) {
     texture_ = primitive.texture_;
@@ -31,6 +32,7 @@ Primitive& Primitive::operator=(Primitive&& primitive) {
     shader_program_ = primitive.shader_program_;
     return *this;
 }
+#endif
 #endif
 
 }  // namespace graphic
