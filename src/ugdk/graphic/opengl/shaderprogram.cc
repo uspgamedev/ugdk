@@ -33,12 +33,18 @@ bool ShaderProgram::IsValid() const {
 void ShaderProgram::AttachShader(const Shader& shader) {
     shader.Compile();
     glAttachShader(id_, shader.id());
+    internal::AssertNoOpenGLError();
 }
 
 bool ShaderProgram::SetupProgram() {
     glBindAttribLocation(id_, 0, "vertexPosition");
     glBindAttribLocation(id_, 1, "vertexUV");
+
+    // Clear errors.
+    internal::ClearOpenGLErrors();
+
     glLinkProgram(id_);
+    internal::AssertNoOpenGLError();
 
     GLint status;
     glGetProgramiv (id_, GL_LINK_STATUS, &status);

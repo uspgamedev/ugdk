@@ -67,7 +67,8 @@ static bool ConvertSurfaceToTexture(SDL_Surface* data, GLuint* texture_, int* te
     *texture_width_ = data->w;
     *texture_height_ = data->h;
 
-    while ( glGetError() ) { ; }
+    // Clear previous errors so the next error checking works.
+    internal::ClearOpenGLErrors();
 
     glGenTextures( 1, texture_ );
     glBindTexture( GL_TEXTURE_2D, *texture_ );

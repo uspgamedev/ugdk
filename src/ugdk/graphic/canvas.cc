@@ -47,6 +47,7 @@ std::shared_ptr<Canvas> Canvas::Create(const std::weak_ptr<desktop::Window>& win
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    internal::AssertNoOpenGLError();
     
     return canvas;
 }
@@ -85,6 +86,7 @@ void Canvas::UpdateViewport() {
     if (auto window = attached_window_.lock()) {
         SDL_GL_SetSwapInterval(window->vsync() ? 1 : 0);
         glViewport(0, 0, window->size().x, window->size().y);
+        internal::AssertNoOpenGLError();
     }
 }
 
@@ -92,6 +94,7 @@ void Canvas::SaveToTexture(Texture* texture) {
     glBindTexture(GL_TEXTURE_2D, texture->gltexture());
     //glReadBuffer(GL_BACK); FIXME
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, texture->width(), texture->height());
+    internal::AssertNoOpenGLError();
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -119,6 +122,7 @@ void Canvas::PopVisualEffect() {
     
 void Canvas::Clear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    internal::AssertNoOpenGLError();
 }
 
 void Canvas::Clear(Color color) {

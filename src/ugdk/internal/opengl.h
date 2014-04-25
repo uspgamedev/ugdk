@@ -15,4 +15,25 @@
 
 #endif
 
+#include <cassert>
+
+namespace ugdk {
+namespace internal {
+
+inline void AssertNoOpenGLError() {
+#ifndef NDEBUG
+    auto err = glGetError();
+    assert(GL_NO_ERROR == err);
+#endif
+}
+
+inline void ClearOpenGLErrors() {
+#ifndef NDEBUG
+    while (GL_NO_ERROR != glGetError());
+#endif
+}
+
+}
+}
+
 #endif // UGDK_INTERNAL_SDLEVENTHANDLER_H_

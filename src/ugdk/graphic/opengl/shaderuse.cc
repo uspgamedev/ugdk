@@ -34,6 +34,7 @@ ShaderUse::ShaderUse(const ShaderProgram* program) : program_(program) {
     glUseProgram(program->id_);
     for (int i = 0; i < MAX_ATTRIBUTES; ++i)
         active_attributes_[i] = false;
+    internal::AssertNoOpenGLError();
 }
 
 ShaderUse::~ShaderUse() {
@@ -46,28 +47,35 @@ ShaderUse::~ShaderUse() {
 
 void ShaderUse::SendUniform(const std::string& name, float t1) {
     glUniform1f(program_->UniformLocation(name), t1);
+    internal::AssertNoOpenGLError();
 }
 void ShaderUse::SendUniform(const std::string& name, float t1, float t2) {
     glUniform2f(program_->UniformLocation(name), t1, t2);
+    internal::AssertNoOpenGLError();
 }
 void ShaderUse::SendUniform(const std::string& name, float t1, float t2, float t3) {
     glUniform3f(program_->UniformLocation(name), t1, t2, t3);
+    internal::AssertNoOpenGLError();
 }
 void ShaderUse::SendUniform(const std::string& name, float t1, float t2, float t3, float t4) {
     glUniform4f(program_->UniformLocation(name), t1, t2, t3, t4);
+    internal::AssertNoOpenGLError();
 }
 
 void ShaderUse::SendGeometry(const glm::mat4& mat) {
     glUniformMatrix4fv(program_->matrix_location_, 1, GL_FALSE, &mat[0][0]);
+    internal::AssertNoOpenGLError();
 }
 
 void ShaderUse::SendGeometry(const ugdk::graphic::Geometry& geometry) {
     glUniformMatrix4fv(program_->matrix_location_, 1, GL_FALSE, &geometry.AsMat4()[0][0]);
+    internal::AssertNoOpenGLError();
 }
         
 void ShaderUse::SendEffect(const ugdk::graphic::VisualEffect& effect) {
     const Color& c = effect.color();
     glUniform4f(program_->color_location_, c.r, c.g, c.b, c.a);
+    internal::AssertNoOpenGLError();
 }
 
 void ShaderUse::SendTexture(GLint slot, const Texture* texture) {
@@ -90,6 +98,7 @@ void ShaderUse::SendTexture(GLint slot, GLuint texture, GLuint location) {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, texture);
     glUniform1i(location, slot);
+    internal::AssertNoOpenGLError();
 }
 
 void ShaderUse::SendTexture(GLint slot, GLuint texture, const std::string& location) {
@@ -102,6 +111,7 @@ void ShaderUse::SendVertexBuffer(const VertexBuffer* buffer, VertexType type, si
     GLuint location = get_vertextype_location(type);
     if (!active_attributes_[location]) {
         glEnableVertexAttribArray(location);
+        internal::AssertNoOpenGLError();
         active_attributes_[location] = true;
     }
     glVertexAttribPointer(
@@ -112,7 +122,7 @@ void ShaderUse::SendVertexBuffer(const VertexBuffer* buffer, VertexType type, si
         stride,             // ammount of bytes to offset for each element. 0 means size*sizeof(type)
         buffer->getPointer(offset) // array buffer offset
     );
-    assert(glGetError() == GL_NO_ERROR);
+    internal::AssertNoOpenGLError();
 }
 
 } // namespace opengl

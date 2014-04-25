@@ -10,6 +10,7 @@ VertexData::Mapper::Mapper(VertexData& data)
 {
     data.buffer()->bind();
     mapped_ = static_cast<uint8*>(data.buffer()->map());
+    internal::AssertNoOpenGLError();
 }
 
 VertexData::Mapper::~Mapper() {
@@ -35,7 +36,10 @@ VertexData::VertexData(std::size_t num_vertices, std::size_t vertex_size, bool d
                                         dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW)))
 ,   num_vertices_(num_vertices)
 ,   vertex_size_(vertex_size)
-{}
+{
+    assert(num_vertices > 0);
+    assert(vertex_size > 0);
+}
 
 VertexData::~VertexData() {}
     

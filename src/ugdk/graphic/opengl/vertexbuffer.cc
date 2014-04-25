@@ -161,7 +161,9 @@ namespace opengl {
 		mapped = malloc(getSize());
 		if (!mapped)
 			throw love::Exception("Out of memory (oh the humanity!)");
+    
 		glGetBufferSubData(getTarget(), 0, getSize(), mapped);
+        ugdk::internal::AssertNoOpenGLError();
 
 		return mapped;
 	}
