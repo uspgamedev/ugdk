@@ -33,7 +33,7 @@ class VertexData {
         void Validate(const char* name, std::size_t size, std::size_t index);
     };
 
-    VertexData(std::size_t num_vertices, std::size_t vertex_size, bool dynamic);
+    VertexData(std::size_t num_vertices, std::size_t vertex_size, bool dynamic, bool ignore_vbo = false);
     ~VertexData();
 
     const std::unique_ptr<opengl::VertexBuffer>& buffer() const { return buffer_; }

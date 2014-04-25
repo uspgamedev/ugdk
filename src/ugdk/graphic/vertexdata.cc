@@ -25,10 +25,14 @@ void VertexData::Mapper::Validate(const char* name, std::size_t size, std::size_
         throw love::Exception("Vertex %u is out of range. (Buffer has %u vertices)", index, data_.num_vertices());
 }
 
-VertexData::VertexData(std::size_t num_vertices, std::size_t vertex_size, bool dynamic)
-:   buffer_(opengl::VertexBuffer::Create(num_vertices * vertex_size,
-                                         GL_ARRAY_BUFFER, 
-                                         dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW))
+VertexData::VertexData(std::size_t num_vertices, std::size_t vertex_size, bool dynamic, bool ignore_vbo)
+:   buffer_(ignore_vbo ?
+            (new opengl::VertexArray(num_vertices * vertex_size,
+                                        GL_ARRAY_BUFFER,
+                                        dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW)) :
+            (opengl::VertexBuffer::Create(num_vertices * vertex_size,
+                                        GL_ARRAY_BUFFER, 
+                                        dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW)))
 ,   num_vertices_(num_vertices)
 ,   vertex_size_(vertex_size)
 {}

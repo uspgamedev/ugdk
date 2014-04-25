@@ -4,12 +4,14 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/drawable.h>
+#include <ugdk/graphic/vertexdata.h>
 #include <ugdk/util/utf8.h>
 #include <ugdk/structure/types.h>
 
 #include <string>
 #include <cstddef>
 #include <vector>
+#include <memory>
 
 namespace ugdk {
 namespace graphic {
@@ -29,7 +31,7 @@ class Label : public Drawable {
 
   private:
     Font* font_;
-    opengl::VertexBuffer* buffer_;
+    std::unique_ptr<VertexData> buffer_;
     std::vector<int> first_vector_, size_vector_;
 
     ugdk::math::Vector2D size_;
