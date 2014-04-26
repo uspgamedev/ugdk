@@ -35,10 +35,14 @@ bool Manager::Initialize() {
     for(int i = 0; i < 32*32*4; ++i) buffer[i] = 255;
     if(white_texture_) delete white_texture_;
     white_texture_ = Texture::CreateRawTexture(32, 32);
+
     glBindTexture(GL_TEXTURE_2D, white_texture_->gltexture());
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 32, 32, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    internal::AssertNoOpenGLError();
+
     glBindTexture(GL_TEXTURE_2D, 0);
 
     return true;

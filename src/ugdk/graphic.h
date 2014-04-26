@@ -8,6 +8,10 @@ namespace graphic {
 class Geometry;
 class VisualEffect;
 class VertexData;
+class Primitive;
+class PrimitiveController;
+class PrimitiveControllerPosition;
+class TextureAtlas;
 
 // Drawables
 class Drawable;

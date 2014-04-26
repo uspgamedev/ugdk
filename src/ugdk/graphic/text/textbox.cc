@@ -36,8 +36,13 @@ void TextBox::ChangeMessage(const std::string& utf8_message) {
     labels_.reserve(split_ucs4_message.size());
 
     for(const auto& ucs4_line : split_ucs4_message) {
-        labels_.emplace_back(new Label(ucs4_line, font_));
-        size_.y += labels_.back()->size().y;
+        if (ucs4_line.empty()) {
+            labels_.emplace_back(nullptr);
+            size_.y += font_->height();
+        } else {
+            labels_.emplace_back(new Label(ucs4_line, font_));
+            size_.y += labels_.back()->size().y;
+        }
     }
 }
 
@@ -47,6 +52,10 @@ void TextBox::Draw(Canvas& canvas) const {
 
     double off_y = 0.0;
     for(const auto& label : labels_) {
+        if (!label) {
+            off_y += font_->height();
+            continue;
+        }
         double off_x = 0.0;
         if(ident_style_ == CENTER)
             off_x = (width_ - label->width()) * 0.5;

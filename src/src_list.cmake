@@ -17,6 +17,8 @@ SET(UGDK_SRC
     src/pyramidworks/ui.h 
     src/pyramidworks/ui/button.cc 
     src/pyramidworks/ui/button.h 
+    src/pyramidworks/ui/drawable.cc 
+    src/pyramidworks/ui/drawable.h 
     src/pyramidworks/ui/menu.cc 
     src/pyramidworks/ui/menu.h 
     src/pyramidworks/ui/uielement.cc 
@@ -64,8 +66,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/drawable.h 
     src/ugdk/graphic/drawable/functions.cc 
     src/ugdk/graphic/drawable/functions.h 
-    src/ugdk/graphic/drawable/sprite.cc 
-    src/ugdk/graphic/drawable/sprite.h 
     src/ugdk/graphic/drawable/texturedrectangle.cc 
     src/ugdk/graphic/drawable/texturedrectangle.h 
     src/ugdk/graphic/geometry.h 
@@ -87,14 +87,15 @@ SET(UGDK_SRC
     src/ugdk/graphic/opengl/shaderuse.h 
     src/ugdk/graphic/opengl/vertexbuffer.cc 
     src/ugdk/graphic/opengl/vertexbuffer.h 
-    src/ugdk/graphic/opengl/vertexdata_rectangle.cc 
-    src/ugdk/graphic/opengl/vertexdata_rectangle.h 
     src/ugdk/graphic/primitive.cc 
     src/ugdk/graphic/primitive.h 
+    src/ugdk/graphic/primitivecontroller.h 
+    src/ugdk/graphic/primitivesetup.cc 
+    src/ugdk/graphic/primitivesetup.h 
+    src/ugdk/graphic/sprite.cc 
+    src/ugdk/graphic/sprite.h 
     src/ugdk/graphic/spritesheet.cc 
     src/ugdk/graphic/spritesheet.h 
-    src/ugdk/graphic/spritesheetdata.cc 
-    src/ugdk/graphic/spritesheetdata.h 
     src/ugdk/graphic/text/font.cc 
     src/ugdk/graphic/text/font.h 
     src/ugdk/graphic/text/label.cc 
@@ -107,6 +108,7 @@ SET(UGDK_SRC
     src/ugdk/graphic/texture.h 
     src/ugdk/graphic/textureatlas.cc 
     src/ugdk/graphic/textureatlas.h 
+    src/ugdk/graphic/vertexdata.cc 
     src/ugdk/graphic/vertexdata.h 
     src/ugdk/graphic/visualeffect.h 
     src/ugdk/input.h 

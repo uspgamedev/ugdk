@@ -18,8 +18,13 @@
 namespace ugdk {
 namespace graphic {
 
-float FillBufferWithText(const Font* font, const std::u32string& msg, void* bufraw, float y) {
-    auto buf = static_cast<vec2*>(bufraw);
+namespace {
+    struct VertexXYUV {
+        GLfloat x, y, u, v;
+    };
+}
+
+float FillBufferWithText(const Font* font, const std::u32string& msg, VertexData::Mapper& mapped_data, float y) {
     float pen = 0.0f;
     size_t buffer_offset = 0;
     for(size_t i = 0; i < msg.size(); ++i ) {
@@ -38,27 +43,31 @@ float FillBufferWithText(const Font* font, const std::u32string& msg, void* bufr
         y0 = y + font->freetype_font()->height - y0;
         y1 = y + font->freetype_font()->height - y1;
         {
-            buf[buffer_offset + 0].x = x0;
-            buf[buffer_offset + 0].y = y0;
-            buf[buffer_offset + 1].x = glyph->s0;
-            buf[buffer_offset + 1].y = glyph->t0;
+            VertexXYUV* v1 = mapped_data.Get<VertexXYUV>(buffer_offset + 0);
+            v1->x = x0;
+            v1->y = y0;
+            v1->u = glyph->s0;
+            v1->v = glyph->t0;
 
-            buf[buffer_offset + 2].x = x1;
-            buf[buffer_offset + 2].y = y0;
-            buf[buffer_offset + 3].x = glyph->s1;
-            buf[buffer_offset + 3].y = glyph->t0;
+            VertexXYUV* v2 = mapped_data.Get<VertexXYUV>(buffer_offset + 1);
+            v2->x = x1;
+            v2->y = y0;
+            v2->u = glyph->s1;
+            v2->v = glyph->t0;
 
-            buf[buffer_offset + 4].x = x0;
-            buf[buffer_offset + 4].y = y1;
-            buf[buffer_offset + 5].x = glyph->s0;
-            buf[buffer_offset + 5].y = glyph->t1;
+            VertexXYUV* v3 = mapped_data.Get<VertexXYUV>(buffer_offset + 2);
+            v3->x = x0;
+            v3->y = y1;
+            v3->u = glyph->s0;
+            v3->v = glyph->t1;
 
-            buf[buffer_offset + 6].x = x1;
-            buf[buffer_offset + 6].y = y1;
-            buf[buffer_offset + 7].x = glyph->s1;
-            buf[buffer_offset + 7].y = glyph->t1;
+            VertexXYUV* v4 = mapped_data.Get<VertexXYUV>(buffer_offset + 3);
+            v4->x = x1;
+            v4->y = y1;
+            v4->u = glyph->s1;
+            v4->v = glyph->t1;
 
-            buffer_offset += 8;
+            buffer_offset += 4;
         }
         pen += glyph->advance_x;
     }
@@ -96,12 +105,12 @@ void DrawSquare(const Geometry& geometry, const VisualEffect& effect, const Text
 void DrawTextLine(const Geometry& geometry, const VisualEffect& effect, const Font* font, const std::string& utf8_message) {
     auto ucs_msg = utf8_to_ucs4(utf8_message);
 
-    opengl::VertexArray buffer(utf8_message.size() * 8 * sizeof(vec2), GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-    opengl::VertexBuffer::Bind bind(buffer);
+    VertexData data(utf8_message.size() * 4, sizeof(VertexXYUV), false, true);
     {
-        opengl::VertexBuffer::Mapper mapper(buffer);
-        FillBufferWithText(font, ucs_msg, mapper.get());
+        VertexData::Mapper mapper(data);
+        FillBufferWithText(font, ucs_msg, mapper);
     }
+    opengl::VertexBuffer::Bind bind(*data.buffer());
 
     std::vector<int> first_vector;
     first_vector.reserve(ucs_msg.size());
@@ -116,8 +125,8 @@ void DrawTextLine(const Geometry& geometry, const VisualEffect& effect, const Fo
     shader_use.SendEffect(effect);
     shader_use.SendTexture(0, font->freetype_font()->atlas->id);
 
-    shader_use.SendVertexBuffer(&buffer, opengl::VERTEX,             0, 2, 2 * sizeof(vec2));
-    shader_use.SendVertexBuffer(&buffer, opengl::TEXTURE, sizeof(vec2), 2, 2 * sizeof(vec2));
+    shader_use.SendVertexBuffer(data.buffer().get(), opengl::VERTEX,             0, 2, data.vertex_size());
+    shader_use.SendVertexBuffer(data.buffer().get(), opengl::TEXTURE, sizeof(vec2), 2, data.vertex_size());
 
 #ifdef UGDK_USING_GLES
     for(size_t i = 0; i < ucs_msg.size(); ++i) {

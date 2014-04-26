@@ -1,13 +1,14 @@
 #ifndef UGDK_ACTION_ANIMATIONPLAYER_H_
 #define UGDK_ACTION_ANIMATIONPLAYER_H_
 
-#include <string>
-#include <cassert>
-
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/action/mediaplayer.h>
 #include <ugdk/structure/indexabletable.h>
+
+#include <string>
+#include <functional>
+#include <cassert>
 
 namespace ugdk {
 namespace action {
@@ -15,15 +16,22 @@ namespace action {
 template<class T>
 class AnimationPlayer : public MediaPlayer {
   public:
+    typedef std::function<void(const typename T::Frame&)> FrameChangedCallback;
+
     AnimationPlayer(const structure::IndexableTable<T*> *table) 
         : current_animation_(nullptr), current_frame_(0), elapsed_time_(0.0), table_(table) {
         // TODO: a user defined current_animation_ may leak
     }
 
+    void set_frame_change_callback(const FrameChangedCallback& callback) {
+        frame_change_callback_ = callback;
+    }
+
     void set_current_animation(T* anim) {
-        if(anim != current_animation_)
-            RestartAnimation();
+        const T* previous_anim = current_animation_;
         current_animation_ = anim;
+        if (anim != previous_anim)
+            RestartAnimation();
     }
 
     const T* current_animation() const { return current_animation_; }
@@ -41,15 +49,14 @@ class AnimationPlayer : public MediaPlayer {
         if (elapsed_time_ >= current_animation_->period()) {
             elapsed_time_ -= current_animation_->period();
 
-            current_frame_ = (current_frame_ + 1) % current_animation_->size();
-            if (current_frame_ == 0) notifyAllObservers();
+            ChangeToNextFrame();
         }
     }
 
     /// Restarts the current animation from the first frame.
     void RestartAnimation() {
-        current_frame_ = 0;
         elapsed_time_ = 0.0;
+        ChangeCurrentFrame(0);
     }
 
     /// Change the current animation to a new animation from the previously selected AnimationSet.
@@ -71,6 +78,18 @@ class AnimationPlayer : public MediaPlayer {
     int current_frame_;
     double elapsed_time_;
     const structure::IndexableTable<T*> *table_;
+    FrameChangedCallback frame_change_callback_;
+
+    void ChangeCurrentFrame(int new_frame) {
+        current_frame_ = new_frame;
+        if (frame_change_callback_)
+            frame_change_callback_(current_animation_frame());
+    }
+
+    void ChangeToNextFrame() {
+        ChangeCurrentFrame((current_frame_ + 1) % current_animation_->size());
+        if (current_frame_ == 0) notifyAllObservers();
+    }
 };
 
 } /* namespace action */

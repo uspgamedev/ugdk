@@ -48,9 +48,14 @@ void Shader::GenerateSource() {
 }
 
 bool Shader::Compile() const {
+
+    internal::ClearOpenGLErrors();
+
     const char* source = source_.c_str();
     glShaderSource(id_, 1, &source, nullptr);
+    internal::AssertNoOpenGLError();
     glCompileShader(id_);
+    internal::AssertNoOpenGLError();
 
     GLint status;
     glGetShaderiv(id_, GL_COMPILE_STATUS, &status);

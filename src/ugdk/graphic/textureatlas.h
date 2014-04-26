@@ -22,23 +22,23 @@ class TextureAtlas {
         ~BoundPiece() {}
         
         const TextureAtlas* atlas() const { return atlas_; }
-        const Piece* piece() const { return piece_; }
-        void ConvertToAtlas(double *u, double *v) const;
+        const math::Vector2D& position() const { return piece_->position; }
+        const math::Vector2D& size() const { return piece_->size; }
+
+        void ConvertToAtlas(float *u, float *v) const;
+        void ConvertToAtlas(float in_u, float in_v, float *out_u, float *out_v) const;
         
       private:
         const TextureAtlas* atlas_;
         const Piece* piece_;
     };
   
-    TextureAtlas(std::unique_ptr<Texture>&& texture, std::size_t size)
-        :   texture_(std::move(texture))
-    {
-        pieces_.reserve(size);
-    }
+    TextureAtlas(std::unique_ptr<Texture>&& texture, std::size_t size);
     ~TextureAtlas();
     
-    void AddPiece(math::Vector2D& pos, math::Vector2D& size) {
+    std::size_t AddPiece(const math::Vector2D& pos, const math::Vector2D& size) {
         pieces_.emplace_back(pos, size);
+        return pieces_.size() - 1;
     }
     
     const Texture* texture() const { return texture_.get(); }

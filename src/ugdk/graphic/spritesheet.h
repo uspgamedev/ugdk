@@ -6,38 +6,25 @@
 #include <memory>
 
 #include <ugdk/graphic.h>
+#include <ugdk/graphic/textureatlas.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/util/uncopyable.h>
 
 namespace ugdk {
 namespace graphic {
 
-class SpritesheetData;
 class Spritesheet {
   public:
-    class Frame : public util::Uncopyable {
+    class Frame {
       public:
-        Frame(Texture* texure, const math::Vector2D& size, const math::Vector2D& hotspot);
+        Frame(const TextureAtlas& atlas, size_t index, const math::Vector2D& hotspot);
         ~Frame();
-#ifndef SWIG
-        Frame(Frame&&);
-        Frame& operator=(Frame&&);
-#endif
 
-        std::unique_ptr<Texture> texture;
-        math::Vector2D size, hotspot;
-      private:
-#ifdef _MSC_VER
-        Frame(const Frame&);
-        Frame& operator=(const Frame&);
-#else
-        Frame(const Frame&) = delete;
-        Frame& operator=(const Frame&) = delete;
-#endif
+        TextureAtlas::BoundPiece piece;
+        math::Vector2D hotspot;
     };
 
-    /// Converts the given SpritesheetData into an optimized Spritesheet.
-    Spritesheet(const SpritesheetData& data);
+    Spritesheet(const std::shared_ptr<TextureAtlas>& atlas, const std::vector< std::pair<size_t, math::Vector2D> >& frames);
     ~Spritesheet();
 
     size_t frame_count() const {
@@ -48,9 +35,11 @@ class Spritesheet {
         return frames_[frame_number];
     }
 
+    std::shared_ptr<TextureAtlas> atlas() const { return atlas_; }
     const ugdk::math::Vector2D& frame_size(size_t frame_number) const;
 
   private:
+    std::shared_ptr<TextureAtlas> atlas_;
     std::vector<Frame> frames_;
 };
 
