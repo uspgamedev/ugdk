@@ -6,6 +6,7 @@ namespace internal {
 
 struct PixelSurface;
 class SDLEventHandler;
+class GLTexture;
 
 }  // namespace internal
 }  // namespace ugdk

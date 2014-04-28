@@ -69,6 +69,8 @@ SET(UGDK_SRC
     src/ugdk/graphic/drawable/texturedrectangle.cc 
     src/ugdk/graphic/drawable/texturedrectangle.h 
     src/ugdk/graphic/geometry.h 
+    src/ugdk/graphic/image.cc 
+    src/ugdk/graphic/image.h 
     src/ugdk/graphic/light.cc 
     src/ugdk/graphic/light.h 
     src/ugdk/graphic/manager.cc 
@@ -104,8 +106,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/text/textbox.h 
     src/ugdk/graphic/text/textmanager.cc 
     src/ugdk/graphic/text/textmanager.h 
-    src/ugdk/graphic/texture.cc 
-    src/ugdk/graphic/texture.h 
     src/ugdk/graphic/textureatlas.cc 
     src/ugdk/graphic/textureatlas.h 
     src/ugdk/graphic/vertexdata.cc 
@@ -126,6 +126,8 @@ SET(UGDK_SRC
     src/ugdk/input/mousebutton.h 
     src/ugdk/input/scancode.h 
     src/ugdk/internal.h 
+    src/ugdk/internal/gltexture.cc 
+    src/ugdk/internal/gltexture.h 
     src/ugdk/internal/opengl.h 
     src/ugdk/internal/pixelsurface.cc 
     src/ugdk/internal/pixelsurface.h 

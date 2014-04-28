@@ -7,6 +7,7 @@
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/desktop.h>
+#include <ugdk/internal.h>
 
 #include <string>
 #include <bitset>
@@ -68,8 +69,8 @@ class Manager {
     };
 
     std::shared_ptr<Canvas> canvas() const { return canvas_; }
-    Texture* light_buffer() { return light_buffer_; }
-    Texture* white_texture() { return white_texture_; }
+    internal::GLTexture* light_buffer() { return light_buffer_; }
+    internal::GLTexture* white_texture() { return white_texture_; }
     Shaders& shaders() { return shaders_; }
     const Shaders& shaders() const { return shaders_; }
     opengl::ShaderProgram* light_shader() { return light_shader_; }
@@ -78,8 +79,8 @@ class Manager {
     void CreateLightBuffer(const math::Vector2D& size);
 
     std::shared_ptr<Canvas> canvas_;
-    Texture* light_buffer_;
-    Texture* white_texture_;
+    internal::GLTexture* light_buffer_;
+    internal::GLTexture* white_texture_;
     
     Shaders shaders_;
     opengl::ShaderProgram* light_shader_;

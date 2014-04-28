@@ -2,6 +2,7 @@
 #define UGDK_GRAPHIC_TEXTUREALTAS_H_
 
 #include <ugdk/graphic.h>
+#include <ugdk/internal.h>
 #include <ugdk/math/vector2D.h>
 
 #include <memory>
@@ -33,7 +34,7 @@ class TextureAtlas {
         const Piece* piece_;
     };
   
-    TextureAtlas(std::unique_ptr<Texture>&& texture, std::size_t size);
+    TextureAtlas(const internal::GLTexture* texture, std::size_t size);
     ~TextureAtlas();
     
     std::size_t AddPiece(const math::Vector2D& pos, const math::Vector2D& size) {
@@ -41,11 +42,11 @@ class TextureAtlas {
         return pieces_.size() - 1;
     }
     
-    const Texture* texture() const { return texture_.get(); }
+    const internal::GLTexture* texture() const { return texture_; }
     BoundPiece PieceAt(size_t i) const { return BoundPiece(this, &pieces_[i]); }
 
   private:
-    std::unique_ptr<Texture> texture_;
+    const internal::GLTexture* texture_;
     std::vector<Piece> pieces_;
 };
 

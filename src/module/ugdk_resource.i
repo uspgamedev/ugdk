@@ -13,7 +13,6 @@
 #include <ugdk/resource/module.h>
 
 //#include <ugdk/action/animationset.h>
-#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/util/languageword.h>
 
@@ -22,9 +21,9 @@
 
 %include <ugdk/resource/resourcecontainer.h> //class template
 
-enable_disown(ugdk::graphic::Texture* val)
-%template(ResourceContainer_Texture) ugdk::resource::ResourceContainer<ugdk::graphic::Texture*>;
-disable_disown(ugdk::graphic::Texture* val)
+enable_disown(ugdk::internal::GLTexture* val)
+%template(ResourceContainer_GLTexture) ugdk::resource::ResourceContainer<ugdk::internal::GLTexture*>;
+disable_disown(ugdk::internal::GLTexture* val)
 
 //enable_disown(ugdk::action::AnimationSet* val)
 //%template(ResourceContainer_AnimationSet) ugdk::resource::ResourceContainer<ugdk::action::AnimationSet*>;
@@ -45,6 +44,7 @@ disable_disown(ugdk::LanguageWord* val)
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_util") <ugdk/util.h>
+%import(module="ugdk_internal") <ugdk/internal.h>
 
 proxy_class(ugdk::action::Scene)
 

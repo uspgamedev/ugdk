@@ -2,6 +2,7 @@
 #define UGDK_GRAPHIC_PRIMITIVESETUP_H_
 
 #include <ugdk/graphic.h>
+#include <ugdk/internal.h>
 #include <ugdk/action.h>
 
 #include <ugdk/graphic/primitive.h>
@@ -41,8 +42,8 @@ struct Sprite {
 struct Rectangle {
     static const VertexDataSpecification vertexdata_specification;
 
-    static void Prepare(Primitive&, const Texture*, const math::Vector2D& size);
-    static void Prepare(Primitive&, const Texture*);
+    static void Prepare(Primitive&, const internal::GLTexture*, const math::Vector2D& size);
+    static void Prepare(Primitive&, const internal::GLTexture*);
     static void Render(const Primitive&, opengl::ShaderUse& shader_use);
 };
 

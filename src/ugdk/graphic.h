@@ -26,7 +26,7 @@ class Font;
 class Image;
 class Light;
 class Node;
-class Texture;
+class Image;
 class Spritesheet;
 class Canvas;
 

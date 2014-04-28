@@ -4,8 +4,8 @@
 #include <glm/glm.hpp>
 
 #include <ugdk/internal/opengl.h>
+#include <ugdk/internal/gltexture.h>
 #include <ugdk/graphic/drawable/functions.h>
-#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
@@ -15,13 +15,13 @@
 namespace ugdk {
 namespace graphic {
     
-TexturedRectangle::TexturedRectangle(Texture* texture) 
+TexturedRectangle::TexturedRectangle(const internal::GLTexture* texture)
     : texture_(texture) {
         assert(texture_);
         size_ = math::Integer2D(texture->width(), texture->height());
     }
 
-TexturedRectangle::TexturedRectangle(Texture* texture, const math::Vector2D& _size) 
+TexturedRectangle::TexturedRectangle(const internal::GLTexture* texture, const math::Vector2D& _size)
     : size_(_size)
     , texture_(texture) { assert(texture_); }
 

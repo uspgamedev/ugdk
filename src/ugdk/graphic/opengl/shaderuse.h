@@ -5,6 +5,7 @@
 #include <list>
 
 #include <ugdk/internal/opengl.h>
+#include <ugdk/internal/gltexture.h>
 #include <ugdk/graphic.h>
 #include <glm/glm.hpp>
 
@@ -30,9 +31,9 @@ class ShaderUse {
     void SendGeometry(const ugdk::graphic::Geometry&);
     void SendEffect(const ugdk::graphic::VisualEffect&);
 
-    void SendTexture(GLint slot, const Texture* texture);
-    void SendTexture(GLint slot, const Texture* texture, GLuint location);
-    void SendTexture(GLint slot, const Texture* texture, const std::string& location);
+    void SendTexture(GLint slot, const internal::GLTexture* texture);
+    void SendTexture(GLint slot, const internal::GLTexture* texture, GLuint location);
+    void SendTexture(GLint slot, const internal::GLTexture* texture, const std::string& location);
     void SendTexture(GLint slot, GLuint texture);
     void SendTexture(GLint slot, GLuint texture, GLuint location);
     void SendTexture(GLint slot, GLuint texture, const std::string& location);

@@ -4,9 +4,11 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/math/vector2D.h>
+#include <ugdk/structure/types.h>
+
+#include <ugdk/internal.h>
 #include <ugdk/desktop.h>
 #include <ugdk/graphic.h>
-#include <ugdk/structure/types.h>
 
 #include <memory>
 #include <vector>
@@ -31,7 +33,7 @@ class Canvas : public std::enable_shared_from_this<Canvas> {
     void AttachTo(const std::weak_ptr<desktop::Window>&);
     void UpdateViewport();
 
-    void SaveToTexture(Texture* texture);
+    void SaveToTexture(internal::GLTexture* texture);
 
     void PushAndCompose(const Geometry& geometry);
     void PushAndCompose(const VisualEffect& effect);

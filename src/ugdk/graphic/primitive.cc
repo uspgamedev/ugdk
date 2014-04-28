@@ -7,7 +7,7 @@
 namespace ugdk {
 namespace graphic {
 
-Primitive::Primitive(const Texture* texture, const std::shared_ptr<VertexData>& data)
+Primitive::Primitive(const internal::GLTexture* texture, const std::shared_ptr<VertexData>& data)
     : texture_(texture)
     , vertexdata_(data)
     , controller_(nullptr)

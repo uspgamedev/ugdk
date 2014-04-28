@@ -2,7 +2,6 @@
 
 #include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/module.h>
-#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>

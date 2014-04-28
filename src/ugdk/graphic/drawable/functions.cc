@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include <ugdk/internal/opengl.h>
-#include <ugdk/graphic/texture.h>
+#include <ugdk/internal/gltexture.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/text/font.h>
@@ -74,7 +74,7 @@ float FillBufferWithText(const Font* font, const std::u32string& msg, VertexData
     return pen;
 }
     
-void DrawSquare(const Geometry& geometry, const VisualEffect& effect, const Texture* texture) {
+void DrawSquare(const Geometry& geometry, const VisualEffect& effect, const internal::GLTexture* texture) {
     const glm::mat4& mat = geometry.AsMat4();
     if(mat[3].x > 1 || mat[3].y < -1 || 
         mat[0].x + mat[1].x + mat[3].x < -1 || 

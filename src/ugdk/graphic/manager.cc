@@ -3,7 +3,7 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/defaultshaders.h>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/graphic/texture.h>
+#include <ugdk/internal/gltexture.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/shaderuse.h>
@@ -34,9 +34,9 @@ bool Manager::Initialize() {
     unsigned char buffer[32*32*4];
     for(int i = 0; i < 32*32*4; ++i) buffer[i] = 255;
     if(white_texture_) delete white_texture_;
-    white_texture_ = Texture::CreateRawTexture(32, 32);
+    white_texture_ = internal::GLTexture::CreateRawTexture(32, 32);
 
-    glBindTexture(GL_TEXTURE_2D, white_texture_->gltexture());
+    glBindTexture(GL_TEXTURE_2D, white_texture_->id());
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 32, 32, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -87,8 +87,8 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
 
 void Manager::CreateLightBuffer(const math::Vector2D& size) {
     if(light_buffer_ != nullptr) delete light_buffer_;
-    light_buffer_ = Texture::CreateRawTexture(size.x, size.y);
-    glBindTexture(GL_TEXTURE_2D, light_buffer_->gltexture());
+    light_buffer_ = internal::GLTexture::CreateRawTexture(size.x, size.y);
+    glBindTexture(GL_TEXTURE_2D, light_buffer_->id());
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

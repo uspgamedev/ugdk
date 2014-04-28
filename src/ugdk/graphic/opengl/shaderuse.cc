@@ -1,9 +1,9 @@
 #include <ugdk/graphic/opengl/shaderuse.h>
 
+#include <ugdk/internal/gltexture.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
-#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/opengl/Exception.h>
 #include <ugdk/graphic/opengl/shader.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
@@ -78,16 +78,16 @@ void ShaderUse::SendEffect(const ugdk::graphic::VisualEffect& effect) {
     internal::AssertNoOpenGLError();
 }
 
-void ShaderUse::SendTexture(GLint slot, const Texture* texture) {
-    SendTexture(slot, texture->gltexture(), program_->texture_location_);
+void ShaderUse::SendTexture(GLint slot, const internal::GLTexture* texture) {
+    SendTexture(slot, texture->id(), program_->texture_location_);
 }
     
-void ShaderUse::SendTexture(GLint slot, const Texture* texture, GLuint location) {
-    SendTexture(slot, texture->gltexture(), location);
+void ShaderUse::SendTexture(GLint slot, const internal::GLTexture* texture, GLuint location) {
+    SendTexture(slot, texture->id(), location);
 }
 
-void ShaderUse::SendTexture(GLint slot, const Texture* texture, const std::string& location) {
-    SendTexture(slot, texture->gltexture(), program_->UniformLocation(location));
+void ShaderUse::SendTexture(GLint slot, const internal::GLTexture* texture, const std::string& location) {
+    SendTexture(slot, texture->id(), program_->UniformLocation(location));
 }
 
 void ShaderUse::SendTexture(GLint slot, GLuint texture) {

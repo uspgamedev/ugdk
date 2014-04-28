@@ -3,7 +3,6 @@
 #include <ugdk/system/engine.h>
 #include <ugdk/desktop/module.h>
 #include <ugdk/desktop/window.h>
-#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/text/label.h>
 #include <ugdk/graphic/text/textbox.h>
 #include <ugdk/graphic/text/font.h>

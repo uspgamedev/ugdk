@@ -14,7 +14,6 @@
 #include <ugdk/system/taskplayer.h>
 
 //#include <ugdk/action/animationset.h>
-#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/spritesheet.h>
 #include <ugdk/util/languageword.h>
 
@@ -22,17 +21,19 @@
 
 %}
 
-
-%import(module="ugdk_math") <ugdk/math/vector2D.h>
+%import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_audio") <ugdk/audio.h>
 %import(module="ugdk_debug") <ugdk/debug.h>
 %import(module="ugdk_desktop") <ugdk/desktop.h>
-%import(module="ugdk_input") <ugdk/input.h>
-%import(module="ugdk_time") <ugdk/time.h>
-%import(module="ugdk_audio") <ugdk/audio.h>
-%import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
-%import(module="ugdk_util") <ugdk/util.h>
+%import(module="ugdk_input") <ugdk/input.h>
+%import(module="ugdk_internal") <ugdk/internal.h>
+%import(module="ugdk_math") <ugdk/math.h>
 %import(module="ugdk_resource") <ugdk/resource.h>
+%import(module="ugdk_time") <ugdk/time.h>
+%import(module="ugdk_util") <ugdk/util.h>
+
+%import(module="ugdk_math") <ugdk/math/vector2D.h>
 
 proxy_class(ugdk::action::Scene)
 

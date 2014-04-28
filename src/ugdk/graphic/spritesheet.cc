@@ -2,9 +2,10 @@
 
 #include <ugdk/math/integer2D.h>
 #include <ugdk/graphic/module.h>
-#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/textureatlas.h>
+#include <ugdk/internal/gltexture.h>
 #include <ugdk/internal/pixelsurface.h>
+#include <ugdk/resource/module.h>
 #include <ugdk/system/engine.h>
 
 #include "SDL_image.h"
@@ -49,7 +50,7 @@ Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
     if(!data) return nullptr;
 
     std::string filename = data["file"].value<VirtualObj::Vector>()[0].value<std::string>();
-    std::unique_ptr<Texture> texture(Texture::CreateFromFile(filename));
+    auto texture = ugdk::resource::GetTextureFromFile(filename);
 
     std::vector< std::pair<math::Vector2D, math::Vector2D> > textureatlas_frames;
     std::vector< std::pair<size_t, math::Vector2D> > spritesheet_frames;
@@ -85,7 +86,7 @@ Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
         }
     }
 
-    std::shared_ptr<TextureAtlas> atlas(new TextureAtlas(std::move(texture), textureatlas_frames.size()));
+    std::shared_ptr<TextureAtlas> atlas(new TextureAtlas(texture, textureatlas_frames.size()));
     for (const auto& textureatlas_frame : textureatlas_frames)
         atlas->AddPiece(textureatlas_frame.first, textureatlas_frame.second);
     return new Spritesheet(atlas, spritesheet_frames);

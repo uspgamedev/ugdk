@@ -2,9 +2,9 @@
 
 #include <cstdio>
 
+#include <ugdk/internal/gltexture.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
-#include <ugdk/graphic/texture.h>
 #include <ugdk/graphic/opengl/Exception.h>
 #include <ugdk/graphic/opengl/shader.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>

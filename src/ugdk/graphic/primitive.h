@@ -1,6 +1,7 @@
 #ifndef UGDK_GRAPHIC_PRIMITIVE_H_
 #define UGDK_GRAPHIC_PRIMITIVE_H_
 
+#include <ugdk/internal.h>
 #include <ugdk/graphic.h>
 
 #include <ugdk/graphic/visualeffect.h>
@@ -13,10 +14,10 @@ namespace graphic {
 
 class Primitive {
   public:
-    Primitive(const Texture* texture, const std::shared_ptr<VertexData>& data);
+    Primitive(const internal::GLTexture* texture, const std::shared_ptr<VertexData>& data);
     ~Primitive();
 
-    const Texture* texture() const { return texture_; }
+    const internal::GLTexture* texture() const { return texture_; }
     std::shared_ptr<VertexData> vertexdata() { return vertexdata_; }
     std::shared_ptr<const VertexData> vertexdata() const { return vertexdata_; }
     const std::function<void(const Primitive&, opengl::ShaderUse&)>& drawfunction() const { return drawfunction_; }
@@ -25,7 +26,7 @@ class Primitive {
     const VisualEffect& visual_effect() const { return visual_effect_; }
     const opengl::ShaderProgram* shader_program() const { return shader_program_; }
     
-    void set_texture(const Texture* texture) { texture_ = texture; }
+    void set_texture(const internal::GLTexture* texture) { texture_ = texture; }
     void set_vertexdata(const std::shared_ptr<VertexData>& data) { vertexdata_ = data; }
     void set_drawfunction(const std::function<void(const Primitive&, opengl::ShaderUse&)>& function) { drawfunction_ = function; }
     void set_visualeffect(const VisualEffect& visual_effect) { visual_effect_ = visual_effect; }
@@ -41,7 +42,7 @@ class Primitive {
 #endif
 
   protected:
-    const Texture* texture_;
+    const internal::GLTexture* texture_;
     std::shared_ptr<VertexData> vertexdata_;
     std::function<void(const Primitive&, opengl::ShaderUse&)> drawfunction_;
     std::unique_ptr<PrimitiveController> controller_;

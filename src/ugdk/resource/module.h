@@ -3,6 +3,7 @@
 
 #include <ugdk/resource/manager.h>
 
+#include <ugdk/internal.h>
 #include <ugdk/action/spritetypes.h> // For action::SpriteAnimationTable
 #include <ugdk/graphic.h> // For graphic::Texture and graphic::Spritesheet
 #include <ugdk/util/languageword.h> // For ugdk::LanguageWord, and user convenience.
@@ -19,8 +20,8 @@ void Release();
 /// Getter for the manager of the module.
 Manager* manager();
 
-graphic::Texture*                GetTextureFromTag        (const std::string& tag);
-graphic::Texture*                GetTextureFromFile       (const std::string& file);
+internal::GLTexture*             GetTextureFromTag(const std::string& tag);
+internal::GLTexture*             GetTextureFromFile(const std::string& file);
 graphic::Spritesheet*            GetSpritesheetFromTag    (const std::string& tag);
 action::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
 ugdk::LanguageWord*              GetLanguageWord(const std::string& tag);

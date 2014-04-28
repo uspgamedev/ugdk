@@ -2,7 +2,7 @@
 
 #include <ugdk/action/spritetypes.h>
 #include <ugdk/graphic/spritesheet.h>
-#include <ugdk/graphic/texture.h>
+#include <ugdk/internal/gltexture.h>
 #include <ugdk/resource/genericcontainer.h>
 #include <ugdk/structure/indexabletable.h>
 #include <ugdk/util/languageword.h>
@@ -22,7 +22,7 @@ static T* NullLoad(const std::string& filepath) {
 
 bool Initialize(Manager* manager) {
     if(manager) {
-        manager->add_container(new GenericContainer<graphic::Texture*>(graphic::Texture::CreateFromFile));
+        manager->add_container(new GenericContainer<internal::GLTexture*>(internal::GLTexture::CreateFromFile));
         manager->add_container(new GenericContainer<graphic::Spritesheet*>(graphic::CreateSpritesheetFromTag));
         manager->add_container(new GenericContainer<action::SpriteAnimationTable*>(action::LoadSpriteAnimationTableFromFile));
         manager->add_container(new GenericContainer<LanguageWord*>(NullLoad<LanguageWord>));
@@ -47,12 +47,12 @@ Manager* manager() {
     return reference_;
 }
 
-graphic::Texture* GetTextureFromTag(const std::string& tag) {
-    return manager()->get_container<graphic::Texture*>()->Find(tag);
+internal::GLTexture* GetTextureFromTag(const std::string& tag) {
+    return manager()->get_container<internal::GLTexture*>()->Find(tag);
 }
 
-graphic::Texture* GetTextureFromFile(const std::string& file) {
-    return manager()->get_container<graphic::Texture*>()->Load(file, file);
+internal::GLTexture* GetTextureFromFile(const std::string& file) {
+    return manager()->get_container<internal::GLTexture*>()->Load(file, file);
 }
 
 graphic::Spritesheet* GetSpritesheetFromTag(const std::string& tag) {

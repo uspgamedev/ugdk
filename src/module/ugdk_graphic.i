@@ -12,7 +12,7 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/drawable.h>
-#include <ugdk/graphic/texture.h>
+#include <ugdk/graphic/image.h>
 #include <ugdk/graphic/light.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/canvas.h>
@@ -30,8 +30,6 @@
 %import(module="ugdk_math") <ugdk/math/frame.h>
 %import(module="ugdk_desktop") <ugdk/desktop.h>
 
-%ignore ugdk::graphic::Texture::CreateFromSurface(SDL_Surface* data);
-%ignore ugdk::graphic::Manager::PushAndApplyModifier(const Geometry& apply);
 %ignore ugdk::graphic::Font::GetLetterSize(wchar_t letter);
 %ignore ugdk::graphic::SpritesheetData::frames() const;
 
@@ -42,8 +40,6 @@
 %newobject ugdk::graphic::TextManager::GetText(const std::wstring& text, const std::string& font, int width = -1);
 %newobject ugdk::graphic::TextManager::GetTextFromFile(const std:: string& path);
 %newobject ugdk::graphic::TextManager::GetTextFromFile(const std:: string& path, const std::string& font, int width = -1);
-%newobject ugdk::graphic::Texture::CreateFromFile(const std::string& filepath);
-%newobject ugdk::graphic::Texture::CreateRawTexture(int texture_width, int texture_height);
 
 %rename(ComposeNew) ugdk::graphic::Geometry::Compose(const Geometry* mod1, const Geometry* mod2);
 %rename(GetTextWithFont) ugdk::graphic::TextManager::GetText(const std::wstring& text, const std::string& font, int width = -1);
@@ -56,10 +52,11 @@
 
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_internal") <ugdk/internal.h>
 %import(module="ugdk_drawable") <ugdk/graphic/text/textbox.h> //this needs to go after the include drawable.h
 
 %include <ugdk/graphic/canvas.h>
-%include <ugdk/graphic/texture.h>
+%include <ugdk/graphic/image.h>
 %include <ugdk/graphic/light.h>
 enable_disown(ugdk::graphic::Node* new_child)
 enable_disown(ugdk::graphic::Drawable* drawable)
@@ -81,7 +78,7 @@ namespace ugdk {
 namespace graphic {
     export_class(Canvas)
     export_class(Drawable)
-    export_class(Texture)
+    export_class(Image)
     export_class(Font)
     export_class(Light)
     export_class(Geometry)

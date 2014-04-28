@@ -1,7 +1,7 @@
 #include <ugdk/graphic/canvas.h>
 
 #include <ugdk/internal/opengl.h>
-#include <ugdk/graphic/texture.h>
+#include <ugdk/internal/gltexture.h>
 #include <ugdk/desktop/window.h>
 
 #include "SDL_video.h"
@@ -90,8 +90,8 @@ void Canvas::UpdateViewport() {
     }
 }
 
-void Canvas::SaveToTexture(Texture* texture) {
-    glBindTexture(GL_TEXTURE_2D, texture->gltexture());
+void Canvas::SaveToTexture(internal::GLTexture* texture) {
+    glBindTexture(GL_TEXTURE_2D, texture->id());
     //glReadBuffer(GL_BACK); FIXME
     glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, texture->width(), texture->height());
     internal::AssertNoOpenGLError();
