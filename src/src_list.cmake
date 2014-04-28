@@ -91,6 +91,7 @@ SET(UGDK_SRC
     src/ugdk/graphic/opengl/vertexbuffer.h 
     src/ugdk/graphic/primitive.cc 
     src/ugdk/graphic/primitive.h 
+    src/ugdk/graphic/primitivecontroller.cc 
     src/ugdk/graphic/primitivecontroller.h 
     src/ugdk/graphic/primitivesetup.cc 
     src/ugdk/graphic/primitivesetup.h 

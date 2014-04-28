@@ -149,7 +149,7 @@ namespace PrimitiveSetup {
     void Rectangle::Prepare(Primitive& primitive, const internal::GLTexture* texture, const math::Vector2D& size) {
         primitive.set_texture(texture);
         primitive.set_vertexdata(CreateVertexDataWithSpecification(Rectangle::vertexdata_specification));
-        // no controller
+        primitive.set_controller(std::unique_ptr<PrimitiveController>(new PrimitiveController));
         primitive.set_drawfunction(Rectangle::Render);
 
         VertexDataManipulation::SetToRectangleAtOrigin(*primitive.vertexdata(), size);

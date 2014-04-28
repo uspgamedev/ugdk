@@ -1,6 +1,8 @@
 #ifndef UGDK_GRAPHIC_PRIMITIVE_CONTROLLER_H_
 #define UGDK_GRAPHIC_PRIMITIVE_CONTROLLER_H_
 
+#include <ugdk/math/vector2D.h>
+
 #include <ugdk/math.h>
 #include <ugdk/graphic.h>
 
@@ -8,17 +10,18 @@ namespace ugdk {
 namespace graphic {
 
 class PrimitiveController {
-  public:         
+  public:       
+    PrimitiveController() : owner_(nullptr) {}
     virtual ~PrimitiveController() {}
 
-    virtual void set_owner(Primitive* owner) = 0;
-};
+    virtual void ChangePosition(const math::Vector2D& position);
+    virtual void set_owner(Primitive* owner) {
+        owner_ = owner;
+    }
 
-class PrimitiveControllerPosition : public virtual PrimitiveController {
-  public:
-    virtual ~PrimitiveControllerPosition() {}
-
-    virtual void ChangePosition(const math::Vector2D& position) = 0;
+  protected:
+    Primitive* owner_;
+    math::Vector2D position_;
 };
 
 }  // namespace graphic
