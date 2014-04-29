@@ -1,28 +1,104 @@
-==========
+
+
+== Dependencies
+
+Required:
+- CMake 2.8.11
+- A C++11 conformant compiler.
+
+
+Built if needed:
+- SDL 2.0.1
+- SDL_image 2.0
+- SDL_mixer 2.0
+- freetype 2.5.2 (may work with lesser)
+- glew
+
+
+Indirectly built if needed:
+- libpng 1.6.3 # when building SDL_image
+- zlib 1.2.8 # when building libpng
+
+
+Optional:
+- swig 2.0 ## Needed for the script system
+- Python 2.7 ## To be used in the script system
+
+
+Embeded:
+- lua 5.1 # Always built when the script system is enabled.
+- glm 0.9.5.2 # Header only library
+
+
+Compatible compilers:
+- g++ 4.6
+- clang 3.3 (maybe lesser)
+- Microsoft Visual Studio 2013
+
+
+== Controlling what is Built
+
+The following CMake variables changes what is built.
+
+- UGDK_BUILD_TESTS         ## automated tests
+- UGDK_INTERNAL_FREETYPE   ## build and link against the embedded freetype
+- UGDK_INTERNAL_GLEW       ## build and link against the embedded glew
+- UGDK_INTERNAL_SDL2       ## build and link against the embedded SDL2
+- UGDK_INTERNAL_SDL2_IMAGE ## build and link against the embedded SDL2_image
+- UGDK_INTERNAL_SDL2_MIXER ## build and link against the embedded SDL2_mixer
+- UGDK_CREATE_BINDINGS     ## activates the script system. Forced FALSE if SWIG is unavailable.
+- UGDK_LUA_BINDINGS        ## with the script system enabled, build embedded Lua and activate it in the script system.
+- UGDK_PYTHON_BINDINGS     ## with the script system enabled, activate Python in the script system. Forced FALSE if Python is not found.
+
+
+== Build instructions
+
+Considering the dependencies listed above satisfied.
+
+
+---------
 GNU/Linux:
-==========
 
-1) Get CMake 2.8 or a higher version
+Open a terminal on the directory containing this file and execute:
+ $ mkdir build && cd build
+ $ cmake ..
+ $ make
 
-2a) Get the folowing libraries: (Debian packages for reference)
- * libsdl2-dev
- * libsdl-image2-dev
- * libsdl-mixer2-dev
+Try using either 'ccmake' or 'cmake-gui' for an interactive interface to control CMake variables.
 
-2b) Optionally install the following packages:
- * liblua5.1-dev
- * python2.7-dev
- * swig2.0
- 
- ## Note: the last two packages are not avaiable in the Debian Squeeze repositories.
 
-4) Open a terminal in the same folder of this file.
+---------
+Windows:
 
-5) $ cmake . (Do not forget the '.' at the end)
-   $ make
+Open the CMake GUI.
+Choose as the 'Where is the source code' to be the path to the directory containing this file.
+Choose any path for 'Build the binaries'.
 
-Optionally, you can use CMake to generate files for your favorite IDE. Search
-for cmake -G options.
+---------
+Android:
+
+1) Have the following software installed:
+- CMake 2.8.11 or higher
+- Android SDK Tools 20131030 or higher (https://developer.android.com/sdk/index.html)
+- Android NDK r9 or higher (http://developer.android.com/tools/sdk/ndk/index.html)
+
+2) Set the enviroment variable ANDROID_NDK to the directory you installed the Android NDK.
+
+3) Run the following:
+  $ mkdir build && cd build
+  $ cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_TOOLCHAIN_FILE=../cmake/android.toolchain.cmake -DANDROID_NATIVE_API_LEVEL=android-9 ..
+
+4) ....
+
+5) Profit! (Aka TODO)
+
+
+
+
+---------------
+OLD, tofix?
+
+
 
 =========
 Mac OS X:
@@ -70,23 +146,4 @@ containing the following libraries:
 
 4) Build using the generated project.
 
-
-=======
-Android
-=======
-
-1) Have the following software installed:
-- CMake 2.8.11 or higher
-- Android SDK Tools 20131030 or higher (https://developer.android.com/sdk/index.html)
-- Android NDK r9 or higher (http://developer.android.com/tools/sdk/ndk/index.html)
-
-2) Set the enviroment variable ANDROID_NDK to the directory you installed the Android NDK.
-
-3) Run the following:
-  $ mkdir build && cd build
-  $ cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_TOOLCHAIN_FILE=../cmake/android.toolchain.cmake -DANDROID_NATIVE_API_LEVEL=android-9 ..
-
-4) ....
-
-5) Profit! (Aka TODO)
 
