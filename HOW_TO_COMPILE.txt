@@ -7,6 +7,11 @@ Required:
 - A C++11 conformant compiler.
 
 
+Android Build:
+- Android SDK Tools 20131030 or higher (https://developer.android.com/sdk/index.html)
+- Android NDK r9 or higher (http://developer.android.com/tools/sdk/ndk/index.html)
+
+
 Built if needed:
 - SDL 2.0.1
 - SDL_image 2.0
@@ -25,7 +30,7 @@ Optional:
 - Python 2.7 ## To be used in the script system
 
 
-Embeded:
+Embedded Libraries:
 - lua 5.1 # Always built when the script system is enabled.
 - glm 0.9.5.2 # Header only library
 
@@ -77,20 +82,12 @@ Choose any path for 'Build the binaries'.
 ---------
 Android:
 
-1) Have the following software installed:
-- CMake 2.8.11 or higher
-- Android SDK Tools 20131030 or higher (https://developer.android.com/sdk/index.html)
-- Android NDK r9 or higher (http://developer.android.com/tools/sdk/ndk/index.html)
+Set the enviroment variable ANDROID_NDK to the directory you installed the Android NDK.
 
-2) Set the enviroment variable ANDROID_NDK to the directory you installed the Android NDK.
-
-3) Run the following:
-  $ mkdir build && cd build
-  $ cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_TOOLCHAIN_FILE=../cmake/android.toolchain.cmake -DANDROID_NATIVE_API_LEVEL=android-9 ..
-
-4) ....
-
-5) Profit! (Aka TODO)
+Open a terminal on the directory containing this file and execute:
+ $ mkdir build && cd build
+ $ cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_TOOLCHAIN_FILE=../cmake/android.toolchain.cmake -DANDROID_NATIVE_API_LEVEL=android-9 ..
+ $ make
 
 
 
