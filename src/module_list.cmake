@@ -8,6 +8,7 @@ SET(UGDK_MODULE_SRC
     src/module/ugdk_drawable.i 
     src/module/ugdk_graphic.i 
     src/module/ugdk_input.i 
+    src/module/ugdk_internal.i 
     src/module/ugdk_math.i 
     src/module/ugdk_resource.i 
     src/module/ugdk_structure.i 
