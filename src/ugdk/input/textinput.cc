@@ -5,6 +5,8 @@
 #include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/system/engine.h>
 
+#include <cstring>
+
 namespace ugdk {
 namespace input {
 
