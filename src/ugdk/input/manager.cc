@@ -22,6 +22,7 @@ bool Manager::Initialize() {
     internal::SDLEventDelegatorHandler* handler = new internal::SDLEventDelegatorHandler;
     handler->AddHandler(keyboard_.event_handler());
     handler->AddHandler(mouse_.event_handler());
+    handler->AddHandler(text_input_.event_handler());
     sdlevent_handler_.reset(handler);
 
     return true;

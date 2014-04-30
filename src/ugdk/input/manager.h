@@ -4,6 +4,7 @@
 #include <ugdk/internal.h>
 #include <ugdk/input/keyboard.h>
 #include <ugdk/input/mouse.h>
+#include <ugdk/input/textinput.h>
 
 #include <memory>
 
@@ -28,6 +29,9 @@ class Manager {
     
     /// A virtual mouse that represents all physical mice.
     const Mouse& mouse() const { return mouse_; }
+    
+    /// Handles the IME.
+    TextInput& text_input() { return text_input_; }
 
     void Update();
 
@@ -35,6 +39,7 @@ class Manager {
     std::unique_ptr<internal::SDLEventHandler> sdlevent_handler_;
     Keyboard keyboard_;
     Mouse mouse_;
+    TextInput text_input_;
 
     friend class InputSDLEventHandler;
 };

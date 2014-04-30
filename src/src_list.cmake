@@ -126,6 +126,8 @@ SET(UGDK_SRC
     src/ugdk/input/mouse.h 
     src/ugdk/input/mousebutton.h 
     src/ugdk/input/scancode.h 
+    src/ugdk/input/textinput.cc 
+    src/ugdk/input/textinput.h 
     src/ugdk/internal.h 
     src/ugdk/internal/gltexture.cc 
     src/ugdk/internal/gltexture.h 

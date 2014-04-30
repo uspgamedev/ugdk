@@ -38,6 +38,18 @@ struct KeyReleasedEvent {
         : keycode(_keycode), scancode(_scancode), modifiers(_modifiers) {}
 };
 
+struct TextEditingEvent {
+    const TextInput& input;
+
+    TextEditingEvent(const TextInput& i) : input(i) {}
+};
+
+struct TextInputEvent {
+    std::string text;
+
+    TextInputEvent(const char* _text) : text(_text) {}
+};
+
 struct MouseMotionEvent {
     math::Integer2D position;
     math::Integer2D motion;

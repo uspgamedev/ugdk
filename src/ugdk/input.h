@@ -13,6 +13,7 @@ namespace input {
 class Manager;
 class Keyboard;
 class Mouse;
+class TextInput;
 ENUMCLASS Keycode;
 ENUMCLASS Scancode;
 ENUMCLASS Keymod;
