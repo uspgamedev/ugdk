@@ -6,6 +6,7 @@
 
 #include <ugdk/input/keyboard.h>
 #include <ugdk/input/mouse.h>
+#include <ugdk/input/textinput.h>
 #include <ugdk/input/manager.h>
 #include <ugdk/input/module.h>
 
@@ -25,6 +26,7 @@ struct MouseButton {};
 }
 %include <ugdk/input/keyboard.h>
 %include <ugdk/input/mouse.h>
+%include <ugdk/input/textinput.h>
 %include <ugdk/input/manager.h>
 %include <ugdk/input/module.h>
 
@@ -32,6 +34,7 @@ namespace ugdk {
 namespace input {
     export_class(Manager)
     export_class(Keyboard)
+    export_class(TextInput)
     export_class(Mouse)
 }
 }
