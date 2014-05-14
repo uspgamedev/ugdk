@@ -115,3 +115,4 @@ if(NOT ANDROID)
 endif(NOT ANDROID)
 
 add_subdirectory(freetype-gl)
+add_subdirectory(libjson)
