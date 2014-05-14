@@ -16,6 +16,7 @@
 #include <ugdk/system/config.h>
 #include <ugdk/debug/profiler.h>
 #include <ugdk/debug/log.h>
+#include <ugdk/graphic/opengl/Exception.h>
 
 #include <string>
 #include <algorithm>
@@ -27,16 +28,24 @@ namespace system {
 
 namespace {
 
+enum class UGDKState {
+    UNINITIALIZED,
+    SUSPENDED,
+    RUNNING,
+    RELEASED,
+};
+
 // Attributes
+
+UGDKState current_state_ = UGDKState::UNINITIALIZED;
 
 graphic:: TextManager *        text_manager_;
       LanguageManager *    language_manager_;
 
-bool                      quit_;
 std::list<action::Scene*> scene_list_;
 std::list<SceneFactory>   queued_scene_list_;
-std::list<std::shared_ptr<const debug::SectionData>> profile_data_list_;
 action::Scene*            previous_focused_scene_;
+std::list<std::shared_ptr<const debug::SectionData>> profile_data_list_;
 Configuration configuration_;
 
 std::vector<const internal::SDLEventHandler*> sdlevent_handlers_;
@@ -99,12 +108,12 @@ class SystemSDLEventHandler : public internal::SDLEventHandler {
     }
 
     void Handle(const ::SDL_Event&) const {
-        Quit();
+        Suspend();
     }
 
 } system_sdlevent_handler;
 
-}
+} // namespace anon
 
 graphic::TextManager *text_manager() {
     return text_manager_;
@@ -121,8 +130,8 @@ std::string ResolvePath(const std::string& path) {
 }
 
 bool Initialize(const Configuration& configuration) {
-    quit_ = false;
-    scene_list_.clear();
+    if (current_state_ != UGDKState::UNINITIALIZED)
+        throw love::Exception("UGDK already initialized.");
 
     // Init SDL, but don't load any modules.
     SDL_Init(0);
@@ -173,6 +182,9 @@ bool Initialize(const Configuration& configuration) {
     if (!SCRIPT_MANAGER()->Initialize())
         return ErrorLog("system::Initialize failed - SCRIPT_MANAGER()->Initialize returned false.");
 
+    previous_focused_scene_ = nullptr;
+    current_state_ = UGDKState::SUSPENDED;
+
     return true;
 }
 
@@ -182,21 +194,26 @@ bool Initialize() {
 }
 
 void Run() {
-    double delta_t;
+    if (current_state_ != UGDKState::SUSPENDED)
+        throw love::Exception("UGDK not suspended.");
+    current_state_ = UGDKState::RUNNING;
 
-    previous_focused_scene_ = nullptr;
-    quit_ = false;
-    while(!quit_) {
+    while (current_state_ == UGDKState::RUNNING) {
         // Pre-frame start logic
         DefocusRoutine();
         DeleteFinishedScenes();
         AddPendingScenes();
-        if(CurrentScene() == nullptr)
+
+        if (CurrentScene() == nullptr) {
+            current_state_ = UGDKState::SUSPENDED;
+            previous_focused_scene_ = nullptr;
             break;
+        }
 
         // Frame starts here!
         FocusRoutine();
 
+        double delta_t;
         if(time::manager()) {
             time::manager()->Update();
             delta_t = (time::manager()->TimeDifference())/1000.0;
@@ -213,8 +230,11 @@ void Run() {
             audio::manager()->Update();
 
         HandleSDLEvents();
+    
+        if (current_state_ != UGDKState::RUNNING)
+            break;
 
-        if (!quit_) {
+        {
             debug::ProfileSection section("Frame");
             {
                 debug::ProfileSection section("Update");
@@ -237,16 +257,13 @@ void Run() {
         while(profile_data_list_.size() > 10)
             profile_data_list_.pop_front();
     }
-    quit_ = true;
-    for(action::Scene* it : scene_list_) {
-        it->Finish();
-        delete it;
-    }
-    scene_list_.clear();
 }
 
 void Release() {
-    assert(quit_);
+    if (current_state_ != UGDKState::SUSPENDED)
+        throw love::Exception("UGDK not suspended.");
+    current_state_ = UGDKState::RELEASED;
+
     sdlevent_handlers_.clear();
 
     if(text_manager_) {
@@ -287,8 +304,10 @@ const std::list< std::shared_ptr<const debug::SectionData> >& profile_data_list(
     return profile_data_list_;
 }
 
-void Quit() {
-    quit_ = true;
+void Suspend() {
+    if (current_state_ != UGDKState::RUNNING)
+        throw love::Exception("UGDK not runing.");
+    current_state_ = UGDKState::SUSPENDED;
 }
 
 } // namespace system

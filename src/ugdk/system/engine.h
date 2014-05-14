@@ -81,8 +81,8 @@ const std::list< std::shared_ptr<const debug::SectionData> >& profile_data_list(
 /** @}
  */
 
-/// Stops the engine and clears the scene list.
-void Quit();
+/// Stops the main loop.
+void Suspend();
 
 } // namespace system
 } // namespace ugdk
