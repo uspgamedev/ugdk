@@ -87,8 +87,11 @@ Spritesheet* CreateSpritesheetFromTag(const std::string& tag) {
     }
 
     std::shared_ptr<TextureAtlas> atlas(new TextureAtlas(texture, textureatlas_frames.size()));
-    for (const auto& textureatlas_frame : textureatlas_frames)
-        atlas->AddPiece(textureatlas_frame.first, textureatlas_frame.second);
+
+    int i = 0;
+    for (const auto& textureatlas_frame : textureatlas_frames) {
+        atlas->AddPiece(std::to_string(i++), textureatlas_frame.first, textureatlas_frame.second);
+    }
     return new Spritesheet(atlas, spritesheet_frames);
 }
 
