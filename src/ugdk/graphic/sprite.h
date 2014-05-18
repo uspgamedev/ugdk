@@ -14,13 +14,13 @@ namespace graphic {
 
 class PrimitiveControllerSprite : public PrimitiveController {
   public:
-    PrimitiveControllerSprite(const Spritesheet *spritesheet);
+    PrimitiveControllerSprite(const TextureAtlas* spritesheet);
     ~PrimitiveControllerSprite();
 
     void ChangeToFrame(const action::SpriteAnimationFrame& frame);
        
   private:
-    const Spritesheet *spritesheet_;
+    const TextureAtlas* spritesheet_;
 };
 
 

@@ -8,12 +8,10 @@
 %{
 
 #include <ugdk/resource/resourcecontainer.h> //class template
-//#include <ugdk/resource/genericcontainer.h>
 #include <ugdk/resource/manager.h>
 #include <ugdk/resource/module.h>
 
-//#include <ugdk/action/animationset.h>
-#include <ugdk/graphic/spritesheet.h>
+#include <ugdk/graphic/textureatlas.h>
 #include <ugdk/util/languageword.h>
 
 %}
@@ -29,9 +27,9 @@ disable_disown(ugdk::internal::GLTexture* val)
 //%template(ResourceContainer_AnimationSet) ugdk::resource::ResourceContainer<ugdk::action::AnimationSet*>;
 //disable_disown(ugdk::action::AnimationSet* val)
 
-enable_disown(ugdk::graphic::Spritesheet* val)
-%template(ResourceContainer_Spritesheet) ugdk::resource::ResourceContainer<ugdk::graphic::Spritesheet*>;
-disable_disown(ugdk::graphic::Spritesheet* val)
+enable_disown(ugdk::graphic::TextureAtlas* val)
+%template(ResourceContainer_TextureAtlas) ugdk::resource::ResourceContainer<ugdk::graphic::TextureAtlas*>;
+disable_disown(ugdk::graphic::TextureAtlas* val)
 
 enable_disown(ugdk::LanguageWord* val)
 %template(ResourceContainer_LanguageWord) ugdk::resource::ResourceContainer<ugdk::LanguageWord*>;

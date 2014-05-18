@@ -67,7 +67,11 @@ void SetToRectangleAtOrigin(VertexData& data, const math::Vector2D& size) {
     v4->v = 1.0f;
 }
 
-void SetToAbsoluteRectangleWithAtlasPiece(VertexData& data, const glm::vec4& top_left, const glm::vec4& bottom_right, const TextureAtlas::BoundPiece& piece) {
+void SetToAbsoluteRectangleWithAtlasPiece(VertexData& data, 
+                                          const glm::vec4& top_left,
+                                          const glm::vec4& bottom_right,
+                                          const TextureAtlas::BoundPiece& piece) {
+
     data.CheckSizes("VertexDataSet", 4, sizeof(VertexXYUV));
 
     VertexData::Mapper mapper(data);
@@ -93,21 +97,23 @@ void SetToAbsoluteRectangleWithAtlasPiece(VertexData& data, const glm::vec4& top
     piece.ConvertToAtlas(1.0f, 1.0f, &v4->u, &v4->v);
 }
 
-void SetUsingSpriteFrameInformation(VertexData& data, const math::Vector2D& position, const action::SpriteAnimationFrame& animation_frame, const Spritesheet::Frame& spritesheet_frame) {
+void SetUsingSpriteFrameInformation(VertexData& data, 
+                                    const math::Vector2D& position, 
+                                    const action::SpriteAnimationFrame& animation_frame,
+                                    const TextureAtlas::BoundPiece& piece) {
     math::Vector2D mirror_scale(
         (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
         (animation_frame.mirror() & ugdk::MIRROR_VFLIP) ? -1.0 : 1.0);
 
     Geometry final_transform =
         animation_frame.geometry()
-        * Geometry(position, mirror_scale)
-        * Geometry(-spritesheet_frame.hotspot);
+        * Geometry(position, mirror_scale);
 
     const glm::mat4& mat = final_transform.AsMat4();
     glm::vec4 top_left = mat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    glm::vec4 bottom_right = mat * glm::vec4(spritesheet_frame.piece.size().x, spritesheet_frame.piece.size().y, 0.0, 1.0);
+    glm::vec4 bottom_right = mat * glm::vec4(piece.size().x, piece.size().y, 0.0, 1.0);
 
-    SetToAbsoluteRectangleWithAtlasPiece(data, top_left, bottom_right, spritesheet_frame.piece);
+    SetToAbsoluteRectangleWithAtlasPiece(data, top_left, bottom_right, piece);
 }
 
 } // namespace VertexDataManipulation
@@ -119,8 +125,8 @@ namespace PrimitiveSetup {
     //========================
     const VertexDataSpecification Sprite::vertexdata_specification(4, sizeof(VertexXYUV), true);
 
-    void Sprite::Prepare(Primitive& primitive, const Spritesheet *spritesheet) {
-        primitive.set_texture(spritesheet->atlas()->texture());
+    void Sprite::Prepare(Primitive& primitive, const TextureAtlas* spritesheet) {
+        primitive.set_texture(spritesheet->texture());
         primitive.set_vertexdata(CreateVertexDataWithSpecification(Sprite::vertexdata_specification));
         primitive.set_controller(std::unique_ptr<PrimitiveControllerSprite>(new PrimitiveControllerSprite(spritesheet)));
         primitive.set_drawfunction(Sprite::Render);

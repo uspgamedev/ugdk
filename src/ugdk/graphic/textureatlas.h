@@ -55,6 +55,7 @@ class TextureAtlas {
         return texture_;
     }
 
+#ifndef SWIG
     BoundPiece PieceAt(size_t i) const {
         return BoundPiece(this, &pieces_[i]);
     }
@@ -62,6 +63,7 @@ class TextureAtlas {
     BoundPiece PieceAt(const std::string& name) const { 
         return PieceAt(names_.at(name));
     }
+#endif
 
   private:
     const internal::GLTexture* texture_;
