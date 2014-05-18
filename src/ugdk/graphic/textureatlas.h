@@ -51,6 +51,7 @@ class TextureAtlas {
         return frame_number;
     }
     
+    math::Integer2D size() const;
     const internal::GLTexture* texture() const {
         return texture_;
     }

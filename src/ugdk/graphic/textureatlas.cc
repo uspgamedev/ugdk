@@ -58,5 +58,10 @@ TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
     return atlas;
 }
 
+math::Integer2D TextureAtlas::size() const {
+    return math::Integer2D(texture_->width(), texture_->height());
+}
+    
+
 }  // namespace graphic
 }  // namespace ugdk
