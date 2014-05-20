@@ -17,7 +17,8 @@ class PrimitiveControllerSprite : public PrimitiveController {
     PrimitiveControllerSprite(const TextureAtlas* spritesheet);
     ~PrimitiveControllerSprite();
 
-    void ChangeToFrame(const action::SpriteAnimationFrame& frame);
+    void ChangeToAnimationFrame(const action::SpriteAnimationFrame& frame);
+    void ChangeToAtlasFrame(const std::string& frame_name);
        
   private:
     const TextureAtlas* spritesheet_;
