@@ -21,6 +21,7 @@
 #include <string>
 #include <algorithm>
 #include <list>
+#include <fstream>
 #include "SDL.h"
 
 namespace ugdk {
@@ -127,6 +128,20 @@ std::string ResolvePath(const std::string& path) {
     if(path.compare(0, configuration_.base_path.size(), configuration_.base_path) == 0)
         return path;
     return configuration_.base_path + path;
+}
+
+std::string GetFileContents(const std::string& filename) {
+    std::ifstream in(ResolvePath(filename).c_str(), std::ios::in);
+    if (in) {
+        std::string contents;
+        in.seekg(0, std::ios::end);
+        contents.resize(in.tellg());
+        in.seekg(0, std::ios::beg);
+        in.read(&contents[0], contents.size());
+        in.close();
+        return(contents);
+    }
+    throw(errno);
 }
 
 bool Initialize(const Configuration& configuration) {
