@@ -37,18 +37,21 @@ class AnimationPlayer : public MediaPlayer {
     const T* current_animation() const { return current_animation_; }
 
     const typename T::Frame& current_animation_frame() const {
-        if(!current_animation() || current_frame_ < 0 || 
-           current_frame_ >= static_cast<int>(current_animation()->size()))
-            return T::Frame::DEFAULT();
-        return current_animation()->At(current_frame_);
+        if (current_animation()) {
+            try {
+                return *current_animation()->at(current_frame_);
+            } catch (std::out_of_range) {}
+        }
+        return T::Frame::DEFAULT();
     }
 
     void Update(double dt) {
         if (!current_animation_) return;
         elapsed_time_ += dt;
-        if (elapsed_time_ >= current_animation_->period()) {
-            elapsed_time_ -= current_animation_->period();
 
+        double frame_period = current_animation_frame().period();
+        if (elapsed_time_ >= frame_period) {
+            elapsed_time_ -= frame_period;
             ChangeToNextFrame();
         }
     }

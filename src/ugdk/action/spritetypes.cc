@@ -51,6 +51,10 @@ namespace {
         } catch (std::out_of_range) {}
         frame->set_mirror(mirror);
 
+        try {
+            frame->set_period(jsondata.at("period").as_float());
+        } catch (std::out_of_range) {}
+
         return frame;
     }
 }
@@ -62,9 +66,8 @@ action::SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string
     for (const auto& animation_json : json_node) {
 
         action::SpriteAnimation* element = new action::SpriteAnimation;
-        element->set_period(animation_json["period"].as_float());
-        for (const auto& frame_json : animation_json["frames"]) {
-            element->Add(build_frame(frame_json));
+        for (const auto& frame_json : animation_json) {
+            element->push_back(build_frame(frame_json));
         }
 
         table->Add(animation_json.name(), element);
