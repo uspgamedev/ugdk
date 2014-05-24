@@ -1,6 +1,9 @@
 #ifndef UGDK_ACTION_H_
 #define UGDK_ACTION_H_
 
+#include <ugdk/structure.h>
+#include <vector>
+
 namespace ugdk {
 namespace action {
 
@@ -14,6 +17,8 @@ template<class T>
 class TableAnimationPlayer;
 
 class SpriteAnimationFrame;
+typedef ::ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimationFrame> SpriteAnimationPlayer;
+typedef ::ugdk::structure::IndexableTable<std::vector<SpriteAnimationFrame*>*> SpriteAnimationTable;
 
 class Scene;
 class Entity;
