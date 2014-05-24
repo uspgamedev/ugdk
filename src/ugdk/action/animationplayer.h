@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 #include <functional>
-#include <cassert>
 
 namespace ugdk {
 namespace action {

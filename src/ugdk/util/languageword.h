@@ -1,8 +1,8 @@
 #ifndef UGDK_UTIL_LANGUAGEWORD_H_
 #define UGDK_UTIL_LANGUAGEWORD_H_
 
-#include <string>
 #include <ugdk/graphic.h>
+#include <string>
 
 namespace ugdk {
 
