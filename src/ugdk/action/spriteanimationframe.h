@@ -1,13 +1,10 @@
 #ifndef UGDK_ACTION_SPRITEANIMATIONFRAME_H_
 #define UGDK_ACTION_SPRITEANIMATIONFRAME_H_
 
-#include <vector>
-#include <string>
-
-#include <ugdk/action.h>
-#include <ugdk/graphic.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
+
+#include <string>
 
 #define DEFAULT_PERIOD 0.1
 
@@ -55,11 +52,6 @@ class SpriteAnimationFrame {
     graphic::VisualEffect effect_;
     ugdk::Mirror mirror_;
     double period_;
-};
-
-class SpriteAnimation : public std::vector<SpriteAnimationFrame*> {
-  public:
-    typedef SpriteAnimationFrame Frame;
 };
 
 } /* namespace action */

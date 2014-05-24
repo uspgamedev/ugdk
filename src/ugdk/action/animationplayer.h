@@ -1,25 +1,29 @@
 #ifndef UGDK_ACTION_ANIMATIONPLAYER_H_
 #define UGDK_ACTION_ANIMATIONPLAYER_H_
 
-#include <ugdk/action.h>
-#include <ugdk/graphic.h>
 #include <ugdk/action/mediaplayer.h>
 #include <ugdk/structure/indexabletable.h>
 
 #include <string>
+#include <vector>
 #include <functional>
 #include <cassert>
 
 namespace ugdk {
 namespace action {
 
-template<class T>
+template<class Frame>
 class AnimationPlayer : public MediaPlayer {
   public:
-    typedef std::function<void(const typename T::Frame&)> FrameChangedCallback;
+    typedef std::vector<Frame*> Vector;
+    typedef std::function<void(const Frame&)> FrameChangedCallback;
 
-    AnimationPlayer(const structure::IndexableTable<T*> *table) 
-        : current_animation_(nullptr), current_frame_(0), elapsed_time_(0.0), table_(table) {
+    AnimationPlayer(const structure::IndexableTable<Vector*> *table)
+        : current_animation_(nullptr)
+        , current_frame_(0)
+        , elapsed_time_(0.0)
+        , table_(table) 
+    {
         // TODO: a user defined current_animation_ may leak
     }
 
@@ -27,22 +31,24 @@ class AnimationPlayer : public MediaPlayer {
         frame_change_callback_ = callback;
     }
 
-    void set_current_animation(T* anim) {
-        const T* previous_anim = current_animation_;
+    void set_current_animation(const Vector* anim) {
+        auto previous_anim = current_animation_;
         current_animation_ = anim;
         if (anim != previous_anim)
             RestartAnimation();
     }
 
-    const T* current_animation() const { return current_animation_; }
+    const Vector* current_animation() const {
+        return current_animation_;
+    }
 
-    const typename T::Frame& current_animation_frame() const {
-        if (current_animation()) {
+    const Frame& current_animation_frame() const {
+        if (current_animation_) {
             try {
-                return *current_animation()->at(current_frame_);
+                return *current_animation_->at(current_frame_);
             } catch (std::out_of_range) {}
         }
-        return T::Frame::DEFAULT();
+        return Frame::DEFAULT();
     }
 
     void Update(double dt) {
@@ -77,10 +83,10 @@ class AnimationPlayer : public MediaPlayer {
     }
 
   private:
-    const T* current_animation_;
+    const Vector* current_animation_;
     int current_frame_;
     double elapsed_time_;
-    const structure::IndexableTable<T*> *table_;
+    const structure::IndexableTable<Vector*> *table_;
     FrameChangedCallback frame_change_callback_;
 
     void ChangeCurrentFrame(int new_frame) {

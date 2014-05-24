@@ -14,7 +14,6 @@ template<class T>
 class TableAnimationPlayer;
 
 class SpriteAnimationFrame;
-class SpriteAnimation;
 
 class Scene;
 class Entity;

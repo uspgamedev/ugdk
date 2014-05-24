@@ -1,6 +1,5 @@
 #include <ugdk/action/spritetypes.h>
 
-#include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/system/engine.h>
 #include <JSONWorker.h>
 
@@ -65,7 +64,7 @@ action::SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string
     action::SpriteAnimationTable* table = new action::SpriteAnimationTable(json_node.size());
     for (const auto& animation_json : json_node) {
 
-        action::SpriteAnimation* element = new action::SpriteAnimation;
+        auto element = new std::vector<SpriteAnimationFrame*>;
         for (const auto& frame_json : animation_json) {
             element->push_back(build_frame(frame_json));
         }
