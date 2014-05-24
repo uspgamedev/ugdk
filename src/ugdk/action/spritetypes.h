@@ -1,10 +1,13 @@
 #ifndef UGDK_ACTION_SPRITETYPES_H_
 #define UGDK_ACTION_SPRITETYPES_H_
 
-#include <string>
+#include <ugdk/action/spriteanimationframe.h>
+#include <ugdk/structure/indexabletable.h>
+
 #include <ugdk/action.h>
 #include <ugdk/structure.h>
-#include <ugdk/action/spriteanimationframe.h>
+
+#include <string>
 
 namespace ugdk {
 namespace action {

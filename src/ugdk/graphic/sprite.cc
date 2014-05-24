@@ -17,7 +17,7 @@ PrimitiveControllerSprite::PrimitiveControllerSprite(const TextureAtlas *sprites
 PrimitiveControllerSprite::~PrimitiveControllerSprite() {}
 
 void PrimitiveControllerSprite::ChangeToAnimationFrame(const action::SpriteAnimationFrame& frame) {
-    auto&& piece = spritesheet_->PieceAt(frame.spritesheet_frame());
+    auto&& piece = spritesheet_->PieceAt(frame.atlas_frame_name());
 
     owner_->set_visualeffect(frame.effect());
     VertexDataManipulation::SetUsingSpriteFrameInformation(*owner_->vertexdata(), position_, frame, piece);

@@ -1,7 +1,5 @@
 #include <ugdk/action/spritetypes.h>
 
-#include <ugdk/util/animationprotocol.h>
-#include <ugdk/util/gdd/loader.h>
 #include <ugdk/action/spriteanimationframe.h>
 #include <ugdk/system/engine.h>
 #include <JSONWorker.h>
@@ -11,7 +9,7 @@ namespace action {
     
 namespace {
     action::SpriteAnimationFrame* build_frame(const JSONNode& jsondata) {
-        action::SpriteAnimationFrame* frame = new action::SpriteAnimationFrame(jsondata["name"].as_int());
+        action::SpriteAnimationFrame* frame = new action::SpriteAnimationFrame(jsondata["name"].as_string());
 
         if (jsondata.find("color") != jsondata.end()) {
             auto&& colorjson = jsondata["color"];

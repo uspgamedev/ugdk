@@ -4,8 +4,6 @@
 namespace ugdk {
 //namespace util {
 
-class AnimationParser;
-class AnimationProtocol;
 class Language;
 class LanguageManager;
 class LanguageWord;

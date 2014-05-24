@@ -24,26 +24,26 @@ class SpriteAnimationFrame {
    *            should be applied to the rendered sprite.
    */
   public:
-    SpriteAnimationFrame(int spritesheet_frame)
-        : spritesheet_frame_(spritesheet_frame), mirror_(0) {}
+    SpriteAnimationFrame(const std::string& atlas_frame_name)
+        : atlas_frame_name_(atlas_frame_name), mirror_(0) {}
 
-    int spritesheet_frame() const { return spritesheet_frame_; }
+    const std::string& atlas_frame_name() const { return atlas_frame_name_; }
     const graphic::Geometry& geometry() const { return geometry_; }
     const graphic::VisualEffect& effect() const { return effect_; }
     ugdk::Mirror mirror() const { return mirror_; }
 
-    void set_spritesheet_frame(int frame) { spritesheet_frame_ = frame; }
+    void set_atlas_frame_name(const std::string& name) { atlas_frame_name_ = name; }
     graphic::Geometry& geometry() { return geometry_; }
     graphic::VisualEffect& effect() { return effect_; }
     void set_mirror(const ugdk::Mirror& _mirror) { mirror_ = _mirror; }
 
     static const SpriteAnimationFrame& DEFAULT() {
-        static SpriteAnimationFrame default_frame(0);
+        static SpriteAnimationFrame default_frame("default");
         return default_frame;
     }
 
   private:
-    int spritesheet_frame_;
+    std::string atlas_frame_name_;
     graphic::Geometry geometry_;
     graphic::VisualEffect effect_;
     ugdk::Mirror mirror_;
