@@ -19,7 +19,6 @@ class AnimationPlayer : public MediaPlayer {
 
     AnimationPlayer(const structure::IndexableTable<Vector*> *table)
         : current_animation_(nullptr)
-        , current_frame_(0)
         , elapsed_time_(0.0)
         , table_(table) 
     {}
