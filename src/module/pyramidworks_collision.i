@@ -30,15 +30,12 @@
 proxy_class(pyramidworks::collision::CollisionLogic)
 void_class()
 
+enable_disown(pyramidworks::geometry::GeometricShape* shape)
 %include <pyramidworks/collision.h>
 %include <pyramidworks/collision/collisionclass.h>
 %include <pyramidworks/collision/collisionmanager.h>
-
-enable_disown(geometry::GeometricShape* shape)
-//enable_disown(CollisionLogic* logic)
 %include <pyramidworks/collision/collisionobject.h>
-//disable_disown(CollisionLogic* logic)
-disable_disown(geometry::GeometricShape* shape)
+disable_disown(pyramidworks::geometry::GeometricShape* shape)
 
 namespace pyramidworks {
 namespace collision {
