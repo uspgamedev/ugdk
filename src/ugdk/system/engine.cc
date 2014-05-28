@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <list>
 #include <fstream>
+#include <cstring>
 #include "SDL.h"
 
 namespace ugdk {
@@ -141,7 +142,8 @@ std::string GetFileContents(const std::string& filename) {
         in.close();
         return(contents);
     }
-    throw(errno);
+    auto error = errno;
+    throw love::Exception("Unable to open file '%s'. Code %d, Reason: %s", filename.c_str(), error, std::strerror(error));
 }
 
 bool Initialize(const Configuration& configuration) {
