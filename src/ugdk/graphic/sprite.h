@@ -6,6 +6,7 @@
 
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/primitivecontroller.h>
+#include <ugdk/graphic/textureatlas.h>
 #include <ugdk/action/animationplayer.h>
 #include <ugdk/action/spritetypes.h>
 
@@ -19,8 +20,11 @@ class PrimitiveControllerSprite : public PrimitiveController {
 
     void ChangeToAnimationFrame(const action::SpriteAnimationFrame& frame);
     void ChangeToAtlasFrame(const std::string& frame_name);
+    void ChangeToAtlasFrame(std::size_t frame_number);
        
   private:
+    void ChangeToBoundPiece(TextureAtlas::BoundPiece& piece);
+
     const TextureAtlas* spritesheet_;
 };
 

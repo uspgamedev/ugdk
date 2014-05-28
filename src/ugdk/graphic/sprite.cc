@@ -25,7 +25,15 @@ void PrimitiveControllerSprite::ChangeToAnimationFrame(const action::SpriteAnima
 
 void PrimitiveControllerSprite::ChangeToAtlasFrame(const std::string& frame_name) {
     auto&& piece = spritesheet_->PieceAt(frame_name);
+    ChangeToBoundPiece(piece);
+}
 
+void PrimitiveControllerSprite::ChangeToAtlasFrame(std::size_t frame_number) {
+    auto&& piece = spritesheet_->PieceAt(frame_number);
+    ChangeToBoundPiece(piece);
+}
+    
+void PrimitiveControllerSprite::ChangeToBoundPiece(TextureAtlas::BoundPiece& piece) {
     glm::vec4 top_left = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
     glm::vec4 bottom_right = glm::vec4(piece.size().x, piece.size().y, 0.0, 1.0);
     VertexDataManipulation::SetToAbsoluteRectangleWithAtlasPiece(*owner_->vertexdata(), top_left, bottom_right, piece);
