@@ -56,13 +56,17 @@ class TextureAtlas {
         return texture_;
     }
 
+    std::size_t NameToId(const std::string& name) const {
+        return names_.at(name);
+    }
+
 #ifndef SWIG
     BoundPiece PieceAt(size_t i) const {
         return BoundPiece(this, &pieces_[i]);
     }
 
     BoundPiece PieceAt(const std::string& name) const { 
-        return PieceAt(names_.at(name));
+        return PieceAt(NameToId(name));
     }
 #endif
 
