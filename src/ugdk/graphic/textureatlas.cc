@@ -2,7 +2,7 @@
 
 #include <ugdk/internal/gltexture.h>
 #include <ugdk/system/engine.h>
-#include <JSONWorker.h>
+#include <libjson.h>
 
 namespace ugdk {
 namespace graphic {
@@ -25,8 +25,11 @@ TextureAtlas::TextureAtlas(const internal::GLTexture* texture, std::size_t size)
 TextureAtlas::~TextureAtlas() {}
     
 TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
-    auto json_node = JSONWorker::parse(system::GetFileContents(filepath + ".json"));
-    auto frames = json_node["frames"];
+    auto&& contents = system::GetFileContents(filepath + ".json");
+    if (!libjson::is_valid(contents))
+        throw love::Exception("Invalid json: %s.json\n", filepath.c_str());
+
+    auto frames = libjson::parse(contents)["frames"];
     internal::GLTexture* gltexture = internal::GLTexture::CreateFromFile(filepath + ".png");
 
     TextureAtlas* atlas = new TextureAtlas(gltexture, frames.size());

@@ -1,7 +1,8 @@
 #include <ugdk/action/spritetypes.h>
 
+#include <ugdk/graphic/opengl/Exception.h>
 #include <ugdk/system/engine.h>
-#include <JSONWorker.h>
+#include <libjson.h>
 
 namespace ugdk {
 namespace action {
@@ -59,8 +60,11 @@ namespace {
 }
 
 action::SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepath) {
-    auto json_node = JSONWorker::parse(system::GetFileContents(filepath));
+    auto&& contents = system::GetFileContents(filepath);
+    if (!libjson::is_valid(contents))
+        throw love::Exception("Invalid json: %s\n", filepath.c_str());
 
+    auto json_node = libjson::parse(contents);
     action::SpriteAnimationTable* table = new action::SpriteAnimationTable(json_node.size());
     for (const auto& animation_json : json_node) {
 
