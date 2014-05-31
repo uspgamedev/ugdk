@@ -23,6 +23,7 @@
 #include <list>
 #include <fstream>
 #include <cstring>
+#include <cerrno>
 #include "SDL.h"
 
 namespace ugdk {
