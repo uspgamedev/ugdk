@@ -47,4 +47,4 @@ _internal/Source/libjson.cpp
 _internal/Source/NumberToString.h)
 
 add_library(libjson ${LIBJSON_SOURCE})
-target_include_directories(libjson PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_include_directories(libjson PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
