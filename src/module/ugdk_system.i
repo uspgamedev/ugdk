@@ -13,12 +13,6 @@
 #include <ugdk/system/task.h>
 #include <ugdk/system/taskplayer.h>
 
-//#include <ugdk/action/animationset.h>
-#include <ugdk/graphic/spritesheet.h>
-#include <ugdk/util/languageword.h>
-
-#include <module/ugdk/action/sceneproxy.h>
-
 %}
 
 %import(module="ugdk_action") <ugdk/action.h>
@@ -35,7 +29,6 @@
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 
-proxy_class(ugdk::action::Scene)
 
 %include <ugdk/system.h>
 %include <ugdk/structure/types.h>

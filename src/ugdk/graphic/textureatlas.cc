@@ -1,6 +1,8 @@
 #include <ugdk/graphic/textureatlas.h>
 
 #include <ugdk/internal/gltexture.h>
+#include <ugdk/system/engine.h>
+#include <libjson.h>
 
 namespace ugdk {
 namespace graphic {
@@ -21,6 +23,31 @@ TextureAtlas::TextureAtlas(const internal::GLTexture* texture, std::size_t size)
 }
 
 TextureAtlas::~TextureAtlas() {}
+    
+TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
+    auto&& contents = system::GetFileContents(filepath + ".json");
+    if (!libjson::is_valid(contents))
+        throw love::Exception("Invalid json: %s.json\n", filepath.c_str());
+
+    auto frames = libjson::parse(contents)["frames"];
+    internal::GLTexture* gltexture = internal::GLTexture::CreateFromFile(filepath + ".png");
+
+    TextureAtlas* atlas = new TextureAtlas(gltexture, frames.size());
+    for (const auto& frame : frames) {
+        auto&& frame_info = frame["frame"];
+        // Ignoring frame["trimmed"]
+        // Ignoring frame["rotated"]
+        atlas->AddPiece(frame.name(),
+                        math::Integer2D(frame_info["x"].as_int(), frame_info["y"].as_int()),
+                        math::Integer2D(frame_info["w"].as_int(), frame_info["h"].as_int()));
+    }
+    return atlas;
+}
+
+math::Integer2D TextureAtlas::size() const {
+    return math::Integer2D(texture_->width(), texture_->height());
+}
+    
 
 }  // namespace graphic
 }  // namespace ugdk

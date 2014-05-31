@@ -23,7 +23,6 @@
 %import(module="ugdk_action") <ugdk/action/spritetypes.h>
 %import(module="ugdk_graphic") <ugdk/graphic/canvas.h>
 %import(module="ugdk_graphic") <ugdk/graphic/drawable.h>
-%import(module="ugdk_graphic") <ugdk/graphic/spritesheet.h>
 %import(module="ugdk_graphic") <ugdk/graphic/text/font.h>
 
 %ignore ugdk::graphic::Text::SetMessage(const std::vector<std::wstring>& message);

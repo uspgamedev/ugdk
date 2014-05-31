@@ -27,7 +27,6 @@ class Image;
 class Light;
 class Node;
 class Image;
-class Spritesheet;
 class Canvas;
 
 // Managers

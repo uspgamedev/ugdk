@@ -85,7 +85,7 @@ int DataGear::WrapData(lua_State* L) {
     if (!type) {
         return luaL_error(
             L,
-            "Unknown SWIG type, cannot wrap data into Lua VM."
+            "Unknown SWIG type, cannot wrap data into Lua VM. "
             "Did you forget to load the respective module?"
         );
     }

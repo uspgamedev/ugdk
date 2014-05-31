@@ -4,6 +4,8 @@
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/type.h>
 
+#include <type_traits>
+
 namespace ugdk {
 namespace script {
 
@@ -34,7 +36,7 @@ class VirtualPrimitive<T*> {
         );
     }
     static void set_value(const VirtualData::Ptr data, const T* value, bool disown) {
-        data->Wrap(const_cast<void*>(static_cast<const void*>(value)), TypeRegistry<T>::type(), disown);
+        data->Wrap(const_cast<void*>(static_cast<const void*>(value)), TypeRegistry<typename std::remove_const<T>::type>::type(), disown);
     }
   private:
     VirtualPrimitive() {}
@@ -52,7 +54,7 @@ public:
         );
     }
     static void set_value(const VirtualData::Ptr data, const T& value, bool disown) {
-        data->Wrap(const_cast<void*>(static_cast<const void*>(&value)), TypeRegistry<T>::type(), disown);
+        data->Wrap(const_cast<void*>(static_cast<const void*>(&value)), TypeRegistry<typename std::remove_const<T>::type>::type(), disown);
     }
 private:
     VirtualPrimitive() {}

@@ -51,8 +51,8 @@ proxy_class(ugdk::action::Scene)
 %include <ugdk/action/spritetypes.h>
 %include <ugdk/structure/indexabletable.h>
 
-%template(SpriteAnimationPlayer) ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimation>;
-%template(SpriteAnimationTable) ugdk::structure::IndexableTable<ugdk::action::SpriteAnimation*>;
+%template(SpriteAnimationPlayer) ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimationFrame>;
+%template(SpriteAnimationTable) ugdk::structure::IndexableTable<std::vector<ugdk::action::SpriteAnimationFrame*>*>;
 
 namespace ugdk {
 namespace action { 
@@ -60,7 +60,6 @@ namespace action {
     export_class(Entity)
     export_class(Observer)
     export_class(Scene)
-    export_class(SpriteAnimation)
     export_class(SpriteAnimationFrame)
 }
 }

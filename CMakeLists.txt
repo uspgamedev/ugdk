@@ -185,7 +185,7 @@ if(NOT ANDROID) # Glew is not necessary for android builds.
 endif()
 
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
-target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 freetype-gl)
+target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 freetype-gl libjson)
 
 set_target_properties(libugdk PROPERTIES 
     LINK_FLAGS "${LDFLAGS}"

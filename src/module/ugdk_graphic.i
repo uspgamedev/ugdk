@@ -16,7 +16,7 @@
 #include <ugdk/graphic/light.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/graphic/spritesheet.h>
+#include <ugdk/graphic/textureatlas.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/vertexdata.h>
@@ -63,7 +63,7 @@ enable_disown(ugdk::graphic::Drawable* drawable)
 %include <ugdk/graphic/node.h>
 disable_disown(ugdk::graphic::Drawable* drawable)
 disable_disown(ugdk::graphic::Node* new_child)
-%include <ugdk/graphic/spritesheet.h>
+%include <ugdk/graphic/textureatlas.h>
 
 %include <ugdk/graphic/vertexdata.h>
 %include <ugdk/graphic/primitive.h>
@@ -84,7 +84,7 @@ namespace graphic {
     export_class(Geometry)
     export_class(VisualEffect)
     export_class(Node)
-    export_class(Spritesheet)
+    export_class(TextureAtlas)
     export_class(TextManager)
     export_class(Manager)
     export_class(Primitive)

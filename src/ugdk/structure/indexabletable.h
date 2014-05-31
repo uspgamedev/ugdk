@@ -1,12 +1,11 @@
 #ifndef UGDK_STRUCTURE_INDEXABLETABLE_H_
 #define UGDK_STRUCTURE_INDEXABLETABLE_H_
 
+#include <ugdk/util/idgenerator.h>
+
 #include <string>
 #include <vector>
 #include <unordered_map>
-
-#include <ugdk/util.h>
-#include <ugdk/util/idgenerator.h>
 
 namespace ugdk {
 namespace structure {

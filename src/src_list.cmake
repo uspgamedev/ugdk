@@ -97,8 +97,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/primitivesetup.h 
     src/ugdk/graphic/sprite.cc 
     src/ugdk/graphic/sprite.h 
-    src/ugdk/graphic/spritesheet.cc 
-    src/ugdk/graphic/spritesheet.h 
     src/ugdk/graphic/text/font.cc 
     src/ugdk/graphic/text/font.h 
     src/ugdk/graphic/text/label.cc 
@@ -186,20 +184,6 @@ SET(UGDK_SRC
     src/ugdk/time/timeaccumulator.cc 
     src/ugdk/time/timeaccumulator.h 
     src/ugdk/util.h 
-    src/ugdk/util/animationprotocol.cc 
-    src/ugdk/util/animationprotocol.h 
-    src/ugdk/util/gdd/descriptionprotocol.h 
-    src/ugdk/util/gdd/descriptionprotocolbase.cc 
-    src/ugdk/util/gdd/descriptionprotocolbase.h 
-    src/ugdk/util/gdd/loader.h 
-    src/ugdk/util/gdd/parser.cc 
-    src/ugdk/util/gdd/parser.h 
-    src/ugdk/util/gdd/parserutility.h 
-    src/ugdk/util/gdd/reader.cc 
-    src/ugdk/util/gdd/reader.h 
-    src/ugdk/util/gdd/typeconverter.h 
-    src/ugdk/util/gdd/typedargsconverter.h 
-    src/ugdk/util/gdd/types.h 
     src/ugdk/util/idgenerator.cc 
     src/ugdk/util/idgenerator.h 
     src/ugdk/util/language.cc 

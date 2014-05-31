@@ -1,62 +1,56 @@
 #ifndef UGDK_ACTION_ANIMATIONPLAYER_H_
 #define UGDK_ACTION_ANIMATIONPLAYER_H_
 
-#include <ugdk/action.h>
-#include <ugdk/graphic.h>
 #include <ugdk/action/mediaplayer.h>
 #include <ugdk/structure/indexabletable.h>
 
 #include <string>
+#include <vector>
 #include <functional>
-#include <cassert>
 
 namespace ugdk {
 namespace action {
 
-template<class T>
+template<class Frame>
 class AnimationPlayer : public MediaPlayer {
   public:
-    typedef std::function<void(const typename T::Frame&)> FrameChangedCallback;
+    typedef std::vector<Frame*> Vector;
+    typedef std::function<void(const Frame&)> FrameChangedCallback;
 
-    AnimationPlayer(const structure::IndexableTable<T*> *table) 
-        : current_animation_(nullptr), current_frame_(0), elapsed_time_(0.0), table_(table) {
-        // TODO: a user defined current_animation_ may leak
-    }
+    AnimationPlayer(const structure::IndexableTable<Vector*> *table)
+        : current_animation_(nullptr)
+        , elapsed_time_(0.0)
+        , table_(table) 
+    {}
 
     void set_frame_change_callback(const FrameChangedCallback& callback) {
         frame_change_callback_ = callback;
     }
 
-    void set_current_animation(T* anim) {
-        const T* previous_anim = current_animation_;
-        current_animation_ = anim;
-        if (anim != previous_anim)
-            RestartAnimation();
+    const Vector* current_animation() const {
+        return current_animation_;
     }
 
-    const T* current_animation() const { return current_animation_; }
-
-    const typename T::Frame& current_animation_frame() const {
-        if(!current_animation() || current_frame_ < 0 || 
-           current_frame_ >= static_cast<int>(current_animation()->size()))
-            return T::Frame::DEFAULT();
-        return current_animation()->At(current_frame_);
+    const Frame& current_animation_frame() const {
+        return **current_frame_;
     }
 
     void Update(double dt) {
         if (!current_animation_) return;
         elapsed_time_ += dt;
-        if (elapsed_time_ >= current_animation_->period()) {
-            elapsed_time_ -= current_animation_->period();
 
+        double frame_period = current_animation_frame().period();
+        if (elapsed_time_ >= frame_period) {
+            elapsed_time_ -= frame_period;
             ChangeToNextFrame();
         }
     }
 
     /// Restarts the current animation from the first frame.
     void RestartAnimation() {
-        elapsed_time_ = 0.0;
-        ChangeCurrentFrame(0);
+        elapsed_time_  = 0.0;
+        current_frame_ = current_animation_->begin();
+        ExecuteFrameChangeCallback();
     }
 
     /// Change the current animation to a new animation from the previously selected AnimationSet.
@@ -74,21 +68,36 @@ class AnimationPlayer : public MediaPlayer {
     }
 
   private:
-    const T* current_animation_;
-    int current_frame_;
+    const Vector* current_animation_;
+    typename Vector::const_iterator current_frame_;
     double elapsed_time_;
-    const structure::IndexableTable<T*> *table_;
+    const structure::IndexableTable<Vector*> *table_;
     FrameChangedCallback frame_change_callback_;
 
-    void ChangeCurrentFrame(int new_frame) {
-        current_frame_ = new_frame;
+    void set_current_animation(const Vector* anim) {
+        auto previous_anim = current_animation_;
+        current_animation_ = anim;
+        if (anim != previous_anim)
+            RestartAnimation();
+    }
+
+    void ExecuteFrameChangeCallback() {
         if (frame_change_callback_)
             frame_change_callback_(current_animation_frame());
     }
 
     void ChangeToNextFrame() {
-        ChangeCurrentFrame((current_frame_ + 1) % current_animation_->size());
-        if (current_frame_ == 0) notifyAllObservers();
+        bool notify = false;
+
+        ++current_frame_;
+        if(current_frame_ == current_animation_->end()) {
+            current_frame_ = current_animation_->begin();
+            notify = true;
+        }
+        ExecuteFrameChangeCallback();
+            
+        if(notify)
+            notifyAllObservers();
     }
 };
 
