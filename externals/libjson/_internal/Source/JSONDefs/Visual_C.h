@@ -5,7 +5,7 @@
 
     #define json_deprecated(method, warning) __declspec(deprecated(warning)) method
 
-    #define json_nothrow
+    #define json_nothrow throw()
     #define json_throws(x)
     #define json_pure json_nothrow
     #define json_read_priority
