@@ -229,7 +229,7 @@ enum class Scancode
     F24 = 115,
     EXECUTE = 116,
     HELP = 117,
-    MENU = 118,
+    MENU = 118, /**< Android Menu Button  */
     SELECT = 119,
     STOP = 120,
     AGAIN = 121,   /**< redo */
@@ -363,7 +363,7 @@ enum class Scancode
     COMPUTER = 267,
     AC_SEARCH = 268,
     AC_HOME = 269,
-    AC_BACK = 270,
+    AC_BACK = 270, /**< Android Back Button  */
     AC_FORWARD = 271,
     AC_STOP = 272,
     AC_REFRESH = 273,
