@@ -6,6 +6,7 @@
 #include <ugdk/internal/opengl.h>
 #include <ugdk/system/engine.h>
 #include <ugdk/system/config.h>
+#include <ugdk/debug/log.h>
 
 #include <cstdlib>
 #include <cstdio>
@@ -48,7 +49,8 @@ namespace {
                         break;
 
                     default:
-                        fprintf(stderr, "Error: LoadSurface - Image BPP of %d unsupported\n", bpp);
+                        debug::Log(debug::LogLevel::ERROR, "UGDK",
+                                   "LoadSurface - Image BPP of ", bpp, " unsupported.");
                         free(raw);
                         return false;
                         break;
@@ -82,10 +84,11 @@ namespace {
 
         GLenum errorCode = glGetError();
         if (errorCode != 0) {
-            if (errorCode == GL_OUT_OF_MEMORY)
-                fprintf(stderr, "Error: LoadSurface - Out of texture memory!\n");
-            else
-                fprintf(stderr, "Error: LoadSurface - Unknown error!\n");
+            debug::Log(debug::LogLevel::ERROR, "UGDK",
+                       "LoadSurface - ",
+                       errorCode == GL_OUT_OF_MEMORY
+                       ? "Out of texture memory"
+                       : "Unknown error");
             free(raw);
             return false;
         }
@@ -94,10 +97,11 @@ namespace {
 
         errorCode = glGetError();
         if (errorCode != 0) {
-            if (errorCode == GL_OUT_OF_MEMORY)
-                fprintf(stderr, "Error: LoadSurface - Out of texture memory!\n");
-            else
-                fprintf(stderr, "Error: LoadSurface - Unknown error!\n");
+            debug::Log(debug::LogLevel::ERROR, "UGDK",
+                       "LoadSurface - ",
+                       errorCode == GL_OUT_OF_MEMORY
+                       ? "Out of texture memory"
+                       : "Unknown error");
             return false;
         }
         return true;
@@ -113,7 +117,8 @@ GLTexture* GLTexture::CreateFromFile(const std::string& filepath) {
     SDL_Surface* data = IMG_Load(fullpath.c_str());
 
     if(data == nullptr) {
-        fprintf(stderr, "UGDK::Texture::CreateFromFile -- error loading file '%s' -> %s.\n", fullpath.c_str(), SDL_GetError());
+        debug::Log(debug::LogLevel::ERROR, "UGDK",
+                   "Texture::CreateFromFile - error loading file '", fullpath, "' -> ", SDL_GetError());
         return nullptr;
     }
     GLTexture* tex = CreateFromSurface(data);
@@ -123,7 +128,8 @@ GLTexture* GLTexture::CreateFromFile(const std::string& filepath) {
 
 GLTexture* GLTexture::CreateFromSurface(SDL_Surface* data) {
     if(data == nullptr) {
-        fprintf(stderr, "UGDK::Texture::CreateFromSurface Error - No Data\n");
+        debug::Log(debug::LogLevel::ERROR, "UGDK",
+                   "Texture::CreateFromFile - No Data");
         return nullptr; // Safeguard from nullptr
     }
 

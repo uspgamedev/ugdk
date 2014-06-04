@@ -12,6 +12,7 @@
 #endif
 
 #include <ugdk/system/config.h>
+#include <ugdk/debug/log.h>
 
 namespace ugdk {
 namespace resource {
@@ -34,9 +35,8 @@ class GenericContainer : public virtual ResourceContainer<T> {
         if(it == database_.end()) {
             database_[tag] = val;
         } else {
-            #ifdef DEBUG
-                fprintf(stderr, "UGDK::GenericContainer<%s> Error - Tag '%s' already exists.\n", TOSTRING(T), tag.c_str());
-            #endif
+            debug::DebugLog(debug::LogLevel::ERROR, "UGDK", 
+                            "GenericContainer<", TOSTRING(T), "> - Tag '", tag, "' already exists.");
         }
     }
 
@@ -84,9 +84,8 @@ class GenericContainer<T*, T* (*) (const std::string&)> : public virtual Resourc
         if(it == database_.end() || it->second == nullptr) {
             database_[tag] = val;
         } else {
-            #ifdef DEBUG
-                fprintf(stderr, "UGDK::GenericContainer<%s> Error - Tag '%s' already exists.\n", TOSTRING(T), tag.c_str());
-            #endif
+            debug::DebugLog(debug::LogLevel::ERROR, "UGDK",
+                            "GenericContainer<", TOSTRING(T), "> - Tag '", tag, "' already exists.");
         }
     }
 
@@ -113,11 +112,8 @@ class GenericContainer<T*, T* (*) (const std::string&)> : public virtual Resourc
     virtual T* Load(const std::string& filepath, const std::string& tag) {
         if(Exists(tag)) return Find(tag);
         T* obj = loader_(filepath);
-        #ifdef DEBUG
-        if(!obj) {
-            fprintf(stderr, "UGDK::GenericContainer<%s> Error - loader_ for '%s' returned nullptr.\n", TOSTRING(T), tag.c_str());
-        }
-        #endif
+        debug::DebugConditionalLog(obj != nullptr, debug::LogLevel::ERROR, "UGDK",
+                                   "GenericContainer<", TOSTRING(T), "> - loader_ for '", tag, "' returned nullptr.");
         Insert(tag, obj);
         return obj;
     }

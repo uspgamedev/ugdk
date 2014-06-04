@@ -1,12 +1,9 @@
 #ifndef UGDK_GRAPHIC_OPENGL_SHADERPROGRAM_H_
 #define UGDK_GRAPHIC_OPENGL_SHADERPROGRAM_H_
 
-#include <string>
-#include <list>
-
 #include <ugdk/internal/opengl.h>
 #include <ugdk/graphic.h>
-#include <glm/glm.hpp>
+#include <string>
 
 namespace ugdk {
 namespace graphic {

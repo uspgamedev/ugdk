@@ -6,6 +6,7 @@
 #include <ugdk/resource/genericcontainer.h>
 #include <ugdk/structure/indexabletable.h>
 #include <ugdk/util/languageword.h>
+#include <ugdk/debug/log.h>
 
 namespace ugdk {
 namespace resource {
@@ -13,10 +14,9 @@ namespace resource {
 static Manager* reference_ = NULL;
 
 template <class T>
-static T* NullLoad(const std::string& filepath) { 
-#ifdef DEBUG
-    fprintf(stderr, "Warning: NullLoad<%s> called with path '%s'.", TOSTRING(T), filepath.c_str());
-#endif
+static T* NullLoad(const std::string& filepath) {
+    debug::DebugLog(debug::LogLevel::WARNING, "UGDK",
+                    "NullLoad<", TOSTRING(T), "> called with path '", filepath, "'");
     return nullptr;
 }
 

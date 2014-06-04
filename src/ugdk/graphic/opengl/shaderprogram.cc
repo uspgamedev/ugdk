@@ -1,15 +1,9 @@
 #include <ugdk/graphic/opengl/shaderprogram.h>
 
-#include <cstdio>
-
+#include <ugdk/debug/log.h>
+#include <ugdk/internal/opengl.h>
 #include <ugdk/internal/gltexture.h>
-#include <ugdk/graphic/geometry.h>
-#include <ugdk/graphic/visualeffect.h>
-#include <ugdk/graphic/opengl/Exception.h>
 #include <ugdk/graphic/opengl/shader.h>
-#include <ugdk/graphic/opengl/vertexbuffer.h>
-
-#include <ugdk/system/config.h>
 
 namespace ugdk {
 namespace graphic {
@@ -54,7 +48,8 @@ bool ShaderProgram::SetupProgram() {
 
         GLchar *strInfoLog = new GLchar[infoLogLength + 1];
         glGetProgramInfoLog(id_, infoLogLength, nullptr, strInfoLog);
-        printf("Linker failure: %s\n", strInfoLog);
+        debug::Log(debug::LogLevel::WARNING, "UGDK",
+                   "Linker failure: ", strInfoLog);
         delete[] strInfoLog;
     } else {
         matrix_location_ = UniformLocation("geometry_matrix");

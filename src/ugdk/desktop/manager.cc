@@ -1,31 +1,24 @@
 #include <ugdk/desktop/manager.h>
 
-#include <cstdio>
-#include <string>
 
 #include "SDL.h"
 #include "SDL_image.h"
 
 #include <ugdk/desktop/window.h>
 #include <ugdk/desktop/windowsettings.h>
+#include <ugdk/debug/log.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/system/engine.h>
 #include <ugdk/internal/sdleventhandler.h>
 
+#include <string>
+
 namespace ugdk {
 namespace desktop {
 
-namespace {
-bool errlog(const std::string& msg) {
-    fprintf(stderr, "ugdk::desktop::Manager Error Log - %s\n", msg.c_str());
-    return false;
-}
-}
-
 Manager::Manager() {}
     
-Manager::~Manager() {
-}
+Manager::~Manager() {}
 
 class DesktopSDLEventHandler : public internal::SDLEventHandler {
 public:
@@ -57,8 +50,11 @@ private:
 };
 
 bool Manager::Initialize() {
-    if(SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
-        return errlog("Failed to initialize SDL_VIDEO: " + std::string(SDL_GetError()));
+    if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0) {
+        debug::Log(debug::LogLevel::ERROR, "UGDK",
+                   "desktop::Manager - Failed to initialize SDL_VIDEO: ", SDL_GetError());
+        return false;
+    }
 
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -85,8 +81,8 @@ std::weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
 
     if(!window) {
         // Couldn't create the window.
-        // TODO: Log the error
-        fprintf(stderr, "Failed to create the window: %s\n", SDL_GetError());
+        debug::Log(debug::LogLevel::ERROR, "UGDK",
+                   "desktop::Manager - Failed to create the window: ", SDL_GetError());
         return std::weak_ptr<Window>();
     }
 

@@ -1,6 +1,7 @@
 #include <ugdk/graphic/text/textmanager.h>
 
 #include <ugdk/system/engine.h>
+#include <ugdk/debug/log.h>
 #include <ugdk/desktop/module.h>
 #include <ugdk/desktop/window.h>
 #include <ugdk/graphic/text/label.h>
@@ -71,14 +72,11 @@ TextBox* TextManager::GetTextFromFile(const std::string& path) {
 void TextManager::AddFont(const std::string& name, const std::string& path, double size) {
     if(fonts_.count(name) > 0) {
         delete fonts_[name];
-    #ifdef DEBUG
-        if(fonts_[name])
-            fprintf(stderr, "Replacing a font tag: \"%s\"\n", name.c_str());
-    #endif
+        debug::DebugConditionalLog(fonts_[name] != nullptr, debug::LogLevel::INFO, "UGDK",
+                                   "Replacing a font tag: '", name, "'");
     } else {
-    #ifdef DEBUG
-        fprintf(stderr, "Loading new font tag: \"%s\"\n", name.c_str());
-    #endif
+        debug::DebugLog(debug::LogLevel::INFO, "UGDK",
+                        "Loading new font tag: '", name, "'");
     }
     fonts_[name] = current_font_ = new Font(path, size);
 }

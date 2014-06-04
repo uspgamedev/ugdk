@@ -1,10 +1,9 @@
 #include <ugdk/graphic/opengl/shader.h>
 
-#include <cstdio>
+#include <ugdk/debug/log.h>
+
 #include <fstream>
 #include <sstream>
-
-#include <ugdk/system/config.h>
 
 namespace ugdk {
 namespace graphic {
@@ -73,8 +72,10 @@ bool Shader::Compile() const {
         default: strShaderType = "unknown"; break;
         }
 
-        printf("Compile failure in %s shader:\n%s\n", strShaderType, strInfoLog);
-        printf("============ SOURCE: \n%s\n", source_.c_str()); 
+        debug::Log(debug::WARNING, "UGDK",
+                   "Compiler failure in ", strShaderType, " shader: ", strInfoLog);
+        debug::Log(debug::WARNING, "UGDK",
+                   "Source: ", source_);
         delete[] strInfoLog;
     }
     return status == GL_TRUE;

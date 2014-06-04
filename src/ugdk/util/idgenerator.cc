@@ -1,24 +1,22 @@
 
-#include <cstdio>
 #include <ugdk/util/idgenerator.h>
+
+#include <ugdk/graphic/opengl/Exception.h>
 
 namespace ugdk {
 namespace util {
 
 using std::unordered_set;
 
-IDGenerator::IDGenerator(int min_id, int max_id, int error_value) :
-    current_id_(min_id),
-      min_id_(min_id),
-      max_id_(max_id),
-      error_value_(error_value)  {
-#ifdef DEBUG
-    if ( min_id > max_id ) {
-      printf("UGDK - IdGenerator\n");
-      printf("The min_id is greater than the max_id"); 
-      printf("(%d > %d)\n", min_id, max_id);
+IDGenerator::IDGenerator(int min_id, int max_id, int error_value)
+    : current_id_(min_id)
+    , min_id_(min_id)
+    , max_id_(max_id)
+    , error_value_(error_value)
+{
+    if (min_id > max_id) {
+        throw love::Exception("IDGenerator: min_id > max_id (%d > %d)", min_id, max_id);
     }
-#endif
 }
 
 

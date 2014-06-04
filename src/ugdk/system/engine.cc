@@ -93,14 +93,15 @@ void HandleSDLEvents() {
     ::SDL_Event sdlevent;
     while(SDL_PollEvent(&sdlevent)) {
         bool found = false;
-        for(const internal::SDLEventHandler* handler : sdlevent_handlers_)
-            if(handler->CanHandle(sdlevent)) {
+        for (const internal::SDLEventHandler* handler : sdlevent_handlers_) {
+            if (handler->CanHandle(sdlevent)) {
                 handler->Handle(sdlevent);
                 found = true;
                 break;
             }
-        if(!found)
-            printf("UGDK -- Event of type 0x%X received, but no known handler.\n", sdlevent.type);
+        }
+        debug::DebugConditionalLog(found, debug::LogLevel::INFO, "UGDK",
+                                   "Event of type ", sdlevent.type, " received, but no known handler.");
     }
 }
 

@@ -63,6 +63,19 @@ inline void DebugLog(LogLevel level, const std::string& owner, Ts&&... ts) {
 #endif
 }
 
+/// If assertion is false, run the DebugLog command.
+/** This function is empty when NDEBUG is defined.
+    @arg assertion The tested assertion. 
+    @see Log
+    @see DebugLog */
+template<typename... Ts>
+inline void DebugConditionalLog(bool assertion, LogLevel level, const std::string& owner, Ts&&... ts) {
+#ifndef NDEBUG
+    if (!assertion)
+        Log(level, owner, std::forward<Ts>(ts)...);
+#endif
+}
+
 #endif // SWIG
 
 }  // namespace debug
