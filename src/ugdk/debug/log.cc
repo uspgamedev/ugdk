@@ -12,11 +12,7 @@
 namespace ugdk {
 namespace debug {
 
-void Log(LogLevel level, const std::string& message) {
-    Log(level, "UGDK", message);
-}
-
-void Log(LogLevel level, const std::string& owner, const std::string& message) {
+void RawLog(LogLevel level, const std::string& owner, const std::string& message) {
 #ifdef ANDROID
     __android_log_print(ANDROID_LOG_INFO,owner.c_str(),message.c_str());
 #else

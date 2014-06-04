@@ -2,6 +2,7 @@
 #define UGDK_DEBUG_LOG_H_
 
 #include <string>
+#include <sstream>
 
 namespace ugdk {
 namespace debug {
@@ -37,21 +38,32 @@ inline const char* ConvertLogToString(LogLevel level) {
 }
 #undef CASE_LOG
 
-void Log(LogLevel, const std::string& owner, const std::string& message);
+void RawLog(LogLevel, const std::string& owner, const std::string& message);
 
-void Log(LogLevel level, const std::string& message);
+#ifndef SWIG
+inline void InsertToStream(std::stringstream& ss) {}
 
-inline void DebugLog(LogLevel level, const std::string& message) {
-#ifdef _DEBUG
-    Log(level, message);
+template<typename T, typename... Ts>
+inline void InsertToStream(std::stringstream& ss, const T& t, Ts&&... ts) {
+    ss << t;
+    InsertToStream(ss, std::forward<Ts>(ts)...);
+}
+
+template<typename... Ts>
+void Log(LogLevel level, const std::string& owner, Ts&&... ts) {
+    std::stringstream ss;
+    InsertToStream(ss, std::forward<Ts>(ts)...);
+    RawLog(level, owner, ss.str());
+}
+
+template<typename... Ts>
+inline void DebugLog(LogLevel level, const std::string& owner, Ts&&... ts) {
+#ifndef NDEBUG
+    Log(level, owner, std::forward<Ts>(ts)...);
 #endif
 }
 
-inline void DebugLog(LogLevel level, const std::string& owner, const std::string& message) {
-#ifdef _DEBUG
-    Log(level, owner, message);
-#endif
-}
+#endif // SWIG
 
 }  // namespace debug
 }  // namespace ugdk
