@@ -1,0 +1,5 @@
+set solib-search-path ./obj/local/armeabi-v7a
+directory D:/Programs/android-ndk-r9b/platforms/android-16/arch-arm/usr/include D:/Programs/android-ndk-r9b/sources/cxx-stl/stlport
+file ./obj/local/armeabi-v7a/app_process
+target remote :5039
+set breakpoint pending on

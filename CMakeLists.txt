@@ -209,11 +209,30 @@ if(ANDROID)
         )
         target_link_libraries(${NAME} libugdk)
     endmacro(add_ugdk_executable)
+    macro(add_ugdk_android_project NAME BUNDLE_NAME)
+        set(UGDK_ANDROIDPROJECT_NAME ${NAME})
+        set(UGDK_ANDROIDPROJECT_BUNDLE_NAME ${BUNDLE_NAME})
+        set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/android-project/libs/armeabi-v7a" 
+            CACHE PATH "root for library output, set this to change where android libs are installed to" FORCE)
+        
+        file(GLOB_RECURSE ANDROID_TEMPLATE_SOURCE
+            RELATIVE ${ugdk_SOURCE_DIR}/android/template
+            "android/template/*")
+        file(COPY ${ugdk_SOURCE_DIR}/android/skeleton/
+            DESTINATION ${CMAKE_BINARY_DIR}/android-project)
+            
+        foreach(it ${ANDROID_TEMPLATE_SOURCE})
+            configure_file(${ugdk_SOURCE_DIR}/android/template/${it}
+                           ${CMAKE_BINARY_DIR}/android-project/${it})
+        endforeach()
+    endmacro(add_ugdk_android_project)
 else(ANDROID)
     macro(add_ugdk_executable NAME)
         add_executable(${NAME} ${ARGN})
         target_link_libraries(${NAME} libugdk)
     endmacro(add_ugdk_executable)
+    macro(add_ugdk_android_project NAME BUNDLE_NAME)
+    endmacro(add_ugdk_android_project)
 endif(ANDROID)
 
 if (UNIX AND PYTHONLIBS_FOUND)
