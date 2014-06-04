@@ -24,12 +24,15 @@ class IDGenerator : public Uncopyable {
     int error_value() const { return error_value_; }
 
   private:
-    int                             current_id_;
-    const int                       min_id_,
-                                    max_id_,
-                                    error_value_;
-    std::unordered_set<int>    unused_ids_;
-    size_t range () const { return static_cast<size_t>(max_id_ - min_id_ + 1);}
+    int current_id_;
+    const int min_id_,
+              max_id_,
+              error_value_;
+    
+    std::unordered_set<int> unused_ids_;
+    std::size_t range() const {
+        return static_cast<std::size_t>(max_id_ - min_id_ + 1);
+    }
 };
 
 } // namespace util

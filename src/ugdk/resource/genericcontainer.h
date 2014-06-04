@@ -9,6 +9,8 @@
 #include <cstdio>
 #include <typeinfo>
 #define TOSTRING(X) typeid(X).name()
+#else
+#define TOSTRING(X) "<UNKTYPE>"
 #endif
 
 #include <ugdk/system/config.h>
