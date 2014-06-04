@@ -1,7 +1,15 @@
 package org.libsdl.app;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import android.app.*;
 import android.content.*;
@@ -43,13 +51,87 @@ public class SDLActivity extends Activity {
 
     // Load the .so
     static {
+    	try {
+    		System.loadLibrary("png16");
+    	} catch(java.lang.UnsatisfiedLinkError err) {
+    		System.loadLibrary("png16d");
+    	}
+    	System.loadLibrary("lua");
+    	System.loadLibrary("freetype");
+    	System.loadLibrary("freetype-gl");
+    	System.loadLibrary("gnustl_shared");
+    	
         System.loadLibrary("SDL2");
         System.loadLibrary("SDL2-image");
         System.loadLibrary("SDL2-mixer");
         //System.loadLibrary("SDL2_net");
         //System.loadLibrary("SDL2_ttf");
-        //System.loadLibrary("ugdk0.5");
-        System.loadLibrary("example-draggable-box");
+        
+        System.loadLibrary("libjson");
+        
+        try {
+        	System.loadLibrary("ugdk0.5");
+    	} catch(java.lang.UnsatisfiedLinkError err) {
+    		System.loadLibrary("ugdk0.5-dbg");
+    	}
+        System.loadLibrary("horus_eye");
+    }
+    
+    private boolean unpackZip(String path, String zipname)
+    {       
+         InputStream is;
+         ZipInputStream zis;
+         
+         File rootdir = new File(path);
+         if(rootdir.isDirectory())
+        	 return true;
+         
+         rootdir.mkdirs();
+         try 
+         {
+             String filename;
+             is = getResources().openRawResource(
+                     getResources().getIdentifier(zipname,
+                    		 "raw", getPackageName()));
+             zis = new ZipInputStream(new BufferedInputStream(is));          
+             ZipEntry ze;
+             byte[] buffer = new byte[1024];
+             int count;
+
+             while ((ze = zis.getNextEntry()) != null) 
+             {
+                 // zapis do souboru
+                 filename = ze.getName();
+
+                 // Need to create directories if not exists, or
+                 // it will generate an Exception...
+                 if (ze.isDirectory()) {
+                    File fmd = new File(path + filename);
+                    fmd.mkdirs();
+                    continue;
+                 }
+
+                 FileOutputStream fout = new FileOutputStream(path + filename);
+
+                 // cteni zipu a zapis
+                 while ((count = zis.read(buffer)) != -1) 
+                 {
+                     fout.write(buffer, 0, count);             
+                 }
+
+                 fout.close();               
+                 zis.closeEntry();
+             }
+
+             zis.close();
+         } 
+         catch(IOException e)
+         {
+             e.printStackTrace();
+             return false;
+         }
+
+        return true;
     }
 
     // Setup
@@ -57,6 +139,8 @@ public class SDLActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         //Log.v("SDL", "onCreate()");
         super.onCreate(savedInstanceState);
+        
+        unpackZip("/sdcard/horus_eye/", "raw/horusdata");
         
         // So we can call stuff from static callbacks
         mSingleton = this;
