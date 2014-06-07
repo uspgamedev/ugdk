@@ -217,7 +217,7 @@ if(ANDROID)
         
         file(GLOB_RECURSE ANDROID_TEMPLATE_SOURCE
             RELATIVE ${ugdk_SOURCE_DIR}/android/template
-            "android/template/*")
+            "${ugdk_SOURCE_DIR}/android/template/*")
         file(COPY ${ugdk_SOURCE_DIR}/android/skeleton/
             DESTINATION ${CMAKE_BINARY_DIR}/android-project)
             
