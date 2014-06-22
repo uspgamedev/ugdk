@@ -1,13 +1,15 @@
 ﻿#include <ugdk/graphic/manager.h>
 
 #include <ugdk/action/scene.h>
+#include <ugdk/internal/gltexture.h>
 #include <ugdk/graphic/defaultshaders.h>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/internal/gltexture.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/graphic/opengl/shaderuse.h>
+#include <ugdk/graphic/framebuffer.h>
 #include <ugdk/debug/profiler.h>
+#include <ugdk/math/integer2D.h>
 
 #include "SDL_video.h"
 
@@ -23,7 +25,7 @@ Manager::Manager(const std::weak_ptr<desktop::Window>& window, const math::Vecto
 Manager::~Manager() {}
 
 bool Manager::Initialize() {
-    CreateLightBuffer(math::Vector2D(canvas_->size()));
+    light_buffer_ = Framebuffer::Create(canvas_->size());
 
     shaders_.ReplaceShader(0, CreateShader(false, false));
     shaders_.ReplaceShader(1, CreateShader( true, false));
@@ -50,8 +52,8 @@ bool Manager::Initialize() {
 }
 
 void Manager::Release() {
-    glDeleteFramebuffers(1, &light_framebuffer_); //TODO
     canvas_.reset();
+    light_buffer_.reset();
 }
 
 action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> render_light_function) {
@@ -61,49 +63,26 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
     light_scene->set_focus_callback([](action::Scene* scene) { scene->Finish(); });
     light_scene->set_render_function([render_light_function](graphic::Canvas& canvas) {
         graphic::Manager* manager = graphic::manager();
+        auto light_buffer = manager->light_buffer();
 
-        glBindFramebuffer(GL_FRAMEBUFFER, manager->light_framebuffer());
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, manager->light_buffer()->id(), 0);
-        internal::AssertNoOpenGLError();
-
-        glClearColor(0.0, 0.0, 0.0, 0.0);
-        glClear(GL_COLOR_BUFFER_BIT);
-    
         // Lights are simply added together.
         glBlendFunc(GL_ONE, GL_ONE);
 
-        // Draw the lights, as the user specified.
+        light_buffer->Bind();
+        light_buffer->Clear(Color(0.0, 0.0, 0.0, 0.0));
         render_light_function(canvas);
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        light_buffer->Unbind();
     
-        // Clear the screen so it's back to how it was before.
-        //canvas.Clear(Color(0.0, 0.0, 0.0, 0.0));
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 
         // Bind the light texture to all shaders that USE_LIGHT_BUFFER.
         opengl::ShaderUse(manager->shaders().GetSpecificShader((1 << 0) + (0 << 1)))
-            .SendTexture(1, manager->light_buffer(), "light_texture");
+            .SendTexture(1, light_buffer->texture(), "light_texture");
         opengl::ShaderUse(manager->shaders().GetSpecificShader((1 << 0) + (1 << 1)))
-            .SendTexture(1, manager->light_buffer(), "light_texture");
+            .SendTexture(1, light_buffer->texture(), "light_texture");
     });
 
     return light_scene;
-}
-
-void Manager::CreateLightBuffer(const math::Vector2D& size) {
-    if(light_buffer_ != nullptr) delete light_buffer_;
-    light_buffer_ = internal::GLTexture::CreateRawTexture(size.x, size.y);
-    glBindTexture(GL_TEXTURE_2D, light_buffer_->id());
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size.x, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    glGenFramebuffers(1, &light_framebuffer_);
 }
 
 const opengl::ShaderProgram* Manager::Shaders::current_shader() const {

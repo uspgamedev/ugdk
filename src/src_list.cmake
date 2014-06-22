@@ -68,6 +68,8 @@ SET(UGDK_SRC
     src/ugdk/graphic/drawable/functions.h 
     src/ugdk/graphic/drawable/texturedrectangle.cc 
     src/ugdk/graphic/drawable/texturedrectangle.h 
+    src/ugdk/graphic/framebuffer.cc 
+    src/ugdk/graphic/framebuffer.h 
     src/ugdk/graphic/geometry.h 
     src/ugdk/graphic/image.cc 
     src/ugdk/graphic/image.h 
