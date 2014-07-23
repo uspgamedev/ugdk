@@ -69,7 +69,7 @@ class Manager {
     };
 
     std::shared_ptr<Canvas> canvas() const { return canvas_; }
-    internal::GLTexture* light_buffer() { return light_buffer_; }
+    std::shared_ptr<Framebuffer> light_buffer() const { return light_buffer_; }
     internal::GLTexture* white_texture() { return white_texture_; }
     Shaders& shaders() { return shaders_; }
     const Shaders& shaders() const { return shaders_; }
@@ -79,7 +79,7 @@ class Manager {
     void CreateLightBuffer(const math::Vector2D& size);
 
     std::shared_ptr<Canvas> canvas_;
-    internal::GLTexture* light_buffer_;
+    std::shared_ptr<Framebuffer> light_buffer_;
     internal::GLTexture* white_texture_;
     
     Shaders shaders_;

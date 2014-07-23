@@ -28,6 +28,7 @@ class Light;
 class Node;
 class Image;
 class Canvas;
+class Framebuffer;
 
 // Managers
 class TextManager;

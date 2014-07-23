@@ -1,7 +1,15 @@
 package org.libsdl.app;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import android.app.*;
 import android.content.*;
@@ -43,20 +51,95 @@ public class SDLActivity extends Activity {
 
     // Load the .so
     static {
+        try {
+            System.loadLibrary("png16");
+        } catch(java.lang.UnsatisfiedLinkError err) {
+            System.loadLibrary("png16d");
+        }
+        System.loadLibrary("lua");
+        System.loadLibrary("freetype");
+        System.loadLibrary("freetype-gl");
+        System.loadLibrary("gnustl_shared");
+
         System.loadLibrary("SDL2");
         System.loadLibrary("SDL2-image");
         System.loadLibrary("SDL2-mixer");
         //System.loadLibrary("SDL2_net");
         //System.loadLibrary("SDL2_ttf");
-        //System.loadLibrary("ugdk0.5");
-        System.loadLibrary("example-draggable-box");
+        
+        System.loadLibrary("libjson");
+        
+        try {
+            System.loadLibrary("ugdk0.5");
+        } catch(java.lang.UnsatisfiedLinkError err) {
+            System.loadLibrary("ugdk0.5-dbg");
+        }
+        System.loadLibrary("horus_eye");
+    }
+    
+    private boolean unpackZip(String path, String zipname)
+    {       
+        InputStream is;
+        ZipInputStream zis;
+
+        File rootdir = new File(path);
+        if(rootdir.isDirectory())
+            return true;
+         
+        rootdir.mkdirs();
+        try {
+            String filename;
+            is = getResources().openRawResource(
+                     getResources().getIdentifier(zipname,
+                    		 "raw", getPackageName()));
+            zis = new ZipInputStream(new BufferedInputStream(is));          
+            ZipEntry ze;
+            byte[] buffer = new byte[1024];
+            int count;
+
+            while ((ze = zis.getNextEntry()) != null) 
+            {
+                // zapis do souboru
+                filename = ze.getName();
+
+                // Need to create directories if not exists, or
+                // it will generate an Exception...
+                if (ze.isDirectory()) {
+                    File fmd = new File(path + filename);
+                    fmd.mkdirs();
+                    continue;
+                }
+
+                FileOutputStream fout = new FileOutputStream(path + filename);
+
+                 // cteni zipu a zapis
+                while ((count = zis.read(buffer)) != -1) 
+                {
+                    fout.write(buffer, 0, count);             
+                }
+
+                fout.close();               
+                zis.closeEntry();
+            }
+
+            zis.close();
+        } 
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     // Setup
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Log.v("SDL", "onCreate()");
+        //Log.v(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
+        
+        //unpackZip("/sdcard/horus_eye/", "raw/horusdata");
         
         // So we can call stuff from static callbacks
         mSingleton = this;
@@ -80,14 +163,14 @@ public class SDLActivity extends Activity {
     // Events
     @Override
     protected void onPause() {
-        Log.v("SDL", "onPause()");
+        Log.v(TAG, "onPause()");
         super.onPause();
         SDLActivity.handlePause();
     }
 
     @Override
     protected void onResume() {
-        Log.v("SDL", "onResume()");
+        Log.v(TAG, "onResume()");
         super.onResume();
         SDLActivity.handleResume();
     }
@@ -96,7 +179,7 @@ public class SDLActivity extends Activity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        Log.v("SDL", "onWindowFocusChanged(): " + hasFocus);
+        Log.v(TAG, "onWindowFocusChanged(): " + hasFocus);
 
         SDLActivity.mHasFocus = hasFocus;
         if (hasFocus) {
@@ -106,7 +189,7 @@ public class SDLActivity extends Activity {
 
     @Override
     public void onLowMemory() {
-        Log.v("SDL", "onLowMemory()");
+        Log.v(TAG, "onLowMemory()");
         super.onLowMemory();
         SDLActivity.nativeLowMemory();
     }
@@ -114,7 +197,7 @@ public class SDLActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v("SDL", "onDestroy()");
+        Log.v(TAG, "onDestroy()");
         // Send a quit message to the application
         SDLActivity.nativeQuit();
 
@@ -123,11 +206,11 @@ public class SDLActivity extends Activity {
             try {
                 SDLActivity.mSDLThread.join();
             } catch(Exception e) {
-                Log.v("SDL", "Problem stopping thread: " + e);
+                Log.v(TAG, "Problem stopping thread: " + e);
             }
             SDLActivity.mSDLThread = null;
 
-            //Log.v("SDL", "Finished waiting for SDL thread");
+            //Log.v(TAG, "Finished waiting for SDL thread");
         }
     }
 
@@ -359,7 +442,7 @@ public class SDLActivity extends Activity {
         int audioFormat = is16Bit ? AudioFormat.ENCODING_PCM_16BIT : AudioFormat.ENCODING_PCM_8BIT;
         int frameSize = (isStereo ? 2 : 1) * (is16Bit ? 2 : 1);
         
-        Log.v("SDL", "SDL audio: wanted " + (isStereo ? "stereo" : "mono") + " " + (is16Bit ? "16-bit" : "8-bit") + " " + (sampleRate / 1000f) + "kHz, " + desiredFrames + " frames buffer");
+        Log.v(TAG, "SDL audio: wanted " + (isStereo ? "stereo" : "mono") + " " + (is16Bit ? "16-bit" : "8-bit") + " " + (sampleRate / 1000f) + "kHz, " + desiredFrames + " frames buffer");
         
         // Let the user pick a larger buffer if they really want -- but ye
         // gods they probably shouldn't, the minimums are horrifyingly high
@@ -375,7 +458,7 @@ public class SDLActivity extends Activity {
             // Ref: http://developer.android.com/reference/android/media/AudioTrack.html#getState()
             
             if (mAudioTrack.getState() != AudioTrack.STATE_INITIALIZED) {
-                Log.e("SDL", "Failed during initialization of Audio Track");
+                Log.e(TAG, "Failed during initialization of Audio Track");
                 mAudioTrack = null;
                 return -1;
             }
@@ -383,7 +466,7 @@ public class SDLActivity extends Activity {
             mAudioTrack.play();
         }
        
-        Log.v("SDL", "SDL audio: got " + ((mAudioTrack.getChannelCount() >= 2) ? "stereo" : "mono") + " " + ((mAudioTrack.getAudioFormat() == AudioFormat.ENCODING_PCM_16BIT) ? "16-bit" : "8-bit") + " " + (mAudioTrack.getSampleRate() / 1000f) + "kHz, " + desiredFrames + " frames buffer");
+        Log.v(TAG, "SDL audio: got " + ((mAudioTrack.getChannelCount() >= 2) ? "stereo" : "mono") + " " + ((mAudioTrack.getAudioFormat() == AudioFormat.ENCODING_PCM_16BIT) ? "16-bit" : "8-bit") + " " + (mAudioTrack.getSampleRate() / 1000f) + "kHz, " + desiredFrames + " frames buffer");
         
         return 0;
     }
@@ -418,7 +501,7 @@ public class SDLActivity extends Activity {
                     // Nom nom
                 }
             } else {
-                Log.w("SDL", "SDL audio: error return from write(byte)");
+                Log.w(TAG, "SDL audio: error return from write(byte)");
                 return;
             }
         }
@@ -484,7 +567,7 @@ class SDLMain implements Runnable {
         // Runs SDL_main()
         SDLActivity.nativeInit();
 
-        //Log.v("SDL", "SDL thread terminated");
+        //Log.v(TAG, "SDL thread terminated");
     }
 }
 
