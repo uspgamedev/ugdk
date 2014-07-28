@@ -22,6 +22,7 @@ class Manager {
     void Release();
 
     std::weak_ptr<Window> CreateWindow(const WindowSettings& settings);
+    std::weak_ptr<Window> CreateWindow(unsigned long hwnd);
     // TODO: DestroyWindow
 
     void set_primary_window(const std::weak_ptr<Window>& window) {

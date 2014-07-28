@@ -72,7 +72,10 @@ bool Manager::Initialize() {
         return false;
     }        
     
-    root_->initialise(false);
+    //root_->initialise(false);
+    window_ = root_->initialise(true, "PLEASE WORK");
+    Ogre::TextureManager::getSingleton().setDefaultNumMipmaps(5);
+    Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 
     return true;
 }

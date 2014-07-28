@@ -101,6 +101,24 @@ std::weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
 
     return new_window;
 }
+std::weak_ptr<Window> Manager::CreateWindow(unsigned long hwnd) {
+    SDL_Window* window = SDL_CreateWindowFrom((void*)hwnd);
+    if(!window) {
+        // Couldn't create the window.
+        // TODO: Log the error
+        fprintf(stderr, "Failed to create the window: %s\n", SDL_GetError());
+        return std::weak_ptr<Window>();
+    }
+
+    std::shared_ptr<Window> new_window(new Window(window));
+
+    windows_[new_window->id()] = new_window;
+
+    if(!primary_window_.lock())
+        primary_window_ = new_window;
+
+    return new_window;
+}
     
 std::shared_ptr<Window> Manager::window(uint32 index) const {
     auto it = windows_.find(index);
