@@ -184,7 +184,7 @@ bool Manager::createWindowFromSDL(const std::shared_ptr<Window>& window) {
         params["currentGLContext"] = "1";
 
         // NOTE: externalWindowHandle is reported as deprecated (GLX Ogre 1.8)
-        SDL_WindowData * x11_window_data = (SDL_WindowData*)window->driverdata;
+        //SDL_WindowData * x11_window_data = (SDL_WindowData*)window->driverdata;
         params["parentWindowHandle"] = Ogre::StringConverter::toString((unsigned long) wmInfo.info.x11.window);
 
         break;
