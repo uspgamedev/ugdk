@@ -479,6 +479,7 @@ include(FeatureSummary)
 
 ####################################
 # Setting list of libraries and list of include dirs for parent project
+update_list(OGRE_INCLUDE_DIRS ${CMAKE_CURRENT_BINARY_DIR}/include)
 update_list(OGRE_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/include)
 update_list(OGRE_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/OgreMain/include)
 update_list(OGRE_LIBRARIES OgreMain)
