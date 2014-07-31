@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include "OgrePrerequisites.h"
 #include "OgreAtomicScalar.h"
 
+#include <type_traits>
+
 namespace Ogre {
 	/** \addtogroup Core
 	*  @{
