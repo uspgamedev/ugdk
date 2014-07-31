@@ -171,12 +171,12 @@ bool Initialize(const Configuration& configuration) {
 #else
             return ErrorLog("system::Initialize failed - UGDK not compiled with 3D module.");
 #endif
+        } else {
+            if(!graphic::Initialize(new graphic::Manager(
+                                        desktop::manager()->primary_window(),
+                                        configuration.canvas_size)))
+                return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
         }
-        
-        if(!graphic::Initialize(new graphic::Manager(
-                                desktop::manager()->primary_window(),
-                                configuration.canvas_size)))
-            return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
 
         if (!text::Initialize(new text::Manager))
             return ErrorLog("system::Initialize failed - text::Initialize returned false.");
@@ -269,12 +269,11 @@ void Run() {
                     canvas.ChangeShaderProgram(graphic::manager()->shaders().current_shader());
                     for (auto& scene : scene_list_)
                         scene->Render(canvas);
+                } else if (desktop::threed::manager()) {
+                    debug::ProfileSection section("3DRender");
+                    desktop::threed::manager()->PresentAll(delta_t);
                 }
                 desktop::manager()->PresentAll();
-            }
-            if(desktop::threed::manager()) {
-                debug::ProfileSection section("3DRender");
-                desktop::threed::manager()->PresentAll(delta_t);
             }
             profile_data_list_.push_back(section.data());
         }
