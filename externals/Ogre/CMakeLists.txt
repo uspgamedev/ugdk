@@ -180,6 +180,7 @@ if ((CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANGXX) AND NOT MINGW)
     endif ()
   endif (OGRE_GCC_VISIBILITY)
 
+  add_definitions(-std=gnu++0x)
   # Fix x64 issues on Linux
   if(OGRE_PLATFORM_X64 AND NOT APPLE)
     add_definitions(-fPIC)
