@@ -140,7 +140,8 @@ namespace PrimitiveSetup {
         RenderPrimitiveAsRectangle(primitive, shader_use);
     }
 
-    std::shared_ptr<action::SpriteAnimationPlayer> Sprite::CreateSpriteAnimationPlayer(Primitive& primitive, const action::SpriteAnimationTable* table) {
+    std::shared_ptr<action::SpriteAnimationPlayer> Sprite::CreateSpriteAnimationPlayer(
+            Primitive& primitive, const action::SpriteAnimationTable* table) {
         Primitive* p = &primitive;
         std::shared_ptr<action::SpriteAnimationPlayer> player(new action::SpriteAnimationPlayer(table));
         player->set_frame_change_callback([p](const action::SpriteAnimationFrame& frame) {
@@ -156,7 +157,8 @@ namespace PrimitiveSetup {
     //========================
     const VertexDataSpecification Rectangle::vertexdata_specification(4, sizeof(VertexXYUV), false);
 
-    void Rectangle::Prepare(Primitive& primitive, const internal::GLTexture* texture, const math::Vector2D& size) {
+    void Rectangle::Prepare(Primitive& primitive, const internal::GLTexture* texture,
+                            const math::Vector2D& size) {
         primitive.set_texture(texture);
         primitive.set_vertexdata(CreateVertexDataWithSpecification(Rectangle::vertexdata_specification));
         primitive.set_controller(std::unique_ptr<PrimitiveController>(new PrimitiveController));

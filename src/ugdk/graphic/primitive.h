@@ -20,7 +20,9 @@ class Primitive {
     const internal::GLTexture* texture() const { return texture_; }
     std::shared_ptr<VertexData> vertexdata() { return vertexdata_; }
     std::shared_ptr<const VertexData> vertexdata() const { return vertexdata_; }
-    const std::function<void(const Primitive&, opengl::ShaderUse&)>& drawfunction() const { return drawfunction_; }
+    const std::function<void(const Primitive&, opengl::ShaderUse&)>& drawfunction() const {
+        return drawfunction_;
+    }
     std::unique_ptr<PrimitiveController>& controller() { return controller_; }
     const std::unique_ptr<PrimitiveController>& controller() const { return controller_; }
     const VisualEffect& visual_effect() const { return visual_effect_; }
