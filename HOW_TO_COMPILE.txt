@@ -36,9 +36,9 @@ Embedded Libraries:
 
 
 Compatible compilers:
-- g++ 4.6
+- g++ 4.7 or higher
 - clang 3.3 (maybe lesser)
-- Microsoft Visual Studio 2013
+- Microsoft Visual Studio 2013 or newer
 
 
 == Controlling what is Built
