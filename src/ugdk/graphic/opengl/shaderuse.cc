@@ -105,7 +105,8 @@ void ShaderUse::SendTexture(GLint slot, GLuint texture, const std::string& locat
     SendTexture(slot, texture, program_->UniformLocation(location));
 }
 
-void ShaderUse::SendVertexBuffer(const VertexBuffer* buffer, VertexType type, size_t offset, GLint size, GLsizei stride) {
+void ShaderUse::SendVertexBuffer(const VertexBuffer* buffer, VertexType type,
+                                 size_t offset, GLint size, GLsizei stride) {
     VertexBuffer::Bind bind(*buffer);
 
     GLuint location = get_vertextype_location(type);
