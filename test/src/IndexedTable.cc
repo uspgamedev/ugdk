@@ -14,6 +14,7 @@ TEST(IndexableTable, MapMethods) {
     table.Add("third", c);
     table.Remove("third");
     
+    EXPECT_EQ(2u, table.size());
     EXPECT_EQ(a, table.Search("first"));
     EXPECT_EQ(b, table.Search("second"));
     EXPECT_EQ(NULL, table.Search("third"));
