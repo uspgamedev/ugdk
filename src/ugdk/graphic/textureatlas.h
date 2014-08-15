@@ -52,6 +52,9 @@ class TextureAtlas {
     }
     
     math::Integer2D size() const;
+    size_t piece_num() const {
+        return pieces_.size();
+    }
     const internal::GLTexture* texture() const {
         return texture_;
     }

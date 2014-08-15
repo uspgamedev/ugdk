@@ -62,7 +62,7 @@ class IndexableTable<T*> {
         if(!val) return index_generator_.error_value();
         int id = index_generator_.GenerateID();
         if(id != index_generator_.error_value()) {
-            if(static_cast<typename decltype(indexes_)::size_type>(id) >= indexes_.size())
+            if(static_cast<decltype(indexes_.size())>(id) >= indexes_.size())
                 indexes_.resize(id + 1);
             indexes_[id] = val;
         }
