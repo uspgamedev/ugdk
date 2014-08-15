@@ -15,12 +15,6 @@ class IndexableTable { private: IndexableTable() {} };
 
 template<class T>
 class IndexableTable<T*> {
-private:
-    typedef typename std::unordered_map<std::string, T*> Table;
-    typedef typename Table::iterator TableIterator;
-    typedef typename Table::const_iterator TableConstIterator;
-
-    typedef typename std::vector<T*> IndexArray;
   public:
     static const int MAX_NUM_INDEX = 1024;
 
@@ -28,15 +22,19 @@ private:
         indexes_.reserve(expected_size);
     }
     ~IndexableTable() {
-        for(TableIterator it = data_.begin(); it != data_.end(); ++it)
-            if(it->second) delete it->second;
+        for(auto& entry : data_)
+            if(entry.second) delete entry.second;
+    }
+
+    size_t size() const {
+        return data_.size();
     }
 
     void Add(const std::string& name, T* element) { data_[name] = element; }
 
     /** @return False if element don't exist, true otherwise. */
     bool Remove(const std::string& name) {
-        TableIterator it = data_.find(name);
+        auto it = data_.find(name);
         if(it == data_.end()) return false;
         T* val = it->second;
         data_.erase(it);
@@ -47,7 +45,7 @@ private:
 
     /// Searches for the element with the given name.
     T* Search(const std::string& name) const { 
-        TableConstIterator it = data_.find(name);
+        auto it = data_.find(name);
         return (it != data_.end()) ? it->second : nullptr;
     }
     
@@ -64,7 +62,7 @@ private:
         if(!val) return index_generator_.error_value();
         int id = index_generator_.GenerateID();
         if(id != index_generator_.error_value()) {
-            if(static_cast<typename IndexArray::size_type>(id) >= indexes_.size())
+            if(static_cast<typename decltype(indexes_)::size_type>(id) >= indexes_.size())
                 indexes_.resize(id + 1);
             indexes_[id] = val;
         }
@@ -87,9 +85,9 @@ private:
             }
     }
 
-    util::IDGenerator index_generator_;
-    Table data_;
-    IndexArray indexes_;
+    util::IDGenerator                   index_generator_;
+    std::unordered_map<std::string, T*> data_;
+    std::vector<T*>                     indexes_;
 };
 
 } // namespace structure
