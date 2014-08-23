@@ -16,6 +16,8 @@ namespace graphic {
 class Framebuffer : public std::enable_shared_from_this<Framebuffer> {
   public:
     static std::shared_ptr<Framebuffer> Create(const math::Integer2D& size);
+
+    Framebuffer(const math::Integer2D& size);
     ~Framebuffer();
 
     const math::Vector2D& size() const;
@@ -28,9 +30,6 @@ class Framebuffer : public std::enable_shared_from_this<Framebuffer> {
     void Clear(Color);
     void Bind();
     void Unbind();
-
-  protected:
-    Framebuffer(const math::Integer2D& size);
     
   private:
     unsigned int gl_buffer_;
