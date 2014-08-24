@@ -36,6 +36,7 @@ class Canvas {
     RenderTarget* render_target_;
     std::vector<Geometry> geometry_stack_;
     std::vector<VisualEffect> visualeffect_stack_;
+    Canvas* previous_canvas_;
 };
 
 }  // namespace graphic

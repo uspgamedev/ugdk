@@ -8,13 +8,30 @@
 namespace ugdk {
 namespace graphic {
 
+namespace {
+Canvas* ACTIVE_CANVAS = nullptr;
+}
+
 Canvas::Canvas(RenderTarget* render_target)
     : render_target_(render_target)
+    , previous_canvas_(ACTIVE_CANVAS)
 {
     geometry_stack_.emplace_back(render_target_->projection_matrix());
     visualeffect_stack_.emplace_back();
 
-    render_target->Bind();
+    if (previous_canvas_)
+        previous_canvas_->render_target_->Unbind();
+
+    ACTIVE_CANVAS = this;
+    this->render_target_->Bind();
+}
+
+Canvas::~Canvas() {
+    render_target_->Unbind();
+
+    ACTIVE_CANVAS = previous_canvas_;
+    if(previous_canvas_)
+        previous_canvas_->render_target_->Bind();
 }
 
 void Canvas::PushAndCompose(const Geometry& geometry) {
@@ -42,6 +59,6 @@ void Canvas::PopVisualEffect() {
 void Canvas::Clear(Color color) {
     render_target_->Clear(color);
 }
-    
+
 }  // namespace graphic
 }  // namespace ugdk
