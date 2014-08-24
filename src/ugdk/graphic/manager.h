@@ -1,5 +1,5 @@
-#ifndef UGDK_GRAPHIC_VIDEOMANAGER_H_
-#define UGDK_GRAPHIC_VIDEOMANAGER_H_
+#ifndef UGDK_GRAPHIC_MANAGER_H_
+#define UGDK_GRAPHIC_MANAGER_H_
 
 #include <ugdk/structure/types.h>
 #include <ugdk/math/vector2D.h>
@@ -15,6 +15,7 @@
 #include <memory>
 
 struct SDL_Window;
+typedef void* SDL_GLContext;
 
 namespace ugdk {
 namespace graphic {
@@ -23,11 +24,14 @@ action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_li
 
 class Manager {
   public:
-    Manager(const std::weak_ptr<desktop::Window>&, const math::Vector2D& canvas_size);
+    Manager();
     ~Manager();
 
-    bool Initialize();
+    bool Initialize(const std::weak_ptr<desktop::Window>&, const math::Vector2D& canvas_size);
     void Release();
+
+    void AttachTo(const std::shared_ptr<desktop::Window>&);
+    void ResizeScreen(const math::Vector2D& canvas_size);
 
     class Shaders {
       public:
@@ -68,8 +72,9 @@ class Manager {
         friend class Manager;
     };
 
-    std::shared_ptr<Canvas> canvas() const { return canvas_; }
-    std::shared_ptr<Framebuffer> light_buffer() const { return light_buffer_; }
+    RenderTarget* screen() const { return screen_.get(); }
+    RenderTexture* light_buffer() const { return light_buffer_.get(); }
+
     internal::GLTexture* white_texture() { return white_texture_; }
     Shaders& shaders() { return shaders_; }
     const Shaders& shaders() const { return shaders_; }
@@ -78,8 +83,9 @@ class Manager {
   private:
     void CreateLightBuffer(const math::Vector2D& size);
 
-    std::shared_ptr<Canvas> canvas_;
-    std::shared_ptr<Framebuffer> light_buffer_;
+    SDL_GLContext context_;
+    std::unique_ptr<RenderTarget> screen_;
+    std::unique_ptr<RenderTexture> light_buffer_;
     internal::GLTexture* white_texture_;
     
     Shaders shaders_;
@@ -89,4 +95,4 @@ class Manager {
 }  // namespace graphic
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_GRAPHIC_MANAGER_H_

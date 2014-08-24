@@ -13,6 +13,9 @@ class PrimitiveController;
 class PrimitiveControllerPosition;
 class TextureAtlas;
 
+class RenderTarget;
+class RenderTexture;
+
 // Drawables
 class Drawable;
 

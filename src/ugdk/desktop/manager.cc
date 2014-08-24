@@ -31,8 +31,7 @@ public:
     void Handle(const ::SDL_Event& sdlevent) const {
         switch (sdlevent.window.event) {
             case SDL_WINDOWEVENT_RESIZED:
-                if (auto canvas = manager_.window(sdlevent.window.windowID)->attached_canvas().lock())
-                    canvas->UpdateViewport();
+                manager_.window(sdlevent.window.windowID)->UpdateViewport();
                 break;
 
             case SDL_WINDOWEVENT_CLOSE:

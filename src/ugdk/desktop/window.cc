@@ -39,8 +39,12 @@ void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen, bool v
     if(fullscreen)
         SDL_SetWindowFullscreen(sdl_window_, SDL_WINDOW_FULLSCREEN);
     
-    if(auto canvas = this->attached_canvas_.lock())
-        canvas->UpdateViewport();
+    UpdateViewport();
+}
+
+void Window::UpdateViewport() {
+    if(update_viewport_function_)
+        update_viewport_function_();
 }
     
 uint32 Window::id() const {

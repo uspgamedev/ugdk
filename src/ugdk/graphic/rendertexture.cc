@@ -1,4 +1,4 @@
-#include <ugdk/graphic/framebuffer.h>
+#include <ugdk/graphic/rendertexture.h>
 
 #include <ugdk/internal/opengl.h>
 #include <ugdk/internal/gltexture.h>
@@ -26,47 +26,38 @@ namespace {
     }
 }
 
-Framebuffer::Framebuffer(const math::Integer2D& size)
-: texture_(CreateTexture(size))
-, is_bound_(false)
+RenderTexture::RenderTexture(std::unique_ptr<internal::GLTexture>&& texture)
+    : texture_(std::move(texture))
+{
+    glGenFramebuffers(1, &gl_buffer_);
+}
+
+RenderTexture::RenderTexture(const math::Integer2D& size)
+    : texture_(CreateTexture(size))
 {                           
     glGenFramebuffers(1, &gl_buffer_);
 }
 
-Framebuffer::~Framebuffer() {
+RenderTexture::~RenderTexture() {
     glDeleteFramebuffers(1, &gl_buffer_);
 }
 
-std::shared_ptr<Framebuffer> Framebuffer::Create(const math::Integer2D& size) {
-    std::shared_ptr<Framebuffer> framebuffer(new Framebuffer(size));
-    internal::AssertNoOpenGLError();
-    
-    return framebuffer;
+math::Vector2D RenderTexture::size() const {
+    return math::Vector2D(texture_->width(), texture_->height());
 }
 
-void Framebuffer::Resize(const math::Vector2D& size) {
-    assert(!is_bound_);
-    assert(false);
+void RenderTexture::set_projection_matrix(const Geometry& geometry) {
+    projection_matrix_ = geometry;
 }
 
-void Framebuffer::Clear() {
-    glClear(GL_COLOR_BUFFER_BIT);
-    internal::AssertNoOpenGLError();
-}
-
-void Framebuffer::Clear(Color color) {
-    glClearColor(color.r, color.g, color.b, color.a);
-    Clear();
-}
-    
-void Framebuffer::Bind() {
-    is_bound_ = true;
+void RenderTexture::Bind() {
+    RenderTarget::Bind();
     glBindFramebuffer(GL_FRAMEBUFFER, gl_buffer_);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_->id(), 0);
 }
 
-void Framebuffer::Unbind() {
-    is_bound_ = false;
+void RenderTexture::Unbind() {
+    RenderTarget::Unbind();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
