@@ -20,10 +20,12 @@ typedef void* SDL_GLContext;
 namespace ugdk {
 namespace graphic {
 
+struct RenderScreen;
 action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_light_function);
 
 class Manager {
   public:
+
     Manager();
     ~Manager();
 
@@ -72,7 +74,7 @@ class Manager {
         friend class Manager;
     };
 
-    RenderTarget* screen() const { return screen_.get(); }
+    RenderTarget* screen() const;
     RenderTexture* light_buffer() const { return light_buffer_.get(); }
 
     internal::GLTexture* white_texture() { return white_texture_; }
@@ -84,7 +86,7 @@ class Manager {
     void CreateLightBuffer(const math::Vector2D& size);
 
     SDL_GLContext context_;
-    std::unique_ptr<RenderTarget> screen_;
+    std::unique_ptr<RenderScreen> screen_;
     std::unique_ptr<RenderTexture> light_buffer_;
     internal::GLTexture* white_texture_;
     

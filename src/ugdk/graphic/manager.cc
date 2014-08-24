@@ -18,8 +18,6 @@
 namespace ugdk {
 namespace graphic {
 
-namespace {
-
 class RenderScreen : public RenderTarget {
 public:
     math::Vector2D size() const {
@@ -39,17 +37,19 @@ public:
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
+    void AttachTo(const std::weak_ptr<desktop::Window>& weak_window) {
+        window_ = weak_window;
+    }
+
+    void UpdateViewport() {
+        if(auto window = window_.lock())
+            glViewport(0, 0, window->size().x, window->size().y);
+    }
+
 private:
+    std::weak_ptr<desktop::Window> window_;
     math::Vector2D size_;
 };
-
-void UpdateViewport(desktop::Window* window) {
-    SDL_GL_SetSwapInterval(window->vsync() ? 1 : 0);
-    glViewport(0, 0, window->size().x, window->size().y);
-    internal::AssertNoOpenGLError();
-}
-
-}
 
 Manager::Manager()
     :   light_buffer_(nullptr)
@@ -60,13 +60,11 @@ Manager::~Manager() {}
 
 void Manager::AttachTo(const std::shared_ptr<desktop::Window>& window) {
     SDL_GL_MakeCurrent(window->sdl_window_, context_);
-
-    auto ptr = window.get();
-    window->set_update_viewport_function([ptr]() { UpdateViewport(ptr); });
+    screen_->AttachTo(window);
 }
 
 void Manager::ResizeScreen(const math::Vector2D& canvas_size) {
-    dynamic_cast<RenderScreen*>(screen_.get())->Resize(canvas_size);
+    screen_->Resize(canvas_size);
 }
 
 bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, const math::Vector2D& canvas_size) {
@@ -88,7 +86,6 @@ bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, cons
     screen_.reset(new RenderScreen);
     ResizeScreen(canvas_size);
     AttachTo(window);
-    UpdateViewport(window.get());
 
     // This hint can improve the speed of texturing when perspective-correct texture
     // coordinate interpolation isn't needed, such as when using a glOrtho() projection.
@@ -188,6 +185,10 @@ Manager::Shaders::~Shaders() {
     unsigned long max_flags = 1 << NUM_FLAGS;
     for(unsigned long i = 0; i < max_flags; ++i)
         delete shaders_[i];
+}
+
+RenderTarget* Manager::screen() const {
+    return screen_.get();
 }
 
 }  // namespace graphic

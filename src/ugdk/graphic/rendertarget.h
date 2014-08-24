@@ -27,6 +27,8 @@ class RenderTarget {
     Geometry projection_matrix_;
 
   private:
+    virtual void UpdateViewport() = 0;
+
     bool is_bound_;
 
     friend class ::ugdk::graphic::Canvas;

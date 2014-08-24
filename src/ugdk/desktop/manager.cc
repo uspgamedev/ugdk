@@ -31,7 +31,7 @@ public:
     void Handle(const ::SDL_Event& sdlevent) const {
         switch (sdlevent.window.event) {
             case SDL_WINDOWEVENT_RESIZED:
-                manager_.window(sdlevent.window.windowID)->UpdateViewport();
+                // no-op
                 break;
 
             case SDL_WINDOWEVENT_CLOSE:

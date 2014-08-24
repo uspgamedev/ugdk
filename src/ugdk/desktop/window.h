@@ -6,10 +6,6 @@
 #include <ugdk/graphic.h>
 #include <ugdk/structure/types.h>
 
-#include <string>
-#include <memory>
-#include <functional>
-
 struct SDL_Window;
 
 namespace ugdk {
@@ -29,7 +25,6 @@ class Window {
     /** Warning: some fullscreen/resolution combinations may be unsupported by the display, resulting
         in unoperable windows. */
     void ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync);
-    void UpdateViewport();
 
     uint32 id() const;
     const char* title() const;
@@ -37,14 +32,9 @@ class Window {
     bool fullscreen() const;
     bool vsync() const { return vsync_; }
 
-    void set_update_viewport_function(const std::function<void (void)>& func) {
-        update_viewport_function_ = func;
-    }
-
   private:
     SDL_Window* sdl_window_;
     bool vsync_;
-    std::function<void (void)> update_viewport_function_;
 
     friend class ::ugdk::desktop::Manager;
     friend class ::ugdk::graphic::Manager;

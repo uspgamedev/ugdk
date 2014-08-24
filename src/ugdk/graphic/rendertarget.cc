@@ -33,6 +33,7 @@ void RenderTarget::Clear(Color color) {
 void RenderTarget::Bind() {
     // TODO: check if !IsActive
     is_bound_ = true;
+    UpdateViewport();
 }
 
 void RenderTarget::Unbind() {

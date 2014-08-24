@@ -76,8 +76,8 @@ float FillBufferWithText(const Font* font, const std::u32string& msg, VertexData
     
 void DrawSquare(const Geometry& geometry, const VisualEffect& effect, const internal::GLTexture* texture) {
     const glm::mat4& mat = geometry.AsMat4();
-    if(mat[3].x > 1 || mat[3].y < -1 || 
-        mat[0].x + mat[1].x + mat[3].x < -1 || 
+    if(mat[3].x > 1 || mat[3].y < -1 ||
+        mat[0].x + mat[1].x + mat[3].x < -1 ||
         mat[0].y + mat[1].y + mat[3].y > 1)
         return;
     

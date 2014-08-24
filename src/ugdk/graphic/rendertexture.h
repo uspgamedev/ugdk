@@ -29,6 +29,8 @@ class RenderTexture : public RenderTarget {
     virtual void Unbind() override;
 
   private:
+    virtual void UpdateViewport() override;
+
     unsigned int gl_buffer_;
     std::unique_ptr<internal::GLTexture> texture_;
 };

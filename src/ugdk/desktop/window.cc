@@ -1,6 +1,7 @@
 #include <ugdk/desktop/window.h>
 
 #include "SDL_video.h"
+#include "SDL_opengl.h"
 
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/debug/profiler.h>
@@ -39,14 +40,10 @@ void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen, bool v
     if(fullscreen)
         SDL_SetWindowFullscreen(sdl_window_, SDL_WINDOW_FULLSCREEN);
     
-    UpdateViewport();
+    SDL_GL_SetSwapInterval(vsync_ ? 1 : 0);
 }
 
-void Window::UpdateViewport() {
-    if(update_viewport_function_)
-        update_viewport_function_();
-}
-    
+
 uint32 Window::id() const {
     return SDL_GetWindowID(sdl_window_);
 }

@@ -61,5 +61,9 @@ void RenderTexture::Unbind() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void RenderTexture::UpdateViewport() {
+    glViewport(0, 0, texture_->width(), texture_->height());
+}
+
 }  // namespace graphic
 }  // namespace ugdk
