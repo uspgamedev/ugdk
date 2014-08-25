@@ -21,6 +21,9 @@ class Canvas {
     Canvas(RenderTarget* render_target);
     ~Canvas();
 
+    void ChangeShaderProgram(const opengl::ShaderProgram* shader_program);
+
+    bool IsActive() const;
     const Geometry& current_geometry() const { return geometry_stack_.back(); }
     const VisualEffect& current_visualeffect() const { return visualeffect_stack_.back(); }
 
@@ -39,6 +42,7 @@ class Canvas {
     RenderTarget* render_target_;
     std::vector<Geometry> geometry_stack_;
     std::vector<VisualEffect> visualeffect_stack_;
+    const opengl::ShaderProgram* shader_program_;
     Canvas* previous_canvas_;
     Canvas* next_canvas_;
 };

@@ -1,6 +1,7 @@
 #include <ugdk/graphic/canvas.h>
 
 #include <ugdk/graphic/rendertarget.h>
+#include <ugdk/graphic/opengl/shaderprogram.h>
 
 #include <cmath>
 #include <cassert>
@@ -30,7 +31,7 @@ Canvas::Canvas(RenderTarget* render_target)
 }
 
 Canvas::~Canvas() {
-    if (ACTIVE_CANVAS == this) {
+    if (IsActive()) {
         Unbind();
         if (next_canvas_)
             ACTIVE_CANVAS = next_canvas_;
@@ -45,6 +46,17 @@ Canvas::~Canvas() {
         next_canvas_->previous_canvas_ = previous_canvas_;
     if (previous_canvas_)
         previous_canvas_->next_canvas_ = next_canvas_;
+}
+
+void Canvas::ChangeShaderProgram(const opengl::ShaderProgram* shader_program) {
+    shader_program_ = shader_program;
+    if (IsActive()) {
+        glUseProgram(shader_program_->id());
+    }
+}
+
+bool Canvas::IsActive() const {
+    return ACTIVE_CANVAS == this;
 }
 
 void Canvas::PushAndCompose(const Geometry& geometry) {
@@ -75,10 +87,13 @@ void Canvas::Clear(Color color) {
 
 void Canvas::Bind() {
     render_target_->Bind();
+    if (shader_program_)
+        glUseProgram(shader_program_->id());
 }
 
 void Canvas::Unbind() {
     render_target_->Unbind();
+    glUseProgram(0);
 }
 
 }  // namespace graphic

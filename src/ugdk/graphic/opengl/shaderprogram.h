@@ -27,6 +27,7 @@ class ShaderProgram {
     GLuint color_location_;
     GLuint texture_location_;
 
+    friend class Canvas;
     friend class ShaderUse;
 };
 
