@@ -115,7 +115,7 @@ void DrawTextLine(const Geometry& geometry, const VisualEffect& effect, const Fo
     std::vector<int> first_vector;
     first_vector.reserve(ucs_msg.size());
     for(size_t i = 0; i < ucs_msg.size(); ++i )
-        first_vector.push_back(i * 4);
+        first_vector.push_back(static_cast<int>(i) * 4);
     std::vector<int> size_vector(ucs_msg.size(), 4);
     
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
@@ -125,15 +125,15 @@ void DrawTextLine(const Geometry& geometry, const VisualEffect& effect, const Fo
     shader_use.SendEffect(effect);
     shader_use.SendTexture(0, font->freetype_font()->atlas->id);
 
-    shader_use.SendVertexBuffer(data.buffer().get(), opengl::VERTEX,             0, 2, data.vertex_size());
-    shader_use.SendVertexBuffer(data.buffer().get(), opengl::TEXTURE, sizeof(vec2), 2, data.vertex_size());
+    shader_use.SendVertexBuffer(data.buffer().get(), opengl::VERTEX,             0, 2, static_cast<int>(data.vertex_size()));
+    shader_use.SendVertexBuffer(data.buffer().get(), opengl::TEXTURE, sizeof(vec2), 2, static_cast<int>(data.vertex_size()));
 
 #ifdef UGDK_USING_GLES
     for(size_t i = 0; i < ucs_msg.size(); ++i) {
         glDrawArrays(GL_TRIANGLE_STRIP, i * 4, 4);
     }
 #else
-    glMultiDrawArrays(GL_TRIANGLE_STRIP, first_vector.data(), size_vector.data(), ucs_msg.size());
+    glMultiDrawArrays(GL_TRIANGLE_STRIP, first_vector.data(), size_vector.data(), static_cast<int>(ucs_msg.size()));
 #endif
 
     graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
