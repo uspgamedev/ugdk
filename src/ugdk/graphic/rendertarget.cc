@@ -1,5 +1,6 @@
 #include <ugdk/graphic/rendertarget.h>
 
+#include <ugdk/graphic/exceptions.h>
 #include <ugdk/internal/opengl.h>
 
 namespace ugdk {
@@ -24,20 +25,20 @@ const Geometry& RenderTarget::projection_matrix() const {
 }
 
 void RenderTarget::Clear(Color color) {
-    // TODO: check if IsActive
+    AssertCondition<InvalidOperation>(IsActive(), "RenderTarget must be active for Clear.");
     glClearColor(color.r, color.g, color.b, color.a);
     glClear(GL_COLOR_BUFFER_BIT);
     internal::AssertNoOpenGLError();
 }
 
 void RenderTarget::Bind() {
-    // TODO: check if !IsActive
+    AssertCondition<InvalidOperation>(!IsActive(), "RenderTarget must be inactive for Bind.");
     is_bound_ = true;
     UpdateViewport();
 }
 
 void RenderTarget::Unbind() {
-    // TODO: check if IsActive
+    AssertCondition<InvalidOperation>(IsActive(), "RenderTarget must be active for Unbind.");
     is_bound_ = false;
 }
 
