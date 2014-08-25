@@ -14,24 +14,37 @@ Canvas* ACTIVE_CANVAS = nullptr;
 
 Canvas::Canvas(RenderTarget* render_target)
     : render_target_(render_target)
-    , previous_canvas_(ACTIVE_CANVAS)
+    , previous_canvas_(nullptr)
+    , next_canvas_(nullptr)
 {
     geometry_stack_.emplace_back(render_target_->projection_matrix());
     visualeffect_stack_.emplace_back();
 
-    if (previous_canvas_)
-        previous_canvas_->render_target_->Unbind();
-
+    if (ACTIVE_CANVAS) {
+        previous_canvas_ = ACTIVE_CANVAS;
+        previous_canvas_->Unbind();
+        previous_canvas_->next_canvas_ = this;
+    }
     ACTIVE_CANVAS = this;
-    this->render_target_->Bind();
+    Bind();
 }
 
 Canvas::~Canvas() {
-    render_target_->Unbind();
+    if (ACTIVE_CANVAS == this) {
+        Unbind();
+        if (next_canvas_)
+            ACTIVE_CANVAS = next_canvas_;
+        else
+            ACTIVE_CANVAS = previous_canvas_;
 
-    ACTIVE_CANVAS = previous_canvas_;
-    if(previous_canvas_)
-        previous_canvas_->render_target_->Bind();
+        if (ACTIVE_CANVAS)
+            ACTIVE_CANVAS->Bind();
+    }
+
+    if (next_canvas_)
+        next_canvas_->previous_canvas_ = previous_canvas_;
+    if (previous_canvas_)
+        previous_canvas_->next_canvas_ = next_canvas_;
 }
 
 void Canvas::PushAndCompose(const Geometry& geometry) {
@@ -58,6 +71,14 @@ void Canvas::PopVisualEffect() {
 
 void Canvas::Clear(Color color) {
     render_target_->Clear(color);
+}
+
+void Canvas::Bind() {
+    render_target_->Bind();
+}
+
+void Canvas::Unbind() {
+    render_target_->Unbind();
 }
 
 }  // namespace graphic
