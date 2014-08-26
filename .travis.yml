@@ -13,7 +13,7 @@ before_script:
   - sudo apt-get install emacsen-common
   - wget http://uspgamedev.org/downloads/libs/ubuntu/cmake_2.8.11.2-1ubuntu5_amd64.deb http://uspgamedev.org/downloads/libs/ubuntu/cmake-data_2.8.11.2-1ubuntu5_all.deb
   - sudo dpkg -i cmake_*.deb cmake-data_*.deb
-  - if [ "$CXX" = "g++" ]; then sudo apt-get install g++-4.7; fi
+  - if [ "$CXX" = "g++" ]; then sudo apt-get install --force-yes g++-4.7; fi
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.7" CC="gcc-4.7"; fi
 
 script:
