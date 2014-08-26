@@ -121,13 +121,13 @@ void Canvas::Unbind() {
 }
 
 void Canvas::SendGeometry() {
-    glUniformMatrix4fv(shader_program_->matrix_location_, 1, GL_FALSE, &current_geometry().AsMat4()[0][0]);
+    glUniformMatrix4fv(shader_program_->UniformLocation("geometry_matrix"), 1, GL_FALSE, &current_geometry().AsMat4()[0][0]);
     internal::AssertNoOpenGLError();
 }
      
 void Canvas::SendEffect() {
     const Color& c = current_visualeffect().color();
-    glUniform4f(shader_program_->color_location_, c.r, c.g, c.b, c.a);
+    glUniform4f(shader_program_->UniformLocation("effect_color"), c.r, c.g, c.b, c.a);
     internal::AssertNoOpenGLError();
 }
 
