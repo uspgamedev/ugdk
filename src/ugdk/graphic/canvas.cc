@@ -1,10 +1,9 @@
 #include <ugdk/graphic/canvas.h>
 
+#include <ugdk/graphic/exceptions.h>
 #include <ugdk/graphic/rendertarget.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
-
-#include <cmath>
-#include <cassert>
+#include <ugdk/internal/gltexture.h>
 
 namespace ugdk {
 namespace graphic {
@@ -50,9 +49,7 @@ Canvas::~Canvas() {
 
 void Canvas::ChangeShaderProgram(const opengl::ShaderProgram* shader_program) {
     shader_program_ = shader_program;
-    if (IsActive()) {
-        glUseProgram(shader_program_->id());
-    }
+    glUseProgram(shader_program_->id());
 }
 
 bool Canvas::IsActive() const {
@@ -63,26 +60,53 @@ void Canvas::PushAndCompose(const Geometry& geometry) {
     geometry_stack_.reserve(geometry_stack_.size() + 1);
     geometry_stack_.emplace_back(geometry_stack_.back());
     geometry_stack_.back().Compose(geometry);
+    if (shader_program_)
+        SendGeometry();
 }
 
 void Canvas::PushAndCompose(const VisualEffect& effect) {
     visualeffect_stack_.reserve(visualeffect_stack_.size() + 1);
     visualeffect_stack_.emplace_back(visualeffect_stack_.back());
     visualeffect_stack_.back().Compose(effect);
+    if (shader_program_)
+        SendEffect();
 }
 
 void Canvas::PopGeometry() {
-    assert(geometry_stack_.size() > 1);
+    AssertCondition<InvalidOperation>(geometry_stack_.size() > 1, "Can only pop a Geometry after pushing at least one.");
     geometry_stack_.pop_back();
 }
 
 void Canvas::PopVisualEffect() {
-    assert(visualeffect_stack_.size() > 1);
+    AssertCondition<InvalidOperation>(visualeffect_stack_.size() > 1, "Can only pop a VisualEffect after pushing at least one.");
     visualeffect_stack_.pop_back();
 }
 
 void Canvas::Clear(Color color) {
     render_target_->Clear(color);
+}
+
+void Canvas::SendUniform(const std::string& name, float t1) {
+    glUniform1f(shader_program_->UniformLocation(name), t1);
+    internal::AssertNoOpenGLError();
+}
+void Canvas::SendUniform(const std::string& name, float t1, float t2) {
+    glUniform2f(shader_program_->UniformLocation(name), t1, t2);
+    internal::AssertNoOpenGLError();
+}
+void Canvas::SendUniform(const std::string& name, float t1, float t2, float t3) {
+    glUniform3f(shader_program_->UniformLocation(name), t1, t2, t3);
+    internal::AssertNoOpenGLError();
+}
+void Canvas::SendUniform(const std::string& name, float t1, float t2, float t3, float t4) {
+    glUniform4f(shader_program_->UniformLocation(name), t1, t2, t3, t4);
+    internal::AssertNoOpenGLError();
+}
+
+void Canvas::SendTexture(GLint slot, const internal::GLTexture* texture) {
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, texture->id());
+    internal::AssertNoOpenGLError();
 }
 
 void Canvas::Bind() {
@@ -94,6 +118,17 @@ void Canvas::Bind() {
 void Canvas::Unbind() {
     render_target_->Unbind();
     glUseProgram(0);
+}
+
+void Canvas::SendGeometry() {
+    glUniformMatrix4fv(shader_program_->matrix_location_, 1, GL_FALSE, &current_geometry().AsMat4()[0][0]);
+    internal::AssertNoOpenGLError();
+}
+     
+void Canvas::SendEffect() {
+    const Color& c = current_visualeffect().color();
+    glUniform4f(shader_program_->color_location_, c.r, c.g, c.b, c.a);
+    internal::AssertNoOpenGLError();
 }
 
 }  // namespace graphic
