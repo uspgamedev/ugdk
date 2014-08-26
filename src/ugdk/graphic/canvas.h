@@ -52,7 +52,7 @@ class Canvas {
     void SendUniform(const std::string& name, float t1, float t2, float t3);
     void SendUniform(const std::string& name, float t1, float t2, float t3, float t4);
 
-    void SendTexture(GLint slot, const internal::GLTexture* texture);
+    void SendTexture(uint8 slot, const internal::GLTexture* texture);
 
   private:
     void Bind();

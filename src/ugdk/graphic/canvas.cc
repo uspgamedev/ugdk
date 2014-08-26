@@ -103,7 +103,7 @@ void Canvas::SendUniform(const std::string& name, float t1, float t2, float t3, 
     internal::AssertNoOpenGLError();
 }
 
-void Canvas::SendTexture(GLint slot, const internal::GLTexture* texture) {
+void Canvas::SendTexture(uint8 slot, const internal::GLTexture* texture) {
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, texture->id());
     internal::AssertNoOpenGLError();
