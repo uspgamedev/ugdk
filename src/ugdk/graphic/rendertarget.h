@@ -1,5 +1,5 @@
-#ifndef UGDK_GRAPHIC_RENDERTARGET_H
-#define UGDK_GRAPHIC_RENDERTARGET_H
+#ifndef UGDK_GRAPHIC_RENDERTARGET_H_
+#define UGDK_GRAPHIC_RENDERTARGET_H_
 
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/geometry.h>
@@ -37,4 +37,4 @@ class RenderTarget {
 } // namespace graphic
 } // namespace ugdk
 
-#endif // UGDK_GRAPHIC_RENDERTARGET_H
+#endif // UGDK_GRAPHIC_RENDERTARGET_H_

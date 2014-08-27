@@ -6,9 +6,9 @@
 namespace ugdk {
 namespace graphic {
 
-class InvalidOperation {
+class GraphicException {
   public:
-    InvalidOperation(const char* reason) : reason_(reason) {}
+    GraphicException(const char* reason) : reason_(reason) {}
 
     const char* what() const throw() {
         return reason_.c_str();
@@ -16,6 +16,16 @@ class InvalidOperation {
 
   private:
     std::string reason_;
+};
+
+class InvalidOperation : public GraphicException {
+  public:
+    InvalidOperation(const char* reason) : GraphicException(reason) {}
+};
+
+class NotSupportedException : public GraphicException {
+  public:
+    NotSupportedException(const char* reason) : NotSupportedException(reason) {}
 };
 
 template<class T, typename ...Args>

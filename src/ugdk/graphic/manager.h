@@ -8,6 +8,9 @@
 #include <ugdk/graphic.h>
 #include <ugdk/desktop.h>
 #include <ugdk/internal.h>
+#include <ugdk/util.h>
+
+#include <ugdk/graphic/textureunit.h>
 
 #include <string>
 #include <bitset>
@@ -25,7 +28,6 @@ action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_li
 
 class Manager {
   public:
-
     Manager();
     ~Manager();
 
@@ -34,6 +36,8 @@ class Manager {
 
     void AttachTo(const std::shared_ptr<desktop::Window>&);
     void ResizeScreen(const math::Vector2D& canvas_size);
+
+    TextureUnit ReserveTextureUnit(const internal::GLTexture* texture = nullptr);
 
     class Shaders {
       public:
@@ -84,14 +88,18 @@ class Manager {
 
   private:
     void CreateLightBuffer(const math::Vector2D& size);
+    void ReleaseTextureUnitID(int id);
 
     SDL_GLContext context_;
     std::unique_ptr<RenderScreen> screen_;
     std::unique_ptr<RenderTexture> light_buffer_;
+    std::unique_ptr<util::IDGenerator> textureunit_ids_;
     internal::GLTexture* white_texture_;
     
     Shaders shaders_;
     opengl::ShaderProgram* light_shader_;
+
+    friend class ::ugdk::graphic::TextureUnit;
 };
 
 }  // namespace graphic

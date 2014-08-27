@@ -15,6 +15,7 @@ class TextureAtlas;
 
 class RenderTarget;
 class RenderTexture;
+class TextureUnit;
 
 // Drawables
 class Drawable;

@@ -8,6 +8,10 @@ class Language;
 class LanguageManager;
 class LanguageWord;
 class PathManager;
+
+namespace util {
+class IDGenerator;
+}
    
 //}  // namespace util
 }  // namespace ugdk

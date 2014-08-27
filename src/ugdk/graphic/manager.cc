@@ -12,6 +12,8 @@
 #include <ugdk/graphic/rendertexture.h>
 #include <ugdk/debug/profiler.h>
 #include <ugdk/math/integer2D.h>
+#include <ugdk/util/idgenerator.h>
+#include <ugdk/graphic/exceptions.h>
 
 #include "SDL_video.h"
 
@@ -96,6 +98,10 @@ bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, cons
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     internal::AssertNoOpenGLError();
 
+    int max_combined_texture_image_units;
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_combined_texture_image_units);
+    textureunit_ids_.reset(new util::IDGenerator(0, max_combined_texture_image_units, -1));
+
     light_buffer_.reset(new RenderTexture(canvas_size));
 
     shaders_.ReplaceShader(0, CreateShader(false, false));
@@ -126,6 +132,22 @@ void Manager::Release() {
     SDL_GL_DeleteContext(context_);
     screen_.reset();
     light_buffer_.reset();
+    textureunit_ids_.reset();
+}
+
+TextureUnit Manager::ReserveTextureUnit(const internal::GLTexture* texture) {
+    int id = textureunit_ids_->GenerateID();
+    if (id == textureunit_ids_->error_value())
+        throw NotSupportedException("Maximum amount of TextureUnits reached.");
+    
+    TextureUnit unit(id);
+    if (texture)
+        unit.BindTexture(texture);
+    return unit;
+}
+
+void Manager::ReleaseTextureUnitID(int id) {
+    textureunit_ids_->ReleaseID(id);
 }
 
 action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> render_light_function) {
