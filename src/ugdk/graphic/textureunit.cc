@@ -8,6 +8,11 @@
 namespace ugdk {
 namespace graphic {
 
+TextureUnit::TextureUnit()
+: id_(-1)
+, texture_(nullptr)
+{}
+
 TextureUnit::TextureUnit(unsigned int id)
 : id_(id)
 , texture_(nullptr)

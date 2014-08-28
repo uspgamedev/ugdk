@@ -37,7 +37,9 @@ class Manager {
     void AttachTo(const std::shared_ptr<desktop::Window>&);
     void ResizeScreen(const math::Vector2D& canvas_size);
 
+#ifndef SWIG
     TextureUnit ReserveTextureUnit(const internal::GLTexture* texture = nullptr);
+#endif
 
     class Shaders {
       public:

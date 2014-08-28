@@ -10,6 +10,8 @@ namespace graphic {
 
 class TextureUnit final {
   public:
+    // FIXME: remove this when SWIG stops breaking
+    TextureUnit();
     TextureUnit(const TextureUnit&) = delete;
     TextureUnit(TextureUnit&&);
     ~TextureUnit();
