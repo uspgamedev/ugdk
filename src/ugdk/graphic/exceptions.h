@@ -25,7 +25,7 @@ class InvalidOperation : public GraphicException {
 
 class NotSupportedException : public GraphicException {
   public:
-    NotSupportedException(const char* reason) : NotSupportedException(reason) {}
+    NotSupportedException(const char* reason) : GraphicException(reason) {}
 };
 
 template<class T, typename ...Args>

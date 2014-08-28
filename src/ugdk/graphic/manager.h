@@ -23,7 +23,7 @@ typedef void* SDL_GLContext;
 namespace ugdk {
 namespace graphic {
 
-struct RenderScreen;
+class RenderScreen;
 action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_light_function);
 
 class Manager {
