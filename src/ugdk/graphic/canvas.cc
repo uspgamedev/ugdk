@@ -2,6 +2,7 @@
 
 #include <ugdk/graphic/exceptions.h>
 #include <ugdk/graphic/rendertarget.h>
+#include <ugdk/graphic/textureunit.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
 #include <ugdk/internal/gltexture.h>
 
@@ -104,10 +105,8 @@ void Canvas::SendUniform(const std::string& name, float t1, float t2, float t3, 
     internal::AssertNoOpenGLError();
 }
 
-void Canvas::SendTexture(uint8 slot, const internal::GLTexture* texture) {
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, texture->id());
-    internal::AssertNoOpenGLError();
+void Canvas::SendUniform(const std::string& name, const TextureUnit& unit) {
+    glUniform1i(shader_program_->UniformLocation(name), unit.id());
 }
 
 void Canvas::Bind() {
