@@ -14,6 +14,7 @@ Canvas* ACTIVE_CANVAS = nullptr;
 
 Canvas::Canvas(RenderTarget* render_target)
     : render_target_(render_target)
+    , shader_program_(nullptr)
     , previous_canvas_(nullptr)
     , next_canvas_(nullptr)
 {
