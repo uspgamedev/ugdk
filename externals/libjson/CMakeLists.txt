@@ -5,9 +5,7 @@ project(libjson CXX)
 SET(LIBJSON_SOURCE
 libjson.h
 JSONOptions.h
-_internal/Dependencies/libbase64++/._libbase64++.h
 _internal/Dependencies/libbase64++/libbase64++.h
-_internal/Dependencies/mempool++/._mempool.h
 _internal/Dependencies/mempool++/mempool.h
 _internal/Source/internalJSONNode.cpp
 _internal/Source/internalJSONNode.h
