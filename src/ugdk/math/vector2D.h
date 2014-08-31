@@ -2,9 +2,10 @@
 #ifndef UGDK_MATH_VECTOR2D_H_
 #define UGDK_MATH_VECTOR2D_H_
 
-#include <array>
 #include <ugdk/structure/types.h>
 #include <ugdk/math.h>
+#include <array>
+#include <tuple>
 
 #ifdef SWIG
 #pragma SWIG nowarn=312
@@ -233,10 +234,12 @@ class Vector2D {
     double    operator*(const Vector2D &right) const;
 
     operator std::array<double, 2> () const {
-        std::array<double, 2> result;
-        result[0] = this->val[0];
-        result[1] = this->val[1];
+        std::array<double, 2> result {{ x,y }};
         return result;
+    }
+
+    operator std::pair<double, double> () const {
+        return std::make_pair(x, y);
     }
 };
 
