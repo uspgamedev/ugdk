@@ -27,7 +27,7 @@ const Geometry& RenderTarget::projection_matrix() const {
 void RenderTarget::Clear(Color color) {
     AssertCondition<InvalidOperation>(IsActive(), "RenderTarget must be active for Clear.");
     glClearColor(color.r, color.g, color.b, color.a);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     internal::AssertNoOpenGLError();
 }
 
