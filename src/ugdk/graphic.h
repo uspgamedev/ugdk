@@ -13,6 +13,7 @@ class PrimitiveController;
 class PrimitiveControllerPosition;
 class TextureAtlas;
 
+class Canvas;
 class RenderTarget;
 class RenderTexture;
 class TextureUnit;
@@ -22,26 +23,22 @@ class Drawable;
 
 class Label;
 class TextBox;
-class Sprite;
 class TexturedRectangle;
 
 // Extra
 class Font;
-class Image;
 class Light;
 class Node;
-class Image;
-class Canvas;
-class Framebuffer;
 
 // Managers
 class TextManager;
 class Manager;
 
+enum class VertexType;
+
 namespace opengl {
 class Shader;
 class ShaderProgram;
-class ShaderUse;
 class VertexBuffer;
 }  // namespace opengl
 
