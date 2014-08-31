@@ -7,7 +7,6 @@
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
-#include <ugdk/graphic/opengl/shaderuse.h>
 #include <ugdk/graphic/rendertarget.h>
 #include <ugdk/graphic/rendertexture.h>
 #include <ugdk/debug/profiler.h>
@@ -169,23 +168,15 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
     light_scene->set_focus_callback([](action::Scene* scene) { scene->Finish(); });
     light_scene->set_render_function([render_light_function](graphic::Canvas& canvas) {
         graphic::Manager* manager = graphic::manager();
-        auto light_buffer = manager->light_buffer();
+        Canvas light_canvas(manager->light_buffer());
 
         // Lights are simply added together.
         glBlendFunc(GL_ONE, GL_ONE);
 
-        /*light_buffer->Bind();
-        light_buffer->Clear(Color(0.0, 0.0, 0.0, 0.0));
-        render_light_function(canvas);
-        light_buffer->Unbind();*/
+        light_canvas.Clear(Color(0.0, 0.0, 0.0, 0.0));
+        render_light_function(light_canvas);
     
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-        // Bind the light texture to all shaders that USE_LIGHT_BUFFER.
-        opengl::ShaderUse(manager->shaders().GetSpecificShader((1 << 0) + (0 << 1)))
-            .SendTexture(1, light_buffer->texture(), "light_texture");
-        opengl::ShaderUse(manager->shaders().GetSpecificShader((1 << 0) + (1 << 1)))
-            .SendTexture(1, light_buffer->texture(), "light_texture");
     });
 
     return light_scene;

@@ -76,7 +76,7 @@ void Node::RenderLight(Canvas& canvas) const {
     canvas.PushAndCompose(geometry_);
 
     if(light_) 
-        light_->Draw(canvas.current_geometry());
+        light_->Draw(canvas);
 
     for(Node* child : childs_)
         child->RenderLight(canvas);
