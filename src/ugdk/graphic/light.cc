@@ -11,6 +11,11 @@ namespace graphic {
 namespace {
     struct VertexXY {
         float x, y;
+
+        void set_xy(double _x, double _y) {
+            this->x = static_cast<float>(_x);
+            this->y = static_cast<float>(_y);
+        }
     };
 }
 
@@ -26,27 +31,10 @@ Light::~Light() {}
 void Light::set_dimension(const ugdk::math::Vector2D& dimension) {
     dimension_ = dimension;
     VertexData::Mapper mapper(data_);
-    {
-        VertexXY* p = mapper.Get<VertexXY>(0);
-        p->x = -dimension_.x;
-        p->y = -dimension_.y;
-    }
-    {
-        VertexXY* p = mapper.Get<VertexXY>(1);
-        p->x =  dimension_.x;
-        p->y = -dimension_.y;
-    }
-    {
-        VertexXY* p = mapper.Get<VertexXY>(2);
-        p->x = -dimension_.x;
-        p->y =  dimension_.y;
-    }
-    {
-        VertexXY* p = mapper.Get<VertexXY>(3);
-        p->x =  dimension_.x;
-        p->y =  dimension_.y;
-    }
-
+    mapper.Get<VertexXY>(0)->set_xy(-dimension_.x, -dimension_.y);
+    mapper.Get<VertexXY>(1)->set_xy( dimension_.x, -dimension_.y);
+    mapper.Get<VertexXY>(2)->set_xy(-dimension_.x,  dimension_.y);
+    mapper.Get<VertexXY>(3)->set_xy( dimension_.x,  dimension_.y);
 }
 
 void Light::Draw(Canvas &canvas) {
@@ -57,6 +45,7 @@ void Light::Draw(Canvas &canvas) {
     canvas.SendUniform("minimum_radius", 0.05f);
     canvas.PushAndCompose(VisualEffect(color_));
     canvas.SendVertexData(data_, VertexType::VERTEX, 0);
+    graphic::manager()->DisableVertexType(VertexType::TEXTURE);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     canvas.ChangeShaderProgram(old_program);
