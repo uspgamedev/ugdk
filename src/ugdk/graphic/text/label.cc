@@ -1,10 +1,6 @@
 #include <ugdk/graphic/text/label.h>
 
 #include <ugdk/internal/opengl.h>
-#include <ugdk/graphic/opengl/shaderprogram.h>
-#include <ugdk/graphic/opengl/shaderuse.h>
-#include <ugdk/graphic/opengl/vertexbuffer.h>
-#include <ugdk/graphic/defaultshaders.h>
 
 #include <ugdk/structure/types.h>
 #include <ugdk/graphic/module.h>
@@ -75,33 +71,31 @@ void Label::Draw(Canvas& canvas) const {
     
     if(draw_setup_function_) draw_setup_function_(this, canvas);
 
-    graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
-    opengl::ShaderUse shader_use(graphic::manager()->shaders().current_shader());
+    auto& shaders = graphic::manager()->shaders();
+    bool previous_ignore_texture_flag = shaders.IsFlagSet(Manager::Shaders::IGNORE_TEXTURE_COLOR);
+    auto previous_program = canvas.shader_program();
 
-    // Send our transformation to the currently bound shader, 
-    // in the "MVP" uniform
-    shader_use.SendGeometry(canvas.current_geometry());
-    shader_use.SendEffect(canvas.current_visualeffect());
+    shaders.ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
+    canvas.ChangeShaderProgram(shaders.current_shader());
 
-    // Bind our texture in Texture Unit 0
-    shader_use.SendTexture(0, font_->freetype_font()->atlas->id);
+    TextureUnit unit = manager()->ReserveTextureUnit(nullptr);
+    glActiveTexture(GL_TEXTURE0 + unit.id());
+    glBindTexture(GL_TEXTURE_2D, font_->freetype_font()->atlas->id);
+    canvas.SendUniform("drawable_texture", unit);
 
-    // 1rst attribute buffer : vertices
-    shader_use.SendVertexBuffer(buffer_->buffer().get(), opengl::VERTEX,             0, 2, buffer_->vertex_size());
+    canvas.SendVertexData(*buffer_, VertexType::VERTEX, 0, 2);
+    canvas.SendVertexData(*buffer_, VertexType::TEXTURE, sizeof(vec2), 2);
 
-    // 2nd attribute buffer : UVs
-    shader_use.SendVertexBuffer(buffer_->buffer().get(), opengl::TEXTURE, sizeof(vec2), 2, buffer_->vertex_size());
-
-    // Draw the line!
 #ifdef UGDK_USING_GLES
-    for(size_t i = 0; i < num_characters_; ++i) {
-        glDrawArrays(GL_TRIANGLE_STRIP, i * 4, 4);
+    for (size_t i = 0; i < num_characters_; ++i) {
+        glDrawArrays(GL_TRIANGLE_STRIP, static_cast<int>(i * 4), 4);
     }
 #else
-    glMultiDrawArrays(GL_TRIANGLE_STRIP, first_vector_.data(), size_vector_.data(), num_characters_);
+    glMultiDrawArrays(GL_TRIANGLE_STRIP, first_vector_.data(), size_vector_.data(), static_cast<int>(num_characters_));
 #endif
-    
-    graphic::manager()->shaders().ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, false);
+
+    shaders.ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, previous_ignore_texture_flag);
+    canvas.ChangeShaderProgram(previous_program);
 
     canvas.PopGeometry();
 }
