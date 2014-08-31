@@ -20,6 +20,11 @@
 struct SDL_Window;
 typedef void* SDL_GLContext;
 
+#ifdef SWIG
+// Nested class not supported
+#pragma SWIG nowarn=325
+#endif
+
 namespace ugdk {
 namespace graphic {
 

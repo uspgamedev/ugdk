@@ -10,6 +10,11 @@
 #include <vector>
 #include <unordered_map>
 
+#ifdef SWIG
+// Nested class not supported
+#pragma SWIG nowarn=325
+#endif
+
 namespace ugdk {
 namespace graphic {
 
