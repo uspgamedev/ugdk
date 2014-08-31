@@ -1,9 +1,12 @@
 #include <ugdk/graphic/canvas.h>
 
 #include <ugdk/graphic/exceptions.h>
+#include <ugdk/graphic/module.h>
 #include <ugdk/graphic/rendertarget.h>
 #include <ugdk/graphic/textureunit.h>
+#include <ugdk/graphic/vertexdata.h>
 #include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/internal/gltexture.h>
 
 namespace ugdk {
@@ -128,6 +131,23 @@ void Canvas::SendGeometry() {
 void Canvas::SendEffect() {
     const Color& c = current_visualeffect().color();
     glUniform4f(shader_program_->UniformLocation("effect_color"), c.r, c.g, c.b, c.a);
+    internal::AssertNoOpenGLError();
+}
+
+void Canvas::SendVertexData(const VertexData* data, VertexType type, size_t offset, int size) {
+    opengl::VertexBuffer::Bind bind(*data->buffer().get());
+
+    unsigned int location = manager()->LocationForVertexType(type);
+    glEnableVertexAttribArray(location);
+
+    glVertexAttribPointer(
+        location,            // location
+        size,                // size
+        GL_FLOAT,            // data type
+        GL_FALSE,            // normalized?
+        data->vertex_size(), // ammount of bytes to offset for each element. 0 means size*sizeof(type)
+        data->buffer()->getPointer(offset) // array buffer offset
+    );
     internal::AssertNoOpenGLError();
 }
 

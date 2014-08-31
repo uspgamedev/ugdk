@@ -150,6 +150,18 @@ void Manager::ReleaseTextureUnitID(int id) {
     textureunit_ids_->ReleaseID(id);
 }
 
+void Manager::DisableVertexType(VertexType type) {
+    glDisableVertexAttribArray(LocationForVertexType(type));
+}
+
+unsigned int Manager::LocationForVertexType(VertexType type) {
+    switch(type) {
+    case VertexType::VERTEX:  return 0;
+    case VertexType::TEXTURE: return 1;
+    case VertexType::COLOR:   return 2;
+    }
+}
+
 action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> render_light_function) {
     action::Scene* light_scene = new action::Scene;
     light_scene->set_identifier("Light Rendering Scene");

@@ -5,6 +5,7 @@
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/structure/types.h>
+#include <ugdk/graphic/manager.h>
 
 #include <ugdk/internal.h>
 #include <ugdk/desktop.h>
@@ -42,7 +43,7 @@ class Canvas {
     void PopGeometry();
     void PopVisualEffect();
 
-    
+    //
     void Clear(Color);
     
     // Shader variables.
@@ -52,6 +53,9 @@ class Canvas {
     void SendUniform(const std::string& name, float t1, float t2, float t3);
     void SendUniform(const std::string& name, float t1, float t2, float t3, float t4);
     void SendUniform(const std::string& name, const TextureUnit& unit);
+
+    /// The VertexType should later be disabled using Manager::DisableVertexType
+    void SendVertexData(const VertexData* data, VertexType type, size_t offset, int size = 2);
 
   private:
     void Bind();

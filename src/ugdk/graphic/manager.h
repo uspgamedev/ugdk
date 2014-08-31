@@ -26,6 +26,10 @@ namespace graphic {
 class RenderScreen;
 action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_light_function);
 
+enum class VertexType {
+    VERTEX, TEXTURE, COLOR
+};
+
 class Manager {
   public:
     Manager();
@@ -40,6 +44,8 @@ class Manager {
 #ifndef SWIG
     TextureUnit ReserveTextureUnit(const internal::GLTexture* texture = nullptr);
 #endif
+    void DisableVertexType(VertexType);
+    unsigned int LocationForVertexType(VertexType);
 
     class Shaders {
       public:
