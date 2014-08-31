@@ -34,7 +34,7 @@ struct Sprite {
     static const VertexDataSpecification vertexdata_specification;
 
     static void Prepare(Primitive&, const TextureAtlas* spritesheet);
-    static void Render(const Primitive&, opengl::ShaderUse& shader_use);
+    static void Render(const Primitive&, Canvas& canvas);
 
     static std::shared_ptr<action::SpriteAnimationPlayer> CreateSpriteAnimationPlayer(Primitive&, const action::SpriteAnimationTable* table);
 };
@@ -44,7 +44,7 @@ struct Rectangle {
 
     static void Prepare(Primitive&, const internal::GLTexture*, const math::Vector2D& size);
     static void Prepare(Primitive&, const internal::GLTexture*);
-    static void Render(const Primitive&, opengl::ShaderUse& shader_use);
+    static void Render(const Primitive&, Canvas& canvas);
 };
 
 } // namespace PrimitiveSetup

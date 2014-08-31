@@ -3,7 +3,8 @@
 #include <ugdk/internal/opengl.h>
 #include <ugdk/internal/gltexture.h>
 #include <ugdk/graphic/sprite.h>
-#include <ugdk/graphic/opengl/shaderuse.h>
+#include <ugdk/graphic/manager.h>
+#include <ugdk/graphic/canvas.h>
 
 namespace ugdk {
 namespace graphic {
@@ -16,10 +17,10 @@ namespace {
         GLfloat x, y, u, v;
     };
 
-    void RenderPrimitiveAsRectangle(const Primitive& primitive, opengl::ShaderUse& shader_use) {
+    void RenderPrimitiveAsRectangle(const Primitive& primitive, Canvas& canvas) {
         auto data = primitive.vertexdata();
-        shader_use.SendVertexBuffer(data->buffer().get(), opengl::VERTEX, 0, 2, data->vertex_size());
-        shader_use.SendVertexBuffer(data->buffer().get(), opengl::TEXTURE, 2 * sizeof(GLfloat), 2, data->vertex_size());
+        canvas.SendVertexData(*data, VertexType::VERTEX, 0, 2);
+        canvas.SendVertexData(*data, VertexType::TEXTURE, 2 * sizeof(GLfloat), 2);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 }
@@ -136,8 +137,8 @@ namespace PrimitiveSetup {
         primitive.set_drawfunction(Sprite::Render);
     }
     
-    void Sprite::Render(const Primitive& primitive, opengl::ShaderUse& shader_use) {
-        RenderPrimitiveAsRectangle(primitive, shader_use);
+    void Sprite::Render(const Primitive& primitive, Canvas& canvas) {
+        RenderPrimitiveAsRectangle(primitive, canvas);
     }
 
     std::shared_ptr<action::SpriteAnimationPlayer> Sprite::CreateSpriteAnimationPlayer(
@@ -171,8 +172,8 @@ namespace PrimitiveSetup {
         Rectangle::Prepare(primitive, texture, math::Vector2D(texture->width(), texture->height()));
     }
 
-    void Rectangle::Render(const Primitive& primitive, opengl::ShaderUse& shader_use) {
-        RenderPrimitiveAsRectangle(primitive, shader_use);
+    void Rectangle::Render(const Primitive& primitive, Canvas& canvas) {
+        RenderPrimitiveAsRectangle(primitive, canvas);
     }
 
 } // namespace PrimitiveSetup
