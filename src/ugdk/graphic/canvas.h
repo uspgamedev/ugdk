@@ -36,6 +36,7 @@ class Canvas {
     bool IsActive() const;
     const Geometry& current_geometry() const { return geometry_stack_.back(); }
     const VisualEffect& current_visualeffect() const { return visualeffect_stack_.back(); }
+    const opengl::ShaderProgram* shader_program() const { return shader_program_; }
 
     void PushAndCompose(const Geometry& geometry);
     void PushAndCompose(const VisualEffect& effect);
@@ -55,7 +56,7 @@ class Canvas {
     void SendUniform(const std::string& name, const TextureUnit& unit);
 
     /// The VertexType should later be disabled using Manager::DisableVertexType
-    void SendVertexData(const VertexData* data, VertexType type, size_t offset, int size = 2);
+    void SendVertexData(const VertexData& data, VertexType type, size_t offset, int size = 2);
 
   private:
     void Bind();

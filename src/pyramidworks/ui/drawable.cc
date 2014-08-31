@@ -4,14 +4,21 @@
 #include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/graphic/opengl/vertexbuffer.h>
-#include <ugdk/graphic/opengl/shaderuse.h>
+#include <ugdk/graphic/module.h>
+#include <ugdk/graphic/textureunit.h>
 #include <ugdk/structure/types.h>
 
 #include <algorithm>
+#include <numeric>
 
 namespace pyramidworks {
 namespace ui {
+
+namespace {
+    struct VertexXY {
+        float x, y;
+    };
+}
 
 using ugdk::graphic::opengl::VertexBuffer;
 
@@ -26,13 +33,11 @@ void Drawable::Draw(ugdk::graphic::Canvas& canvas) const {
         draw_setup_function_(this, canvas);
 
     canvas.PushAndCompose(-hotspot_);
+    canvas.ChangeShaderProgram(primitive_->shader_program());
 
-    ugdk::graphic::opengl::ShaderUse shader(primitive_->shader_program());
-
-    shader.SendTexture(0, primitive_->texture());
-    shader.SendGeometry(canvas.current_geometry());
-    shader.SendEffect(canvas.current_visualeffect());
-    primitive_->drawfunction()(*primitive_, shader);
+    ugdk::graphic::TextureUnit unit = ugdk::graphic::manager()->ReserveTextureUnit(primitive_->texture());
+    canvas.SendUniform("drawable_texture", unit);
+    primitive_->drawfunction()(*primitive_, canvas);
 
     canvas.PopGeometry();
 }
@@ -44,27 +49,20 @@ const ugdk::math::Vector2D& Drawable::size() const {
 
 void Drawable::updateSize() {
     auto& data = *primitive_->vertexdata();
-    auto buffer = primitive_->vertexdata()->buffer().get();
+    ugdk::graphic::VertexData::Mapper mapper(data);
 
-    VertexBuffer::Bind bind(*buffer);
-    VertexBuffer::Mapper mapper(*buffer);
+    float min_x = std::numeric_limits<float>::max(),
+          max_x = std::numeric_limits<float>::min(),
+          min_y = std::numeric_limits<float>::max(),
+          max_y = std::numeric_limits<float>::min();
 
-    ugdk::uint8* ptr = static_cast<ugdk::uint8*>(mapper.get());
-
-    GLfloat* v1 = reinterpret_cast<GLfloat*>(ptr);
-    GLfloat min_x = v1[0];
-    GLfloat max_x = v1[0];
-    GLfloat min_y = v1[1];
-    GLfloat max_y = v1[1];
-
-    for (std::size_t i = 1; i < data.num_vertices(); ++i) {
-        GLfloat* v = reinterpret_cast<GLfloat*>(ptr + i * data.vertex_size());
-        min_x = std::min(min_x, v[0]);
-        min_y = std::min(min_y, v[1]);
-        max_x = std::max(max_x, v[0]);
-        max_y = std::max(max_y, v[1]);
+    for (std::size_t i = 0; i < data.num_vertices(); ++i) {
+        VertexXY* p = mapper.Get<VertexXY>(i);
+        min_x = std::min(min_x, p->x);
+        min_y = std::min(min_y, p->y);
+        max_x = std::max(max_x, p->x);
+        max_y = std::max(max_y, p->y);
     }
-
     size_.x = max_x - min_x; 
     size_.y = max_y - min_y;
 }

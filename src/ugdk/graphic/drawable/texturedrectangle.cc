@@ -5,34 +5,52 @@
 
 #include <ugdk/internal/opengl.h>
 #include <ugdk/internal/gltexture.h>
-#include <ugdk/graphic/drawable/functions.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/graphic/opengl/shaderprogram.h>
-#include <ugdk/graphic/opengl/vertexbuffer.h>
+#include <ugdk/graphic/textureunit.h>
+#include <ugdk/graphic/module.h>
+#include <ugdk/graphic/primitivesetup.h>
 #include <ugdk/math/integer2D.h>
 
 namespace ugdk {
 namespace graphic {
+
+
+namespace {
+    struct VertexXYUV {
+        GLfloat x, y, u, v;
+    };
+}
     
 TexturedRectangle::TexturedRectangle(const internal::GLTexture* texture)
-    : texture_(texture) {
-        assert(texture_);
-        size_ = math::Integer2D(texture->width(), texture->height());
-    }
+    : TexturedRectangle(texture, math::Integer2D(texture->width(), texture->height()))
+{}
 
 TexturedRectangle::TexturedRectangle(const internal::GLTexture* texture, const math::Vector2D& _size)
     : size_(_size)
-    , texture_(texture) { assert(texture_); }
+    , data_(4, sizeof(VertexXYUV), false)
+    , texture_(texture)
+{
+    assert(texture_);
+
+    VertexDataManipulation::SetToRectangleAtOrigin(data_, size_);
+}
 
 TexturedRectangle::~TexturedRectangle() {}
 
 void TexturedRectangle::Draw(Canvas& canvas) const {
     if(draw_setup_function_) draw_setup_function_(this, canvas);
 
-    DrawSquare(canvas.current_geometry() * Geometry(math::Vector2D(-hotspot_), size_), 
-        canvas.current_visualeffect(), 
-        texture_ ? texture_ : graphic::manager()->white_texture());
+    canvas.PushAndCompose(Geometry(math::Vector2D(-hotspot_)));
+
+    TextureUnit unit = manager()->ReserveTextureUnit(texture_);
+    canvas.SendUniform("drawable_texture", unit);
+
+    canvas.SendVertexData(data_, VertexType::VERTEX, 0, 2);
+    canvas.SendVertexData(data_, VertexType::TEXTURE, 2 * sizeof(GLfloat), 2);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    canvas.PopGeometry();
 }
 
 }  // namespace graphic

@@ -11,8 +11,7 @@ namespace graphic {
 
 float FillBufferWithText(const Font*, const std::u32string&, VertexData::Mapper& mapped_data, float y = 0.0f);
 
-void DrawSquare(const Geometry& geometry, const VisualEffect&, const internal::GLTexture*);
-void DrawTextLine(const Geometry& geometry, const VisualEffect&, const Font*, const std::string& utf8_message);
+void DrawTextLine(Canvas& canvas, const Font*, const std::string& utf8_message);
 
 }  // namespace graphic
 }  // namespace ugdk

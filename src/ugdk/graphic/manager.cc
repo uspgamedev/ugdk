@@ -199,6 +199,11 @@ const opengl::ShaderProgram* Manager::Shaders::GetSpecificShader(const std::bits
     return shaders_[flags.to_ulong()];
 }
 
+bool Manager::Shaders::IsFlagSet(Flag flag) const {
+    int flag_bit = static_cast<int>(flag);
+    return flags_[flag_bit];
+}
+
 void Manager::Shaders::ChangeFlag(Flag flag, bool value) {
     int flag_bit = static_cast<int>(flag);
     flags_[flag_bit] = value;

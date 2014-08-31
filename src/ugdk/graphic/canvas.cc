@@ -55,6 +55,8 @@ Canvas::~Canvas() {
 void Canvas::ChangeShaderProgram(const opengl::ShaderProgram* shader_program) {
     shader_program_ = shader_program;
     glUseProgram(shader_program_->id());
+    SendGeometry();
+    SendEffect();
 }
 
 bool Canvas::IsActive() const {
@@ -80,11 +82,15 @@ void Canvas::PushAndCompose(const VisualEffect& effect) {
 void Canvas::PopGeometry() {
     AssertCondition<InvalidOperation>(geometry_stack_.size() > 1, "Can only pop a Geometry after pushing at least one.");
     geometry_stack_.pop_back();
+    if (shader_program_)
+        SendGeometry();
 }
 
 void Canvas::PopVisualEffect() {
     AssertCondition<InvalidOperation>(visualeffect_stack_.size() > 1, "Can only pop a VisualEffect after pushing at least one.");
     visualeffect_stack_.pop_back();
+    if (shader_program_)
+        SendEffect();
 }
 
 void Canvas::Clear(Color color) {
@@ -134,8 +140,8 @@ void Canvas::SendEffect() {
     internal::AssertNoOpenGLError();
 }
 
-void Canvas::SendVertexData(const VertexData* data, VertexType type, size_t offset, int size) {
-    opengl::VertexBuffer::Bind bind(*data->buffer().get());
+void Canvas::SendVertexData(const VertexData& data, VertexType type, size_t offset, int size) {
+    opengl::VertexBuffer::Bind bind(*data.buffer().get());
 
     unsigned int location = manager()->LocationForVertexType(type);
     glEnableVertexAttribArray(location);
@@ -145,8 +151,8 @@ void Canvas::SendVertexData(const VertexData* data, VertexType type, size_t offs
         size,                // size
         GL_FLOAT,            // data type
         GL_FALSE,            // normalized?
-        data->vertex_size(), // ammount of bytes to offset for each element. 0 means size*sizeof(type)
-        data->buffer()->getPointer(offset) // array buffer offset
+        data.vertex_size(), // ammount of bytes to offset for each element. 0 means size*sizeof(type)
+        data.buffer()->getPointer(offset) // array buffer offset
     );
     internal::AssertNoOpenGLError();
 }

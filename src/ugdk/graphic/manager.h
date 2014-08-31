@@ -60,6 +60,7 @@ class Manager {
         
         const opengl::ShaderProgram* GetSpecificShader(const std::bitset<NUM_FLAGS>& flags) const;
 
+        bool IsFlagSet(Flag) const;
         void ChangeFlag(Flag, bool);
 
         /// Replace the ShaderProgram UGDK uses for the given combination of flags.
