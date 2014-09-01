@@ -266,6 +266,7 @@ void Run() {
                 if(graphic::manager()) {
                     graphic::Canvas canvas(graphic::manager()->screen());
                     canvas.Clear(Color(0.0, 0.0, 0.0, 0.0));
+                    canvas.ChangeShaderProgram(graphic::manager()->shaders().current_shader());
                     for(action::Scene* it : scene_list_)
                         it->Render(canvas);
                 }

@@ -54,9 +54,13 @@ Canvas::~Canvas() {
 
 void Canvas::ChangeShaderProgram(const opengl::ShaderProgram* shader_program) {
     shader_program_ = shader_program;
-    glUseProgram(shader_program_->id());
-    SendGeometry();
-    SendEffect();
+    if (shader_program_) {
+        glUseProgram(shader_program_->id());
+        SendGeometry();
+        SendEffect();
+    } else {
+        glUseProgram(0);
+    }
 }
 
 bool Canvas::IsActive() const {
