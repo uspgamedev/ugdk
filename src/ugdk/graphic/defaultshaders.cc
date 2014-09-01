@@ -83,9 +83,11 @@ opengl::ShaderProgram* LightShader() {
     if(!myprogram) {
         opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
-        vertex_shader.AddCodeBlock("out highp vec2 lightPosition;" "\n");
-        vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition*4.0,0,1);" "\n");
-        vertex_shader.AddLineInMain("   lightPosition = vertexPosition*4.0;" "\n");
+        vertex_shader.AddCodeBlock("out highp vec2 lightPosition;" "\n"
+                                   "uniform highp vec2 dimension;" "\n"
+                                   );
+        vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition * dimension,0,1);" "\n");
+        vertex_shader.AddLineInMain("   lightPosition = vertexPosition;" "\n");
         vertex_shader.GenerateSource();
 
         fragment_shader.AddCodeBlock("in highp vec2 lightPosition;" "\n"
