@@ -49,6 +49,7 @@ void Light::Draw(Canvas &canvas) {
     graphic::manager()->DisableVertexType(VertexType::TEXTURE);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
+    canvas.PopVisualEffect();
     canvas.ChangeShaderProgram(old_program);
 }
 
