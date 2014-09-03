@@ -67,6 +67,10 @@ bool Canvas::IsActive() const {
     return ACTIVE_CANVAS == this;
 }
 
+math::Vector2D Canvas::size() const {
+    return render_target_->size();
+}
+
 void Canvas::PushAndCompose(const Geometry& geometry) {
     geometry_stack_.reserve(geometry_stack_.size() + 1);
     geometry_stack_.emplace_back(geometry_stack_.back());
@@ -108,6 +112,9 @@ void Canvas::SendUniform(const std::string& name, float t1) {
 void Canvas::SendUniform(const std::string& name, float t1, float t2) {
     glUniform2f(shader_program_->UniformLocation(name), t1, t2);
     internal::AssertNoOpenGLError();
+}
+void Canvas::SendUniform(const std::string& name, const math::Vector2D& v) {
+    SendUniform(name, static_cast<float>(v.x), static_cast<float>(v.y));
 }
 void Canvas::SendUniform(const std::string& name, float t1, float t2, float t3) {
     glUniform3f(shader_program_->UniformLocation(name), t1, t2, t3);

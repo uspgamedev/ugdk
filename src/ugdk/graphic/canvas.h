@@ -35,6 +35,7 @@ class Canvas {
 
     /// Queries if this object is currently bound.
     bool IsActive() const;
+    math::Vector2D size() const;
     const Geometry& current_geometry() const { return geometry_stack_.back(); }
     const VisualEffect& current_visualeffect() const { return visualeffect_stack_.back(); }
     const opengl::ShaderProgram* shader_program() const { return shader_program_; }
@@ -52,6 +53,7 @@ class Canvas {
 
     void SendUniform(const std::string& name, float t1);
     void SendUniform(const std::string& name, float t1, float t2);
+    void SendUniform(const std::string& name, const math::Vector2D&);
     void SendUniform(const std::string& name, float t1, float t2, float t3);
     void SendUniform(const std::string& name, float t1, float t2, float t3, float t4);
     void SendUniform(const std::string& name, const TextureUnit& unit);
