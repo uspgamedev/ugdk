@@ -17,6 +17,7 @@
 #include <ugdk/graphic/image.h>
 #include <ugdk/graphic/light.h>
 #include <ugdk/graphic/node.h>
+#include <ugdk/graphic/drawmode.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/textureatlas.h>
 #include <ugdk/graphic/textureunit.h>
@@ -60,6 +61,7 @@
 %import(module="ugdk_internal") <ugdk/internal.h>
 %import(module="ugdk_drawable") <ugdk/graphic/text/textbox.h> //this needs to go after the include drawable.h
 
+%include <ugdk/graphic/drawmode.h>
 %include <ugdk/graphic/canvas.h>
 %include <ugdk/graphic/image.h>
 %include <ugdk/graphic/light.h>
@@ -84,6 +86,7 @@ disable_disown(ugdk::graphic::Node* new_child)
 
 namespace ugdk {
 namespace graphic {
+	export_class(DrawMode)
     export_class(Canvas)
     export_class(Drawable)
     export_class(Image)
