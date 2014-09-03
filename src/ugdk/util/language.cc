@@ -9,6 +9,7 @@
 #include <ugdk/util/utf8.h>
 
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <utility>
 #include <algorithm>
