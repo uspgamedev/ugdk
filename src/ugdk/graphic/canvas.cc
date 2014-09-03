@@ -140,7 +140,11 @@ void Canvas::SendGeometry() {
      
 void Canvas::SendEffect() {
     const Color& c = current_visualeffect().color();
-    glUniform4f(shader_program_->UniformLocation("effect_color"), c.r, c.g, c.b, c.a);
+    glUniform4f(shader_program_->UniformLocation("effect_color"),
+                static_cast<GLfloat>(c.r),
+                static_cast<GLfloat>(c.g),
+                static_cast<GLfloat>(c.b),
+                static_cast<GLfloat>(c.a));
     internal::AssertNoOpenGLError();
 }
 
@@ -155,10 +159,14 @@ void Canvas::SendVertexData(const VertexData& data, VertexType type, size_t offs
         size,                // size
         GL_FLOAT,            // data type
         GL_FALSE,            // normalized?
-        data.vertex_size(), // ammount of bytes to offset for each element. 0 means size*sizeof(type)
+        static_cast<int>(data.vertex_size()), // ammount of bytes to offset for each element. 0 means size*sizeof(type)
         data.buffer()->getPointer(offset) // array buffer offset
     );
     internal::AssertNoOpenGLError();
+}
+
+void Canvas::DrawArrays(DrawMode mode, int first_vertex, int vertex_count) {
+    glDrawArrays(mode.mode(), first_vertex, vertex_count);
 }
 
 }  // namespace graphic

@@ -1,11 +1,12 @@
 #ifndef UGDK_GRAPHIC_CANVAS_H_
 #define UGDK_GRAPHIC_CANVAS_H_
 
+#include <ugdk/graphic/drawmode.h>
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/structure/types.h>
-#include <ugdk/graphic/manager.h>
 
 #include <ugdk/internal.h>
 #include <ugdk/desktop.h>
@@ -57,6 +58,9 @@ class Canvas {
 
     /// The VertexType should later be disabled using Manager::DisableVertexType
     void SendVertexData(const VertexData& data, VertexType type, size_t offset, int size = 2);
+
+    // Drawing
+    void DrawArrays(DrawMode, int first_vertex, int vertex_count);
 
   private:
     void Bind();
