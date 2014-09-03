@@ -7,6 +7,8 @@
 %include "std_vector.i"
 %include "std_map.i"
 
+#define final
+
 %{
 
 #include <ugdk/graphic/geometry.h>
@@ -17,6 +19,9 @@
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/textureatlas.h>
+#include <ugdk/graphic/textureunit.h>
+#include <ugdk/graphic/rendertarget.h>
+#include <ugdk/graphic/rendertexture.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/vertexdata.h>
@@ -64,6 +69,9 @@ enable_disown(ugdk::graphic::Drawable* drawable)
 disable_disown(ugdk::graphic::Drawable* drawable)
 disable_disown(ugdk::graphic::Node* new_child)
 %include <ugdk/graphic/textureatlas.h>
+%include <ugdk/graphic/textureunit.h>
+%include <ugdk/graphic/rendertarget.h>
+%include <ugdk/graphic/rendertexture.h>
 
 %include <ugdk/graphic/vertexdata.h>
 %include <ugdk/graphic/primitive.h>
@@ -85,6 +93,9 @@ namespace graphic {
     export_class(VisualEffect)
     export_class(Node)
     export_class(TextureAtlas)
+	export_class(TextureUnit)
+	export_class(RenderTarget)
+	export_class(RenderTexture)
     export_class(TextManager)
     export_class(Manager)
     export_class(Primitive)

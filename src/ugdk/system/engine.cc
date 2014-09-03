@@ -168,9 +168,9 @@ bool Initialize(const Configuration& configuration) {
         for(const auto& window_config : configuration.windows_list)
             desktop::manager()->CreateWindow(window_config);
 
-        if(!graphic::Initialize(new graphic::Manager(
-                                    desktop::manager()->primary_window(),
-                                    configuration.canvas_size)))
+        if(!graphic::Initialize(new graphic::Manager,
+                                desktop::manager()->primary_window(),
+                                configuration.canvas_size))
             return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
 
         sdlevent_handlers_.push_back(desktop::manager()->sdlevent_handler());
@@ -264,10 +264,11 @@ void Run() {
             if(desktop::manager()) {
                 debug::ProfileSection section("Render");
                 if(graphic::manager()) {
-                    auto canvas = graphic::manager()->canvas();
-                    canvas->Clear();
+                    graphic::Canvas canvas(graphic::manager()->screen());
+                    canvas.Clear(Color(0.0, 0.0, 0.0, 0.0));
+                    canvas.ChangeShaderProgram(graphic::manager()->shaders().current_shader());
                     for(action::Scene* it : scene_list_)
-                        it->Render(*canvas);
+                        it->Render(canvas);
                 }
                 desktop::manager()->PresentAll();
             }

@@ -20,7 +20,7 @@ class Primitive {
     const internal::GLTexture* texture() const { return texture_; }
     std::shared_ptr<VertexData> vertexdata() { return vertexdata_; }
     std::shared_ptr<const VertexData> vertexdata() const { return vertexdata_; }
-    const std::function<void(const Primitive&, opengl::ShaderUse&)>& drawfunction() const {
+    const std::function<void(const Primitive&, Canvas&)>& drawfunction() const {
         return drawfunction_;
     }
     std::unique_ptr<PrimitiveController>& controller() { return controller_; }
@@ -30,7 +30,7 @@ class Primitive {
     
     void set_texture(const internal::GLTexture* texture) { texture_ = texture; }
     void set_vertexdata(const std::shared_ptr<VertexData>& data) { vertexdata_ = data; }
-    void set_drawfunction(const std::function<void(const Primitive&, opengl::ShaderUse&)>& function) { drawfunction_ = function; }
+    void set_drawfunction(const std::function<void(const Primitive&, Canvas&)>& function) { drawfunction_ = function; }
     void set_visualeffect(const VisualEffect& visual_effect) { visual_effect_ = visual_effect; }
     void set_shader_program(const opengl::ShaderProgram* shader_program) { shader_program_ = shader_program; }
 
@@ -46,7 +46,7 @@ class Primitive {
   protected:
     const internal::GLTexture* texture_;
     std::shared_ptr<VertexData> vertexdata_;
-    std::function<void(const Primitive&, opengl::ShaderUse&)> drawfunction_;
+    std::function<void(const Primitive&, Canvas&)> drawfunction_;
     std::unique_ptr<PrimitiveController> controller_;
     VisualEffect visual_effect_;
     const opengl::ShaderProgram* shader_program_;

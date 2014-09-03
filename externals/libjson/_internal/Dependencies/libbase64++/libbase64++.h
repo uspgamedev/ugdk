@@ -29,8 +29,8 @@
 			return *loc;
 		}
 	private:
-		const T * lowerbound;
 		const T * upperbound;
+        const T * lowerbound;
 	};
 	#define CREATEBOUNDCHECKER(type, name, ubound, lbound) libbase64_boundChecker<type> name(ubound, lbound)
 	#define GETITEM_BOUNDCHECK(loc, name) name.getLocation(loc)

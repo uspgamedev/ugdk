@@ -6,9 +6,6 @@
 #include <ugdk/graphic.h>
 #include <ugdk/structure/types.h>
 
-#include <string>
-#include <memory>
-
 struct SDL_Window;
 
 namespace ugdk {
@@ -34,15 +31,13 @@ class Window {
     math::Integer2D size() const;
     bool fullscreen() const;
     bool vsync() const { return vsync_; }
-    std::weak_ptr<graphic::Canvas> attached_canvas() const { return attached_canvas_; }
 
   private:
     SDL_Window* sdl_window_;
     bool vsync_;
-    std::weak_ptr<graphic::Canvas> attached_canvas_;
 
     friend class ::ugdk::desktop::Manager;
-    friend class ::ugdk::graphic::Canvas;
+    friend class ::ugdk::graphic::Manager;
 };
 
 }  // namespace desktop

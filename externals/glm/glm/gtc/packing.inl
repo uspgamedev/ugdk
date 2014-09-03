@@ -142,7 +142,7 @@ namespace detail
 		if(x == 0.0f)
 			return 0;
 		else if(glm::isnan(x))
-			return ~0;
+			return ~0U;
 		else if(glm::isinf(x))
 			return 0x1f << 6;
 
@@ -181,7 +181,7 @@ namespace detail
 		if(x == 0.0f)
 			return 0;
 		else if(glm::isnan(x))
-			return ~0;
+			return ~0U;
 		else if(glm::isinf(x))
 			return 0x1f << 5;
 

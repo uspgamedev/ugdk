@@ -4,6 +4,7 @@
 #include <ugdk/internal.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/drawable.h>
+#include <ugdk/graphic/vertexdata.h>
 
 namespace ugdk {
 namespace graphic {
@@ -22,6 +23,7 @@ class TexturedRectangle : public Drawable {
 
   private:
     ugdk::math::Vector2D size_;
+    VertexData data_;
     const internal::GLTexture* texture_;
 };
 

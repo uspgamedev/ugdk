@@ -1,7 +1,5 @@
 #include <ugdk/graphic/primitive.h>
 
-#include <ugdk/graphic/vertexdata.h>
-#include <ugdk/graphic/opengl/shaderuse.h>
 #include <ugdk/graphic/primitivecontroller.h>
 
 namespace ugdk {

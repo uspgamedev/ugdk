@@ -42,6 +42,7 @@ struct TextEditingEvent {
     const TextInput& input;
 
     TextEditingEvent(const TextInput& i) : input(i) {}
+    TextEditingEvent& operator=(const TextEditingEvent&) = delete;
 };
 
 struct TextInputEvent {

@@ -1,7 +1,9 @@
 #ifndef UGDK_GRAPHIC_CANVAS_H_
 #define UGDK_GRAPHIC_CANVAS_H_
 
+#include <ugdk/graphic/drawmode.h>
 #include <ugdk/graphic/geometry.h>
+#include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/structure/types.h>
@@ -13,27 +15,29 @@
 #include <memory>
 #include <vector>
 
-typedef void* SDL_GLContext;
-
 namespace ugdk {
 namespace graphic {
 
-class Canvas : public std::enable_shared_from_this<Canvas> {
+/**
+    Binds the RenderTarget to allow rendering. Unbinds automatically on destructor.
+    Creating multiple instances at the same time are supported, but the lifetime of
+    the instances should act as a stack.
+    TODO: example about this.
+
+    The only valid calls on inactive instances are const-qualified methods.
+*/
+class Canvas {
   public:
-    static std::shared_ptr<Canvas> Create(const std::weak_ptr<desktop::Window>&, const math::Vector2D& size);
+    Canvas(RenderTarget* render_target);
     ~Canvas();
 
-    const math::Vector2D& size() const { return size_; }
+    void ChangeShaderProgram(const opengl::ShaderProgram* shader_program);
+
+    /// Queries if this object is currently bound.
+    bool IsActive() const;
     const Geometry& current_geometry() const { return geometry_stack_.back(); }
     const VisualEffect& current_visualeffect() const { return visualeffect_stack_.back(); }
-
-    /** Can only be resized when the geometry stack stacks is empty. */
-    void Resize(const math::Vector2D& size);
-
-    void AttachTo(const std::weak_ptr<desktop::Window>&);
-    void UpdateViewport();
-
-    void SaveToTexture(internal::GLTexture* texture);
+    const opengl::ShaderProgram* shader_program() const { return shader_program_; }
 
     void PushAndCompose(const Geometry& geometry);
     void PushAndCompose(const VisualEffect& effect);
@@ -41,18 +45,35 @@ class Canvas : public std::enable_shared_from_this<Canvas> {
     void PopGeometry();
     void PopVisualEffect();
 
-    void Clear();
+    //
     void Clear(Color);
-
-  protected:
-    Canvas(SDL_GLContext);
     
+    // Shader variables.
+
+    void SendUniform(const std::string& name, float t1);
+    void SendUniform(const std::string& name, float t1, float t2);
+    void SendUniform(const std::string& name, float t1, float t2, float t3);
+    void SendUniform(const std::string& name, float t1, float t2, float t3, float t4);
+    void SendUniform(const std::string& name, const TextureUnit& unit);
+
+    /// The VertexType should later be disabled using Manager::DisableVertexType
+    void SendVertexData(const VertexData& data, VertexType type, size_t offset, int size = 2);
+
+    // Drawing
+    void DrawArrays(DrawMode, int first_vertex, int vertex_count);
+
   private:
-    SDL_GLContext context_;
-    math::Vector2D size_;
-    std::weak_ptr<desktop::Window> attached_window_;
+    void Bind();
+    void Unbind();
+    void SendGeometry();
+    void SendEffect();
+
+    RenderTarget* render_target_;
     std::vector<Geometry> geometry_stack_;
     std::vector<VisualEffect> visualeffect_stack_;
+    const opengl::ShaderProgram* shader_program_;
+    Canvas* previous_canvas_;
+    Canvas* next_canvas_;
 };
 
 }  // namespace graphic

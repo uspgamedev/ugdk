@@ -5,8 +5,9 @@ namespace graphic {
 
 static Manager* reference_ = nullptr;
 
-bool Initialize(Manager* manager) {
-    if(manager && manager->Initialize()) {
+bool Initialize(Manager* manager, const std::weak_ptr<desktop::Window> & window,
+                const math::Vector2D &canvas_size) {
+    if(manager && manager->Initialize(window, canvas_size)) {
         // The manager initialized correctly, so we can use it.
         reference_ = manager;
         return true;

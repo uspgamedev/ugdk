@@ -68,8 +68,9 @@ SET(UGDK_SRC
     src/ugdk/graphic/drawable/functions.h 
     src/ugdk/graphic/drawable/texturedrectangle.cc 
     src/ugdk/graphic/drawable/texturedrectangle.h 
-    src/ugdk/graphic/framebuffer.cc 
-    src/ugdk/graphic/framebuffer.h 
+    src/ugdk/graphic/drawmode.cc 
+    src/ugdk/graphic/drawmode.h 
+    src/ugdk/graphic/exceptions.h 
     src/ugdk/graphic/geometry.h 
     src/ugdk/graphic/image.cc 
     src/ugdk/graphic/image.h 
@@ -87,8 +88,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/opengl/shader.h 
     src/ugdk/graphic/opengl/shaderprogram.cc 
     src/ugdk/graphic/opengl/shaderprogram.h 
-    src/ugdk/graphic/opengl/shaderuse.cc 
-    src/ugdk/graphic/opengl/shaderuse.h 
     src/ugdk/graphic/opengl/vertexbuffer.cc 
     src/ugdk/graphic/opengl/vertexbuffer.h 
     src/ugdk/graphic/primitive.cc 
@@ -97,6 +96,10 @@ SET(UGDK_SRC
     src/ugdk/graphic/primitivecontroller.h 
     src/ugdk/graphic/primitivesetup.cc 
     src/ugdk/graphic/primitivesetup.h 
+    src/ugdk/graphic/rendertarget.cc 
+    src/ugdk/graphic/rendertarget.h 
+    src/ugdk/graphic/rendertexture.cc 
+    src/ugdk/graphic/rendertexture.h 
     src/ugdk/graphic/sprite.cc 
     src/ugdk/graphic/sprite.h 
     src/ugdk/graphic/text/font.cc 
@@ -109,6 +112,8 @@ SET(UGDK_SRC
     src/ugdk/graphic/text/textmanager.h 
     src/ugdk/graphic/textureatlas.cc 
     src/ugdk/graphic/textureatlas.h 
+    src/ugdk/graphic/textureunit.cc 
+    src/ugdk/graphic/textureunit.h 
     src/ugdk/graphic/vertexdata.cc 
     src/ugdk/graphic/vertexdata.h 
     src/ugdk/graphic/visualeffect.h 

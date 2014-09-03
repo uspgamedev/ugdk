@@ -1,5 +1,5 @@
-#ifndef UGDK_GRAPHIC_VIDEOMANAGER_H_
-#define UGDK_GRAPHIC_VIDEOMANAGER_H_
+#ifndef UGDK_GRAPHIC_MANAGER_H_
+#define UGDK_GRAPHIC_MANAGER_H_
 
 #include <ugdk/structure/types.h>
 #include <ugdk/math/vector2D.h>
@@ -8,6 +8,9 @@
 #include <ugdk/graphic.h>
 #include <ugdk/desktop.h>
 #include <ugdk/internal.h>
+#include <ugdk/util.h>
+
+#include <ugdk/graphic/textureunit.h>
 
 #include <string>
 #include <bitset>
@@ -15,19 +18,39 @@
 #include <memory>
 
 struct SDL_Window;
+typedef void* SDL_GLContext;
+
+#ifdef SWIG
+// Nested class not supported
+#pragma SWIG nowarn=325
+#endif
 
 namespace ugdk {
 namespace graphic {
 
+class RenderScreen;
 action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_light_function);
+
+enum class VertexType {
+    VERTEX, TEXTURE, COLOR
+};
 
 class Manager {
   public:
-    Manager(const std::weak_ptr<desktop::Window>&, const math::Vector2D& canvas_size);
+    Manager();
     ~Manager();
 
-    bool Initialize();
+    bool Initialize(const std::weak_ptr<desktop::Window>&, const math::Vector2D& canvas_size);
     void Release();
+
+    void AttachTo(const std::shared_ptr<desktop::Window>&);
+    void ResizeScreen(const math::Vector2D& canvas_size);
+
+#ifndef SWIG
+    TextureUnit ReserveTextureUnit(const internal::GLTexture* texture = nullptr);
+#endif
+    void DisableVertexType(VertexType);
+    unsigned int LocationForVertexType(VertexType);
 
     class Shaders {
       public:
@@ -42,6 +65,7 @@ class Manager {
         
         const opengl::ShaderProgram* GetSpecificShader(const std::bitset<NUM_FLAGS>& flags) const;
 
+        bool IsFlagSet(Flag) const;
         void ChangeFlag(Flag, bool);
 
         /// Replace the ShaderProgram UGDK uses for the given combination of flags.
@@ -68,8 +92,9 @@ class Manager {
         friend class Manager;
     };
 
-    std::shared_ptr<Canvas> canvas() const { return canvas_; }
-    std::shared_ptr<Framebuffer> light_buffer() const { return light_buffer_; }
+    RenderTarget* screen() const;
+    RenderTexture* light_buffer() const { return light_buffer_.get(); }
+
     internal::GLTexture* white_texture() { return white_texture_; }
     Shaders& shaders() { return shaders_; }
     const Shaders& shaders() const { return shaders_; }
@@ -77,16 +102,21 @@ class Manager {
 
   private:
     void CreateLightBuffer(const math::Vector2D& size);
+    void ReleaseTextureUnitID(int id);
 
-    std::shared_ptr<Canvas> canvas_;
-    std::shared_ptr<Framebuffer> light_buffer_;
+    SDL_GLContext context_;
+    std::unique_ptr<RenderScreen> screen_;
+    std::unique_ptr<RenderTexture> light_buffer_;
+    std::unique_ptr<util::IDGenerator> textureunit_ids_;
     internal::GLTexture* white_texture_;
     
     Shaders shaders_;
     opengl::ShaderProgram* light_shader_;
+
+    friend class ::ugdk::graphic::TextureUnit;
 };
 
 }  // namespace graphic
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_GRAPHIC_MANAGER_H_

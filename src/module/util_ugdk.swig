@@ -9,10 +9,15 @@
 %begin %{
 
 #ifdef _WIN32
-#ifndef MSVC
+#ifndef _MSC_VER
 #include <cmath>
-#endif // MSVC
+#endif // _MSC_VER
 #endif // _WIN32
 
-%}
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4701 )
+#endif
 
+%}

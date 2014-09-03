@@ -10,6 +10,11 @@
 #include "../detail/_vectorize.hpp"
 #include <limits>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4310) //cast truncates constant value
+#endif
+
 namespace glm
 {
 	template <typename genIType>
@@ -780,3 +785,7 @@ namespace glm
 	}
 
 }//namespace glm
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
