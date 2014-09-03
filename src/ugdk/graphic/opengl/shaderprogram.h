@@ -20,8 +20,11 @@ class ShaderProgram {
     bool IsValid() const;
     void AttachShader(const Shader& shader);
     bool SetupProgram();
+    void Validate();
 
   private:
+    void PrintLog(const std::string& title) const;
+
     GLuint id_;
     GLuint matrix_location_;
     GLuint color_location_;
