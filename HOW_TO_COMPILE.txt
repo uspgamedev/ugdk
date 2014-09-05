@@ -5,6 +5,7 @@
 Required:
 - CMake 2.8.11
 - A C++11 conformant compiler.
+- OpenGL headers (Package 'mesa-common-dev' on Debian)
 
 
 Android Build:
@@ -26,8 +27,9 @@ Indirectly built if needed:
 
 
 Optional:
-- swig 2.0 ## Needed for the script system
+- swig 3.0 ## Needed for the script system
 - Python 2.7 ## To be used in the script system
+- libvorbis ## For ogg loading when building SDL_mixer
 
 
 Embedded Libraries:
