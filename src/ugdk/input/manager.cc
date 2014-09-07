@@ -1,7 +1,7 @@
 #include <ugdk/input/manager.h>
 
 #include <ugdk/internal/sdleventhandler.h>
-#include <ugdk/internal/sdleventdelegatorhandler.h>
+#include <ugdk/system/engine.h>
 
 #include "SDL.h"
 
@@ -19,16 +19,18 @@ bool Manager::Initialize() {
     
     SDL_StopTextInput();
 
-    internal::SDLEventDelegatorHandler* handler = new internal::SDLEventDelegatorHandler;
-    handler->AddHandler(keyboard_.event_handler());
-    handler->AddHandler(mouse_.event_handler());
-    handler->AddHandler(text_input_.event_handler());
-    sdlevent_handler_.reset(handler);
+    system::RegisterSDLHandler(keyboard_.event_handler());
+    system::RegisterSDLHandler(mouse_.event_handler());
+    system::RegisterSDLHandler(text_input_.event_handler());
 
     return true;
 }
 
-void Manager::Release() {}
+void Manager::Release() {
+    system::DeregisterSDLHandler(keyboard_.event_handler());
+    system::DeregisterSDLHandler(mouse_.event_handler());
+    system::DeregisterSDLHandler(text_input_.event_handler());
+}
 
 void Manager::Update() {
     keyboard_.Update();

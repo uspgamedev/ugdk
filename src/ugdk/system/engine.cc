@@ -51,7 +51,7 @@ action::Scene*            previous_focused_scene_;
 std::list<std::shared_ptr<const debug::SectionData>> profile_data_list_;
 Configuration configuration_;
 
-std::vector<const internal::SDLEventHandler*> sdlevent_handlers_;
+std::unordered_map<Uint32, const internal::SDLEventHandler*> sdlevent_mapper_;
 
 bool ErrorLog(const std::string& err_msg) {
     debug::Log(debug::CRITICAL, err_msg);
@@ -92,26 +92,25 @@ void FocusRoutine() {
 void HandleSDLEvents() {
     ::SDL_Event sdlevent;
     while(SDL_PollEvent(&sdlevent)) {
-        bool found = false;
-        for (const internal::SDLEventHandler* handler : sdlevent_handlers_) {
-            if (handler->CanHandle(sdlevent)) {
-                handler->Handle(sdlevent);
-                found = true;
-                break;
-            }
+
+        auto mapper = sdlevent_mapper_.find(sdlevent.type);
+        if (mapper != sdlevent_mapper_.end()) {
+            mapper->second->Handle(sdlevent);
+
+        } else {
+            debug::DebugLog(debug::LogLevel::INFO, "UGDK",
+                            "Event of type ", sdlevent.type, " received, but no known handler.");
         }
-        debug::DebugConditionalLog(found, debug::LogLevel::INFO, "UGDK",
-                                   "Event of type ", sdlevent.type, " received, but no known handler.");
     }
 }
 
-class SystemSDLEventHandler : public internal::SDLEventHandler {
+class SDLQuitEventHandler : public internal::SDLEventHandler {
   public:
-    bool CanHandle(const ::SDL_Event& sdlevent) const { 
-        return sdlevent.type == SDL_QUIT;
+    std::unordered_set<Uint32> TypesHandled() const override {
+        return { SDL_QUIT };
     }
 
-    void Handle(const ::SDL_Event&) const {
+    void Handle(const ::SDL_Event&) const override {
         Suspend();
     }
 
@@ -157,7 +156,7 @@ bool Initialize(const Configuration& configuration) {
 
     configuration_ = configuration;
 
-    sdlevent_handlers_.push_back(&system_sdlevent_handler);
+    RegisterSDLHandler(&system_sdlevent_handler);
 
     language_manager_ = new LanguageManager(configuration.default_language);
 
@@ -172,8 +171,6 @@ bool Initialize(const Configuration& configuration) {
                                 desktop::manager()->primary_window(),
                                 configuration.canvas_size))
             return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
-
-        sdlevent_handlers_.push_back(desktop::manager()->sdlevent_handler());
     }
     
     if(configuration.audio_enabled)
@@ -183,7 +180,6 @@ bool Initialize(const Configuration& configuration) {
     if(configuration.input_enabled) {
         if(!input::Initialize(new input::Manager))
             return ErrorLog("system::Initialize failed - input::Initialize returned false.");
-        sdlevent_handlers_.push_back(input::manager()->sdlevent_handler());
     }
 
     if(configuration.time_enabled)
@@ -284,7 +280,7 @@ void Release() {
         throw love::Exception("UGDK not suspended.");
     current_state_ = UGDKState::RELEASED;
 
-    sdlevent_handlers_.clear();
+    DeregisterSDLHandler(&system_sdlevent_handler);
 
     if(text_manager_) {
         text_manager_->Release();
@@ -300,6 +296,8 @@ void Release() {
 
     SCRIPT_MANAGER()->Finalize();
     delete SCRIPT_MANAGER();
+
+    assert(sdlevent_mapper_.empty());
 
     SDL_Quit();
 }
@@ -328,6 +326,20 @@ void Suspend() {
     if (current_state_ != UGDKState::RUNNING)
         throw love::Exception("UGDK not runing.");
     current_state_ = UGDKState::SUSPENDED;
+}
+
+void RegisterSDLHandler(const internal::SDLEventHandler* handler) {
+    for (const auto& type : handler->TypesHandled()) {
+        assert(sdlevent_mapper_.find(type) == sdlevent_mapper_.end());
+        sdlevent_mapper_[type] = handler;
+    }
+}
+
+void DeregisterSDLHandler(const internal::SDLEventHandler* handler) {
+    for (const auto& type : handler->TypesHandled()) {
+        assert(sdlevent_mapper_[type] == handler);
+        sdlevent_mapper_.erase(type);
+    }
 }
 
 } // namespace system

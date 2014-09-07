@@ -30,8 +30,6 @@ class Manager {
     std::shared_ptr<Window> primary_window() const { return primary_window_.lock(); }
     std::shared_ptr<Window> window(uint32 index) const;
     
-    const internal::SDLEventHandler* sdlevent_handler() { return sdlevent_handler_.get(); }
-
     void PresentAll();
 
   private:

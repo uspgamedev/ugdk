@@ -14,11 +14,11 @@ class TextInputSDLEventHandler : public internal::SDLEventHandler {
   public:
       TextInputSDLEventHandler(TextInput& text_input) : text_input_(text_input) {}
 
-    bool CanHandle(const ::SDL_Event& sdlevent) const {
-        return sdlevent.type == SDL_TEXTEDITING || sdlevent.type == SDL_TEXTINPUT;
+    std::unordered_set<Uint32> TypesHandled() const override {
+        return { SDL_TEXTEDITING, SDL_TEXTINPUT };
     }
 
-    void Handle(const ::SDL_Event& sdlevent) const {
+    void Handle(const ::SDL_Event& sdlevent) const override {
         if (sdlevent.type == SDL_TEXTEDITING)
             TextEditingHandler(sdlevent);
         else if (sdlevent.type == SDL_TEXTINPUT)

@@ -12,11 +12,11 @@ class KeyboardInputSDLEventHandler : public internal::SDLEventHandler {
   public:
     KeyboardInputSDLEventHandler(Keyboard& keyboard) : keyboard_(keyboard) {}
 
-    bool CanHandle(const ::SDL_Event& sdlevent) const {
-        return sdlevent.type == SDL_KEYDOWN || sdlevent.type == SDL_KEYUP;
+    std::unordered_set<Uint32> TypesHandled() const override {
+        return { SDL_KEYDOWN, SDL_KEYUP };
     }
 
-    void Handle(const ::SDL_Event& sdlevent) const {
+    void Handle(const ::SDL_Event& sdlevent) const override {
         if(sdlevent.type == SDL_KEYDOWN)
             KeyDownHandler(sdlevent);
         else if(sdlevent.type == SDL_KEYUP)

@@ -1,6 +1,5 @@
 #include <ugdk/desktop/manager.h>
 
-
 #include "SDL.h"
 #include "SDL_image.h"
 
@@ -24,11 +23,11 @@ class DesktopSDLEventHandler : public internal::SDLEventHandler {
 public:
     DesktopSDLEventHandler(Manager& manager) : manager_(manager) {}
 
-    bool CanHandle(const ::SDL_Event& sdlevent) const {
-        return sdlevent.type == SDL_WINDOWEVENT;
+    std::unordered_set<Uint32> TypesHandled() const override {
+        return { SDL_WINDOWEVENT };
     }
 
-    void Handle(const ::SDL_Event& sdlevent) const {
+    void Handle(const ::SDL_Event& sdlevent) const override {
         switch (sdlevent.window.event) {
             case SDL_WINDOWEVENT_RESIZED:
                 // no-op
@@ -60,10 +59,12 @@ bool Manager::Initialize() {
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 
     sdlevent_handler_.reset(new DesktopSDLEventHandler(*this));
+    system::RegisterSDLHandler(sdlevent_handler_.get());
     return true;
 }
 
 void Manager::Release() {
+    system::DeregisterSDLHandler(sdlevent_handler_.get());
     windows_.clear();
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }

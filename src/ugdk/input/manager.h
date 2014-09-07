@@ -1,7 +1,6 @@
 #ifndef UGDK_INPUT_MANAGER_H_
 #define UGDK_INPUT_MANAGER_H_
 
-#include <ugdk/internal.h>
 #include <ugdk/input/keyboard.h>
 #include <ugdk/input/mouse.h>
 #include <ugdk/input/textinput.h>
@@ -22,8 +21,6 @@ class Manager {
     bool Initialize();
     void Release();
 
-    const internal::SDLEventHandler* sdlevent_handler() { return sdlevent_handler_.get(); }
-
     /// A virtual keyboard that represents all physical keyboards.
     const Keyboard& keyboard() const { return keyboard_; }
     
@@ -36,12 +33,9 @@ class Manager {
     void Update();
 
   private:
-    std::unique_ptr<internal::SDLEventHandler> sdlevent_handler_;
     Keyboard keyboard_;
     Mouse mouse_;
     TextInput text_input_;
-
-    friend class InputSDLEventHandler;
 };
 
 }  // namespace input

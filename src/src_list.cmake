@@ -139,7 +139,6 @@ SET(UGDK_SRC
     src/ugdk/internal/opengl.h 
     src/ugdk/internal/pixelsurface.cc 
     src/ugdk/internal/pixelsurface.h 
-    src/ugdk/internal/sdleventdelegatorhandler.h 
     src/ugdk/internal/sdleventhandler.h 
     src/ugdk/math.h 
     src/ugdk/math/frame.cc 

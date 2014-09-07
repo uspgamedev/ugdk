@@ -16,15 +16,12 @@ class MouseInputSDLEventHandler : public internal::SDLEventHandler {
         return system::CurrentScene()->event_handler();
     }
 
-
-    bool CanHandle(const ::SDL_Event& sdlevent) const {
-        return sdlevent.type == SDL_MOUSEMOTION
-            || sdlevent.type == SDL_MOUSEBUTTONDOWN
-            || sdlevent.type == SDL_MOUSEBUTTONUP
-            || sdlevent.type == SDL_MOUSEWHEEL;
+    std::unordered_set<Uint32> TypesHandled() const override {
+        return { SDL_MOUSEMOTION, SDL_MOUSEBUTTONDOWN,
+                 SDL_MOUSEBUTTONUP, SDL_MOUSEWHEEL };
     }
 
-    void Handle(const ::SDL_Event& sdlevent) const {
+    void Handle(const ::SDL_Event& sdlevent) const override {
         if(sdlevent.type == SDL_MOUSEMOTION)
             MouseMotionHandler(sdlevent);
         else if(sdlevent.type == SDL_MOUSEBUTTONDOWN)

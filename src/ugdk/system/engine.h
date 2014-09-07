@@ -2,17 +2,18 @@
 #define UGDK_SYSTEM_ENGINE_H_
 
 #include <ugdk/action.h>
-#include <ugdk/graphic.h>
-#include <ugdk/util.h>
-#include <ugdk/system.h>
 #include <ugdk/debug.h>
+#include <ugdk/graphic.h>
+#include <ugdk/internal.h>
+#include <ugdk/system.h>
+#include <ugdk/util.h>
 #include <ugdk/structure/types.h>
 #include <ugdk/system/configuration.h>
 
-#include <list>
-#include <string>
 #include <functional>
+#include <list>
 #include <memory>
+#include <string>
 
 namespace ugdk {
 namespace system {
@@ -84,6 +85,17 @@ const std::list< std::shared_ptr<const debug::SectionData> >& profile_data_list(
 
 /// Stops the main loop.
 void Suspend();
+
+
+/** @name Internal
+ * @{
+ */
+
+void RegisterSDLHandler(const internal::SDLEventHandler*);
+void DeregisterSDLHandler(const internal::SDLEventHandler*);
+
+/** @}
+ */
 
 } // namespace system
 } // namespace ugdk
