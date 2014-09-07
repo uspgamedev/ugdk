@@ -1,5 +1,9 @@
 language: cpp
 
+os:
+  - linux
+  - osx
+
 compiler:
   - gcc
   - clang
@@ -7,14 +11,14 @@ compiler:
 cache: apt
 
 before_install:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo add-apt-repository -y ppa:henriquegemignani/uspgamedev
-  - sudo apt-get update
+  - if [ $TRAVIS_OS_NAME == "linux" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
+  - if [ $TRAVIS_OS_NAME == "linux" ]; then sudo add-apt-repository -y ppa:henriquegemignani/uspgamedev; fi
+  - if [ $TRAVIS_OS_NAME == "linux" ]; then sudo apt-get update; fi
 
 install:
-  - sudo apt-get install swig3.0 cmake
-  - if [ "$CXX" = "g++" ]; then sudo apt-get install --force-yes g++-4.7; fi
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.7" CC="gcc-4.7"; fi
+  - if [ $TRAVIS_OS_NAME == "linux" ]; then sudo apt-get install swig3.0 cmake; fi
+  - if [ $TRAVIS_OS_NAME == "linux" -a "$CXX" = "g++" ]; then sudo apt-get install --force-yes g++-4.7; fi
+  - if [ $TRAVIS_OS_NAME == "linux" -a "$CXX" = "g++" ]; then export CXX="g++-4.7" CC="gcc-4.7"; fi
 
 script:
   - cmake .
@@ -25,4 +29,4 @@ script:
 
 notifications:
   email:
-      - travis@uspgamedev.org
+      - henrique@uspgamedev.org
