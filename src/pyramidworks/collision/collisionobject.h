@@ -17,7 +17,7 @@ namespace pyramidworks {
 namespace collision {
 
 /// An interface for other classes implement so they can be associated with an CollsionObject.
-struct CollisionData {};
+class CollisionData {};
 
 /// A class that knows how to manage collisions.
 /** It encapsulates everything that is related to collisions, from finding the
