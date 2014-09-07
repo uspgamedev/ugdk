@@ -1,6 +1,7 @@
 ﻿#include <ugdk/graphic/manager.h>
 
 #include <ugdk/action/scene.h>
+#include <ugdk/action/events.h>
 #include <ugdk/internal/gltexture.h>
 #include <ugdk/desktop/window.h>
 #include <ugdk/graphic/defaultshaders.h>
@@ -166,7 +167,9 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
     action::Scene* light_scene = new action::Scene;
     light_scene->set_identifier("Light Rendering Scene");
     // This scene has no logic, so quit if you ask for it to be only scene.
-    light_scene->set_focus_callback([](action::Scene* scene) { scene->Finish(); });
+    light_scene->event_handler().AddListener<action::SceneFocusEvent>([](const action::SceneFocusEvent& ev) {
+        ev.scene->Finish();
+    });
     light_scene->set_render_function([render_light_function](graphic::Canvas& canvas) {
         graphic::Manager* manager = graphic::manager();
         Canvas light_canvas(manager->light_buffer());

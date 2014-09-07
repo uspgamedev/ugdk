@@ -1,6 +1,7 @@
 #include <ugdk/action/scene.h>
 
 #include <ugdk/action/entity.h>
+#include <ugdk/action/events.h>
 #include <ugdk/audio/module.h>
 #include <ugdk/audio/music.h>
 #include <ugdk/graphic/node.h>
@@ -54,7 +55,7 @@ Scene::~Scene() {
 }
 
 void Scene::Focus() {
-    if(focus_callback_) focus_callback_(this);
+    event_handler_.RaiseEvent(SceneFocusEvent(this));
     if(background_music_ != nullptr) { 
         if(!background_music_->IsPlaying())
             background_music_->PlayForever();
@@ -69,7 +70,7 @@ void Scene::Focus() {
 }
 
 void Scene::DeFocus() {
-    if(defocus_callback_) defocus_callback_(this);
+    event_handler_.RaiseEvent(SceneDefocusEvent(this));
 }
 
 void Scene::AddEntity(Entity *entity) { 

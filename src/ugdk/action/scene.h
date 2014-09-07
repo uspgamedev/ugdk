@@ -88,12 +88,6 @@ class Scene : public system::TaskPlayer {
     /**@}
      */
 
-    void set_defocus_callback(const std::function<void (Scene*)>& defocus_callback) { 
-        defocus_callback_ = defocus_callback;
-    }
-    void set_focus_callback(const std::function<void (Scene*)>& focus_callback) { 
-        focus_callback_ = focus_callback;
-    }
     void set_render_function(const std::function<void (graphic::Canvas& canvas)>& render_function) {
         render_function_ = render_function;
     }
@@ -130,8 +124,6 @@ class Scene : public system::TaskPlayer {
 
     std::list<Entity*> entities_;
     std::queue<Entity*> queued_entities_;
-    std::function<void (Scene*)> defocus_callback_;
-    std::function<void (Scene*)> focus_callback_;
     std::function<void (graphic::Canvas& canvas)> render_function_;
 }; // class Scene.
 

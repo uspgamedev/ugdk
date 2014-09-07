@@ -26,6 +26,7 @@ SET(UGDK_SRC
     src/ugdk/action.h 
     src/ugdk/action/animationplayer.h 
     src/ugdk/action/entity.h 
+    src/ugdk/action/events.h 
     src/ugdk/action/mediamanager.h 
     src/ugdk/action/mediaplayer.cc 
     src/ugdk/action/mediaplayer.h 
