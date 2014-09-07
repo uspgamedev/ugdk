@@ -32,7 +32,7 @@ class RenderScreen;
 action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_light_function);
 
 enum class VertexType {
-    VERTEX, TEXTURE, COLOR
+    VERTEX, TEXTURE, COLOR, CUSTOM1
 };
 
 class Manager {

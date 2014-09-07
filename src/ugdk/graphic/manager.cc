@@ -158,6 +158,7 @@ unsigned int Manager::LocationForVertexType(VertexType type) {
     case VertexType::VERTEX:  return 0;
     case VertexType::TEXTURE: return 1;
     case VertexType::COLOR:   return 2;
+    case VertexType::CUSTOM1:   return 3;
     }
 }
 
