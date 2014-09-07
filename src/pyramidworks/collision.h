@@ -4,12 +4,12 @@
 #include <functional>
 #include <list>
 #include <utility>
-#include <ugdk/action.h>
 
 namespace pyramidworks {
 namespace collision {
 
 class CollisionClass;
+class CollisionData;
 class CollisionObject;
 class CollisionManager;
 

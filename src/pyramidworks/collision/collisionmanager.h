@@ -1,24 +1,28 @@
 #ifndef PYRAMIDWORKS_COLLISION_COLLISIONMANAGER_H_
 #define PYRAMIDWORKS_COLLISION_COLLISIONMANAGER_H_
 
-#include <string>
-#include <map>
-#include <set>
-#include <memory>
+#include <ugdk/structure/box.h>
+
 #include <ugdk/system.h>
 #include <pyramidworks/collision.h>
-#include <ugdk/util/uncopyable.h>
-#include <ugdk/structure/box.h>
+
+#include <map>
+#include <memory>
+#include <set>
+#include <string>
 
 namespace pyramidworks {
 namespace collision {
 
 /// \class CollisionManager collisionmanager.h "pyramidworks/collision/collisionmanager.h"
 /// An instance of the collision system.
-class CollisionManager : public ugdk::util::Uncopyable {
+class CollisionManager {
   public:
-    CollisionManager(const ugdk::structure::Box<2>& tree_bounding_box);
+    explicit CollisionManager(const ugdk::structure::Box<2>& tree_bounding_box);
+    CollisionManager(const CollisionManager&) = delete;
     ~CollisionManager();
+
+    CollisionManager& operator=(const CollisionManager&) = delete;
 
     /// Returns a CollisionClass of the asked name.
     /** Searches for a CollisionClass with the given name, creating it if none is found.
