@@ -1,21 +1,24 @@
 #include "collisionobject.h"
 
-#include <cstdlib>
-#include <cstdio>
-
-#include <ugdk/structure/intervalkdtree.h>
 #include "pyramidworks/collision/collisionmanager.h"
 #include "pyramidworks/collision/collisionclass.h"
 #include "pyramidworks/geometry/geometricshape.h"
+
+#include <ugdk/structure/intervalkdtree.h>
+
+#include <cstdlib>
+#include <cstdio>
 
 namespace pyramidworks {
 namespace collision {
 
 
-CollisionObject::CollisionObject(CollisionData* data, const std::string& colclass, geometry::GeometricShape* shape) 
+CollisionObject::CollisionObject(CollisionData* data,
+                                 const std::string& colclass,
+                                 std::unique_ptr<geometry::GeometricShape>&& shape) 
     : collision_class_(colclass)
     , data_(data)
-    , shape_(shape)
+    , shape_(std::move(shape))
     , manager_(nullptr) {}
 
 CollisionObject::~CollisionObject() {
@@ -80,8 +83,8 @@ void CollisionObject::MoveTo(const ugdk::math::Vector2D& position) {
 ugdk::structure::Box<2> CollisionObject::CreateBoundingBox() const {
     return shape_->GetBoundingBox(this->absolute_position());
 }
-void CollisionObject::ChangeShape(geometry::GeometricShape* shape) { 
-    shape_.reset(shape);
+void CollisionObject::ChangeShape(std::unique_ptr<geometry::GeometricShape>&& shape) {
+    shape_ = std::move(shape);
     if(manager_)
         manager_->Find(collision_class_).RefreshObject(this);
 }

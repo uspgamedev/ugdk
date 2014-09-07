@@ -28,7 +28,7 @@ class CollisionObject {
       * @param colclass Name of the collision class of this object.
       * @param shape The shape for this object.
       * @see CollisionLogic */
-    CollisionObject(CollisionData* data, const std::string& colclass, geometry::GeometricShape* shape);
+    CollisionObject(CollisionData* data, const std::string& colclass, std::unique_ptr<geometry::GeometricShape>&& shape);
     ~CollisionObject();
 
     /// Search if there's any collision.
@@ -74,7 +74,7 @@ class CollisionObject {
     /// Changes the shape used.
     /** @param shape The shape to use. 
       * @see GeometricShape */
-    void ChangeShape(geometry::GeometricShape* shape);
+    void ChangeShape(std::unique_ptr<geometry::GeometricShape>&& shape);
     
     /// Returns the name of the collision class of this object.
     const std::string& collision_class() const { return collision_class_; }
