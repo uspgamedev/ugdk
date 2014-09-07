@@ -29,7 +29,6 @@ namespace action {
 class Scene : public system::TaskPlayer {
   public:
     Scene();
-      
     virtual ~Scene();
 
     /// Method called when this Scene arrives on the top of the Scene stack.
@@ -38,19 +37,11 @@ class Scene : public system::TaskPlayer {
     /// Method called when this Scene leaves the top of the Scene stack.
     virtual void DeFocus();
 
-    /// Adds an Entity to the scene.
-    void AddEntity(Entity *entity);
-
-    /// Removes the specified Entity from the scene.
-    void RemoveEntity(Entity *entity) { entities_.remove(entity); }
-
-    /// Will be added at the end of the 
-    void QueuedAddEntity(Entity *entity) { queued_entities_.push(entity); }
-
-    void RemoveAllEntities();
-
     /// Finishes the scene.
     void Finish() { End(); finished_ = true; }
+
+    /// Whether this scene stops the previous music even if wont play any music.
+    void StopsPreviousMusic(bool set) { stops_previous_music_ = set; }
 
     /// Logical update of the scene.
     /**
@@ -58,9 +49,10 @@ class Scene : public system::TaskPlayer {
     */
     void Update(double delta_t);
 
-    /// Whether this scene stops the previous music even if wont play any music.
-    void StopsPreviousMusic(bool set) { stops_previous_music_ = set; }
-
+    /// Renders the scene to the given canvas if the scene is visible.
+    /**
+        Uses the configurated renderfunction.
+    */
     void Render(graphic::Canvas&) const;
 
     /** @name Getters and Setters
@@ -93,18 +85,18 @@ class Scene : public system::TaskPlayer {
     }
 
   protected:
-    
     /// Ends the scene activity.
     /** Note: do not release any resources in this method. */
     virtual void End();
 
+  private:
     /// Used to identify the scene internally.
     std::string identifier_;
     
     /// Tells whether the scene is currently running or not.
     bool active_;
 
-    /// Tells whether the scene is finished or not.
+    /// Tells whether the scene will be cleared on the next frame start.
     bool finished_;
 
     /// Tells whether the scene is visible or not.
@@ -113,17 +105,16 @@ class Scene : public system::TaskPlayer {
     /// The background music when this scene is on top.
     audio::Music* background_music_;
 
-  private:
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;
 
     /// A MediaManager provided for users.
     MediaManager media_manager_;
 
+    /// An scoped event handler for the scene.
     system::EventHandler event_handler_;
 
-    std::list<Entity*> entities_;
-    std::queue<Entity*> queued_entities_;
+    /// Function that is used to render the scene when it's visible.
     std::function<void (graphic::Canvas& canvas)> render_function_;
 }; // class Scene.
 

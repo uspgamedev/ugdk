@@ -12,9 +12,9 @@ namespace pyramidworks {
 namespace collision {
 
 
-CollisionObject::CollisionObject(ugdk::action::Entity* owner, const std::string& colclass, geometry::GeometricShape* shape) 
+CollisionObject::CollisionObject(CollisionData* data, const std::string& colclass, geometry::GeometricShape* shape) 
     : collision_class_(colclass)
-    , owner_(owner)
+    , data_(data)
     , shape_(shape)
     , manager_(nullptr) {}
 

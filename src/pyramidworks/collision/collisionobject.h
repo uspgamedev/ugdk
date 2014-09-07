@@ -1,18 +1,23 @@
 #ifndef PYRAMIDWORKS_COLLISION_COLLISIONOBJECT_H_
 #define PYRAMIDWORKS_COLLISION_COLLISIONOBJECT_H_
 
-#include <map>
-#include <list>
-#include <string>
-#include <memory>
-#include <ugdk/action.h>
-#include <ugdk/math/vector2D.h>
-#include <ugdk/structure.h>
 #include <pyramidworks/collision.h>
 #include <pyramidworks/geometry.h>
+#include <ugdk/action.h>
+#include <ugdk/structure.h>
+
+#include <ugdk/math/vector2D.h>
+
+#include <list>
+#include <map>
+#include <memory>
+#include <string>
 
 namespace pyramidworks {
 namespace collision {
+
+/// An interface for other classes implement so they can be associated with an CollsionObject.
+struct CollisionData {};
 
 /// A class that knows how to manage collisions.
 /** It encapsulates everything that is related to collisions, from finding the
@@ -23,7 +28,7 @@ class CollisionObject {
       * @param colclass Name of the collision class of this object.
       * @param shape The shape for this object.
       * @see CollisionLogic */
-    CollisionObject(ugdk::action::Entity* owner, const std::string& colclass, geometry::GeometricShape* shape);
+    CollisionObject(CollisionData* data, const std::string& colclass, geometry::GeometricShape* shape);
     ~CollisionObject();
 
     /// Search if there's any collision.
@@ -74,8 +79,8 @@ class CollisionObject {
     /// Returns the name of the collision class of this object.
     const std::string& collision_class() const { return collision_class_; }
     
-    /// Returns the Entity that owns this object.
-    ugdk::action::Entity* owner() const { return owner_; }
+    /// Returns the CollisionData associated with this object.
+    CollisionData* data() const { return data_; }
 
     /// Returns the position of this object.
     const ugdk::math::Vector2D& position() const { return position_; }
@@ -90,13 +95,14 @@ class CollisionObject {
     /// Changes the offset of this object.
     void set_offset(const ugdk::math::Vector2D& _offset) { offset_ = _offset; }
 
-    /// Changes the owner of this object.
-    void set_owner(ugdk::action::Entity* owner) { owner_ = owner; }
+    /// Changes the data of this object.
+    void set_data(CollisionData* data) { data_ = data; }
 
   private:
     std::string collision_class_;
 
-    ugdk::action::Entity* owner_;
+    /// Some data associated with this object.
+    CollisionData* data_;
 
     ugdk::math::Vector2D position_;
     ugdk::math::Vector2D offset_;
