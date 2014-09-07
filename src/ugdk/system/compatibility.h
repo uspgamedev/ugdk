@@ -21,7 +21,7 @@ namespace ugdk {
     template <typename T> inline
     typename std::enable_if<std::is_array<T>::value && std::extent<T>::value == 0, std::unique_ptr<T>>::type
     MakeUnique(std::size_t size) {
-        using Element = std::remove_extent<T>::type;
+        using Element = typename std::remove_extent<T>::type;
         return std::unique_ptr<T>(new Element[size]);
     }
 
