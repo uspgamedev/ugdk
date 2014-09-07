@@ -25,7 +25,7 @@ class TaskPlayer {
         Priority values are commonly in the [0; 1] interval. */
     void AddTask(const Task& task);
 
-    /// Logical update of the scene.
+    /// Executes all tasks held.
     /**
        @param delta_t Time in seconds since last update
     */

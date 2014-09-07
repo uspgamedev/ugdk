@@ -25,34 +25,9 @@ Scene::Scene()
     AddTask(system::Task([&](double dt) {
         media_manager_.Update(dt);
     }, 0.4));
-
-    // Update entities
-    AddTask(system::Task([&](double dt) {  
-        for(auto it : entities_) it->Update(dt);
-    }, 0.5));
-
-    // Remove to be deleted entities
-    AddTask(system::Task([&](double dt) {  
-        entities_.remove_if([](Entity* e){ 
-            bool is_dead = e->to_be_removed();
-            if (is_dead) delete e;
-            return is_dead;
-        });
-    }, 0.9));
-
-    // Flush add queue
-    AddTask(system::Task([&](double dt) {  
-        while(!queued_entities_.empty()) {
-            Entity* e = queued_entities_.front();
-            this->AddEntity(e);
-            queued_entities_.pop();
-        }
-    }, 1.0));
 }
 
-Scene::~Scene() {
-    //RemoveAllEntities(); Play safe... TODO: activate this and refactor users!
-}
+Scene::~Scene() {}
 
 void Scene::Focus() {
     event_handler_.RaiseEvent(SceneFocusEvent(this));
@@ -71,18 +46,6 @@ void Scene::Focus() {
 
 void Scene::DeFocus() {
     event_handler_.RaiseEvent(SceneDefocusEvent(this));
-}
-
-void Scene::AddEntity(Entity *entity) { 
-    entities_.push_back(entity);
-    entity->OnSceneAdd(this);
-}
-
-void Scene::RemoveAllEntities() {
-    std::list<Entity*>::iterator i;
-    for (i = entities_.begin(); i != entities_.end(); ++i)
-        delete (*i);
-    entities_.clear();
 }
 
 void Scene::Update(double dt) {
