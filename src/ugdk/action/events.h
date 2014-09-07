@@ -9,13 +9,13 @@ namespace action {
 struct SceneFocusEvent {
     Scene* scene;
 
-    SceneFocusEvent(Scene* _scene) : scene(scene) {}
+    SceneFocusEvent(Scene* _scene) : scene(_scene) {}
 };
 
 struct SceneDefocusEvent {
     Scene* scene;
 
-    SceneDefocusEvent(Scene* _scene) : scene(scene) {}
+    SceneDefocusEvent(Scene* _scene) : scene(_scene) {}
 };
 
 } // namespace action
