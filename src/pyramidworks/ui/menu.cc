@@ -21,28 +21,11 @@ namespace pyramidworks {
 namespace ui {
 
 using namespace ugdk;
-const MenuCallback Menu::FINISH_MENU(mem_fn(&Menu::FinishScene));
+const MenuCallback Menu::FINISH_MENU(mem_fn(&Menu::Finish));
 const MenuCallback Menu::INTERACT_MENU(mem_fn(&Menu::InteractWithFocused));
 
-class CallbackCheckTask {
-public:
-    CallbackCheckTask(Menu* menu) : menu_(menu) {}
-    bool operator()(double) {
-        input::Manager* input = input::manager();
-        const InputCallbacks& callbacks = menu_->input_callbacks();
-        for(InputCallbacks::const_iterator it = callbacks.begin(); it != callbacks.end(); ++it) {
-            if(input->keyboard().IsPressed(it->first))
-                it->second(menu_);
-        }
-        return true;
-    }
-private:
-    Menu* menu_;
-};
-
 Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
-  : node_(new graphic::Node())
-  , owner_scene_(nullptr)
+  : node_(new graphic::Node)
   , focused_element_(nullptr)
   , objects_tree_(new ObjectTree(tree_bounding_box,5))
   , hook_(hook) 
@@ -50,28 +33,33 @@ Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::V
     node_->geometry().ChangeOffset(offset);
     option_node_[0] = nullptr;
     option_node_[1] = nullptr;
+
+    AddTask([this](double) {
+        input::Manager* input = input::manager();
+        ugdk::math::Vector2D mouse_pos = input->mouse().position();
+        if ((mouse_pos - last_mouse_position_).NormOne() > 10e-10) {
+            auto intersecting_uielements = GetMouseCollision();
+            if (intersecting_uielements->size() > 0)
+                SelectUIElement((*intersecting_uielements)[0]);
+        }
+        last_mouse_position_ = mouse_pos;
+        if (input->mouse().IsReleased(input::MouseButton::LEFT))
+            this->CheckInteraction(mouse_pos);
+        if (input->keyboard().IsReleased(input::Scancode::DOWN))
+            this->FocusNextElement(1);
+        if (input->keyboard().IsReleased(input::Scancode::UP))
+            this->FocusNextElement(-1);
+
+        for (const auto& it : input_callbacks()) {
+            if (input->keyboard().IsPressed(it.first))
+                it.second(this);
+        }
+    });
+
+    set_render_function(std::bind(&graphic::Node::Render, node_.get(), _1));
 }
 
 Menu::~Menu() {
-    delete option_node_[0];
-    delete option_node_[1];
-}
-
-void Menu::Update(double) {
-    input::Manager* input = input::manager();
-    ugdk::math::Vector2D mouse_pos = input->mouse().position();
-    if((mouse_pos - last_mouse_position_).NormOne() > 10e-10) {
-        auto intersecting_uielements = GetMouseCollision();
-        if(intersecting_uielements->size() > 0)
-            SelectUIElement((*intersecting_uielements)[0]);
-    }
-    last_mouse_position_ = mouse_pos;
-    if(input->mouse().IsReleased(input::MouseButton::LEFT))
-        this->CheckInteraction(mouse_pos);
-    if(input->keyboard().IsReleased(input::Scancode::DOWN))
-        this->FocusNextElement(1);
-    if(input->keyboard().IsReleased(input::Scancode::UP))
-        this->FocusNextElement(-1);
 }
 
 void Menu::AddCallback(const input::Keycode& key, const MenuCallback& callback) {
@@ -86,8 +74,7 @@ void Menu::SelectUIElement(UIElement* target) {
 }
 
 void Menu::FocusNextElement(int offset) {
-    std::list< UIElement* >::iterator current_element = 
-        std::find(uielements_.begin(), uielements_.end(), focused_element_);
+    auto current_element = std::find(uielements_.begin(), uielements_.end(), focused_element_);
 
     if(current_element == uielements_.end())
         current_element = uielements_.begin();
@@ -105,8 +92,8 @@ void Menu::FocusNextElement(int offset) {
 }
 
 void Menu::PositionSelectionDrawables() {
-    double focus_x = focused_element_->node()->drawable()->hotspot().x,
-           size_x = focused_element_->node()->drawable()->size().x;
+    double focus_x = focused_element_ ? focused_element_->node()->drawable()->hotspot().x : 0.0,
+        size_x = focused_element_ ? focused_element_->node()->drawable()->size().x : 0.0;
     if(option_node_[0]) {
         double draw0_x = option_node_[0]->drawable()->hotspot().x;
         option_node_[0]->geometry().ChangeOffset(ugdk::math::Vector2D(-focus_x - draw0_x, 0.0));
@@ -115,15 +102,6 @@ void Menu::PositionSelectionDrawables() {
         double draw1_x = option_node_[1]->drawable()->hotspot().x;
         option_node_[1]->geometry().ChangeOffset(ugdk::math::Vector2D(size_x - focus_x + draw1_x, 0.0));
     }
-}
-
-void Menu::OnSceneAdd(action::Scene* scene) {
-    owner_scene_ = scene;
-    scene->AddTask(CallbackCheckTask(this));
-}
-
-void Menu::FinishScene() const {
-    owner_scene_->Finish();
 }
 
 std::shared_ptr< std::vector<UIElement *> > Menu::GetMouseCollision() {

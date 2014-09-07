@@ -1,6 +1,5 @@
 #include <ugdk/action/scene.h>
 
-#include <ugdk/action/entity.h>
 #include <ugdk/action/events.h>
 #include <ugdk/audio/module.h>
 #include <ugdk/audio/music.h>

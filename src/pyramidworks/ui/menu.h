@@ -10,7 +10,7 @@
 #include <ugdk/graphic.h>
 #include <ugdk/util.h>
 #include <ugdk/structure.h>
-#include <ugdk/action/entity.h>
+#include <ugdk/action/scene.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/input.h>
@@ -26,21 +26,23 @@ namespace ui {
 typedef std::function<void (Menu*)> MenuCallback;
 typedef std::map<ugdk::input::Keycode, MenuCallback> InputCallbacks;
 
-class Menu: public ugdk::action::Entity {
+class Menu: public ::ugdk::action::Scene {
   typedef ugdk::structure::ikdtree::IntervalKDTree<UIElement*, 2> ObjectTree;
   public:
-    Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const ugdk::graphic::Drawable::HookPoint& hook = ugdk::graphic::Drawable::TOP_LEFT);
+    Menu(const ugdk::structure::Box<2>& tree_bounding_box,
+         const ugdk::math::Vector2D& offset,
+         const ugdk::graphic::Drawable::HookPoint& hook = ugdk::graphic::Drawable::TOP_LEFT);
     ~Menu();
-
-    void Update(double dt);
-    void OnSceneAdd(ugdk::action::Scene* scene);
 
     std::shared_ptr< std::vector<UIElement *> > GetMouseCollision();
 
     void AddCallback(const ugdk::input::Keycode& key, const MenuCallback& callback);
 
     void SetOptionDrawable(ugdk::graphic::Drawable* option_graphic, int index = 0) {
-        if (!option_node_[index]) option_node_[index] = new ugdk::graphic::Node;
+        if (!option_node_[index]) {
+            option_node_[index] = new ugdk::graphic::Node;
+            node_->AddChild(option_node_[index]);
+        }
         option_node_[index]->set_drawable(option_graphic);
     }
 
@@ -48,12 +50,10 @@ class Menu: public ugdk::action::Entity {
     void RemoveObject(UIElement* obj);
     void RefreshObject(UIElement* obj);
 
-    ugdk::graphic::Node* node() { return node_; }
+    ugdk::graphic::Node* node() { return node_.get(); }
     const UIElement* focused_element() const { return focused_element_; }
 
     const InputCallbacks& input_callbacks() const { return input_callbacks_; }
-
-    void FinishScene() const;
 
     const static MenuCallback FINISH_MENU;
     const static MenuCallback INTERACT_MENU;
@@ -65,9 +65,11 @@ class Menu: public ugdk::action::Entity {
     void FocusNextElement(int offset);
     void PositionSelectionDrawables();
 
-    ugdk::graphic::Node* node_;
+    std::unique_ptr<ugdk::graphic::Node> node_;
+
+    // Deleted by node_ destructor
     ugdk::graphic::Node* option_node_[2];
-    ugdk::action::Scene* owner_scene_;
+
     ugdk::math::Integer2D last_mouse_position_;
     UIElement* focused_element_;
     std::list< UIElement* > uielements_;

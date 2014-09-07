@@ -9,7 +9,6 @@
 %{
 
 #include <ugdk/action/animationplayer.h>
-#include <ugdk/action/entity.h>
 #include <ugdk/action/mediamanager.h>
 #include <ugdk/action/mediaplayer.h>
 #include <ugdk/action/observer.h>
@@ -18,7 +17,6 @@
 #include <ugdk/action/spritetypes.h>
 
 // Proxies
-#include <module/ugdk/action/entityproxy.h>
 #include <module/ugdk/action/observerproxy.h>
 #include <module/ugdk/action/sceneproxy.h>
 
@@ -34,16 +32,10 @@
 %import(module="ugdk_util") <ugdk/util/uncopyable.h>
 
 proxy_class(ugdk::action::Observer)
-proxy_class(ugdk::action::Entity)
 proxy_class(ugdk::action::Scene)
-
-%ignore ugdk::action::Scene::content_node() const;
-%ignore ugdk::action::Scene::interface_node() const;
-%ignore ugdk::action::Entity::OnSceneAdd(Scene* scene);
 
 %include <ugdk/system/taskplayer.h>
 %include <ugdk/action/mediaplayer.h>
-%include <ugdk/action/entity.h>
 %include <ugdk/action/observer.h>
 %include <ugdk/action/scene.h>
 %include <ugdk/action/animationplayer.h>
@@ -57,7 +49,6 @@ proxy_class(ugdk::action::Scene)
 namespace ugdk {
 namespace action { 
     export_class(MediaPlayer)
-    export_class(Entity)
     export_class(Observer)
     export_class(Scene)
     export_class(SpriteAnimationFrame)

@@ -25,7 +25,6 @@ SET(UGDK_SRC
     src/pyramidworks/ui/uielement.h 
     src/ugdk/action.h 
     src/ugdk/action/animationplayer.h 
-    src/ugdk/action/entity.h 
     src/ugdk/action/events.h 
     src/ugdk/action/mediamanager.h 
     src/ugdk/action/mediaplayer.cc 

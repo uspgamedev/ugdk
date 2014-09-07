@@ -21,7 +21,6 @@ typedef ::ugdk::action::AnimationPlayer<ugdk::action::SpriteAnimationFrame> Spri
 typedef ::ugdk::structure::IndexableTable<std::vector<SpriteAnimationFrame*>*> SpriteAnimationTable;
 
 class Scene;
-class Entity;
 class Observer;
 
 }  // namespace action
