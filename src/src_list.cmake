@@ -2,6 +2,7 @@ SET(UGDK_SRC
     src/pyramidworks/collision.h 
     src/pyramidworks/collision/collisionclass.cc 
     src/pyramidworks/collision/collisionclass.h 
+    src/pyramidworks/collision/collisiondata.h 
     src/pyramidworks/collision/collisionmanager.cc 
     src/pyramidworks/collision/collisionmanager.h 
     src/pyramidworks/collision/collisionobject.cc 

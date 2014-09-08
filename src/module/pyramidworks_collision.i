@@ -10,6 +10,7 @@
 %{
 
 #include <pyramidworks/collision.h>
+#include <pyramidworks/collision/collisiondata.h>
 #include <pyramidworks/collision/collisionclass.h>
 #include <pyramidworks/collision/collisionmanager.h>
 #include <pyramidworks/collision/collisionobject.h>
@@ -32,6 +33,7 @@ void_class()
 
 enable_disown(pyramidworks::geometry::GeometricShape* shape)
 %include <pyramidworks/collision.h>
+%include <pyramidworks/collision/collisiondata.h>
 %include <pyramidworks/collision/collisionclass.h>
 %include <pyramidworks/collision/collisionmanager.h>
 %include <pyramidworks/collision/collisionobject.h>
@@ -39,6 +41,7 @@ disable_disown(pyramidworks::geometry::GeometricShape* shape)
 
 namespace pyramidworks {
 namespace collision {
+	export_class(CollisionData)
     export_class(CollisionClass)
     export_class(CollisionManager)
     export_class(CollisionObject)
