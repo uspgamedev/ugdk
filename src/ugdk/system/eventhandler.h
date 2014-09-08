@@ -43,6 +43,11 @@ class EventHandler {
         return AddRawListener(typeid(Event), new Listener<Event>(handler));
     }
 
+    template<class Event>
+    IListener* AddListener(void (*handler)(const Event&)) {
+        return AddRawListener(typeid(Event), new Listener<Event>(handler));
+    }
+
     IListener* AddRawListener(const std::type_index& type, IListener* listener) {
         event_handlers_[type].emplace_back(listener);
         return listener;
