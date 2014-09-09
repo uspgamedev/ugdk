@@ -14,6 +14,7 @@
 #include <pyramidworks/collision/collisionclass.h>
 #include <pyramidworks/collision/collisionmanager.h>
 #include <pyramidworks/collision/collisionobject.h>
+#include <pyramidworks/geometry/geometricshape.h>
 
 %}
 

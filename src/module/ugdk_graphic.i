@@ -27,6 +27,7 @@
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/graphic/primitive.h>
+#include <ugdk/internal/gltexture.h>
 
 %}
 

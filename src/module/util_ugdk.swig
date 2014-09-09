@@ -4,6 +4,7 @@
 %include <module/ownership.swig>
 %include <module/widetypes.swig>
 %include <module/function.swig>
+%include <module/unique_ptr.swig>
 
 // Manually including cmath in the beginning prevents errors on some compilers
 %begin %{
