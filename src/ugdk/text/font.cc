@@ -1,11 +1,11 @@
-#include <ugdk/graphic/text/font.h>
+#include <ugdk/text/font.h>
 
 #include <ugdk/system/engine.h>
 #include <texture-atlas.h>
 #include <texture-font.h>
 
 namespace ugdk {
-namespace graphic {
+namespace text {
 
 using std::string;
 using std::wstring;
@@ -40,5 +40,5 @@ void Font::HintString(const wstring& string) {
     }
 }
 
-} // namespace graphic
+} // namespace text
 } // namespace ugdk

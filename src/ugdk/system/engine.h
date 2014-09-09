@@ -3,7 +3,6 @@
 
 #include <ugdk/action.h>
 #include <ugdk/debug.h>
-#include <ugdk/graphic.h>
 #include <ugdk/internal.h>
 #include <ugdk/system.h>
 #include <ugdk/util.h>
@@ -21,11 +20,6 @@ namespace system {
 typedef std::function<action::Scene* ()> SceneFactory;
 
 class PathManager;
-
-/// Returns a reference to the Text Manager.
-/** @see TextManager
- */
-graphic::TextManager *text_manager();
 
 /// Returns a reference to the Language Manager.
 /** @see LanguageManager

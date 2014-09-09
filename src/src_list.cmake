@@ -65,8 +65,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/defaultshaders.cc 
     src/ugdk/graphic/defaultshaders.h 
     src/ugdk/graphic/drawable.h 
-    src/ugdk/graphic/drawable/functions.cc 
-    src/ugdk/graphic/drawable/functions.h 
     src/ugdk/graphic/drawable/texturedrectangle.cc 
     src/ugdk/graphic/drawable/texturedrectangle.h 
     src/ugdk/graphic/drawmode.cc 
@@ -103,14 +101,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/rendertexture.h 
     src/ugdk/graphic/sprite.cc 
     src/ugdk/graphic/sprite.h 
-    src/ugdk/graphic/text/font.cc 
-    src/ugdk/graphic/text/font.h 
-    src/ugdk/graphic/text/label.cc 
-    src/ugdk/graphic/text/label.h 
-    src/ugdk/graphic/text/textbox.cc 
-    src/ugdk/graphic/text/textbox.h 
-    src/ugdk/graphic/text/textmanager.cc 
-    src/ugdk/graphic/text/textmanager.h 
     src/ugdk/graphic/textureatlas.cc 
     src/ugdk/graphic/textureatlas.h 
     src/ugdk/graphic/textureunit.cc 
@@ -183,6 +173,19 @@ SET(UGDK_SRC
     src/ugdk/system/task.h 
     src/ugdk/system/taskplayer.cc 
     src/ugdk/system/taskplayer.h 
+    src/ugdk/text.h 
+    src/ugdk/text/font.cc 
+    src/ugdk/text/font.h 
+    src/ugdk/text/functions.cc 
+    src/ugdk/text/functions.h 
+    src/ugdk/text/label.cc 
+    src/ugdk/text/label.h 
+    src/ugdk/text/manager.cc 
+    src/ugdk/text/manager.h 
+    src/ugdk/text/module.cc 
+    src/ugdk/text/module.h 
+    src/ugdk/text/textbox.cc 
+    src/ugdk/text/textbox.h 
     src/ugdk/time.h 
     src/ugdk/time/manager.cc 
     src/ugdk/time/manager.h 

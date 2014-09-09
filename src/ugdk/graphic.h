@@ -20,18 +20,13 @@ class TextureUnit;
 
 // Drawables
 class Drawable;
-
-class Label;
-class TextBox;
 class TexturedRectangle;
 
 // Extra
-class Font;
 class Light;
 class Node;
 
 // Managers
-class TextManager;
 class Manager;
 
 enum class VertexType;

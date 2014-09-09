@@ -1,8 +1,8 @@
-#include <ugdk/graphic/text/textbox.h>
+#include <ugdk/text/textbox.h>
 
 #include <ugdk/graphic/geometry.h>
-#include <ugdk/graphic/text/font.h>
-#include <ugdk/graphic/text/label.h>
+#include <ugdk/text/font.h>
+#include <ugdk/text/label.h>
 #include <ugdk/graphic/canvas.h>
 
 #include <texture-font.h>
@@ -12,7 +12,7 @@
 #include <algorithm>
 
 namespace ugdk {
-namespace graphic {
+namespace text {
 
 using std::vector;
 using std::list;
@@ -46,7 +46,7 @@ void TextBox::ChangeMessage(const std::string& utf8_message) {
     }
 }
 
-void TextBox::Draw(Canvas& canvas) const {
+void TextBox::Draw(graphic::Canvas& canvas) const {
     
     if(draw_setup_function_) draw_setup_function_(this, canvas);
 
@@ -62,7 +62,7 @@ void TextBox::Draw(Canvas& canvas) const {
         else if(ident_style_ == RIGHT)
             off_x = (width_ - label->width()) * 1.0;
 
-        canvas.PushAndCompose(Geometry(math::Vector2D(off_x, off_y) - hotspot_));
+        canvas.PushAndCompose(graphic::Geometry(math::Vector2D(off_x, off_y) - hotspot_));
         label->Draw(canvas);
         canvas.PopGeometry();
 
