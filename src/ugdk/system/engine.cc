@@ -166,6 +166,9 @@ bool Initialize(const Configuration& configuration) {
                                 desktop::manager()->primary_window(),
                                 configuration.canvas_size))
             return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
+
+        if (!text::Initialize(new text::Manager))
+            return ErrorLog("system::Initialize failed - text::Initialize returned false.");
     }
     
     if(configuration.audio_enabled)
