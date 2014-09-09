@@ -2,6 +2,7 @@
 #define UGDK_GRAPHIC_DRAWABLE_TEXTBOX_H_
 
 #include <ugdk/math/vector2D.h>
+#include <ugdk/text.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/drawable.h>
 #include <ugdk/util/utf8.h>
@@ -12,9 +13,9 @@
 #include <memory>
 
 namespace ugdk {
-namespace graphic {
+namespace text {
 
-class TextBox : public Drawable {
+class TextBox : public graphic::Drawable {
   public:
     TextBox(const std::string& message, double width, Font* font);
     ~TextBox();
@@ -26,7 +27,7 @@ class TextBox : public Drawable {
     /// This operation is slow.
     void ChangeMessage(const std::string& message);
 
-    void Draw(Canvas&) const override;
+    void Draw(graphic::Canvas&) const override;
 
     void set_ident_style(IdentStyle style) { ident_style_ = style; }
 
@@ -46,7 +47,7 @@ class TextBox : public Drawable {
     double calculateWidth(std::u32string::const_iterator start, std::u32string::const_iterator end);
 };
 
-}  // namespace graphic
+}  // namespace text
 }  // namespace ugdk
 
 #endif

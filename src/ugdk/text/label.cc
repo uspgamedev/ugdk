@@ -1,4 +1,4 @@
-#include <ugdk/graphic/text/label.h>
+#include <ugdk/text/label.h>
 
 #include <ugdk/internal/opengl.h>
 
@@ -7,9 +7,9 @@
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/graphic/text/font.h>
+#include <ugdk/text/font.h>
 #include <ugdk/util/utf8.h>
-#include <ugdk/graphic/drawable/functions.h>
+#include <ugdk/text/functions.h>
 
 #include <texture-font.h>
 #include <vec234.h>
@@ -17,8 +17,9 @@
 #include <algorithm>
 
 namespace ugdk {
-namespace graphic {
+namespace text {
 
+using namespace graphic;
 using ugdk::Color;
 
 Label::Label(const std::string& utf8_message, Font *font) 
@@ -72,10 +73,10 @@ void Label::Draw(Canvas& canvas) const {
     if(draw_setup_function_) draw_setup_function_(this, canvas);
 
     auto& shaders = graphic::manager()->shaders();
-    bool previous_ignore_texture_flag = shaders.IsFlagSet(Manager::Shaders::IGNORE_TEXTURE_COLOR);
+    bool previous_ignore_texture_flag = shaders.IsFlagSet(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR);
     auto previous_program = canvas.shader_program();
 
-    shaders.ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
+    shaders.ChangeFlag(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
     canvas.ChangeShaderProgram(shaders.current_shader());
 
     TextureUnit unit = manager()->ReserveTextureUnit(nullptr);
@@ -94,11 +95,11 @@ void Label::Draw(Canvas& canvas) const {
     glMultiDrawArrays(GL_TRIANGLE_STRIP, first_vector_.data(), size_vector_.data(), static_cast<int>(num_characters_));
 #endif
 
-    shaders.ChangeFlag(Manager::Shaders::IGNORE_TEXTURE_COLOR, previous_ignore_texture_flag);
+    shaders.ChangeFlag(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR, previous_ignore_texture_flag);
     canvas.ChangeShaderProgram(previous_program);
 
     canvas.PopGeometry();
 }
 
-}  // namespace graphic
+}  // namespace text
 }  // namespace ugdk

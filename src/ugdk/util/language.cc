@@ -1,9 +1,9 @@
 #include "language.h"
 
-#include <ugdk/graphic/text/textmanager.h>
 #include <ugdk/resource/module.h>
-#include <ugdk/graphic/text/label.h>
-#include <ugdk/graphic/text/textbox.h>
+#include <ugdk/text/module.h>
+#include <ugdk/text/label.h>
+#include <ugdk/text/textbox.h>
 #include <ugdk/system/engine.h>
 #include <ugdk/util/languageword.h>
 #include <ugdk/util/utf8.h>
@@ -66,7 +66,7 @@ static void ReadFont(char* str) {
 
     double font_size = atof(size.c_str());
 
-    TEXT_MANAGER()->AddFont(name, path, font_size);
+    text::manager()->AddFont(name, path, font_size);
 }
 
 //===================================================================

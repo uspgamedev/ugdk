@@ -4,11 +4,11 @@
 #include <ugdk/graphic/module.h>
 #include <ugdk/audio/module.h>
 #include <ugdk/resource/module.h>
+#include <ugdk/text/module.h>
 #include <ugdk/time/module.h>
 #include <ugdk/desktop/module.h>
 
 #include <ugdk/action/scene.h>
-#include <ugdk/graphic/text/textmanager.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/util/languagemanager.h>
@@ -42,7 +42,6 @@ enum class UGDKState {
 
 UGDKState current_state_ = UGDKState::UNINITIALIZED;
 
-graphic:: TextManager *        text_manager_;
       LanguageManager *    language_manager_;
 
 std::list<action::Scene*> scene_list_;
@@ -118,10 +117,6 @@ class SDLQuitEventHandler : public internal::SDLEventHandler {
 
 } // namespace anon
 
-graphic::TextManager *text_manager() {
-    return text_manager_;
-}
-
 LanguageManager* language_manager() {
     return language_manager_;
 }
@@ -188,11 +183,6 @@ bool Initialize(const Configuration& configuration) {
 
     if(!resource::Initialize(new resource::Manager))
         return ErrorLog("system::Initialize failed - resource::Initialize returned false.");
-
-    if(graphic::manager()) {
-        text_manager_ = new graphic::TextManager;
-        text_manager_->Initialize();
-    }
 
     if (!SCRIPT_MANAGER()->Initialize())
         return ErrorLog("system::Initialize failed - SCRIPT_MANAGER()->Initialize returned false.");
@@ -282,17 +272,13 @@ void Release() {
 
     DeregisterSDLHandler(&system_sdlevent_handler);
 
-    if(text_manager_) {
-        text_manager_->Release();
-        delete text_manager_;
-    }
-
     audio::Release();
     input::Release();
     resource::Release();
     time::Release();
     graphic::Release();
     desktop::Release();
+    text::Release();
 
     SCRIPT_MANAGER()->Finalize();
     delete SCRIPT_MANAGER();

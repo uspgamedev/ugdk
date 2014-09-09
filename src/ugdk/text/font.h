@@ -1,7 +1,7 @@
-#ifndef UGDK_GRAPHIC_FONT_H_
-#define UGDK_GRAPHIC_FONT_H_
+#ifndef UGDK_TEXT_FONT_H_
+#define UGDK_TEXT_FONT_H_
 
-#include <ugdk/graphic.h>
+#include <ugdk/text.h>
 #include <ugdk/math/vector2D.h>
 
 #include <memory>
@@ -11,7 +11,7 @@ struct texture_atlas_t;
 struct texture_font_t;
 
 namespace ugdk {
-namespace graphic {
+namespace text {
 
 class Font {
   public:
@@ -34,7 +34,7 @@ class Font {
     texture_font_t* freetype_font_;
 };
 
-}  // namespace graphic
+}  // namespace text
 }  // namespace ugdk
 
-#endif // UGDK_GRAPHIC_FONT_H_
+#endif // UGDK_TEXT_FONT_H_

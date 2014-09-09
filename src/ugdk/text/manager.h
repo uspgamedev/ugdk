@@ -1,21 +1,20 @@
-#ifndef HORUSEYE_FRAMEWORK_TEXTMANAGER_H_
-#define HORUSEYE_FRAMEWORK_TEXTMANAGER_H_
+#ifndef UGDK_TEXT_MANAGER_H_
+#define UGDK_TEXT_MANAGER_H_
 
-#include <vector>
-#include <map>
-#include <string>
 #include <ugdk/math/vector2D.h>
-#include <ugdk/graphic.h>
+#include <ugdk/text.h>
 
-#define TEXT_MANAGER() ugdk::system::text_manager()
+#include <unordered_map>
+#include <memory>
+#include <string>
 
 namespace ugdk {
-namespace graphic {
+namespace text {
 
-class TextManager {
+class Manager {
   public:
-    TextManager() : current_font_(nullptr) {}
-    ~TextManager();
+    Manager();
+    ~Manager();
 
     bool Initialize();
     bool Release();
@@ -25,19 +24,17 @@ class TextManager {
     TextBox* GetTextFromFile(const std::string& path);
 	TextBox* GetTextFromFile(const std::string& path, const std::string& font, int width = -1);
 
-    Font* current_font() { return current_font_; }
-    Font* GetFont(const std::string& name) {
-        return fonts_[name];
-    }
+    Font* current_font() const { return current_font_; }
+    Font* GetFont(const std::string& name) const;
 
 	void AddFont(const std::string& name, const std::string& path, double size);
 
   private:
     Font *current_font_;
-    std::map<std::string, Font*> fonts_;
+    std::unordered_map<std::string, std::unique_ptr<Font>> fonts_;
 };
 
-}  // namespace graphic
+}  // namespace text
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_TEXT_MANAGER_H_
