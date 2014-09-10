@@ -7,8 +7,7 @@
 namespace pyramidworks {
 namespace geometry {
 
-/// \class RotatedRect rotatedrect.h "pyramidworks/geometry/rotatedrect.h"
-/// A rotated rect, one type of GeometricShape. This determines a rect just like the Rect class, but allows it to be rotated giving more geometric options.
+/// A convex polygon, one type of GeometricShape. This determines a polygon conposed by at least 3 vertices.
 class ConvexPolygon : public GeometricShape {
   public:
     /** @param vertices	The list of vertices of the polygon, in local coordinates (0,0 is the "center", where this polygon is positioned).
@@ -16,7 +15,7 @@ class ConvexPolygon : public GeometricShape {
 	  */
 	ConvexPolygon(const std::vector<ugdk::math::Vector2D>& vertices);
 
-	void set_vertices(const std::vector<ugdk::math::Vector2D>& vertices) { vertices_ = vertices; this->calculateSize(); }
+	void set_vertices(const std::vector<ugdk::math::Vector2D>& vertices) { vertices_ = vertices; this->CalculateSize(); }
 
     bool Intersects(const ugdk::math::Vector2D& this_pos, const GeometricShape *obj, const ugdk::math::Vector2D& that_pos) const;
     bool Intersects(const ugdk::math::Vector2D& this_pos, const           Rect *obj, const ugdk::math::Vector2D& that_pos) const;
@@ -28,10 +27,7 @@ class ConvexPolygon : public GeometricShape {
 	double bbox_height() { return bbox_half_height_*2; }
 
   private:
-    std::vector<ugdk::math::Vector2D> vertices_;
-	double bbox_half_width_, bbox_half_height_;
-
-	void calculateSize();
+	void CalculateSize();
 
 	/// Checks if there's an separating axis between the two given objects (convex polygons represented as a Vector2D list and a position). 
 	/// If a separating axis exist, the two polygons do not intersect.
@@ -42,11 +38,14 @@ class ConvexPolygon : public GeometricShape {
 				(plus the last and initial vectors) in the list correspond to a pair of vertices that form a edge of the polygon. Vertices should be ordered clockwise.
 		@param obj2pos The position of the second convex polygon.
         @return True if there's a separating axis. */
-	bool checkAxisSeparation(const std::vector<ugdk::math::Vector2D>& obj1, const ugdk::math::Vector2D& obj1pos, 
+	bool CheckAxisSeparation(const std::vector<ugdk::math::Vector2D>& obj1, const ugdk::math::Vector2D& obj1pos, 
 							 const std::vector<ugdk::math::Vector2D>& obj2, const ugdk::math::Vector2D& obj2pos) const;
-	bool axisSeparationTest(const ugdk::math::Vector2D& p1, const ugdk::math::Vector2D& p2, const ugdk::math::Vector2D& ref,
+	bool AxisSeparationTest(const ugdk::math::Vector2D& p1, const ugdk::math::Vector2D& p2, const ugdk::math::Vector2D& ref,
 							const std::vector<ugdk::math::Vector2D>& obj, const ugdk::math::Vector2D& obj2pos) const;
-	bool insideSameSpace(const ugdk::math::Vector2D& line, const ugdk::math::Vector2D& point) const;
+	bool InsideSameSpace(const ugdk::math::Vector2D& line, const ugdk::math::Vector2D& point) const;
+
+    std::vector<ugdk::math::Vector2D> vertices_;
+    double bbox_half_width_, bbox_half_height_;
 };
 
 } // namespace geometry

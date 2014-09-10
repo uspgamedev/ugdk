@@ -1,20 +1,27 @@
 #include "convexpolygon.h"
+
 #include "rect.h"
 #include "circle.h"
-#include <cmath>
+
 #include <ugdk/structure/intervalkdtree.h>
+
+#include <cmath>
+#include <algorithm>
 
 namespace pyramidworks {
 namespace geometry {
 
 using ugdk::math::Vector2D;
 
-ConvexPolygon::ConvexPolygon(const std::vector<ugdk::math::Vector2D>& vertices) : GeometricShape(), vertices_(vertices) {
-	calculateSize();
+ConvexPolygon::ConvexPolygon(const std::vector<ugdk::math::Vector2D>& vertices)
+: GeometricShape()
+, vertices_(vertices)
+{
+	CalculateSize();
 }
 
 bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const ConvexPolygon *polygon, const ugdk::math::Vector2D& otherpos) const {
-	return ! checkAxisSeparation(vertices_, this_pos, polygon->vertices_, otherpos);
+	return !CheckAxisSeparation(vertices_, this_pos, polygon->vertices_, otherpos);
 }
 
 bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const Rect *rect, const ugdk::math::Vector2D& otherpos) const {
@@ -23,7 +30,7 @@ bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const Rect
 	rect_vertices.emplace_back( rect->width()/2.0, -rect->height()/2.0);
 	rect_vertices.emplace_back(-rect->width()/2.0,  rect->height()/2.0);
 	rect_vertices.emplace_back( rect->width()/2.0,  rect->height()/2.0);
-	return ! checkAxisSeparation(vertices_, this_pos, rect_vertices, otherpos);
+	return !CheckAxisSeparation(vertices_, this_pos, rect_vertices, otherpos);
 }
 
 bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const Circle *circle, const ugdk::math::Vector2D& circ_pos) const {
@@ -45,7 +52,7 @@ bool ConvexPolygon::Intersects (const ugdk::math::Vector2D& this_pos, const Circ
 		edgeNormal.y = edge.x;
 		AC = circ_pos - A;
 
-		if (insideSameSpace(edgeNormal, AC)) {
+		if (InsideSameSpace(edgeNormal, AC)) {
 			/* This edge says the center point is "outside" the polygon, so the circle cannot be inside the polygon.
 			   So check if the circle intersects with the edge by calculating the distance between the center and the edge
 			   using projection. */
@@ -77,17 +84,15 @@ ugdk::structure::Box<2> ConvexPolygon::GetBoundingBox(const ugdk::math::Vector2D
     return ugdk::structure::Box<2>(thisposmin, thisposmax);
 }
 
-void ConvexPolygon::calculateSize() {
+void ConvexPolygon::CalculateSize() {
 	/* Calculate rough width and height of the convex polygon in order to build a bounding box. */
 	for (size_t i=0; i < vertices_.size(); i++) {
-		if (fabs(vertices_[i].x) > bbox_half_width_)
-			bbox_half_width_ = fabs(vertices_[i].x);
-		if (fabs(vertices_[i].y) > bbox_half_height_)
-			bbox_half_height_ = fabs(vertices_[i].y);
+        bbox_half_width_ = std::max(bbox_half_width_, fabs(vertices_[i].x));
+        bbox_half_height_ = std::max(bbox_half_height_, fabs(vertices_[i].y));
 	}
 }
 
-bool ConvexPolygon::checkAxisSeparation(const std::vector<ugdk::math::Vector2D>& obj1, const ugdk::math::Vector2D& obj1pos,
+bool ConvexPolygon::CheckAxisSeparation(const std::vector<ugdk::math::Vector2D>& obj1, const ugdk::math::Vector2D& obj1pos,
 										const std::vector<ugdk::math::Vector2D>& obj2, const ugdk::math::Vector2D& obj2pos) const {
 	size_t i, p2;
 	/* For each edge in the obj1 polygon, we check if that edge is a separating axis between the two polygons. */
@@ -97,7 +102,7 @@ bool ConvexPolygon::checkAxisSeparation(const std::vector<ugdk::math::Vector2D>&
 
 		/* obj1 and obj2 ugdk::math::Vector2Ds are in local coordinates relative to that polygon - so add the polygon position to the
 		   obj1 vectors we are passing to the separating axis edge test. */
-		if (axisSeparationTest(obj1[i]+obj1pos, obj1[p2]+obj1pos, obj1pos, obj2, obj2pos))
+		if (AxisSeparationTest(obj1[i]+obj1pos, obj1[p2]+obj1pos, obj1pos, obj2, obj2pos))
 			return true;
 	}
 
@@ -107,24 +112,24 @@ bool ConvexPolygon::checkAxisSeparation(const std::vector<ugdk::math::Vector2D>&
 		p2 = i + 1;
 		if (p2 >= obj2.size())	p2 = 0;
 
-		if (axisSeparationTest(obj2[i]+obj2pos, obj2[p2]+obj2pos, obj2pos, obj1, obj1pos))
+		if (AxisSeparationTest(obj2[i]+obj2pos, obj2[p2]+obj2pos, obj2pos, obj1, obj1pos))
 			return true;
 	}
 
 	return false;
 }
 
-bool ConvexPolygon::axisSeparationTest(const ugdk::math::Vector2D& p1, const ugdk::math::Vector2D& p2, const ugdk::math::Vector2D& ref,
+bool ConvexPolygon::AxisSeparationTest(const ugdk::math::Vector2D& p1, const ugdk::math::Vector2D& p2, const ugdk::math::Vector2D& ref,
 									   const std::vector<ugdk::math::Vector2D>& obj, const ugdk::math::Vector2D& obj2pos) const {
 	ugdk::math::Vector2D edge = p2 - p1;
 	ugdk::math::Vector2D edgeNormal (-edge.y, edge.x);
 
 	/* Store the side of the reference point in the given polygon (obj1) relative to the given edge (p2-p1) to check against. */
-	bool ref_side = insideSameSpace(edgeNormal, (ref - p1));
+	bool ref_side = InsideSameSpace(edgeNormal, (ref - p1));
 
 	/* Now check in which side of the edge each vertex of the obj2 polygon is. */
 	for (size_t i = 0; i<obj.size(); i++) {
-		bool side = insideSameSpace(edgeNormal, ((obj[i]+obj2pos) - p1));
+		bool side = InsideSameSpace(edgeNormal, ((obj[i]+obj2pos) - p1));
 		if (side == ref_side) {
 			/* The point we're checking (of the other polygon) is in the same side as our reference point (from our polygon),
 				so this edge cannot be a separating axis. */
@@ -137,7 +142,7 @@ bool ConvexPolygon::axisSeparationTest(const ugdk::math::Vector2D& p1, const ugd
 	return true;
 }
 
-bool ConvexPolygon::insideSameSpace(const ugdk::math::Vector2D& line, const ugdk::math::Vector2D& point) const {
+bool ConvexPolygon::InsideSameSpace(const ugdk::math::Vector2D& line, const ugdk::math::Vector2D& point) const {
 	return (line * point) > 0;
 }
 
