@@ -1,4 +1,4 @@
-%module ugdk_input_scancode
+%module ugdk_input_keycode
 
 %{
 
