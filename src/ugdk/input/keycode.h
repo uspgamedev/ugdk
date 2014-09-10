@@ -316,6 +316,7 @@ enum class Keycode
 Scancode CreateScancodeFromKeycode(const Keycode&);
 Keycode CreateKeycodeFromScancode(const Scancode&);
 
+#ifndef SWIG
 /**
  * \brief Enumeration of valid key mods (possibly OR'd together).
  */
@@ -347,6 +348,7 @@ enum class Keymod
 inline bool operator&(const Keymod& left, const Keymod& right) {
     return (static_cast<int>(left) & static_cast<int>(right)) != 0;
 }
+#endif // SWIG
 
 } // namespace input
 } // namespace ugdk

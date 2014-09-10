@@ -7,6 +7,9 @@ SET(UGDK_MODULE_SRC
     src/module/ugdk_desktop.i 
     src/module/ugdk_graphic.i 
     src/module/ugdk_input.i 
+    src/module/ugdk_input_keycode.i 
+    src/module/ugdk_input_mousebutton.i 
+    src/module/ugdk_input_scancode.i 
     src/module/ugdk_internal.i 
     src/module/ugdk_math.i 
     src/module/ugdk_resource.i 

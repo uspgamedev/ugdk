@@ -16,21 +16,9 @@
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %include <ugdk/internal.h>
 
-%include <ugdk/input/scancode.h>
-
-// SWIG don't know what scope is, so we can't export the keycodes.
-//%include <ugdk/input/keycode.h>
-namespace ugdk {
-namespace input {
-enum class Keycode {};
-enum class MouseButton {};
-
-// SWIG generates invalid code for these functions
-//Scancode CreateScancodeFromKeycode(const Keycode&);
-//Keycode CreateKeycodeFromScancode(const Scancode&);
-}
-}
-//
+%import(module="ugdk_input_scancode") <ugdk/input/scancode.h>
+%import(module="ugdk_input_keycode") <ugdk/input/keycode.h>
+%import(module="ugdk_input_mousebutton") <ugdk/input/mousebutton.h>
 
 // SWIG can't differ from Keycode/Scancode overload.
 %ignore ugdk::input::Keyboard::IsDown(const Keycode& keycode) const;
