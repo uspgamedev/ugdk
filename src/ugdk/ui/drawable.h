@@ -1,12 +1,12 @@
-#ifndef PYRAMIDWORKS_UI_DRAWABLE_H_
-#define PYRAMIDWORKS_UI_DRAWABLE_H_
+#ifndef UGDK_UI_DRAWABLE_H_
+#define UGDK_UI_DRAWABLE_H_
 
 #include <ugdk/graphic/drawable.h>
 
 #include <ugdk/graphic.h>
 #include <memory>
 
-namespace pyramidworks {
+namespace ugdk {
 namespace ui {
 
 class Drawable : public ugdk::graphic::Drawable {
@@ -24,7 +24,7 @@ class Drawable : public ugdk::graphic::Drawable {
     ugdk::math::Vector2D size_;
 };
 
-} // namespace pyramidworks
+} // namespace ui
 } // namespace ugdk
 
-#endif // PYRAMIDWORKS_UI_DRAWABLE_H_
+#endif // UGDK_UI_DRAWABLE_H_

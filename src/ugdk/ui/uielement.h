@@ -1,12 +1,12 @@
-#ifndef PYRAMIDWORKS_UI_UIELEMENT_H_
-#define PYRAMIDWORKS_UI_UIELEMENT_H_
+#ifndef UGDK_UI_UIELEMENT_H_
+#define UGDK_UI_UIELEMENT_H_
 
 #include <ugdk/util.h>
 #include <ugdk/structure.h>
 #include <ugdk/graphic.h>
-#include <pyramidworks/ui.h>
+#include <ugdk/ui.h>
 
-namespace pyramidworks {
+namespace ugdk {
 namespace ui {
 
 class UIElement {
@@ -26,7 +26,7 @@ class UIElement {
     ugdk::graphic::Node* node_;
 };
 
-} // namespace pyramidworks
+} // namespace ugdk
 } // namespace ugdk
 
-#endif // PYRAMIDWORKS_UI_UIELEMENT_H_
+#endif // UGDK_UI_UIELEMENT_H_

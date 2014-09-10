@@ -1,12 +1,12 @@
 #ifndef PYRAMIDWORKS_UI_BUTTON_H_
 #define PYRAMIDWORKS_UI_BUTTON_H_
 
-#include <pyramidworks/ui/uielement.h>
+#include <ugdk/ui/uielement.h>
 #include <ugdk/math/vector2D.h>
 
 #include <functional>
 
-namespace pyramidworks {
+namespace ugdk {
 namespace ui {
 
 typedef std::function<void (const Button *)> ButtonCallback;
@@ -24,6 +24,6 @@ class Button : public UIElement {
 };
 
 } // namespace ui
-} // namespace pyramidworks
+} // namespace ugdk
 
 #endif // PYRAMIDWORKS_UI_BUTTON_H_

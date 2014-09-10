@@ -1,26 +1,26 @@
-#ifndef PYRAMIDWORKS_UI_MENU_H_
-#define PYRAMIDWORKS_UI_MENU_H_
+#ifndef UGDK_UI_MENU_H_
+#define UGDK_UI_MENU_H_
 
-#include <pyramidworks/ui.h>
+#include <ugdk/input.h>
+#include <ugdk/action.h>
+#include <ugdk/graphic.h>
+#include <ugdk/ui.h>
+#include <ugdk/util.h>
 #include <pyramidworks/collision.h>
 
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/integer2D.h>
-#include <ugdk/action.h>
-#include <ugdk/graphic.h>
-#include <ugdk/util.h>
 #include <ugdk/structure.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/node.h>
 #include <ugdk/graphic/drawable.h>
-#include <ugdk/input.h>
 
 #include <string>
 #include <functional>
 #include <memory>
 #include <map>
 
-namespace pyramidworks {
+namespace ugdk {
 namespace ui {
     
 typedef std::function<void (Menu*)> MenuCallback;
@@ -79,6 +79,6 @@ class Menu: public ::ugdk::action::Scene {
 };
 
 } // namespace ui
-} // namespace pyramidworks
+} // namespace ugdk
 
-#endif // PYRAMIDWORKS_UI_MENU_H_
+#endif // UGDK_UI_MENU_H_

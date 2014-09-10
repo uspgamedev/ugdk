@@ -1,6 +1,6 @@
 
-#include <pyramidworks/ui/menu.h>
-#include <pyramidworks/ui/uielement.h>
+#include <ugdk/ui/menu.h>
+#include <ugdk/ui/uielement.h>
 
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/drawable.h>
@@ -17,10 +17,9 @@
 using std::mem_fn;
 using std::placeholders::_1;
 
-namespace pyramidworks {
+namespace ugdk {
 namespace ui {
 
-using namespace ugdk;
 const MenuCallback Menu::FINISH_MENU(mem_fn(&Menu::Finish));
 const MenuCallback Menu::INTERACT_MENU(mem_fn(&Menu::InteractWithFocused));
 
@@ -150,4 +149,4 @@ void Menu::RefreshObject(UIElement *obj) {
 }
 
 } // namespace ui
-} // namespace pyramidworks
+} // namespace ugdk

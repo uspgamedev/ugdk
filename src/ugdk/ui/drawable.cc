@@ -1,5 +1,5 @@
 
-#include <pyramidworks/ui/drawable.h>
+#include <ugdk/ui/drawable.h>
 
 #include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/vertexdata.h>
@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <numeric>
 
-namespace pyramidworks {
+namespace ugdk {
 namespace ui {
 
 namespace {
@@ -67,6 +67,6 @@ void Drawable::updateSize() {
     size_.y = max_y - min_y;
 }
 
-} // namespace pyramidworks
+} // namespace ui
 } // namespace ugdk
 
