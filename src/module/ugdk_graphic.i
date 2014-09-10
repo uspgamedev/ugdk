@@ -13,10 +13,8 @@
 
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
-#include <ugdk/graphic/drawable.h>
 #include <ugdk/graphic/image.h>
 #include <ugdk/graphic/light.h>
-#include <ugdk/graphic/node.h>
 #include <ugdk/graphic/drawmode.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/textureatlas.h>
@@ -43,10 +41,8 @@
 %rename(ComposeNew) ugdk::graphic::Geometry::Compose(const Geometry* mod1, const Geometry* mod2);
 
 %include <ugdk/graphic.h>
-
 %include <ugdk/graphic/geometry.h>
 %include <ugdk/graphic/visualeffect.h>
-%include <ugdk/graphic/drawable.h>
 
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
@@ -56,11 +52,6 @@
 %include <ugdk/graphic/canvas.h>
 %include <ugdk/graphic/image.h>
 %include <ugdk/graphic/light.h>
-enable_disown(ugdk::graphic::Node* new_child)
-enable_disown(ugdk::graphic::Drawable* drawable)
-%include <ugdk/graphic/node.h>
-disable_disown(ugdk::graphic::Drawable* drawable)
-disable_disown(ugdk::graphic::Node* new_child)
 %include <ugdk/graphic/textureatlas.h>
 %include <ugdk/graphic/textureunit.h>
 %include <ugdk/graphic/rendertarget.h>
@@ -76,11 +67,9 @@ namespace ugdk {
 namespace graphic {
 	export_class(DrawMode)
     export_class(Canvas)
-    export_class(Drawable)
     export_class(Light)
     export_class(Geometry)
     export_class(VisualEffect)
-    export_class(Node)
     export_class(TextureAtlas)
 	export_class(TextureUnit)
 	export_class(RenderTarget)

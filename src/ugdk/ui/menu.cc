@@ -3,11 +3,11 @@
 #include <ugdk/ui/uielement.h>
 
 #include <ugdk/action/scene.h>
-#include <ugdk/graphic/drawable.h>
-#include <ugdk/graphic/node.h>
 #include <ugdk/input/module.h>
 #include <ugdk/input/scancode.h>
 #include <ugdk/input/events.h>
+#include <ugdk/ui/drawable.h>
+#include <ugdk/ui/node.h>
 #include <ugdk/structure/intervalkdtree.h>
 
 #include <vector>
@@ -23,8 +23,8 @@ namespace ui {
 const MenuCallback Menu::FINISH_MENU(mem_fn(&Menu::Finish));
 const MenuCallback Menu::INTERACT_MENU(mem_fn(&Menu::InteractWithFocused));
 
-Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, const graphic::Drawable::HookPoint& hook) 
-  : node_(new graphic::Node)
+Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, HookPoint hook) 
+  : node_(new Node)
   , focused_element_(nullptr)
   , objects_tree_(new ObjectTree(tree_bounding_box,5))
   , hook_(hook) 
@@ -55,7 +55,7 @@ Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::V
         }
     });
 
-    set_render_function(std::bind(&graphic::Node::Render, node_.get(), _1));
+    set_render_function(std::bind(&Node::Render, node_.get(), _1));
 }
 
 Menu::~Menu() {
@@ -63,6 +63,14 @@ Menu::~Menu() {
 
 void Menu::AddCallback(const input::Keycode& key, const MenuCallback& callback) {
     input_callbacks_[key] = callback;
+}
+
+void Menu::SetOptionDrawable(std::unique_ptr<Drawable>&& option_graphic, int index) {
+    if (!option_node_[index]) {
+        option_node_[index].reset(new Node);
+        node_->AddChild(option_node_[index]);
+    }
+    option_node_[index]->set_drawable(std::move(option_graphic));
 }
 
 void Menu::SelectUIElement(UIElement* target) {
@@ -140,7 +148,7 @@ void Menu::AddObject(UIElement *obj) {
 void Menu::RemoveObject(UIElement *obj) { 
     obj->set_owner(nullptr);
     objects_tree_->Remove(obj);
-    node_->RemoveChild(obj->node());
+    node_->RemoveChild(obj->node().get());
     uielements_.remove(obj);
 }
 

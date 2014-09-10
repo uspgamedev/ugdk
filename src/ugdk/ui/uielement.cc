@@ -2,7 +2,7 @@
 #include <ugdk/ui/uielement.h>
 
 #include <ugdk/ui/menu.h>
-#include <ugdk/graphic/drawable.h>
+#include <ugdk/ui/node.h>
 #include <ugdk/util.h>
 
 #include <string>
@@ -11,9 +11,12 @@
 namespace ugdk {
 namespace ui {
 
-UIElement::UIElement() : owner_(nullptr), node_(new ugdk::graphic::Node) {}
+UIElement::UIElement()
+:  owner_(nullptr)
+,  node_(new Node)
+{}
 
-UIElement::~UIElement() { delete node_; }
+UIElement::~UIElement() {}
 
 } // namespace ui
 } // namespace ugdk

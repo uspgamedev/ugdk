@@ -1,7 +1,7 @@
 #ifndef UGDK_UTIL_LANGUAGEWORD_H_
 #define UGDK_UTIL_LANGUAGEWORD_H_
 
-#include <ugdk/graphic.h>
+#include <ugdk/ui.h>
 #include <string>
 
 namespace ugdk {
@@ -15,7 +15,7 @@ class LanguageWord {
     const std::string& text() const { return utf8_text_; }
     const std::string& font() const { return font_; }
 
-    graphic::Drawable* CreateLabel() const;
+    ui::Drawable* CreateLabel() const;
 
   protected:
     std::string utf8_text_;

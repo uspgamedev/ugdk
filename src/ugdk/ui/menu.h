@@ -8,12 +8,10 @@
 #include <ugdk/util.h>
 #include <pyramidworks/collision.h>
 
-#include <ugdk/math/vector2D.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/structure.h>
 #include <ugdk/action/scene.h>
-#include <ugdk/graphic/node.h>
-#include <ugdk/graphic/drawable.h>
+#include <ugdk/ui/hookpoint.h>
 
 #include <string>
 #include <functional>
@@ -24,33 +22,27 @@ namespace ugdk {
 namespace ui {
     
 typedef std::function<void (Menu*)> MenuCallback;
-typedef std::map<ugdk::input::Keycode, MenuCallback> InputCallbacks;
+typedef std::map<input::Keycode, MenuCallback> InputCallbacks;
 
 class Menu: public ::ugdk::action::Scene {
   typedef ugdk::structure::ikdtree::IntervalKDTree<UIElement*, 2> ObjectTree;
   public:
-    Menu(const ugdk::structure::Box<2>& tree_bounding_box,
-         const ugdk::math::Vector2D& offset,
-         const ugdk::graphic::Drawable::HookPoint& hook = ugdk::graphic::Drawable::TOP_LEFT);
+    Menu(const structure::Box<2>& tree_bounding_box,
+         const math::Vector2D& offset,
+         HookPoint hook = HookPoint::TOP_LEFT);
     ~Menu();
 
     std::shared_ptr< std::vector<UIElement *> > GetMouseCollision();
 
     void AddCallback(const ugdk::input::Keycode& key, const MenuCallback& callback);
 
-    void SetOptionDrawable(ugdk::graphic::Drawable* option_graphic, int index = 0) {
-        if (!option_node_[index]) {
-            option_node_[index] = new ugdk::graphic::Node;
-            node_->AddChild(option_node_[index]);
-        }
-        option_node_[index]->set_drawable(option_graphic);
-    }
+    void SetOptionDrawable(std::unique_ptr<Drawable>&& option_graphic, int index = 0);
 
     void AddObject(UIElement* obj);
     void RemoveObject(UIElement* obj);
     void RefreshObject(UIElement* obj);
 
-    ugdk::graphic::Node* node() { return node_.get(); }
+    Node* node() { return node_.get(); }
     const UIElement* focused_element() const { return focused_element_; }
 
     const InputCallbacks& input_callbacks() const { return input_callbacks_; }
@@ -59,23 +51,21 @@ class Menu: public ::ugdk::action::Scene {
     const static MenuCallback INTERACT_MENU;
     
   private:
-    void CheckInteraction(const ugdk::math::Vector2D& mouse_pos);
+    void CheckInteraction(const math::Vector2D& mouse_pos);
     void InteractWithFocused();
     void SelectUIElement(UIElement* target);
     void FocusNextElement(int offset);
     void PositionSelectionDrawables();
 
-    std::unique_ptr<ugdk::graphic::Node> node_;
+    std::unique_ptr<Node> node_;
+    std::shared_ptr<Node> option_node_[2];
 
-    // Deleted by node_ destructor
-    ugdk::graphic::Node* option_node_[2];
-
-    ugdk::math::Integer2D last_mouse_position_;
+    math::Integer2D last_mouse_position_;
     UIElement* focused_element_;
     std::list< UIElement* > uielements_;
     std::unique_ptr<ObjectTree> objects_tree_;
     InputCallbacks input_callbacks_;
-    ugdk::graphic::Drawable::HookPoint hook_;
+    HookPoint hook_;
 };
 
 } // namespace ui

@@ -4,7 +4,7 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/text.h>
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/drawable.h>
+#include <ugdk/ui/drawable.h>
 #include <ugdk/util/utf8.h>
 
 #include <vector>
@@ -15,7 +15,7 @@
 namespace ugdk {
 namespace text {
 
-class TextBox : public graphic::Drawable {
+class TextBox : public ui::Drawable {
   public:
     TextBox(const std::string& message, double width, Font* font);
     ~TextBox();

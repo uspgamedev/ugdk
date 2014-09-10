@@ -55,9 +55,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/canvas.h 
     src/ugdk/graphic/defaultshaders.cc 
     src/ugdk/graphic/defaultshaders.h 
-    src/ugdk/graphic/drawable.h 
-    src/ugdk/graphic/drawable/texturedrectangle.cc 
-    src/ugdk/graphic/drawable/texturedrectangle.h 
     src/ugdk/graphic/drawmode.cc 
     src/ugdk/graphic/drawmode.h 
     src/ugdk/graphic/exceptions.h 
@@ -70,8 +67,6 @@ SET(UGDK_SRC
     src/ugdk/graphic/manager.h 
     src/ugdk/graphic/module.cc 
     src/ugdk/graphic/module.h 
-    src/ugdk/graphic/node.cc 
-    src/ugdk/graphic/node.h 
     src/ugdk/graphic/opengl/Exception.cc 
     src/ugdk/graphic/opengl/Exception.h 
     src/ugdk/graphic/opengl/shader.cc 
@@ -187,10 +182,16 @@ SET(UGDK_SRC
     src/ugdk/ui.h 
     src/ugdk/ui/button.cc 
     src/ugdk/ui/button.h 
-    src/ugdk/ui/drawable.cc 
     src/ugdk/ui/drawable.h 
+    src/ugdk/ui/drawable/primitive.cc 
+    src/ugdk/ui/drawable/primitive.h 
+    src/ugdk/ui/drawable/texturedrectangle.cc 
+    src/ugdk/ui/drawable/texturedrectangle.h 
+    src/ugdk/ui/hookpoint.h 
     src/ugdk/ui/menu.cc 
     src/ugdk/ui/menu.h 
+    src/ugdk/ui/node.cc 
+    src/ugdk/ui/node.h 
     src/ugdk/ui/uielement.cc 
     src/ugdk/ui/uielement.h 
     src/ugdk/util.h 

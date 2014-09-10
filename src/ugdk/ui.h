@@ -7,6 +7,11 @@ namespace ui {
 class Button;
 class Menu;
 class UIElement;
+class Node;
+
+class Drawable;
+class DrawablePrimitive;
+class TexturedRectangle;
 
 }  // namespace ui
 }  // namespace ugdk

@@ -1,5 +1,5 @@
 
-#include <ugdk/ui/drawable.h>
+#include <ugdk/ui/drawable/primitive.h>
 
 #include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/vertexdata.h>
@@ -22,12 +22,12 @@ namespace {
 
 using ugdk::graphic::opengl::VertexBuffer;
 
-Drawable::Drawable(const std::shared_ptr<ugdk::graphic::Primitive>& primitive)
+DrawablePrimitive::DrawablePrimitive(const std::shared_ptr<ugdk::graphic::Primitive>& primitive)
     : primitive_(primitive) {}
 
-Drawable::~Drawable() {}
+DrawablePrimitive::~DrawablePrimitive() {}
 
-void Drawable::Draw(ugdk::graphic::Canvas& canvas) const {
+void DrawablePrimitive::Draw(ugdk::graphic::Canvas& canvas) const {
 
     if (draw_setup_function_)
         draw_setup_function_(this, canvas);
@@ -42,12 +42,12 @@ void Drawable::Draw(ugdk::graphic::Canvas& canvas) const {
     canvas.PopGeometry();
 }
 
-const ugdk::math::Vector2D& Drawable::size() const {
-    const_cast<Drawable*>(this)->updateSize();
+const ugdk::math::Vector2D& DrawablePrimitive::size() const {
+    const_cast<DrawablePrimitive*>(this)->UpdateSize();
     return size_;
 }
 
-void Drawable::updateSize() {
+void DrawablePrimitive::UpdateSize() {
     auto& data = *primitive_->vertexdata();
     ugdk::graphic::VertexData::Mapper mapper(data);
 

@@ -15,7 +15,7 @@
 %}
 
 %import(module="ugdk_action") <ugdk/action.h>
-%import(module="ugdk_graphic") <ugdk/graphic.h>
+%import(module="ugdk_ui") <ugdk/ui.h>
 
 %include <ugdk/util/uncopyable.h>
 %include <ugdk/util/languageword.h>
