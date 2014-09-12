@@ -14,6 +14,8 @@ class UIElement {
     virtual ~UIElement();
     
     void set_owner(Menu* owner) { owner_ = owner; }
+
+    Menu* owner() const { return owner_; }
     std::shared_ptr<Node> node() const { return node_; }
 
     virtual void Interact() const = 0;
@@ -21,8 +23,6 @@ class UIElement {
 
   protected:
     UIElement();
-
-    Menu* owner() const { return owner_; }
 
   private:
     Menu* owner_;
