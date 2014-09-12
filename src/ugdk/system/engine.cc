@@ -287,7 +287,7 @@ void Release() {
 
 void PushScene(std::unique_ptr<action::Scene> scene) {
     action::Scene* ptr = scene.release();
-    PushScene([ptr] { return std::unique_ptr<action::Scene>(ptr); });
+    queued_scene_list_.emplace_back([ptr] { return std::unique_ptr<action::Scene>(ptr); });
 }
 
 void PushSceneFactory(const std::function<std::unique_ptr<action::Scene>()>& scene_factory) {
