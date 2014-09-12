@@ -46,9 +46,6 @@ class Menu: public ::ugdk::action::Scene {
     const UIElement* focused_element() const { return focused_element_; }
 
     const InputCallbacks& input_callbacks() const { return input_callbacks_; }
-
-    const static MenuCallback FINISH_MENU;
-    const static MenuCallback INTERACT_MENU;
     
   private:
     void CheckInteraction(const math::Vector2D& mouse_pos);

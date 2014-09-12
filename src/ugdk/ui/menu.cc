@@ -20,9 +20,6 @@ using std::placeholders::_1;
 namespace ugdk {
 namespace ui {
 
-const MenuCallback Menu::FINISH_MENU(mem_fn(&Menu::Finish));
-const MenuCallback Menu::INTERACT_MENU(mem_fn(&Menu::InteractWithFocused));
-
 Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, HookPoint hook) 
   : node_(new Node)
   , focused_element_(nullptr)
