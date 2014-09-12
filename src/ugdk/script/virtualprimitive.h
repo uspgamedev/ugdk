@@ -27,6 +27,8 @@ class VirtualPrimitive {
     static_assert(is_virtual_primitive<T>::value, "Unsupported type.");
 };
 
+//================
+
 template <typename T>
 class VirtualPrimitive<T*> {
   public:
@@ -45,6 +47,8 @@ class VirtualPrimitive<T*> {
 template <typename T>
 struct is_virtual_primitive<T*> { static const bool value = true; };
 
+//================
+
 template <typename T>
 class VirtualPrimitive<T&> {
 public:
@@ -62,6 +66,28 @@ private:
 
 template <typename T>
 struct is_virtual_primitive<T&> { static const bool value = true; };
+
+//================
+
+template <typename T>
+class VirtualPrimitive<std::unique_ptr<T>> {
+public:
+    static std::unique_ptr<T> value(const VirtualData::Ptr data, bool disown) {
+        assert(disown);
+        return std::unique_ptr<T>(VirtualPrimitive<T*>::value(data, true));
+    }
+    static void set_value(const VirtualData::Ptr data, std::unique_ptr<T> value, bool disown) {
+        assert(disown);
+        VirtualPrimitive<T*>::set_value(data, value.release(), true);
+    }
+private:
+    VirtualPrimitive() {}
+};
+
+template <typename T>
+struct is_virtual_primitive<std::unique_ptr<T>> { static const bool value = true; };
+
+//================
 
 template <typename T, typename S>
 inline T CheckAndCast (S value) {
