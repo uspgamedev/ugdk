@@ -65,7 +65,7 @@ void Release();
 
 /// Queues a scene to be added just before the start of the next frame.
 /** @param scene_factory A factory for the scene to be added. */
-void PushScene(const std::function<std::unique_ptr<action::Scene>()>& scene_factory);
+void PushSceneFactory(const std::function<std::unique_ptr<action::Scene>()>& scene_factory);
 
 /// Queues a scene to be added just before the start of the next frame.
 /** @param scene The scene to be added. */

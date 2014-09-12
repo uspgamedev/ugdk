@@ -290,7 +290,7 @@ void PushScene(std::unique_ptr<action::Scene> scene) {
     PushScene([ptr] { return std::unique_ptr<action::Scene>(ptr); });
 }
 
-void PushScene(const std::function<std::unique_ptr<action::Scene>()>& scene_factory) {
+void PushSceneFactory(const std::function<std::unique_ptr<action::Scene>()>& scene_factory) {
     queued_scene_list_.push_back(scene_factory);
 }
 
