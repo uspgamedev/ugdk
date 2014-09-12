@@ -3,6 +3,7 @@
 
 #include <ugdk/script/virtualdata.h>
 #include <ugdk/script/type.h>
+#include <ugdk/system/exceptions.h>
 
 #include <type_traits>
 
@@ -73,11 +74,10 @@ template <typename T>
 class VirtualPrimitive<std::unique_ptr<T>> {
 public:
     static std::unique_ptr<T> value(const VirtualData::Ptr data, bool disown) {
-        assert(disown);
+        system::AssertCondition<system::InvalidOperation>(disown, "Disown must be true when extracting std::unique_ptr");
         return std::unique_ptr<T>(VirtualPrimitive<T*>::value(data, true));
     }
     static void set_value(const VirtualData::Ptr data, std::unique_ptr<T> value, bool disown) {
-        assert(disown);
         VirtualPrimitive<T*>::set_value(data, value.release(), true);
     }
 private:
