@@ -22,14 +22,12 @@
 
 %}
 
-%import(module="ugdk_structure") <ugdk/structure.h>
-%import(module="ugdk_system") <ugdk/system.h>
-%import(module="ugdk_system") <ugdk/structure/types.h>
-%import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_audio") <ugdk/audio.h>
-%import(module="ugdk_action") <ugdk/action.h>
-%import(module="ugdk_util") <ugdk/util.h>
-%import(module="ugdk_util") <ugdk/util/uncopyable.h>
+%import(module="ugdk_structure") <ugdk/structure.h>
+%import(module="ugdk_system") <ugdk/system/task.h>
+%import(module="ugdk_graphic") <ugdk/graphic.h>
+
+%include <ugdk/action.h>
 
 proxy_class(ugdk::action::Observer)
 proxy_class(ugdk::action::Scene)

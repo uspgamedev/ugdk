@@ -23,8 +23,7 @@
 
 %}
 
-%import(module="ugdk_system") <ugdk/system/taskplayer.h>
-%import(module="ugdk_action") <ugdk/action/scene.h>
+%import "ugdk_action.i"
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_math") <ugdk/math.h>
 %import(module="ugdk_internal") <ugdk/internal.h>
