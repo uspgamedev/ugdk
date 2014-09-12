@@ -35,21 +35,20 @@ class Menu: public ::ugdk::action::Scene {
     std::shared_ptr< std::vector<UIElement *> > GetMouseCollision();
 
     void AddCallback(const ugdk::input::Keycode& key, const MenuCallback& callback);
-
     void SetOptionDrawable(std::unique_ptr<Drawable>&& option_graphic, int index = 0);
 
     void AddObject(UIElement* obj);
     void RemoveObject(UIElement* obj);
     void RefreshObject(UIElement* obj);
 
+    void InteractWithFocused();
+
     Node* node() { return node_.get(); }
     const UIElement* focused_element() const { return focused_element_; }
-
     const InputCallbacks& input_callbacks() const { return input_callbacks_; }
     
   private:
     void CheckInteraction(const math::Vector2D& mouse_pos);
-    void InteractWithFocused();
     void SelectUIElement(UIElement* target);
     void FocusNextElement(int offset);
     void PositionSelectionDrawables();
