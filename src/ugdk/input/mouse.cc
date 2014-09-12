@@ -13,7 +13,7 @@ class MouseInputSDLEventHandler : public internal::SDLEventHandler {
     MouseInputSDLEventHandler(Mouse& mouse) : mouse_(mouse) {}
 
     static system::EventHandler& handler() {
-        return system::CurrentScene()->event_handler();
+        return system::CurrentScene().event_handler();
     }
 
     std::unordered_set<Uint32> TypesHandled() const override {
@@ -60,7 +60,7 @@ class MouseInputSDLEventHandler : public internal::SDLEventHandler {
     }
 
     void MouseWheelHandler(const ::SDL_Event& sdlevent) const {
-        system::CurrentScene()->event_handler().RaiseEvent(MouseWheelEvent(
+        system::CurrentScene().event_handler().RaiseEvent(MouseWheelEvent(
             math::Integer2D(sdlevent.wheel.x, sdlevent.wheel.y)
         ));
     }

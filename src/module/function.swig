@@ -43,14 +43,13 @@ ugdk::script::lua::LuaData* CreateLuaDataFrom(lua_State *L, int index) {
 }
 
 %typemap(in) const std::function< T >& {
-    ugdk::script::lua::LuaData* luadata = CreateLuaDataFrom(L, $input);
-    $1 = new $1_basetype (ugdk::script::VirtualObj( ugdk::script::VirtualData::Ptr(luadata) ).AsFunction< remove_function< $1_basetype >::type >());
+    ugdk::script::VirtualData::Ptr data(CreateLuaDataFrom(L, $input));
+    $1 = new $1_basetype(ugdk::script::VirtualObj(data).AsFunction<remove_function< $1_basetype >::type>());
 }
+
+#endif
+
 %typemap(freearg) const std::function< T >& {
     delete $1;
 }
-
-
-
-#endif
 

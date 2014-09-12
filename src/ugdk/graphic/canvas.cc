@@ -88,14 +88,14 @@ void Canvas::PushAndCompose(const VisualEffect& effect) {
 }
 
 void Canvas::PopGeometry() {
-    AssertCondition<InvalidOperation>(geometry_stack_.size() > 1, "Can only pop a Geometry after pushing at least one.");
+    system::AssertCondition<system::InvalidOperation>(geometry_stack_.size() > 1, "Can only pop a Geometry after pushing at least one.");
     geometry_stack_.pop_back();
     if (shader_program_)
         SendGeometry();
 }
 
 void Canvas::PopVisualEffect() {
-    AssertCondition<InvalidOperation>(visualeffect_stack_.size() > 1, "Can only pop a VisualEffect after pushing at least one.");
+    system::AssertCondition<system::InvalidOperation>(visualeffect_stack_.size() > 1, "Can only pop a VisualEffect after pushing at least one.");
     visualeffect_stack_.pop_back();
     if (shader_program_)
         SendEffect();

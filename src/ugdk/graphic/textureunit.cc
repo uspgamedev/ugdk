@@ -32,7 +32,7 @@ TextureUnit::~TextureUnit() {
 }
 
 void TextureUnit::BindTexture(const internal::GLTexture* texture) {
-    AssertCondition<InvalidOperation>(id_ > -1, "Attempting to bind texture to invalid TextureUnit.");
+    system::AssertCondition<system::InvalidOperation>(id_ > -1, "Attempting to bind texture to invalid TextureUnit.");
     texture_ = texture;
 
     glActiveTexture(GL_TEXTURE0 + id_);

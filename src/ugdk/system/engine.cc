@@ -42,10 +42,10 @@ enum class UGDKState {
 
 UGDKState current_state_ = UGDKState::UNINITIALIZED;
 
-      LanguageManager *    language_manager_;
+LanguageManager* language_manager_;
 
-std::list<action::Scene*> scene_list_;
-std::list<SceneFactory>   queued_scene_list_;
+std::list<std::unique_ptr<action::Scene >> scene_list_;
+std::list<std::function<std::unique_ptr<action::Scene>()>> queued_scene_list_;
 action::Scene*            previous_focused_scene_;
 std::list<std::shared_ptr<const debug::SectionData>> profile_data_list_;
 Configuration configuration_;
@@ -60,20 +60,14 @@ bool ErrorLog(const std::string& err_msg) {
 void AddPendingScenes() {
     // Insert all queued Scenes at the end of the scene list.
     for(const SceneFactory& scene_factory : queued_scene_list_)
-        scene_list_.push_back(scene_factory());
+        scene_list_.emplace_back(scene_factory());
     queued_scene_list_.clear();
 }
 
 void DeleteFinishedScenes() {
-    std::list<action::Scene*> to_delete;
-    for(action::Scene* it : scene_list_)
-        if(it->finished())
-            to_delete.push_front(it);
-
-    for(action::Scene* it : to_delete) {
-        delete it;
-        scene_list_.remove(it);
-    }
+    scene_list_.remove_if([](std::unique_ptr<action::Scene>& scene) {
+        return scene->finished();
+    });
 }
 
 void DefocusRoutine() {
@@ -84,8 +78,8 @@ void DefocusRoutine() {
 }
 
 void FocusRoutine() {
-    if(previous_focused_scene_ != CurrentScene())
-        (previous_focused_scene_ = CurrentScene())->Focus();
+    if(previous_focused_scene_ != scene_list_.back().get())
+        (previous_focused_scene_ = scene_list_.back().get())->Focus();
 }
 
 void HandleSDLEvents() {
@@ -212,7 +206,7 @@ void Run() {
         DeleteFinishedScenes();
         AddPendingScenes();
 
-        if (CurrentScene() == nullptr) {
+        if (scene_list_.empty()) {
             current_state_ = UGDKState::SUSPENDED;
             previous_focused_scene_ = nullptr;
             break;
@@ -246,8 +240,8 @@ void Run() {
             debug::ProfileSection section("Frame");
             {
                 debug::ProfileSection section("Update");
-                for(action::Scene* it : scene_list_)
-                    it->Update(delta_t);
+                for(auto& scene : scene_list_)
+                    scene->Update(delta_t);
             }
 
             if(desktop::manager()) {
@@ -256,8 +250,8 @@ void Run() {
                     graphic::Canvas canvas(graphic::manager()->screen());
                     canvas.Clear(Color(0.0, 0.0, 0.0, 0.0));
                     canvas.ChangeShaderProgram(graphic::manager()->shaders().current_shader());
-                    for(action::Scene* it : scene_list_)
-                        it->Render(canvas);
+                    for (auto& scene : scene_list_)
+                        scene->Render(canvas);
                 }
                 desktop::manager()->PresentAll();
             }
@@ -291,23 +285,26 @@ void Release() {
     SDL_Quit();
 }
 
-void PushScene(action::Scene* scene) {
-    PushScene([scene]{ return scene; });
+void PushScene(std::unique_ptr<action::Scene> scene) {
+    action::Scene* ptr = scene.release();
+    PushScene([ptr] { return std::unique_ptr<action::Scene>(ptr); });
 }
 
-void PushScene(const SceneFactory& scene_factory) {
+void PushScene(const std::function<std::unique_ptr<action::Scene>()>& scene_factory) {
     queued_scene_list_.push_back(scene_factory);
 }
 
-action::Scene* CurrentScene() {
-    return scene_list_.empty() ? nullptr : scene_list_.back();
+action::Scene& CurrentScene() {
+    if (scene_list_.empty())
+        throw 0;
+    return *scene_list_.back();
 }
 
-const std::list<action::Scene*>& scene_list() {
+const std::list<std::unique_ptr<action::Scene>>& scene_list() {
     return scene_list_;
 }
 
-const std::list< std::shared_ptr<const debug::SectionData> >& profile_data_list() {
+const std::list<std::shared_ptr<const debug::SectionData>>& profile_data_list() {
     return profile_data_list_;
 }
 

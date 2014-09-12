@@ -25,20 +25,20 @@ const Geometry& RenderTarget::projection_matrix() const {
 }
 
 void RenderTarget::Clear(Color color) {
-    AssertCondition<InvalidOperation>(IsActive(), "RenderTarget must be active for Clear.");
+    system::AssertCondition<system::InvalidOperation>(IsActive(), "RenderTarget must be active for Clear.");
     glClearColor(color.r, color.g, color.b, color.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     internal::AssertNoOpenGLError();
 }
 
 void RenderTarget::Bind() {
-    AssertCondition<InvalidOperation>(!IsActive(), "RenderTarget must be inactive for Bind.");
+    system::AssertCondition<system::InvalidOperation>(!IsActive(), "RenderTarget must be inactive for Bind.");
     is_bound_ = true;
     UpdateViewport();
 }
 
 void RenderTarget::Unbind() {
-    AssertCondition<InvalidOperation>(IsActive(), "RenderTarget must be active for Unbind.");
+    system::AssertCondition<system::InvalidOperation>(IsActive(), "RenderTarget must be active for Unbind.");
     is_bound_ = false;
 }
 

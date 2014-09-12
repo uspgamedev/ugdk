@@ -8,16 +8,23 @@
 #include <ugdk/util.h>
 #include <ugdk/structure/types.h>
 #include <ugdk/system/configuration.h>
+#include <ugdk/system/compatibility.h>
 
 #include <functional>
 #include <list>
 #include <memory>
 #include <string>
 
+#ifdef SWIG
+#define GET_OWNERSHIP(T) T&&
+#else
+#define GET_OWNERSHIP(T) T
+#endif
+
 namespace ugdk {
 namespace system {
 
-typedef std::function<action::Scene* ()> SceneFactory;
+typedef std::function<std::unique_ptr<action::Scene> ()> SceneFactory;
 
 class PathManager;
 
@@ -58,21 +65,21 @@ void Release();
 
 /// Queues a scene to be added just before the start of the next frame.
 /** @param scene_factory A factory for the scene to be added. */
-void PushScene(const SceneFactory& scene_factory);
+void PushScene(const std::function<std::unique_ptr<action::Scene>()>& scene_factory);
 
 /// Queues a scene to be added just before the start of the next frame.
 /** @param scene The scene to be added. */
-void PushScene(action::Scene* scene);
+void PushScene(GET_OWNERSHIP(std::unique_ptr<action::Scene>) scene);
 
 /// Returns the currently focused scene.
-action::Scene* CurrentScene();
+action::Scene& CurrentScene();
 
 /// Returns the scene list.
 /** The list is changed when PushScene is called. */
-const std::list<action::Scene*>& scene_list();
+const std::list<std::unique_ptr<action::Scene>>& scene_list();
 
 
-const std::list< std::shared_ptr<const debug::SectionData> >& profile_data_list();
+const std::list<std::shared_ptr<const debug::SectionData>>& profile_data_list();
 
 /** @}
  */

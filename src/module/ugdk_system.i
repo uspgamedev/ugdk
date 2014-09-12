@@ -7,6 +7,7 @@
 
 %{
 
+#include <ugdk/action/scene.h>
 #include <ugdk/structure/types.h>
 #include <ugdk/system/configuration.h>
 #include <ugdk/system/engine.h>
