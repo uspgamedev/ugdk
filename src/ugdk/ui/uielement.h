@@ -1,12 +1,12 @@
-#ifndef PYRAMIDWORKS_UI_UIELEMENT_H_
-#define PYRAMIDWORKS_UI_UIELEMENT_H_
+#ifndef UGDK_UI_UIELEMENT_H_
+#define UGDK_UI_UIELEMENT_H_
 
-#include <ugdk/util.h>
 #include <ugdk/structure.h>
-#include <ugdk/graphic.h>
-#include <pyramidworks/ui.h>
+#include <ugdk/ui.h>
 
-namespace pyramidworks {
+#include <memory>
+
+namespace ugdk {
 namespace ui {
 
 class UIElement {
@@ -14,7 +14,7 @@ class UIElement {
     virtual ~UIElement();
     
     void set_owner(Menu* owner) { owner_ = owner; }
-    ugdk::graphic::Node* node() const { return node_; }
+    std::shared_ptr<Node> node() const { return node_; }
 
     virtual void Interact() const = 0;
     virtual ugdk::structure::Box<2> GetBoundingBox() const = 0;
@@ -22,11 +22,14 @@ class UIElement {
   protected:
     UIElement();
 
+    Menu* owner() const { return owner_; }
+
+  private:
     Menu* owner_;
-    ugdk::graphic::Node* node_;
+    std::shared_ptr<Node> node_;
 };
 
-} // namespace pyramidworks
+} // namespace ugdk
 } // namespace ugdk
 
-#endif // PYRAMIDWORKS_UI_UIELEMENT_H_
+#endif // UGDK_UI_UIELEMENT_H_

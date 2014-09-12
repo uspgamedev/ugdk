@@ -18,13 +18,8 @@ class RenderTarget;
 class RenderTexture;
 class TextureUnit;
 
-// Drawables
-class Drawable;
-class TexturedRectangle;
-
 // Extra
 class Light;
-class Node;
 
 // Managers
 class Manager;

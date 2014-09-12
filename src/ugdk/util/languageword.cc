@@ -6,7 +6,7 @@
 
 namespace ugdk {
 
-graphic::Drawable* LanguageWord::CreateLabel() const {
+ui::Drawable* LanguageWord::CreateLabel() const {
     return new text::Label(utf8_text_, text::manager()->GetFont(font_));
 }
 

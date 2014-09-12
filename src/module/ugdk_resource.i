@@ -35,10 +35,6 @@ enable_disown(ugdk::LanguageWord* val)
 %template(ResourceContainer_LanguageWord) ugdk::resource::ResourceContainer<ugdk::LanguageWord*>;
 disable_disown(ugdk::LanguageWord* val)
 
-%import(module="ugdk_math") <ugdk/math/vector2D.h>
-%import(module="ugdk_input") <ugdk/input.h>
-%import(module="ugdk_time") <ugdk/time.h>
-%import(module="ugdk_audio") <ugdk/audio.h>
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_util") <ugdk/util.h>

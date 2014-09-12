@@ -3,7 +3,6 @@
 #include <ugdk/action/events.h>
 #include <ugdk/audio/module.h>
 #include <ugdk/audio/music.h>
-#include <ugdk/graphic/node.h>
 #include <ugdk/debug/profiler.h>
 
 #include <algorithm>

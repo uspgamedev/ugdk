@@ -4,7 +4,7 @@
 #include <ugdk/graphic.h>
 #include <ugdk/text.h>
 
-#include <ugdk/graphic/drawable.h>
+#include <ugdk/ui/drawable.h>
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/util/utf8.h>
 #include <ugdk/structure/types.h>
@@ -18,7 +18,7 @@
 namespace ugdk {
 namespace text {
 
-class Label : public graphic::Drawable {
+class Label : public ui::Drawable {
   public:
     Label(const std::string& utf8_message, Font* font);
     Label(const std::u32string& ucs4_message, Font* font);
