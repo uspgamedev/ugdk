@@ -6,6 +6,7 @@
 #include <ugdk/input/scancode.h>
 #include <ugdk/input/mousebutton.h>
 #include <ugdk/math/integer2D.h>
+#include <string>
 
 namespace ugdk {
 namespace input {
