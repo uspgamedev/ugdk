@@ -172,9 +172,9 @@ bool Initialize(const Configuration& configuration) {
             return ErrorLog("system::Initialize failed - UGDK not compiled with 3D module.");
 #endif
         } else {
-            if(!graphic::Initialize(new graphic::Manager(
+            if(!graphic::Initialize(new graphic::Manager,
                                         desktop::manager()->primary_window(),
-                                        configuration.canvas_size)))
+                                        configuration.canvas_size))
                 return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
         }
 

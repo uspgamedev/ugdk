@@ -262,9 +262,10 @@ if (UNIX AND PYTHONLIBS_FOUND)
     set(UGDK_INSTALL_LOCATION "${CMAKE_INSTALL_PREFIX}/${UGDK_INSTALL_LOCATION_RELATIVE}")
 endif (UNIX AND PYTHONLIBS_FOUND)
 
+message(STATUS "3D Enabled: ${UGDK_3D_ENABLED}")
 CONFIGURE_FILE(
     "cmake/config.h.in"
-    "src/ugdk/system/config.h"
+    "${CMAKE_SOURCE_DIR}/src/ugdk/system/config.h"
 ) 
 
 install(TARGETS libugdk
