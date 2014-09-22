@@ -20,6 +20,7 @@ install:
 script:
   - cmake .
   - make libugdk
+  - make libugdk3d
   - make ugdk_test
   - make ugdk_script_test
   - ./test/ugdk_test
