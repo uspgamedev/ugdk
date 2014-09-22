@@ -66,13 +66,10 @@ if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT UGDK_SRC)
 
-if (UGDK_3D_ENABLED)
-    include (src/3d_module_src_list.cmake)
-    if (NOT UGDK_3D_SRC)
-        message (FATAL_ERROR "Error: UGDK_3D_SRC not defined! Please do so in the file src/3d_module_src_list.cmake!")
-    endif (NOT UGDK_3D_SRC)
-    set (UGDK_SRC ${UGDK_SRC} ${UGDK_3D_SRC})
-endif(UGDK_3D_ENABLED)
+include (src/3d_module_src_list.cmake)
+if (NOT UGDK_3D_SRC)
+    message (FATAL_ERROR "Error: UGDK_3D_SRC not defined! Please do so in the file src/3d_module_src_list.cmake!")
+endif (NOT UGDK_3D_SRC)
 
 # Create the targets for all the dependencies.
 add_subdirectory(externals)
@@ -166,11 +163,18 @@ endif ()
 
 # =============================
 add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
+if (UGDK_3D_ENABLED)
+  add_library(libugdk3d ${UGDK_SRC} ${UGDK_3D_SRC} ${GENERATED_SRC})
+else()
+  add_library(libugdk3d EXCLUDE_FROM_ALL ${UGDK_SRC} ${UGDK_3D_SRC} ${GENERATED_SRC})
+endif()
 
 if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
     target_include_directories(libugdk PUBLIC ${GLM_LOCATION})
+    target_include_directories(libugdk3d PUBLIC ${GLM_LOCATION})
 else()
     target_include_directories(libugdk SYSTEM PUBLIC ${GLM_LOCATION})
+    target_include_directories(libugdk3d SYSTEM PUBLIC ${GLM_LOCATION})
 endif()
 
 target_include_directories(libugdk
@@ -178,34 +182,49 @@ target_include_directories(libugdk
     PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/src" # TODO: should be /include
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
+target_include_directories(libugdk3d
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src" # TODO: should be /include
+    PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/src" # TODO: should be /include
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+
 if (MINGW)
-    target_link_libraries(libugdk LINK_PUBLIC mingw32) # TODO: do we really need this?
+    # TODO: do we really need this?
+    target_link_libraries(libugdk LINK_PUBLIC mingw32) 
+    target_link_libraries(libugdk3d LINK_PUBLIC mingw32)
 endif (MINGW)
 
 if (WIN32)
     # utf8<->ucs4 conversion uses a networking function
     target_link_libraries(libugdk LINK_PUBLIC Ws2_32)
+    target_link_libraries(libugdk3d LINK_PUBLIC Ws2_32)
 endif (WIN32)
 
 # Libraries for the scripts.
 target_link_libraries(libugdk LINK_PUBLIC ${UGDK_LIBRARIES})
+target_link_libraries(libugdk3d LINK_PUBLIC ${UGDK_LIBRARIES})
 
-if(NOT ANDROID AND NOT UGDK_3D_ENABLED) # Glew is not necessary for android or 3D builds.
-    target_link_libraries(libugdk LINK_PUBLIC glew)
+if(NOT ANDROID) # Glew is not necessary for android or 3D builds.
+  target_link_libraries(libugdk LINK_PUBLIC glew)
 endif()
 
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
 target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 freetype-gl libjson)
+target_link_libraries(libugdk3d LINK_PUBLIC SDL2-mixer SDL2-image SDL2 freetype-gl libjson)
 
-if (UGDK_3D_ENABLED)
-    target_link_libraries(libugdk LINK_PUBLIC ${BULLET_LIBRARIES} ${OGRE_LIBRARIES} BtOgre)
-endif (UGDK_3D_ENABLED)
+target_link_libraries(libugdk3d LINK_PUBLIC ${BULLET_LIBRARIES} ${OGRE_LIBRARIES} BtOgre)
 
 set_target_properties(libugdk PROPERTIES 
     LINK_FLAGS "${LDFLAGS}"
     PROJECT_NAME UGDK
     OUTPUT_NAME ugdk${UGDK_BIGVERSION}
     OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-dbg
+)
+
+set_target_properties(libugdk3d PROPERTIES 
+    LINK_FLAGS "${LDFLAGS}"
+    PROJECT_NAME UGDK
+    OUTPUT_NAME ugdk${UGDK_BIGVERSION}-3d
+    OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-3d-dbg
 )
 
 if(ANDROID)
@@ -250,9 +269,13 @@ if(ANDROID)
         
     endmacro(add_ugdk_android_project)
 else(ANDROID)
-    macro(add_ugdk_executable NAME)
+    macro(add_ugdk_executable NAME USE_3D)
         add_executable(${NAME} ${ARGN})
-        target_link_libraries(${NAME} libugdk)
+        if (USE_3D)
+          target_link_libraries(${NAME} libugdk3d)
+        else()
+          target_link_libraries(${NAME} libugdk)
+        endif()
     endmacro(add_ugdk_executable)
     macro(add_ugdk_android_project NAME BUNDLE_NAME)
     endmacro(add_ugdk_android_project)
@@ -268,7 +291,7 @@ CONFIGURE_FILE(
     "${CMAKE_SOURCE_DIR}/src/ugdk/system/config.h"
 ) 
 
-install(TARGETS libugdk
+install(TARGETS libugdk libugdk3d
     DESTINATION lib
 #    CONFIGURATIONS Release
 )
