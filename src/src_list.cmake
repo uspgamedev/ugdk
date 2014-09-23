@@ -15,7 +15,6 @@ SET(UGDK_SRC
     src/pyramidworks/geometry/geometricshape.h 
     src/pyramidworks/geometry/rect.cc 
     src/pyramidworks/geometry/rect.h 
-    
     src/ugdk/action.h 
     src/ugdk/action/animationplayer.h 
     src/ugdk/action/events.h 
@@ -52,49 +51,6 @@ SET(UGDK_SRC
     src/ugdk/desktop/windowsettings.cc 
     src/ugdk/desktop/windowsettings.h 
     src/ugdk/graphic.h 
-    src/ugdk/graphic/canvas.cc 
-    src/ugdk/graphic/canvas.h 
-    src/ugdk/graphic/defaultshaders.cc 
-    src/ugdk/graphic/defaultshaders.h 
-    src/ugdk/graphic/drawmode.cc 
-    src/ugdk/graphic/drawmode.h 
-    src/ugdk/graphic/exceptions.h 
-    src/ugdk/graphic/geometry.h 
-    src/ugdk/graphic/image.cc 
-    src/ugdk/graphic/image.h 
-    src/ugdk/graphic/light.cc 
-    src/ugdk/graphic/light.h 
-    src/ugdk/graphic/manager.cc 
-    src/ugdk/graphic/manager.h 
-    src/ugdk/graphic/module.cc 
-    src/ugdk/graphic/module.h 
-    src/ugdk/graphic/opengl/Exception.cc 
-    src/ugdk/graphic/opengl/Exception.h 
-    src/ugdk/graphic/opengl/shader.cc 
-    src/ugdk/graphic/opengl/shader.h 
-    src/ugdk/graphic/opengl/shaderprogram.cc 
-    src/ugdk/graphic/opengl/shaderprogram.h 
-    src/ugdk/graphic/opengl/vertexbuffer.cc 
-    src/ugdk/graphic/opengl/vertexbuffer.h 
-    src/ugdk/graphic/primitive.cc 
-    src/ugdk/graphic/primitive.h 
-    src/ugdk/graphic/primitivecontroller.cc 
-    src/ugdk/graphic/primitivecontroller.h 
-    src/ugdk/graphic/primitivesetup.cc 
-    src/ugdk/graphic/primitivesetup.h 
-    src/ugdk/graphic/rendertarget.cc 
-    src/ugdk/graphic/rendertarget.h 
-    src/ugdk/graphic/rendertexture.cc 
-    src/ugdk/graphic/rendertexture.h 
-    src/ugdk/graphic/sprite.cc 
-    src/ugdk/graphic/sprite.h 
-    src/ugdk/graphic/textureatlas.cc 
-    src/ugdk/graphic/textureatlas.h 
-    src/ugdk/graphic/textureunit.cc 
-    src/ugdk/graphic/textureunit.h 
-    src/ugdk/graphic/vertexdata.cc 
-    src/ugdk/graphic/vertexdata.h 
-    src/ugdk/graphic/visualeffect.h 
     src/ugdk/input.h 
     src/ugdk/input/events.h 
     src/ugdk/input/keyboard.cc 
@@ -162,6 +118,71 @@ SET(UGDK_SRC
     src/ugdk/system/taskplayer.cc 
     src/ugdk/system/taskplayer.h 
     src/ugdk/text.h 
+    src/ugdk/time.h 
+    src/ugdk/time/manager.cc 
+    src/ugdk/time/manager.h 
+    src/ugdk/time/module.cc 
+    src/ugdk/time/module.h 
+    src/ugdk/time/timeaccumulator.cc 
+    src/ugdk/time/timeaccumulator.h 
+    src/ugdk/ui.h 
+    src/ugdk/util.h 
+    src/ugdk/util/idgenerator.cc 
+    src/ugdk/util/idgenerator.h 
+    src/ugdk/util/language.cc 
+    src/ugdk/util/language.h 
+    src/ugdk/util/languagemanager.cc 
+    src/ugdk/util/languagemanager.h 
+    src/ugdk/util/languageword.cc 
+    src/ugdk/util/languageword.h 
+    src/ugdk/util/uncopyable.h 
+    src/ugdk/util/utf8.cc 
+    src/ugdk/util/utf8.h 
+)
+SET(UGDK_2D_SRC 
+    src/ugdk/graphic/canvas.cc 
+    src/ugdk/graphic/canvas.h 
+    src/ugdk/graphic/defaultshaders.cc 
+    src/ugdk/graphic/defaultshaders.h 
+    src/ugdk/graphic/drawmode.cc 
+    src/ugdk/graphic/drawmode.h 
+    src/ugdk/graphic/exceptions.h 
+    src/ugdk/graphic/geometry.h 
+    src/ugdk/graphic/image.cc 
+    src/ugdk/graphic/image.h 
+    src/ugdk/graphic/light.cc 
+    src/ugdk/graphic/light.h 
+    src/ugdk/graphic/manager.cc 
+    src/ugdk/graphic/manager.h 
+    src/ugdk/graphic/module.cc 
+    src/ugdk/graphic/module.h 
+    src/ugdk/graphic/opengl/Exception.cc 
+    src/ugdk/graphic/opengl/Exception.h 
+    src/ugdk/graphic/opengl/shader.cc 
+    src/ugdk/graphic/opengl/shader.h 
+    src/ugdk/graphic/opengl/shaderprogram.cc 
+    src/ugdk/graphic/opengl/shaderprogram.h 
+    src/ugdk/graphic/opengl/vertexbuffer.cc 
+    src/ugdk/graphic/opengl/vertexbuffer.h 
+    src/ugdk/graphic/primitive.cc 
+    src/ugdk/graphic/primitive.h 
+    src/ugdk/graphic/primitivecontroller.cc 
+    src/ugdk/graphic/primitivecontroller.h 
+    src/ugdk/graphic/primitivesetup.cc 
+    src/ugdk/graphic/primitivesetup.h 
+    src/ugdk/graphic/rendertarget.cc 
+    src/ugdk/graphic/rendertarget.h 
+    src/ugdk/graphic/rendertexture.cc 
+    src/ugdk/graphic/rendertexture.h 
+    src/ugdk/graphic/sprite.cc 
+    src/ugdk/graphic/sprite.h 
+    src/ugdk/graphic/textureatlas.cc 
+    src/ugdk/graphic/textureatlas.h 
+    src/ugdk/graphic/textureunit.cc 
+    src/ugdk/graphic/textureunit.h 
+    src/ugdk/graphic/vertexdata.cc 
+    src/ugdk/graphic/vertexdata.h 
+    src/ugdk/graphic/visualeffect.h 
     src/ugdk/text/font.cc 
     src/ugdk/text/font.h 
     src/ugdk/text/functions.cc 
@@ -174,14 +195,6 @@ SET(UGDK_SRC
     src/ugdk/text/module.h 
     src/ugdk/text/textbox.cc 
     src/ugdk/text/textbox.h 
-    src/ugdk/time.h 
-    src/ugdk/time/manager.cc 
-    src/ugdk/time/manager.h 
-    src/ugdk/time/module.cc 
-    src/ugdk/time/module.h 
-    src/ugdk/time/timeaccumulator.cc 
-    src/ugdk/time/timeaccumulator.h 
-    src/ugdk/ui.h 
     src/ugdk/ui/button.cc 
     src/ugdk/ui/button.h 
     src/ugdk/ui/drawable.h 
@@ -196,16 +209,22 @@ SET(UGDK_SRC
     src/ugdk/ui/node.h 
     src/ugdk/ui/uielement.cc 
     src/ugdk/ui/uielement.h 
-    src/ugdk/util.h 
-    src/ugdk/util/idgenerator.cc 
-    src/ugdk/util/idgenerator.h 
-    src/ugdk/util/language.cc 
-    src/ugdk/util/language.h 
-    src/ugdk/util/languagemanager.cc 
-    src/ugdk/util/languagemanager.h 
-    src/ugdk/util/languageword.cc 
-    src/ugdk/util/languageword.h 
-    src/ugdk/util/uncopyable.h 
-    src/ugdk/util/utf8.cc 
-    src/ugdk/util/utf8.h 
+)
+SET(UGDK_3D_SRC 
+    src/ugdk/action/3D/camera.cc 
+    src/ugdk/action/3D/camera.h 
+    src/ugdk/action/3D/ogreentity.cc 
+    src/ugdk/action/3D/ogreentity.h 
+    src/ugdk/action/3D/ogrescene.cc 
+    src/ugdk/action/3D/ogrescene.h 
+    src/ugdk/desktop/3D/manager.cc 
+    src/ugdk/desktop/3D/manager.h 
+    src/ugdk/desktop/3D/module.cc 
+    src/ugdk/desktop/3D/module.h 
+    src/bulletworks/manager.cc 
+    src/bulletworks/manager.h 
+    src/bulletworks/object.cc 
+    src/bulletworks/object.h 
+    src/bulletworks/physicscene.cc 
+    src/bulletworks/physicscene.h 
 )

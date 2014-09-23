@@ -66,11 +66,6 @@ if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT UGDK_SRC)
 
-include (src/3d_module_src_list.cmake)
-if (NOT UGDK_3D_SRC)
-    message (FATAL_ERROR "Error: UGDK_3D_SRC not defined! Please do so in the file src/3d_module_src_list.cmake!")
-endif (NOT UGDK_3D_SRC)
-
 # Create the targets for all the dependencies.
 add_subdirectory(externals)
 
@@ -162,11 +157,9 @@ if (MSVC)
 endif ()
 
 # =============================
-add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
+add_library (libugdk ${UGDK_SRC} ${UGDK_2D_SRC} ${GENERATED_SRC})
 if (UGDK_3D_ENABLED)
   add_library(libugdk3d ${UGDK_SRC} ${UGDK_3D_SRC} ${GENERATED_SRC})
-else()
-  add_library(libugdk3d EXCLUDE_FROM_ALL ${UGDK_SRC} ${UGDK_3D_SRC} ${GENERATED_SRC})
 endif()
 
 if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
