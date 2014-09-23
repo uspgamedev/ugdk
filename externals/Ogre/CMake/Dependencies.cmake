@@ -77,10 +77,12 @@ find_package(FreeImage)
 macro_log_feature(FreeImage_FOUND "freeimage" "Support for commonly used graphics image formats" "http://freeimage.sourceforge.net" FALSE "" "")
 
 # Find FreeType
-if (TARGET freetype)
+if (UGDK_INTERNAL_FREETYPE)
     message("Using freetype from UGDK")
+    set(FREETYPE_LIBRARY freetype)
 else()
-    find_package(Freetype)
+    # UGDK already searched for it
+    # find_package(Freetype)
 endif()
 macro_log_feature(FREETYPE_FOUND "freetype" "Portable font engine" "http://www.freetype.org" FALSE "" "")
 

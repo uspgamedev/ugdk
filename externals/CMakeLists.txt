@@ -17,8 +17,8 @@ if(ANDROID)
     set(UGDK_INTERNAL_SDL2       ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
     set(UGDK_INTERNAL_SDL2_IMAGE ON CACHE BOOL "Set to ON to use an internal SDL2_image instead of the system one." FORCE)
     set(UGDK_INTERNAL_SDL2_MIXER ON CACHE BOOL "Set to ON to use an internal SDL2_mixer instead of the system one." FORCE)
+	
 else()
-
     macro(check_package OPTION_VAR PKG_NAME)
         find_package(${PKG_NAME} ${ARGN} QUIET)
         if(NOT ${OPTION_VAR}_FOUND)
@@ -27,11 +27,15 @@ else()
         endif()
     endmacro(check_package)
 
-    check_package(FREETYPE Freetype)
+    
     check_package(SDL2 SDL2)
-    check_package(SDL2_IMAGE SDL2_image)
-    check_package(SDL2_MIXER SDL2_mixer)
-    check_package(GLEW GLEW 1.5)
+	check_package(SDL2_MIXER SDL2_mixer)
+	check_package(FREETYPE Freetype)
+    if(NOT UGDK_3D_ENABLED)
+		message(FATAL_ERROR "CHECK PACKAGES?")
+		check_package(SDL2_IMAGE SDL2_image)
+		check_package(GLEW GLEW 1.5)
+	endif()
 endif()
 
 ########################
@@ -43,7 +47,7 @@ if(UGDK_INTERNAL_SDL2)
         # For android, using SDL's CMakeLists is not necessary (and doesn't work without too much effort)
         include(android-sdl2.cmake)
 
-    else()
+    elseif()
         if(WIN32)
             find_package(OpenGL REQUIRED)
             list(APPEND EXTRA_LIBS ${OPENGL_LIBRARIES})
@@ -102,19 +106,6 @@ else(UGDK_INTERNAL_SDL2_MIXER)
         INTERFACE_INCLUDE_DIRECTORIES "${SDL2_MIXER_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_SDL2_MIXER)
 
-########################
-## freetype
-########################
-if(UGDK_INTERNAL_FREETYPE)
-    add_subdirectory(freetype) # Defines 'SDL2-image'
-
-else(UGDK_INTERNAL_FREETYPE)
-    add_library(freetype STATIC IMPORTED GLOBAL)
-    set_target_properties(freetype PROPERTIES
-        IMPORTED_LOCATION "${FREETYPE_LIBRARIES}"
-        INTERFACE_INCLUDE_DIRECTORIES "${FREETYPE_INCLUDE_DIRS}")
-endif(UGDK_INTERNAL_FREETYPE)
-
 if(NOT ANDROID AND NOT UGDK_3D_ENABLED)
     if(UGDK_INTERNAL_GLEW)
         add_subdirectory(glew) # Defines 'glew'
@@ -126,8 +117,20 @@ if(NOT ANDROID AND NOT UGDK_3D_ENABLED)
     endif(UGDK_INTERNAL_GLEW)
 endif(NOT ANDROID AND NOT UGDK_3D_ENABLED)
 
-add_subdirectory(freetype-gl)
 add_subdirectory(libjson)
+
+########################
+## freetype
+########################
+if(UGDK_INTERNAL_FREETYPE)
+	add_subdirectory(freetype)
+
+elseif(NOT UGDK_3D_ENABLED)
+	add_library(freetype STATIC IMPORTED GLOBAL)
+	set_target_properties(freetype PROPERTIES
+		IMPORTED_LOCATION "${FREETYPE_LIBRARIES}"
+		INTERFACE_INCLUDE_DIRECTORIES "${FREETYPE_INCLUDE_DIRS}")
+endif(UGDK_INTERNAL_FREETYPE)
 
 ########################
 ## 3D Module
@@ -164,6 +167,11 @@ if(UGDK_3D_ENABLED)
     ## BtOgre
     ########################
     add_subdirectory(btogre) #generates target BtOgre
-    
+else(UGDK_3D_ENABLED)
+
+	########################
+	## freetype-gl
+	########################
+	add_subdirectory(freetype-gl)
 endif(UGDK_3D_ENABLED)
 
