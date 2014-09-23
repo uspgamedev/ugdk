@@ -160,7 +160,7 @@ endif ()
 if (UGDK_3D_ENABLED)
 	add_library(libugdk ${UGDK_SRC} ${UGDK_3D_SRC} ${GENERATED_SRC})
 else()
-	add_library (libugdk ${UGDK_SRC} ${UGDK_2D_SRC} ${GENERATED_SRC})
+	add_library(libugdk ${UGDK_SRC} ${UGDK_2D_SRC} ${GENERATED_SRC})
 endif()
 
 if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
@@ -192,10 +192,8 @@ if(NOT ANDROID AND NOT UGDK_3D_ENABLED) # Glew is not necessary for android or 3
 endif()
 
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
-target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 libjson)
-
 if(UGDK_3D_ENABLED)
-	target_link_libraries(libugdk LINK_PUBLIC ${BULLET_LIBRARIES} ${OGRE_LIBRARIES} BtOgre)
+	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2 libjson ${BULLET_LIBRARIES} ${OGRE_LIBRARIES} BtOgre)
 	set_target_properties(libugdk PROPERTIES 
 		LINK_FLAGS "${LDFLAGS}"
 		PROJECT_NAME UGDK
@@ -203,7 +201,7 @@ if(UGDK_3D_ENABLED)
 		OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-3d-dbg
 	)
 else()
-	target_link_libraries(libugdk LINK_PUBLIC freetype-gl)
+	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 libjson freetype-gl)
 	set_target_properties(libugdk PROPERTIES 
 		LINK_FLAGS "${LDFLAGS}"
 		PROJECT_NAME UGDK
