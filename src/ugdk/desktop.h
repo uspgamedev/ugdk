@@ -11,7 +11,11 @@ class Window;
 struct WindowSettings;
 
 #ifdef UGDK_3D_ENABLED
-namespace threed {
+namespace mode3d {
+class Manager;
+}
+#else
+namespace mode2d {
 class Manager;
 }
 #endif

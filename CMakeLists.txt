@@ -58,6 +58,8 @@ set (UGDK_LINK_FLAGS)
 include (cmake/MacOptions.cmake)
 
 include (src/src_list.cmake)
+include (src/2d_module_src_list.cmake)
+include (src/3d_module_src_list.cmake)
 include (src/module_list.cmake)
 include (src/lua_src_list.cmake)
 include (src/py_src_list.cmake)

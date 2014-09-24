@@ -10,7 +10,9 @@
 #include <ugdk/time/module.h>
 #include <ugdk/desktop/module.h>
 #ifdef UGDK_3D_ENABLED
-#include <ugdk/desktop/3D/module.h>
+# include <ugdk/desktop/3D/module.h>
+#else
+# include <ugdk/desktop/2D/manager.h>
 #endif
 
 #include <ugdk/action/scene.h>
@@ -156,30 +158,24 @@ bool Initialize(const Configuration& configuration) {
     language_manager_ = new LanguageManager(configuration.default_language);
 
     if(!configuration.windows_list.empty()) {
-        if(!desktop::Initialize(new desktop::Manager))
+#ifdef UGDK_3D_ENABLED
+        desktop::Manager *deskmanager = new desktop::mode3d::Manager;
+#else
+        desktop::Manager *deskmanager = new desktop::mode2d::Manager;
+#endif
+        if(!desktop::Initialize(deskmanager))
             return ErrorLog("system::Initialize failed - desktop::Initialize returned false.");
-    
         for(const auto& window_config : configuration.windows_list)
             desktop::manager()->CreateWindow(window_config);
-
-        if(configuration.ogre_enabled) {
-#ifdef UGDK_3D_ENABLED
-            if(!desktop::threed::Initialize(new desktop::threed::Manager))
-                return ErrorLog("system::Initialize failed - desktop::threed::Initialize returned false.");
-            if(!desktop::threed::manager()->AddWindow(desktop::manager()->primary_window()))
-                return ErrorLog("system::Initialize failed - desktop::threed::Manager could not create window.");
-#else
-            return ErrorLog("system::Initialize failed - UGDK not compiled with 3D module.");
-#endif
-        } else {
-            if(!graphic::Initialize(new graphic::Manager,
-                                        desktop::manager()->primary_window(),
-                                        configuration.canvas_size))
-                return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
-        }
+#ifndef UGDK_3D_ENABLED
+        if(!graphic::Initialize(new graphic::Manager,
+                                    desktop::manager()->primary_window(),
+                                    configuration.canvas_size))
+            return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
 
         if (!text::Initialize(new text::Manager))
             return ErrorLog("system::Initialize failed - text::Initialize returned false.");
+#endif
     }
     
     if(configuration.audio_enabled)
@@ -263,16 +259,15 @@ void Run() {
 
             if(desktop::manager()) {
                 debug::ProfileSection section("Render");
+#ifndef UGDK_3D_ENABLED
                 if(graphic::manager()) {
                     graphic::Canvas canvas(graphic::manager()->screen());
                     canvas.Clear(Color(0.0, 0.0, 0.0, 0.0));
                     canvas.ChangeShaderProgram(graphic::manager()->shaders().current_shader());
                     for (auto& scene : scene_list_)
                         scene->Render(canvas);
-                } else if (desktop::threed::manager()) {
-                    debug::ProfileSection section("3DRender");
-                    desktop::threed::manager()->PresentAll(delta_t);
                 }
+#endif
                 desktop::manager()->PresentAll();
             }
             profile_data_list_.push_back(section.data());

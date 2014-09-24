@@ -1,3 +1,4 @@
+
 #ifndef UGDK_DESKTOP_WINDOW_H_
 #define UGDK_DESKTOP_WINDOW_H_
 
@@ -36,10 +37,11 @@ class Window {
     SDL_Window* sdl_window_;
     bool vsync_;
 
-    friend class ::ugdk::desktop::Manager;
     friend class ::ugdk::graphic::Manager;
 #ifdef UGDK_3D_ENABLED
-    friend class ::ugdk::desktop::threed::Manager;
+    //friend class ::ugdk::desktop::threed::Manager;
+#else
+    friend class ::ugdk::desktop::mode2d::Manager;
 #endif
 };
 
