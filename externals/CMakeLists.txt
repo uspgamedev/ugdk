@@ -4,6 +4,7 @@ option(UGDK_INTERNAL_FREETYPE    "Set to ON to use an internal freetype instead 
 option(UGDK_INTERNAL_SDL2        "Set to ON to use an internal SDL2 instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2_IMAGE  "Set to ON to use an internal SDL2_image instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2_MIXER  "Set to ON to use an internal SDL2_mixer instead of the system one." OFF)
+option(UGDK_INTERNAL_OGRE        "Set to ON to use an internal OGRE instead of the system one." OFF)
 
 macro(update_list LISTNAME VALUE)
     set(${LISTNAME} "${${LISTNAME}};${VALUE}" CACHE INTERNAL "")
@@ -31,8 +32,9 @@ else()
     check_package(SDL2 SDL2)
 	check_package(SDL2_MIXER SDL2_mixer)
 	check_package(FREETYPE Freetype)
-  if(NOT UGDK_3D_ENABLED)
-    #message(FATAL_ERROR "CHECK PACKAGES?")
+    if(UGDK_3D_ENABLED)
+        check_package(OGRE OGRE)
+    else()
 		check_package(SDL2_IMAGE SDL2_image)
 		check_package(GLEW GLEW 1.5)
 	endif()
@@ -136,25 +138,28 @@ endif(UGDK_INTERNAL_FREETYPE)
 ## 3D Module
 ########################
 if(UGDK_3D_ENABLED)
+
     ########################
     ## OGRE
     ########################
-    set (OGRE_STATIC TRUE CACHE BOOL "Forcing static build" FORCE)
-    set (OGRE_ARCHIVE_OUTPUT ${LIB_DIR})
-    set (OGRE_LIBRARY_OUTPUT ${LIB_DIR})
-    set (OGRE_RUNTIME_OUTPUT ${LIB_DIR})
-    set (OGRE_INCLUDE_DIRS "" CACHE INTERNAL "Ogre external include directories")
-    set (OGRE_LIBRARIES "" CACHE INTERNAL "Compiled Ogre libraries")
-    set (FREETYPE_FT2BUILD_INCLUDE_DIR ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
-    set (FREETYPE_LIBRARY freetype CACHE STRING "" FORCE)
-    set (FREETYPE_LIBRARY_DBG freetype CACHE STRING "" FORCE)
-    set (FREETYPE_LIBRARY_REL freetype CACHE STRING "" FORCE)
-    set (FREETYPE_FOUND ON CACHE BOOL "" FORCE)
-    set (FREETYPE_INCLUDE_DIR ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
-    set (FREETYPE_INCLUDE_DIR_freetype2 ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
-    set (FREETYPE_INCLUDE_DIR_ft2build ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
-   
-    add_subdirectory(Ogre)
+    if(UGDK_INTERNAL_OGRE)
+        set (OGRE_STATIC TRUE CACHE BOOL "Forcing static build" FORCE)
+        set (OGRE_ARCHIVE_OUTPUT ${LIB_DIR})
+        set (OGRE_LIBRARY_OUTPUT ${LIB_DIR})
+        set (OGRE_RUNTIME_OUTPUT ${LIB_DIR})
+        set (OGRE_INCLUDE_DIRS "" CACHE INTERNAL "Ogre external include directories")
+        set (OGRE_LIBRARIES "" CACHE INTERNAL "Compiled Ogre libraries")
+        set (FREETYPE_FT2BUILD_INCLUDE_DIR ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
+        set (FREETYPE_LIBRARY freetype CACHE STRING "" FORCE)
+        set (FREETYPE_LIBRARY_DBG freetype CACHE STRING "" FORCE)
+        set (FREETYPE_LIBRARY_REL freetype CACHE STRING "" FORCE)
+        set (FREETYPE_FOUND ON CACHE BOOL "" FORCE)
+        set (FREETYPE_INCLUDE_DIR ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
+        set (FREETYPE_INCLUDE_DIR_freetype2 ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
+        set (FREETYPE_INCLUDE_DIR_ft2build ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
+       
+        add_subdirectory(Ogre)
+    endif()
 
     ########################
     ## BULLET PHYSICS
