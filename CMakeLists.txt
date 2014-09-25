@@ -195,7 +195,9 @@ endif()
 
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
 if(UGDK_3D_ENABLED)
-	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2 libjson ${BULLET_LIBRARIES} ${OGRE_LIBRARIES} BtOgre)
+	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2 libjson ${BULLET_LIBRARIES} ${UGDK_OGRE_LIBRARIES} BtOgre)
+    target_include_directories(libugdk PRIVATE ${UGDK_OGRE_INCLUDE_DIRS})
+    
 	set_target_properties(libugdk PROPERTIES 
 		LINK_FLAGS "${LDFLAGS}"
 		PROJECT_NAME UGDK

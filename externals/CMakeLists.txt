@@ -161,7 +161,26 @@ if(UGDK_3D_ENABLED)
         endif(UGDK_INTERNAL_FREETYPE)
        
         add_subdirectory(Ogre)
+        set(UGDK_OGRE_LIBRARIES ${OGRE_LIBRARIES} PARENT_SCOPE)
+        set(UGDK_OGRE_INCLUDE_DIRS ${OGRE_INCLUDE_DIRS} PARENT_SCOPE)
+    else()
+        set(UGDK_OGRE_LIBRARIES ${OGRE_LIBRARIES})
+        set(UGDK_OGRE_INCLUDE_DIRS ${OGRE_INCLUDE_DIRS})
+        
+        set(OGRE_COMPONENTS Plugin_BSPSceneManager;Plugin_CgProgramManager;Plugin_OctreeSceneManager;
+                            Plugin_OctreeZone;Plugin_ParticleFX;Plugin_PCZSceneManager;RenderSystem_GL;
+                            RenderSystem_GL3Plus;RenderSystem_GLES;RenderSystem_GLES2;RenderSystem_Direct3D9;
+                            RenderSystem_Direct3D11;Paging;Terrain;Volume;Overlay)
+        foreach(it ${OGRE_COMPONENTS})
+            if(OGRE_${it}_FOUND)
+                list(APPEND UGDK_OGRE_LIBRARIES ${OGRE_${it}_LIBRARIES})
+                list(APPEND UGDK_OGRE_INCLUDE_DIRS ${OGRE_${it}_INCLUDE_DIRS})
+            endif()
+        endforeach()
+        set(UGDK_OGRE_LIBRARIES ${UGDK_OGRE_LIBRARIES} PARENT_SCOPE)
+        set(UGDK_OGRE_INCLUDE_DIRS ${UGDK_OGRE_INCLUDE_DIRS} PARENT_SCOPE)
     endif()
+    
 
     ########################
     ## BULLET PHYSICS
