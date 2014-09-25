@@ -8,6 +8,8 @@ namespace desktop {
 using std::weak_ptr;
 using std::shared_ptr;
 
+Manager::~Manager() {}
+
 weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
     return RegisterAndGetWindow(this->DoCreateWindow(settings));
 }
