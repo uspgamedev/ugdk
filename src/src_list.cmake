@@ -67,13 +67,6 @@ src/ugdk/input/mousebutton.h
 src/ugdk/input/scancode.h
 src/ugdk/input/textinput.cc
 src/ugdk/input/textinput.h
-src/ugdk/internal.h
-src/ugdk/internal/gltexture.cc
-src/ugdk/internal/gltexture.h
-src/ugdk/internal/opengl.h
-src/ugdk/internal/pixelsurface.cc
-src/ugdk/internal/pixelsurface.h
-src/ugdk/internal/sdleventhandler.h
 src/ugdk/math.h
 src/ugdk/math/frame.cc
 src/ugdk/math/frame.h

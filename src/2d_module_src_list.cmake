@@ -74,4 +74,11 @@ src/ugdk/math/integer2D.cc
 src/ugdk/math/integer2D.h
 src/ugdk/math/vector2D.cc
 src/ugdk/math/vector2D.h
+src/ugdk/internal.h
+src/ugdk/internal/gltexture.cc
+src/ugdk/internal/gltexture.h
+src/ugdk/internal/opengl.h
+src/ugdk/internal/pixelsurface.cc
+src/ugdk/internal/pixelsurface.h
+src/ugdk/internal/sdleventhandler.h
 )

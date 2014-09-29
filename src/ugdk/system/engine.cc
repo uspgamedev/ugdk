@@ -11,6 +11,7 @@
 #include <ugdk/desktop/module.h>
 #ifdef UGDK_3D_ENABLED
 # include <ugdk/desktop/3D/module.h>
+# include <ugdk/desktop/3D/manager.h>
 #else
 # include <ugdk/desktop/2D/manager.h>
 #endif
