@@ -5,11 +5,18 @@ option(UGDK_INTERNAL_SDL2        "Set to ON to use an internal SDL2 instead of t
 option(UGDK_INTERNAL_SDL2_IMAGE  "Set to ON to use an internal SDL2_image instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2_MIXER  "Set to ON to use an internal SDL2_mixer instead of the system one." OFF)
 
-macro(init_submodule SUBMODULE)
-    find_host_package(Git REQUIRED)
-    execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init ${SUBMODULE}
-                    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-endmacro()
+option(UGDK_FORCE_SUBMODULES     "Set to ON to force the submodules to the commited version." ON)
+
+if(${UGDK_FORCE_SUBMODULES})
+    macro(init_submodule SUBMODULE)
+        find_host_package(Git REQUIRED)
+        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init ${SUBMODULE}
+                        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+    endmacro()
+else()
+    macro(init_submodule)
+    endmacro(init_submodule)
+endif()
 
 if(ANDROID)
     # Always compile all externals for Android.
