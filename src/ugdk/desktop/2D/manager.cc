@@ -4,7 +4,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 
-#include <ugdk/desktop/window.h>
+#include <ugdk/desktop/2D/window.h>
 #include <ugdk/desktop/windowsettings.h>
 #include <ugdk/debug/log.h>
 #include <ugdk/graphic/canvas.h>
@@ -76,7 +76,7 @@ void Manager::Release() {
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
     
-std::shared_ptr<Window> Manager::DoCreateWindow(const WindowSettings& settings) {
+std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& settings) {
 
     Uint32 flags = SDL_WINDOW_OPENGL;
     if(settings.fullscreen) flags |= SDL_WINDOW_FULLSCREEN;
@@ -90,7 +90,7 @@ std::shared_ptr<Window> Manager::DoCreateWindow(const WindowSettings& settings) 
         // Couldn't create the window.
         debug::Log(debug::LogLevel::ERROR, "UGDK",
                    "desktop::Manager - Failed to create the window: ", SDL_GetError());
-        return std::shared_ptr<Window>();
+        return std::shared_ptr<desktop::Window>();
     }
 
     if(settings.icon.length() > 0) {
@@ -99,17 +99,17 @@ std::shared_ptr<Window> Manager::DoCreateWindow(const WindowSettings& settings) 
         SDL_FreeSurface(icon);
     }
 
-    return shared_ptr<Window>(new Window(window));
+    return shared_ptr<desktop::Window>(new desktop::mode2d::Window(window));
 }
-std::shared_ptr<Window> Manager::DoCreateWindow(unsigned long hwnd) {
+std::shared_ptr<desktop::Window> Manager::DoCreateWindow(unsigned long hwnd) {
     SDL_Window* window = SDL_CreateWindowFrom((void*)hwnd);
     if(!window) {
         // Couldn't create the window.
         // TODO: Log the error
         fprintf(stderr, "Failed to create the window: %s\n", SDL_GetError());
-        return std::shared_ptr<Window>();
+        return std::shared_ptr<desktop::Window>();
     }
-    return shared_ptr<Window>(new Window(window));
+    return shared_ptr<desktop::Window>(new desktop::mode2d::Window(window));
 }
     
 void Manager::PresentAll() {

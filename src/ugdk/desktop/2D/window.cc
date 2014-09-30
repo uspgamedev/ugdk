@@ -1,4 +1,4 @@
-#include <ugdk/desktop/window.h>
+#include <ugdk/desktop/2D/window.h>
 
 #include "SDL_video.h"
 #include "SDL_opengl.h"
@@ -8,6 +8,7 @@
 
 namespace ugdk {
 namespace desktop {
+namespace mode2d {
 
 Window::Window(SDL_Window* sdl_window)
     : sdl_window_(sdl_window)
@@ -62,5 +63,6 @@ bool Window::fullscreen() const {
     return (SDL_GetWindowFlags(sdl_window_) & SDL_WINDOW_FULLSCREEN) != 0;
 }
 
+}  // namespace mode2d
 }  // namespace desktop
 }  // namespace ugdk

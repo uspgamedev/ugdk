@@ -1,43 +1,41 @@
 #ifndef UGDK_DESKTOP_3D_MANAGER_H_
 #define UGDK_DESKTOP_3D_MANAGER_H_
 
+#include <ugdk/desktop/manager.h>
+#include <ugdk/desktop.h>
+
 #include <string>
 #include <memory>
 
 namespace Ogre {
 class Root;
-class RenderWindow;
 class StaticPluginLoader;
 }
 
 namespace ugdk {
 namespace desktop {
+namespace mode3d {
 
-class Window;
-
-namespace threed {
-
-class Manager {
+class Manager final : public desktop::Manager  {
 public:
 	Manager();
 	~Manager();
-
-    bool Initialize();
+	
+	bool Initialize() override;
+    void Release() override;
     
-    bool AddWindow(const std::shared_ptr<Window>& window);
-    void ChangeWindowSettings();
-
-    void PresentAll(double dt);
+    void PresentAll() override;
     
     Ogre::Root* root() { return root_; }
     Ogre::RenderWindow* window() { return window_; }
 
+protected:
+    std::shared_ptr<Window> DoCreateWindow(const WindowSettings& settings) override; /**/
+    std::shared_ptr<Window> DoCreateWindow(unsigned long hwnd) override;             /**/
+    
 private:
     Ogre::Root* root_;
     Ogre::StaticPluginLoader* static_loader_;
-    Ogre::RenderWindow* window_;
-    
-    bool createWindowFromSDL(const std::shared_ptr<Window>& window);
 };
 
 } // namespace threed

@@ -70,6 +70,8 @@ src/ugdk/ui/uielement.cc
 src/ugdk/ui/uielement.h
 src/ugdk/desktop/2D/manager.cc
 src/ugdk/desktop/2D/manager.h
+src/ugdk/desktop/2D/window.cc
+src/ugdk/desktop/2D/window.h
 src/ugdk/math/integer2D.cc
 src/ugdk/math/integer2D.h
 src/ugdk/math/vector2D.cc

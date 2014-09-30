@@ -46,7 +46,6 @@ src/ugdk/desktop/manager.cc
 src/ugdk/desktop/manager.h
 src/ugdk/desktop/module.cc
 src/ugdk/desktop/module.h
-src/ugdk/desktop/window.cc
 src/ugdk/desktop/window.h
 src/ugdk/desktop/windowsettings.cc
 src/ugdk/desktop/windowsettings.h
