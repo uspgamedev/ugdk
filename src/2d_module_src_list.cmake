@@ -22,9 +22,9 @@ src/ugdk/graphic/opengl/shaderprogram.h
 src/ugdk/graphic/opengl/vertexbuffer.cc
 src/ugdk/graphic/opengl/vertexbuffer.h
 src/ugdk/graphic/primitive.cc
-src/ugdk/graphic/primitive.h
 src/ugdk/graphic/primitivecontroller.cc
 src/ugdk/graphic/primitivecontroller.h
+src/ugdk/graphic/primitive.h
 src/ugdk/graphic/primitivesetup.cc
 src/ugdk/graphic/primitivesetup.h
 src/ugdk/graphic/rendertarget.cc
@@ -40,6 +40,12 @@ src/ugdk/graphic/textureunit.h
 src/ugdk/graphic/vertexdata.cc
 src/ugdk/graphic/vertexdata.h
 src/ugdk/graphic/visualeffect.h
+src/ugdk/internal/gltexture.cc
+src/ugdk/internal/gltexture.h
+src/ugdk/internal/opengl.h
+src/ugdk/internal/pixelsurface.cc
+src/ugdk/internal/pixelsurface.h
+src/ugdk/internal/sdleventhandler.h
 src/ugdk/text/font.cc
 src/ugdk/text/font.h
 src/ugdk/text/functions.cc
