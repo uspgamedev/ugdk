@@ -18,8 +18,6 @@
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 
-%import <module/ugdk_util.i>
-
 %newobject pyramidworks::geometry::Circle::GetBoundingBox(const ugdk::math::Vector2D& position) const;
 %newobject pyramidworks::geometry::Rect::GetBoundingBox(const ugdk::math::Vector2D& position) const;
 %newobject pyramidworks::geometry::ConvexPolygon::GetBoundingBox(const ugdk::math::Vector2D& position) const;

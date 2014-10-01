@@ -21,8 +21,6 @@
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 %import(module="pyramidworks_geometry") <pyramidworks/geometry.h>
 
-%import <module/ugdk_util.i>
-
 %newobject pyramidworks::collision::CollisionClass::FindCollidingObjects(const CollisionObject *target) const;
 %newobject pyramidworks::collision::CollisionObject::absolute_position() const;
 %newobject pyramidworks::collision::CollisionObject::CreateBoundingBox() const;
