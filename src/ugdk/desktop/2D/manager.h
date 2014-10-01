@@ -27,8 +27,8 @@ class Manager final : public desktop::Manager {
     void PresentAll() override;
 
   protected:
-    std::shared_ptr<Window> DoCreateWindow(const WindowSettings& settings) override;
-    std::shared_ptr<Window> DoCreateWindow(unsigned long hwnd) override;
+    std::shared_ptr<desktop::Window> DoCreateWindow(const WindowSettings& settings) override;
+    std::shared_ptr<desktop::Window> DoCreateWindow(unsigned long hwnd) override;
 
   private:
     std::unique_ptr<internal::SDLEventHandler> sdlevent_handler_;
