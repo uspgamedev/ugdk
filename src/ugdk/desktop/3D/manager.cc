@@ -2,6 +2,7 @@
 
 #include <ugdk/desktop/3D/window.h>
 #include <ugdk/desktop/module.h>
+#include <ugdk/desktop/windowsettings.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/debug/log.h>
 
@@ -16,7 +17,7 @@
 
 namespace ugdk {
 namespace desktop {
-namespace threed {
+namespace mode3d {
 
 using std::string;
 using std::vector;
@@ -93,14 +94,15 @@ std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& s
     // TODO: We might need to set resource listeners, if any, before this call.    
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
     
-    return shared_ptr<desktop::Window>(new desktop::mode3d::Window(window));
+    return std::shared_ptr<desktop::Window>(new mode3d::Window(window));
 }
+
 std::shared_ptr<desktop::Window> Manager::DoCreateWindow(unsigned long hwnd) {
     //TODO: Not sure how to do this, or even if we can do this. So just return null
-    return shared_ptr<desktop::Window>();
+    return std::shared_ptr<desktop::Window>();
 }
 
 
-} // namespace threed
+} // namespace mode3d
 } // namespace desktop
 } // namespace ugdk

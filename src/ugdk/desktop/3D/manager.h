@@ -10,6 +10,7 @@
 namespace Ogre {
 class Root;
 class StaticPluginLoader;
+class RenderWindow;
 }
 
 namespace ugdk {
@@ -30,12 +31,13 @@ public:
     Ogre::RenderWindow* window() { return window_; }
 
 protected:
-    std::shared_ptr<Window> DoCreateWindow(const WindowSettings& settings) override; /**/
-    std::shared_ptr<Window> DoCreateWindow(unsigned long hwnd) override;             /**/
+    std::shared_ptr<desktop::Window> DoCreateWindow(const WindowSettings& settings) override; /**/
+    std::shared_ptr<desktop::Window> DoCreateWindow(unsigned long hwnd) override;             /**/
     
 private:
     Ogre::Root* root_;
     Ogre::StaticPluginLoader* static_loader_;
+    Ogre::RenderWindow* window_;
 };
 
 } // namespace threed

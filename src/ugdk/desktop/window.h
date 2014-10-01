@@ -10,9 +10,6 @@ namespace ugdk {
 namespace desktop {
 
 class Window {
-  protected:
-    Window() {};
-
   public:
     virtual ~Window() {}
 
@@ -29,6 +26,9 @@ class Window {
     virtual math::Integer2D size() const = 0;
     virtual bool fullscreen() const = 0;
     virtual bool vsync() const = 0;
+
+  protected:
+    Window() {}
 };
 
 }  // namespace desktop

@@ -1,8 +1,9 @@
 #include <ugdk/desktop/3D/window.h>
 
-
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/debug/profiler.h>
+
+#include "OgreRenderWindow.h"
 
 namespace ugdk {
 namespace desktop {
@@ -23,13 +24,13 @@ void Window::Present() {
 }
 
 void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync) {
-    ogre_window_->setFullScreen(fullscreen, size.x, size.y);
+    ogre_window_->setFullscreen(fullscreen, size.x, size.y);
     ogre_window_->setVSyncEnabled(vsync);
 }
 
 
 uint32 Window::id() const {
-    return SDL_GetWindowID(sdl_window_);
+    return 1; //SDL_GetWindowID(sdl_window_); // FIXME
 }
     
 const char* Window::title() const {
@@ -44,7 +45,7 @@ bool Window::fullscreen() const {
     return ogre_window_->isFullScreen();
 }
 
-bool vsync() const {
+bool Window::vsync() const {
     return ogre_window_->isVSyncEnabled();
 }
 

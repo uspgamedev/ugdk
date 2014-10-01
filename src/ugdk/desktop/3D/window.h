@@ -2,6 +2,7 @@
 #define UGDK_DESKTOP_3D_WINDOW_H_
 
 #include <ugdk/math/integer2D.h>
+#include <ugdk/desktop/window.h>
 #include <ugdk/desktop.h>
 #include <ugdk/graphic.h>
 #include <ugdk/structure/types.h>
@@ -41,7 +42,7 @@ class Window final : public desktop::Window {
     friend class ::ugdk::desktop::mode3d::Manager;
 };
 
-)  // namespace mode2d
+}  // namespace mode2d
 }  // namespace desktop
 }  // namespace ugdk
 

@@ -1,6 +1,8 @@
 #include <ugdk/action/3D/ogrescene.h>
 #include <ugdk/action/3D/camera.h>
-#include <ugdk/desktop/3D/module.h>
+
+#include <ugdk/desktop/module.h>
+#include <ugdk/desktop/3D/manager.h>
 
 #include <OgreRoot.h>
 #include <OgreSceneManager.h>
@@ -16,8 +18,14 @@ namespace ugdk {
 namespace action {
 namespace threed {
 
+namespace {
+ugdk::desktop::mode3d::Manager* desktop_manager() {
+    return dynamic_cast<desktop::mode3d::Manager*>(desktop::manager());
+}
+}
+
 OgreScene::OgreScene() {
-    scene_mgr_ = ugdk::desktop::threed::manager()->root()->createSceneManager("OctreeSceneManager");
+    scene_mgr_ = desktop_manager()->root()->createSceneManager("OctreeSceneManager");
     overlay_system_ = new Ogre::OverlaySystem();
 	scene_mgr_->addRenderQueueListener( overlay_system_ );
 	camera_ = new Camera(this);
@@ -26,16 +34,17 @@ OgreScene::OgreScene() {
 }
 
 OgreScene::~OgreScene() {
+    auto mgr = desktop_manager();
     if (z_order_ > 0)
-        ugdk::desktop::threed::manager()->window()->removeViewport(z_order_);
+        mgr->window()->removeViewport(z_order_);
     delete camera_;
-    ugdk::desktop::threed::manager()->root()->destroySceneManager(scene_mgr_);
+    mgr->root()->destroySceneManager(scene_mgr_);
 }
 
 void OgreScene::OnPushed(int index) {
     z_order_ = index;
 	//TODO: we could let user set with x/y/w/h of this viewport...
-	viewport_ = ugdk::desktop::threed::manager()->window()->addViewport(camera_->camera(), z_order_, 0, 0, 1, 1);
+    viewport_ = desktop_manager()->window()->addViewport(camera_->camera(), z_order_, 0, 0, 1, 1);
     viewport_->setBackgroundColour(Ogre::ColourValue(0,0,0));
     viewport_->setOverlaysEnabled(true);
     camera_->camera()->setAspectRatio(Ogre::Real(viewport_->getActualWidth()) / Ogre::Real(viewport_->getActualHeight()));
@@ -95,7 +104,7 @@ void OgreScene::HideFrameStats() {
 void OgreScene::UpdateFrameStats() {
     if (!IsFrameStatsVisible()) return;
     
-    auto stats = ugdk::desktop::threed::manager()->window()->getStatistics();
+    auto stats = desktop_manager()->window()->getStatistics();
     std::string over_name = identifier() + "_FrameStats";
     Ogre::OverlayContainer* panel = fps_stats_->getChild(over_name + "/Panel");
     Ogre::TextAreaOverlayElement* avgFPS = static_cast<Ogre::TextAreaOverlayElement*>(panel->getChild(over_name + "/AvgFPS"));

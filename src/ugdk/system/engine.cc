@@ -10,7 +10,6 @@
 #include <ugdk/time/module.h>
 #include <ugdk/desktop/module.h>
 #ifdef UGDK_3D_ENABLED
-# include <ugdk/desktop/3D/module.h>
 # include <ugdk/desktop/3D/manager.h>
 #else
 # include <ugdk/desktop/2D/manager.h>
@@ -290,9 +289,6 @@ void Release() {
     resource::Release();
     time::Release();
     graphic::Release();
-#ifdef UGDK_3D_ENABLED
-    desktop::threed::Release();
-#endif
     desktop::Release();
     text::Release();
 
