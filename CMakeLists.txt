@@ -60,13 +60,21 @@ include (cmake/MacOptions.cmake)
 include (src/src_list.cmake)
 include (src/2d_module_src_list.cmake)
 include (src/3d_module_src_list.cmake)
-include (src/module_list.cmake)
 include (src/lua_src_list.cmake)
 include (src/py_src_list.cmake)
+include (src/swig_module_list.cmake)
+include (src/swig_2d_module_list.cmake)
+include (src/swig_3d_module_list.cmake)
 
 if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT UGDK_SRC)
+
+if (UGDK_3D_ENABLED)
+    list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_3D_SRC})
+else ()
+    list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_2D_SRC})
+endif ()
 
 # Create the targets for all the dependencies.
 add_subdirectory(externals)

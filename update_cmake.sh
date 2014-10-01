@@ -1,7 +1,5 @@
 #!/bin/bash
 
-MODULES=`find src/module -name "ugdk_*.i" -o -name "pyramidworks_*.i" | sort -h`
-
 # CORE SOURCE
 echo "SET(UGDK_SRC " > src/src_list.cmake
 find src/ugdk src/pyramidworks \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) -not \( -path "*/script/languages/*" -o -path "*/3D/*" -o -path "*/2D/*" -o -path "*/graphic/*" -o -path "*/text/*" -o -path "*/ui/*" \) | grep -v config.h | sort >> src/src_list.cmake
@@ -34,8 +32,20 @@ find src/ugdk/script/languages/python -name "*.cc" -o -name "*.h" | sort >> src/
 echo ")" >> src/py_src_list.cmake
 echo "Arquivo src/py_src_list.txt criado com sucesso."
 
+###############
 # MOUDULE LIST
-echo "SET(UGDK_MODULE_SRC " > src/module_list.cmake
-find src/module -name "ugdk_*.i" -o -name "pyramidworks_*.i" | sort -h >> src/module_list.cmake
-echo ")" >> src/module_list.cmake
-echo "Arquivo src/module_list.txt criado com sucesso."
+echo "SET(UGDK_MODULE_SRC " > src/swig_module_list.cmake
+find src/module \( -name "ugdk_*.i" -o -name "pyramidworks_*.i" \) -a -not \( -name "*2D*" -o -name "*3D*" \) | sort -h >> src/swig_module_list.cmake
+echo ")" >> src/swig_module_list.cmake
+echo "Arquivo src/swig_module_list.txt criado com sucesso."
+
+# 2d
+echo "SET(UGDK_MODULE_2D_SRC " >> src/swig_2d_module_list.cmake
+find src/module -name "*2D*" -a \( -name "ugdk_*.i" -o -name "pyramidworks_*.i" \) | sort -h >> src/swig_2d_module_list.cmake
+echo ")" >> src/swig_2d_module_list.cmake
+
+# 3d
+echo "SET(UGDK_MODULE_3D_SRC " >> src/swig_3d_module_list.cmake
+find src/module -name "*3D*" -a \( -name "ugdk_*.i" -o -name "pyramidworks_*.i" \) | sort -h >> src/swig_3d_module_list.cmake
+echo ")" >> src/swig_3d_module_list.cmake
+
