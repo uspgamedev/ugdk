@@ -288,9 +288,11 @@ void Release() {
     input::Release();
     resource::Release();
     time::Release();
+#ifndef UGDK_3D_ENABLED
     graphic::Release();
-    desktop::Release();
     text::Release();
+#endif
+    desktop::Release();
 
     SCRIPT_MANAGER()->Finalize();
     delete SCRIPT_MANAGER();
