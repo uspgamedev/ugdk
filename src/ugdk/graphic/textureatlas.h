@@ -4,7 +4,7 @@
 #include <ugdk/graphic.h>
 #include <ugdk/internal.h>
 #include <ugdk/math/integer2D.h>
-#include <ugdk/graphic/opengl/Exception.h>
+#include <ugdk/system/LoveException.h>
 
 #include <memory>
 #include <vector>

@@ -15,8 +15,6 @@ src/ugdk/graphic/manager.cc
 src/ugdk/graphic/manager.h
 src/ugdk/graphic/module.cc
 src/ugdk/graphic/module.h
-src/ugdk/graphic/opengl/Exception.cc
-src/ugdk/graphic/opengl/Exception.h
 src/ugdk/graphic/opengl/shader.cc
 src/ugdk/graphic/opengl/shader.h
 src/ugdk/graphic/opengl/shaderprogram.cc

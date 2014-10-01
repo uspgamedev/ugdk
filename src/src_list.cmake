@@ -113,6 +113,8 @@ src/ugdk/system/engine.cc
 src/ugdk/system/engine.h
 src/ugdk/system/eventhandler.h
 src/ugdk/system/exceptions.h
+src/ugdk/system/LoveException.cc
+src/ugdk/system/LoveException.h
 src/ugdk/system/task.h
 src/ugdk/system/taskplayer.cc
 src/ugdk/system/taskplayer.h

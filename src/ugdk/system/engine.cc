@@ -22,7 +22,7 @@
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/debug/profiler.h>
 #include <ugdk/debug/log.h>
-#include <ugdk/graphic/opengl/Exception.h>
+#include <ugdk/system/LoveException.h>
 
 #include <string>
 #include <algorithm>
