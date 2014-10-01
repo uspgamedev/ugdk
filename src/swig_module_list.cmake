@@ -10,7 +10,6 @@ src/module/ugdk_input_mousebutton.i
 src/module/ugdk_input_scancode.i
 src/module/ugdk_internal.i
 src/module/ugdk_math.i
-src/module/ugdk_resource.i
 src/module/ugdk_structure.i
 src/module/ugdk_system.i
 src/module/ugdk_time.i
