@@ -74,6 +74,10 @@ bool Manager::Initialize() {
     return true;
 }
 
+void Manager::Release() {
+    // FIXME: DO SOMETHING?
+}
+
 void Manager::PresentAll(/*double dt*/) {
     //TODO: check if we dont need to use the overload which receives delta_t
     root_->renderOneFrame();
