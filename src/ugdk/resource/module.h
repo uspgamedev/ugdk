@@ -8,7 +8,7 @@
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/internal.h>
-#include <ugdk/util.h>
+#include <ugdk/text.h>
 
 namespace ugdk {
 namespace resource {
@@ -28,7 +28,7 @@ internal::GLTexture*             GetTextureFromTag(const std::string& tag);
 internal::GLTexture*             GetTextureFromFile(const std::string& file);
 graphic::TextureAtlas*           GetTextureAtlasFromTag(const std::string& tag);
 graphic::TextureAtlas*           GetTextureAtlasFromFile(const std::string& file);
-ugdk::LanguageWord*              GetLanguageWord(const std::string& tag);
+text::LanguageWord*              GetLanguageWord(const std::string& tag);
 #endif // UGDK_3D_ENABLED
 
 } // namespace resource

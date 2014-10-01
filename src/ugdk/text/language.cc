@@ -5,7 +5,7 @@
 #include <ugdk/text/label.h>
 #include <ugdk/text/textbox.h>
 #include <ugdk/system/engine.h>
-#include <ugdk/util/languageword.h>
+#include <ugdk/text/languageword.h>
 #include <ugdk/util/utf8.h>
 
 #include <cstdio>
@@ -15,6 +15,7 @@
 #include <algorithm>
 
 namespace ugdk {
+namespace text {
 
 using std::map;
 using std::string;
@@ -180,4 +181,5 @@ bool Language::Load(const std::string& language_file) {
     return true;
 }
 
-} //  namespace ugdk
+} // namespace text
+} // namespace ugdk

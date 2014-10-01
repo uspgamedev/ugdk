@@ -1,10 +1,12 @@
-#ifndef UGDK_UTIL_LANGUAGEWORD_H_
-#define UGDK_UTIL_LANGUAGEWORD_H_
+#ifndef UGDK_TEXT_LANGUAGEWORD_H_
+#define UGDK_TEXT_LANGUAGEWORD_H_
 
+#include <ugdk/text.h>
 #include <ugdk/ui.h>
 #include <string>
 
 namespace ugdk {
+namespace text {
 
 class LanguageWord {
   public:
@@ -22,6 +24,7 @@ class LanguageWord {
     std::string font_;
 };
 
-}  // namespace ugdk
+} // namespace text
+} // namespace ugdk
 
-#endif /* UGDK_UTIL_LANGUAGEWORD_H_ */
+#endif // UGDK_TEXT_LANGUAGEWORD_H_

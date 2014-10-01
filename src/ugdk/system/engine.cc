@@ -18,7 +18,6 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/internal/sdleventhandler.h>
-#include <ugdk/util/languagemanager.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/debug/profiler.h>
 #include <ugdk/debug/log.h>
@@ -47,8 +46,6 @@ enum class UGDKState {
 // Attributes
 
 UGDKState current_state_ = UGDKState::UNINITIALIZED;
-
-LanguageManager* language_manager_;
 
 std::list<std::unique_ptr<action::Scene >> scene_list_;
 std::list<std::function<std::unique_ptr<action::Scene>()>> queued_scene_list_;
@@ -119,10 +116,6 @@ class SDLQuitEventHandler : public internal::SDLEventHandler {
 
 } // namespace anon
 
-LanguageManager* language_manager() {
-    return language_manager_;
-}
-
 std::string ResolvePath(const std::string& path) {
     if(path.compare(0, configuration_.base_path.size(), configuration_.base_path) == 0)
         return path;
@@ -155,8 +148,6 @@ bool Initialize(const Configuration& configuration) {
 
     RegisterSDLHandler(&system_sdlevent_handler);
 
-    language_manager_ = new LanguageManager(configuration.default_language);
-
     if(!configuration.windows_list.empty()) {
 #ifdef UGDK_3D_ENABLED
         desktop::Manager *deskmanager = new desktop::mode3d::Manager;
@@ -173,7 +164,7 @@ bool Initialize(const Configuration& configuration) {
                                     configuration.canvas_size))
             return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
 
-        if (!text::Initialize(new text::Manager))
+        if (!text::Initialize(new text::Manager(configuration.default_language)))
             return ErrorLog("system::Initialize failed - text::Initialize returned false.");
 #endif
     }

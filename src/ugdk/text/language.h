@@ -1,10 +1,11 @@
-#ifndef UGDK_UTIL_LANGUAGE_H_
-#define UGDK_UTIL_LANGUAGE_H_
+#ifndef UGDK_TEXT_LANGUAGE_H_
+#define UGDK_TEXT_LANGUAGE_H_
 
 #include <string>
 #include <ugdk/util.h>
 
 namespace ugdk {
+namespace text {
 
 class Language {
   public:
@@ -14,6 +15,7 @@ class Language {
     bool Load(const std::string& language_file);
 };
 
-}  // namespace ugdk
+} // namespace text
+} // namespace ugdk
 
-#endif /* UGDK_UTIL_LANGUAGE_H_ */
+#endif // UGDK_UTIL_LANGUAGE_H_

@@ -130,12 +130,6 @@ src/ugdk/ui.h
 src/ugdk/util.h
 src/ugdk/util/idgenerator.cc
 src/ugdk/util/idgenerator.h
-src/ugdk/util/language.cc
-src/ugdk/util/language.h
-src/ugdk/util/languagemanager.cc
-src/ugdk/util/languagemanager.h
-src/ugdk/util/languageword.cc
-src/ugdk/util/languageword.h
 src/ugdk/util/uncopyable.h
 src/ugdk/util/utf8.cc
 src/ugdk/util/utf8.h

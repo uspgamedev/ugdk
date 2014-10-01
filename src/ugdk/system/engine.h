@@ -26,13 +26,6 @@ namespace system {
 
 typedef std::function<std::unique_ptr<action::Scene> ()> SceneFactory;
 
-class PathManager;
-
-/// Returns a reference to the Language Manager.
-/** @see LanguageManager
- */
-LanguageManager* language_manager();
-
 /// Expands the given path with configurated base path.
 std::string ResolvePath(const std::string& path);
 std::string GetFileContents(const std::string& filename);

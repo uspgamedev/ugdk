@@ -46,6 +46,10 @@ src/ugdk/text/functions.cc
 src/ugdk/text/functions.h
 src/ugdk/text/label.cc
 src/ugdk/text/label.h
+src/ugdk/text/language.cc
+src/ugdk/text/language.h
+src/ugdk/text/languageword.cc
+src/ugdk/text/languageword.h
 src/ugdk/text/manager.cc
 src/ugdk/text/manager.h
 src/ugdk/text/module.cc

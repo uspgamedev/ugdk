@@ -8,6 +8,8 @@ class Manager;
 class Label;
 class TextBox;
 class Font;
+class Language;
+class LanguageWord;
 
 }  // namespace text
 }  // namespace ugdk

@@ -34,6 +34,7 @@ if (SWIG_FOUND)
     set(MODULES_LIST "")
     foreach(it ${UGDK_MODULE_SRC})
         get_filename_component(val ${it} NAME_WE)
+        string(REGEX REPLACE "_[23]D" "" val ${val})
         set(MODULES_LIST "${MODULES_LIST} \\\n    ACTION(LANG, ${val})")
     endforeach()
     

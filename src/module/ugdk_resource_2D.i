@@ -12,7 +12,7 @@
 #include <ugdk/resource/module.h>
 
 #include <ugdk/graphic/textureatlas.h>
-#include <ugdk/util/languageword.h>
+#include <ugdk/text/languageword.h>
 
 %}
 
@@ -31,13 +31,13 @@ enable_disown(ugdk::graphic::TextureAtlas* val)
 %template(ResourceContainer_TextureAtlas) ugdk::resource::ResourceContainer<ugdk::graphic::TextureAtlas*>;
 disable_disown(ugdk::graphic::TextureAtlas* val)
 
-enable_disown(ugdk::LanguageWord* val)
-%template(ResourceContainer_LanguageWord) ugdk::resource::ResourceContainer<ugdk::LanguageWord*>;
-disable_disown(ugdk::LanguageWord* val)
+enable_disown(ugdk::text::LanguageWord* val)
+%template(ResourceContainer_LanguageWord) ugdk::resource::ResourceContainer<ugdk::text::LanguageWord*>;
+disable_disown(ugdk::text::LanguageWord* val)
 
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
-%import(module="ugdk_util") <ugdk/util.h>
+%import(module="ugdk_text") <ugdk/text.h>
 %import(module="ugdk_internal") <ugdk/internal.h>
 
 proxy_class(ugdk::action::Scene)
