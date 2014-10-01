@@ -6,6 +6,7 @@
 #include <ugdk/math/integer2D.h>
 #include <ugdk/debug/log.h>
 
+#define OGRE_STATIC_GL
 #include <OgreStaticPluginLoader.h>
 #include <OgreSceneManager.h>
 #include <OgreStringConverter.h>
@@ -64,10 +65,10 @@ bool Manager::Initialize() {
     // Show the configuration dialog and initialise the system
     // You can skip this and use root.restoreConfig() to load configuration
     // settings if you were sure there are valid ones saved in ogre.cfg
-    //if(!root_->showConfigDialog()) {
-    //    return false;
-    //}        
-    root_->restoreConfig();
+    if(!root_->showConfigDialog()) {
+        return false;
+    }        
+    //root_->restoreConfig();
     
     root_->initialise(false);
 
