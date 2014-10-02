@@ -14,7 +14,7 @@ before_install:
 
 install:
   - sudo apt-get install swig3.0 cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
-  - if [ "$CXX" = "g++" ]; then sudo apt-get install --force-yes g++-4.7; fi
+  - sudo apt-get install --force-yes g++-4.7
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.7" CC="gcc-4.7"; fi
 
 script:
