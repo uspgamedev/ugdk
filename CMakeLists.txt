@@ -279,7 +279,7 @@ endif (UNIX AND PYTHONLIBS_FOUND)
 message(STATUS "3D Enabled: ${UGDK_3D_ENABLED}")
 CONFIGURE_FILE(
     "cmake/config.h.in"
-    "${CMAKE_SOURCE_DIR}/src/ugdk/system/config.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/ugdk/system/config.h"
 ) 
 
 install(TARGETS libugdk
