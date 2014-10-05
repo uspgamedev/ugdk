@@ -10,11 +10,11 @@ before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo add-apt-repository -y ppa:henriquegemignani/uspgamedev
   - sudo apt-get update
-  - wget http://uspgamedev.org/downloads/libs/debian/wheezy/ogre-1.9_20140924-1_amd64.deb
+  - wget http://uspgamedev.org/downloads/libs/debian/wheezy/ogre-1.9_20141005-1_amd64.deb
 
 install:
   - sudo apt-get install libfreetype6-dev libfreeimage-dev libzzip-dev libxrandr-dev libxaw7-dev freeglut3-dev libgl1-mesa-dev libglu1-mesa-dev
-  - sudo dpkg -i ogre-1.9_20140924-1_amd64.deb
+  - sudo dpkg -i ogre-1.9_20141005-1_amd64.deb
   - sudo apt-get install swig3.0 cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev
   - sudo apt-get install --force-yes g++-4.7
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.7" CC="gcc-4.7"; fi
