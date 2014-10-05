@@ -1,6 +1,6 @@
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/graphic/opengl/vertexbuffer.h>
-#include <ugdk/graphic/opengl/Exception.h>
+#include <ugdk/system/LoveException.h>
 
 namespace ugdk {
 namespace graphic {

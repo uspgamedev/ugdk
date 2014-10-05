@@ -4,12 +4,6 @@
 #include <memory>
 #include <type_traits>
 
-#ifdef __GNUC__
-#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 7)
-#define override 
-#endif
-#endif
-
 namespace ugdk {
 
     template <typename T, typename... Args> inline

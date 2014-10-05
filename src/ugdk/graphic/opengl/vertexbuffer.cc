@@ -20,7 +20,7 @@
 
 #include "vertexbuffer.h"
 
-#include "Exception.h"
+#include <ugdk/system/LoveException.h>
 //#include <common/config.h>
 
 #include <cstdlib>

@@ -1,43 +1,34 @@
+
 #ifndef UGDK_DESKTOP_WINDOW_H_
 #define UGDK_DESKTOP_WINDOW_H_
 
 #include <ugdk/math/integer2D.h>
 #include <ugdk/desktop.h>
-#include <ugdk/graphic.h>
 #include <ugdk/structure/types.h>
-
-struct SDL_Window;
 
 namespace ugdk {
 namespace desktop {
 
 class Window {
-  private:
-    Window(SDL_Window* sdl_window);
-
   public:
-    ~Window();
+    virtual ~Window() {}
 
     /// Presents the current canvas in the screen.
-    void Present();
+    virtual void Present() = 0;
 
     /// Updates the settings and applies the changes.
     /** Warning: some fullscreen/resolution combinations may be unsupported by the display, resulting
         in unoperable windows. */
-    void ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync);
+    virtual void ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync) = 0;
 
-    uint32 id() const;
-    const char* title() const;
-    math::Integer2D size() const;
-    bool fullscreen() const;
-    bool vsync() const { return vsync_; }
+    virtual uint32 id() const = 0;
+    virtual const char* title() const = 0;
+    virtual math::Integer2D size() const = 0;
+    virtual bool fullscreen() const = 0;
+    virtual bool vsync() const = 0;
 
-  private:
-    SDL_Window* sdl_window_;
-    bool vsync_;
-
-    friend class ::ugdk::desktop::Manager;
-    friend class ::ugdk::graphic::Manager;
+  protected:
+    Window() {}
 };
 
 }  // namespace desktop

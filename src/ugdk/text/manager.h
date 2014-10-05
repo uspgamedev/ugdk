@@ -13,7 +13,7 @@ namespace text {
 
 class Manager {
   public:
-    Manager();
+    Manager(const std::string& default_language_code);
     ~Manager();
 
     bool Initialize();
@@ -29,9 +29,20 @@ class Manager {
 
 	void AddFont(const std::string& name, const std::string& path, double size);
 
+    //================
+    const std::string& default_language() const { return default_language_; }
+
+    bool RegisterLanguage(const std::string& code, const std::string& language_file);
+
+    /** @param active_language The language that will be active. */
+    bool Setup(const std::string& active_language);
+
   private:
     Font *current_font_;
     std::unordered_map<std::string, std::unique_ptr<Font>> fonts_;
+
+    std::string default_language_;
+    std::unordered_map<std::string, std::string> registered_languages_;
 };
 
 }  // namespace text

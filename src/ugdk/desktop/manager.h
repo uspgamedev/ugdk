@@ -1,27 +1,25 @@
+
 #ifndef UGDK_DESKTOP_MANAGER_H_
 #define UGDK_DESKTOP_MANAGER_H_
 
-#include <ugdk/internal.h>
-#include <ugdk/desktop/windowsettings.h>
 #include <ugdk/desktop.h>
 #include <ugdk/structure/types.h>
 
-#include <vector>
-#include <memory>
 #include <map>
+#include <memory>
 
 namespace ugdk {
 namespace desktop {
 
 class Manager {
   public:
-    Manager();
-    ~Manager();
+    virtual ~Manager();
 
-    bool Initialize();
-    void Release();
+    virtual bool Initialize() = 0;
+    virtual void Release() = 0;
 
     std::weak_ptr<Window> CreateWindow(const WindowSettings& settings);
+    std::weak_ptr<Window> CreateWindow(unsigned long hwnd);
     // TODO: DestroyWindow
 
     void set_primary_window(const std::weak_ptr<Window>& window) {
@@ -30,14 +28,19 @@ class Manager {
     std::shared_ptr<Window> primary_window() const { return primary_window_.lock(); }
     std::shared_ptr<Window> window(uint32 index) const;
     
-    void PresentAll();
+    virtual void PresentAll() = 0;
 
-  private:
-    std::unique_ptr<internal::SDLEventHandler> sdlevent_handler_;
+  protected:
+    Manager() {}
+
+    virtual std::shared_ptr<Window> DoCreateWindow(const WindowSettings& settings) = 0;
+    virtual std::shared_ptr<Window> DoCreateWindow(unsigned long hwnd) = 0;
+
     std::weak_ptr<Window> primary_window_;
     std::map< uint32, std::shared_ptr<Window> > windows_;
-    
-    friend class DesktopSDLEventHandler;
+
+  private:
+    std::weak_ptr<Window> RegisterAndGetWindow(const std::shared_ptr<Window>& new_window);
 };
 
 }  // namespace desktop

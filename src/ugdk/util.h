@@ -2,18 +2,11 @@
 #define UGDK_UTIL_H_
 
 namespace ugdk {
-//namespace util {
-
-class Language;
-class LanguageManager;
-class LanguageWord;
-class PathManager;
-
 namespace util {
+
 class IDGenerator;
-}
    
-//}  // namespace util
+}  // namespace util
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_UTIL_H_

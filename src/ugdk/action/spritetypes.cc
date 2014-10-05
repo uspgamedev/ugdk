@@ -1,6 +1,6 @@
 #include <ugdk/action/spritetypes.h>
 
-#include <ugdk/graphic/opengl/Exception.h>
+#include <ugdk/system/LoveException.h>
 #include <ugdk/system/engine.h>
 #include <libjson.h>
 

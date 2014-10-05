@@ -1,12 +1,16 @@
 #include <ugdk/resource/module.h>
 
-#include <ugdk/action/spritetypes.h>
-#include <ugdk/graphic/textureatlas.h>
-#include <ugdk/internal/gltexture.h>
 #include <ugdk/resource/genericcontainer.h>
 #include <ugdk/structure/indexabletable.h>
-#include <ugdk/util/languageword.h>
 #include <ugdk/debug/log.h>
+
+#include <ugdk/action/spritetypes.h>
+
+#ifndef UGDK_3D_ENABLED
+#include <ugdk/graphic/textureatlas.h>
+#include <ugdk/internal/gltexture.h>
+#include <ugdk/text/languageword.h>
+#endif
 
 namespace ugdk {
 namespace resource {
@@ -22,10 +26,12 @@ static T* NullLoad(const std::string& filepath) {
 
 bool Initialize(Manager* manager) {
     if(manager) {
+        manager->add_container(new GenericContainer<action::SpriteAnimationTable*>(action::LoadSpriteAnimationTableFromFile));
+#ifndef UGDK_3D_ENABLED
         manager->add_container(new GenericContainer<internal::GLTexture*>(internal::GLTexture::CreateFromFile));
         manager->add_container(new GenericContainer<graphic::TextureAtlas*>(graphic::TextureAtlas::LoadFromFile));
-        manager->add_container(new GenericContainer<action::SpriteAnimationTable*>(action::LoadSpriteAnimationTableFromFile));
-        manager->add_container(new GenericContainer<LanguageWord*>(NullLoad<LanguageWord>));
+        manager->add_container(new GenericContainer<text::LanguageWord*>(NullLoad<text::LanguageWord>));
+#endif
 
         // The manager initialized correctly, so we can use it.
         reference_ = manager;
@@ -47,6 +53,12 @@ Manager* manager() {
     return reference_;
 }
 
+action::SpriteAnimationTable* GetSpriteAnimationTableFromFile(const std::string& file) {
+    return manager()->get_container<action::SpriteAnimationTable*>()->Load(file, file);
+}
+
+#ifndef UGDK_3D_ENABLED
+
 internal::GLTexture* GetTextureFromTag(const std::string& tag) {
     return manager()->get_container<internal::GLTexture*>()->Find(tag);
 }
@@ -63,13 +75,11 @@ graphic::TextureAtlas* GetTextureAtlasFromFile(const std::string& file) {
     return manager()->get_container<graphic::TextureAtlas*>()->Load(file, file);
 }
 
-action::SpriteAnimationTable* GetSpriteAnimationTableFromFile(const std::string& file) {
-    return manager()->get_container<action::SpriteAnimationTable*>()->Load(file, file);
+text::LanguageWord* GetLanguageWord(const std::string& tag) {
+    return manager()->get_container<text::LanguageWord*>()->Find(tag);
 }
 
-ugdk::LanguageWord* GetLanguageWord(const std::string& tag) {
-    return manager()->get_container<LanguageWord*>()->Find(tag);
-}
+#endif // UGDK_3D_ENABLED
 
 } // namespace resource
 } // namespace ugdk

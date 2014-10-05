@@ -26,11 +26,6 @@ if (SWIG_FOUND)
 
     include (cmake/UseSWIG.cmake)
 
-    # Is UGDK_MODULE_SRC defined?
-    if (NOT UGDK_MODULE_SRC)
-        message (FATAL_ERROR "Variable UGDK_MODULE_SRC not defined! Please do so in the file src/module_list.cmake!")
-    endif (NOT UGDK_MODULE_SRC)
-
     set_source_files_properties (${UGDK_MODULE_SRC} PROPERTIES CPLUSPLUS ON)
     set_source_files_properties (${UGDK_MODULE_SRC} PROPERTIES SWIG_FLAGS "")
     
@@ -39,6 +34,7 @@ if (SWIG_FOUND)
     set(MODULES_LIST "")
     foreach(it ${UGDK_MODULE_SRC})
         get_filename_component(val ${it} NAME_WE)
+        string(REGEX REPLACE "_[23]D" "" val ${val})
         set(MODULES_LIST "${MODULES_LIST} \\\n    ACTION(LANG, ${val})")
     endforeach()
     

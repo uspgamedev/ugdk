@@ -21,6 +21,12 @@ IF(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
     set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
 ENDIF()
 
+if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
+    set(CMAKE_INCLUDE_SYSTEM)
+else()
+    set(CMAKE_INCLUDE_SYSTEM SYSTEM)
+endif()
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
 
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
@@ -31,6 +37,8 @@ option(UGDK_BUILD_TESTS          "Set to ON to enable building tests." ON)
 option(UGDK_CREATE_BINDINGS      "Set to ON to generate bindings for supported script languages." ON)
 option(UGDK_LUA_BINDINGS         "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS      "Set to ON to enable Python as one of the languages to create bindings." ON)
+
+option(UGDK_3D_ENABLED           "Set to ON to enable the 3D module - Ogre rendering + Bullet physics." OFF)
 
 if(NOT ${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
     # Don't polute the git repository with the generated files for out-of-source builds
@@ -56,13 +64,23 @@ set (UGDK_LINK_FLAGS)
 include (cmake/MacOptions.cmake)
 
 include (src/src_list.cmake)
-include (src/module_list.cmake)
+include (src/2d_module_src_list.cmake)
+include (src/3d_module_src_list.cmake)
 include (src/lua_src_list.cmake)
 include (src/py_src_list.cmake)
+include (src/swig_module_list.cmake)
+include (src/swig_2d_module_list.cmake)
+include (src/swig_3d_module_list.cmake)
 
 if (NOT UGDK_SRC)
     message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
 endif (NOT UGDK_SRC)
+
+if (UGDK_3D_ENABLED)
+    list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_3D_SRC})
+else ()
+    list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_2D_SRC})
+endif ()
 
 # Create the targets for all the dependencies.
 add_subdirectory(externals)
@@ -155,21 +173,21 @@ if (MSVC)
 endif ()
 
 # =============================
-add_library (libugdk ${UGDK_SRC} ${GENERATED_SRC})
-
-if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
-    target_include_directories(libugdk PUBLIC ${GLM_LOCATION})
+if (UGDK_3D_ENABLED)
+	add_library(libugdk ${UGDK_SRC} ${UGDK_3D_SRC} ${GENERATED_SRC})
 else()
-    target_include_directories(libugdk SYSTEM PUBLIC ${GLM_LOCATION})
+	add_library(libugdk ${UGDK_SRC} ${UGDK_2D_SRC} ${GENERATED_SRC})
 endif()
 
+target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
 target_include_directories(libugdk
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src" # TODO: should be /include
     PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/src" # TODO: should be /include
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 if (MINGW)
-    target_link_libraries(libugdk LINK_PUBLIC mingw32) # TODO: do we really need this?
+    # TODO: do we really need this?
+    target_link_libraries(libugdk LINK_PUBLIC mingw32)
 endif (MINGW)
 
 if (WIN32)
@@ -180,19 +198,30 @@ endif (WIN32)
 # Libraries for the scripts.
 target_link_libraries(libugdk LINK_PUBLIC ${UGDK_LIBRARIES})
 
-if(NOT ANDROID) # Glew is not necessary for android builds.
-    target_link_libraries(libugdk LINK_PUBLIC glew)
+if(NOT ANDROID AND NOT UGDK_3D_ENABLED) # Glew is not necessary for android or 3D builds.
+  target_link_libraries(libugdk LINK_PUBLIC glew)
 endif()
 
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
-target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 freetype-gl libjson)
-
-set_target_properties(libugdk PROPERTIES 
-    LINK_FLAGS "${LDFLAGS}"
-    PROJECT_NAME UGDK
-    OUTPUT_NAME ugdk${UGDK_BIGVERSION}
-    OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-dbg
-)
+if(UGDK_3D_ENABLED)
+	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2 libjson ${BULLET_LIBRARIES} ${UGDK_OGRE_LIBRARIES} BtOgre)
+    target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PRIVATE ${UGDK_OGRE_INCLUDE_DIRS})
+    
+	set_target_properties(libugdk PROPERTIES 
+		LINK_FLAGS "${LDFLAGS}"
+		PROJECT_NAME UGDK
+		OUTPUT_NAME ugdk${UGDK_BIGVERSION}-3d
+		OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-3d-dbg
+	)
+else()
+	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 libjson freetype-gl)
+	set_target_properties(libugdk PROPERTIES 
+		LINK_FLAGS "${LDFLAGS}"
+		PROJECT_NAME UGDK
+		OUTPUT_NAME ugdk${UGDK_BIGVERSION}
+		OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-dbg
+	)
+endif()
 
 if(ANDROID)
     target_compile_definitions(libugdk PUBLIC 
@@ -248,9 +277,10 @@ if (UNIX AND PYTHONLIBS_FOUND)
     set(UGDK_INSTALL_LOCATION "${CMAKE_INSTALL_PREFIX}/${UGDK_INSTALL_LOCATION_RELATIVE}")
 endif (UNIX AND PYTHONLIBS_FOUND)
 
+message(STATUS "3D Enabled: ${UGDK_3D_ENABLED}")
 CONFIGURE_FILE(
     "cmake/config.h.in"
-    "src/ugdk/system/config.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/ugdk/system/config.h"
 ) 
 
 install(TARGETS libugdk

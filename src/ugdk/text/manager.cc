@@ -7,6 +7,7 @@
 #include <ugdk/text/label.h>
 #include <ugdk/text/textbox.h>
 #include <ugdk/text/font.h>
+#include <ugdk/text/language.h>
 #include <ugdk/util/utf8.h>
 
 #include <iostream>
@@ -27,7 +28,10 @@ using std::string;
 using std::vector;
 using std::map;
 
-Manager::Manager() : current_font_(nullptr) {}
+Manager::Manager(const std::string& default_language_code)
+: current_font_(nullptr)
+, default_language_(default_language_code)
+{}
 
 Manager::~Manager() {}
 
@@ -84,6 +88,36 @@ void Manager::AddFont(const std::string& name, const std::string& path, double s
                                "Loading new font tag: '", name, "'");
     fonts_[name].reset(new Font(path, size));
     current_font_ = fonts_[name].get();
+}
+
+bool Manager::RegisterLanguage(const std::string& code, const std::string& language_file) {
+    // validate the code here
+    if (false) {
+        debug::Log(debug::LogLevel::ERROR, "UGDK",
+                   "LanguageManager::RegisterLanguage - Unknown error");
+        return false;
+    }
+
+    registered_languages_[code] = language_file;
+    return true;
+}
+
+bool Manager::Setup(const std::string& active_language) {
+    if (registered_languages_.find(default_language_) == registered_languages_.end()) {
+        debug::Log(debug::LogLevel::ERROR, "UGDK",
+                   "LanguageManager::Setup - Default language '", default_language_, "' is not registered");
+        return false;
+    }
+
+    if (registered_languages_.find(active_language) == registered_languages_.end()) {
+        debug::Log(debug::LogLevel::ERROR, "UGDK",
+                   "LanguageManager::Setup - Active language '", active_language, "' is not registered");
+        return false;
+    }
+
+    // We'll simply ignore the default language for now... TODO!
+    Language lang;
+    return lang.Load(registered_languages_[active_language]);
 }
 
 }  // namespace text

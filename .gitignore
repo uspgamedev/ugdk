@@ -32,16 +32,25 @@ CPackSourceConfig.cmake
 _CPack_Packages/
 install_manifest.txt
 /modules.cc
-/*.a
+*.a
+*.lib
+*.log
 /build
 /build-mingw
 *.exe
 *.pdb
+*.exp
+cg.dll
 
 *.ilk
 *.cache
 
 /src/ugdk/system/config.h
 /externals/sdl2-build/
+/externals/Ogre/include/OgreBuildSettings.h
+/externals/Ogre/lib/
+/externals/Ogre/pkgconfig/
+/externals/Ogre/Dependencies/
+
 
 CTestTestfile.cmake

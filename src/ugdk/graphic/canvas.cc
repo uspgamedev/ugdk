@@ -155,7 +155,8 @@ void Canvas::SendEffect() {
     internal::AssertNoOpenGLError();
 }
 
-void Canvas::SendVertexData(const VertexData& data, VertexType type, size_t offset, int size) {
+void Canvas::SendVertexData(const VertexData& data, VertexType type, size_t offset, int size,
+                            int vertex_per_data) {
     opengl::VertexBuffer::Bind bind(*data.buffer().get());
 
     unsigned int location = manager()->LocationForVertexType(type);
@@ -166,7 +167,7 @@ void Canvas::SendVertexData(const VertexData& data, VertexType type, size_t offs
         size,                // size
         GL_FLOAT,            // data type
         GL_FALSE,            // normalized?
-        static_cast<int>(data.vertex_size()), // ammount of bytes to offset for each element. 0 means size*sizeof(type)
+        static_cast<int>(data.vertex_size())/vertex_per_data, // ammount of bytes to offset for each element. 0 means size*sizeof(type)
         data.buffer()->getPointer(offset) // array buffer offset
     );
     internal::AssertNoOpenGLError();

@@ -36,6 +36,9 @@ class Scene : public system::TaskPlayer {
 
     /// Method called when this Scene leaves the top of the Scene stack.
     virtual void DeFocus();
+    
+    /// Method called when this scene is pushed to the Engine's Scene stack.
+    virtual void OnPushed(int index) {}
 
     /// Finishes the scene.
     void Finish() { End(); finished_ = true; }

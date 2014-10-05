@@ -50,8 +50,11 @@ if(CMAKE_COMPILER_IS_GNUCC)
 endif()
 if(ANDROID)
     target_link_libraries(freetype-gl LINK_PUBLIC GLESv2)
-else()
+elseif(NOT UGDK_3D_ENABLED)
     target_link_libraries(freetype-gl LINK_PUBLIC glew)
+elseif(UGDK_3D_ENABLED)
+    #TODO: fix this... its very ugly... 
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../glew/include)
 endif()
 
 target_include_directories(freetype-gl PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

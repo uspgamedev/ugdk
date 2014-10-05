@@ -59,7 +59,8 @@ class Canvas {
     void SendUniform(const std::string& name, const TextureUnit& unit);
 
     /// The VertexType should later be disabled using Manager::DisableVertexType
-    void SendVertexData(const VertexData& data, VertexType type, size_t offset, int size = 2);
+    void SendVertexData(const VertexData& data, VertexType type, size_t offset, int size = 2,
+                        int vertex_per_data = 1);
 
     // Drawing
     void DrawArrays(DrawMode, int first_vertex, int vertex_count);

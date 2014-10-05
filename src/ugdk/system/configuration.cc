@@ -15,6 +15,8 @@ Configuration::Configuration()
     , input_enabled(true)
 
     , time_enabled(true)
+    
+    , ogre_enabled(false)
     {}
 
 } // namespace system
