@@ -21,6 +21,12 @@ IF(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
     set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
 ENDIF()
 
+if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
+    set(CMAKE_INCLUDE_SYSTEM)
+else()
+    set(CMAKE_INCLUDE_SYSTEM SYSTEM)
+endif()
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
 
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
@@ -173,12 +179,7 @@ else()
 	add_library(libugdk ${UGDK_SRC} ${UGDK_2D_SRC} ${GENERATED_SRC})
 endif()
 
-if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
-    target_include_directories(libugdk PUBLIC ${GLM_LOCATION})
-else()
-    target_include_directories(libugdk SYSTEM PUBLIC ${GLM_LOCATION})
-endif()
-
+target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
 target_include_directories(libugdk
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src" # TODO: should be /include
     PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/src" # TODO: should be /include
@@ -204,7 +205,7 @@ endif()
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
 if(UGDK_3D_ENABLED)
 	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2 libjson ${BULLET_LIBRARIES} ${UGDK_OGRE_LIBRARIES} BtOgre)
-    target_include_directories(libugdk PRIVATE ${UGDK_OGRE_INCLUDE_DIRS})
+    target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PRIVATE ${UGDK_OGRE_INCLUDE_DIRS})
     
 	set_target_properties(libugdk PROPERTIES 
 		LINK_FLAGS "${LDFLAGS}"
