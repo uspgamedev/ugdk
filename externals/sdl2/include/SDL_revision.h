@@ -1,2 +1,0 @@
-#define SDL_REVISION "hg-8038:e1f2a85d9dda"
-#define SDL_REVISION_NUMBER 8038

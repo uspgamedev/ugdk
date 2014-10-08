@@ -12,6 +12,19 @@ endmacro()
 
 ########################
 
+option(UGDK_FORCE_SUBMODULES     "Set to ON to force the submodules to the commited version." ON)
+
+if(${UGDK_FORCE_SUBMODULES})
+    macro(init_submodule SUBMODULE)
+        find_host_package(Git REQUIRED)
+        execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init ${SUBMODULE}
+                        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+    endmacro()
+else()
+    macro(init_submodule)
+    endmacro(init_submodule)
+endif()
+
 if(ANDROID)
     # Always compile all externals for Android.
     set(UGDK_INTERNAL_FREETYPE   ON CACHE BOOL "Set to ON to use an internal freetype instead of the system one." FORCE)
@@ -44,33 +57,8 @@ endif()
 ## SDL2
 ########################
 if(UGDK_INTERNAL_SDL2)
-    # Build from source!
-    if(ANDROID)
-        # For android, using SDL's CMakeLists is not necessary (and doesn't work without too much effort)
-        include(android-sdl2.cmake)
-
-    elseif()
-        if(WIN32)
-            find_package(OpenGL REQUIRED)
-            list(APPEND EXTRA_LIBS ${OPENGL_LIBRARIES})
-        endif()
-        # Set some options for the SDL's CMakeLists.
-        if(${BUILD_SHARED_LIBS})
-            set(SDL_SHARED ON  CACHE BOOL "Build a shared version of the library" FORCE)
-            set(SDL_STATIC OFF CACHE BOOL "Build a static version of the library" FORCE)
-        else()
-            set(SDL_SHARED OFF CACHE BOOL "Build a shared version of the library" FORCE)
-            set(SDL_STATIC ON  CACHE BOOL "Build a static version of the library" FORCE)
-        endif()
-        set(DIRECTX    OFF CACHE BOOL "Use DirectX for Windows audio/video" FORCE)
-        set(RENDER_D3D OFF CACHE BOOL "Enable the Direct3D render driver" FORCE)
-        if (MSVC)
-            set(LIBC   ON CACHE BOOL "Use the system C library" FORCE)
-        endif(MSVC)
-        add_subdirectory(sdl2 sdl2-build)
-
-        target_include_directories(SDL2 PUBLIC "${SDL2_SOURCE_DIR}/include" "${SDL2_BINARY_DIR}/include") # TODO: add 'SYSTEM' flag when we have cmake 2.8.12
-    endif()
+    init_submodule(sdl2)
+    add_subdirectory(sdl2) # Defines 'SDL2'
 
 else(UGDK_INTERNAL_SDL2)
     find_package(OpenGL REQUIRED)
@@ -86,6 +74,7 @@ endif(UGDK_INTERNAL_SDL2)
 ## SDL2_IMAGE
 ########################
 if(UGDK_INTERNAL_SDL2_IMAGE)
+    init_submodule(sdl2-image)
     add_subdirectory(sdl2-image) # Defines 'SDL2-image'
 
 else(UGDK_INTERNAL_SDL2_IMAGE)
@@ -99,6 +88,7 @@ endif(UGDK_INTERNAL_SDL2_IMAGE)
 ## SDL2_MIXER
 ########################
 if(UGDK_INTERNAL_SDL2_MIXER)
+    init_submodule(sdl2-mixer)
     add_subdirectory(sdl2-mixer) # Defines 'SDL2-mixer'
 
 else(UGDK_INTERNAL_SDL2_MIXER)

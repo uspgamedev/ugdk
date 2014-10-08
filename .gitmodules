@@ -1,0 +1,9 @@
+[submodule "externals/sdl2"]
+	path = externals/sdl2
+	url = https://github.com/uspgamedev/ugdk-sdl.git
+[submodule "externals/sdl2-image"]
+	path = externals/sdl2-image
+	url = https://github.com/uspgamedev/ugdk-sdlimage.git
+[submodule "externals/sdl2-mixer"]
+	path = externals/sdl2-mixer
+	url = https://github.com/uspgamedev/ugdk-sdlmixer.git
