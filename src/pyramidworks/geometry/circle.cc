@@ -1,7 +1,7 @@
 
-#include "circle.h"
-#include "rect.h"
-#include "convexpolygon.h"
+#include <pyramidworks/geometry/circle.h>
+#include <pyramidworks/geometry/rect.h>
+#include <pyramidworks/geometry/convexpolygon.h>
 #include <ugdk/structure/intervalkdtree.h>
 
 namespace pyramidworks {

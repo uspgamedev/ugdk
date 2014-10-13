@@ -18,7 +18,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 **/
 
-#include "vertexbuffer.h"
+#include <ugdk/graphic/opengl/vertexbuffer.h>
 
 #include <ugdk/system/LoveException.h>
 //#include <common/config.h>

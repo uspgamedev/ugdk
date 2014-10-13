@@ -181,8 +181,8 @@ endif()
 
 target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
 target_include_directories(libugdk
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src" # TODO: should be /include
-    PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/src" # TODO: should be /include
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include"
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 if (MINGW)
@@ -280,7 +280,7 @@ endif (UNIX AND PYTHONLIBS_FOUND)
 message(STATUS "3D Enabled: ${UGDK_3D_ENABLED}")
 CONFIGURE_FILE(
     "cmake/config.h.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/ugdk/system/config.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/include/ugdk/system/config.h"
 ) 
 
 install(TARGETS libugdk

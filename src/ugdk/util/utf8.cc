@@ -17,7 +17,7 @@
 
 #include <wchar.h>
 
-#include "utf8.h"
+#include <ugdk/util/utf8.h>
 
 #include <vector>
 
