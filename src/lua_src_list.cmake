@@ -12,10 +12,10 @@ include/ugdk/script/languages/lua/native/traceback.h
 include/ugdk/script/languages/lua/primitive.h
 include/ugdk/script/languages/lua/state.h
 include/ugdk/script/languages/lua/swigluarun.h
-src/ugdk/script/languages/lua/basegear.cc
-src/ugdk/script/languages/lua/bootstrapgear.cc
-src/ugdk/script/languages/lua/datagear.cc
-src/ugdk/script/languages/lua/luadata.cc
-src/ugdk/script/languages/lua/luamodules.cc
-src/ugdk/script/languages/lua/luawrapper.cc
+src/ugdk-script/languages/lua/basegear.cc
+src/ugdk-script/languages/lua/bootstrapgear.cc
+src/ugdk-script/languages/lua/datagear.cc
+src/ugdk-script/languages/lua/luadata.cc
+src/ugdk-script/languages/lua/luamodules.cc
+src/ugdk-script/languages/lua/luawrapper.cc
 )

@@ -2,33 +2,38 @@
 
 # CORE SOURCE
 echo "SET(UGDK_SRC " > src/src_list.cmake
-find {src,include}/ugdk src/pyramidworks \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) -not \( -path "*/script/languages/*" -o -path "*/3D/*" -o -path "*/2D/*" -o -path "*/graphic/*" -o -path "*/text/*" -o -path "*/ui/*" -o -path "*/internal/*" \) | grep -v config.h | sort >> src/src_list.cmake
+find include/ugdk include/pyramidworks \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) -not \( -path "*/script/languages/*" -o -path "*/3D/*" -o -path "*/2D/*" -o -path "*/graphic/*" -o -path "*/text/*" -o -path "*/ui/*" -o -path "*/internal/*" \) | grep -v config.h | sort >> src/src_list.cmake
+find src/ugdk-core src/ugdk-script -not -path "*/languages/*" | sort >> src/src_list.cmake
 echo ")" >> src/src_list.cmake
 echo "Arquivo src/src_list.txt criado com sucesso."
 
 # 2D SOURCE
 echo "SET(UGDK_2D_SRC " > src/2d_module_src_list.cmake
-find {src,include}/ugdk/{graphic,text,ui,internal} \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) | sort >> src/2d_module_src_list.cmake
-find {src,include}/ugdk \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) -path "*/2D/*" | sort >> src/2d_module_src_list.cmake
+find include/ugdk/{graphic,text,ui,internal} \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) | sort >> src/2d_module_src_list.cmake
+find include/ugdk \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) -path "*/2D/*" | sort >> src/2d_module_src_list.cmake
+find src/ugdk-2d | sort >> src/2d_module_src_list.cmake
 echo ")" >> src/2d_module_src_list.cmake
 echo "Arquivo src/2d_module_src_list.txt criado com sucesso."
 
 # 3D SOURCE
 echo "SET(UGDK_3D_SRC " > src/3d_module_src_list.cmake
-find {src,include}/ugdk \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) -path "*/3D/*" | sort >> src/3d_module_src_list.cmake
-find {src,include}/bulletworks \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) | sort >> src/3d_module_src_list.cmake
+find include/ugdk \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) -path "*/3D/*" | sort >> src/3d_module_src_list.cmake
+find include/bulletworks \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) | sort >> src/3d_module_src_list.cmake
+find src/ugdk-3d \( -name "*.cc" -o -name "*.h" -o -name "*.th" -o -name "*.tcc" \) | sort >> src/3d_module_src_list.cmake
 echo ")" >> src/3d_module_src_list.cmake
 echo "Arquivo src/3d_module_src_list.txt criado com sucesso."
 
 # LUA SOURCE
 echo "SET(UGDK_LUA_SRC " > src/lua_src_list.cmake
-find {src,include}/ugdk/script/languages/lua -name "*.cc" -o -name "*.h" | sort >> src/lua_src_list.cmake
+find include/ugdk/script/languages/lua -name "*.cc" -o -name "*.h" | sort >> src/lua_src_list.cmake
+find src/ugdk-script/languages/lua -name "*.cc" -o -name "*.h" | sort >> src/lua_src_list.cmake
 echo ")" >> ./src/lua_src_list.cmake
 echo "Arquivo src/lua_src_list.txt criado com sucesso."
 
 # PYTHON SOURCE
 echo "SET(UGDK_PYTHON_SRC " > src/py_src_list.cmake
-find {src,include}/ugdk/script/languages/python -name "*.cc" -o -name "*.h" | sort >> src/py_src_list.cmake
+find include/ugdk/script/languages/python -name "*.cc" -o -name "*.h" | sort >> src/py_src_list.cmake
+find src/ugdk-script/languages/python -name "*.cc" -o -name "*.h" | sort >> src/py_src_list.cmake
 echo ")" >> src/py_src_list.cmake
 echo "Arquivo src/py_src_list.txt criado com sucesso."
 
