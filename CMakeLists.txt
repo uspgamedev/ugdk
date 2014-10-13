@@ -181,9 +181,21 @@ endif()
 
 target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
 target_include_directories(libugdk
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-core"
     PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include"
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src" # for SWIG
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-core"
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-script")
+    
+if (UGDK_3D_ENABLED)
+    target_include_directories(libugdk
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-3d"
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-3d")
+else()
+    target_include_directories(libugdk
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-2d"
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-2d")
+endif()
 
 if (MINGW)
     # TODO: do we really need this?
