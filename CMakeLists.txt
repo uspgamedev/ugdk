@@ -288,7 +288,7 @@ install(TARGETS libugdk
 #    CONFIGURATIONS Release
 )
 
-install(DIRECTORY src/ugdk src/pyramidworks # TODO: change to only 'include/'
+install(DIRECTORY include/
         DESTINATION include/ugdk${UGDK_BIGVERSION} 
         FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
 
