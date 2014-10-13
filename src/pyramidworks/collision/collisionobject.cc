@@ -1,4 +1,4 @@
-#include "collisionobject.h"
+#include "pyramidworks/collision/collisionobject.h"
 
 #include "pyramidworks/collision/collisionmanager.h"
 #include "pyramidworks/collision/collisionclass.h"

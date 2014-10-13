@@ -1,8 +1,10 @@
-#include "rect.h"
-#include "circle.h"
-#include "convexpolygon.h"
-#include <cmath>
+#include <pyramidworks/geometry/rect.h>
+
+#include <pyramidworks/geometry/circle.h>
+#include <pyramidworks/geometry/convexpolygon.h>
+
 #include <ugdk/structure/intervalkdtree.h>
+#include <cmath>
 
 #define SQRT_TWO 1.4142136
 

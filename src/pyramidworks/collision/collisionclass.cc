@@ -1,4 +1,4 @@
-#include "collisionclass.h"
+#include <pyramidworks/collision/collisionclass.h>
 
 #include <list>
 #include <ugdk/structure/intervalkdtree.h>

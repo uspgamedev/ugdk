@@ -1,4 +1,4 @@
-#include "node.h"
+#include <ugdk/ui/node.h>
 
 #include <ugdk/internal/opengl.h>
 #include <ugdk/graphic/manager.h>

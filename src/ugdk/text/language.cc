@@ -1,4 +1,4 @@
-#include "language.h"
+#include <ugdk/text/language.h>
 
 #include <ugdk/resource/module.h>
 #include <ugdk/text/module.h>

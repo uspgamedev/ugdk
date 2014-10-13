@@ -18,8 +18,10 @@
 * 3. This notice may not be removed or altered from any source distribution.
 **/
 
-#include "LoveException.h"
+#include <ugdk/system/LoveException.h>
+
 #include <iostream>
+
 using namespace std;
 
 namespace love
