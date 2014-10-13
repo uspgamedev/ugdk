@@ -22,7 +22,7 @@ find_host_package (SWIG)
 
 if (SWIG_FOUND)
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/src/module")
-    set(CMAKE_SWIG_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}/src")
+    set(CMAKE_SWIG_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}/src" "-I${CMAKE_CURRENT_SOURCE_DIR}/include" "-I${CMAKE_CURRENT_BINARY_DIR}/include")
 
     include (cmake/UseSWIG.cmake)
 
