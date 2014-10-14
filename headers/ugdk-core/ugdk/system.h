@@ -10,6 +10,7 @@ struct Configuration;
 class EventHandler;
 class TaskPlayer;
 class Task;
+class SDLEventHandler;
 
 }  // namespace system
 }  // namespace ugdk

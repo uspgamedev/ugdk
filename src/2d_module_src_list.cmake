@@ -19,6 +19,8 @@ headers/ugdk-2d/ugdk/graphic/primitivesetup.h
 headers/ugdk-2d/ugdk/graphic/rendertarget.h
 headers/ugdk-2d/ugdk/graphic/rendertexture.h
 headers/ugdk-2d/ugdk/graphic/sprite.h
+headers/ugdk-2d/ugdk/graphic/spriteanimationframe.h
+headers/ugdk-2d/ugdk/graphic/spritetypes.h
 headers/ugdk-2d/ugdk/graphic/textureatlas.h
 headers/ugdk-2d/ugdk/graphic/textureunit.h
 headers/ugdk-2d/ugdk/graphic/vertexdata.h
@@ -26,7 +28,6 @@ headers/ugdk-2d/ugdk/graphic/visualeffect.h
 headers/ugdk-2d/ugdk/internal/gltexture.h
 headers/ugdk-2d/ugdk/internal/opengl.h
 headers/ugdk-2d/ugdk/internal/pixelsurface.h
-headers/ugdk-2d/ugdk/internal/sdleventhandler.h
 headers/ugdk-2d/ugdk/text/font.h
 headers/ugdk-2d/ugdk/text/functions.h
 headers/ugdk-2d/ugdk/text/label.h
@@ -61,6 +62,7 @@ src/ugdk-2d/graphic/primitivesetup.cc
 src/ugdk-2d/graphic/rendertarget.cc
 src/ugdk-2d/graphic/rendertexture.cc
 src/ugdk-2d/graphic/sprite.cc
+src/ugdk-2d/graphic/spritetypes.cc
 src/ugdk-2d/graphic/textureatlas.cc
 src/ugdk-2d/graphic/textureunit.cc
 src/ugdk-2d/graphic/vertexdata.cc

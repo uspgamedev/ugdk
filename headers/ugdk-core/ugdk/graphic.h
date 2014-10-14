@@ -1,6 +1,10 @@
 #ifndef UGDK_GRAPHIC_H_
 #define UGDK_GRAPHIC_H_
 
+#include <ugdk/action.h>
+#include <ugdk/structure.h>
+#include <vector>
+
 namespace ugdk {
 namespace graphic {
 
@@ -25,6 +29,10 @@ class Light;
 class Manager;
 
 enum class VertexType;
+
+class SpriteAnimationFrame;
+typedef ::ugdk::action::AnimationPlayer<SpriteAnimationFrame> SpriteAnimationPlayer;
+typedef ::ugdk::structure::IndexableTable<std::vector<SpriteAnimationFrame*>*> SpriteAnimationTable;
 
 namespace opengl {
 class Shader;

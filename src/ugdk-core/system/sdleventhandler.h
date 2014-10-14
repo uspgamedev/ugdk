@@ -1,11 +1,11 @@
-#ifndef UGDK_INTERNAL_SDLEVENTHANDLER_H_
-#define UGDK_INTERNAL_SDLEVENTHANDLER_H_
+#ifndef UGDK_SYSTEM_SDLEVENTHANDLER_H_
+#define UGDK_SYSTEM_SDLEVENTHANDLER_H_
 
 #include "SDL_events.h"
 #include <unordered_set>
 
 namespace ugdk {
-namespace internal {
+namespace system {
 
 class SDLEventHandler {
   public:
@@ -13,7 +13,7 @@ class SDLEventHandler {
     virtual void Handle(const ::SDL_Event&) const = 0;
 };
 
-}  // namespace internal
+}  // namespace system
 }  // namespace ugdk
 
-#endif // UGDK_INTERNAL_SDLEVENTHANDLER_H_
+#endif // UGDK_SYSTEM_SDLEVENTHANDLER_H_

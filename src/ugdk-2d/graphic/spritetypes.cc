@@ -1,15 +1,15 @@
-#include <ugdk/action/spritetypes.h>
+#include <ugdk/graphic/spritetypes.h>
 
 #include <ugdk/system/LoveException.h>
 #include <ugdk/system/engine.h>
 #include <libjson.h>
 
 namespace ugdk {
-namespace action {
+namespace graphic {
     
 namespace {
-    action::SpriteAnimationFrame* build_frame(const JSONNode& jsondata) {
-        action::SpriteAnimationFrame* frame = new action::SpriteAnimationFrame(jsondata["name"].as_string());
+    SpriteAnimationFrame* build_frame(const JSONNode& jsondata) {
+        SpriteAnimationFrame* frame = new SpriteAnimationFrame(jsondata["name"].as_string());
 
         if (jsondata.find("color") != jsondata.end()) {
             auto&& colorjson = jsondata["color"];
@@ -59,13 +59,13 @@ namespace {
     }
 }
 
-action::SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepath) {
+SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepath) {
     auto&& contents = system::GetFileContents(filepath);
     if (!libjson::is_valid(contents))
         throw love::Exception("Invalid json: %s\n", filepath.c_str());
 
     auto json_node = libjson::parse(contents);
-    action::SpriteAnimationTable* table = new action::SpriteAnimationTable(json_node.size());
+    SpriteAnimationTable* table = new SpriteAnimationTable(json_node.size());
     for (const auto& animation_json : json_node) {
 
         auto element = new std::vector<SpriteAnimationFrame*>;

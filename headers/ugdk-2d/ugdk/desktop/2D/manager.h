@@ -5,7 +5,7 @@
 #include <ugdk/desktop/windowsettings.h>
 #include <ugdk/desktop/manager.h>
 #include <ugdk/desktop.h>
-#include <ugdk/internal.h>
+#include <ugdk/system.h>
 #include <ugdk/structure/types.h>
 
 #include <map>
@@ -31,7 +31,7 @@ class Manager final : public desktop::Manager {
     std::shared_ptr<desktop::Window> DoCreateWindow(unsigned long hwnd) override;
 
   private:
-    std::unique_ptr<internal::SDLEventHandler> sdlevent_handler_;
+    std::unique_ptr<system::SDLEventHandler> sdlevent_handler_;
     
     friend class DesktopSDLEventHandler;
 };

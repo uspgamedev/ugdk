@@ -1,7 +1,7 @@
 #ifndef UGDK_INPUT_TEXTINPUT_H_
 #define UGDK_INPUT_TEXTINPUT_H_
 
-#include <ugdk/internal.h>
+#include <ugdk/system.h>
 #include <ugdk/math.h>
 #include <string>
 #include <memory>
@@ -22,9 +22,9 @@ class TextInput {
     TextInput();
     ~TextInput();
 
-    const internal::SDLEventHandler* event_handler();
+    const system::SDLEventHandler* event_handler();
 
-    std::unique_ptr<internal::SDLEventHandler> event_handler_;
+    std::unique_ptr<system::SDLEventHandler> event_handler_;
     char composition_[32];
     int cursor_;
     int selection_size_;

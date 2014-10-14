@@ -5,7 +5,6 @@
 
 #include <ugdk/system/config.h>
 
-#include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/internal.h>
 #include <ugdk/text.h>
@@ -22,8 +21,8 @@ void Release();
 /// Getter for the manager of the module.
 Manager* manager();
 
-action::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
 #ifndef UGDK_3D_ENABLED
+graphic::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
 internal::GLTexture*             GetTextureFromTag(const std::string& tag);
 internal::GLTexture*             GetTextureFromFile(const std::string& file);
 graphic::TextureAtlas*           GetTextureAtlasFromTag(const std::string& tag);

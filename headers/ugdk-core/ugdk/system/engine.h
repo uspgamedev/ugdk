@@ -85,8 +85,8 @@ void Suspend();
  * @{
  */
 
-void RegisterSDLHandler(const internal::SDLEventHandler*);
-void DeregisterSDLHandler(const internal::SDLEventHandler*);
+void RegisterSDLHandler(const SDLEventHandler*);
+void DeregisterSDLHandler(const SDLEventHandler*);
 
 /** @}
  */

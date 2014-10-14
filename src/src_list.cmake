@@ -16,8 +16,6 @@ headers/ugdk-core/ugdk/action/mediamanager.h
 headers/ugdk-core/ugdk/action/mediaplayer.h
 headers/ugdk-core/ugdk/action/observer.h
 headers/ugdk-core/ugdk/action/scene.h
-headers/ugdk-core/ugdk/action/spriteanimationframe.h
-headers/ugdk-core/ugdk/action/spritetypes.h
 headers/ugdk-core/ugdk/audio.h
 headers/ugdk-core/ugdk/audio/manager.h
 headers/ugdk-core/ugdk/audio/module.h
@@ -88,7 +86,6 @@ headers/ugdk-core/ugdk/util/uncopyable.h
 headers/ugdk-core/ugdk/util/utf8.h
 src/ugdk-core/action/mediaplayer.cc
 src/ugdk-core/action/scene.cc
-src/ugdk-core/action/spritetypes.cc
 src/ugdk-core/audio/manager.cc
 src/ugdk-core/audio/module.cc
 src/ugdk-core/audio/music.cc
@@ -118,6 +115,7 @@ src/ugdk-core/resource/module.cc
 src/ugdk-core/system/configuration.cc
 src/ugdk-core/system/engine.cc
 src/ugdk-core/system/LoveException.cc
+src/ugdk-core/system/sdleventhandler.h
 src/ugdk-core/system/taskplayer.cc
 src/ugdk-core/time/manager.cc
 src/ugdk-core/time/module.cc

@@ -23,10 +23,6 @@ enable_disown(ugdk::internal::GLTexture* val)
 %template(ResourceContainer_GLTexture) ugdk::resource::ResourceContainer<ugdk::internal::GLTexture*>;
 disable_disown(ugdk::internal::GLTexture* val)
 
-//enable_disown(ugdk::action::AnimationSet* val)
-//%template(ResourceContainer_AnimationSet) ugdk::resource::ResourceContainer<ugdk::action::AnimationSet*>;
-//disable_disown(ugdk::action::AnimationSet* val)
-
 enable_disown(ugdk::graphic::TextureAtlas* val)
 %template(ResourceContainer_TextureAtlas) ugdk::resource::ResourceContainer<ugdk::graphic::TextureAtlas*>;
 disable_disown(ugdk::graphic::TextureAtlas* val)

@@ -1,5 +1,5 @@
-#ifndef UGDK_ACTION_SPRITEANIMATIONFRAME_H_
-#define UGDK_ACTION_SPRITEANIMATIONFRAME_H_
+#ifndef UGDK_GRAPHIC_SPRITEANIMATIONFRAME_H_
+#define UGDK_GRAPHIC_SPRITEANIMATIONFRAME_H_
 
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/visualeffect.h>
@@ -9,7 +9,7 @@
 #define DEFAULT_PERIOD 0.1
 
 namespace ugdk {
-namespace action {
+namespace graphic {
 
 /*
  * Represents the visual behavior information of a sprite in a single game frame.
@@ -54,10 +54,9 @@ class SpriteAnimationFrame {
     double period_;
 };
 
-} /* namespace action */
+} // namespace graphic
+} // namespace ugdk
 
-} /* namespace ugdk */
-
-#endif /* UGDK_ACTION_ANIMATIONFRAME_H_ */
+#endif // UGDK_GRAPHIC_SPRITEANIMATIONFRAME_H_
 
 

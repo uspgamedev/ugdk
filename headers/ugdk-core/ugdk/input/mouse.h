@@ -1,7 +1,7 @@
 #ifndef UGDK_INPUT_MOUSE_H_
 #define UGDK_INPUT_MOUSE_H_
 
-#include <ugdk/internal.h>
+#include <ugdk/system.h>
 #include <ugdk/input/mousebutton.h>
 #include <ugdk/math/integer2D.h>
 #include <set>
@@ -26,9 +26,9 @@ class Mouse {
     ~Mouse();
     
     void Update();
-    const internal::SDLEventHandler* event_handler();
+    const system::SDLEventHandler* event_handler();
 
-    std::unique_ptr<internal::SDLEventHandler> event_handler_;
+    std::unique_ptr<system::SDLEventHandler> event_handler_;
     math::Integer2D position_;
     std::set<MouseButton> state_, state_previous_;
 

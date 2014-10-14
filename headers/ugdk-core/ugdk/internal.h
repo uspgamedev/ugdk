@@ -5,7 +5,6 @@ namespace ugdk {
 namespace internal {
 
 struct PixelSurface;
-class SDLEventHandler;
 class GLTexture;
 
 }  // namespace internal

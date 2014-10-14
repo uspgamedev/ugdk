@@ -1,7 +1,7 @@
 #ifndef UGDK_INPUT_KEYBOARD_H_
 #define UGDK_INPUT_KEYBOARD_H_
 
-#include <ugdk/internal.h>
+#include <ugdk/system.h>
 #include <ugdk/input/scancode.h>
 #include <ugdk/input/keycode.h>
 #include <set>
@@ -27,9 +27,9 @@ class Keyboard {
     ~Keyboard();
 
     void Update();
-    const internal::SDLEventHandler* event_handler();
+    const system::SDLEventHandler* event_handler();
 
-    std::unique_ptr<internal::SDLEventHandler> event_handler_;
+    std::unique_ptr<system::SDLEventHandler> event_handler_;
     std::set<Scancode> keystate_, keystate_previous_;
 
     friend class Manager;
