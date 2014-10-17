@@ -6,6 +6,8 @@ if (PYTHONLIBS_FOUND)
     ugdk_add_scriptlang (python)
     
     set(UGDK_PYTHON_ENABLED True)
+    
+    include(${PROJECT_SOURCE_DIR}/modules/ugdk-script/python_src_list.cmake)
 
     LIST(APPEND UGDK_SRC ${UGDK_PYTHON_SRC}) 
     if(PYTHON_DEBUG_LIBRARY)

@@ -57,22 +57,22 @@ CONFIGURE_FILE(
     "doxystuff/Doxyfile"
 )
 
-include (src/src_list.cmake)
-include (src/2d_module_src_list.cmake)
-include (src/3d_module_src_list.cmake)
-include (src/lua_src_list.cmake)
-include (src/py_src_list.cmake)
+include (modules/ugdk-core/src_list.cmake)
 include (src/swig_module_list.cmake)
-include (src/swig_2d_module_list.cmake)
-include (src/swig_3d_module_list.cmake)
 
-if (NOT UGDK_SRC)
-    message (FATAL_ERROR "Error: UGDK_SRC not defined! Please do so in the file src/src_list.cmake!")
-endif (NOT UGDK_SRC)
+set(UGDK_SRC "${UGDK-CORE_SRC};${UGDK-CORE_HEADERS}")
 
 if (UGDK_3D_ENABLED)
+    include (modules/ugdk-3d/src_list.cmake)
+    include (src/swig_3d_module_list.cmake)
+    
+    list(APPEND UGDK_SRC "${UGDK-3D_SRC};${UGDK-3D_HEADERS}")
     list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_3D_SRC})
 else ()
+    include (modules/ugdk-2d/src_list.cmake)
+    include (src/swig_2d_module_list.cmake)
+    
+    list(APPEND UGDK_SRC "${UGDK-2D_SRC};${UGDK-2D_HEADERS}")
     list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_2D_SRC})
 endif ()
 
@@ -93,12 +93,16 @@ set(UGDK_LIBRARIES)
 set(UGDK_LIBRARIES_DEBUG)
 set(UGDK_LANGUAGES_LIST)
 if (UGDK_CREATE_BINDINGS)
+    include (modules/ugdk-script/src_list.cmake)
+    list(APPEND UGDK_SRC "${UGDK-SCRIPT_SRC};${UGDK-SCRIPT_HEADERS}")
+    
     if (UGDK_LUA_BINDINGS)
         list(APPEND UGDK_LANGUAGES_LIST Lua)
     endif()
     if (UGDK_PYTHON_BINDINGS)
         list(APPEND UGDK_LANGUAGES_LIST Python)
     endif()
+    
     include(cmake/CreateBindings.cmake)
 endif (UGDK_CREATE_BINDINGS)
 #########################################################
@@ -166,29 +170,30 @@ if (MSVC)
 endif ()
 
 # =============================
+add_library(libugdk ${UGDK_SRC} ${GENERATED_SRC})
+
 if (UGDK_3D_ENABLED)
-	add_library(libugdk ${UGDK_SRC} ${UGDK_3D_SRC} ${GENERATED_SRC})
     set(UGDK_LIBRARY_NAME ugdk${UGDK_BIGVERSION}-3d)
     
     target_include_directories(libugdk
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-3d"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-3d")
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-3d/include"
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-3d/src")
 else()
-	add_library(libugdk ${UGDK_SRC} ${UGDK_2D_SRC} ${GENERATED_SRC})
     set(UGDK_LIBRARY_NAME ugdk${UGDK_BIGVERSION}-2d)
     
     target_include_directories(libugdk
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-2d"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-2d")
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-2d/include"
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-2d/src")
 endif()
 
 # UGDK headers
 target_include_directories(libugdk
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-core"
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/include"
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/include"
     PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include"
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src" # for SWIG
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-core"
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-script")
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/src"
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/src")
     
     
 # Add GLM dependency

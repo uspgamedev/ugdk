@@ -6,7 +6,7 @@ set (GENERATED_SRC "")
 
 macro (ugdk_add_scriptlang lang)
 
-  swig_add_module (ugdk_${lang} ${lang} ${UGDK_MODULE_SRC} ${FRAMEWORK_SRC})
+  swig_add_module (ugdk_${lang} ${lang} ${UGDK_MODULE_SRC})
   set (TEMP_ONLY_CXX)
   foreach (it ${swig_generated_sources})
     if (${it} MATCHES ".cc$")
@@ -24,17 +24,18 @@ if (SWIG_FOUND)
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/src/module")
     set(CMAKE_SWIG_FLAGS
         "-I${CMAKE_CURRENT_SOURCE_DIR}/src"
-        "-I${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-core"
-        "-I${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-core"
+        "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/src"
+        "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/include"
+        "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/include"
         "-I${CMAKE_CURRENT_BINARY_DIR}/include")
     if (UGDK_3D_ENABLED)
         set(CMAKE_SWIG_FLAGS "${CMAKE_SWIG_FLAGS}"
-            "-I${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-3d"
-            "-I${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-3d")
+            "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-3d/include"
+            "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-3d/src")
     else()
         set(CMAKE_SWIG_FLAGS "${CMAKE_SWIG_FLAGS}"
-            "-I${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-2d"
-            "-I${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-2d")
+            "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-2d/include"
+            "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-2d/src")
     endif()
 
     include (cmake/UseSWIG.cmake)
