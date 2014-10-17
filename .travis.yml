@@ -27,7 +27,6 @@ script:
   - cmake -DUGDK_3D_ENABLED=$UGDK3D .
   - make libugdk
   - make ugdk_test
-  - make ugdk_script_test
   - ./test/ugdk_test
 
 notifications:
