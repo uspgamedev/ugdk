@@ -253,19 +253,20 @@ install(TARGETS libugdk
 #    CONFIGURATIONS Release
 )
 
-install(DIRECTORY headers/ugdk-core/
+install(DIRECTORY modules/ugdk-core/include/
         DESTINATION include/${UGDK_LIBRARY_NAME} 
         FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
         
-if(UGDK_3D_ENABLED)
-    install(DIRECTORY headers/ugdk-3d/
+install(DIRECTORY modules/ugdk-${UGDK_GRAPHIC_MODULE}/include/
         DESTINATION include/${UGDK_LIBRARY_NAME} 
         FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
-else()
-    install(DIRECTORY headers/ugdk-2d/
-        DESTINATION include/${UGDK_LIBRARY_NAME} 
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
-endif()        
+        
+if (UGDK_CREATE_BINDINGS)
+    install(DIRECTORY modules/ugdk-script/include/
+            DESTINATION include/${UGDK_LIBRARY_NAME} 
+            FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
+endif()   
+        
 
 if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src/generated/ 
