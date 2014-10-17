@@ -1,6 +1,10 @@
 cmake_minimum_required (VERSION 2.8.11)
 # 2.8.11 for target_include_directories
 
+include(cmake/Compatibility.cmake)
+
+########################################
+
 set( UGDK_ANDROID_DIR "${CMAKE_SOURCE_DIR}/android" )
 set( LIBRARY_OUTPUT_PATH_ROOT "${UGDK_ANDROID_DIR}" CACHE PATH "root for library output, set this to change where android libs are installed to" FORCE)
 
@@ -17,28 +21,21 @@ set (UGDK_INSTALL_LOCATION_RELATIVE share/ugdk)
 
 message ("=== UGDK version ${UGDK_VERSION} ===")
 
-IF(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL 8))
-    set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
-ENDIF()
-
-if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
-    set(CMAKE_INCLUDE_SYSTEM)
-else()
-    set(CMAKE_INCLUDE_SYSTEM SYSTEM)
-endif()
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
 
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
+option(UGDK_3D_ENABLED           "Set to ON to enable the 3D module - Ogre rendering + Bullet physics." OFF)
 option(UGDK_BUILD_TESTS          "Set to ON to enable building tests." ON)
 option(UGDK_CREATE_BINDINGS      "Set to ON to generate bindings for supported script languages." ON)
 option(UGDK_LUA_BINDINGS         "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS      "Set to ON to enable Python as one of the languages to create bindings." ON)
 
-option(UGDK_3D_ENABLED           "Set to ON to enable the 3D module - Ogre rendering + Bullet physics." OFF)
+message(STATUS "3D Enabled: ${UGDK_3D_ENABLED}")
+
+########################################
 
 if(NOT ${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
     # Don't polute the git repository with the generated files for out-of-source builds
@@ -92,9 +89,9 @@ include(cmake/Package.cmake)
 
 #########################################################
 # Bindings configuration
-set(UGDK_LIBRARIES       "")
-set(UGDK_LIBRARIES_DEBUG "")
-set(UGDK_LANGUAGES_LIST  "")
+set(UGDK_LIBRARIES)
+set(UGDK_LIBRARIES_DEBUG)
+set(UGDK_LANGUAGES_LIST)
 if (UGDK_CREATE_BINDINGS)
     if (UGDK_LUA_BINDINGS)
         list(APPEND UGDK_LANGUAGES_LIST Lua)
@@ -124,9 +121,8 @@ if(NOT ANDROID)
     endforeach( OUTPUTCONFIG CMAKE_CONFIGURATION_TYPES )
 endif(NOT ANDROID)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 if (UNIX OR MINGW)
-    add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++0x)
+    add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++11)
     #add_definitions(-msse2)
     add_definitions(-Wall
         # TODO: would like these but they produce overwhelming amounts of warnings
@@ -173,12 +169,20 @@ endif ()
 if (UGDK_3D_ENABLED)
 	add_library(libugdk ${UGDK_SRC} ${UGDK_3D_SRC} ${GENERATED_SRC})
     set(UGDK_LIBRARY_NAME ugdk${UGDK_BIGVERSION}-3d)
+    
+    target_include_directories(libugdk
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-3d"
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-3d")
 else()
 	add_library(libugdk ${UGDK_SRC} ${UGDK_2D_SRC} ${GENERATED_SRC})
     set(UGDK_LIBRARY_NAME ugdk${UGDK_BIGVERSION}-2d)
+    
+    target_include_directories(libugdk
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-2d"
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-2d")
 endif()
 
-target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
+# UGDK headers
 target_include_directories(libugdk
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-core"
     PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include"
@@ -186,21 +190,10 @@ target_include_directories(libugdk
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-core"
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-script")
     
-if (UGDK_3D_ENABLED)
-    target_include_directories(libugdk
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-3d"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-3d")
-else()
-    target_include_directories(libugdk
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-2d"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-2d")
-endif()
-
-if (MINGW)
-    # TODO: do we really need this?
-    target_link_libraries(libugdk LINK_PUBLIC mingw32)
-endif (MINGW)
-
+    
+# Add GLM dependency
+target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
+    
 if (WIN32)
     # utf8<->ucs4 conversion uses a networking function
     target_link_libraries(libugdk LINK_PUBLIC Ws2_32)
@@ -209,16 +202,15 @@ endif (WIN32)
 # Libraries for the scripts.
 target_link_libraries(libugdk LINK_PUBLIC ${UGDK_LIBRARIES})
 
-if(NOT ANDROID AND NOT UGDK_3D_ENABLED) # Glew is not necessary for android or 3D builds.
-  target_link_libraries(libugdk LINK_PUBLIC glew)
-endif()
-
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
 if(UGDK_3D_ENABLED)
 	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2 libjson ${BULLET_LIBRARIES} ${UGDK_OGRE_LIBRARIES} BtOgre)
     target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PRIVATE ${UGDK_OGRE_INCLUDE_DIRS})
 else()
 	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 libjson freetype-gl)
+    if(NOT ANDROID)
+        target_link_libraries(libugdk LINK_PUBLIC glew)
+    endif()
 endif()
 
 set_target_properties(libugdk PROPERTIES 
@@ -240,7 +232,6 @@ if (UNIX AND PYTHONLIBS_FOUND)
     set(UGDK_INSTALL_LOCATION "${CMAKE_INSTALL_PREFIX}/${UGDK_INSTALL_LOCATION_RELATIVE}")
 endif (UNIX AND PYTHONLIBS_FOUND)
 
-message(STATUS "3D Enabled: ${UGDK_3D_ENABLED}")
 CONFIGURE_FILE(
     "cmake/config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/include/ugdk/system/config.h"
