@@ -1,9 +1,0 @@
-
-Here go all the swig-generated wrap files.
-They will be named sort of like this:
-
-    <module><LANGUAGE>_wrap.cc
-
-Where:
-    <module>    is the wrapped module's name.
-    <LANGUAGE>  is the language it's beem wrapped to.

@@ -188,11 +188,6 @@ bool Initialize(const Configuration& configuration) {
     if(!resource::Initialize(new resource::Manager))
         return ErrorLog("system::Initialize failed - resource::Initialize returned false.");
 
-#ifdef UGDK_SWIG_ENABLED
-    if (!SCRIPT_MANAGER()->Initialize())
-        return ErrorLog("system::Initialize failed - SCRIPT_MANAGER()->Initialize returned false.");
-#endif
-
     previous_focused_scene_ = nullptr;
     current_state_ = UGDKState::SUSPENDED;
 
@@ -289,11 +284,6 @@ void Release() {
     text::Release();
 #endif
     desktop::Release();
-
-#ifdef UGDK_SWIG_ENABLED
-    SCRIPT_MANAGER()->Finalize();
-    delete SCRIPT_MANAGER();
-#endif
 
     assert(sdlevent_mapper_.empty());
 

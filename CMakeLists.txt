@@ -29,9 +29,6 @@ option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
 option(UGDK_3D_ENABLED           "Set to ON to enable the 3D module - Ogre rendering + Bullet physics." OFF)
 option(UGDK_BUILD_TESTS          "Set to ON to enable building tests." ON)
-option(UGDK_CREATE_BINDINGS      "Set to ON to generate bindings for supported script languages." ON)
-option(UGDK_LUA_BINDINGS         "Set to ON to enable Lua as one of the languages to create bindings." ON)
-option(UGDK_PYTHON_BINDINGS      "Set to ON to enable Python as one of the languages to create bindings." ON)
 
 message(STATUS "3D Enabled: ${UGDK_3D_ENABLED}")
 
@@ -94,34 +91,6 @@ set(GLM_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/externals/glm")
 include(cmake/Package.cmake)
 
 #########################################################
-# Bindings configuration
-set(UGDK_LIBRARIES)
-set(UGDK_LIBRARIES_DEBUG)
-set(UGDK_LANGUAGES_LIST)
-
-if (UGDK_CREATE_BINDINGS)
-    load_source_for_module(ugdk-script)
-    
-    set(UGDK_MODULE_SRC)
-    include(src/swig_module_list.cmake)
-    include(src/swig_${UGDK_GRAPHIC_MODULE}_module_list.cmake)
-    list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_${UGDK_GRAPHIC_MODULE}_SRC})
-    
-    if (UGDK_LUA_BINDINGS)
-        list(APPEND UGDK_LANGUAGES_LIST Lua)
-        include(cmake/languages/Lua.cmake)
-    endif()
-    if (UGDK_PYTHON_BINDINGS)
-        include(cmake/languages/Python.cmake)
-        list(APPEND UGDK_LANGUAGES_LIST Python)
-    endif()
-    
-    include(cmake/CreateBindings.cmake)
-    create_modules(UGDK_LANGUAGES_LIST UGDK_MODULE_SRC "UGDK" GENERATED_SRC)
-    set(UGDK_SWIG_ENABLED True)
-    
-endif (UGDK_CREATE_BINDINGS)
-#########################################################
 
 if(NOT ANDROID)
     set (LIB_DIR lib)
@@ -161,12 +130,6 @@ if (UNIX OR MINGW)
         # And we ignore these warnings...
         -Wno-switch-default # SDL includes causes these. Awaiting CMake 2.8.12 to ignore these properly. TODO
     )
-        
-    set_source_files_properties(${GENERATED_SRC}
-        PROPERTIES 
-            COMPILE_FLAGS
-                "-fpermissive -Wno-unused-value")
-            
 endif()
 
 # Disable some warnings for Clang.
@@ -186,7 +149,7 @@ if (MSVC)
 endif ()
 
 # =============================
-add_library(libugdk ${UGDK_SRC} ${UGDK_HEADERS} ${GENERATED_SRC})
+add_library(libugdk ${UGDK_SRC} ${UGDK_HEADERS})
 
 # Generated config
 target_include_directories(libugdk PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include")
@@ -198,15 +161,7 @@ target_include_directories(libugdk
 target_include_directories(libugdk
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/include"
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/src")
-
-if (UGDK_CREATE_BINDINGS)
-    target_include_directories(libugdk 
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/include"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/src"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src" # for SWIG
-        )
-endif()   
-    
+   
 # Add GLM dependency
 target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
     
@@ -214,9 +169,6 @@ if (WIN32)
     # utf8<->ucs4 conversion uses a networking function
     target_link_libraries(libugdk LINK_PUBLIC Ws2_32)
 endif (WIN32)
-
-# Libraries for the scripts.
-target_link_libraries(libugdk LINK_PUBLIC ${UGDK_LIBRARIES})
 
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
 if(UGDK_3D_ENABLED)
@@ -243,11 +195,6 @@ endif(ANDROID)
 
 include(cmake/ExecutableFunctions.cmake)
 
-
-if (UNIX AND PYTHONLIBS_FOUND)
-    set(UGDK_INSTALL_LOCATION "${CMAKE_INSTALL_PREFIX}/${UGDK_INSTALL_LOCATION_RELATIVE}")
-endif (UNIX AND PYTHONLIBS_FOUND)
-
 set (UGDK_OGRE_STATIC ${OGRE_STATIC})
 
 configure_file (
@@ -268,19 +215,6 @@ install(DIRECTORY modules/ugdk-${UGDK_GRAPHIC_MODULE}/include/
         DESTINATION include/${UGDK_LIBRARY_NAME} 
         FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
         
-if (UGDK_CREATE_BINDINGS)
-    install(DIRECTORY modules/ugdk-script/include/
-            DESTINATION include/${UGDK_LIBRARY_NAME} 
-            FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
-endif()   
-        
-
-if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src/generated/ 
-            DESTINATION ${UGDK_INSTALL_LOCATION_RELATIVE}/${UGDK_BIGVERSION}/python
-            FILES_MATCHING PATTERN "*.py")
-endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
-
 # Export variables for any project using UGDK as subdirectory
 set(UGDK_HEADERS ${UGDK_HEADERS} PARENT_SCOPE)
 

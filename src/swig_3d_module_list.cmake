@@ -1,2 +1,0 @@
-SET(UGDK_MODULE_3d_SRC 
-)

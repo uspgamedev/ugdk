@@ -151,8 +151,7 @@ STRIP_FROM_PATH        =
 
 STRIP_FROM_INC_PATH    = @CMAKE_CURRENT_SOURCE_DIR@/modules/ugdk-core/include \
                          @CMAKE_CURRENT_SOURCE_DIR@/modules/ugdk-2d/include \
-                         @CMAKE_CURRENT_SOURCE_DIR@/modules/ugdk-3d/include \
-                         @CMAKE_CURRENT_SOURCE_DIR@/modules/ugdk-script/include
+                         @CMAKE_CURRENT_SOURCE_DIR@/modules/ugdk-3d/include
 
 # If the SHORT_NAMES tag is set to YES, doxygen will generate much shorter 
 # (but less readable) file names. This can be useful if your file system 
@@ -680,8 +679,7 @@ WARN_LOGFILE           =
 
 INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/modules/ugdk-core/include \
                          @CMAKE_CURRENT_SOURCE_DIR@/modules/ugdk-2d/include \
-                         @CMAKE_CURRENT_SOURCE_DIR@/modules/ugdk-3d/include \
-                         @CMAKE_CURRENT_SOURCE_DIR@/modules/ugdk-script/include
+                         @CMAKE_CURRENT_SOURCE_DIR@/modules/ugdk-3d/include
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 
