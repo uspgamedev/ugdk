@@ -22,7 +22,6 @@
 %import(module="ugdk_desktop") <ugdk/desktop.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_input") <ugdk/input.h>
-%import(module="ugdk_internal") <ugdk/internal.h>
 %import(module="ugdk_math") <ugdk/math.h>
 %import(module="ugdk_resource") <ugdk/resource.h>
 %import(module="ugdk_time") <ugdk/time.h>

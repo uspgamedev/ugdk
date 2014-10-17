@@ -1,6 +1,5 @@
 #include <ugdk/desktop/3D/window.h>
 
-#include <ugdk/graphic/canvas.h>
 #include <ugdk/debug/profiler.h>
 
 #include "OgreRenderWindow.h"

@@ -25,6 +25,8 @@
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/graphic/primitive.h>
+#include <ugdk/graphic/spriteanimationframe.h>
+#include <ugdk/graphic/spritetypes.h>
 #include <ugdk/internal/gltexture.h>
 
 %}
@@ -46,6 +48,7 @@
 
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_internal") <ugdk/internal.h>
 
 %include <ugdk/graphic/drawmode.h>
@@ -56,12 +59,18 @@
 %include <ugdk/graphic/textureunit.h>
 %include <ugdk/graphic/rendertarget.h>
 %include <ugdk/graphic/rendertexture.h>
+%include <ugdk/graphic/spriteanimationframe.h>
+%include <ugdk/graphic/spritetypes.h>
+%include <ugdk/structure/indexabletable.h>
 
 %include <ugdk/graphic/vertexdata.h>
 %include <ugdk/graphic/primitive.h>
 
 %include <ugdk/graphic/manager.h>
 %include <ugdk/graphic/module.h>
+
+%template(SpriteAnimationPlayer) ugdk::action::AnimationPlayer<ugdk::graphic::SpriteAnimationFrame>;
+%template(SpriteAnimationTable) ugdk::structure::IndexableTable<std::vector<ugdk::graphic::SpriteAnimationFrame*>*>;
 
 namespace ugdk {
 namespace graphic {
@@ -77,6 +86,7 @@ namespace graphic {
     export_class(Manager)
     export_class(Primitive)
     export_class(VertexData)
+    export_class(SpriteAnimationFrame)
 }
 }
 

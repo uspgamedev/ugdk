@@ -2,13 +2,14 @@
 
 #include <ugdk/action/scene.h>
 #include <ugdk/input/events.h>
-#include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/system/engine.h>
+
+#include <system/sdleventhandler.h>
 
 namespace ugdk {
 namespace input {
 
-class KeyboardInputSDLEventHandler : public internal::SDLEventHandler {
+class KeyboardInputSDLEventHandler : public system::SDLEventHandler {
   public:
     KeyboardInputSDLEventHandler(Keyboard& keyboard) : keyboard_(keyboard) {}
 
@@ -88,7 +89,7 @@ void Keyboard::Update() {
     keystate_previous_ = keystate_;
 }
 
-const internal::SDLEventHandler* Keyboard::event_handler() {
+const system::SDLEventHandler* Keyboard::event_handler() {
     return event_handler_.get();
 }
 

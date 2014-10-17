@@ -100,7 +100,7 @@ void SetToAbsoluteRectangleWithAtlasPiece(VertexData& data,
 
 void SetUsingSpriteFrameInformation(VertexData& data, 
                                     const math::Vector2D& position, 
-                                    const action::SpriteAnimationFrame& animation_frame,
+                                    const SpriteAnimationFrame& animation_frame,
                                     const TextureAtlas::BoundPiece& piece) {
     math::Vector2D mirror_scale(
         (animation_frame.mirror() & ugdk::MIRROR_HFLIP) ? -1.0 : 1.0,
@@ -141,11 +141,11 @@ namespace PrimitiveSetup {
         RenderPrimitiveAsRectangle(primitive, canvas);
     }
 
-    std::shared_ptr<action::SpriteAnimationPlayer> Sprite::CreateSpriteAnimationPlayer(
-            Primitive& primitive, const action::SpriteAnimationTable* table) {
+    std::shared_ptr<SpriteAnimationPlayer> Sprite::CreateSpriteAnimationPlayer(
+            Primitive& primitive, const SpriteAnimationTable* table) {
         Primitive* p = &primitive;
-        std::shared_ptr<action::SpriteAnimationPlayer> player(new action::SpriteAnimationPlayer(table));
-        player->set_frame_change_callback([p](const action::SpriteAnimationFrame& frame) {
+        std::shared_ptr<SpriteAnimationPlayer> player(new SpriteAnimationPlayer(table));
+        player->set_frame_change_callback([p](const SpriteAnimationFrame& frame) {
             if (PrimitiveControllerSprite* sprite = dynamic_cast<PrimitiveControllerSprite*>(p->controller().get())) {
                 sprite->ChangeToAnimationFrame(frame);
             }

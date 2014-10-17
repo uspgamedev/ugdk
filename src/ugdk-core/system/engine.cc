@@ -3,25 +3,26 @@
 #include <ugdk/system/config.h>
 
 #include <ugdk/input/module.h>
-#include <ugdk/graphic/module.h>
 #include <ugdk/audio/module.h>
 #include <ugdk/resource/module.h>
-#include <ugdk/text/module.h>
 #include <ugdk/time/module.h>
 #include <ugdk/desktop/module.h>
 #ifdef UGDK_3D_ENABLED
 # include <ugdk/desktop/3D/manager.h>
 #else
 # include <ugdk/desktop/2D/manager.h>
+# include <ugdk/graphic/module.h>
+# include <ugdk/graphic/canvas.h>
+# include <ugdk/text/module.h>
 #endif
 
 #include <ugdk/action/scene.h>
-#include <ugdk/graphic/canvas.h>
-#include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/script/scriptmanager.h>
 #include <ugdk/debug/profiler.h>
 #include <ugdk/debug/log.h>
 #include <ugdk/system/LoveException.h>
+
+#include <system/sdleventhandler.h>
 
 #include <string>
 #include <algorithm>
@@ -53,7 +54,7 @@ action::Scene*            previous_focused_scene_;
 std::list<std::shared_ptr<const debug::SectionData>> profile_data_list_;
 Configuration configuration_;
 
-std::unordered_map<Uint32, const internal::SDLEventHandler*> sdlevent_mapper_;
+std::unordered_map<Uint32, const SDLEventHandler*> sdlevent_mapper_;
 
 bool ErrorLog(const std::string& err_msg) {
     debug::Log(debug::CRITICAL, err_msg);
@@ -102,7 +103,7 @@ void HandleSDLEvents() {
     }
 }
 
-class SDLQuitEventHandler : public internal::SDLEventHandler {
+class SDLQuitEventHandler : public SDLEventHandler {
   public:
     std::unordered_set<Uint32> TypesHandled() const override {
         return { SDL_QUIT };
@@ -322,14 +323,14 @@ void Suspend() {
     current_state_ = UGDKState::SUSPENDED;
 }
 
-void RegisterSDLHandler(const internal::SDLEventHandler* handler) {
+void RegisterSDLHandler(const SDLEventHandler* handler) {
     for (const auto& type : handler->TypesHandled()) {
         assert(sdlevent_mapper_.find(type) == sdlevent_mapper_.end());
         sdlevent_mapper_[type] = handler;
     }
 }
 
-void DeregisterSDLHandler(const internal::SDLEventHandler* handler) {
+void DeregisterSDLHandler(const SDLEventHandler* handler) {
     for (const auto& type : handler->TypesHandled()) {
         assert(sdlevent_mapper_[type] == handler);
         sdlevent_mapper_.erase(type);

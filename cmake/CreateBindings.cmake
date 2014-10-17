@@ -22,7 +22,20 @@ find_host_package (SWIG)
 
 if (SWIG_FOUND)
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/src/module")
-    set(CMAKE_SWIG_FLAGS "-I${CMAKE_CURRENT_SOURCE_DIR}/src" "-I${CMAKE_CURRENT_SOURCE_DIR}/include" "-I${CMAKE_CURRENT_BINARY_DIR}/include")
+    set(CMAKE_SWIG_FLAGS
+        "-I${CMAKE_CURRENT_SOURCE_DIR}/src"
+        "-I${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-core"
+        "-I${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-core"
+        "-I${CMAKE_CURRENT_BINARY_DIR}/include")
+    if (UGDK_3D_ENABLED)
+        set(CMAKE_SWIG_FLAGS "${CMAKE_SWIG_FLAGS}"
+            "-I${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-3d"
+            "-I${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-3d")
+    else()
+        set(CMAKE_SWIG_FLAGS "${CMAKE_SWIG_FLAGS}"
+            "-I${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-2d"
+            "-I${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-2d")
+    endif()
 
     include (cmake/UseSWIG.cmake)
 

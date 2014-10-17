@@ -1,6 +1,6 @@
 #include <ugdk/input/manager.h>
 
-#include <ugdk/internal/sdleventhandler.h>
+#include <system/sdleventhandler.h>
 #include <ugdk/system/engine.h>
 
 #include "SDL.h"

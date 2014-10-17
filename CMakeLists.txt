@@ -175,15 +175,29 @@ endif ()
 # =============================
 if (UGDK_3D_ENABLED)
 	add_library(libugdk ${UGDK_SRC} ${UGDK_3D_SRC} ${GENERATED_SRC})
+    set(UGDK_LIBRARY_NAME ugdk${UGDK_BIGVERSION}-3d)
 else()
 	add_library(libugdk ${UGDK_SRC} ${UGDK_2D_SRC} ${GENERATED_SRC})
+    set(UGDK_LIBRARY_NAME ugdk${UGDK_BIGVERSION}-2d)
 endif()
 
 target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
 target_include_directories(libugdk
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-core"
     PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include"
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src" # for SWIG
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-core"
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-script")
+    
+if (UGDK_3D_ENABLED)
+    target_include_directories(libugdk
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-3d"
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-3d")
+else()
+    target_include_directories(libugdk
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/headers/ugdk-2d"
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src/ugdk-2d")
+endif()
 
 if (MINGW)
     # TODO: do we really need this?
@@ -206,22 +220,15 @@ endif()
 if(UGDK_3D_ENABLED)
 	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2 libjson ${BULLET_LIBRARIES} ${UGDK_OGRE_LIBRARIES} BtOgre)
     target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PRIVATE ${UGDK_OGRE_INCLUDE_DIRS})
-    
-	set_target_properties(libugdk PROPERTIES 
-		LINK_FLAGS "${LDFLAGS}"
-		PROJECT_NAME UGDK
-		OUTPUT_NAME ugdk${UGDK_BIGVERSION}-3d
-		OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-3d-dbg
-	)
 else()
 	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 libjson freetype-gl)
-	set_target_properties(libugdk PROPERTIES 
-		LINK_FLAGS "${LDFLAGS}"
-		PROJECT_NAME UGDK
-		OUTPUT_NAME ugdk${UGDK_BIGVERSION}
-		OUTPUT_NAME_DEBUG ugdk${UGDK_BIGVERSION}-dbg
-	)
 endif()
+set_target_properties(libugdk PROPERTIES 
+    LINK_FLAGS "${LDFLAGS}"
+    PROJECT_NAME UGDK
+    OUTPUT_NAME ${UGDK_LIBRARY_NAME}
+    OUTPUT_NAME_DEBUG ${UGDK_LIBRARY_NAME}-dbg
+)
 
 if(ANDROID)
     target_compile_definitions(libugdk PUBLIC 
@@ -288,9 +295,19 @@ install(TARGETS libugdk
 #    CONFIGURATIONS Release
 )
 
-install(DIRECTORY include/
-        DESTINATION include/ugdk${UGDK_BIGVERSION} 
+install(DIRECTORY headers/ugdk-core/
+        DESTINATION include/${UGDK_LIBRARY_NAME} 
         FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
+        
+if(UGDK_3D_ENABLED)
+    install(DIRECTORY headers/ugdk-3d/
+        DESTINATION include/${UGDK_LIBRARY_NAME} 
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
+else()
+    install(DIRECTORY headers/ugdk-2d/
+        DESTINATION include/${UGDK_LIBRARY_NAME} 
+        FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
+endif()        
 
 if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src/generated/ 

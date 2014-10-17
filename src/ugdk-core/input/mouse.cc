@@ -2,13 +2,14 @@
 
 #include <ugdk/action/scene.h>
 #include <ugdk/input/events.h>
-#include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/system/engine.h>
+
+#include <system/sdleventhandler.h>
 
 namespace ugdk {
 namespace input {
 
-class MouseInputSDLEventHandler : public internal::SDLEventHandler {
+class MouseInputSDLEventHandler : public system::SDLEventHandler {
   public:
     MouseInputSDLEventHandler(Mouse& mouse) : mouse_(mouse) {}
 
@@ -94,7 +95,7 @@ void Mouse::Update() {
     state_previous_ = state_;
 }
 
-const internal::SDLEventHandler* Mouse::event_handler() {
+const system::SDLEventHandler* Mouse::event_handler() {
     return event_handler_.get();
 }
 

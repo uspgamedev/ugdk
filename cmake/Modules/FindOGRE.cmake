@@ -456,13 +456,14 @@ macro(ogre_find_plugin PLUGIN HEADER)
   set(OGRE_${PLUGIN}_LIBRARY_NAMES "${PLUGIN}${OGRE_LIB_SUFFIX}")
   get_debug_names(OGRE_${PLUGIN}_LIBRARY_NAMES)
   set(OGRE_${PLUGIN}_LIBRARY_FWK ${OGRE_LIBRARY_FWK})
-  message(STATUS "Searching for ${OGRE_${PLUGIN}_LIBRARY_NAMES}")
   find_library(OGRE_${PLUGIN}_LIBRARY_REL NAMES ${OGRE_${PLUGIN}_LIBRARY_NAMES}
     HINTS "${OGRE_BUILD}/lib" ${OGRE_LIBRARY_DIRS} PATH_SUFFIXES "" OGRE opt Release Release/opt RelWithDebInfo RelWithDebInfo/opt MinSizeRel MinSizeRel/opt)
   find_library(OGRE_${PLUGIN}_LIBRARY_DBG NAMES ${OGRE_${PLUGIN}_LIBRARY_NAMES_DBG}
     HINTS "${OGRE_BUILD}/lib" ${OGRE_LIBRARY_DIRS} PATH_SUFFIXES "" OGRE opt Debug Debug/opt)
-  message(STATUS "Searching for ${OGRE_${PLUGIN}_LIBRARY_NAMES}.. ${OGRE_${PLUGIN}_LIBRARY_REL_FOUND}")
   make_library_set(OGRE_${PLUGIN}_LIBRARY)
+  if(OGRE_${PLUGIN}_LIBRARY)
+    message(STATUS "Found ${OGRE_${PLUGIN}_LIBRARY_NAMES}: ${OGRE_${PLUGIN}_LIBRARY}")
+  endif()
 
   if (OGRE_${PLUGIN}_LIBRARY OR OGRE_${PLUGIN}_INCLUDE_DIR)
     set(OGRE_${PLUGIN}_FOUND TRUE)

@@ -2,15 +2,16 @@
 
 #include <ugdk/action/scene.h>
 #include <ugdk/input/events.h>
-#include <ugdk/internal/sdleventhandler.h>
 #include <ugdk/system/engine.h>
+
+#include <system/sdleventhandler.h>
 
 #include <cstring>
 
 namespace ugdk {
 namespace input {
 
-class TextInputSDLEventHandler : public internal::SDLEventHandler {
+class TextInputSDLEventHandler : public system::SDLEventHandler {
   public:
       TextInputSDLEventHandler(TextInput& text_input) : text_input_(text_input) {}
 
@@ -50,7 +51,7 @@ TextInput::TextInput() : event_handler_(new TextInputSDLEventHandler(*this)) {}
 
 TextInput::~TextInput() {}
 
-const internal::SDLEventHandler* TextInput::event_handler() {
+const system::SDLEventHandler* TextInput::event_handler() {
     return event_handler_.get();
 }
 

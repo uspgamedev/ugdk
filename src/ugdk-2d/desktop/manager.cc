@@ -9,8 +9,8 @@
 #include <ugdk/debug/log.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/system/engine.h>
-#include <ugdk/internal/sdleventhandler.h>
 
+#include <system/sdleventhandler.h>
 #include <string>
 
 namespace ugdk {
@@ -23,7 +23,7 @@ Manager::Manager() {}
 
 Manager::~Manager() {}
 
-class DesktopSDLEventHandler : public internal::SDLEventHandler {
+class DesktopSDLEventHandler : public system::SDLEventHandler {
 public:
     DesktopSDLEventHandler(Manager& manager) : manager_(manager) {}
 
