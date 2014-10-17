@@ -1,4 +1,4 @@
-SET(UGDK-CORE_SRC
+SET(GENERATED_SRC
 modules/ugdk-core/src/action/mediaplayer.cc
 modules/ugdk-core/src/action/scene.cc
 modules/ugdk-core/src/audio/manager.cc
@@ -30,6 +30,7 @@ modules/ugdk-core/src/resource/module.cc
 modules/ugdk-core/src/system/configuration.cc
 modules/ugdk-core/src/system/engine.cc
 modules/ugdk-core/src/system/LoveException.cc
+modules/ugdk-core/src/system/sdleventhandler.h
 modules/ugdk-core/src/system/taskplayer.cc
 modules/ugdk-core/src/time/manager.cc
 modules/ugdk-core/src/time/module.cc
@@ -37,7 +38,7 @@ modules/ugdk-core/src/time/timeaccumulator.cc
 modules/ugdk-core/src/util/idgenerator.cc
 modules/ugdk-core/src/util/utf8.cc
 )
-SET(UGDK-CORE_HEADERS
+SET(GENERATED_HEADERS
 modules/ugdk-core/include/pyramidworks/collision.h
 modules/ugdk-core/include/pyramidworks/collision/collisionclass.h
 modules/ugdk-core/include/pyramidworks/collision/collisiondata.h

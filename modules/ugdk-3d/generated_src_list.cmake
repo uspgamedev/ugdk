@@ -1,4 +1,4 @@
-SET(UGDK-3D_SRC
+SET(GENERATED_SRC
 modules/ugdk-3d/src/action/camera.cc
 modules/ugdk-3d/src/action/ogreentity.cc
 modules/ugdk-3d/src/action/ogrescene.cc
@@ -8,7 +8,7 @@ modules/ugdk-3d/src/bulletworks/physicscene.cc
 modules/ugdk-3d/src/desktop/manager.cc
 modules/ugdk-3d/src/desktop/window.cc
 )
-SET(UGDK-3D_HEADERS
+SET(GENERATED_HEADERS
 modules/ugdk-3d/include/bulletworks/manager.h
 modules/ugdk-3d/include/bulletworks/object.h
 modules/ugdk-3d/include/bulletworks/physicscene.h

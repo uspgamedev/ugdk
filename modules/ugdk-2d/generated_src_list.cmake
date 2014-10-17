@@ -1,4 +1,4 @@
-SET(UGDK-2D_SRC
+SET(GENERATED_SRC
 modules/ugdk-2d/src/desktop/manager.cc
 modules/ugdk-2d/src/desktop/window.cc
 modules/ugdk-2d/src/graphic/canvas.cc
@@ -38,7 +38,7 @@ modules/ugdk-2d/src/ui/menu.cc
 modules/ugdk-2d/src/ui/node.cc
 modules/ugdk-2d/src/ui/uielement.cc
 )
-SET(UGDK-2D_HEADERS
+SET(GENERATED_HEADERS
 modules/ugdk-2d/include/ugdk/desktop/2D/manager.h
 modules/ugdk-2d/include/ugdk/desktop/2D/window.h
 modules/ugdk-2d/include/ugdk/graphic/canvas.h

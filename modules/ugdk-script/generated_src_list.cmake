@@ -1,9 +1,9 @@
-SET(UGDK-SCRIPT_SRC
+SET(GENERATED_SRC
 modules/ugdk-script/src/initscripts.cc
 modules/ugdk-script/src/scriptmanager.cc
 modules/ugdk-script/src/virtualobj.cc
 )
-SET(UGDK-SCRIPT_HEADERS
+SET(GENERATED_HEADERS
 modules/ugdk-script/include/ugdk/script/baseproxy.h
 modules/ugdk-script/include/ugdk/script/defs.h
 modules/ugdk-script/include/ugdk/script/langwrapper.h

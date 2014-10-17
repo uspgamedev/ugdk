@@ -35,6 +35,13 @@ option(UGDK_PYTHON_BINDINGS      "Set to ON to enable Python as one of the langu
 
 message(STATUS "3D Enabled: ${UGDK_3D_ENABLED}")
 
+if (UGDK_3D_ENABLED)
+    set(UGDK_GRAPHIC_MODULE 3d)
+else()
+    set(UGDK_GRAPHIC_MODULE 2d)
+endif()
+set(UGDK_LIBRARY_NAME ugdk${UGDK_BIGVERSION}-${UGDK_GRAPHIC_MODULE})
+
 ########################################
 
 if(NOT ${CMAKE_CURRENT_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_BINARY_DIR})
@@ -57,24 +64,23 @@ CONFIGURE_FILE(
     "doxystuff/Doxyfile"
 )
 
-include (modules/ugdk-core/src_list.cmake)
-include (src/swig_module_list.cmake)
+#################
 
-set(UGDK_SRC "${UGDK-CORE_SRC};${UGDK-CORE_HEADERS}")
+macro(load_source_for_module NAME)
+    include(modules/${NAME}/generated_src_list.cmake)
 
-if (UGDK_3D_ENABLED)
-    include (modules/ugdk-3d/src_list.cmake)
-    include (src/swig_3d_module_list.cmake)
-    
-    list(APPEND UGDK_SRC "${UGDK-3D_SRC};${UGDK-3D_HEADERS}")
-    list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_3D_SRC})
-else ()
-    include (modules/ugdk-2d/src_list.cmake)
-    include (src/swig_2d_module_list.cmake)
-    
-    list(APPEND UGDK_SRC "${UGDK-2D_SRC};${UGDK-2D_HEADERS}")
-    list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_2D_SRC})
-endif ()
+    list(APPEND UGDK_SRC ${GENERATED_SRC})
+    list(APPEND UGDK_HEADERS ${GENERATED_HEADERS})
+
+    unset(GENERATED_SRC)
+    unset(GENERATED_HEADERS)
+endmacro(load_source_for_module)
+
+set(UGDK_SRC)
+set(UGDK_HEADERS)
+
+load_source_for_module(ugdk-core)
+load_source_for_module(ugdk-${UGDK_GRAPHIC_MODULE})
 
 # Create the targets for all the dependencies.
 add_subdirectory(externals)
@@ -92,9 +98,14 @@ include(cmake/Package.cmake)
 set(UGDK_LIBRARIES)
 set(UGDK_LIBRARIES_DEBUG)
 set(UGDK_LANGUAGES_LIST)
+
 if (UGDK_CREATE_BINDINGS)
-    include (modules/ugdk-script/src_list.cmake)
-    list(APPEND UGDK_SRC "${UGDK-SCRIPT_SRC};${UGDK-SCRIPT_HEADERS}")
+    load_source_for_module(ugdk-script)
+    
+    set(UGDK_MODULE_SRC)
+    include(src/swig_module_list.cmake)
+    include(src/swig_${UGDK_GRAPHIC_MODULE}_module_list.cmake)
+    list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_${UGDK_GRAPHIC_MODULE}_SRC})
     
     if (UGDK_LUA_BINDINGS)
         list(APPEND UGDK_LANGUAGES_LIST Lua)
@@ -170,31 +181,26 @@ if (MSVC)
 endif ()
 
 # =============================
-add_library(libugdk ${UGDK_SRC} ${GENERATED_SRC})
+add_library(libugdk ${UGDK_SRC} ${UGDK_HEADERS} ${GENERATED_SRC})
 
-if (UGDK_3D_ENABLED)
-    set(UGDK_LIBRARY_NAME ugdk${UGDK_BIGVERSION}-3d)
-    
-    target_include_directories(libugdk
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-3d/include"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-3d/src")
-else()
-    set(UGDK_LIBRARY_NAME ugdk${UGDK_BIGVERSION}-2d)
-    
-    target_include_directories(libugdk
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-2d/include"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-2d/src")
-endif()
+# Generated config
+target_include_directories(libugdk PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include")
 
-# UGDK headers
-target_include_directories(libugdk
+target_include_directories(libugdk 
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/include"
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/include"
-    PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include"
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src" # for SWIG
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/src"
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/src")
-    
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/src")
+
+target_include_directories(libugdk
+    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/include"
+    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/src")
+
+if (UGDK_CREATE_BINDINGS)
+    target_include_directories(libugdk 
+        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/include"
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/src"
+        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src" # for SWIG
+        )
+endif()   
     
 # Add GLM dependency
 target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
