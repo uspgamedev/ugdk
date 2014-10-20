@@ -16,8 +16,10 @@
 # include <ugdk/text/module.h>
 #endif
 
+#ifdef UGDK_SWIG_ENABLED
+# include <ugdk/script/scriptmanager.h>
+#endif
 #include <ugdk/action/scene.h>
-#include <ugdk/script/scriptmanager.h>
 #include <ugdk/debug/profiler.h>
 #include <ugdk/debug/log.h>
 #include <ugdk/system/LoveException.h>
@@ -186,8 +188,10 @@ bool Initialize(const Configuration& configuration) {
     if(!resource::Initialize(new resource::Manager))
         return ErrorLog("system::Initialize failed - resource::Initialize returned false.");
 
+#ifdef UGDK_SWIG_ENABLED
     if (!SCRIPT_MANAGER()->Initialize())
         return ErrorLog("system::Initialize failed - SCRIPT_MANAGER()->Initialize returned false.");
+#endif
 
     previous_focused_scene_ = nullptr;
     current_state_ = UGDKState::SUSPENDED;
@@ -286,8 +290,10 @@ void Release() {
 #endif
     desktop::Release();
 
+#ifdef UGDK_SWIG_ENABLED
     SCRIPT_MANAGER()->Finalize();
     delete SCRIPT_MANAGER();
+#endif
 
     assert(sdlevent_mapper_.empty());
 

@@ -20,6 +20,8 @@
 #cmakedefine UGDK_3D_ENABLED
 #define UGDK_ENABLED(X) UGDK_##X##_ENABLED
 
+#cmakedefine UGDK_OGRE_STATIC
+
 #ifdef ANDROID
 #include <cstdio>
 #include <jni.h>

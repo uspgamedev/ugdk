@@ -243,7 +243,9 @@ if (UNIX AND PYTHONLIBS_FOUND)
     set(UGDK_INSTALL_LOCATION "${CMAKE_INSTALL_PREFIX}/${UGDK_INSTALL_LOCATION_RELATIVE}")
 endif (UNIX AND PYTHONLIBS_FOUND)
 
-CONFIGURE_FILE(
+set (UGDK_OGRE_STATIC ${OGRE_STATIC})
+
+configure_file (
     "cmake/config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/include/ugdk/system/config.h"
 ) 

@@ -7,7 +7,7 @@
 #include <ugdk/debug/log.h>
 #include <ugdk/system/engine.h>
 
-#ifdef OGRE_STATIC_LIB
+#ifdef UGDK_OGRE_STATIC
 // FIXME: HELP, WE'RE HARD CODING THIS
 #define OGRE_STATIC_GL
 #endif
