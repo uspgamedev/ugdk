@@ -76,7 +76,7 @@ bool Manager::Initialize() {
     // settings if you were sure there are valid ones saved in ogre.cfg
     if(!root_->showConfigDialog()) {
         return false;
-    }        
+    }
     //root_->restoreConfig();
     
     root_->initialise(false);

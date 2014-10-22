@@ -20,7 +20,7 @@ class Window final : public desktop::Window {
     Window(Ogre::RenderWindow* ogre_window);
 
   public:
-    ~Window();
+    ~Window() {}
 
     /// Presents the current canvas in the screen.
     void Present() override;
