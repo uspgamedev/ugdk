@@ -17,18 +17,20 @@ namespace ugdk {
 namespace desktop {
 namespace mode3d {
 
+class Window;
+
 class Manager final : public desktop::Manager  {
 public:
-	Manager();
-	~Manager();
-	
-	bool Initialize() override;
+    Manager();
+    ~Manager();
+    
+    bool Initialize() override;
     void Release() override;
     
     void PresentAll() override;
     
     Ogre::Root* root() { return root_; }
-    Ogre::RenderWindow* window() { return window_; }
+    Ogre::RenderWindow& window();
 
 protected:
     std::shared_ptr<desktop::Window> DoCreateWindow(const WindowSettings& settings) override; /**/
@@ -37,10 +39,10 @@ protected:
 private:
     Ogre::Root* root_;
     Ogre::StaticPluginLoader* static_loader_;
-    Ogre::RenderWindow* window_;
+    std::shared_ptr<Window> window_;
 };
 
-} // namespace threed
+} // namespace mode3d
 } // namespace desktop
 } // namespace ugdk
 #endif

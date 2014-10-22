@@ -20,7 +20,7 @@ class Window final : public desktop::Window {
     Window(Ogre::RenderWindow* ogre_window);
 
   public:
-    ~Window();
+    ~Window() {}
 
     /// Presents the current canvas in the screen.
     void Present() override;
@@ -29,6 +29,9 @@ class Window final : public desktop::Window {
     /** Warning: some fullscreen/resolution combinations may be unsupported by the display, resulting
         in unoperable windows. */
     void ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync) override;
+
+    /// Returns the Ogre window
+    Ogre::RenderWindow& ogre_window() { return *ogre_window_; }
 
     uint32 id() const override;
     const char* title() const override;

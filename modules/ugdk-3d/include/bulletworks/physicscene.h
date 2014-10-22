@@ -15,7 +15,7 @@ class Manager;
 
    Represents a funcional 3D game scene, with 3D graphics and physics simulation support.
 */
-class PhysicScene : public ugdk::action::threed::OgreScene {
+class PhysicScene : public ugdk::action::mode3d::OgreScene {
   public:
     PhysicScene(const btVector3& grav);
     virtual ~PhysicScene();

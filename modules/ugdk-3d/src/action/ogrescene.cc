@@ -16,7 +16,7 @@
 
 namespace ugdk {
 namespace action {
-namespace threed {
+namespace mode3d {
 
 namespace {
 ugdk::desktop::mode3d::Manager* desktop_manager() {
@@ -36,7 +36,7 @@ OgreScene::OgreScene() {
 OgreScene::~OgreScene() {
     auto mgr = desktop_manager();
     if (z_order_ > 0)
-        mgr->window()->removeViewport(z_order_);
+        mgr->window().removeViewport(z_order_);
     delete camera_;
     mgr->root()->destroySceneManager(scene_mgr_);
 }
@@ -44,7 +44,7 @@ OgreScene::~OgreScene() {
 void OgreScene::OnPushed(int index) {
     z_order_ = index;
 	//TODO: we could let user set with x/y/w/h of this viewport...
-    viewport_ = desktop_manager()->window()->addViewport(camera_->camera(), z_order_, 0, 0, 1, 1);
+    viewport_ = desktop_manager()->window().addViewport(camera_->camera(), z_order_, 0, 0, 1, 1);
     viewport_->setBackgroundColour(Ogre::ColourValue(0,0,0));
     viewport_->setOverlaysEnabled(true);
     camera_->camera()->setAspectRatio(Ogre::Real(viewport_->getActualWidth()) / Ogre::Real(viewport_->getActualHeight()));
@@ -104,7 +104,7 @@ void OgreScene::HideFrameStats() {
 void OgreScene::UpdateFrameStats() {
     if (!IsFrameStatsVisible()) return;
     
-    auto stats = desktop_manager()->window()->getStatistics();
+    auto stats = desktop_manager()->window().getStatistics();
     std::string over_name = identifier() + "_FrameStats";
     Ogre::OverlayContainer* panel = fps_stats_->getChild(over_name + "/Panel");
     Ogre::TextAreaOverlayElement* avgFPS = static_cast<Ogre::TextAreaOverlayElement*>(panel->getChild(over_name + "/AvgFPS"));
@@ -119,6 +119,6 @@ void OgreScene::UpdateFrameStats() {
     
 }
 
-} // namespace threed
+} // namespace mode3d
 } // namespace action
 } // namespace ugdk

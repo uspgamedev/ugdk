@@ -11,12 +11,6 @@ namespace mode3d {
 Window::Window(Ogre::RenderWindow* ogre_window)
     : ogre_window_(ogre_window)
 {}
-    
-Window::~Window() {
-    //Do not believe this is needed, since Root destroys everything 
-    ogre_window_->destroy();
-    ogre_window_ = nullptr;
-}
 
 void Window::Present() {
     ogre_window_->update();
