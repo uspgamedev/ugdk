@@ -30,6 +30,9 @@ class Window final : public desktop::Window {
         in unoperable windows. */
     void ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync) override;
 
+    /// Returns the Ogre window
+    Ogre::RenderWindow& ogre_window() { return *ogre_window_; }
+
     uint32 id() const override;
     const char* title() const override;
     math::Integer2D size() const override;

@@ -10,6 +10,7 @@
 #ifdef UGDK_OGRE_STATIC
 // FIXME: HELP, WE'RE HARD CODING THIS
 #define OGRE_STATIC_GL
+#define OGRE_STATIC_OctreeSceneManager
 #endif
 
 #include <OgreStaticPluginLoader.h>
@@ -29,6 +30,7 @@ using std::string;
 using std::vector;
 using std::stringstream;
 using std::stoi;
+using std::make_shared;
 
 Manager::Manager() {
 }
@@ -93,6 +95,10 @@ void Manager::PresentAll(/*double dt*/) {
     root_->renderOneFrame();
 }
 
+Ogre::RenderWindow& Manager::window() {
+    return window_->ogre_window();
+}
+
 std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& settings) {
 
     Ogre::NameValuePairList params;
@@ -108,7 +114,8 @@ std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& s
     // TODO: We might need to set resource listeners, if any, before this call.    
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
     
-    return std::shared_ptr<desktop::Window>(new mode3d::Window(window));
+    window_.reset(new ugdk::desktop::mode3d::Window(window));
+    return window_;
 }
 
 std::shared_ptr<desktop::Window> Manager::DoCreateWindow(unsigned long hwnd) {
