@@ -12,7 +12,7 @@ class OverlaySystem;
 
 namespace ugdk {
 namespace action {
-namespace threed {
+namespace mode3d {
 
 class Camera;
 

@@ -11,7 +11,7 @@ class Quaternion;
 
 namespace ugdk {
 namespace action {
-namespace threed {
+namespace mode3d {
 
 class OgreEntity;
 class OgreScene;

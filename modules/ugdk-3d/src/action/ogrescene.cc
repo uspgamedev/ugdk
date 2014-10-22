@@ -16,7 +16,7 @@
 
 namespace ugdk {
 namespace action {
-namespace threed {
+namespace mode3d {
 
 namespace {
 ugdk::desktop::mode3d::Manager* desktop_manager() {
@@ -119,6 +119,6 @@ void OgreScene::UpdateFrameStats() {
     
 }
 
-} // namespace threed
+} // namespace mode3d
 } // namespace action
 } // namespace ugdk

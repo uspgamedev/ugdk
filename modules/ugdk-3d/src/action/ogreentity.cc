@@ -5,7 +5,7 @@
 
 namespace ugdk {
 namespace action {
-namespace threed {
+namespace mode3d {
 
 OgreEntity::~OgreEntity() {
     if (node_) {
@@ -16,6 +16,6 @@ OgreEntity::~OgreEntity() {
     }
 }
 
-} // namespace threed
+} // namespace mode3d
 } // namespace action
 } // namespace ugdk

@@ -40,7 +40,7 @@ private:
     Ogre::RenderWindow* window_;
 };
 
-} // namespace threed
+} // namespace mode3d
 } // namespace desktop
 } // namespace ugdk
 #endif

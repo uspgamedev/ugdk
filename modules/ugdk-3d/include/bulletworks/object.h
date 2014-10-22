@@ -19,7 +19,7 @@ class btRigidBody;
 namespace bulletworks {
 class Manager;
 
-class Object : ugdk::action::threed::OgreEntity {
+class Object : ugdk::action::mode3d::OgreEntity {
 public:
     struct PhysicsData {
         double mass;                // rigid body mass (must be >= 0, and 0 means static "infinite mass" object)

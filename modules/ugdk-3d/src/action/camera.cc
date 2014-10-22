@@ -8,7 +8,7 @@
 
 namespace ugdk {
 namespace action {
-namespace threed {
+namespace mode3d {
 
 using Ogre::Vector3;
 using Ogre::Quaternion;
