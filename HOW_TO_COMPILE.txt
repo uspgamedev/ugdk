@@ -42,6 +42,10 @@ Compatible compilers:
 - clang 3.3 (maybe lesser)
 - Microsoft Visual Studio 2013 or newer
 
+=
+For Windows, you can use the libsdownloader script to automatically
+download and install SWIG and SDL.
+It's located at git://uspgamedev.org/libsdownloader.git
 
 == Controlling what is Built
 
