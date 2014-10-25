@@ -1,12 +1,14 @@
 #ifndef UGDK_INPUT_EVENTS_H_
 #define UGDK_INPUT_EVENTS_H_
 
+#include <ugdk/desktop.h>
 #include <ugdk/input.h>
 #include <ugdk/input/keycode.h>
 #include <ugdk/input/scancode.h>
 #include <ugdk/input/mousebutton.h>
 #include <ugdk/math/integer2D.h>
 #include <string>
+#include <memory>
 
 namespace ugdk {
 namespace input {
@@ -55,9 +57,15 @@ struct TextInputEvent {
 struct MouseMotionEvent {
     math::Integer2D position;
     math::Integer2D motion;
+    std::weak_ptr<desktop::Window> window;
     
-    MouseMotionEvent(const math::Integer2D& _position, const math::Integer2D& _motion)
-        : position(_position), motion(_motion) {}
+    MouseMotionEvent(const math::Integer2D& _position,
+                     const math::Integer2D& _motion,
+                     const std::weak_ptr<desktop::Window>& _window)
+        : position(_position)
+        , motion(_motion)
+        , window(_window)
+    {}
 };
 struct MouseButtonPressedEvent {
     math::Integer2D position;

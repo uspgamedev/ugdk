@@ -3,6 +3,7 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/input/events.h>
 #include <ugdk/system/engine.h>
+#include <ugdk/desktop/module.h>
 
 #include <system/sdleventhandler.h>
 
@@ -40,7 +41,8 @@ class MouseInputSDLEventHandler : public system::SDLEventHandler {
         mouse_.position_.y = sdlevent.motion.y;
         handler().RaiseEvent(MouseMotionEvent(
             mouse_.position_,
-            math::Integer2D(sdlevent.motion.xrel, sdlevent.motion.yrel)
+            math::Integer2D(sdlevent.motion.xrel, sdlevent.motion.yrel),
+            desktop::manager()->window(sdlevent.motion.windowID)
         ));
     }
 
