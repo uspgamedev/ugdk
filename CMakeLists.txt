@@ -216,7 +216,7 @@ target_link_libraries(libugdk LINK_PUBLIC ${UGDK_LIBRARIES})
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
 if(UGDK_3D_ENABLED)
 	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2 libjson ${BULLET_LIBRARIES} ${UGDK_OGRE_LIBRARIES} BtOgre)
-    target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PRIVATE ${UGDK_OGRE_INCLUDE_DIRS})
+    target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${UGDK_OGRE_INCLUDE_DIRS})
 else()
 	target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 libjson freetype-gl)
     if(NOT ANDROID)
