@@ -28,7 +28,7 @@ TextureAtlas::~TextureAtlas() {}
 TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
     auto&& contents = system::GetFileContents(filepath + ".json");
     if (!libjson::is_valid(contents))
-        throw love::Exception("Invalid json: %s.json\n", filepath.c_str());
+        throw system::BaseException("Invalid json: %s.json\n", filepath.c_str());
 
     auto frames = libjson::parse(contents)["frames"];
     graphic::GLTexture* gltexture = graphic::GLTexture::CreateFromFile(

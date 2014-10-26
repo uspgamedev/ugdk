@@ -3,7 +3,7 @@
 
 #include <ugdk/graphic.h>
 #include <ugdk/math/integer2D.h>
-#include <ugdk/system/LoveException.h>
+#include <ugdk/system/exceptions.h>
 
 #include <memory>
 #include <vector>
@@ -47,7 +47,7 @@ class TextureAtlas {
     
     std::size_t AddPiece(const std::string& name, const math::Integer2D& pos, const math::Integer2D& size) {
         if (names_.find(name) != names_.end())
-            throw love::Exception("Piece already declared: %s", name.c_str());
+            throw system::BaseException("Piece already declared: %s", name.c_str());
 
         pieces_.emplace_back(pos, size);
         std::size_t frame_number = pieces_.size() - 1;

@@ -29,7 +29,7 @@ modules/ugdk-core/src/resource/manager.cc
 modules/ugdk-core/src/resource/module.cc
 modules/ugdk-core/src/system/configuration.cc
 modules/ugdk-core/src/system/engine.cc
-modules/ugdk-core/src/system/LoveException.cc
+modules/ugdk-core/src/system/exceptions.cc
 modules/ugdk-core/src/system/sdleventhandler.h
 modules/ugdk-core/src/system/taskplayer.cc
 modules/ugdk-core/src/time/manager.cc
@@ -102,7 +102,6 @@ modules/ugdk-core/include/ugdk/system/configuration.h
 modules/ugdk-core/include/ugdk/system/engine.h
 modules/ugdk-core/include/ugdk/system/eventhandler.h
 modules/ugdk-core/include/ugdk/system/exceptions.h
-modules/ugdk-core/include/ugdk/system/LoveException.h
 modules/ugdk-core/include/ugdk/system/task.h
 modules/ugdk-core/include/ugdk/system/taskplayer.h
 modules/ugdk-core/include/ugdk/text.h

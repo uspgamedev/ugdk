@@ -1,6 +1,6 @@
 #include <ugdk/graphic/spritetypes.h>
 
-#include <ugdk/system/LoveException.h>
+#include <ugdk/system/exceptions.h>
 #include <ugdk/system/engine.h>
 #include <libjson.h>
 
@@ -62,7 +62,7 @@ namespace {
 SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepath) {
     auto&& contents = system::GetFileContents(filepath);
     if (!libjson::is_valid(contents))
-        throw love::Exception("Invalid json: %s\n", filepath.c_str());
+        throw system::BaseException("Invalid json: %s\n", filepath.c_str());
 
     auto json_node = libjson::parse(contents);
     SpriteAnimationTable* table = new SpriteAnimationTable(json_node.size());

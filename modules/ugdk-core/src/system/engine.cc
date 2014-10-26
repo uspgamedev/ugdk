@@ -22,7 +22,7 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/debug/profiler.h>
 #include <ugdk/debug/log.h>
-#include <ugdk/system/LoveException.h>
+#include <ugdk/system/exceptions.h>
 
 #include <system/sdleventhandler.h>
 
@@ -137,12 +137,12 @@ std::string GetFileContents(const std::string& filename) {
         return(contents);
     }
     auto error = errno;
-    throw love::Exception("Unable to open file '%s'. Code %d, Reason: %s", filename.c_str(), error, std::strerror(error));
+    throw BaseException("Unable to open file '%s'. Code %d, Reason: %s", filename.c_str(), error, std::strerror(error));
 }
 
 bool Initialize(const Configuration& configuration) {
     if (current_state_ != UGDKState::UNINITIALIZED)
-        throw love::Exception("UGDK already initialized.");
+        throw BaseException("UGDK already initialized.");
 
     // Init SDL, but don't load any modules.
     SDL_Init(0);
@@ -206,7 +206,7 @@ bool Initialize() {
 
 void Run() {
     if (current_state_ != UGDKState::SUSPENDED)
-        throw love::Exception("UGDK not suspended.");
+        throw BaseException("UGDK not suspended.");
     current_state_ = UGDKState::RUNNING;
 
     while (current_state_ == UGDKState::RUNNING) {
@@ -275,7 +275,7 @@ void Run() {
 
 void Release() {
     if (current_state_ != UGDKState::SUSPENDED)
-        throw love::Exception("UGDK not suspended.");
+        throw BaseException("UGDK not suspended.");
     current_state_ = UGDKState::RELEASED;
 
     DeregisterSDLHandler(&system_sdlevent_handler);
@@ -325,7 +325,7 @@ const std::list<std::shared_ptr<const debug::SectionData>>& profile_data_list() 
 
 void Suspend() {
     if (current_state_ != UGDKState::RUNNING)
-        throw love::Exception("UGDK not runing.");
+        throw BaseException("UGDK not runing.");
     current_state_ = UGDKState::SUSPENDED;
 }
 

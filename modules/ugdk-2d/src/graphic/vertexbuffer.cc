@@ -20,8 +20,7 @@
 
 #include "vertexbuffer.h"
 
-#include <ugdk/system/LoveException.h>
-//#include <common/config.h>
+#include <ugdk/system/exceptions.h>
 
 #include <cstdlib>
 #include <cstring>
@@ -38,7 +37,7 @@ namespace graphic {
 			// Try to create a VBO.
 			return new VBO(size, target, usage);
 		}
-		catch (const love::Exception &)
+		catch (const system::BaseException &)
 #endif
 		{
 			// VBO not supported ... create regular array.
@@ -137,12 +136,12 @@ namespace graphic {
 		, mapped(nullptr)
 	{
 		if (!GLEW_VERSION_1_5)
-			throw love::Exception("Not supported");
+			throw system::BaseException("Not supported");
 
 		bool ok = load(false);
 
 		if (!ok)
-			throw love::Exception("Could not load VBO.");
+            throw system::BaseException("Could not load VBO.");
 	}
 
 	VBO::~VBO()
@@ -155,11 +154,11 @@ namespace graphic {
 	{
 		// mapping twice could result in memory leaks
 		if (mapped)
-			throw love::Exception("VBO is already mapped!");
+            throw system::BaseException("VBO is already mapped!");
 
 		mapped = malloc(getSize());
 		if (!mapped)
-			throw love::Exception("Out of memory (oh the humanity!)");
+            throw system::BaseException("Out of memory (oh the humanity!)");
     
 		glGetBufferSubData(getTarget(), 0, getSize(), mapped);
         ugdk::internal::AssertNoOpenGLError();

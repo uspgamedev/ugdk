@@ -1,7 +1,7 @@
 
 #include <ugdk/util/idgenerator.h>
 
-#include <ugdk/system/LoveException.h>
+#include <ugdk/system/exceptions.h>
 
 namespace ugdk {
 namespace util {
@@ -15,7 +15,7 @@ IDGenerator::IDGenerator(int min_id, int max_id, int error_value)
     , error_value_(error_value)
 {
     if (min_id > max_id) {
-        throw love::Exception("IDGenerator: min_id > max_id (%d > %d)", min_id, max_id);
+        throw system::BaseException("IDGenerator: min_id > max_id (%d > %d)", min_id, max_id);
     }
 }
 

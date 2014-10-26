@@ -8,9 +8,10 @@ namespace system {
 
 class BaseException {
   public:
-      BaseException(const char* reason) : reason_(reason) {}
+    BaseException(const char * fmt, ...); 
+    virtual ~BaseException() throw() {}
 
-    const char* what() const throw() {
+    inline virtual const char * what() const throw() {
         return reason_.c_str();
     }
 
