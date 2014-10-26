@@ -189,26 +189,28 @@ endif ()
 add_library(libugdk ${UGDK_SRC} ${UGDK_HEADERS} ${GENERATED_SRC})
 
 # Generated config
-target_include_directories(libugdk PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/include")
+target_include_directories(libugdk PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>")
 
-target_include_directories(libugdk 
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/include"
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/src")
+#"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
 
 target_include_directories(libugdk
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/include"
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/src")
+    PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/include>"
+    PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/src>")
+
+target_include_directories(libugdk
+    PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/include>"
+    PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/src>")
 
 if (UGDK_CREATE_BINDINGS)
     target_include_directories(libugdk 
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/include"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/src"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src" # for SWIG
+        PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/include>"
+        PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/src>"
+        PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>" # for SWIG
         )
 endif()   
     
 # Add GLM dependency
-target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
+target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC "$<BUILD_INTERFACE:${GLM_LOCATION}>")
     
 if (WIN32)
     # utf8<->ucs4 conversion uses a networking function
@@ -256,7 +258,9 @@ configure_file (
 ) 
 
 install(TARGETS libugdk
-    DESTINATION lib
+    EXPORT UGDK_Install
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
 #    CONFIGURATIONS Release
 )
 
@@ -274,12 +278,21 @@ if (UGDK_CREATE_BINDINGS)
             FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
 endif()   
         
-
 if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src/generated/ 
             DESTINATION ${UGDK_INSTALL_LOCATION_RELATIVE}/${UGDK_BIGVERSION}/python
             FILES_MATCHING PATTERN "*.py")
 endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
+
+#set(ConfigPackageLocation share/cmake/ClimbingStats)
+#install(EXPORT UGDK_Install
+#  FILE
+#    UGDK.cmake
+#  NAMESPACE
+#    UGDK::
+#  DESTINATION
+#    ${ConfigPackageLocation}
+#)
 
 # Tests and examples
 if(UGDK_BUILD_TESTS)
