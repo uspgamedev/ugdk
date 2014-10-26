@@ -3,8 +3,7 @@ find_package (PythonLibs 2.6)
 
 if (PYTHONLIBS_FOUND)
     include_directories (${PYTHON_INCLUDE_DIRS})
-    ugdk_add_scriptlang (python)
-    
+        
     set(UGDK_PYTHON_ENABLED True)
     
     include(${PROJECT_SOURCE_DIR}/modules/ugdk-script/python_src_list.cmake)

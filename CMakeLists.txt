@@ -109,12 +109,17 @@ if (UGDK_CREATE_BINDINGS)
     
     if (UGDK_LUA_BINDINGS)
         list(APPEND UGDK_LANGUAGES_LIST Lua)
+        include(cmake/languages/Lua.cmake)
     endif()
     if (UGDK_PYTHON_BINDINGS)
+        include(cmake/languages/Python.cmake)
         list(APPEND UGDK_LANGUAGES_LIST Python)
     endif()
     
     include(cmake/CreateBindings.cmake)
+    create_modules(UGDK_LANGUAGES_LIST UGDK_MODULE_SRC "UGDK" GENERATED_SRC)
+    set(UGDK_SWIG_ENABLED True)
+    
 endif (UGDK_CREATE_BINDINGS)
 #########################################################
 

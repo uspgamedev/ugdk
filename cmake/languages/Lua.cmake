@@ -10,7 +10,6 @@ add_subdirectory(externals/lua-5.1)
 set(UGDK_LUA_ENABLED True)
 LIST(APPEND UGDK_SRC       ${UGDK_LUA_SRC})
 LIST(APPEND UGDK_LIBRARIES lua)
-ugdk_add_scriptlang (lua)
 
 message ("-- Lua5.1 modules added.")
 
