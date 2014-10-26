@@ -53,7 +53,7 @@ set_target_properties (libjson PROPERTIES
 
 install(TARGETS libjson
     EXPORT UGDK_Install
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib)
+    LIBRARY DESTINATION lib/ugdk
+    ARCHIVE DESTINATION lib/ugdk)
 
 

@@ -255,7 +255,14 @@ set (UGDK_OGRE_STATIC ${OGRE_STATIC})
 configure_file (
     "cmake/config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/include/ugdk/system/config.h"
-) 
+)
+
+include(CMakePackageConfigHelpers)
+
+WRITE_BASIC_PACKAGE_VERSION_FILE(
+    "${CMAKE_CURRENT_BINARY_DIR}/UGDK${UGDK_GRAPHIC_MODULE}ConfigVersion.cmake"
+    VERSION ${UGDK_VERSION}
+    COMPATIBILITY ExactVersion ) # In future, SameMajorVersion
 
 install(TARGETS libugdk
     EXPORT UGDK_Install
@@ -265,34 +272,38 @@ install(TARGETS libugdk
 )
 
 install(DIRECTORY modules/ugdk-core/include/
+        EXPORT UGDK_Install
         DESTINATION include/${UGDK_LIBRARY_NAME} 
         FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
         
 install(DIRECTORY modules/ugdk-${UGDK_GRAPHIC_MODULE}/include/
+        EXPORT UGDK_Install
         DESTINATION include/${UGDK_LIBRARY_NAME} 
         FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
         
 if (UGDK_CREATE_BINDINGS)
     install(DIRECTORY modules/ugdk-script/include/
+            EXPORT UGDK_Install
             DESTINATION include/${UGDK_LIBRARY_NAME} 
             FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
 endif()   
         
 if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src/generated/ 
+            EXPORT UGDK_Install
             DESTINATION ${UGDK_INSTALL_LOCATION_RELATIVE}/${UGDK_BIGVERSION}/python
             FILES_MATCHING PATTERN "*.py")
 endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
 
-#set(ConfigPackageLocation share/cmake/ClimbingStats)
-#install(EXPORT UGDK_Install
-#  FILE
-#    UGDK.cmake
-#  NAMESPACE
-#    UGDK::
-#  DESTINATION
-#    ${ConfigPackageLocation}
-#)
+set(ConfigPackageLocation share/cmake)
+install(EXPORT UGDK_Install
+  FILE
+    UGDK${UGDK_BIGVERSION}-${UGDK_GRAPHIC_MODULE}.cmake
+  NAMESPACE
+    UGDK${UGDK_GRAPHIC_MODULE}::
+  DESTINATION
+    ${ConfigPackageLocation}
+)
 
 # Tests and examples
 if(UGDK_BUILD_TESTS)

@@ -58,8 +58,8 @@ add_library(freetype ${BASE_SRCS})
 target_compile_definitions(freetype PRIVATE "FT2_BUILD_LIBRARY")
 target_include_directories(freetype 
     PUBLIC 
-        "${freetype_SOURCE_DIR}/include"
-        "${freetype_SOURCE_DIR}/include/freetype"
+        "$<BUILD_INTERFACE:${freetype_SOURCE_DIR}/include>"
+        "$<BUILD_INTERFACE:${freetype_SOURCE_DIR}/include/freetype>"
     PRIVATE
         "src/truetype"
         "src/sfnt"
@@ -75,4 +75,9 @@ if(ANDROID)
     target_compile_definitions(freetype PRIVATE "FT_CONFIG_OPTION_SYSTEM_ZLIB")
     target_link_libraries(freetype LINK_PRIVATE ${ZLIB_LIBRARY})
 endif()
+
+install(TARGETS freetype
+    EXPORT UGDK_Install
+    LIBRARY DESTINATION lib/ugdk
+    ARCHIVE DESTINATION lib/ugdk)
     

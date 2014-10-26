@@ -52,4 +52,9 @@ add_library(lua ${LUA_CORE} ${LUA_STANDARD_LIBRARY} ${PUBLIC_HEADERS})
 if(CMAKE_COMPILER_IS_GNUCC)
     target_link_libraries(lua LINK_PUBLIC m)
 endif()
-target_include_directories(lua PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
+target_include_directories(lua PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>")
+
+install(TARGETS lua
+    EXPORT UGDK_Install
+    LIBRARY DESTINATION lib/ugdk
+    ARCHIVE DESTINATION lib/ugdk)
