@@ -25,7 +25,6 @@
 %import(module="ugdk_math") <ugdk/math.h>
 %import(module="ugdk_resource") <ugdk/resource.h>
 %import(module="ugdk_time") <ugdk/time.h>
-%import(module="ugdk_util") <ugdk/util.h>
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 
