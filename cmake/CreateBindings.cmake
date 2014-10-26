@@ -55,11 +55,9 @@ if (SWIG_FOUND)
             string(TOLOWER ${it} itLOWER)
             ugdk_add_scriptlang (${itLOWER} ${MODULE_LIST_VAR} MODULE_GENERATED)
             list(APPEND GENERATED_SRC ${MODULE_GENERATED})
-            if(UGDK_${itUPPER}_ENABLED)
-                set(LANGUAGES_LIST "${LANGUAGES_LIST} \\\n    ACTION(${itUPPER})")
-            endif()
+            set(LANGUAGES_LIST "${LANGUAGES_LIST} \\\n    ACTION(${itUPPER})")
         endforeach()
-        
+
         list(APPEND GENERATED_SRC modules.cc)
         configure_file(${ugdk_SOURCE_DIR}/cmake/modules.cc.in modules.cc)
         unset(MODULES_LIST)
