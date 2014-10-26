@@ -20,8 +20,6 @@ namespace {
     };
 }
 
-using ugdk::graphic::opengl::VertexBuffer;
-
 DrawablePrimitive::DrawablePrimitive(const std::shared_ptr<ugdk::graphic::Primitive>& primitive)
     : primitive_(primitive) {}
 

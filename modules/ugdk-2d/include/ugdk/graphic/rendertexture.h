@@ -3,7 +3,6 @@
 
 #include <ugdk/graphic/rendertarget.h>
 
-#include <ugdk/internal.h>
 #include <ugdk/graphic.h>
 #include <ugdk/math.h>
 #include <ugdk/system/compatibility.h>
@@ -15,12 +14,12 @@ namespace graphic {
 
 class RenderTexture : public RenderTarget {
   public:
-    RenderTexture(std::unique_ptr<internal::GLTexture>&& texture);
+    RenderTexture(std::unique_ptr<graphic::GLTexture>&& texture);
     RenderTexture(const math::Integer2D& size);
     ~RenderTexture();
 
     virtual math::Vector2D size() const override;
-    internal::GLTexture* texture() const { return texture_.get(); }
+    graphic::GLTexture* texture() const { return texture_.get(); }
 
     void set_projection_matrix(const Geometry&);
 
@@ -32,7 +31,7 @@ class RenderTexture : public RenderTarget {
     virtual void UpdateViewport() override;
 
     unsigned int gl_buffer_;
-    std::unique_ptr<internal::GLTexture> texture_;
+    std::unique_ptr<graphic::GLTexture> texture_;
 };
 
 }  // namespace graphic

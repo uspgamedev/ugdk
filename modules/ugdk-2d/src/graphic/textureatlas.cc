@@ -1,7 +1,8 @@
 #include <ugdk/graphic/textureatlas.h>
 
-#include <ugdk/internal/gltexture.h>
 #include <ugdk/system/engine.h>
+
+#include "gltexture.h"
 #include <libjson.h>
 
 namespace ugdk {
@@ -16,7 +17,7 @@ void TextureAtlas::BoundPiece::ConvertToAtlas(float in_u, float in_v, float *out
     *out_v = (piece_->position.y + (in_v) * piece_->size.y) / atlas_->texture_->height();
 }
 
-TextureAtlas::TextureAtlas(const internal::GLTexture* texture, std::size_t size)
+TextureAtlas::TextureAtlas(const graphic::GLTexture* texture, std::size_t size)
 :   texture_(texture)
 {
     pieces_.reserve(size);
@@ -30,7 +31,7 @@ TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
         throw love::Exception("Invalid json: %s.json\n", filepath.c_str());
 
     auto frames = libjson::parse(contents)["frames"];
-    internal::GLTexture* gltexture = internal::GLTexture::CreateFromFile(
+    graphic::GLTexture* gltexture = graphic::GLTexture::CreateFromFile(
             filepath + ".png");
 
     TextureAtlas* atlas = new TextureAtlas(gltexture, frames.size());

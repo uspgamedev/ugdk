@@ -2,19 +2,19 @@
 
 #include <cassert>
 
-#include <ugdk/internal/opengl.h>
-#include <ugdk/graphic/opengl/shader.h>
-#include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/opengl.h>
+#include <ugdk/graphic/shader.h>
+#include <ugdk/graphic/shaderprogram.h>
 
 #include <ugdk/system/config.h>
 
 namespace ugdk {
 namespace graphic {
 
-opengl::ShaderProgram* DEFAULT_SHADERS[4] = { nullptr, nullptr, nullptr, nullptr };
+ShaderProgram* DEFAULT_SHADERS[4] = { nullptr, nullptr, nullptr, nullptr };
 
-opengl::ShaderProgram* CreateShader(bool light_system, bool color_text_mode) {
-    opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
+ShaderProgram* CreateShader(bool light_system, bool color_text_mode) {
+    Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
     // VERTEX
     vertex_shader.AddCodeBlock("out highp vec2 UV;" "\n");
@@ -48,7 +48,7 @@ opengl::ShaderProgram* CreateShader(bool light_system, bool color_text_mode) {
     fragment_shader.AddLineInMain(" gl_FragColor = color;" "\n");
     fragment_shader.GenerateSource();
 
-    opengl::ShaderProgram* myprogram = new opengl::ShaderProgram;
+    ShaderProgram* myprogram = new ShaderProgram;
 
     myprogram->AttachShader(vertex_shader);
     myprogram->AttachShader(fragment_shader);
@@ -58,30 +58,30 @@ opengl::ShaderProgram* CreateShader(bool light_system, bool color_text_mode) {
     return myprogram;
 }
 
-opengl::ShaderProgram* InterfaceShader() {
+ShaderProgram* InterfaceShader() {
     if(DEFAULT_SHADERS[0*2 + 0]) return DEFAULT_SHADERS[0*2 + 0];
     return DEFAULT_SHADERS[0 + 0] = CreateShader(false, false);
 }
 
-opengl::ShaderProgram* LightSystemShader() {
+ShaderProgram* LightSystemShader() {
     if(DEFAULT_SHADERS[0*2 + 1]) return DEFAULT_SHADERS[0*2 + 1];
     return DEFAULT_SHADERS[0 + 1] = CreateShader(true, false);
 }
 
-opengl::ShaderProgram* InterfaceTextShader() {
+ShaderProgram* InterfaceTextShader() {
     if(DEFAULT_SHADERS[1*2 + 0]) return DEFAULT_SHADERS[1*2 + 0];
     return DEFAULT_SHADERS[1*2 + 0] = CreateShader(false, true);
 }
 
-opengl::ShaderProgram* LightSystemTextShader() {
+ShaderProgram* LightSystemTextShader() {
     if(DEFAULT_SHADERS[1*2 + 1]) return DEFAULT_SHADERS[1*2 + 1];
     return DEFAULT_SHADERS[1*2 + 1] = CreateShader(true, true);
 }
 
-opengl::ShaderProgram* LightShader() {
-    static opengl::ShaderProgram* myprogram = nullptr;
+ShaderProgram* LightShader() {
+    static ShaderProgram* myprogram = nullptr;
     if(!myprogram) {
-        opengl::Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
+        Shader vertex_shader(GL_VERTEX_SHADER), fragment_shader(GL_FRAGMENT_SHADER);
 
         vertex_shader.AddCodeBlock("out highp vec2 lightPosition;" "\n"
                                    "uniform highp vec2 dimension;" "\n"
@@ -97,7 +97,7 @@ opengl::ShaderProgram* LightShader() {
         fragment_shader.AddLineInMain(" gl_FragColor = effect_color * exp(-decayment * (length(lightPosition) - minimum_radius));" "\n");
         fragment_shader.GenerateSource();
 
-        myprogram = new opengl::ShaderProgram;
+        myprogram = new ShaderProgram;
 
         myprogram->AttachShader(vertex_shader);
         myprogram->AttachShader(fragment_shader);

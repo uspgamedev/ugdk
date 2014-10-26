@@ -1,8 +1,8 @@
 #include <ugdk/graphic/rendertexture.h>
 
-#include <ugdk/internal/opengl.h>
-#include <ugdk/internal/gltexture.h>
+#include <ugdk/graphic/opengl.h>
 #include <ugdk/math/integer2D.h>
+#include "gltexture.h"
 
 #include "SDL_video.h"
 
@@ -13,8 +13,8 @@ namespace ugdk {
 namespace graphic {
 
 namespace {
-    internal::GLTexture* CreateTexture(const math::Integer2D& size) {
-        internal::GLTexture* texture = ugdk::internal::GLTexture::CreateRawTexture(size.x, size.y);
+    graphic::GLTexture* CreateTexture(const math::Integer2D& size) {
+        graphic::GLTexture* texture = ugdk::graphic::GLTexture::CreateRawTexture(size.x, size.y);
         glBindTexture(GL_TEXTURE_2D, texture->id());
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -26,7 +26,7 @@ namespace {
     }
 }
 
-RenderTexture::RenderTexture(std::unique_ptr<internal::GLTexture>&& texture)
+RenderTexture::RenderTexture(std::unique_ptr<graphic::GLTexture>&& texture)
     : texture_(std::move(texture))
 {
     glGenFramebuffers(1, &gl_buffer_);

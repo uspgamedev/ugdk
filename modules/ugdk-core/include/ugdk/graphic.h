@@ -16,6 +16,10 @@ class Primitive;
 class PrimitiveController;
 class PrimitiveControllerPosition;
 class TextureAtlas;
+struct PixelSurface;
+class GLTexture;
+class Shader;
+class ShaderProgram;
 
 class Canvas;
 class RenderTarget;
@@ -34,13 +38,7 @@ class SpriteAnimationFrame;
 typedef ::ugdk::action::AnimationPlayer<SpriteAnimationFrame> SpriteAnimationPlayer;
 typedef ::ugdk::structure::IndexableTable<std::vector<SpriteAnimationFrame*>*> SpriteAnimationTable;
 
-namespace opengl {
-class Shader;
-class ShaderProgram;
-class VertexBuffer;
-}  // namespace opengl
-
 }  // namespace graphic
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_GRAPHIC_H_

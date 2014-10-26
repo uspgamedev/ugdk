@@ -1,4 +1,4 @@
-#include <ugdk/internal/pixelsurface.h>
+#include "pixelsurface.h"
 
 #include "SDL_image.h"
 

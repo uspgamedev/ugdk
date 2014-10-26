@@ -2,7 +2,6 @@
 #define UGDK_GRAPHIC_TEXTUREUNIT_H_
 
 #include <ugdk/graphic.h>
-#include <ugdk/internal.h>
 #include <ugdk/structure/types.h>
 
 namespace ugdk {
@@ -16,16 +15,16 @@ class TextureUnit final {
     TextureUnit(TextureUnit&&);
     ~TextureUnit();
 
-    void BindTexture(const internal::GLTexture* texture);
+    void BindTexture(const graphic::GLTexture* texture);
 
     int id() const { return id_; }
-    const internal::GLTexture* texture() const { return texture_; }
+    const graphic::GLTexture* texture() const { return texture_; }
 
   private:
     TextureUnit(unsigned int);
 
     int id_;
-    const internal::GLTexture* texture_;
+    const graphic::GLTexture* texture_;
 
     friend class ::ugdk::graphic::Manager;
 };

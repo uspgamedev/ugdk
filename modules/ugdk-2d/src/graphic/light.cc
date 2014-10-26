@@ -1,6 +1,6 @@
 #include <ugdk/graphic/light.h>
 
-#include <ugdk/internal/opengl.h>
+#include <ugdk/graphic/opengl.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/visualeffect.h>
@@ -38,7 +38,7 @@ void Light::set_dimension(const ugdk::math::Vector2D& dimension) {
 }
 
 void Light::Draw(Canvas &canvas) {
-    const opengl::ShaderProgram* old_program = canvas.shader_program();
+    const ShaderProgram* old_program = canvas.shader_program();
 
     canvas.ChangeShaderProgram(graphic::manager()->light_shader());
     canvas.SendUniform("decayment", 2.4f);

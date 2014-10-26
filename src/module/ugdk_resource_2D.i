@@ -16,12 +16,11 @@
 
 %}
 
-
 %include <ugdk/resource/resourcecontainer.h> //class template
 
-enable_disown(ugdk::internal::GLTexture* val)
-%template(ResourceContainer_GLTexture) ugdk::resource::ResourceContainer<ugdk::internal::GLTexture*>;
-disable_disown(ugdk::internal::GLTexture* val)
+enable_disown(ugdk::graphic::GLTexture* val)
+%template(ResourceContainer_GLTexture) ugdk::resource::ResourceContainer<ugdk::graphic::GLTexture*>;
+disable_disown(ugdk::graphic::GLTexture* val)
 
 enable_disown(ugdk::graphic::TextureAtlas* val)
 %template(ResourceContainer_TextureAtlas) ugdk::resource::ResourceContainer<ugdk::graphic::TextureAtlas*>;
@@ -34,7 +33,6 @@ disable_disown(ugdk::text::LanguageWord* val)
 %import <ugdk/action.h>
 %import <ugdk/graphic.h>
 %import <ugdk/text.h>
-%import <ugdk/internal.h>
 
 proxy_class(ugdk::action::Scene)
 

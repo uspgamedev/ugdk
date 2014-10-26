@@ -1,15 +1,13 @@
-#include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/shaderprogram.h>
 
 #include <ugdk/debug/log.h>
-#include <ugdk/internal/opengl.h>
-#include <ugdk/internal/gltexture.h>
-#include <ugdk/graphic/opengl/shader.h>
+#include <ugdk/graphic/opengl.h>
+#include <ugdk/graphic/shader.h>
 
 #include <memory>
 
 namespace ugdk {
 namespace graphic {
-namespace opengl {
 
 ShaderProgram::ShaderProgram() : id_(0) {
     id_ = glCreateProgram();
@@ -74,6 +72,5 @@ void ShaderProgram::PrintLog(const std::string& title) const {
                title, ": ", strInfoLog.get());
 }
 
-} // namespace opengl
 } // namespace graphic
 } // namespace ugdk

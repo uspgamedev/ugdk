@@ -3,7 +3,6 @@
 
 #include <ugdk/action.h>
 #include <ugdk/debug.h>
-#include <ugdk/internal.h>
 #include <ugdk/system.h>
 #include <ugdk/util.h>
 #include <ugdk/structure/types.h>

@@ -2,7 +2,7 @@
 #define UGDK_GRAPHIC_PRIMITIVESETUP_H_
 
 #include <ugdk/graphic.h>
-#include <ugdk/internal.h>
+
 #include <ugdk/action.h>
 
 #include <ugdk/action/animationplayer.h>
@@ -43,8 +43,8 @@ struct Sprite {
 struct Rectangle {
     static const VertexDataSpecification vertexdata_specification;
 
-    static void Prepare(Primitive&, const internal::GLTexture*, const math::Vector2D& size);
-    static void Prepare(Primitive&, const internal::GLTexture*);
+    static void Prepare(Primitive&, const graphic::GLTexture*, const math::Vector2D& size);
+    static void Prepare(Primitive&, const graphic::GLTexture*);
     static void Render(const Primitive&, Canvas& canvas);
 };
 

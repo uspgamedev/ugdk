@@ -1,4 +1,4 @@
-#include <ugdk/graphic/opengl/shader.h>
+#include <ugdk/graphic/shader.h>
 
 #include <ugdk/debug/log.h>
 
@@ -7,7 +7,6 @@
 
 namespace ugdk {
 namespace graphic {
-namespace opengl {
 
 Shader::Shader(GLenum shaderType) : id_(0), type_(shaderType) {
     id_ = glCreateShader(shaderType);
@@ -81,6 +80,5 @@ bool Shader::Compile() const {
     return status == GL_TRUE;
 }
 
-} // namespace opengl
 } // namespace graphic
 } // namespace ugdk

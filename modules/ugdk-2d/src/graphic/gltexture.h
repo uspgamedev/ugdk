@@ -1,13 +1,13 @@
-#ifndef UGDK_INTERNAL_TEXTURE_H_
-#define UGDK_INTERNAL_TEXTURE_H_
+#ifndef UGDK_GRAPHIC_GLTEXTURE_H_
+#define UGDK_GRAPHIC_GLTEXTURE_H_
 
-#include <ugdk/internal/opengl.h>
+#include <ugdk/graphic/opengl.h>
 
 #include <string>
 #include "SDL_video.h"
 
 namespace ugdk {
-namespace internal {
+namespace graphic {
 
 class GLTexture {
   public:
@@ -27,7 +27,7 @@ class GLTexture {
     int texture_width_, texture_height_;
 };
 
-}  // namespace internal
+}  // namespace graphic
 }  // namespace ugdk
 
-#endif
+#endif // UGDK_GRAPHIC_GLTEXTURE_H_

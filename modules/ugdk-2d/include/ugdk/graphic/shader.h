@@ -1,12 +1,11 @@
-#ifndef UGDK_GRAPHIC_OPENGL_SHADER_H_
-#define UGDK_GRAPHIC_OPENGL_SHADER_H_
+#ifndef UGDK_GRAPHIC_SHADER_H_
+#define UGDK_GRAPHIC_SHADER_H_
 
 #include <string>
-#include <ugdk/internal/opengl.h>
+#include <ugdk/graphic/opengl.h>
 
 namespace ugdk {
 namespace graphic {
-namespace opengl {
 
 class Shader {
   public:
@@ -37,8 +36,7 @@ class Shader {
     std::string main_;
 };
 
-} // namespace opengl
 } // namespace graphic
 } // namespace ugdk
 
-#endif // UGDK_GRAPHIC_SHADER_SHADER_H_
+#endif // UGDK_GRAPHIC_SHADER_H_

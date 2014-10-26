@@ -2,8 +2,8 @@
 
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/exceptions.h>
-#include <ugdk/internal/opengl.h>
-#include <ugdk/internal/gltexture.h>
+#include <ugdk/graphic/opengl.h>
+#include "gltexture.h"
 
 namespace ugdk {
 namespace graphic {
@@ -31,7 +31,7 @@ TextureUnit::~TextureUnit() {
         graphic::manager()->ReleaseTextureUnitID(id_);
 }
 
-void TextureUnit::BindTexture(const internal::GLTexture* texture) {
+void TextureUnit::BindTexture(const graphic::GLTexture* texture) {
     system::AssertCondition<system::InvalidOperation>(id_ > -1, "Attempting to bind texture to invalid TextureUnit.");
     texture_ = texture;
 

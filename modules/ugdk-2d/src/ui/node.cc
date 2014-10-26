@@ -1,6 +1,6 @@
 #include <ugdk/ui/node.h>
 
-#include <ugdk/internal/opengl.h>
+#include <ugdk/graphic/opengl.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/canvas.h>

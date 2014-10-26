@@ -6,7 +6,6 @@
 #include <ugdk/system/config.h>
 
 #include <ugdk/graphic.h>
-#include <ugdk/internal.h>
 #include <ugdk/text.h>
 
 namespace ugdk {
@@ -23,8 +22,8 @@ Manager* manager();
 
 #ifndef UGDK_3D_ENABLED
 graphic::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
-internal::GLTexture*             GetTextureFromTag(const std::string& tag);
-internal::GLTexture*             GetTextureFromFile(const std::string& file);
+graphic::GLTexture*             GetTextureFromTag(const std::string& tag);
+graphic::GLTexture*             GetTextureFromFile(const std::string& file);
 graphic::TextureAtlas*           GetTextureAtlasFromTag(const std::string& tag);
 graphic::TextureAtlas*           GetTextureAtlasFromFile(const std::string& file);
 text::LanguageWord*              GetLanguageWord(const std::string& tag);

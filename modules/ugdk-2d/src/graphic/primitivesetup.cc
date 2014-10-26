@@ -1,10 +1,10 @@
 #include <ugdk/graphic/primitivesetup.h>
 
-#include <ugdk/internal/opengl.h>
-#include <ugdk/internal/gltexture.h>
+#include <ugdk/graphic/opengl.h>
 #include <ugdk/graphic/sprite.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/canvas.h>
+#include "gltexture.h"
 
 namespace ugdk {
 namespace graphic {
@@ -158,7 +158,7 @@ namespace PrimitiveSetup {
     //========================
     const VertexDataSpecification Rectangle::vertexdata_specification(4, sizeof(VertexXYUV), false);
 
-    void Rectangle::Prepare(Primitive& primitive, const internal::GLTexture* texture,
+    void Rectangle::Prepare(Primitive& primitive, const graphic::GLTexture* texture,
                             const math::Vector2D& size) {
         primitive.set_texture(texture);
         primitive.set_vertexdata(CreateVertexDataWithSpecification(Rectangle::vertexdata_specification));
@@ -168,7 +168,7 @@ namespace PrimitiveSetup {
         VertexDataManipulation::SetToRectangleAtOrigin(*primitive.vertexdata(), size);
     }
 
-    void Rectangle::Prepare(Primitive& primitive, const internal::GLTexture* texture) {
+    void Rectangle::Prepare(Primitive& primitive, const graphic::GLTexture* texture) {
         Rectangle::Prepare(primitive, texture, math::Vector2D(texture->width(), texture->height()));
     }
 

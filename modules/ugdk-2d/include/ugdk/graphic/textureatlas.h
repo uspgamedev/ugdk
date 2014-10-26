@@ -2,7 +2,6 @@
 #define UGDK_GRAPHIC_TEXTUREALTAS_H_
 
 #include <ugdk/graphic.h>
-#include <ugdk/internal.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/system/LoveException.h>
 
@@ -41,7 +40,7 @@ class TextureAtlas {
         const Piece* piece_;
     };
   
-    TextureAtlas(const internal::GLTexture* texture, std::size_t size);
+    TextureAtlas(const graphic::GLTexture* texture, std::size_t size);
     ~TextureAtlas();
 
     static TextureAtlas* LoadFromFile(const std::string& filepath);
@@ -60,7 +59,7 @@ class TextureAtlas {
     size_t piece_num() const {
         return pieces_.size();
     }
-    const internal::GLTexture* texture() const {
+    const graphic::GLTexture* texture() const {
         return texture_;
     }
 
@@ -79,7 +78,7 @@ class TextureAtlas {
 #endif
 
   private:
-    const internal::GLTexture* texture_;
+    const graphic::GLTexture* texture_;
     std::vector<Piece> pieces_;
     std::unordered_map<std::string, std::size_t> names_;
 };

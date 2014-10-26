@@ -1,6 +1,6 @@
 #include <ugdk/graphic/drawmode.h>
 
-#include <ugdk/internal/opengl.h>
+#include <ugdk/graphic/opengl.h>
 
 namespace ugdk {
 namespace graphic {

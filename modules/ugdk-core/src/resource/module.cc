@@ -7,8 +7,8 @@
 #ifndef UGDK_3D_ENABLED
 #include <ugdk/graphic/spritetypes.h>
 #include <ugdk/graphic/textureatlas.h>
-#include <ugdk/internal/gltexture.h>
 #include <ugdk/text/languageword.h>
+#include "graphic/gltexture.h"
 #endif
 
 namespace ugdk {
@@ -27,7 +27,7 @@ bool Initialize(Manager* manager) {
     if(manager) {        
 #ifndef UGDK_3D_ENABLED
         manager->add_container(new GenericContainer<graphic::SpriteAnimationTable*>(graphic::LoadSpriteAnimationTableFromFile));
-        manager->add_container(new GenericContainer<internal::GLTexture*>(internal::GLTexture::CreateFromFile));
+        manager->add_container(new GenericContainer<graphic::GLTexture*>(graphic::GLTexture::CreateFromFile));
         manager->add_container(new GenericContainer<graphic::TextureAtlas*>(graphic::TextureAtlas::LoadFromFile));
         manager->add_container(new GenericContainer<text::LanguageWord*>(NullLoad<text::LanguageWord>));
 #endif
@@ -58,12 +58,12 @@ graphic::SpriteAnimationTable* GetSpriteAnimationTableFromFile(const std::string
     return manager()->get_container<graphic::SpriteAnimationTable*>()->Load(file, file);
 }
 
-internal::GLTexture* GetTextureFromTag(const std::string& tag) {
-    return manager()->get_container<internal::GLTexture*>()->Find(tag);
+graphic::GLTexture* GetTextureFromTag(const std::string& tag) {
+    return manager()->get_container<graphic::GLTexture*>()->Find(tag);
 }
 
-internal::GLTexture* GetTextureFromFile(const std::string& file) {
-    return manager()->get_container<internal::GLTexture*>()->Load(file, file);
+graphic::GLTexture* GetTextureFromFile(const std::string& file) {
+    return manager()->get_container<graphic::GLTexture*>()->Load(file, file);
 }
 
 graphic::TextureAtlas* GetTextureAtlasFromTag(const std::string& tag) {

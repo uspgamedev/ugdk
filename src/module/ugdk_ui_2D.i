@@ -26,7 +26,6 @@
 %import "ugdk_action.i"
 %import(module="ugdk_graphic") <ugdk/graphic.h>
 %import(module="ugdk_math") <ugdk/math.h>
-%import(module="ugdk_internal") <ugdk/internal.h>
 %import(module="ugdk_structure") <ugdk/structure.h>
 
 %include <ugdk/ui.h>

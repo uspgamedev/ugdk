@@ -1,9 +1,9 @@
-#include <ugdk/internal/gltexture.h>
+#include "gltexture.h"
 
 #include "SDL_endian.h"
 #include "SDL_image.h"
 
-#include <ugdk/internal/opengl.h>
+#include <ugdk/graphic/opengl.h>
 #include <ugdk/system/engine.h>
 #include <ugdk/system/config.h>
 #include <ugdk/debug/log.h>
@@ -12,7 +12,7 @@
 #include <cstdio>
 
 namespace ugdk {
-namespace internal {
+namespace graphic {
 
 namespace {
     bool ConvertSurfaceToTexture(SDL_Surface* data, GLuint* texture_, int* texture_width_, int* texture_height_) {
@@ -150,5 +150,5 @@ GLTexture* GLTexture::CreateRawTexture(int texture_width, int texture_height) {
 GLTexture::GLTexture(GLuint gltexture, int texture_width, int texture_height) 
     : id_(gltexture), texture_width_(texture_width), texture_height_(texture_height) {}
 
-} // namespace internal
+} // namespace graphic
 } // namespace ugdk

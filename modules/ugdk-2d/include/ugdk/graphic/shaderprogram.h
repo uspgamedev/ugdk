@@ -1,13 +1,12 @@
-#ifndef UGDK_GRAPHIC_OPENGL_SHADERPROGRAM_H_
-#define UGDK_GRAPHIC_OPENGL_SHADERPROGRAM_H_
+#ifndef UGDK_GRAPHIC_SHADERPROGRAM_H_
+#define UGDK_GRAPHIC_SHADERPROGRAM_H_
 
-#include <ugdk/internal/opengl.h>
+#include <ugdk/graphic/opengl.h>
 #include <ugdk/graphic.h>
 #include <string>
 
 namespace ugdk {
 namespace graphic {
-namespace opengl {
 
 class ShaderProgram {
   public:
@@ -34,8 +33,7 @@ class ShaderProgram {
     friend class ShaderUse;
 };
 
-} // namespace opengl
 } // namespace graphic
 } // namespace ugdk
 
-#endif // UGDK_GRAPHIC_SHADER_SHADERPROGRAM_H_
+#endif // UGDK_GRAPHIC_SHADERPROGRAM_H_

@@ -16,6 +16,7 @@
 namespace ugdk {
 namespace graphic {
 
+class VertexBuffer;
 class VertexData {
   public:
     class Mapper {
@@ -41,14 +42,14 @@ class VertexData {
     VertexData(std::size_t num_vertices, std::size_t vertex_size, bool dynamic, bool ignore_vbo = false);
     ~VertexData();
 
-    const std::unique_ptr<opengl::VertexBuffer>& buffer() const { return buffer_; }
+    const std::unique_ptr<VertexBuffer>& buffer() const { return buffer_; }
     std::size_t num_vertices() const { return num_vertices_; }
     std::size_t vertex_size() const { return vertex_size_; }
 
     void CheckSizes(const char* caller_name, std::size_t test_num_vertices, std::size_t test_vertex_size) const;
 
   private:
-    std::unique_ptr<opengl::VertexBuffer> buffer_;
+    std::unique_ptr<VertexBuffer> buffer_;
     std::size_t num_vertices_;
     std::size_t vertex_size_;
 };

@@ -8,7 +8,6 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/structure/types.h>
 
-#include <ugdk/internal.h>
 #include <ugdk/desktop.h>
 #include <ugdk/graphic.h>
 
@@ -31,14 +30,14 @@ class Canvas {
     Canvas(RenderTarget* render_target);
     ~Canvas();
 
-    void ChangeShaderProgram(const opengl::ShaderProgram* shader_program);
+    void ChangeShaderProgram(const ShaderProgram* shader_program);
 
     /// Queries if this object is currently bound.
     bool IsActive() const;
     math::Vector2D size() const;
     const Geometry& current_geometry() const { return geometry_stack_.back(); }
     const VisualEffect& current_visualeffect() const { return visualeffect_stack_.back(); }
-    const opengl::ShaderProgram* shader_program() const { return shader_program_; }
+    const ShaderProgram* shader_program() const { return shader_program_; }
 
     void PushAndCompose(const Geometry& geometry);
     void PushAndCompose(const VisualEffect& effect);
@@ -74,7 +73,7 @@ class Canvas {
     RenderTarget* render_target_;
     std::vector<Geometry> geometry_stack_;
     std::vector<VisualEffect> visualeffect_stack_;
-    const opengl::ShaderProgram* shader_program_;
+    const ShaderProgram* shader_program_;
     Canvas* previous_canvas_;
     Canvas* next_canvas_;
 };

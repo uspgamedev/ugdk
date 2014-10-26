@@ -14,7 +14,6 @@
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 %import(module="ugdk_system") <ugdk/structure/types.h>
-%include <ugdk/internal.h>
 
 %import(module="ugdk_input_scancode") <ugdk/input/scancode.h>
 %import(module="ugdk_input_keycode") <ugdk/input/keycode.h>

@@ -5,9 +5,9 @@
 #include <ugdk/graphic/rendertarget.h>
 #include <ugdk/graphic/textureunit.h>
 #include <ugdk/graphic/vertexdata.h>
-#include <ugdk/graphic/opengl/shaderprogram.h>
-#include <ugdk/graphic/opengl/vertexbuffer.h>
-#include <ugdk/internal/gltexture.h>
+#include <ugdk/graphic/shaderprogram.h>
+#include "vertexbuffer.h"
+#include "gltexture.h"
 
 namespace ugdk {
 namespace graphic {
@@ -52,7 +52,7 @@ Canvas::~Canvas() {
         previous_canvas_->next_canvas_ = next_canvas_;
 }
 
-void Canvas::ChangeShaderProgram(const opengl::ShaderProgram* shader_program) {
+void Canvas::ChangeShaderProgram(const ShaderProgram* shader_program) {
     shader_program_ = shader_program;
     if (shader_program_) {
         glUseProgram(shader_program_->id());
@@ -157,7 +157,7 @@ void Canvas::SendEffect() {
 
 void Canvas::SendVertexData(const VertexData& data, VertexType type, size_t offset, int size,
                             int vertex_per_data) {
-    opengl::VertexBuffer::Bind bind(*data.buffer().get());
+    VertexBuffer::Bind bind(*data.buffer().get());
 
     unsigned int location = manager()->LocationForVertexType(type);
     glEnableVertexAttribArray(location);

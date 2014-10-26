@@ -1,6 +1,6 @@
 #include <ugdk/text/label.h>
 
-#include <ugdk/internal/opengl.h>
+#include <ugdk/graphic/opengl.h>
 
 #include <ugdk/structure/types.h>
 #include <ugdk/graphic/module.h>

@@ -26,12 +26,11 @@
 //#include <graphics/Volatile.h>
 
 // OpenGL
-#include <ugdk/internal/opengl.h>
+#include <ugdk/graphic/opengl.h>
 #include <memory>
 
 namespace ugdk {
 namespace graphic {
-namespace opengl {
 	/**
 	 * VertexBuffer is an abstraction over VBOs (Vertex Buffer Objecys), which
 	 * falls back to regular vertex arrays if VBOs are not supported.
@@ -314,7 +313,6 @@ namespace opengl {
 	};
 #endif // UGDK_USING_GLES
 
-} // namespace opengl
 } // namespace graphic
 } // namespace ugdk
 

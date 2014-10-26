@@ -2,12 +2,11 @@
 
 #include <ugdk/action/scene.h>
 #include <ugdk/action/events.h>
-#include <ugdk/internal/gltexture.h>
 #include <ugdk/desktop/2D/window.h>
 #include <ugdk/graphic/defaultshaders.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/module.h>
-#include <ugdk/graphic/opengl/shaderprogram.h>
+#include <ugdk/graphic/shaderprogram.h>
 #include <ugdk/graphic/rendertarget.h>
 #include <ugdk/graphic/rendertexture.h>
 #include <ugdk/debug/profiler.h>
@@ -15,6 +14,7 @@
 #include <ugdk/util/idgenerator.h>
 #include <ugdk/graphic/exceptions.h>
 
+#include "gltexture.h"
 #include "SDL_video.h"
 
 namespace ugdk {
@@ -31,7 +31,7 @@ public:
         projection_matrix_ = Geometry(math::Vector2D(-1.0, 1.0), math::Vector2D(2.0/size_.x, -2.0/size_.y));
     }
 
-    void SaveToTexture(internal::GLTexture* texture) {
+    void SaveToTexture(graphic::GLTexture* texture) {
         glBindTexture(GL_TEXTURE_2D, texture->id());
         //glReadBuffer(GL_BACK); FIXME
         glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, texture->width(), texture->height());
@@ -114,7 +114,7 @@ bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, cons
     unsigned char buffer[32*32*4];
     for(int i = 0; i < 32*32*4; ++i) buffer[i] = 255;
     if(white_texture_) delete white_texture_;
-    white_texture_ = internal::GLTexture::CreateRawTexture(32, 32);
+    white_texture_ = graphic::GLTexture::CreateRawTexture(32, 32);
 
     glBindTexture(GL_TEXTURE_2D, white_texture_->id());
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 32, 32, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
@@ -135,7 +135,7 @@ void Manager::Release() {
     textureunit_ids_.reset();
 }
 
-TextureUnit Manager::ReserveTextureUnit(const internal::GLTexture* texture) {
+TextureUnit Manager::ReserveTextureUnit(const graphic::GLTexture* texture) {
     int id = textureunit_ids_->GenerateID();
     if (id == textureunit_ids_->error_value())
         throw NotSupportedException("Maximum amount of TextureUnits reached.");
@@ -186,11 +186,11 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
     return light_scene;
 }
 
-const opengl::ShaderProgram* Manager::Shaders::current_shader() const {
+const ShaderProgram* Manager::Shaders::current_shader() const {
     return shaders_[flags_.to_ulong()];
 }
         
-const opengl::ShaderProgram* Manager::Shaders::GetSpecificShader(const std::bitset<Manager::Shaders::NUM_FLAGS>& flags) const {
+const ShaderProgram* Manager::Shaders::GetSpecificShader(const std::bitset<Manager::Shaders::NUM_FLAGS>& flags) const {
     return shaders_[flags.to_ulong()];
 }
 
@@ -204,7 +204,7 @@ void Manager::Shaders::ChangeFlag(Flag flag, bool value) {
     flags_[flag_bit] = value;
 }
 
-void Manager::Shaders::ReplaceShader(const std::bitset<NUM_FLAGS>& flags, opengl::ShaderProgram* program) {
+void Manager::Shaders::ReplaceShader(const std::bitset<NUM_FLAGS>& flags, ShaderProgram* program) {
     delete shaders_[flags.to_ulong()];
     shaders_[flags.to_ulong()] = program;
 }

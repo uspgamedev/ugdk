@@ -3,14 +3,14 @@
 //#define GLM_SWIZZLE 
 #include <glm/glm.hpp>
 
-#include <ugdk/internal/opengl.h>
-#include <ugdk/internal/gltexture.h>
+#include <ugdk/graphic/opengl.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/textureunit.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/primitivesetup.h>
 #include <ugdk/math/integer2D.h>
+#include "graphic/gltexture.h"
 
 namespace ugdk {
 namespace ui {
@@ -23,11 +23,11 @@ namespace {
     };
 }
     
-TexturedRectangle::TexturedRectangle(const internal::GLTexture* texture)
+TexturedRectangle::TexturedRectangle(const graphic::GLTexture* texture)
     : TexturedRectangle(texture, math::Integer2D(texture->width(), texture->height()))
 {}
 
-TexturedRectangle::TexturedRectangle(const internal::GLTexture* texture, const math::Vector2D& _size)
+TexturedRectangle::TexturedRectangle(const graphic::GLTexture* texture, const math::Vector2D& _size)
     : size_(_size)
     , data_(4, sizeof(VertexXYUV), false)
     , texture_(texture)

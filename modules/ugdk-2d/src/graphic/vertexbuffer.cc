@@ -18,7 +18,7 @@
 * 3. This notice may not be removed or altered from any source distribution.
 **/
 
-#include <ugdk/graphic/opengl/vertexbuffer.h>
+#include "vertexbuffer.h"
 
 #include <ugdk/system/LoveException.h>
 //#include <common/config.h>
@@ -28,7 +28,6 @@
 
 namespace ugdk {
 namespace graphic {
-namespace opengl {
 	// VertexBuffer
 
 	VertexBuffer *VertexBuffer::Create(size_t size, GLenum target, GLenum usage)
@@ -58,10 +57,10 @@ namespace opengl {
             1.0f, 0.0f,
             1.0f, 1.0f
         };
-        std::shared_ptr<VertexBuffer> ptr(opengl::VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW));
+        std::shared_ptr<VertexBuffer> ptr(VertexBuffer::Create(sizeof(buffer_data), GL_ARRAY_BUFFER, GL_STATIC_DRAW));
         {
-            opengl::VertexBuffer::Bind bind(*ptr);
-            opengl::VertexBuffer::Mapper mapper(*ptr);
+            VertexBuffer::Bind bind(*ptr);
+            VertexBuffer::Mapper mapper(*ptr);
 
             GLfloat *indices = static_cast<GLfloat*>(mapper.get());
             if (indices)
@@ -260,6 +259,5 @@ namespace opengl {
 	}
 #endif // UGDK_USING_GLES
 
-} // namespace opengl
 } // namespace graphic
 } // namespace ugdk

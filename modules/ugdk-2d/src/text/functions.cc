@@ -2,15 +2,12 @@
 
 #include <glm/glm.hpp>
 
-#include <ugdk/internal/opengl.h>
-#include <ugdk/internal/gltexture.h>
+#include <ugdk/graphic/opengl.h>
 #include <ugdk/graphic/module.h>
-#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/textureunit.h>
+#include <ugdk/graphic/shaderprogram.h>
 #include <ugdk/text/font.h>
-#include <ugdk/graphic/opengl/shaderprogram.h>
-#include <ugdk/graphic/opengl/vertexbuffer.h>
 #include <ugdk/util/utf8.h>
 
 #include <texture-font.h>

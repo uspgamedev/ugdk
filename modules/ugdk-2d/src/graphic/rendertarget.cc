@@ -1,7 +1,7 @@
 #include <ugdk/graphic/rendertarget.h>
 
 #include <ugdk/graphic/exceptions.h>
-#include <ugdk/internal/opengl.h>
+#include <ugdk/graphic/opengl.h>
 
 namespace ugdk {
 namespace graphic {

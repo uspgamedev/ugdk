@@ -80,7 +80,6 @@ modules/ugdk-core/include/ugdk/input/mouse.h
 modules/ugdk-core/include/ugdk/input/mousebutton.h
 modules/ugdk-core/include/ugdk/input/scancode.h
 modules/ugdk-core/include/ugdk/input/textinput.h
-modules/ugdk-core/include/ugdk/internal.h
 modules/ugdk-core/include/ugdk/math.h
 modules/ugdk-core/include/ugdk/math/frame.h
 modules/ugdk-core/include/ugdk/math/integer2D.h
@@ -96,6 +95,7 @@ modules/ugdk-core/include/ugdk/structure/box.h
 modules/ugdk-core/include/ugdk/structure/indexabletable.h
 modules/ugdk-core/include/ugdk/structure/intervalkdtree.h
 modules/ugdk-core/include/ugdk/structure/types.h
+modules/ugdk-core/include/ugdk/structure/vertex.h
 modules/ugdk-core/include/ugdk/system.h
 modules/ugdk-core/include/ugdk/system/compatibility.h
 modules/ugdk-core/include/ugdk/system/configuration.h
