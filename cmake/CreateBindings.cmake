@@ -21,19 +21,19 @@ if (SWIG_FOUND)
 
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/src/module")
     set(CMAKE_SWIG_FLAGS
-        "-I${CMAKE_CURRENT_SOURCE_DIR}/src"
-        "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/src"
-        "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/include"
-        "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/include"
-        "-I${CMAKE_CURRENT_BINARY_DIR}/include")
+        "-I${ugdk_SOURCE_DIR}/src"
+        "-I${ugdk_SOURCE_DIR}/modules/ugdk-core/src"
+        "-I${ugdk_SOURCE_DIR}/modules/ugdk-core/include"
+        "-I${ugdk_SOURCE_DIR}/modules/ugdk-script/include"
+        "-I${ugdk_BINARY_DIR}/include")
     if (UGDK_3D_ENABLED)
         set(CMAKE_SWIG_FLAGS "${CMAKE_SWIG_FLAGS}"
-            "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-3d/include"
-            "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-3d/src")
+            "-I${ugdk_SOURCE_DIR}/modules/ugdk-3d/include"
+            "-I${ugdk_SOURCE_DIR}/modules/ugdk-3d/src")
     else()
         set(CMAKE_SWIG_FLAGS "${CMAKE_SWIG_FLAGS}"
-            "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-2d/include"
-            "-I${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-2d/src")
+            "-I${ugdk_SOURCE_DIR}/modules/ugdk-2d/include"
+            "-I${ugdk_SOURCE_DIR}/modules/ugdk-2d/src")
     endif()
     
     function (create_modules LANGUAGE_LIST_VAR MODULE_LIST_VAR MODULES_NAME GENERATED_OUTPUT)
