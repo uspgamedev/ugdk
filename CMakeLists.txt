@@ -281,6 +281,9 @@ if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/pa
             FILES_MATCHING PATTERN "*.py")
 endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
 
+# Export variables for any project using UGDK as subdirectory
+set(UGDK_HEADERS ${UGDK_HEADERS} PARENT_SCOPE)
+
 # Tests and examples
 if(UGDK_BUILD_TESTS)
     add_subdirectory(test)
