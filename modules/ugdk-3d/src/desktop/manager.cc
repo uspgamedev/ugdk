@@ -122,12 +122,12 @@ std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& s
     if (SDL_GetWindowWMInfo(window, &wmInfo) == SDL_FALSE)
         return false; //Couldn't get WM Info!
 
-    SDL_GLContext glcontext = NULL;
+    SDL_GLContext glcontext = nullptr;
 #ifndef __MACOSX__
     glcontext = SDL_GL_CreateContext(window);
-    if (glcontext == NULL) {
+    if (!glcontext) {
         ugdk::debug::Log(ugdk::debug::CRITICAL, "SDL_GL_CreateContext failed: " + std::string(SDL_GetError()));
-        return false;
+        return std::shared_ptr<desktop::Window>();
     }
 #endif
 
@@ -157,7 +157,6 @@ std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& s
         params["macAPICocoaUseNSView"] = "true";
 
         break;
-        return false;
 #else
     case SDL_SYSWM_X11:
 
@@ -173,7 +172,7 @@ std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& s
 #endif
     default:
         //unexpected WM
-        return false;
+        return std::shared_ptr<desktop::Window>();
     }
 
     Ogre::RenderWindow* ogre_window = root_->createRenderWindow(Ogre::String(settings.title), 
