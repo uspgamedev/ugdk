@@ -120,7 +120,7 @@ std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& s
     SDL_VERSION(&wmInfo.version);
 
     if (SDL_GetWindowWMInfo(window, &wmInfo) == SDL_FALSE)
-        return false; //Couldn't get WM Info!
+        return std::shared_ptr<desktop::Window>(); //Couldn't get WM Info!
 
     SDL_GLContext glcontext = nullptr;
 #ifndef __MACOSX__
