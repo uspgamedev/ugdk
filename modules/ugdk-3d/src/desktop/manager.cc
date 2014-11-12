@@ -98,6 +98,7 @@ void Manager::Release() {
 void Manager::PresentAll(/*double dt*/) {
     //TODO: check if we dont need to use the overload which receives delta_t
     root_->renderOneFrame();
+    window_->Present();
 }
 
 Ogre::RenderWindow& Manager::window() {
@@ -187,7 +188,7 @@ std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& s
     // TODO: We might need to set resource listeners, if any, before this call.    
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
     
-    window_.reset(new ugdk::desktop::mode3d::Window(ogre_window));
+    window_.reset(new ugdk::desktop::mode3d::Window(window, ogre_window));
     return window_;
 }
 
