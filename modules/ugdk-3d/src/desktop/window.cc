@@ -4,16 +4,23 @@
 
 #include "OgreRenderWindow.h"
 
+#include "SDL.h"
+#include "SDL_opengl.h"
+
 namespace ugdk {
 namespace desktop {
 namespace mode3d {
 
-Window::Window(Ogre::RenderWindow* ogre_window)
-    : ogre_window_(ogre_window)
+Window::Window(SDL_Window* sdl_window, Ogre::RenderWindow* ogre_window)
+    : sdl_window_(sdl_window)
+    , ogre_window_(ogre_window)
 {}
 
 void Window::Present() {
     ogre_window_->update();
+    SDL_GL_SwapWindow(sdl_window_);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync) {

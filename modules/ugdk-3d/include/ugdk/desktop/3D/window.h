@@ -10,6 +10,7 @@
 namespace Ogre {
 class RenderWindow;
 }
+struct SDL_Window;
 
 namespace ugdk {
 namespace desktop {
@@ -17,7 +18,7 @@ namespace mode3d {
 
 class Window final : public desktop::Window {
   private:
-    Window(Ogre::RenderWindow* ogre_window);
+    Window(SDL_Window* sdl_window, Ogre::RenderWindow* ogre_window);
 
   public:
     ~Window() {}
@@ -40,6 +41,7 @@ class Window final : public desktop::Window {
     bool vsync() const override;
 
   private:
+    SDL_Window* sdl_window_;
     Ogre::RenderWindow* ogre_window_;
     
     friend class ::ugdk::desktop::mode3d::Manager;

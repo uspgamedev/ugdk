@@ -22,6 +22,11 @@
 #include <sstream>
 #include <vector>
 
+#include "SDL.h"
+#include "SDL_syswm.h"
+#include "SDL_video.h"
+#include "SDL_opengl.h"
+
 namespace ugdk {
 namespace desktop {
 namespace mode3d {
@@ -93,6 +98,7 @@ void Manager::Release() {
 void Manager::PresentAll(/*double dt*/) {
     //TODO: check if we dont need to use the overload which receives delta_t
     root_->renderOneFrame();
+    window_->Present();
 }
 
 Ogre::RenderWindow& Manager::window() {
@@ -101,10 +107,77 @@ Ogre::RenderWindow& Manager::window() {
 
 std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& settings) {
 
-    Ogre::NameValuePairList params;
-    Ogre::RenderWindow* window = root_->createRenderWindow(Ogre::String(settings.title), 
-                                                           settings.size.x, settings.size.y, 
-                                                           settings.fullscreen, &params);
+    Uint32 flags = SDL_WINDOW_OPENGL;
+    if(settings.fullscreen) flags |= SDL_WINDOW_FULLSCREEN;
+
+    SDL_Window* window  = SDL_CreateWindow(settings.title.c_str(),
+                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                               settings.size.x, settings.size.y,
+                               flags);
+
+    //get the native whnd
+    SDL_SysWMinfo wmInfo;
+    SDL_VERSION(&wmInfo.version);
+
+    if (SDL_GetWindowWMInfo(window, &wmInfo) == SDL_FALSE)
+        return std::shared_ptr<desktop::Window>(); //Couldn't get WM Info!
+
+    SDL_GLContext glcontext = nullptr;
+#ifndef __MACOSX__
+    glcontext = SDL_GL_CreateContext(window);
+    if (!glcontext) {
+        ugdk::debug::Log(ugdk::debug::CRITICAL, "SDL_GL_CreateContext failed: " + std::string(SDL_GetError()));
+        return std::shared_ptr<desktop::Window>();
+    }
+#endif
+
+    Ogre::NameValuePairList params; //TODO: this could (should?) be a parameter
+
+    switch (wmInfo.subsystem)
+    {
+#ifdef WIN32
+    case SDL_SYSWM_WINDOWS:
+        // Windows code
+
+        params["externalGLControl"] = "1";
+
+        // only supported for Win32 on Ogre 1.8 not on other platforms (documentation needs fixing to accurately reflect this)
+        params["externalGLContext"] = Ogre::StringConverter::toString( (unsigned long)glcontext );
+        params["externalWindowHandle"] = Ogre::StringConverter::toString( (unsigned long) wmInfo.info.win.window );
+
+        break;
+#elif __MACOSX__
+    case SDL_SYSWM_COCOA:
+
+        params["externalGLControl"] = "1";
+        // only supported for Win32 on Ogre 1.8 not on other platforms (documentation needs fixing to accurately reflect this)
+        // params["externalGLContext"] = Ogre::StringConverter::toString( glcontext );
+        params["externalWindowHandle"] = OSX_cocoa_view( window->sdl_window_ );
+        params["macAPI"] = "cocoa";
+        params["macAPICocoaUseNSView"] = "true";
+
+        break;
+#else
+    case SDL_SYSWM_X11:
+
+        params["externalGLControl"] = "1";
+        // not documented in Ogre 1.8 mainline, supported for GLX and EGL{Win32,X11}
+        params["currentGLContext"] = "1";
+
+        // NOTE: externalWindowHandle is reported as deprecated (GLX Ogre 1.8)
+        //SDL_WindowData * x11_window_data = (SDL_WindowData*)window->driverdata;
+        params["parentWindowHandle"] = Ogre::StringConverter::toString((unsigned long) wmInfo.info.x11.window);
+
+        break;
+#endif
+    default:
+        //unexpected WM
+        return std::shared_ptr<desktop::Window>();
+    }
+
+    Ogre::RenderWindow* ogre_window = root_->createRenderWindow(Ogre::String(settings.title), 
+                                                                settings.size.x, settings.size.y, 
+                                                                settings.fullscreen, &params);
     
     // Set default number of mipmaps. Not sure if this particularly needed, but...
     //Pretty sure these calls need a RenderWindow created to work, that's why they are here for now...
@@ -114,7 +187,7 @@ std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& s
     // TODO: We might need to set resource listeners, if any, before this call.    
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
     
-    window_.reset(new ugdk::desktop::mode3d::Window(window));
+    window_.reset(new ugdk::desktop::mode3d::Window(window, ogre_window));
     return window_;
 }
 
