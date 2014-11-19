@@ -6,6 +6,7 @@
 #include <ugdk/math/integer2D.h>
 #include <ugdk/debug/log.h>
 #include <ugdk/system/engine.h>
+#include <ugdk/system/config.h>
 
 #ifdef UGDK_OGRE_STATIC
 // FIXME: HELP, WE'RE HARD CODING THIS
@@ -42,8 +43,10 @@ Manager::Manager() {
 
 Manager::~Manager() {
     delete root_;
+#ifdef UGDK_OGRE_STATIC
     static_loader_->unload();
     delete static_loader_;
+#endif
 }
 
 bool Manager::Initialize() {
@@ -52,11 +55,17 @@ bool Manager::Initialize() {
     std::string mPluginsCfg = system::ResolvePath("plugins" OGRE_BUILD_SUFFIX ".cfg");
 
     // Create the Root
-    root_ = new Ogre::Root(mPluginsCfg);
-    
+    root_ = new Ogre::Root();
+
+#ifdef UGDK_OGRE_STATIC
     // Load static plugins
     static_loader_ = new Ogre::StaticPluginLoader();
     static_loader_->load();
+#else
+    root_->loadPlugin(OGRE_PLUGIN_DIR_DBG "/RenderSystem_GL" OGRE_BUILD_SUFFIX);
+    root_->loadPlugin(OGRE_PLUGIN_DIR_DBG "/Plugin_OctreeSceneManager" OGRE_BUILD_SUFFIX);
+#endif
+    
     
     // Setup resources
     Ogre::ConfigFile cf;
