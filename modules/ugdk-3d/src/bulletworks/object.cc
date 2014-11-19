@@ -60,7 +60,7 @@ void Object::setupCollision() {
     btRigidBody::btRigidBodyConstructionInfo  bodyInfo(static_cast<btScalar>(physics_data_.mass), motionState, physics_data_.shape, inertia);
     body_ = new btRigidBody(bodyInfo);
     body_->setLinearFactor(btVector3(1,1,1));
-	body_->setActivationState(DISABLE_DEACTIVATION);
+    body_->setActivationState(DISABLE_DEACTIVATION);
     body_->setUserPointer(this);
 }
 

@@ -36,7 +36,7 @@ public:
     virtual void OnSceneAdd(ugdk::action::Scene* scene);
 
     Ogre::Entity* entity() const { return entity_; }
-	btRigidBody* body() const { return body_; }
+    btRigidBody* body() const { return body_; }
     std::string entity_name();
 
     double mass() const { return physics_data_.mass; }
@@ -48,10 +48,10 @@ public:
     void Rotate(double yaw, double pitch, double roll);
 
 protected:
-	Ogre::Entity* entity_;
+    Ogre::Entity* entity_;
 
     PhysicsData physics_data_;
-	btRigidBody* body_;
+    btRigidBody* body_;
 
     Manager* parent_physics_mgr_;
     void setupCollision();
