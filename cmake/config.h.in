@@ -20,7 +20,10 @@
 #cmakedefine UGDK_3D_ENABLED
 #define UGDK_ENABLED(X) UGDK_##X##_ENABLED
 
-#cmakedefine UGDK_OGRE_STATIC
+#cmakedefine UGDK_INSTALL_LOCATION "@UGDK_INSTALL_LOCATION@"
+
+#cmakedefine OGRE_PLUGIN_DIR_REL "@OGRE_PLUGIN_DIR_REL@"
+#cmakedefine OGRE_PLUGIN_DIR_DBG "@OGRE_PLUGIN_DIR_DBG@"
 
 #ifdef ANDROID
 #include <cstdio>
