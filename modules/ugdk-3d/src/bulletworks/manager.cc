@@ -32,17 +32,17 @@ Manager::Manager(const btVector3& grav, Ogre::SceneManager* sceneMgr) {
     debug_drawer_->setDebugMode(false);
     world_->setDebugDrawer(debug_drawer_);
 
-    world_->setWorldUserInfo(static_cast<void*>(this));
     world_->setInternalTickCallback(&tickCallback);
+    world_->setWorldUserInfo(static_cast<void*>(this));
 }
 
 Manager::~Manager() {
+    delete world_;
 	delete broadphase_;
-    delete config_;
     delete dispatcher_;
+    delete config_;
     delete solver_;
     delete debug_drawer_;
-    delete world_;
 }
 
 void Manager::Update(double dt) {
@@ -81,7 +81,7 @@ void tickCallback(btDynamicsWorld *world, btScalar timeStep) {
             //std::cout << obA->entity_name() << " IS NEAR (" << pt.getDistance() << ") " << obB->entity_name() << std::endl;
 			if (pt.getDistance() <= 0)
 			{
-                CollisionLogic& logic = static_cast<Manager*>(world->getWorldUserInfo())->collision_logic();
+                CollisionLogic logic = static_cast<Manager*>(world->getWorldUserInfo())->collision_logic();
                 if (logic) {
                     logic(obA, obB, pt);
                 }

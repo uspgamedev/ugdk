@@ -38,7 +38,7 @@ public:
     bool debug_draw_enabled();
 
     void set_collision_logic(CollisionLogic& logic) { col_logic_ = logic; }
-    CollisionLogic& collision_logic() { return col_logic_; }
+    CollisionLogic collision_logic() { return col_logic_; }
 
 private:
     btBroadphaseInterface* broadphase_;

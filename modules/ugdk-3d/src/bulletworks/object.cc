@@ -20,6 +20,7 @@ Object::PhysicsData::PhysicsData() {
     shape = nullptr;
     auto identity = BtOgre::Convert::toBullet(Ogre::Quaternion::IDENTITY);
     initial = btTransform(identity, btVector3(0, 0, 0));
+    offset = btTransform(identity, btVector3(0, 0, 0));
 }
 
 Object::Object(Ogre::Entity* entity, const PhysicsData& physics_data)
