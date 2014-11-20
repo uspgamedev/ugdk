@@ -13,6 +13,8 @@ modules/ugdk-core/src/desktop/windowsettings.cc
 modules/ugdk-core/src/filesystem/file.cc
 modules/ugdk-core/src/filesystem/manager.cc
 modules/ugdk-core/src/filesystem/module.cc
+modules/ugdk-core/src/filesystem/sdlfile.cc
+modules/ugdk-core/src/filesystem/sdlfile.h
 modules/ugdk-core/src/input/keyboard.cc
 modules/ugdk-core/src/input/keycode.cc
 modules/ugdk-core/src/input/manager.cc
