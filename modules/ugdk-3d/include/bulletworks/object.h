@@ -18,8 +18,9 @@ class btRigidBody;
 
 namespace bulletworks {
 class Manager;
+class PhysicScene;
 
-class Object : ugdk::action::mode3d::OgreEntity {
+class Object : public ugdk::action::mode3d::OgreEntity {
 public:
     struct PhysicsData {
         double mass;                // rigid body mass (must be >= 0, and 0 means static "infinite mass" object)
@@ -28,12 +29,14 @@ public:
         btCollisionShape* shape;    // collision shape of this object
         btTransform initial;        // initial position and orientation of the object
         btTransform offset;         // offset to center of mass
+
+        PhysicsData();
     };
 
     Object(Ogre::Entity* entity, const PhysicsData& physics_data);
     ~Object();
 
-    virtual void OnSceneAdd(ugdk::action::Scene* scene);
+    void AddToScene(bulletworks::PhysicScene* scene);
 
     Ogre::Entity* entity() const { return entity_; }
     btRigidBody* body() const { return body_; }
@@ -44,8 +47,11 @@ public:
     short collides_with() const { return physics_data_.collides_with; }
 
     void Translate(const Ogre::Vector3& move);
+    void Translate(double move_x, double move_y, double move_z);
     void Move(const Ogre::Vector3& delta);
+    void Move(double delta_x, double delta_y, double delta_z);
     void Rotate(double yaw, double pitch, double roll);
+    void Scale(double factor_x, double factor_y, double factor_z);
 
 protected:
     Ogre::Entity* entity_;
