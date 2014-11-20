@@ -104,4 +104,10 @@ void Object::Rotate(double yaw, double pitch, double roll) {
     body_->setCenterOfMassTransform(t);*/
 }
 
+void Object::Scale(double factor_x, double factor_y, double factor_z) {
+    node_->scale(factor_x, factor_y, factor_z);
+    if (body_)
+        body_->getCollisionShape()->setLocalScaling(btVector3(factor_x, factor_y, factor_z));
+}
+
 }

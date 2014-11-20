@@ -51,6 +51,7 @@ public:
     void Move(const Ogre::Vector3& delta);
     void Move(double delta_x, double delta_y, double delta_z);
     void Rotate(double yaw, double pitch, double roll);
+    void Scale(double factor_x, double factor_y, double factor_z);
 
 protected:
     Ogre::Entity* entity_;
