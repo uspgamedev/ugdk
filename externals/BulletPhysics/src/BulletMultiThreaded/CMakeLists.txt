@@ -20,11 +20,11 @@ SET(BulletMultiThreaded_SRCS
 	#SPURS_PEGatherScatterTask/SpuPEGatherScatterTask.cpp
 	#SpuPEGatherScatterTaskProcess.cpp
 
-	SpuNarrowPhaseCollisionTask/boxBoxDistance.cpp
-	SpuNarrowPhaseCollisionTask/SpuContactResult.cpp
-	SpuNarrowPhaseCollisionTask/SpuMinkowskiPenetrationDepthSolver.cpp
-	SpuNarrowPhaseCollisionTask/SpuGatheringCollisionTask.cpp
-	SpuNarrowPhaseCollisionTask/SpuCollisionShapes.cpp
+	#SpuNarrowPhaseCollisionTask/boxBoxDistance.cpp
+	#SpuNarrowPhaseCollisionTask/SpuContactResult.cpp
+	#SpuNarrowPhaseCollisionTask/SpuMinkowskiPenetrationDepthSolver.cpp
+	#SpuNarrowPhaseCollisionTask/SpuGatheringCollisionTask.cpp
+	#SpuNarrowPhaseCollisionTask/SpuCollisionShapes.cpp
 
 	#Some GPU related stuff, mainly CUDA and perhaps OpenCL
 	btGpu3DGridBroadphase.cpp
@@ -74,7 +74,7 @@ SET(SpuNarrowPhaseCollisionTask_HDRS
 
 SET(BulletMultiThreaded_HDRS
 	${Root_HDRS}
-	${SpuNarrowPhaseCollisionTask_HDRS}
+	#${SpuNarrowPhaseCollisionTask_HDRS}
 )
 
 ADD_LIBRARY(BulletMultiThreaded ${BulletMultiThreaded_SRCS} ${BulletMultiThreaded_HDRS})
