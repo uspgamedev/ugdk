@@ -10,8 +10,12 @@ namespace filesystem {
 
 class SDLFile : public File {
   public:
-    SDLFile() {}
-    ~SDLFile() {}
+    SDLFile(SDL_RWops* _rwops) : rwops_(_rwops) {}
+
+    ~SDLFile() {
+        if (rwops_)
+            Close();
+    }
 
     int64 size() const {
         return SDL_RWsize(rwops_);
@@ -40,6 +44,12 @@ class SDLFile : public File {
 
     std::size_t WriteRaw(const void* ptr, std::size_t size, std::size_t num) {
         return SDL_RWwrite(rwops_, ptr, size, num);
+    }
+
+    bool Close() {
+        bool success = SDL_RWclose(rwops_) == 0;
+        rwops_ = nullptr;
+        return success;
     }
 
     SDL_RWops* rwops() { return rwops_; }

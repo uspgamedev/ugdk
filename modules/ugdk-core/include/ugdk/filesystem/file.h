@@ -31,6 +31,7 @@ class File {
 
     /**
     * @return The current offset in the file stream, relative to the start.
+    * @see Seek
     */
     int64 Tell();
 
@@ -48,6 +49,7 @@ class File {
     * @param ptr The buffer where the objects will be saved.
     * @param maxnum The maximum number of objects to be read.
     * @return The number of objects read, or 0 if end of file or error.
+    * @see ReadRaw
     */
     template <class T>
     std::size_t Read(T* ptr, std::size_t maxnum = 1) {
@@ -68,11 +70,18 @@ class File {
     * @param ptr The buffer from where the objects are read.
     * @param num The number of objects to write.
     * @return The number of objects written, or 0 if end of file or error.
+    * @see WriteRaw
     */
     template <class T>
     std::size_t Write(const T* ptr, std::size_t num = 1) {
         return WriteRaw(ptr, sizeof(T), num);
     }
+
+    /**
+    * Flushes data and closes the file. Any operations on a closed file are undefined behaviour.
+    * @return True on success, false on error.
+    */
+    virtual bool Close() = 0;
 
   protected:
     File() {}    
