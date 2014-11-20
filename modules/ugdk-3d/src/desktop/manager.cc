@@ -38,6 +38,12 @@ using std::stringstream;
 using std::stoi;
 using std::make_shared;
 
+#ifdef OGRE_DEBUG_MODE
+#define UGDK_OGRE_PLUGIN_DIR OGRE_PLUGIN_DIR_DBG
+#else
+#define UGDK_OGRE_PLUGIN_DIR OGRE_PLUGIN_DIR_REL
+#endif
+
 Manager::Manager() {
 }
 
@@ -62,8 +68,8 @@ bool Manager::Initialize() {
     static_loader_ = new Ogre::StaticPluginLoader();
     static_loader_->load();
 #else
-    root_->loadPlugin(OGRE_PLUGIN_DIR_DBG "/RenderSystem_GL" OGRE_BUILD_SUFFIX);
-    root_->loadPlugin(OGRE_PLUGIN_DIR_DBG "/Plugin_OctreeSceneManager" OGRE_BUILD_SUFFIX);
+    root_->loadPlugin(UGDK_OGRE_PLUGIN_DIR "/RenderSystem_GL" OGRE_BUILD_SUFFIX);
+    root_->loadPlugin(UGDK_OGRE_PLUGIN_DIR "/Plugin_OctreeSceneManager" OGRE_BUILD_SUFFIX);
 #endif
     
     
