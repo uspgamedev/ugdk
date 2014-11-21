@@ -1,7 +1,7 @@
 #ifndef BULLETWORKS_OBJECT_H_
 #define BULLETWORKS_OBJECT_H_
 
-#include <ugdk/action/3D/ogreentity.h>
+#include <ugdk/action/3D/element.h>
 #include <ugdk/action.h>
 
 #include <LinearMath/btTransform.h>
@@ -20,7 +20,7 @@ namespace bulletworks {
 class Manager;
 class PhysicScene;
 
-class Object : public ugdk::action::mode3d::OgreEntity {
+class Object : public ugdk::action::mode3d::Element {
 public:
     struct PhysicsData {
         double mass;                // rigid body mass (must be >= 0, and 0 means static "infinite mass" object)

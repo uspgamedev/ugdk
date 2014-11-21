@@ -1,5 +1,5 @@
 #include <ugdk/action/3D/camera.h>
-#include <ugdk/action/3D/ogreentity.h>
+#include <ugdk/action/3D/element.h>
 #include <ugdk/action/3D/ogrescene.h>
 
 #include <OgreEntity.h>
@@ -27,7 +27,7 @@ Camera::~Camera() {
     camera_->getSceneManager()->destroyCamera(camera_);
 }
 
-void Camera::AttachTo(OgreEntity* ent) {
+void Camera::AttachTo(Element* ent) {
     if (parent_ != nullptr) {
         Ogre::SceneNode* oldCamNode = camera_->getParentSceneNode();
         parent_->node()->removeChild( oldCamNode );

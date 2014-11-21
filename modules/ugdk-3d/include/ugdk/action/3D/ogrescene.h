@@ -25,7 +25,7 @@ class Camera;
 */
 class OgreScene : public ugdk::action::Scene {
 //TODO: this does not allow showing at the same time multiple cameras from the same scene (splitscreen coop for example).
-  public:
+public:
     OgreScene();
     virtual ~OgreScene();
     
@@ -40,8 +40,9 @@ class OgreScene : public ugdk::action::Scene {
     Ogre::SceneManager* manager() const { return scene_mgr_; }
     Camera* camera() const { return camera_; }
 
-  protected:
-    
+protected:
+    virtual void setupCamera();
+
     Ogre::SceneManager* scene_mgr_;
     Ogre::OverlaySystem* overlay_system_;
     Camera* camera_;

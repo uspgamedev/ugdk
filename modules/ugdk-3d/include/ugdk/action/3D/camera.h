@@ -21,7 +21,7 @@ public:
     Camera(OgreScene* scene, const std::string& camName="MainCam");
     ~Camera();
 
-    void AttachTo(OgreEntity* ent);
+    void AttachTo(Element* ent);
 
     void SetParameters(const Ogre::Vector3& parent_origin_offset = Ogre::Vector3::ZERO, double max_dist=7.5);
 
@@ -30,13 +30,13 @@ public:
     void Rotate(double yaw, double pitch);
 
     Ogre::Camera* camera() { return camera_; }
-    OgreEntity* parent() { return parent_; }
+    Element* parent() { return parent_; }
     Ogre::Quaternion orientation(); //local camera orientation
     Ogre::Quaternion actual_orientation(); //world camera orientation
     
 protected:
     Ogre::Camera* camera_;
-	OgreEntity* parent_;
+	Element* parent_;
 
     Ogre::Vector3 offset_; // offset to parent origin
     double dist_;          // distance to origin (parent origin+offset)

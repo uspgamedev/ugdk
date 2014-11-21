@@ -37,7 +37,7 @@ Object::~Object() {
     }
 
     node_->getCreator()->destroyEntity(entity_);
-    //OgreEntity takes care of destroying our node_
+    //Element takes care of destroying our node_
 }
 
 std::string Object::entity_name() {

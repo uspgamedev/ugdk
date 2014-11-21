@@ -1,6 +1,6 @@
 SET(GENERATED_SRC
 modules/ugdk-3d/src/action/camera.cc
-modules/ugdk-3d/src/action/ogreentity.cc
+modules/ugdk-3d/src/action/element.cc
 modules/ugdk-3d/src/action/ogrescene.cc
 modules/ugdk-3d/src/bulletworks/manager.cc
 modules/ugdk-3d/src/bulletworks/object.cc
@@ -13,7 +13,7 @@ modules/ugdk-3d/include/bulletworks/manager.h
 modules/ugdk-3d/include/bulletworks/object.h
 modules/ugdk-3d/include/bulletworks/physicscene.h
 modules/ugdk-3d/include/ugdk/action/3D/camera.h
-modules/ugdk-3d/include/ugdk/action/3D/ogreentity.h
+modules/ugdk-3d/include/ugdk/action/3D/element.h
 modules/ugdk-3d/include/ugdk/action/3D/ogrescene.h
 modules/ugdk-3d/include/ugdk/desktop/3D/manager.h
 modules/ugdk-3d/include/ugdk/desktop/3D/window.h
