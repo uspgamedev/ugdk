@@ -33,7 +33,7 @@ public:
         PhysicsData();
     };
 
-    Object(Ogre::Entity* entity, const PhysicsData& physics_data);
+    Object(PhysicScene& scene, Ogre::Entity* entity, const PhysicsData& physics_data);
     ~Object();
 
     void AddToScene(bulletworks::PhysicScene* scene);

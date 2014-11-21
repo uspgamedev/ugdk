@@ -41,8 +41,6 @@ public:
     Camera* camera() const { return camera_; }
 
 protected:
-    virtual void setupCamera();
-
     Ogre::SceneManager* scene_mgr_;
     Ogre::OverlaySystem* overlay_system_;
     Camera* camera_;

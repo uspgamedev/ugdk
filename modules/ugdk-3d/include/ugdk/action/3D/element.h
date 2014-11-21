@@ -28,6 +28,7 @@ public:
 
 protected:
     Element(OgreScene& scene);
+    virtual void onAttach() {}
     
     Ogre::SceneNode* node_;
     

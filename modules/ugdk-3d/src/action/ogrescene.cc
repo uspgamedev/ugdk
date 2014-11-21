@@ -28,7 +28,7 @@ OgreScene::OgreScene() {
     scene_mgr_ = desktop_manager()->root()->createSceneManager("OctreeSceneManager");
     overlay_system_ = new Ogre::OverlaySystem();
     scene_mgr_->addRenderQueueListener( overlay_system_ );
-    camera_ = nullptr;
+    camera_ = new Camera(this);
     z_order_ = -1;
     fps_stats_ = nullptr;
 }
@@ -43,13 +43,8 @@ OgreScene::~OgreScene() {
     mgr->root()->destroySceneManager(scene_mgr_);
 }
 
-void OgreScene::setupCamera() {
-    camera_ = new Camera(this);
-}
-
 void OgreScene::OnPushed(int index) {
     z_order_ = index;
-    this->setupCamera();
     //TODO: we could let user set with x/y/w/h of this viewport...
     viewport_ = desktop_manager()->window().addViewport(camera_->camera(), z_order_, 0, 0, 1, 1);
     viewport_->setBackgroundColour(Ogre::ColourValue(0,0,0));

@@ -23,8 +23,8 @@ Object::PhysicsData::PhysicsData() {
     offset = btTransform(identity, btVector3(0, 0, 0));
 }
 
-Object::Object(Ogre::Entity* entity, const PhysicsData& physics_data)
-    : entity_(entity), physics_data_(physics_data), body_(nullptr)
+Object::Object(PhysicScene& scene, Ogre::Entity* entity, const PhysicsData& physics_data)
+    : Element(scene), entity_(entity), physics_data_(physics_data), body_(nullptr)
 {
 }
 
