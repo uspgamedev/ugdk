@@ -17,11 +17,11 @@ class SDLFile : public File {
             Close();
     }
 
-    int64 size() const {
+    int64 size() const override {
         return SDL_RWsize(rwops_);
     }
 
-    int64 Seek(int64 offset, SeekPositions whence) {
+    int64 Seek(int64 offset, SeekPositions whence) override {
         int w;
         switch (whence) {
             case SeekPositions::BEGINNING:
@@ -38,15 +38,15 @@ class SDLFile : public File {
         return SDL_RWseek(rwops_, offset, w);
     }
 
-    std::size_t ReadRaw(void* ptr, std::size_t size, std::size_t maxnum) {
+    std::size_t ReadRaw(void* ptr, std::size_t size, std::size_t maxnum) override {
         return SDL_RWread(rwops_, ptr, size, maxnum);
     }
 
-    std::size_t WriteRaw(const void* ptr, std::size_t size, std::size_t num) {
+    std::size_t WriteRaw(const void* ptr, std::size_t size, std::size_t num) override {
         return SDL_RWwrite(rwops_, ptr, size, num);
     }
 
-    bool Close() {
+    bool Close() override {
         bool success = SDL_RWclose(rwops_) == 0;
         rwops_ = nullptr;
         return success;

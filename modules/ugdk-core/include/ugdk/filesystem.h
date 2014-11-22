@@ -2,7 +2,7 @@
 #define UGDK_FILESYSTEM_H_
 
 namespace ugdk {
-namespace ui {
+namespace filesystem {
 
 class Manager;
 class File;
