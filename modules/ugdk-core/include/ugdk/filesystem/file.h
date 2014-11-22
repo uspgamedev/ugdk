@@ -18,6 +18,14 @@ class File {
     virtual ~File() {}
 
     /**
+    * The name of the file this object represents.
+    * There's no guarantee a request to open a file with the name returned will succeed.
+    * @return A string containing a filepath, or a special string for files
+    *         that don't exist in the file system.
+    */
+    virtual std::string filename() const = 0;
+
+    /**
     * @return The size of this file, or -1 if unknown.
     */
     virtual int64 size() const = 0;

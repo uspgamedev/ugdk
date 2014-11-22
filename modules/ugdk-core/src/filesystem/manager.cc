@@ -30,7 +30,7 @@ std::unique_ptr<File> Manager::OpenFile(const std::string& path, const char* mod
         std::string fullpath = search + path;
         auto file = SDL_RWFromFile(fullpath.c_str(), mode);
         if (file)
-            return MakeUnique<SDLFile>(file);
+            return MakeUnique<SDLFile>(path, file);
     }
     return std::unique_ptr<File>();
 }

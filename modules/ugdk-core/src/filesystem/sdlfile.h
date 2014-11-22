@@ -10,7 +10,10 @@ namespace filesystem {
 
 class SDLFile : public File {
   public:
-    SDLFile(SDL_RWops* _rwops) : rwops_(_rwops) {}
+    SDLFile(const std::string& _filename, SDL_RWops* _rwops)
+        : rwops_(_rwops) 
+        , filename_(_filename)
+    {}
 
     ~SDLFile() {
         if (rwops_)
@@ -51,11 +54,16 @@ class SDLFile : public File {
         rwops_ = nullptr;
         return success;
     }
-
+    
     SDL_RWops* rwops() { return rwops_; }
+
+    std::string filename() const {
+        return filename_;
+    }
 
   private:
     SDL_RWops* rwops_;
+    std::string filename_;
 
 };
 
