@@ -4,6 +4,7 @@
 #include <ugdk/filesystem.h>
 #include <ugdk/structure/types.h>
 #include <cstddef>
+#include <string>
 
 namespace ugdk {
 namespace filesystem {
@@ -82,6 +83,17 @@ class File {
     * @return True on success, false on error.
     */
     virtual bool Close() = 0;
+
+    /**
+    * Get the whole file in a string. Can only be used in files supporting seek.
+    * @return A string containing the contents of the file.
+    */
+    std::string GetContents();
+
+    /**
+    * @return Whether this file can successfully seek.
+    */
+    bool CanSeek();
 
   protected:
     File() {}    
