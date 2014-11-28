@@ -61,7 +61,7 @@ void Object::AddToScene(bulletworks::PhysicScene* scene) {
 }
 
 void Object::AddComponent(const std::shared_ptr<Component> &component) {
-    components_[typeid(*component)].push_back(component);
+    components_[component->GetType()].push_back(component);
     component->Take(shared_from_this());
 }
 

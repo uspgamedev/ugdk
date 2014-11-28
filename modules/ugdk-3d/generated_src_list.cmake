@@ -10,6 +10,7 @@ modules/ugdk-3d/src/desktop/manager.cc
 modules/ugdk-3d/src/desktop/window.cc
 )
 SET(GENERATED_HEADERS
+modules/ugdk-3d/include/bulletworks/component/body.h
 modules/ugdk-3d/include/bulletworks/component.h
 modules/ugdk-3d/include/bulletworks/manager.h
 modules/ugdk-3d/include/bulletworks/object.h
