@@ -1,4 +1,5 @@
 #include <bulletworks/object.h>
+#include <bulletworks/component.h>
 #include <bulletworks/manager.h>
 #include <bulletworks/physicscene.h>
 
@@ -13,6 +14,8 @@
 
 
 namespace bulletworks {
+
+using std::shared_ptr;
 
 Object::PhysicsData::PhysicsData() {
     mass = 1.0;
@@ -55,6 +58,11 @@ void Object::AddToScene(bulletworks::PhysicScene* scene) {
         parent_physics_mgr_ = scene->physics_manager();
         parent_physics_mgr_->AddBody(this);
     }
+}
+
+void Object::AddComponent(const std::shared_ptr<Component> &component) {
+    components_[typeid(*component)].push_back(component);
+    component->Take(shared_from_this());
 }
 
 void Object::setupCollision() {

@@ -6,7 +6,11 @@
 
 #include <LinearMath/btTransform.h>
 
+#include <memory>
 #include <string>
+#include <typeindex>
+#include <unordered_map>
+#include <vector>
 
 namespace Ogre {
 class Entity;
@@ -19,9 +23,10 @@ class btRigidBody;
 namespace bulletworks {
 class Manager;
 class PhysicScene;
+class Component;
 
-class Object : public ugdk::action::mode3d::Element {
-public:
+class Object : public ugdk::action::mode3d::Element, public std::enable_shared_from_this<Object> {
+  public:
     struct PhysicsData {
         double mass;                // rigid body mass (must be >= 0, and 0 means static "infinite mass" object)
         short collision_group;      // flag (power of 2 bit mask) of the collision group this object belongs to
@@ -38,6 +43,10 @@ public:
 
     void AddToScene(bulletworks::PhysicScene* scene);
 
+    void AddComponent(const std::shared_ptr<Component> &component);
+    template <class T>
+    std::weak_ptr<T> GetComponent(size_t index);
+
     Ogre::Entity* entity() const { return entity_; }
     btRigidBody* body() const { return body_; }
     std::string entity_name();
@@ -53,7 +62,7 @@ public:
     void Rotate(double yaw, double pitch, double roll);
     void Scale(double factor_x, double factor_y, double factor_z);
 
-protected:
+  protected:
     Ogre::Entity* entity_;
 
     PhysicsData physics_data_;
@@ -61,7 +70,19 @@ protected:
 
     Manager* parent_physics_mgr_;
     void setupCollision();
+
+  private:
+    using ComponentVector = std::vector<std::shared_ptr<Component>>;
+    std::unordered_map<std::type_index, ComponentVector> components_;
 };
+
+template <class T>
+std::weak_ptr<T> Object::GetComponent(size_t index) {
+    auto check = components_.find(typeid(T));
+    if (check == components_.end() && index >= check->second.size())
+        return nullptr;
+    return check->second[index];
+}
 
 }
 #endif

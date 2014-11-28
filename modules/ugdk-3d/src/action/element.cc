@@ -24,6 +24,7 @@ void Element::AttachTo(Element& parent) {
     parent.node().addChild(node_);
     onAttach();
 }
+
 void Element::AttachTo(OgreScene& scene) {
     node_->getParentSceneNode()->removeChild(node_);
     scene.manager()->getRootSceneNode()->addChild(node_);
