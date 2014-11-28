@@ -20,9 +20,11 @@ class btManifoldPoint;
 
 namespace bulletworks {
 
-class Object;
+namespace component {
 
-typedef std::function<void (Object*,Object*,btManifoldPoint&)> CollisionLogic;
+class PhysicsBody;
+
+}
 
 class Manager {
 public:
@@ -31,14 +33,11 @@ public:
 
     void Update(double dt);
 
-    void AddBody(Object* obj);
-    void RemoveBody(Object* obj);
+    void AddBody(component::PhysicsBody* obj);
+    void RemoveBody(component::PhysicsBody* obj);
 
     void set_debug_draw_enabled(bool enable);
     bool debug_draw_enabled();
-
-    void set_collision_logic(CollisionLogic& logic) { col_logic_ = logic; }
-    CollisionLogic collision_logic() { return col_logic_; }
 
 private:
     btBroadphaseInterface* broadphase_;
@@ -48,8 +47,6 @@ private:
     btDiscreteDynamicsWorld* world_;
 
     BtOgre::DebugDrawer* debug_drawer_;
-
-    CollisionLogic col_logic_;
 };
 
 }

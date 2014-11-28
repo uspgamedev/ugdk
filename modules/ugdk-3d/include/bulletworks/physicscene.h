@@ -20,7 +20,7 @@ class PhysicScene : public ugdk::action::mode3d::OgreScene {
     PhysicScene(const btVector3& grav);
     virtual ~PhysicScene();
     
-    Manager* physics_manager() const { return physics_mgr_; }
+    Manager& physics_manager() const { return *physics_mgr_; }
 
   protected:
     Manager* physics_mgr_;

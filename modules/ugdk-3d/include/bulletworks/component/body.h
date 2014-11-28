@@ -14,15 +14,15 @@ namespace component {
 class Body : public Component {
   public:
     std::type_index GetType() const override;
-    void Translate(const Ogre::Vector3& move);
-    void Move(const Ogre::Vector3& delta);
+    virtual void Translate(const Ogre::Vector3& move);
+    virtual void Move(const Ogre::Vector3& delta);
     virtual void Translate(double move_x, double move_y, double move_z) = 0;
     virtual void Move(double delta_x, double delta_y, double delta_z) = 0;
     virtual void Rotate(double yaw, double pitch, double roll) = 0;
     virtual void Scale(double factor_x, double factor_y, double factor_z) = 0;
   protected:
     Body () {}
-    void OnTake(const std::weak_ptr<Object> &owner) override;
+    void OnTake() override;
 };
 
 inline std::type_index Body::GetType() const {
@@ -36,6 +36,8 @@ inline void Body::Translate(const Ogre::Vector3 &move) {
 inline void Body::Move(const Ogre::Vector3 &delta) {
     this->Translate(delta.x, delta.y, delta.z);
 }
+
+inline void Body::OnTake() {}
 
 template <>
 class NullComponent<Body> : public Body {

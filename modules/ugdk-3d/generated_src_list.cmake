@@ -3,6 +3,7 @@ modules/ugdk-3d/src/action/camera.cc
 modules/ugdk-3d/src/action/element.cc
 modules/ugdk-3d/src/action/ogrescene.cc
 modules/ugdk-3d/src/bulletworks/component.cc
+modules/ugdk-3d/src/bulletworks/component/physicsbody.cc
 modules/ugdk-3d/src/bulletworks/manager.cc
 modules/ugdk-3d/src/bulletworks/object.cc
 modules/ugdk-3d/src/bulletworks/physicscene.cc
@@ -12,6 +13,7 @@ modules/ugdk-3d/src/desktop/window.cc
 SET(GENERATED_HEADERS
 modules/ugdk-3d/include/bulletworks/component/body.h
 modules/ugdk-3d/include/bulletworks/component.h
+modules/ugdk-3d/include/bulletworks/component/physicsbody.h
 modules/ugdk-3d/include/bulletworks/manager.h
 modules/ugdk-3d/include/bulletworks/object.h
 modules/ugdk-3d/include/bulletworks/physicscene.h

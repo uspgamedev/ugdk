@@ -1,12 +1,14 @@
 #include <bulletworks/manager.h>
 
-#include <bulletworks/object.h>
+#include <bulletworks/component/physicsbody.h>
 
 #include <btBulletDynamicsCommon.h>
 #include <BtOgreExtras.h>
 #include <OgreSceneManager.h>
 
 namespace bulletworks {
+
+using component::PhysicsBody;
 
 void tickCallback(btDynamicsWorld *world, btScalar timeStep);
 
@@ -52,10 +54,10 @@ void Manager::Update(double dt) {
     debug_drawer_->step();
 }
 
-void Manager::AddBody(Object* obj) {
+void Manager::AddBody(PhysicsBody* obj) {
     world_->addRigidBody(obj->body(), obj->collision_group(), obj->collides_with());
 }
-void Manager::RemoveBody(Object* obj) {
+void Manager::RemoveBody(PhysicsBody* obj) {
     world_->removeRigidBody(obj->body());
 }
 
@@ -71,8 +73,8 @@ void tickCallback(btDynamicsWorld *world, btScalar timeStep) {
 	for (int i=0; i<numManifolds; i++)
 	{
 		btPersistentManifold* contactManifold =  world->getDispatcher()->getManifoldByIndexInternal(i);
-        Object* obA = static_cast<Object*>(contactManifold->getBody0()->getUserPointer());
-		Object* obB = static_cast<Object*>(contactManifold->getBody1()->getUserPointer());
+        PhysicsBody* obA = static_cast<PhysicsBody*>(contactManifold->getBody0()->getUserPointer());
+        PhysicsBody* obB = static_cast<PhysicsBody*>(contactManifold->getBody1()->getUserPointer());
 
 		int numContacts = contactManifold->getNumContacts();
 		for (int j=0; j<numContacts; j++)
@@ -81,12 +83,8 @@ void tickCallback(btDynamicsWorld *world, btScalar timeStep) {
             //std::cout << obA->entity_name() << " IS NEAR (" << pt.getDistance() << ") " << obB->entity_name() << std::endl;
 			if (pt.getDistance() <= 0)
 			{
-                CollisionLogic logic = static_cast<Manager*>(world->getWorldUserInfo())->collision_logic();
-                if (logic) {
-                    logic(obA, obB, pt);
-                }
-                //std::cout << obA->entity_name() << "(" << ptA.x() << ", " << ptA.y() << ", "<<ptA.z() << ") collided with " << 
-                //    obB->entity_name() << "(" << ptB.x() << ", " << ptB.y() << ", "<<ptB.z() << ")" << std::endl;
+                //CollisionLogic logic = static_cast<Manager*>(world->getWorldUserInfo())->collision_logic();
+                // TODO call collision logic sbrubles
 			}
 		}
 	}
