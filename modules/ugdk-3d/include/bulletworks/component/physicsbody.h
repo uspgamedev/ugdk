@@ -16,6 +16,8 @@ namespace component {
 
 class PhysicsBody final : public Body {
   public:
+    using Body::Move;
+
     struct PhysicsData {
         /// rigid body mass (must be >= 0, and 0 means static "infinite mass" object)
         double mass;
