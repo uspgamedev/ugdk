@@ -38,11 +38,9 @@ class PhysicsBody final : public Body {
     PhysicsBody (Manager &manager, const PhysicsData &physics_data);
     ~PhysicsBody();
 
-    double mass() const;
-    short collision_group() const;
-    short collides_with() const;
-    void set_angular_factor(double x_axis, double y_axis, double z_axis);
-    void set_restitution(double factor);
+    double mass() const override;
+    void set_angular_factor(double x_axis, double y_axis, double z_axis) override;
+    void set_restitution(double factor) override;
 
     void Translate(double move_x, double move_y, double move_z) override;
     void Move(double delta_x, double delta_y, double delta_z) override;
@@ -67,14 +65,6 @@ inline PhysicsBody::PhysicsBody(Manager &manager, const PhysicsData &physics_dat
 
 inline double PhysicsBody::mass() const  {
     return physics_data_.mass;
-}
-
-inline short PhysicsBody::collision_group() const  {
-    return physics_data_.collision_group;
-}
-
-inline short PhysicsBody::collides_with() const {
-    return physics_data_.collides_with;
 }
 
 template <>

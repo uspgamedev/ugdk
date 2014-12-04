@@ -12,7 +12,7 @@ class Object;
 class Component {
   public:
     virtual ~Component() {}
-    virtual std::type_index GetType() const = 0;
+    virtual std::type_index type() const = 0;
   protected:
     Component() {}
     /// TODO: Make this not accessible from Object
