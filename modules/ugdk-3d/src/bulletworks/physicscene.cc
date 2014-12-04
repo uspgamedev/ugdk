@@ -6,15 +6,17 @@
 namespace bulletworks {
 
 PhysicScene::PhysicScene(const btVector3& grav) {
-    physics_mgr_ = new Manager(grav, scene_mgr_);
+    physics_mgr_.reset(new Manager(grav, scene_mgr_));
     
     AddTask(ugdk::system::Task([&](double dt) {
         physics_mgr_->Update(dt);
     }, 0.2));
 }
 
-PhysicScene::~PhysicScene() {
-    delete physics_mgr_;
+void PhysicScene::AddObject(const std::shared_ptr<Object> &the_object) {
+    objetcs_.push_back(the_object);
 }
+
+PhysicScene::~PhysicScene() {}
 
 } // namespace bulletworks

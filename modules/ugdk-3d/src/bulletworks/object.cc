@@ -21,7 +21,6 @@ Object::Object(PhysicScene& scene, Ogre::Entity* entity)
     : Element(scene), entity_(entity) {}
 
 Object::~Object() {
-    node_->getCreator()->destroyEntity(entity_);
     //Element takes care of destroying our node_
 }
 
@@ -32,6 +31,7 @@ std::string Object::entity_name() {
 void Object::AddToScene(bulletworks::PhysicScene* scene) {
     //node_ = scene->manager()->getRootSceneNode()->createChildSceneNode();
     node_->attachObject(entity_);
+    scene->AddObject(shared_from_this());
     //node_->setPosition(BtOgre::Convert::toOgre(physics_data_.initial.getOrigin()));
     //node_->setOrientation(BtOgre::Convert::toOgre(physics_data_.initial.getRotation()));
 }
