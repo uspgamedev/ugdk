@@ -38,11 +38,11 @@ class PhysicsBody final : public Body {
     PhysicsBody (Manager &manager, const PhysicsData &physics_data);
     ~PhysicsBody();
 
-    btRigidBody* body() const;
     double mass() const;
     short collision_group() const;
     short collides_with() const;
     void set_angular_factor(double x_axis, double y_axis, double z_axis);
+    void set_restitution(double factor);
 
     void Translate(double move_x, double move_y, double move_z) override;
     void Move(double delta_x, double delta_y, double delta_z) override;
@@ -55,6 +55,8 @@ class PhysicsBody final : public Body {
 
   private:
 
+    friend class ::bulletworks::Manager;
+
     Manager     &manager_;
     PhysicsData physics_data_;
     btRigidBody *body_;
@@ -62,10 +64,6 @@ class PhysicsBody final : public Body {
 
 inline PhysicsBody::PhysicsBody(Manager &manager, const PhysicsData &physics_data)
     : manager_(manager), physics_data_(physics_data) {}
-
-inline btRigidBody *PhysicsBody::body() const {
-    return body_;
-}
 
 inline double PhysicsBody::mass() const  {
     return physics_data_.mass;

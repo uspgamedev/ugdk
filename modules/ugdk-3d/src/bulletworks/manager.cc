@@ -55,10 +55,11 @@ void Manager::Update(double dt) {
 }
 
 void Manager::AddBody(PhysicsBody* obj) {
-    world_->addRigidBody(obj->body(), obj->collision_group(), obj->collides_with());
+    world_->addRigidBody(obj->body_, obj->physics_data_.collision_group,
+                         obj->physics_data_.collides_with);
 }
 void Manager::RemoveBody(PhysicsBody* obj) {
-    world_->removeRigidBody(obj->body());
+    world_->removeRigidBody(obj->body_);
 }
 
 void Manager::set_debug_draw_enabled(bool enable) { 

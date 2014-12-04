@@ -53,6 +53,10 @@ void PhysicsBody::Scale(double factor_x, double factor_y, double factor_z) {
     body_->getCollisionShape()->setLocalScaling(btVector3(factor_x, factor_y, factor_z));
 }
 
+void PhysicsBody::set_restitution(double factor) {
+    body_->setRestitution(factor);
+}
+
 void PhysicsBody::OnTake() {
     BtOgre::RigidBodyState* motionState = new BtOgre::RigidBodyState(&owner()->node(),
                                                                      physics_data_.initial,
