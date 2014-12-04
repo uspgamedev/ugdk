@@ -30,7 +30,7 @@ std::string Object::entity_name() {
 }
 
 void Object::AddToScene(bulletworks::PhysicScene* scene) {
-    node_ = scene->manager()->getRootSceneNode()->createChildSceneNode();
+    //node_ = scene->manager()->getRootSceneNode()->createChildSceneNode();
     node_->attachObject(entity_);
     //node_->setPosition(BtOgre::Convert::toOgre(physics_data_.initial.getOrigin()));
     //node_->setOrientation(BtOgre::Convert::toOgre(physics_data_.initial.getRotation()));
