@@ -22,13 +22,13 @@ Element::~Element() {
 void Element::AttachTo(Element& parent) {
     node_->getParentSceneNode()->removeChild(node_);
     parent.node().addChild(node_);
-    onAttach();
+    this->onAttach();
 }
 
 void Element::AttachTo(OgreScene& scene) {
     node_->getParentSceneNode()->removeChild(node_);
     scene.manager()->getRootSceneNode()->addChild(node_);
-    onAttach();
+    this->onAttach();
 }
 
 } // namespace mode3d
