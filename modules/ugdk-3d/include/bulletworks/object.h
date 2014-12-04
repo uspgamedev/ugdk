@@ -29,9 +29,9 @@ class Object : public ugdk::action::mode3d::Element, public std::enable_shared_f
 
     void AddToScene(bulletworks::PhysicScene* scene);
 
-    void AddComponent(const std::shared_ptr<Component> &component);
+    void AddComponent(const std::shared_ptr<Component> &the_component);
     template <class T>
-    T* GetComponent();
+    T* component();
 
     Ogre::Entity* entity() const { return entity_; }
     std::string entity_name();
@@ -44,7 +44,7 @@ class Object : public ugdk::action::mode3d::Element, public std::enable_shared_f
 };
 
 template <class T>
-T* Object::GetComponent() {
+T* Object::component() {
     auto check = components_.find(typeid(T));
     if (check == components_.end()) {
         return nullptr;

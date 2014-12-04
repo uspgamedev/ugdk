@@ -36,9 +36,9 @@ void Object::AddToScene(bulletworks::PhysicScene* scene) {
     //node_->setOrientation(BtOgre::Convert::toOgre(physics_data_.initial.getRotation()));
 }
 
-void Object::AddComponent(const std::shared_ptr<Component> &component) {
-    components_[component->type()] = component;
-    component->Take(shared_from_this());
+void Object::AddComponent(const std::shared_ptr<Component> &the_component) {
+    components_[the_component->type()] = the_component;
+    the_component->Take(shared_from_this());
 }
 
 }
