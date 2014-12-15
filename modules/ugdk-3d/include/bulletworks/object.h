@@ -37,6 +37,7 @@ class Object : public ugdk::action::mode3d::Element, public std::enable_shared_f
     std::string entity_name();
 
   protected:
+    virtual void OnParentDestroyed() override {}
     Ogre::Entity* entity_;
 
   private:

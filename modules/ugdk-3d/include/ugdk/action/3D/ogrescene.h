@@ -36,6 +36,7 @@ public:
     bool IsFrameStatsVisible();
     void UpdateFrameStats();
     void HideFrameStats();
+    void AddElement();
     
     Ogre::SceneManager* manager() const { return scene_mgr_; }
     Camera* camera() const { return camera_; }

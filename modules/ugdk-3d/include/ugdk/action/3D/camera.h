@@ -39,7 +39,8 @@ protected:
     double max_dist_;
     double cumulative_pitch_;
 
-    virtual void onAttach() override;
+    virtual void OnAttach() override;
+    virtual void OnParentDestroyed() override;
     void setupTransform();
 };
 

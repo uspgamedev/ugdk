@@ -62,9 +62,16 @@ void Camera::Rotate(double yaw, double pitch) {
         cumulative_pitch_ -= pitch;
 }
 
-void Camera::onAttach() {
+void Camera::OnAttach() {
     setupTransform();
 }
+
+void Camera::OnParentDestroyed() {
+    Ogre::SceneManager *mgr = node_->getCreator();
+    node_->getParentSceneNode()->removeChild(node_);
+    mgr->getRootSceneNode()->addChild(node_);
+}
+
 void Camera::setupTransform() {
     node_->setPosition( offset_ );
     node_->setOrientation( Quaternion::IDENTITY );

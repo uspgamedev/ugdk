@@ -23,12 +23,14 @@ public:
 
     void AttachTo(Element& parent);
     void AttachTo(OgreScene& scene);
+    void Destroy();
 
     Ogre::SceneNode& node() { return *node_; }
 
 protected:
     Element(OgreScene& scene);
-    virtual void onAttach() {}
+    virtual void OnAttach() {}
+    virtual void OnParentDestroyed() = 0;
     
     Ogre::SceneNode* node_;
     
