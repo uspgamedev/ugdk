@@ -12,6 +12,7 @@ class btBroadphaseInterface;
 class btDefaultCollisionConfiguration;
 class btCollisionDispatcher;
 class btSequentialImpulseConstraintSolver;
+class btDynamicsWorld;
 class btDiscreteDynamicsWorld;
 class btManifoldPoint;
 
@@ -45,6 +46,8 @@ private:
     btDiscreteDynamicsWorld* world_;
 
     BtOgre::DebugDrawer* debug_drawer_;
+
+    static void tickCallback(btDynamicsWorld *world, float timeStep);
 };
 
 } // namespace mode3d

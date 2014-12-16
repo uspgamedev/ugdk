@@ -77,6 +77,10 @@ void PhysicsBody::OnTaken() {
     physics_.AddBody(this);
 }
 
+void PhysicsBody::AddCollisionAction(short target_mask, const CollisionAction& action) {
+    action_map_[target_mask] = action;
+}
+
 } // namespace component
 } // namespace mode3d
 } // namespace action

@@ -41,6 +41,8 @@ class PhysicsBody final : public Body {
     ~PhysicsBody();
 
     double mass() const override;
+    short collision_group() const override;
+    short collides_with() const override;
     void set_angular_factor(double x_axis, double y_axis, double z_axis) override;
     void set_restitution(double factor) override;
 
@@ -49,17 +51,18 @@ class PhysicsBody final : public Body {
     void Rotate(double yaw, double pitch, double roll) override;
     void Scale(double factor_x, double factor_y, double factor_z) override;
 
-  protected:
+    void AddCollisionAction(short target_mask, const CollisionAction& action) override;
 
+  protected:
     void OnTaken() override;
 
   private:
-
     friend class Physics;
 
     Physics     &physics_;
     PhysicsData physics_data_;
     btRigidBody *body_;
+    std::unordered_map<short, CollisionAction> action_map_;
 };
 
 inline PhysicsBody::PhysicsBody(Physics &physics, const PhysicsData &physics_data)
@@ -67,6 +70,13 @@ inline PhysicsBody::PhysicsBody(Physics &physics, const PhysicsData &physics_dat
 
 inline double PhysicsBody::mass() const  {
     return physics_data_.mass;
+}
+
+inline short PhysicsBody::collision_group() const  {
+    return physics_data_.collision_group;
+}
+inline short PhysicsBody::collides_with() const  {
+    return physics_data_.collides_with;
 }
 
 template <>

@@ -3,15 +3,21 @@
 
 #include <ugdk/action/3D/component.h>
 #include <OgreVector3.h>
+#include <functional>
 
 namespace Ogre {
 class Vector3;
 }
 
+class btManifoldPoint;
+
 namespace ugdk {
 namespace action {
 namespace mode3d {
 namespace component {
+
+
+using CollisionAction = std::function < void(const std::shared_ptr<Element>&, const std::shared_ptr<Element>&, const btManifoldPoint&) > ;
 
 class Body : public Component {
 
@@ -20,6 +26,8 @@ class Body : public Component {
     std::type_index type() const override;
 
     virtual double mass() const = 0;
+    virtual short collision_group() const = 0;
+    virtual short collides_with() const = 0;
     virtual void set_angular_factor(double x_factor, double y_factor, double z_factor) = 0;
     virtual void set_restitution(double factor) = 0;
 
@@ -30,6 +38,8 @@ class Body : public Component {
     virtual void Move(double delta_x, double delta_y, double delta_z) = 0;
     virtual void Rotate(double yaw, double pitch, double roll) = 0;
     virtual void Scale(double factor_x, double factor_y, double factor_z) = 0;
+
+    virtual void AddCollisionAction(short target_mask, const CollisionAction& action) = 0;
 
   protected:
 

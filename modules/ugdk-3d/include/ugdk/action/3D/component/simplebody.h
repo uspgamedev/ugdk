@@ -17,6 +17,8 @@ class SimpleBody final : public Body {
     ~SimpleBody();
 
     double mass() const override;
+    short collision_group() const override;
+    short collides_with() const override;
     void set_angular_factor(double x_axis, double y_axis, double z_axis) override {}
     void set_restitution(double factor) override {}
 
@@ -24,6 +26,8 @@ class SimpleBody final : public Body {
     void Move(double delta_x, double delta_y, double delta_z) override;
     void Rotate(double yaw, double pitch, double roll) override;
     void Scale(double factor_x, double factor_y, double factor_z) override;
+
+    void AddCollisionAction(short target_mask, const CollisionAction& action) override {}
 
   protected:
     void OnTaken() override;
@@ -37,6 +41,12 @@ inline SimpleBody::SimpleBody(const Ogre::Vector3& initial_pos, const Ogre::Quat
 
 inline double SimpleBody::mass() const  {
     return 0.0;
+}
+inline short SimpleBody::collision_group() const  {
+    return 0;
+}
+inline short SimpleBody::collides_with() const  {
+    return 0;
 }
 
 template <>
