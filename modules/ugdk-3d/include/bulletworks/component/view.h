@@ -19,6 +19,8 @@ class View : public Component {
   public:
     View() {}
 
+    virtual std::type_index type() const override;
+
     void AddEntity(const std::string& meshName);
     void AddEntity(const std::string& entName, const std::string& meshName);
     void AddEntity(Ogre::Entity* ent);
@@ -29,6 +31,10 @@ class View : public Component {
     std::vector<std::pair<std::string, std::string>> pending_entities_;
     std::vector<Ogre::Entity*> entities_;
 };
+
+inline std::type_index View::type() const {
+    return typeid(View);
+}
 
 } // namespace component
 } // namespace bulletworks
