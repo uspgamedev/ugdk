@@ -49,7 +49,7 @@ class PhysicsBody final : public Body {
 
   protected:
 
-    void OnTake() override;
+    void OnTaken() override;
 
   private:
 

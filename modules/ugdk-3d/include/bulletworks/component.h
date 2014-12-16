@@ -16,7 +16,7 @@ class Component {
   protected:
     Component() {}
     /// TODO: Make this not accessible from Object
-    virtual void OnTake() = 0;
+    virtual void OnTaken() = 0;
     void Take(const std::weak_ptr<Object> &the_owner);
     std::shared_ptr<Object> owner() const;
     friend class Object;

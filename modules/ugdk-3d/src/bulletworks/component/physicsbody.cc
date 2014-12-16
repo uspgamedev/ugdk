@@ -57,7 +57,7 @@ void PhysicsBody::set_restitution(double factor) {
     body_->setRestitution(factor);
 }
 
-void PhysicsBody::OnTake() {
+void PhysicsBody::OnTaken() {
     BtOgre::RigidBodyState* motionState = new BtOgre::RigidBodyState(&owner()->node(),
                                                                      physics_data_.initial,
                                                                      physics_data_.offset);

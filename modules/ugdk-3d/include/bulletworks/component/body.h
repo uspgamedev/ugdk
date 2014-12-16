@@ -32,7 +32,7 @@ class Body : public Component {
   protected:
 
     Body () {}
-    void OnTake() override;
+    void OnTaken() override;
 
 };
 
@@ -48,7 +48,7 @@ inline void Body::Move(const Ogre::Vector3 &delta) {
     this->Translate(delta.x, delta.y, delta.z);
 }
 
-inline void Body::OnTake() {}
+inline void Body::OnTaken() {}
 
 template <>
 class NullComponent<Body> : public Body {
