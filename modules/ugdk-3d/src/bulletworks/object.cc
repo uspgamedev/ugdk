@@ -15,7 +15,7 @@
 
 namespace bulletworks {
 
-using std::shared_ptr;
+using std::unique_ptr;
 
 Object::Object(PhysicScene& scene, Ogre::Entity* entity)
     : Element(scene), entity_(entity) {}
@@ -30,15 +30,15 @@ std::string Object::entity_name() {
 
 void Object::AddToScene(bulletworks::PhysicScene* scene) {
     //node_ = scene->manager()->getRootSceneNode()->createChildSceneNode();
-    node_->attachObject(entity_);
-    scene->AddObject(shared_from_this());
+    //node_->attachObject(entity_);
+    //scene->AddObject(shared_from_this());
     //node_->setPosition(BtOgre::Convert::toOgre(physics_data_.initial.getOrigin()));
     //node_->setOrientation(BtOgre::Convert::toOgre(physics_data_.initial.getRotation()));
 }
 
-void Object::AddComponent(const std::shared_ptr<Component> &the_component) {
-    components_[the_component->type()] = the_component;
-    the_component->Take(shared_from_this());
+void Object::AddComponent(const std::unique_ptr<Component> &the_component) {
+    //components_[the_component->type()] = the_component;
+    //the_component->Take(shared_from_this());
 }
 
 }

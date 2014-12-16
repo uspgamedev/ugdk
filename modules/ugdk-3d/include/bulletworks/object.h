@@ -21,7 +21,8 @@ class Vector3;
 namespace bulletworks {
 class PhysicScene;
 
-class Object : public ugdk::action::mode3d::Element, public std::enable_shared_from_this<Object> {
+class Object : public ugdk::action::mode3d::Element,
+               public std::enable_shared_from_this<Object> {
   public:
 
     Object(PhysicScene& scene, Ogre::Entity* entity);
@@ -29,7 +30,7 @@ class Object : public ugdk::action::mode3d::Element, public std::enable_shared_f
 
     void AddToScene(bulletworks::PhysicScene* scene);
 
-    void AddComponent(const std::shared_ptr<Component> &the_component);
+    void AddComponent(const std::unique_ptr<Component> &the_component);
     template <class T>
     T* component();
 
@@ -41,7 +42,7 @@ class Object : public ugdk::action::mode3d::Element, public std::enable_shared_f
     Ogre::Entity* entity_;
 
   private:
-    std::unordered_map<std::type_index, std::shared_ptr<Component>> components_;
+    std::unordered_map<std::type_index, std::unique_ptr<Component>> components_;
 };
 
 template <class T>

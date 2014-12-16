@@ -5,9 +5,15 @@
 #include <memory>
 #include <typeindex>
 
-namespace bulletworks {
+namespace ugdk {
+namespace action {
+namespace mode3d {
+class Element;
+}
+}
+}
 
-class Object;
+namespace bulletworks {
 
 class Component {
   public:
@@ -17,14 +23,14 @@ class Component {
     Component() {}
     /// TODO: Make this not accessible from Object
     virtual void OnTaken() = 0;
-    void Take(const std::weak_ptr<Object> &the_owner);
-    std::shared_ptr<Object> owner() const;
-    friend class Object;
+    void Take(const std::weak_ptr<ugdk::action::mode3d::Element> &the_owner);
+    std::shared_ptr<ugdk::action::mode3d::Element> owner() const;
+    friend class ugdk::action::mode3d::Element;
   private:
-    std::weak_ptr<Object> owner_;
+    std::weak_ptr<ugdk::action::mode3d::Element> owner_;
 };
 
-inline std::shared_ptr<Object> Component::owner() const {
+inline std::shared_ptr<ugdk::action::mode3d::Element> Component::owner() const {
     return owner_.lock();
 }
 

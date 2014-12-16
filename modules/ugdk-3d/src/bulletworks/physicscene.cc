@@ -13,9 +13,9 @@ PhysicScene::PhysicScene(const btVector3& grav) {
     }, 0.2));
 }
 
-void PhysicScene::AddObject(const std::shared_ptr<Object> &the_object) {
-    objetcs_.push_back(the_object);
-}
+//void PhysicScene::AddObject(const std::unique_ptr<Object> &the_object) {
+//    objetcs_.push_back(the_object);
+//}
 
 PhysicScene::~PhysicScene() {}
 

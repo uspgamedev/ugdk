@@ -2,6 +2,7 @@
 #define UGDK_ACTION_3D_OGRESCENE_H_
 
 #include <ugdk/action/scene.h>
+#include <bulletworks/manager.h>
 
 namespace Ogre {
 class SceneManager;
@@ -15,6 +16,7 @@ namespace action {
 namespace mode3d {
 
 class Camera;
+class Element;
 
 /**
    @class OgreScene
@@ -36,7 +38,11 @@ public:
     bool IsFrameStatsVisible();
     void UpdateFrameStats();
     void HideFrameStats();
-    void AddElement();
+
+    std::shared_ptr<Element>& AddElement();
+    const std::unique_ptr<bulletworks::Manager>& physics_manager() const {
+        return physics_mgr_;
+    }
     
     Ogre::SceneManager* manager() const { return scene_mgr_; }
     Camera* camera() const { return camera_; }
@@ -47,8 +53,11 @@ protected:
     Camera* camera_;
     int z_order_;
     Ogre::Viewport* viewport_;
-    
     Ogre::Overlay* fps_stats_;
+
+    std::unique_ptr<bulletworks::Manager> physics_mgr_;
+    std::vector<std::shared_ptr<Element>> elements_;
+    
 }; // class OgreScene.
 
 } // namespace 3D

@@ -22,11 +22,11 @@ class PhysicScene : public ugdk::action::mode3d::OgreScene {
     virtual ~PhysicScene();
     
     Manager& physics_manager() const { return *physics_mgr_; }
-    void AddObject(const std::shared_ptr<Object> &the_object);
+    //void AddObject(const std::unique_ptr<Object> &the_object);
 
   protected:
     std::unique_ptr<Manager> physics_mgr_;
-    std::vector<std::shared_ptr<Object>> objetcs_;
+    //std::vector<std::unique_ptr<Object>> objetcs_;
 };
 
 } // namespace bulletworks

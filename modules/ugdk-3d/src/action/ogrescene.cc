@@ -1,4 +1,5 @@
 #include <ugdk/action/3D/ogrescene.h>
+#include <ugdk/action/3D/element.h>
 #include <ugdk/action/3D/camera.h>
 
 #include <ugdk/desktop/module.h>
@@ -12,11 +13,16 @@
 #include <OgreOverlaySystem.h>
 #include <OgreFont.h>
 
+#include <btBulletDynamicsCommon.h>
+
 #include <iostream>
 
 namespace ugdk {
 namespace action {
 namespace mode3d {
+
+using bulletworks::Manager;
+using std::shared_ptr;
 
 namespace {
 ugdk::desktop::mode3d::Manager* desktop_manager() {
@@ -31,6 +37,10 @@ OgreScene::OgreScene() {
     camera_ = new Camera(this);
     z_order_ = -1;
     fps_stats_ = nullptr;
+    physics_mgr_.reset(new Manager(btVector3(0.0, -10.0, 0.0), scene_mgr_));
+    AddTask(ugdk::system::Task([&](double dt) {
+        physics_mgr_->Update(dt);
+    }, 0.2));
 }
 
 OgreScene::~OgreScene() {
@@ -119,6 +129,11 @@ void OgreScene::UpdateFrameStats() {
     log("best frame time = " << stats.bestFrameTime);
     log("worst frame time = " << stats.worstFrameTime);*/
     
+}
+
+shared_ptr<Element>& OgreScene::AddElement() {
+    elements_.emplace_back(new Element(*this));
+    return elements_.back();
 }
 
 } // namespace mode3d

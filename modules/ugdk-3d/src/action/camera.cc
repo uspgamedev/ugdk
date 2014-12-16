@@ -16,7 +16,7 @@ using Ogre::Quaternion;
 Camera::Camera(OgreScene* scene, const std::string& camName) : Element(*scene) {
     camera_ = scene->manager()->createCamera(camName);
     camera_->setNearClipDistance(1);
-    node_->attachObject(camera_);
+    node().attachObject(camera_);
     dist_ = 0;
     offset_ = Vector3::ZERO;
     max_dist_ = 7.5;
@@ -35,10 +35,10 @@ void Camera::SetParameters(const Vector3& parent_origin_offset, double max_dist)
 }
 
 Quaternion Camera::orientation() {
-    return node_->getOrientation();
+    return node().getOrientation();
 }
 Quaternion Camera::actual_orientation() {
-    return node_->getParentSceneNode()->getOrientation() * node_->getOrientation();
+    return node().getParentSceneNode()->getOrientation() * node().getOrientation();
 }
 
 /*void Camera::injectMouseMoved( const OIS::MouseEvent &arg ) {
@@ -49,15 +49,15 @@ void Camera::SetDistance(double dist) {
     dist_ = dist;
     if (dist_ <= 0) dist_ = 0;
     if (dist_ > max_dist_) dist_ = max_dist_;
-    Vector3 pos = node_->getParentSceneNode()->getOrientation() * Vector3::UNIT_Z * dist_;
+    Vector3 pos = node().getParentSceneNode()->getOrientation() * Vector3::UNIT_Z * dist_;
     camera_->setPosition( pos );
 }
 void Camera::Rotate(double yaw, double pitch) {
-    node_->yaw(Ogre::Degree( yaw ), Ogre::Node::TS_WORLD);
+    node().yaw(Ogre::Degree( yaw ), Ogre::Node::TS_WORLD);
 
     cumulative_pitch_ += pitch;
     if ( Ogre::Math::Abs(cumulative_pitch_) <= 90 )
-         node_->pitch(Ogre::Degree( pitch ), Ogre::Node::TS_LOCAL);
+         node().pitch(Ogre::Degree( pitch ), Ogre::Node::TS_LOCAL);
     else
         cumulative_pitch_ -= pitch;
 }
@@ -67,15 +67,15 @@ void Camera::OnAttach() {
 }
 
 void Camera::OnParentDestroyed() {
-    Ogre::SceneManager *mgr = node_->getCreator();
-    node_->getParentSceneNode()->removeChild(node_);
-    mgr->getRootSceneNode()->addChild(node_);
+    Ogre::SceneManager *mgr = node().getCreator();
+    node().getParentSceneNode()->removeChild(&node());
+    mgr->getRootSceneNode()->addChild(&node());
 }
 
 void Camera::setupTransform() {
-    node_->setPosition( offset_ );
-    node_->setOrientation( Quaternion::IDENTITY );
-    camera_->setPosition( node_->getParentSceneNode()->getOrientation() * Vector3::UNIT_Z * dist_);
+    node().setPosition( offset_ );
+    node().setOrientation( Quaternion::IDENTITY );
+    camera_->setPosition( node().getParentSceneNode()->getOrientation() * Vector3::UNIT_Z * dist_);
 }
 
 } // namespace 3D

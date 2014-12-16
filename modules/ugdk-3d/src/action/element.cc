@@ -1,5 +1,6 @@
 #include <ugdk/action/3D/element.h>
 #include <ugdk/action/3D/ogrescene.h>
+#include <bulletworks/component.h>
 
 #include <OgreAny.h>
 #include <OgreSceneNode.h>
@@ -10,6 +11,7 @@ namespace action {
 namespace mode3d {
 
 using Ogre::Any;
+using bulletworks::Component;
 
 Element::Element(OgreScene& scene) {
     node_ = scene.manager()->getRootSceneNode()->createChildSceneNode();
@@ -17,6 +19,11 @@ Element::Element(OgreScene& scene) {
 }
 
 Element::~Element() {}
+
+void Element::AddComponent(const std::shared_ptr<Component> &the_component) {
+    components_[the_component->type()] = the_component;
+    the_component->Take(shared_from_this());
+}
 
 void Element::AttachTo(Element& parent) {
     node_->getParentSceneNode()->removeChild(node_);
