@@ -1,7 +1,7 @@
-#ifndef BULLETWORKS_COMPONENT_VIEW_H
-#define BULLETWORKS_COMPONENT_VIEW_H
+#ifndef UGDK_ACTION_3D_COMPONENT_VIEW_H
+#define UGDK_ACTION_3D_COMPONENT_VIEW_H
 
-#include <bulletworks/component.h>
+#include <ugdk/action/3D/component.h>
 #include <OgreVector3.h>
 #include <vector>
 #include <utility>
@@ -11,7 +11,9 @@ class Vector3;
 class Entity;
 }
 
-namespace bulletworks {
+namespace ugdk {
+namespace action {
+namespace mode3d {
 namespace component {
 
 class View : public Component {
@@ -37,6 +39,8 @@ inline std::type_index View::type() const {
 }
 
 } // namespace component
-} // namespace bulletworks
+} // namespace mode3d
+} // namespace action
+} // namespace ugdk
 
-#endif // BULLETWORKS_COMPONENT_VIEW_H
+#endif // UGDK_ACTION_3D_COMPONENT_VIEW_H

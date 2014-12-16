@@ -10,15 +10,12 @@ namespace Ogre {
 class SceneNode;
 }
 
-namespace bulletworks {
-class Component;
-}
-
 namespace ugdk {
 namespace action {
 namespace mode3d {
 
-class OgreScene;
+class Scene3D;
+class Component;
 
 /**
    @class Element
@@ -28,15 +25,15 @@ class OgreScene;
 */
 class Element : public std::enable_shared_from_this<Element> {
   public:
-    Element(OgreScene& scene);
+    Element(Scene3D& scene);
     virtual ~Element();
 
-    void AddComponent(const std::shared_ptr<bulletworks::Component> &the_component);
+    void AddComponent(const std::shared_ptr<Component> &the_component);
     template <class T>
     T* component();
 
     void AttachTo(Element& parent);
-    void AttachTo(OgreScene& scene);
+    void AttachTo(Scene3D& scene);
     void Destroy();
 
     Ogre::SceneNode& node() { return *node_; }
@@ -46,8 +43,8 @@ class Element : public std::enable_shared_from_this<Element> {
     virtual void OnParentDestroyed() {}
     
   private:
-    std::unordered_map<std::type_index, std::shared_ptr<bulletworks::Component>>    components_;
-    Ogre::SceneNode                                                                 *node_;
+    std::unordered_map<std::type_index, std::shared_ptr<Component>>    components_;
+    Ogre::SceneNode                                                         *node_;
     
 }; // class Element.
 

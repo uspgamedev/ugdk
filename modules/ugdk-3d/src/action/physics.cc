@@ -1,18 +1,20 @@
-#include <bulletworks/manager.h>
-
-#include <bulletworks/component/physicsbody.h>
+#include <ugdk/action/3D/physics.h>
+#include <ugdk/action/3D/component/physicsbody.h>
+#include <ugdk/action/3D/scene3d.h>
 
 #include <btBulletDynamicsCommon.h>
 #include <BtOgreExtras.h>
 #include <OgreSceneManager.h>
 
-namespace bulletworks {
+namespace ugdk {
+namespace action {
+namespace mode3d {
 
 using component::PhysicsBody;
 
 void tickCallback(btDynamicsWorld *world, btScalar timeStep);
 
-Manager::Manager(const btVector3& grav, Ogre::SceneManager* sceneMgr) {
+Physics::Physics(const btVector3& grav, Scene3D* scene) {
     // Broadphase is the initial collision detecting: checks for colliding pairs given their bounding boxes
     broadphase_ = new btDbvtBroadphase();
 
@@ -30,7 +32,7 @@ Manager::Manager(const btVector3& grav, Ogre::SceneManager* sceneMgr) {
     btContactSolverInfo& info = world_->getSolverInfo();
     info.m_splitImpulse = 1; //enable split impulse feature
 
-    debug_drawer_ = new BtOgre::DebugDrawer(sceneMgr->getRootSceneNode(), world_);
+    debug_drawer_ = new BtOgre::DebugDrawer(scene->manager()->getRootSceneNode(), world_);
     debug_drawer_->setDebugMode(false);
     world_->setDebugDrawer(debug_drawer_);
 
@@ -38,7 +40,7 @@ Manager::Manager(const btVector3& grav, Ogre::SceneManager* sceneMgr) {
     world_->setWorldUserInfo(static_cast<void*>(this));
 }
 
-Manager::~Manager() {
+Physics::~Physics() {
     delete world_;
 	delete broadphase_;
     delete dispatcher_;
@@ -47,25 +49,25 @@ Manager::~Manager() {
     delete debug_drawer_;
 }
 
-void Manager::Update(double dt) {
+void Physics::Update(double dt) {
     // stepSimulation( dt, maxSubSteps, fixedDtSubStep=1/60)
     // dt < maxSubSteps * fixedDtSubStep
     world_->stepSimulation(dt, 10);
     debug_drawer_->step();
 }
 
-void Manager::AddBody(PhysicsBody* obj) {
+void Physics::AddBody(PhysicsBody* obj) {
     world_->addRigidBody(obj->body_, obj->physics_data_.collision_group,
                          obj->physics_data_.collides_with);
 }
-void Manager::RemoveBody(PhysicsBody* obj) {
+void Physics::RemoveBody(PhysicsBody* obj) {
     world_->removeRigidBody(obj->body_);
 }
 
-void Manager::set_debug_draw_enabled(bool enable) { 
+void Physics::set_debug_draw_enabled(bool enable) {
     debug_drawer_->setDebugMode(enable);
 }
-bool Manager::debug_draw_enabled() { 
+bool Physics::debug_draw_enabled() {
     return debug_drawer_->getDebugMode() != 0; 
 }
 
@@ -91,4 +93,6 @@ void tickCallback(btDynamicsWorld *world, btScalar timeStep) {
 	}
 }
 
+}
+}
 }

@@ -1,6 +1,6 @@
 
-#ifndef BULLETWORKS_COMPONENT_H
-#define BULLETWORKS_COMPONENT_H
+#ifndef UGDK_ACTION_3D_COMPONENT_H
+#define UGDK_ACTION_3D_COMPONENT_H
 
 #include <memory>
 #include <typeindex>
@@ -8,12 +8,8 @@
 namespace ugdk {
 namespace action {
 namespace mode3d {
-class Element;
-}
-}
-}
 
-namespace bulletworks {
+class Element;
 
 class Component {
   public:
@@ -23,14 +19,14 @@ class Component {
     Component() {}
     /// TODO: Make this not accessible from Object
     virtual void OnTaken() = 0;
-    void Take(const std::weak_ptr<ugdk::action::mode3d::Element> &the_owner);
-    std::shared_ptr<ugdk::action::mode3d::Element> owner() const;
-    friend class ugdk::action::mode3d::Element;
+    void Take(const std::weak_ptr<Element> &the_owner);
+    std::shared_ptr<Element> owner() const;
+    friend class Element;
   private:
-    std::weak_ptr<ugdk::action::mode3d::Element> owner_;
+    std::weak_ptr<Element> owner_;
 };
 
-inline std::shared_ptr<ugdk::action::mode3d::Element> Component::owner() const {
+inline std::shared_ptr<Element> Component::owner() const {
     return owner_.lock();
 }
 
@@ -43,7 +39,8 @@ class NullComponent {
 };
 
 } // namespace component
+} // namespace mode3d
+} // namespace action
+} // namespace ugdk
 
-} // namespace bulletworks
-
-#endif // COMPONENT_H
+#endif // UGDK_ACTION_3D_COMPONENT_H

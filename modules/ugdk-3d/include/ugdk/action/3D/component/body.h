@@ -1,14 +1,16 @@
-#ifndef BULLETWORKS_COMPONENT_BODY_H
-#define BULLETWORKS_COMPONENT_BODY_H
+#ifndef UGDK_ACTION_3D_COMPONENT_BODY_H
+#define UGDK_ACTION_3D_COMPONENT_BODY_H
 
-#include <bulletworks/component.h>
+#include <ugdk/action/3D/component.h>
 #include <OgreVector3.h>
 
 namespace Ogre {
 class Vector3;
 }
 
-namespace bulletworks {
+namespace ugdk {
+namespace action {
+namespace mode3d {
 namespace component {
 
 class Body : public Component {
@@ -61,6 +63,8 @@ class NullComponent<Body> : public Body {
 };
 
 } // namespace component
-} // namespace bulletworks
+} // namespace mode3d
+} // namespace action
+} // namespace ugdk
 
-#endif // BULLETWORKS_COMPONENT_BODY_H
+#endif // UGDK_ACTION_3D_COMPONENT_BODY_H

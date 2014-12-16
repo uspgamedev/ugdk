@@ -1,16 +1,18 @@
-#ifndef BULLETWORKS_COMPONENT_PHYSICSBODY_H
-#define BULLETWORKS_COMPONENT_PHYSICSBODY_H
+#ifndef UGDK_ACTION_3D_COMPONENT_PHYSICSBODY_H
+#define UGDK_ACTION_3D_COMPONENT_PHYSICSBODY_H
 
-#include <bulletworks/component/body.h>
+#include <ugdk/action/3D/component/body.h>
 
 #include <LinearMath/btTransform.h>
 
 class btCollisionShape;
 class btRigidBody;
 
-namespace bulletworks {
+namespace ugdk {
+namespace action {
+namespace mode3d {
 
-class Manager;
+class Physics;
 
 namespace component {
 
@@ -35,7 +37,7 @@ class PhysicsBody final : public Body {
         PhysicsData();
     };
 
-    PhysicsBody (Manager &manager, const PhysicsData &physics_data);
+    PhysicsBody(Physics &physics, const PhysicsData &physics_data);
     ~PhysicsBody();
 
     double mass() const override;
@@ -53,15 +55,15 @@ class PhysicsBody final : public Body {
 
   private:
 
-    friend class ::bulletworks::Manager;
+    friend class Physics;
 
-    Manager     &manager_;
+    Physics     &physics_;
     PhysicsData physics_data_;
     btRigidBody *body_;
 };
 
-inline PhysicsBody::PhysicsBody(Manager &manager, const PhysicsData &physics_data)
-    : manager_(manager), physics_data_(physics_data) {}
+inline PhysicsBody::PhysicsBody(Physics &physics, const PhysicsData &physics_data)
+    : physics_(physics), physics_data_(physics_data) {}
 
 inline double PhysicsBody::mass() const  {
     return physics_data_.mass;
@@ -71,6 +73,8 @@ template <>
 class NullComponent<PhysicsBody> : public NullComponent<Body> {};
 
 } // namespace component
-} // namespace bulletworks
+} // namespace mode3d
+} // namespace action
+} // namespace ugdk
 
 #endif // BULLETWORKS_COMPONENT_PHYSICSBODY_H

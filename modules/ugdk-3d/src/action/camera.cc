@@ -1,6 +1,6 @@
 #include <ugdk/action/3D/camera.h>
 #include <ugdk/action/3D/element.h>
-#include <ugdk/action/3D/ogrescene.h>
+#include <ugdk/action/3D/scene3d.h>
 
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
@@ -13,7 +13,7 @@ namespace mode3d {
 using Ogre::Vector3;
 using Ogre::Quaternion;
 
-Camera::Camera(OgreScene* scene, const std::string& camName) : Element(*scene) {
+Camera::Camera(Scene3D* scene, const std::string& camName) : Element(*scene) {
     camera_ = scene->manager()->createCamera(camName);
     camera_->setNearClipDistance(1);
     node().attachObject(camera_);

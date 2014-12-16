@@ -1,13 +1,15 @@
 
-#include <bulletworks/component/physicsbody.h>
-#include <bulletworks/object.h>
-#include <bulletworks/manager.h>
+#include <ugdk/action/3D/component/physicsbody.h>
+#include <ugdk/action/3D/element.h>
+#include <ugdk/action/3D/physics.h>
 
 #include <btBulletDynamicsCommon.h>
 #include <OgreSceneNode.h>
 #include <BtOgrePG.h>
 
-namespace bulletworks {
+namespace ugdk {
+namespace action {
+namespace mode3d {
 namespace component {
 
 PhysicsBody::PhysicsData::PhysicsData() {
@@ -21,7 +23,7 @@ PhysicsBody::PhysicsData::PhysicsData() {
 
 PhysicsBody::~PhysicsBody() {
     if (body_) {
-        manager_.RemoveBody(this);
+        physics_.RemoveBody(this);
         delete body_->getMotionState();
         delete body_;
         delete physics_data_.shape;
@@ -72,8 +74,10 @@ void PhysicsBody::OnTaken() {
     body_->setLinearFactor(btVector3(1,1,1));
     body_->setActivationState(DISABLE_DEACTIVATION);
     body_->setUserPointer(this);
-    manager_.AddBody(this);
+    physics_.AddBody(this);
 }
 
 } // namespace component
-} // namespace bulletworks
+} // namespace mode3d
+} // namespace action
+} // namespace ugdk

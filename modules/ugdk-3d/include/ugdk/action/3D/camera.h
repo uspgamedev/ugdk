@@ -14,11 +14,11 @@ namespace ugdk {
 namespace action {
 namespace mode3d {
 
-class OgreScene;
+class Scene3D;
 
 class Camera : public Element {
 public:
-    Camera(OgreScene* scene, const std::string& camName="MainCam");
+    Camera(Scene3D* scene, const std::string& camName = "MainCam");
     ~Camera();
 
     void SetParameters(const Ogre::Vector3& parent_origin_offset = Ogre::Vector3::ZERO, double max_dist=7.5);

@@ -1,12 +1,14 @@
 
-#include <bulletworks/component/view.h>
-#include <bulletworks/object.h>
+#include <ugdk/action/3D/component/view.h>
+#include <ugdk/action/3D/element.h>
 
 #include <OgreSceneNode.h>
 #include <OgreEntity.h>
 #include <OgreSceneManager.h>
 
-namespace bulletworks {
+namespace ugdk {
+namespace action {
+namespace mode3d {
 namespace component {
 
 void View::AddEntity(const std::string& meshName) {
@@ -50,4 +52,6 @@ void View::OnTaken() {
 }
 
 } // namespace component
-} // namespace bulletworks
+} // namespace mode3d
+} // namespace action
+} // namespace ugdk

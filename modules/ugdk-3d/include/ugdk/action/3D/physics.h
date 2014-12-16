@@ -1,13 +1,10 @@
-#ifndef BULLETWORKS_MANAGER_H_
-#define BULLETWORKS_MANAGER_H_
+#ifndef UGDK_ACTION_3D_PHYSICS_H_
+#define UGDK_ACTION_3D_PHYSICS_H_
 
 #include <functional>
 
 namespace BtOgre {
 class DebugDrawer;
-}
-namespace Ogre {
-class SceneManager;
 }
 
 class btVector3;
@@ -18,18 +15,19 @@ class btSequentialImpulseConstraintSolver;
 class btDiscreteDynamicsWorld;
 class btManifoldPoint;
 
-namespace bulletworks {
+namespace ugdk {
+namespace action {
+namespace mode3d {
 
+class Scene3D;
 namespace component {
-
 class PhysicsBody;
-
 }
 
-class Manager {
+class Physics {
 public:
-	Manager(const btVector3& grav, Ogre::SceneManager* sceneMgr);
-	~Manager();
+    Physics(const btVector3& grav, Scene3D* scene);
+    ~Physics();
 
     void Update(double dt);
 
@@ -49,5 +47,8 @@ private:
     BtOgre::DebugDrawer* debug_drawer_;
 };
 
-}
-#endif
+} // namespace mode3d
+} // namespace action
+} // namespace ugdk
+
+#endif // UGDK_ACTION_3D_PHYSICS_H_

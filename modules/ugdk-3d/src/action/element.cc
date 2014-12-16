@@ -1,6 +1,6 @@
 #include <ugdk/action/3D/element.h>
-#include <ugdk/action/3D/ogrescene.h>
-#include <bulletworks/component.h>
+#include <ugdk/action/3D/scene3d.h>
+#include <ugdk/action/3D/component.h>
 
 #include <OgreAny.h>
 #include <OgreSceneNode.h>
@@ -11,9 +11,8 @@ namespace action {
 namespace mode3d {
 
 using Ogre::Any;
-using bulletworks::Component;
 
-Element::Element(OgreScene& scene) {
+Element::Element(Scene3D& scene) {
     node_ = scene.manager()->getRootSceneNode()->createChildSceneNode();
     node_->getUserObjectBindings().setUserAny("owner", Any(this));
 }
@@ -31,7 +30,7 @@ void Element::AttachTo(Element& parent) {
     this->OnAttach();
 }
 
-void Element::AttachTo(OgreScene& scene) {
+void Element::AttachTo(Scene3D& scene) {
     node_->getParentSceneNode()->removeChild(node_);
     scene.manager()->getRootSceneNode()->addChild(node_);
     this->OnAttach();
