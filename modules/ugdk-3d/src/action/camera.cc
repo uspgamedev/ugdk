@@ -1,6 +1,6 @@
 #include <ugdk/action/3D/camera.h>
-#include <ugdk/action/3D/ogreentity.h>
-#include <ugdk/action/3D/ogrescene.h>
+#include <ugdk/action/3D/element.h>
+#include <ugdk/action/3D/scene3d.h>
 
 #include <OgreEntity.h>
 #include <OgreSceneNode.h>
@@ -13,10 +13,10 @@ namespace mode3d {
 using Ogre::Vector3;
 using Ogre::Quaternion;
 
-Camera::Camera(OgreScene* scene, const std::string& camName) {
-    parent_ = nullptr;
+Camera::Camera(Scene3D* scene, const std::string& camName) : Element(*scene) {
     camera_ = scene->manager()->createCamera(camName);
     camera_->setNearClipDistance(1);
+    node().attachObject(camera_);
     dist_ = 0;
     offset_ = Vector3::ZERO;
     max_dist_ = 7.5;
@@ -27,19 +27,6 @@ Camera::~Camera() {
     camera_->getSceneManager()->destroyCamera(camera_);
 }
 
-void Camera::AttachTo(OgreEntity* ent) {
-    if (parent_ != nullptr) {
-        Ogre::SceneNode* oldCamNode = camera_->getParentSceneNode();
-        parent_->node()->removeChild( oldCamNode );
-        camera_->detachFromParent();
-        delete oldCamNode;
-    }
-    parent_ = ent;
-    parent_->node()->createChildSceneNode()->attachObject(camera_);
-
-    setupTransform();
-}
-
 void Camera::SetParameters(const Vector3& parent_origin_offset, double max_dist) {
     offset_ = parent_origin_offset;
     if (max_dist_ > 0)
@@ -48,14 +35,10 @@ void Camera::SetParameters(const Vector3& parent_origin_offset, double max_dist)
 }
 
 Quaternion Camera::orientation() {
-    if (parent_ != nullptr)
-        return camera_->getParentSceneNode()->getOrientation();
-    return Quaternion::IDENTITY;
+    return node().getOrientation();
 }
 Quaternion Camera::actual_orientation() {
-    if (parent_ != nullptr)
-        return parent_->node()->getOrientation() * camera_->getParentSceneNode()->getOrientation();
-    return Quaternion::IDENTITY;
+    return node().getParentSceneNode()->getOrientation() * node().getOrientation();
 }
 
 /*void Camera::injectMouseMoved( const OIS::MouseEvent &arg ) {
@@ -66,29 +49,33 @@ void Camera::SetDistance(double dist) {
     dist_ = dist;
     if (dist_ <= 0) dist_ = 0;
     if (dist_ > max_dist_) dist_ = max_dist_;
-    if (parent_ == nullptr) return;
-    Vector3 pos = parent_->node()->getOrientation() * Vector3::UNIT_Z * dist_;
+    Vector3 pos = node().getParentSceneNode()->getOrientation() * Vector3::UNIT_Z * dist_;
     camera_->setPosition( pos );
 }
 void Camera::Rotate(double yaw, double pitch) {
-    if (parent_ == nullptr) return;
-    Ogre::SceneNode* node = camera_->getParentSceneNode();
-    node->yaw(Ogre::Degree( yaw ), Ogre::Node::TS_WORLD);
+    node().yaw(Ogre::Degree( yaw ), Ogre::Node::TS_WORLD);
 
     cumulative_pitch_ += pitch;
     if ( Ogre::Math::Abs(cumulative_pitch_) <= 90 )
-         node->pitch(Ogre::Degree( pitch ), Ogre::Node::TS_LOCAL);
+         node().pitch(Ogre::Degree( pitch ), Ogre::Node::TS_LOCAL);
     else
         cumulative_pitch_ -= pitch;
 }
 
-void Camera::setupTransform() {
-    if (parent_ == nullptr) return;
-    Ogre::SceneNode* node = camera_->getParentSceneNode();
+void Camera::OnAttach() {
+    setupTransform();
+}
 
-    node->setPosition( offset_ );
-    node->setOrientation( Quaternion::IDENTITY );
-    camera_->setPosition( parent_->node()->getOrientation() * Vector3::UNIT_Z * dist_ );
+void Camera::OnParentDestroyed() {
+    Ogre::SceneManager *mgr = node().getCreator();
+    node().getParentSceneNode()->removeChild(&node());
+    mgr->getRootSceneNode()->addChild(&node());
+}
+
+void Camera::setupTransform() {
+    node().setPosition( offset_ );
+    node().setOrientation( Quaternion::IDENTITY );
+    camera_->setPosition( node().getParentSceneNode()->getOrientation() * Vector3::UNIT_Z * dist_);
 }
 
 } // namespace 3D

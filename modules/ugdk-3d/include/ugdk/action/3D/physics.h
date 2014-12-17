@@ -1,13 +1,10 @@
-#ifndef BULLETWORKS_MANAGER_H_
-#define BULLETWORKS_MANAGER_H_
+#ifndef UGDK_ACTION_3D_PHYSICS_H_
+#define UGDK_ACTION_3D_PHYSICS_H_
 
 #include <functional>
 
 namespace BtOgre {
 class DebugDrawer;
-}
-namespace Ogre {
-class SceneManager;
 }
 
 class btVector3;
@@ -15,30 +12,31 @@ class btBroadphaseInterface;
 class btDefaultCollisionConfiguration;
 class btCollisionDispatcher;
 class btSequentialImpulseConstraintSolver;
+class btDynamicsWorld;
 class btDiscreteDynamicsWorld;
 class btManifoldPoint;
 
-namespace bulletworks {
+namespace ugdk {
+namespace action {
+namespace mode3d {
 
-class Object;
+class Scene3D;
+namespace component {
+class PhysicsBody;
+}
 
-typedef std::function<void (Object*,Object*,btManifoldPoint&)> CollisionLogic;
-
-class Manager {
+class Physics {
 public:
-	Manager(const btVector3& grav, Ogre::SceneManager* sceneMgr);
-	~Manager();
+    Physics(const btVector3& grav, Scene3D* scene);
+    ~Physics();
 
     void Update(double dt);
 
-    void AddBody(Object* obj);
-    void RemoveBody(Object* obj);
+    void AddBody(component::PhysicsBody* obj);
+    void RemoveBody(component::PhysicsBody* obj);
 
     void set_debug_draw_enabled(bool enable);
     bool debug_draw_enabled();
-
-    void set_collision_logic(CollisionLogic& logic) { col_logic_ = logic; }
-    CollisionLogic collision_logic() { return col_logic_; }
 
 private:
     btBroadphaseInterface* broadphase_;
@@ -49,8 +47,11 @@ private:
 
     BtOgre::DebugDrawer* debug_drawer_;
 
-    CollisionLogic col_logic_;
+    static void tickCallback(btDynamicsWorld *world, float timeStep);
 };
 
-}
-#endif
+} // namespace mode3d
+} // namespace action
+} // namespace ugdk
+
+#endif // UGDK_ACTION_3D_PHYSICS_H_

@@ -1,5 +1,7 @@
-#include <ugdk/action/3D/ogrescene.h>
+#include <ugdk/action/3D/scene3d.h>
+#include <ugdk/action/3D/element.h>
 #include <ugdk/action/3D/camera.h>
+#include <ugdk/action/3D/physics.h>
 
 #include <ugdk/desktop/module.h>
 #include <ugdk/desktop/3D/manager.h>
@@ -12,11 +14,15 @@
 #include <OgreOverlaySystem.h>
 #include <OgreFont.h>
 
+#include <btBulletDynamicsCommon.h>
+
 #include <iostream>
 
 namespace ugdk {
 namespace action {
 namespace mode3d {
+
+using std::shared_ptr;
 
 namespace {
 ugdk::desktop::mode3d::Manager* desktop_manager() {
@@ -24,24 +30,30 @@ ugdk::desktop::mode3d::Manager* desktop_manager() {
 }
 }
 
-OgreScene::OgreScene() {
+Scene3D::Scene3D() {
     scene_mgr_ = desktop_manager()->root()->createSceneManager("OctreeSceneManager");
     overlay_system_ = new Ogre::OverlaySystem();
     scene_mgr_->addRenderQueueListener( overlay_system_ );
     camera_ = new Camera(this);
     z_order_ = -1;
     fps_stats_ = nullptr;
+    physics_.reset(new Physics(btVector3(0.0, -10.0, 0.0), this));
+    AddTask(ugdk::system::Task([&](double dt) {
+        physics_->Update(dt);
+    }, 0.2));
 }
 
-OgreScene::~OgreScene() {
+Scene3D::~Scene3D() {
     auto mgr = desktop_manager();
     if (z_order_ > 0)
         mgr->window().removeViewport(z_order_);
-    delete camera_;
+    if (camera_)
+        delete camera_;
+    delete overlay_system_;
     mgr->root()->destroySceneManager(scene_mgr_);
 }
 
-void OgreScene::OnPushed(int index) {
+void Scene3D::OnPushed(int index) {
     z_order_ = index;
     //TODO: we could let user set with x/y/w/h of this viewport...
     viewport_ = desktop_manager()->window().addViewport(camera_->camera(), z_order_, 0, 0, 1, 1);
@@ -52,7 +64,7 @@ void OgreScene::OnPushed(int index) {
     std::cout << "Viewport size = " << viewport_->getActualWidth() << " x " << viewport_->getActualHeight() << std::endl;
 }
 
-void OgreScene::ShowFrameStats() {
+void Scene3D::ShowFrameStats() {
     if (fps_stats_ == nullptr) {
         Ogre::OverlayManager* overlay_mgr = Ogre::OverlayManager::getSingletonPtr();
         std::string over_name = identifier() + "_FrameStats";
@@ -90,18 +102,18 @@ void OgreScene::ShowFrameStats() {
     fps_stats_->show();
 }
 
-bool OgreScene::IsFrameStatsVisible() {
+bool Scene3D::IsFrameStatsVisible() {
     if (fps_stats_ != nullptr)
         return fps_stats_->isVisible();
     return false;
 }
 
-void OgreScene::HideFrameStats() {
+void Scene3D::HideFrameStats() {
     //if (fps_stats_ != nullptr)
     //    fps_stats_->hide();
 }
 
-void OgreScene::UpdateFrameStats() {
+void Scene3D::UpdateFrameStats() {
     if (!IsFrameStatsVisible()) return;
     
     auto stats = desktop_manager()->window().getStatistics();
@@ -117,6 +129,11 @@ void OgreScene::UpdateFrameStats() {
     log("best frame time = " << stats.bestFrameTime);
     log("worst frame time = " << stats.worstFrameTime);*/
     
+}
+
+shared_ptr<Element>& Scene3D::AddElement() {
+    elements_.emplace_back(new Element(*this));
+    return elements_.back();
 }
 
 } // namespace mode3d
