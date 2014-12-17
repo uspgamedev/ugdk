@@ -1,6 +1,7 @@
 #include <ugdk/text/font.h>
 
-#include <ugdk/system/engine.h>
+#include <ugdk/filesystem/module.h>
+#include <ugdk/filesystem/file.h>
 #include <texture-atlas.h>
 #include <texture-font.h>
 
@@ -12,20 +13,28 @@ using std::wstring;
 using math::Vector2D;
 
 Font::Font(const string& path, double size) 
-    : size_(size) 
-    {
-    
-    std::string fullpath = ugdk::system::ResolvePath(path);
+    : size_(size)
+    , ttf_memory_(nullptr)
+{
 
+    auto file = ugdk::filesystem::manager()->OpenFile(path);
+    auto file_size = file->size();
+
+    ttf_memory_ = malloc(file_size);
+    file->ReadRaw(ttf_memory_, file_size, 1);
+    
     atlas_ = texture_atlas_new(512, 512, 1);
 
-    freetype_font_ = texture_font_new_from_file(
+    freetype_font_ = texture_font_new_from_memory(
                             atlas_,
                             static_cast<float>(size),
-                            fullpath.c_str());
+                            ttf_memory_,
+                            file_size);
 }
 
 Font::~Font() {
+    if (ttf_memory_)
+        free(ttf_memory_);
     texture_atlas_delete(atlas_);
     texture_font_delete(freetype_font_);
 }

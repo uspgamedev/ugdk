@@ -4,7 +4,8 @@
 #include <ugdk/text/module.h>
 #include <ugdk/text/label.h>
 #include <ugdk/text/textbox.h>
-#include <ugdk/system/engine.h>
+#include <ugdk/filesystem/module.h>
+#include <ugdk/filesystem/file.h>
 #include <ugdk/text/languageword.h>
 #include <ugdk/util/utf8.h>
 
@@ -24,19 +25,18 @@ using std::string;
 
 std::string LoadTextFromFile(const std::string& path) {
     std::string output;
-    std::string fullpath = ugdk::system::ResolvePath(path);
 
-    FILE *txtFile = fopen(fullpath.c_str(), "r");
-    if(txtFile == nullptr) return output;
+    auto file = ugdk::filesystem::manager()->OpenFile(path);
+    if (!file)
+        return output;
 
     static const int MAXLINE = 1024;
 
     char buffer_utf8[MAXLINE];
     // Read from the UTF-8 encoded file.
-    while(fgets(buffer_utf8, MAXLINE, txtFile) != nullptr){
+    while(file->fgets(buffer_utf8, MAXLINE) != nullptr){
         output.append(buffer_utf8);
     }
-    fclose(txtFile);
     return output;
 }
 
@@ -145,16 +145,15 @@ static int title_type(char* str) {
 
 // Fills the map with the information on the given file
 bool Language::Load(const std::string& language_file) {
-    FILE* file = fopen(ugdk::system::ResolvePath(language_file).c_str(), "r");
-    if(file == nullptr)
+    auto file = filesystem::manager()->OpenFile(language_file);
+    if(!file)
         return false;
 
     char buffer_raw[STRING_LENGTH];
     int reading_type = 0;
 
-    while(!feof(file)) {
+    while (file->fgets(buffer_raw, STRING_LENGTH)) {
         // Read from the UTF-8 encoded file.
-        fgets(buffer_raw, STRING_LENGTH, file);
 
         if(is_blank(buffer_raw)) { // Is this line blank?
             continue;
@@ -177,7 +176,6 @@ bool Language::Load(const std::string& language_file) {
             // Syntax error!
         }
     }
-    fclose(file);
     return true;
 }
 

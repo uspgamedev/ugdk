@@ -23,5 +23,28 @@ bool File::CanSeek() {
     return Seek(0, SeekPositions::CURRENT) != -1;
 }
 
+int File::fgetc() {
+    unsigned char c;
+    if (Read(&c, 1) == 1)
+        return static_cast<int>(c);
+    else
+        return EOF;
+}
+
+char* File::fgets(char* str, int count) {
+    char *buf = str;    
+    int chars_left = count;
+
+    int ch;
+    while (--chars_left > 0 && (ch = fgetc()) != EOF) {
+        if ((*buf++ = ch) == '\n')  /* EOL */
+            break;
+    }
+    *buf = '\0';
+    if (ch == EOF && buf == str)
+        return NULL;
+    return str;
+}
+
 } // namespace filesystem
 } // namespace ugdk

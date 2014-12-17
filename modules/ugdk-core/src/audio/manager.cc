@@ -65,9 +65,8 @@ void Manager::ReleaseMusics() {
 }
 
 Sample* Manager::LoadSample(const std::string& filepath) {
-	std::string fullpath = ugdk::system::ResolvePath(filepath);
     if(sample_data_.find(filepath) == sample_data_.end()) {
-        Sample *sample = new Sample(fullpath);
+        Sample *sample = new Sample(filepath);
         if(sample)
             sample_data_[filepath] = sample;
     }
@@ -76,9 +75,8 @@ Sample* Manager::LoadSample(const std::string& filepath) {
 }
 
 Music* Manager::LoadMusic(const std::string& filepath) {
-	std::string fullpath = ugdk::system::ResolvePath(filepath);
     if(music_data_.find(filepath) == music_data_.end()) {
-        Music *music = new Music(fullpath);
+        Music *music = new Music(filepath);
         if(music)
             music_data_[filepath] = music;
     }

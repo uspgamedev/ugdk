@@ -6,10 +6,14 @@
 #include <ugdk/graphic/opengl.h>
 #include <ugdk/system/engine.h>
 #include <ugdk/system/config.h>
+#include <ugdk/system/exceptions.h>
+#include <ugdk/filesystem/module.h>
+#include <filesystem/sdlfile.h>
 #include <ugdk/debug/log.h>
 
 #include <cstdlib>
 #include <cstdio>
+#include <cstring>
 
 namespace ugdk {
 namespace graphic {
@@ -113,12 +117,27 @@ GLTexture::~GLTexture() {
 }
 
 GLTexture* GLTexture::CreateFromFile(const std::string& filepath) {
-    std::string fullpath = ugdk::system::ResolvePath(filepath);
-    SDL_Surface* data = IMG_Load(fullpath.c_str());
+    auto file = ugdk::filesystem::manager()->OpenFile(filepath);
+
+    if (!file) {
+        debug::Log(debug::LogLevel::ERROR, "UGDK",
+                   "Texture::CreateFromFile - file '", filepath, "' not found.");
+        return nullptr;
+    }
+
+    const char *ext = strrchr(filepath.c_str(), '.');
+    SDL_RWops* rwops;
+
+    if (auto ptr = dynamic_cast<filesystem::SDLFile*>(file.get())) {
+        rwops = ptr->rwops();        
+    } else {
+        throw system::BaseException("NYI: GLTexture::CreateFromFile from non-SDLFile.");
+    }
+    SDL_Surface* data = IMG_LoadTyped_RW(rwops, 0, ext);
 
     if(data == nullptr) {
         debug::Log(debug::LogLevel::ERROR, "UGDK",
-                   "Texture::CreateFromFile - error loading file '", fullpath, "' -> ", SDL_GetError());
+                   "Texture::CreateFromFile - error loading file '", filepath, "' -> ", SDL_GetError());
         return nullptr;
     }
     GLTexture* tex = CreateFromSurface(data);

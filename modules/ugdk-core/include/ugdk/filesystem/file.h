@@ -103,6 +103,22 @@ class File {
     */
     bool CanSeek();
 
+    /**
+    * Reads the next character from the given input stream.
+    * @return The obtained character on success or EOF on failure. 
+    */
+    int fgetc();
+
+    /**
+    * Reads at most count - 1 characters from the given file stream and stores them in str.
+    * The produced character string is always null-terminated. Parsing stops if end-of-file
+    * occurs or a newline character is found, in which case str will contain that newline character. 
+    * @param str string to read the characters to
+    * @param count the length of str
+    * @return str on success, NULL on failure. 
+    */
+    char* fgets(char* str, int count);
+
   protected:
     File() {}    
 };

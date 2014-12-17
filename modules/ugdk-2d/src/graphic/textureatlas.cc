@@ -1,6 +1,7 @@
 #include <ugdk/graphic/textureatlas.h>
 
-#include <ugdk/system/engine.h>
+#include <ugdk/filesystem/module.h>
+#include <ugdk/filesystem/file.h>
 
 #include "gltexture.h"
 #include <libjson.h>
@@ -26,7 +27,11 @@ TextureAtlas::TextureAtlas(const graphic::GLTexture* texture, std::size_t size)
 TextureAtlas::~TextureAtlas() {}
 
 TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
-    auto&& contents = system::GetFileContents(filepath + ".json");
+    auto json_file = ugdk::filesystem::manager()->OpenFile(filepath + ".json");
+    if (!json_file)
+        throw system::BaseException("File not found: %s.json\n", filepath.c_str());
+
+    auto contents = json_file->GetContents();
     if (!libjson::is_valid(contents))
         throw system::BaseException("Invalid json: %s.json\n", filepath.c_str());
 
