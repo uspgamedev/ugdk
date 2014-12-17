@@ -6,7 +6,7 @@
 #include <BtOgreExtras.h>
 #include <OgreSceneManager.h>
 
-#include <iostream>
+#include <vector>
 
 namespace ugdk {
 namespace action {
@@ -83,25 +83,25 @@ void Physics::tickCallback(btDynamicsWorld *world, btScalar timeStep) {
         PhysicsBody* bodyA = static_cast<PhysicsBody*>(contactManifold->getBody0()->getUserPointer());
         PhysicsBody* bodyB = static_cast<PhysicsBody*>(contactManifold->getBody1()->getUserPointer());
 
+        component::ManifoldPointVector points;
 		int numContacts = contactManifold->getNumContacts();
 		for (int j=0; j<numContacts; j++)
 		{
 			btManifoldPoint& pt = contactManifold->getContactPoint(j);
 			if (pt.getDistance() <= 0)
-			{
-                //TODO: use find+iterator instead of count
-                //TODO: refactor to hold list of collision points, call action with them
-                if (bodyA->action_map_.count(bodyB->collision_group())) {
-                    bodyA->action_map_[bodyB->collision_group()](bodyA->owner(), bodyB->owner(), pt);
-                }
-                if (bodyB->action_map_.count(bodyA->collision_group())) {
-                    bodyB->action_map_[bodyA->collision_group()](bodyB->owner(), bodyA->owner(), pt);
-                }
-                //TODO: check if we should continue to check collision points and possibly
-                //      recall a collision action with another point for the same two objects,
-                //      or just stop collision callback here.
-			}
+                points.push_back(pt);
 		}
+
+        if (points.size() > 0) {
+            auto actionA = bodyA->action_map_.find(bodyB->collision_group());
+            if (actionA != bodyA->action_map_.end()) {
+                actionA->second(bodyA->owner(), bodyB->owner(), points);
+            }
+            auto actionB = bodyB->action_map_.find(bodyA->collision_group());
+            if (actionB != bodyB->action_map_.end()) {
+                actionB->second(bodyB->owner(), bodyA->owner(), points);
+            }
+        }
 	}
 }
 

@@ -4,6 +4,7 @@
 #include <ugdk/action/3D/component.h>
 #include <OgreVector3.h>
 #include <functional>
+#include <vector>
 
 namespace Ogre {
 class Vector3;
@@ -16,8 +17,9 @@ namespace action {
 namespace mode3d {
 namespace component {
 
-
-using CollisionAction = std::function < void(const std::shared_ptr<Element>&, const std::shared_ptr<Element>&, const btManifoldPoint&) > ;
+using ElementPtr = std::shared_ptr < Element > ;
+using ManifoldPointVector = std::vector < btManifoldPoint > ;
+using CollisionAction = std::function < void(const ElementPtr&, const ElementPtr&, const ManifoldPointVector&) >;
 
 class Body : public Component {
 
