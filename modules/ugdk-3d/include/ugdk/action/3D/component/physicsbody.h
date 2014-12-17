@@ -57,7 +57,7 @@ class PhysicsBody final : public Body {
     void OnTaken() override;
 
   private:
-    friend class Physics;
+    friend class ::ugdk::action::mode3d::Physics;
 
     Physics     &physics_;
     PhysicsData physics_data_;
