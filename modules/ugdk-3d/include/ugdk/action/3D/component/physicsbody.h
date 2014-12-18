@@ -45,6 +45,8 @@ class PhysicsBody final : public Body {
     short collides_with() const override;
     void set_angular_factor(double x_axis, double y_axis, double z_axis) override;
     void set_restitution(double factor) override;
+    void set_friction(double frict) override;
+    void set_damping(double linear, double angular) override;
 
     void Translate(double move_x, double move_y, double move_z) override;
     void Move(double delta_x, double delta_y, double delta_z) override;

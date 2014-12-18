@@ -56,7 +56,15 @@ void PhysicsBody::Scale(double factor_x, double factor_y, double factor_z) {
 }
 
 void PhysicsBody::set_restitution(double factor) {
-    body_->setRestitution(factor);
+    body_->setRestitution(static_cast<btScalar>(factor));
+}
+
+void PhysicsBody::set_friction(double frict) {
+    body_->setFriction(static_cast<btScalar>(frict));
+}
+
+void PhysicsBody::set_damping(double linear, double angular) {
+    body_->setDamping(static_cast<btScalar>(linear), static_cast<btScalar>(angular));
 }
 
 void PhysicsBody::OnTaken() {
