@@ -22,8 +22,6 @@ struct Configuration {
     bool input_enabled;
 
     bool time_enabled;
-    
-    bool ogre_enabled;
 
     Configuration();
 };

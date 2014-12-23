@@ -93,14 +93,14 @@ bool Manager::Initialize() {
     
     // Initialize the Root
     
-    // Show the configuration dialog and initialise the system
-    // You can skip this and use root.restoreConfig() to load configuration
-    // settings if you were sure there are valid ones saved in ogre.cfg
-    if(!root_->showConfigDialog()) {
-        return false;
-    }
-    //root_->restoreConfig();
+    // Choose and set render system to use.
+    //TODO: actually choose which render system to use, instead of using the first one.
+    Ogre::RenderSystem* render_system = root_->getAvailableRenderers().front();
+    // Config selected render system
+    //TODO: update this to actually set any non-default config options that we want.
     
+    // Initialize ogre
+    root_->setRenderSystem(render_system);
     root_->initialise(false);
 
     return true;
