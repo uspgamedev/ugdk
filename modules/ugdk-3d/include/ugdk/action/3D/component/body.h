@@ -61,7 +61,7 @@ inline void Body::Translate(const Ogre::Vector3 &move) {
 }
 
 inline void Body::Move(const Ogre::Vector3 &delta) {
-    this->Translate(delta.x, delta.y, delta.z);
+    this->Move(delta.x, delta.y, delta.z);
 }
 
 inline void Body::OnTaken() {}

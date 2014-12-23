@@ -4,6 +4,8 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/action/3D/physics.h>
 
+class btVector3;
+
 namespace Ogre {
 class SceneManager;
 class Viewport;
@@ -28,7 +30,7 @@ class Element;
 class Scene3D : public ugdk::action::Scene {
 //TODO: this does not allow showing at the same time multiple cameras from the same scene (splitscreen coop for example).
 public:
-    Scene3D();
+    Scene3D(const btVector3& gravity);
     virtual ~Scene3D();
     
     /// Method called when this scene is pushed to the Engine's Scene stack.

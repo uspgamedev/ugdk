@@ -30,14 +30,14 @@ ugdk::desktop::mode3d::Manager* desktop_manager() {
 }
 }
 
-Scene3D::Scene3D() {
+Scene3D::Scene3D(const btVector3& gravity) {
     scene_mgr_ = desktop_manager()->root()->createSceneManager("OctreeSceneManager");
     overlay_system_ = new Ogre::OverlaySystem();
     scene_mgr_->addRenderQueueListener( overlay_system_ );
     camera_ = new Camera(this);
     z_order_ = -1;
     fps_stats_ = nullptr;
-    physics_.reset(new Physics(btVector3(0.0, -10.0, 0.0), this));
+    physics_.reset(new Physics(gravity, this));
     AddTask(ugdk::system::Task([&](double dt) {
         physics_->Update(dt);
     }, 0.2));
