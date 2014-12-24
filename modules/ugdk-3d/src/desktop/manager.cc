@@ -55,10 +55,17 @@ Manager::~Manager() {
 #endif
 }
 
+void Manager::LoadPlugin(const std::string& plugin_name) {
+#ifndef UGDK_OGRE_STATIC
+    std::stringstream ss;
+    ss << UGDK_OGRE_PLUGIN_DIR "/" << plugin_name << OGRE_BUILD_SUFFIX;
+    root_->loadPlugin(ss.str());
+#endif
+}
+
 bool Manager::Initialize() {
 
     std::string mResourcesCfg = system::ResolvePath("resources" OGRE_BUILD_SUFFIX ".cfg");
-    std::string mPluginsCfg = system::ResolvePath("plugins" OGRE_BUILD_SUFFIX ".cfg");
 
     // Create the Root
     root_ = new Ogre::Root();
@@ -68,8 +75,8 @@ bool Manager::Initialize() {
     static_loader_ = new Ogre::StaticPluginLoader();
     static_loader_->load();
 #else
-    root_->loadPlugin(UGDK_OGRE_PLUGIN_DIR "/RenderSystem_GL" OGRE_BUILD_SUFFIX);
-    root_->loadPlugin(UGDK_OGRE_PLUGIN_DIR "/Plugin_OctreeSceneManager" OGRE_BUILD_SUFFIX);
+    LoadPlugin("RenderSystem_GL");
+    LoadPlugin("Plugin_OctreeSceneManager");
 #endif
     
     

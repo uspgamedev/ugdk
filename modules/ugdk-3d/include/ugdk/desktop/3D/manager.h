@@ -28,6 +28,8 @@ public:
     void Release() override;
     
     void PresentAll() override;
+
+    void LoadPlugin(const std::string& plugin_name);
     
     Ogre::Root* root() { return root_; }
     Ogre::RenderWindow& window();
