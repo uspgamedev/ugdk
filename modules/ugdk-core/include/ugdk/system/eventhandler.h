@@ -45,16 +45,16 @@ class EventHandler {
 
     template<class Event, class Handler>
     IListener* AddListener(Handler handler) {
-        return AddRawListener(typeid(Event), new Listener<Event>(handler));
+        return AddRawListener(typeid(Event), std::make_shared<FunctionListener<Event>>(handler));
     }
 
     template<class Event>
     IListener* AddListener(void (*handler)(const Event&)) {
-        return AddRawListener(typeid(Event), new Listener<Event>(handler));
+        return AddRawListener(typeid(Event), std::make_shared<FunctionListener<Event>>(handler));
     }
 
-    IListener* AddRawListener(const std::type_index& type, std::shared_ptr<IListener> listener) {
-        event_handlers_[type].emplace_front(listener);
+    IListener* AddRawListener(const std::type_index& type, const std::shared_ptr<IListener>& listener) {
+        event_handlers_[type].push_front(listener);
         return listener.get();
     }
 
