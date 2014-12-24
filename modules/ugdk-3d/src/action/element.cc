@@ -12,7 +12,7 @@ namespace mode3d {
 
 using Ogre::Any;
 
-Element::Element(Scene3D& scene) {
+Element::Element(Scene3D& scene) : scene_(scene) {
     node_ = scene.manager()->getRootSceneNode()->createChildSceneNode();
     node_->getUserObjectBindings().setUserAny("owner", Any(this));
 }

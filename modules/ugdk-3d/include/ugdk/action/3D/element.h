@@ -37,6 +37,7 @@ class Element : public std::enable_shared_from_this<Element> {
     void Destroy();
 
     Ogre::SceneNode& node() { return *node_; }
+    Scene3D& scene() { return scene_; }
 
   protected:
     virtual void OnAttach() {}
@@ -45,7 +46,7 @@ class Element : public std::enable_shared_from_this<Element> {
   private:
     std::unordered_map<std::type_index, std::shared_ptr<Component>>    components_;
     Ogre::SceneNode                                                         *node_;
-    
+    Scene3D&    scene_;
 }; // class Element.
 
 template <class T>
