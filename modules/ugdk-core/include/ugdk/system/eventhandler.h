@@ -17,7 +17,7 @@ namespace system {
 class IListener { public: virtual ~IListener() {} };
 
 template <class Event>
-class Listener : public IListener {
+class Listener : public virtual IListener {
   public:
     virtual void Handle(const Event& ev) = 0;
 };

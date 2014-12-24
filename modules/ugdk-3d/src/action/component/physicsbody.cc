@@ -34,6 +34,13 @@ void PhysicsBody::set_angular_factor(double x_axis, double y_axis, double z_axis
     body_->setAngularFactor(btVector3(x_axis, y_axis, z_axis));
 }
 
+Ogre::Vector3 PhysicsBody::position() const {
+    return BtOgre::Convert::toOgre(body_->getCenterOfMassPosition());
+}
+Ogre::Quaternion PhysicsBody::orientation() const {
+    return BtOgre::Convert::toOgre(body_->getOrientation());
+}
+
 void PhysicsBody::Translate(double move_x, double move_y, double move_z) {
     body_->translate(btVector3(move_x, move_y, move_z));
 }

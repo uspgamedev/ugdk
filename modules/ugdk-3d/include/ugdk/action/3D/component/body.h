@@ -8,6 +8,7 @@
 
 namespace Ogre {
 class Vector3;
+class Quaternion;
 }
 
 class btManifoldPoint;
@@ -34,6 +35,9 @@ class Body : public Component {
     virtual void set_restitution(double factor) = 0;
     virtual void set_friction(double frict) = 0;
     virtual void set_damping(double linear, double angular) = 0;
+
+    virtual Ogre::Vector3 position() const = 0;
+    virtual Ogre::Quaternion orientation() const = 0;
 
     void Translate(const Ogre::Vector3& move);
     void Move(const Ogre::Vector3& delta);

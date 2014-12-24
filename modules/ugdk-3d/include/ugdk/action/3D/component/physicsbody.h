@@ -48,6 +48,9 @@ class PhysicsBody final : public Body {
     void set_friction(double frict) override;
     void set_damping(double linear, double angular) override;
 
+    Ogre::Vector3 position() const override;
+    Ogre::Quaternion orientation() const override;
+
     void Translate(double move_x, double move_y, double move_z) override;
     void Move(double delta_x, double delta_y, double delta_z) override;
     void Rotate(double yaw, double pitch, double roll) override;

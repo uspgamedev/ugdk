@@ -49,8 +49,9 @@ void Camera::SetDistance(double dist) {
     dist_ = dist;
     if (dist_ <= 0) dist_ = 0;
     if (dist_ > max_dist_) dist_ = max_dist_;
-    Vector3 pos = node().getParentSceneNode()->getOrientation() * Vector3::UNIT_Z * dist_;
+    Vector3 pos = node().getParentSceneNode()->getOrientation() * Vector3::NEGATIVE_UNIT_Z * dist_;
     camera_->setPosition( pos );
+    camera_->lookAt(node().getPosition());
 }
 void Camera::Rotate(double yaw, double pitch) {
     node().yaw(Ogre::Degree( yaw ), Ogre::Node::TS_WORLD);
@@ -75,7 +76,8 @@ void Camera::OnParentDestroyed() {
 void Camera::setupTransform() {
     node().setPosition( offset_ );
     node().setOrientation( Quaternion::IDENTITY );
-    camera_->setPosition( node().getParentSceneNode()->getOrientation() * Vector3::UNIT_Z * dist_);
+    camera_->setPosition(node().getParentSceneNode()->getOrientation() * Vector3::NEGATIVE_UNIT_Z * dist_);
+    camera_->lookAt(node().getPosition());
 }
 
 } // namespace 3D
