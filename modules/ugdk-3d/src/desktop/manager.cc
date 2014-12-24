@@ -44,7 +44,9 @@ using std::make_shared;
 #define UGDK_OGRE_PLUGIN_DIR OGRE_PLUGIN_DIR_REL
 #endif
 
-Manager::Manager() {
+Manager::Manager(const std::vector<std::string>& plugins)
+: ogre_plugins_(plugins)
+{
 }
 
 Manager::~Manager() {
@@ -75,8 +77,8 @@ bool Manager::Initialize() {
     static_loader_ = new Ogre::StaticPluginLoader();
     static_loader_->load();
 #else
-    LoadPlugin("RenderSystem_GL");
-    LoadPlugin("Plugin_OctreeSceneManager");
+    for (const auto& plugin : ogre_plugins_)
+        LoadPlugin(plugin);
 #endif
     
     

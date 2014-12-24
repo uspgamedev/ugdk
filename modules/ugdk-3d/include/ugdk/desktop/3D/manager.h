@@ -5,6 +5,7 @@
 #include <ugdk/desktop.h>
 
 #include <string>
+#include <vector>
 #include <memory>
 
 namespace Ogre {
@@ -21,7 +22,7 @@ class Window;
 
 class Manager final : public desktop::Manager  {
 public:
-    Manager();
+    Manager(const std::vector<std::string>& ogre_plugins);
     ~Manager();
     
     bool Initialize() override;
@@ -42,6 +43,7 @@ private:
     Ogre::Root* root_;
     Ogre::StaticPluginLoader* static_loader_;
     std::shared_ptr<Window> window_;
+    std::vector<std::string> ogre_plugins_;
 };
 
 } // namespace mode3d

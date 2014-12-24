@@ -18,6 +18,7 @@ struct Configuration {
 
     std::vector<desktop::WindowSettings> windows_list;
     math::Vector2D canvas_size;
+    std::vector<std::string> ogre_plugins;
 
     bool input_enabled;
 

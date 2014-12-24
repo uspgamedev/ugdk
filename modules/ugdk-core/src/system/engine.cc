@@ -153,7 +153,7 @@ bool Initialize(const Configuration& configuration) {
 
     if(!configuration.windows_list.empty()) {
 #ifdef UGDK_3D_ENABLED
-        desktop::Manager *deskmanager = new desktop::mode3d::Manager;
+        desktop::Manager *deskmanager = new desktop::mode3d::Manager(configuration.ogre_plugins);
 #else
         desktop::Manager *deskmanager = new desktop::mode2d::Manager;
 #endif
