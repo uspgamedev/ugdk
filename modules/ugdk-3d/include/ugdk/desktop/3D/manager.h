@@ -22,7 +22,7 @@ class Window;
 
 class Manager final : public desktop::Manager  {
 public:
-    Manager(const std::vector<std::string>& ogre_plugins);
+    Manager(const std::vector<std::string>& ogre_plugins, const std::string& renderer_name);
     ~Manager();
     
     bool Initialize() override;
@@ -44,6 +44,7 @@ private:
     Ogre::StaticPluginLoader* static_loader_;
     std::shared_ptr<Window> window_;
     std::vector<std::string> ogre_plugins_;
+    std::string renderer_name_;
 };
 
 } // namespace mode3d

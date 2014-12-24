@@ -44,8 +44,8 @@ using std::make_shared;
 #define UGDK_OGRE_PLUGIN_DIR OGRE_PLUGIN_DIR_REL
 #endif
 
-Manager::Manager(const std::vector<std::string>& plugins)
-: ogre_plugins_(plugins)
+Manager::Manager(const std::vector<std::string>& plugins, const std::string& renderer_name)
+: ogre_plugins_(plugins), renderer_name_(renderer_name)
 {
 }
 
@@ -104,7 +104,11 @@ bool Manager::Initialize() {
     
     // Choose and set render system to use.
     //TODO: actually choose which render system to use, instead of using the first one.
-    Ogre::RenderSystem* render_system = root_->getAvailableRenderers().front();
+    Ogre::RenderSystem* render_system = root_->getRenderSystemByName(renderer_name_);
+    if (!render_system) {
+        render_system = root_->getAvailableRenderers().front();
+        debug::Log(ugdk::debug::LogLevel::WARNING, "Desktop 3D Manager", "Could not find Ogre renderer '"+renderer_name_+"', defaulting to use '"+render_system->getName()+"'.");
+    }
     // Config selected render system
     //TODO: update this to actually set any non-default config options that we want.
     
