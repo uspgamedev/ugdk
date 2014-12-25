@@ -25,7 +25,7 @@ class Component;
 */
 class Element : public std::enable_shared_from_this<Element> {
   public:
-    Element(Scene3D& scene);
+    Element(Scene3D& scene, const std::string& name="");
     virtual ~Element();
 
     void AddComponent(const std::shared_ptr<Component> &the_component);
@@ -38,6 +38,7 @@ class Element : public std::enable_shared_from_this<Element> {
 
     Ogre::SceneNode& node() { return *node_; }
     Scene3D& scene() { return scene_; }
+    std::string name() const { return name_; }
 
   protected:
     virtual void OnAttach() {}
@@ -47,6 +48,7 @@ class Element : public std::enable_shared_from_this<Element> {
     std::unordered_map<std::type_index, std::shared_ptr<Component>>    components_;
     Ogre::SceneNode                                                         *node_;
     Scene3D&    scene_;
+    std::string name_;
 }; // class Element.
 
 template <class T>

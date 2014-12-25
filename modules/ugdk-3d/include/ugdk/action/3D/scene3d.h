@@ -41,7 +41,7 @@ public:
     void UpdateFrameStats();
     void HideFrameStats();
 
-    std::shared_ptr<Element>& AddElement();
+    std::shared_ptr<Element>& AddElement(const std::string& name="");
     const std::unique_ptr<Physics>& physics() const {
         return physics_;
     }
@@ -61,6 +61,7 @@ protected:
     std::vector<std::shared_ptr<Element>> elements_;
     
 }; // class OgreScene.
+
 
 } // namespace 3D
 } /* namespace action */

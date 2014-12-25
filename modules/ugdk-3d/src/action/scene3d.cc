@@ -131,8 +131,8 @@ void Scene3D::UpdateFrameStats() {
     
 }
 
-shared_ptr<Element>& Scene3D::AddElement() {
-    elements_.emplace_back(new Element(*this));
+shared_ptr<Element>& Scene3D::AddElement(const std::string& name) {
+    elements_.emplace_back(new Element(*this, name));
     return elements_.back();
 }
 

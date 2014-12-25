@@ -23,10 +23,13 @@ class View : public Component {
 
     virtual std::type_index type() const override;
 
-    void AddEntity(const std::string& meshName);
-    void AddEntity(const std::string& entName, const std::string& meshName);
-    void AddEntity(Ogre::Entity* ent);
+    Ogre::Entity* AddEntity(const std::string& meshName);
+    Ogre::Entity* AddEntity(const std::string& entName, const std::string& meshName);
+    Ogre::Entity* AddEntity(Ogre::Entity* ent);
     
+    Ogre::Entity* GetEntity(int index);
+    Ogre::Entity* GetEntity(const std::string& entName);
+
   protected:
     void OnTaken() override;
 

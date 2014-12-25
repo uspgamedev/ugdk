@@ -12,8 +12,8 @@ namespace mode3d {
 
 using Ogre::Any;
 
-Element::Element(Scene3D& scene) : scene_(scene) {
-    node_ = scene.manager()->getRootSceneNode()->createChildSceneNode();
+Element::Element(Scene3D& scene, const std::string& name) : scene_(scene), name_(name) {
+    node_ = scene.manager()->getRootSceneNode()->createChildSceneNode(name);
     node_->getUserObjectBindings().setUserAny("owner", Any(this));
 }
 
