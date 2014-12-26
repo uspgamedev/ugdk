@@ -35,7 +35,7 @@ bool LuaWrapper::Initialize() {
         data_gear()->getfield(-1, "path");
         string oldpath = (*data_gear_)->toprimitive<const char*>(-1);
         data_gear()->pop(1);
-        string path = ugdk::system::ResolvePath("scripts/")+"?.lua;"+oldpath;
+        string path = ugdk::system::CurrentConfiguration().base_path + "scripts/?.lua;" + oldpath;
         data_gear()->pushprimitive<const char*>(path.c_str());
         data_gear()->setfield(-2, "path");
         data_gear()->pop(1);
@@ -59,11 +59,10 @@ void LuaWrapper::ExecuteCode(const std::string& code) {
 }
 
 VirtualObj LuaWrapper::LoadModule(const string& name) {
-    string fullpath = ugdk::system::ResolvePath(
-        "scripts/" +
-        SCRIPT_MANAGER()->ConvertDottedNotationToPath(name) +
-        "." + file_extension()
-    );
+    string fullpath = ugdk::system::CurrentConfiguration().base_path
+        + "scripts/"
+        + SCRIPT_MANAGER()->ConvertDottedNotationToPath(name)
+        + "." + file_extension();
     return VirtualObj(LoadChunk(fullpath, DataGear::DoFile));
 }
 

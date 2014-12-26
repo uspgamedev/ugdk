@@ -312,6 +312,10 @@ const std::list<std::shared_ptr<const debug::SectionData>>& profile_data_list() 
     return profile_data_list_;
 }
 
+const Configuration& CurrentConfiguration() {
+    return configuration_;
+}
+
 void Suspend() {
     if (current_state_ != UGDKState::RUNNING)
         throw BaseException("UGDK not runing.");

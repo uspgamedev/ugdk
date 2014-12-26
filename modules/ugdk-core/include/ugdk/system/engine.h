@@ -65,6 +65,9 @@ const std::list<std::unique_ptr<action::Scene>>& scene_list();
 
 const std::list<std::shared_ptr<const debug::SectionData>>& profile_data_list();
 
+/// Returns the current configuration.
+const Configuration& CurrentConfiguration();
+
 /** @}
  */
 
