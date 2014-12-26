@@ -25,10 +25,26 @@ using std::string;
 
 std::string LoadTextFromFile(const std::string& path) {
     auto file = ugdk::filesystem::manager()->OpenFile(path);
-    if (file) {
-        return file->GetContents();
+    if (!file)
+        return std::string();
+
+    static const int MAXLINE = 1024;
+
+    char buffer_utf8[MAXLINE];
+    // Read from the UTF-8 encoded file.
+
+    std::string output;
+    while(file->fgets(buffer_utf8, MAXLINE) != nullptr) {
+#ifdef _WIN32
+        size_t len = strlen(buffer_utf8);
+        if (len > 1 && buffer_utf8[len - 2] == '\r') {
+            buffer_utf8[len - 2] = buffer_utf8[len - 1];
+            buffer_utf8[len - 1] = buffer_utf8[len];
+        }
+#endif
+        output.append(buffer_utf8);
     }
-    return std::string();
+    return output;
 }
 
 //===================================================================
