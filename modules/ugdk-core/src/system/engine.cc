@@ -278,6 +278,11 @@ void Release() {
         throw BaseException("UGDK not suspended.");
     current_state_ = UGDKState::RELEASED;
 
+    for (; !scene_list_.empty(); scene_list_.pop_back()) {
+        scene_list_.back()->Finish();        
+    }
+    queued_scene_list_.clear();
+
     DeregisterSDLHandler(&system_sdlevent_handler);
 
     audio::Release();
