@@ -1,14 +1,30 @@
 #include <algorithm>
 #include "SDL.h"
+
 #include <ugdk/audio/music.h>
+#include <ugdk/system/exceptions.h>
+#include <ugdk/filesystem/module.h>
+#include <ugdk/filesystem/file.h>
+#include <filesystem/sdlfile.h>
 
 namespace ugdk {
 namespace audio {
 
 Music* Music::playing_music_(nullptr);
 
-Music::Music(const std::string& filepath) : data_(nullptr), volume_(1.0) {
-    data_ = Mix_LoadMUS(filepath.c_str());
+Music::Music(const std::string& filepath)
+    : data_(nullptr)
+    , volume_(1.0)
+{
+    auto file = ugdk::filesystem::manager()->OpenFile(filepath);
+
+    SDL_RWops* rwops;
+    if (auto ptr = dynamic_cast<filesystem::SDLFile*>(file.get())) {
+        rwops = ptr->rwops();
+    } else {
+        throw system::BaseException("NYI: Sample from non-SDLFile.");
+    }
+    data_ = Mix_LoadMUS_RW(rwops, 0);
     Mix_HookMusicFinished(MusicDone);
 }
 

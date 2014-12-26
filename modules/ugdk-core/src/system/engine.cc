@@ -6,6 +6,7 @@
 #include <ugdk/audio/module.h>
 #include <ugdk/resource/module.h>
 #include <ugdk/time/module.h>
+#include <ugdk/filesystem/module.h>
 #include <ugdk/desktop/module.h>
 #ifdef UGDK_3D_ENABLED
 # include <ugdk/desktop/3D/manager.h>
@@ -119,27 +120,6 @@ class SDLQuitEventHandler : public SDLEventHandler {
 
 } // namespace anon
 
-std::string ResolvePath(const std::string& path) {
-    if(path.compare(0, configuration_.base_path.size(), configuration_.base_path) == 0)
-        return path;
-    return configuration_.base_path + path;
-}
-
-std::string GetFileContents(const std::string& filename) {
-    std::ifstream in(ResolvePath(filename).c_str(), std::ios::in);
-    if (in) {
-        std::string contents;
-        in.seekg(0, std::ios::end);
-        contents.resize(in.tellg());
-        in.seekg(0, std::ios::beg);
-        in.read(&contents[0], contents.size());
-        in.close();
-        return(contents);
-    }
-    auto error = errno;
-    throw BaseException("Unable to open file '%s'. Code %d, Reason: %s", filename.c_str(), error, std::strerror(error));
-}
-
 bool Initialize(const Configuration& configuration) {
     if (current_state_ != UGDKState::UNINITIALIZED)
         throw BaseException("UGDK already initialized.");
@@ -150,6 +130,9 @@ bool Initialize(const Configuration& configuration) {
     configuration_ = configuration;
 
     RegisterSDLHandler(&system_sdlevent_handler);
+
+    if (filesystem::Initialize(new filesystem::Manager))
+        filesystem::manager()->AddSearchPath(configuration_.base_path);
 
     if(!configuration.windows_list.empty()) {
 #ifdef UGDK_3D_ENABLED
@@ -294,6 +277,7 @@ void Release() {
     text::Release();
 #endif
     desktop::Release();
+    filesystem::Release();
 
 #ifdef UGDK_SWIG_ENABLED
     SCRIPT_MANAGER()->Finalize();
@@ -326,6 +310,10 @@ const std::list<std::unique_ptr<action::Scene>>& scene_list() {
 
 const std::list<std::shared_ptr<const debug::SectionData>>& profile_data_list() {
     return profile_data_list_;
+}
+
+const Configuration& CurrentConfiguration() {
+    return configuration_;
 }
 
 void Suspend() {

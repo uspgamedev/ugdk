@@ -10,6 +10,11 @@ modules/ugdk-core/src/debug/profiler.cc
 modules/ugdk-core/src/desktop/manager.cc
 modules/ugdk-core/src/desktop/module.cc
 modules/ugdk-core/src/desktop/windowsettings.cc
+modules/ugdk-core/src/filesystem/file.cc
+modules/ugdk-core/src/filesystem/manager.cc
+modules/ugdk-core/src/filesystem/module.cc
+modules/ugdk-core/src/filesystem/sdlfile.cc
+modules/ugdk-core/src/filesystem/sdlfile.h
 modules/ugdk-core/src/input/keyboard.cc
 modules/ugdk-core/src/input/keycode.cc
 modules/ugdk-core/src/input/manager.cc
@@ -69,6 +74,10 @@ modules/ugdk-core/include/ugdk/desktop/manager.h
 modules/ugdk-core/include/ugdk/desktop/module.h
 modules/ugdk-core/include/ugdk/desktop/window.h
 modules/ugdk-core/include/ugdk/desktop/windowsettings.h
+modules/ugdk-core/include/ugdk/filesystem.h
+modules/ugdk-core/include/ugdk/filesystem/file.h
+modules/ugdk-core/include/ugdk/filesystem/manager.h
+modules/ugdk-core/include/ugdk/filesystem/module.h
 modules/ugdk-core/include/ugdk/graphic.h
 modules/ugdk-core/include/ugdk/input.h
 modules/ugdk-core/include/ugdk/input/events.h

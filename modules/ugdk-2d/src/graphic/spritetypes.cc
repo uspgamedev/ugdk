@@ -1,7 +1,8 @@
 #include <ugdk/graphic/spritetypes.h>
 
 #include <ugdk/system/exceptions.h>
-#include <ugdk/system/engine.h>
+#include <ugdk/filesystem/module.h>
+#include <ugdk/filesystem/file.h>
 #include <libjson.h>
 
 namespace ugdk {
@@ -60,7 +61,11 @@ namespace {
 }
 
 SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepath) {
-    auto&& contents = system::GetFileContents(filepath);
+    auto file = filesystem::manager()->OpenFile(filepath);
+    if (!file)
+        return nullptr;
+
+    auto contents = file->GetContents();
     if (!libjson::is_valid(contents))
         throw system::BaseException("Invalid json: %s\n", filepath.c_str());
 
