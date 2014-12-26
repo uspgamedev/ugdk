@@ -64,6 +64,17 @@ Vector2D Vector2D::Scale(const Vector2D &scale) const {
     return Vector2D(x * scale.x, y * scale.y);
 }
 
+void Vector2D::Divide(const Vector2D& divider) {
+    x /= divider.x;
+    y /= divider.y;
+}
+
+Vector2D Vector2D::Divided(const Vector2D& divider) const {
+    Vector2D ret = *this;
+    ret.Divide(divider);
+    return ret;
+}
+
 Vector2D& Vector2D::operator+=(const Vector2D& other) {
     x += other.x;  
     y += other.y;

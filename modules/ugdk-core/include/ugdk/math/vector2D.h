@@ -113,6 +113,18 @@ class Vector2D {
      */
     Vector2D Scale(const Vector2D& scale) const;
 
+    /// In-place integer division, coordinate by coordinate.
+    /** @see Divided
+    *  @see Scale
+    */
+    void Divide(const Vector2D& divider);
+
+    /// Returns a new Integer2D equal to this divided coordinate by coordinate by "multiplier".
+    /** @see Divide
+    *  @see Scale
+    */
+    Vector2D Divided(const Vector2D& divider) const;
+
     // Static methods
 
     /// Static method that returns a vector equal to the sum of two others
