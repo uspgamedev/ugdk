@@ -6,6 +6,7 @@
 #include <ugdk/input/keycode.h>
 #include <ugdk/input/scancode.h>
 #include <ugdk/input/mousebutton.h>
+#include <ugdk/input/joystickstatus.h>
 #include <ugdk/math/integer2D.h>
 #include <string>
 #include <memory>
@@ -100,6 +101,19 @@ struct JoystickDisconnectedEvent {
 
     JoystickDisconnectedEvent(const std::weak_ptr<Joystick>& _joystick)
         : joystick(_joystick) {}
+};
+struct JoystickAxisEvent {
+    std::weak_ptr<Joystick> joystick;
+    int axis_id;
+    AxisStatus axis_status;
+
+    JoystickAxisEvent(const std::weak_ptr<Joystick>& _joystick,
+                      int axis,
+                      int16 status)
+        : joystick(_joystick)
+        , axis_id(axis)
+        , axis_status(status)
+    {}
 };
 
 } // namespace input

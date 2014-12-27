@@ -15,6 +15,8 @@ class Keyboard;
 class Mouse;
 class TextInput;
 class Joystick;
+class AxisStatus;
+class HatStatus;
 ENUMCLASS Keycode;
 ENUMCLASS Scancode;
 ENUMCLASS Keymod;

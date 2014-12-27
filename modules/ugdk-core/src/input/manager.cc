@@ -36,6 +36,12 @@ class InputSDLEventHandler : public system::SDLEventHandler {
             if (auto joystick = manager_.joysticks_[sdlevent.jdevice.which])
                 handler().RaiseEvent(JoystickDisconnectedEvent(joystick));
             manager_.joysticks_.erase(sdlevent.jdevice.which);
+
+        } else if (sdlevent.type == SDL_JOYAXISMOTION) {
+            handler().RaiseEvent(JoystickAxisEvent(
+                manager_.joysticks_.at(sdlevent.jaxis.which),
+                sdlevent.jaxis.axis,
+                sdlevent.jaxis.value));
         }
     }
 

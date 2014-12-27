@@ -2,8 +2,10 @@
 #define UGDK_INPUT_JOYSTICK_H_
 
 #include <ugdk/system.h>
-#include <ugdk/input/mousebutton.h>
+#include <ugdk/input/joystickstatus.h>
 #include <ugdk/math/integer2D.h>
+#include <ugdk/system/eventhandler.h>
+
 #include <set>
 #include <memory>
 
@@ -11,43 +13,6 @@ struct _SDL_Joystick;
 
 namespace ugdk {
 namespace input {
-
-class AxisStatus {
-  public: 
-    AxisStatus(int16 raw);
-
-    int16 raw() const;
-    int16 MaximumValue() const;
-    int16 MinimumValue() const;
-    double Percentage() const;
-
-  private:
-    int16 raw_;
-};
-
-class HatStatus {
-  public:
-    HatStatus(int raw);
-
-    int raw() const;
-    bool IsCentered() const;
-    bool IsUp() const;
-    bool IsRight() const;
-    bool IsDown() const;
-    bool IsLeft() const;
-    bool IsRightUp() const;
-    bool IsRightDown() const;
-    bool IsLeftUp() const;
-    bool IsLeftDown() const;
-
-    bool HasUp() const;
-    bool HasRight() const;
-    bool HasDown() const;
-    bool HasLeft() const;
-
-  private:
-    int raw_;
-};
 
 class Joystick {
   public:
@@ -86,10 +51,14 @@ class Joystick {
     /// Get the current state of an axis control.
     AxisStatus GetAxisStatus(int axis) const;
 
+    /// An event handler for events that matching this joystick.
+    system::EventHandler& event_handler() { return event_handler_; }
+
   private:
     Joystick(_SDL_Joystick*);
 
     _SDL_Joystick* sdljoystick_;
+    system::EventHandler event_handler_;
 
     friend class Manager;
 };
