@@ -49,6 +49,12 @@ class InputSDLEventHandler : public system::SDLEventHandler {
                 sdlevent.jball.ball,
                 sdlevent.jball.xrel,
                 sdlevent.jball.yrel));
+
+        } else if (sdlevent.type == SDL_JOYHATMOTION) {
+            handler().RaiseEvent(JoystickHatEvent(
+                manager_.joysticks_.at(sdlevent.jhat.which),
+                sdlevent.jhat.hat,
+                sdlevent.jhat.value));
         }
         
     }

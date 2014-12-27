@@ -127,6 +127,18 @@ struct JoystickBallEvent {
                       , ball_id(ball)
                       , ball_status(dx, dy) {}
 };
+struct JoystickHatEvent {
+    std::weak_ptr<Joystick> joystick;
+    int hat_id;
+    HatStatus hat_status;
+
+    JoystickHatEvent(const std::weak_ptr<Joystick>& _joystick,
+                      int hat,
+                      int status)
+                      : joystick(_joystick)
+                      , hat_id(hat)
+                      , hat_status(status) {}
+};
 
 } // namespace input
 } // namespace ugdk
