@@ -15,6 +15,8 @@ modules/ugdk-core/src/filesystem/manager.cc
 modules/ugdk-core/src/filesystem/module.cc
 modules/ugdk-core/src/filesystem/sdlfile.cc
 modules/ugdk-core/src/filesystem/sdlfile.h
+modules/ugdk-core/src/input/joystick.cc
+modules/ugdk-core/src/input/joystickstatus.cc
 modules/ugdk-core/src/input/keyboard.cc
 modules/ugdk-core/src/input/keycode.cc
 modules/ugdk-core/src/input/manager.cc
@@ -81,6 +83,8 @@ modules/ugdk-core/include/ugdk/filesystem/module.h
 modules/ugdk-core/include/ugdk/graphic.h
 modules/ugdk-core/include/ugdk/input.h
 modules/ugdk-core/include/ugdk/input/events.h
+modules/ugdk-core/include/ugdk/input/joystick.h
+modules/ugdk-core/include/ugdk/input/joystickstatus.h
 modules/ugdk-core/include/ugdk/input/keyboard.h
 modules/ugdk-core/include/ugdk/input/keycode.h
 modules/ugdk-core/include/ugdk/input/manager.h

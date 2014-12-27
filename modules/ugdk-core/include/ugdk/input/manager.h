@@ -3,9 +3,14 @@
 
 #include <ugdk/input/keyboard.h>
 #include <ugdk/input/mouse.h>
+#include <ugdk/input/joystick.h>
 #include <ugdk/input/textinput.h>
+#include <ugdk/structure/types.h>
+#include <ugdk/system.h>
 
 #include <memory>
+#include <unordered_map>
+#include <forward_list>
 
 namespace ugdk {
 namespace input {
@@ -30,12 +35,26 @@ class Manager {
     /// Handles the IME.
     TextInput& text_input() { return text_input_; }
 
+    /// Returns a list with the current joysticks.
+    std::forward_list<std::shared_ptr<Joystick>> CurrentJoysticks() const {
+        std::forward_list<std::shared_ptr<Joystick>> result;
+        for (const auto& it : joysticks_)
+            result.push_front(it.second);
+        return result;
+    }
+
     void Update();
 
   private:
+    std::shared_ptr<Joystick> CreateJoystick(int device);
+
     Keyboard keyboard_;
     Mouse mouse_;
     TextInput text_input_;
+    std::unordered_map<int32, std::shared_ptr<Joystick>> joysticks_;
+    std::unique_ptr<system::SDLEventHandler> event_handler_;
+
+    friend class InputSDLEventHandler;
 };
 
 }  // namespace input
