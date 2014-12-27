@@ -4,6 +4,7 @@
 #include <ugdk/system/engine.h>
 #include <ugdk/action/scene.h>
 #include <ugdk/debug/log.h>
+#include <ugdk/input/events.h>
 
 #include "SDL.h"
 
@@ -19,19 +20,22 @@ class InputSDLEventHandler : public system::SDLEventHandler {
     }
 
     std::unordered_set<Uint32> TypesHandled() const override {
-        return { SDL_JOYDEVICEADDED, SDL_JOYDEVICEREMOVED };
+        return{ SDL_JOYDEVICEADDED, SDL_JOYDEVICEREMOVED,
+            SDL_JOYAXISMOTION, SDL_JOYBALLMOTION, SDL_JOYHATMOTION,
+            SDL_JOYBUTTONDOWN, SDL_JOYBUTTONUP };
     }
 
     void Handle(const ::SDL_Event& sdlevent) const override {
         if (sdlevent.type == SDL_JOYDEVICEADDED) {
             auto joystick = manager_.CreateJoystick(sdlevent.jdevice.which);
             if (joystick) {
-                // TODO
+                handler().RaiseEvent(JoystickConnectedEvent(joystick));
             }
 
         } else if (sdlevent.type == SDL_JOYDEVICEREMOVED) {
+            if (auto joystick = manager_.joysticks_[sdlevent.jdevice.which])
+                handler().RaiseEvent(JoystickDisconnectedEvent(joystick));
             manager_.joysticks_.erase(sdlevent.jdevice.which);
-            // TODO
         }
     }
 

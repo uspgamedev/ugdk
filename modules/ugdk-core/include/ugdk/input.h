@@ -14,6 +14,7 @@ class Manager;
 class Keyboard;
 class Mouse;
 class TextInput;
+class Joystick;
 ENUMCLASS Keycode;
 ENUMCLASS Scancode;
 ENUMCLASS Keymod;

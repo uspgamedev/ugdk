@@ -88,6 +88,20 @@ struct MouseWheelEvent {
         : scroll(_scroll) {}
 };
 
+struct JoystickConnectedEvent {
+    std::weak_ptr<Joystick> joystick;
+
+    JoystickConnectedEvent(const std::weak_ptr<Joystick>& _joystick)
+        : joystick(_joystick)
+    {}
+};
+struct JoystickDisconnectedEvent {
+    std::weak_ptr<Joystick> joystick;
+
+    JoystickDisconnectedEvent(const std::weak_ptr<Joystick>& _joystick)
+        : joystick(_joystick) {}
+};
+
 } // namespace input
 } // namespace ugdk
 
