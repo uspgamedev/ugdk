@@ -55,6 +55,16 @@ class InputSDLEventHandler : public system::SDLEventHandler {
                 manager_.joysticks_.at(sdlevent.jhat.which),
                 sdlevent.jhat.hat,
                 sdlevent.jhat.value));
+
+        } else if (sdlevent.type == SDL_JOYBUTTONDOWN) {
+            handler().RaiseEvent(JoystickButtonPressedEvent(
+                manager_.joysticks_.at(sdlevent.jbutton.which),
+                sdlevent.jbutton.button));
+
+        } else if (sdlevent.type == SDL_JOYBUTTONUP) {
+            handler().RaiseEvent(JoystickButtonReleasedEvent(
+                manager_.joysticks_.at(sdlevent.jbutton.which),
+                sdlevent.jbutton.button));
         }
         
     }

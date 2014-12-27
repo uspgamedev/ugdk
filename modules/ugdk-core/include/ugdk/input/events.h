@@ -139,6 +139,24 @@ struct JoystickHatEvent {
                       , hat_id(hat)
                       , hat_status(status) {}
 };
+struct JoystickButtonPressedEvent {
+    std::weak_ptr<Joystick> joystick;
+    int button;
+
+    JoystickButtonPressedEvent(const std::weak_ptr<Joystick>& _joystick,
+                               int _button)
+                               : joystick(_joystick)
+                               , button(_button) {}
+};
+struct JoystickButtonReleasedEvent {
+    std::weak_ptr<Joystick> joystick;
+    int button;
+
+    JoystickButtonReleasedEvent(const std::weak_ptr<Joystick>& _joystick,
+                               int _button)
+                               : joystick(_joystick)
+                               , button(_button) {}
+};
 
 } // namespace input
 } // namespace ugdk
