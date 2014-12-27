@@ -26,47 +26,64 @@ class InputSDLEventHandler : public system::SDLEventHandler {
     }
 
     void Handle(const ::SDL_Event& sdlevent) const override {
-        if (sdlevent.type == SDL_JOYDEVICEADDED) {
-            auto joystick = manager_.CreateJoystick(sdlevent.jdevice.which);
-            if (joystick) {
-                handler().RaiseEvent(JoystickConnectedEvent(joystick));
-            }
+        std::shared_ptr<Joystick> joystick;
+        switch (sdlevent.type) {
+            case SDL_JOYDEVICEADDED:
+                joystick = manager_.CreateJoystick(sdlevent.jdevice.which);
+                if (joystick) {
+                    handler().RaiseEvent(JoystickConnectedEvent(joystick));
+                }
+                break;
 
-        } else if (sdlevent.type == SDL_JOYDEVICEREMOVED) {
-            if (auto joystick = manager_.joysticks_[sdlevent.jdevice.which])
-                handler().RaiseEvent(JoystickDisconnectedEvent(joystick));
-            manager_.joysticks_.erase(sdlevent.jdevice.which);
+            case SDL_JOYDEVICEREMOVED:
+                joystick = manager_.joysticks_[sdlevent.jdevice.which];
+                if (joystick)
+                    handler().RaiseEvent(JoystickDisconnectedEvent(joystick));
+                manager_.joysticks_.erase(sdlevent.jdevice.which);
+                break;
 
-        } else if (sdlevent.type == SDL_JOYAXISMOTION) {
-            handler().RaiseEvent(JoystickAxisEvent(
-                manager_.joysticks_.at(sdlevent.jaxis.which),
-                sdlevent.jaxis.axis,
-                sdlevent.jaxis.value));
+            case SDL_JOYAXISMOTION:
+                joystick = manager_.joysticks_.at(sdlevent.jaxis.which);
+                joystick->event_handler().RaiseEvent(JoystickAxisEvent(
+                    joystick,
+                    sdlevent.jaxis.axis,
+                    sdlevent.jaxis.value));
+                break;
 
-        } else if (sdlevent.type == SDL_JOYBALLMOTION) {
-            handler().RaiseEvent(JoystickBallEvent(
-                manager_.joysticks_.at(sdlevent.jball.which),
-                sdlevent.jball.ball,
-                sdlevent.jball.xrel,
-                sdlevent.jball.yrel));
+            case SDL_JOYBALLMOTION:
+                joystick = manager_.joysticks_.at(sdlevent.jaxis.which);
+                joystick->event_handler().RaiseEvent(JoystickBallEvent(
+                    joystick,
+                    sdlevent.jball.ball,
+                    sdlevent.jball.xrel,
+                    sdlevent.jball.yrel));
+                break;
 
-        } else if (sdlevent.type == SDL_JOYHATMOTION) {
-            handler().RaiseEvent(JoystickHatEvent(
-                manager_.joysticks_.at(sdlevent.jhat.which),
-                sdlevent.jhat.hat,
-                sdlevent.jhat.value));
+            case SDL_JOYHATMOTION:
+                joystick = manager_.joysticks_.at(sdlevent.jaxis.which);
+                joystick->event_handler().RaiseEvent(JoystickHatEvent(
+                    joystick,
+                    sdlevent.jhat.hat,
+                    sdlevent.jhat.value));
+                break;
 
-        } else if (sdlevent.type == SDL_JOYBUTTONDOWN) {
-            handler().RaiseEvent(JoystickButtonPressedEvent(
-                manager_.joysticks_.at(sdlevent.jbutton.which),
-                sdlevent.jbutton.button));
+            case SDL_JOYBUTTONDOWN:
+                joystick = manager_.joysticks_.at(sdlevent.jaxis.which);
+                joystick->event_handler().RaiseEvent(JoystickButtonPressedEvent(
+                    joystick,
+                    sdlevent.jbutton.button));
+                break;
 
-        } else if (sdlevent.type == SDL_JOYBUTTONUP) {
-            handler().RaiseEvent(JoystickButtonReleasedEvent(
-                manager_.joysticks_.at(sdlevent.jbutton.which),
-                sdlevent.jbutton.button));
+            case SDL_JOYBUTTONUP:
+                joystick = manager_.joysticks_.at(sdlevent.jaxis.which);
+                joystick->event_handler().RaiseEvent(JoystickButtonReleasedEvent(
+                    joystick,
+                    sdlevent.jbutton.button));
+                break;
+
+            default:
+                break;
         }
-        
     }
 
   private:
