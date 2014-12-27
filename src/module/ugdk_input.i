@@ -7,17 +7,20 @@
 #include <ugdk/input/keyboard.h>
 #include <ugdk/input/mouse.h>
 #include <ugdk/input/textinput.h>
+#include <ugdk/input/joystick.h>
 #include <ugdk/input/manager.h>
 #include <ugdk/input/module.h>
 
 %}
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
+%import(module="ugdk_system") <ugdk/system.h>
 %import(module="ugdk_system") <ugdk/structure/types.h>
 
 %import(module="ugdk_input_scancode") <ugdk/input/scancode.h>
 %import(module="ugdk_input_keycode") <ugdk/input/keycode.h>
 %import(module="ugdk_input_mousebutton") <ugdk/input/mousebutton.h>
+%include <ugdk/input/joystickstatus.h>
 
 // SWIG can't differ from Keycode/Scancode overload.
 %ignore ugdk::input::Keyboard::IsDown(const Keycode& keycode) const;
@@ -29,6 +32,7 @@
 %include <ugdk/input/keyboard.h>
 %include <ugdk/input/mouse.h>
 %include <ugdk/input/textinput.h>
+%include <ugdk/input/joystick.h>
 %include <ugdk/input/manager.h>
 %include <ugdk/input/module.h>
 
@@ -38,6 +42,9 @@ namespace input {
     export_class(Keyboard)
     export_class(TextInput)
     export_class(Mouse)
+	export_class(Joystick)
+	export_class(AxisStatus)
+	export_class(HatStatus)
 }
 }
  
