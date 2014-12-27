@@ -10,6 +10,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <forward_list>
 
 namespace ugdk {
 namespace input {
@@ -33,6 +34,14 @@ class Manager {
     
     /// Handles the IME.
     TextInput& text_input() { return text_input_; }
+
+    /// Returns a list with the current joysticks.
+    std::forward_list<std::shared_ptr<Joystick>> CurrentJoysticks() const {
+        std::forward_list<std::shared_ptr<Joystick>> result;
+        for (const auto& it : joysticks_)
+            result.push_front(it.second);
+        return result;
+    }
 
     void Update();
 

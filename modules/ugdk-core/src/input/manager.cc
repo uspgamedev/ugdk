@@ -38,7 +38,7 @@ class InputSDLEventHandler : public system::SDLEventHandler {
             case SDL_JOYDEVICEREMOVED:
                 joystick = manager_.joysticks_[sdlevent.jdevice.which];
                 if (joystick)
-                    handler().RaiseEvent(JoystickDisconnectedEvent(joystick));
+                    joystick->event_handler().RaiseEvent(JoystickDisconnectedEvent(joystick));
                 manager_.joysticks_.erase(sdlevent.jdevice.which);
                 break;
 
