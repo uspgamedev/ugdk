@@ -42,7 +42,15 @@ class InputSDLEventHandler : public system::SDLEventHandler {
                 manager_.joysticks_.at(sdlevent.jaxis.which),
                 sdlevent.jaxis.axis,
                 sdlevent.jaxis.value));
+
+        } else if (sdlevent.type == SDL_JOYBALLMOTION) {
+            handler().RaiseEvent(JoystickBallEvent(
+                manager_.joysticks_.at(sdlevent.jball.which),
+                sdlevent.jball.ball,
+                sdlevent.jball.xrel,
+                sdlevent.jball.yrel));
         }
+        
     }
 
   private:

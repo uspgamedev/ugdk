@@ -110,10 +110,22 @@ struct JoystickAxisEvent {
     JoystickAxisEvent(const std::weak_ptr<Joystick>& _joystick,
                       int axis,
                       int16 status)
-        : joystick(_joystick)
-        , axis_id(axis)
-        , axis_status(status)
-    {}
+                      : joystick(_joystick)
+                      , axis_id(axis)
+                      , axis_status(status) {}
+};
+struct JoystickBallEvent {
+    std::weak_ptr<Joystick> joystick;
+    int ball_id;
+    math::Integer2D ball_status;
+
+    JoystickBallEvent(const std::weak_ptr<Joystick>& _joystick,
+                      int ball,
+                      int dx,
+                      int dy)
+                      : joystick(_joystick)
+                      , ball_id(ball)
+                      , ball_status(dx, dy) {}
 };
 
 } // namespace input
