@@ -67,7 +67,9 @@ void Manager::LoadPlugin(const std::string& plugin_name) {
 
 bool Manager::Initialize() {
 
-    std::string mResourcesCfg = system::ResolvePath("resources" OGRE_BUILD_SUFFIX ".cfg");
+    const auto& config = system::CurrentConfiguration();
+
+    std::string mResourcesCfg = config.base_path + ("resources" OGRE_BUILD_SUFFIX ".cfg");
 
     // Create the Root
     root_ = new Ogre::Root();
@@ -96,7 +98,7 @@ bool Manager::Initialize() {
             typeName = i->first;
             archName = i->second;
             Ogre::ResourceGroupManager::getSingleton().addResourceLocation(
-                system::ResolvePath(archName), typeName, secName);
+                config.base_path + (archName), typeName, secName);
         }
     }
     
