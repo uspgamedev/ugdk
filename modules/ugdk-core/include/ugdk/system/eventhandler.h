@@ -112,13 +112,12 @@ class EventHandler {
             RaiseGlobalEvent(ev);
 
         auto handlers = event_handlers_.find(typeid(Event));
-        if(handlers == event_handlers_.end()) return;
-
-        for(const auto& listener : handlers->second) {
-            Listener<Event>* specific_listener = dynamic_cast<Listener<Event>*>(listener.get());
-            assert(specific_listener);
-            specific_listener->Handle(ev);
-        }
+        if (handlers != event_handlers_.end())
+            for (const auto& listener : handlers->second) {
+                Listener<Event>* specific_listener = dynamic_cast<Listener<Event>*>(listener.get());
+                assert(specific_listener);
+                specific_listener->Handle(ev);
+            }
 
         for (IListener* listener : object_listeners_) {
             if (Listener<Event>* specific_listener = dynamic_cast<Listener<Event>*>(listener)) {
