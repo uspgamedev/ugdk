@@ -100,9 +100,13 @@ class EventHandler {
     */
     template<class Event>
     static void RaiseGlobalEvent(const Event& ev) {
-        GlobalEventHandler().dispatch_as_global_ = false;
+        static bool processing_global_event = false;
+        if (processing_global_event) return;
+
+        processing_global_event = true;
         GlobalEventHandler().RaiseEvent(ev);
         GetCurrentSceneEventHandler().RaiseEvent(ev);
+        processing_global_event = false;
     }
 
     // Raising events
