@@ -37,6 +37,9 @@ bool Initialize();
 /// Starts running the engine.
 void Run();
 
+/// Stops the main loop.
+void Suspend();
+
 /// Releases all the resouces allocated by the engine.
 void Release();
 
@@ -62,18 +65,19 @@ action::Scene& CurrentScene();
 /** The list is changed when PushScene is called. */
 const std::list<std::unique_ptr<action::Scene>>& scene_list();
 
+/** @}
+*/
 
 const std::list<std::shared_ptr<const debug::SectionData>>& profile_data_list();
 
 /// Returns the current configuration.
 const Configuration& CurrentConfiguration();
 
-/** @}
- */
+/// Returns the global EventHandler.
+EventHandler& GlobalEventHandler();
 
-/// Stops the main loop.
-void Suspend();
-
+/// Returns the EventHandler for the current scene.
+EventHandler& GetCurrentSceneEventHandler();
 
 /** @name Internal
  * @{

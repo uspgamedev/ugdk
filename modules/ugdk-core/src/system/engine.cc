@@ -55,6 +55,7 @@ std::list<std::unique_ptr<action::Scene >> scene_list_;
 std::list<std::function<std::unique_ptr<action::Scene>()>> queued_scene_list_;
 action::Scene*            previous_focused_scene_;
 std::list<std::shared_ptr<const debug::SectionData>> profile_data_list_;
+std::unique_ptr<EventHandler> global_event_handler_;
 Configuration configuration_;
 
 std::unordered_map<Uint32, const SDLEventHandler*> sdlevent_mapper_;
@@ -128,6 +129,7 @@ bool Initialize(const Configuration& configuration) {
     SDL_Init(0);
 
     configuration_ = configuration;
+    global_event_handler_.reset(new EventHandler);
 
     RegisterSDLHandler(&system_sdlevent_handler);
 
@@ -256,6 +258,12 @@ void Run() {
     }
 }
 
+void Suspend() {
+    if (current_state_ != UGDKState::RUNNING)
+        throw BaseException("UGDK not runing.");
+    current_state_ = UGDKState::SUSPENDED;
+}
+
 void Release() {
     if (current_state_ != UGDKState::SUSPENDED)
         throw BaseException("UGDK not suspended.");
@@ -267,6 +275,7 @@ void Release() {
     queued_scene_list_.clear();
 
     DeregisterSDLHandler(&system_sdlevent_handler);
+    global_event_handler_.reset();
 
     audio::Release();
     input::Release();
@@ -300,7 +309,7 @@ void PushSceneFactory(const std::function<std::unique_ptr<action::Scene>()>& sce
 
 action::Scene& CurrentScene() {
     if (scene_list_.empty())
-        throw 0;
+        throw InvalidOperation("Attempting to get CurrentScene with empty scene list.");
     return *scene_list_.back();
 }
 
@@ -316,10 +325,12 @@ const Configuration& CurrentConfiguration() {
     return configuration_;
 }
 
-void Suspend() {
-    if (current_state_ != UGDKState::RUNNING)
-        throw BaseException("UGDK not runing.");
-    current_state_ = UGDKState::SUSPENDED;
+EventHandler& GlobalEventHandler() {
+    return *global_event_handler_;
+}
+
+EventHandler& GetCurrentSceneEventHandler() {
+    return CurrentScene().event_handler();
 }
 
 void RegisterSDLHandler(const SDLEventHandler* handler) {

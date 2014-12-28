@@ -33,11 +33,11 @@ class TextInputSDLEventHandler : public system::SDLEventHandler {
         text_input_.cursor_ = sdlevent.edit.start;
         text_input_.selection_size_ = sdlevent.edit.length;
 
-        system::CurrentScene().event_handler().RaiseEvent(TextEditingEvent(text_input_));
+        system::EventHandler::RaiseGlobalEvent(TextEditingEvent(text_input_));
     }
     
     void TextInputHandler(const ::SDL_Event& sdlevent) const {
-        system::CurrentScene().event_handler().RaiseEvent(TextInputEvent(sdlevent.text.text));
+        system::EventHandler::RaiseGlobalEvent(TextInputEvent(sdlevent.text.text));
     }
 
 

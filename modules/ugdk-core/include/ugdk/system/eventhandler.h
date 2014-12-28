@@ -1,7 +1,8 @@
 #ifndef UGDK_SYSTEM_EVENTHANDLER_H_
 #define UGDK_SYSTEM_EVENTHANDLER_H_
 
-#include <cassert>
+#include <ugdk/system/engine.h>
+
 #include <typeinfo>
 #include <typeindex>
 #include <functional>
@@ -9,7 +10,7 @@
 #include <memory>
 #include <unordered_map>
 #include <algorithm>
-#include <ugdk/system/taskplayer.h>
+#include <cassert>
 
 namespace ugdk {
 namespace system {
@@ -38,7 +39,7 @@ class FunctionListener : public Listener<Event> {
 
 class EventHandler {
   public:
-    EventHandler() {}
+    EventHandler() : dispatch_as_global_(false) {}
     ~EventHandler() {}
 
     // Add listeners
@@ -87,10 +88,29 @@ class EventHandler {
     void RemoveObjectListener(IListener* listener) {
         object_listeners_.remove(listener);
     }
+    
+    /// If true, events raised on this handler will be raised as global events.
+    void set_dispatch_as_global(bool flag) {
+        dispatch_as_global_ = flag;
+    }
+
+    /// Dispatches a global event.
+    /** Globals events are received by the global EventHandler and
+    *   the CurrentScene's EventHandler.
+    */
+    template<class Event>
+    static void RaiseGlobalEvent(const Event& ev) {
+        GlobalEventHandler().dispatch_as_global_ = false;
+        GlobalEventHandler().RaiseEvent(ev);
+        GetCurrentSceneEventHandler().RaiseEvent(ev);
+    }
 
     // Raising events
     template<class Event>
     void RaiseEvent(const Event& ev) const {
+        if (dispatch_as_global_)
+            RaiseGlobalEvent(ev);
+
         auto handlers = event_handlers_.find(typeid(Event));
         if(handlers == event_handlers_.end()) return;
 
@@ -112,6 +132,7 @@ class EventHandler {
 
     std::unordered_map<std::type_index, ListenerVector> event_handlers_;
     std::forward_list<IListener*> object_listeners_;
+    bool dispatch_as_global_;
 };
 
 } // namespace system

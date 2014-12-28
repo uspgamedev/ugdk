@@ -15,10 +15,6 @@ class InputSDLEventHandler : public system::SDLEventHandler {
   public:
     InputSDLEventHandler(Manager& manager) : manager_(manager) {}
 
-    static system::EventHandler& handler() {
-        return system::CurrentScene().event_handler();
-    }
-
     std::unordered_set<Uint32> TypesHandled() const override {
         return{ SDL_JOYDEVICEADDED, SDL_JOYDEVICEREMOVED,
             SDL_JOYAXISMOTION, SDL_JOYBALLMOTION, SDL_JOYHATMOTION,
@@ -31,7 +27,7 @@ class InputSDLEventHandler : public system::SDLEventHandler {
             case SDL_JOYDEVICEADDED:
                 joystick = manager_.CreateJoystick(sdlevent.jdevice.which);
                 if (joystick) {
-                    handler().RaiseEvent(JoystickConnectedEvent(joystick));
+                    system::EventHandler::RaiseGlobalEvent(JoystickConnectedEvent(joystick));
                 }
                 break;
 
