@@ -4,7 +4,8 @@
 #include <ugdk/text/module.h>
 #include <ugdk/text/label.h>
 #include <ugdk/text/textbox.h>
-#include <ugdk/system/engine.h>
+#include <ugdk/filesystem/module.h>
+#include <ugdk/filesystem/file.h>
 #include <ugdk/text/languageword.h>
 #include <ugdk/util/utf8.h>
 
@@ -23,20 +24,26 @@ using std::string;
 #define STRING_LENGTH 1024
 
 std::string LoadTextFromFile(const std::string& path) {
-    std::string output;
-    std::string fullpath = ugdk::system::ResolvePath(path);
-
-    FILE *txtFile = fopen(fullpath.c_str(), "r");
-    if(txtFile == nullptr) return output;
+    auto file = ugdk::filesystem::manager()->OpenFile(path);
+    if (!file)
+        return std::string();
 
     static const int MAXLINE = 1024;
 
     char buffer_utf8[MAXLINE];
     // Read from the UTF-8 encoded file.
-    while(fgets(buffer_utf8, MAXLINE, txtFile) != nullptr){
+
+    std::string output;
+    while(file->fgets(buffer_utf8, MAXLINE) != nullptr) {
+#ifdef _WIN32
+        size_t len = strlen(buffer_utf8);
+        if (len > 1 && buffer_utf8[len - 2] == '\r') {
+            buffer_utf8[len - 2] = buffer_utf8[len - 1];
+            buffer_utf8[len - 1] = buffer_utf8[len];
+        }
+#endif
         output.append(buffer_utf8);
     }
-    fclose(txtFile);
     return output;
 }
 
@@ -134,28 +141,40 @@ static bool is_title(char* str) {
 #define TITLE_FONTS   3
 
 static int title_type(char* str) {
-    if(strcmp(str, "#WORDS\n") == 0)
+    if(strcmp(str, "#WORDS") == 0)
         return TITLE_WORDS;
-    if(strcmp(str, "#FILES\n") == 0)
+    if(strcmp(str, "#FILES") == 0)
         return TITLE_FILES;
-    if(strcmp(str, "#FONTS\n") == 0)
+    if(strcmp(str, "#FONTS") == 0)
         return TITLE_FONTS;
     return TITLE_UNKNOWN;
 }
 
+void trim_trailing_whitespace(char *str) {
+    if (*str == 0)  // All spaces?
+        return;
+
+    // Trim trailing space
+    char* end = str + strlen(str) - 1;
+    while (end > str && isspace(*end)) end--;
+
+    // Write new null terminator
+    *(end + 1) = 0;
+}
+
 // Fills the map with the information on the given file
 bool Language::Load(const std::string& language_file) {
-    FILE* file = fopen(ugdk::system::ResolvePath(language_file).c_str(), "r");
-    if(file == nullptr)
+    auto file = filesystem::manager()->OpenFile(language_file);
+    if(!file)
         return false;
 
     char buffer_raw[STRING_LENGTH];
     int reading_type = 0;
 
-    while(!feof(file)) {
+    while (file->fgets(buffer_raw, STRING_LENGTH)) {
         // Read from the UTF-8 encoded file.
-        fgets(buffer_raw, STRING_LENGTH, file);
-
+        trim_trailing_whitespace(buffer_raw);
+   
         if(is_blank(buffer_raw)) { // Is this line blank?
             continue;
         }
@@ -177,7 +196,6 @@ bool Language::Load(const std::string& language_file) {
             // Syntax error!
         }
     }
-    fclose(file);
     return true;
 }
 

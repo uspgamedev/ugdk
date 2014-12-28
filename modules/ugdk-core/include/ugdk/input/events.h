@@ -6,6 +6,7 @@
 #include <ugdk/input/keycode.h>
 #include <ugdk/input/scancode.h>
 #include <ugdk/input/mousebutton.h>
+#include <ugdk/input/joystickstatus.h>
 #include <ugdk/math/integer2D.h>
 #include <string>
 #include <memory>
@@ -86,6 +87,75 @@ struct MouseWheelEvent {
 
     MouseWheelEvent(const math::Integer2D& _scroll)
         : scroll(_scroll) {}
+};
+
+struct JoystickConnectedEvent {
+    std::weak_ptr<Joystick> joystick;
+
+    JoystickConnectedEvent(const std::weak_ptr<Joystick>& _joystick)
+        : joystick(_joystick)
+    {}
+};
+struct JoystickDisconnectedEvent {
+    std::weak_ptr<Joystick> joystick;
+
+    JoystickDisconnectedEvent(const std::weak_ptr<Joystick>& _joystick)
+        : joystick(_joystick) {}
+};
+struct JoystickAxisEvent {
+    std::weak_ptr<Joystick> joystick;
+    int axis_id;
+    AxisStatus axis_status;
+
+    JoystickAxisEvent(const std::weak_ptr<Joystick>& _joystick,
+                      int axis,
+                      int16 status)
+                      : joystick(_joystick)
+                      , axis_id(axis)
+                      , axis_status(status) {}
+};
+struct JoystickBallEvent {
+    std::weak_ptr<Joystick> joystick;
+    int ball_id;
+    math::Integer2D ball_status;
+
+    JoystickBallEvent(const std::weak_ptr<Joystick>& _joystick,
+                      int ball,
+                      int dx,
+                      int dy)
+                      : joystick(_joystick)
+                      , ball_id(ball)
+                      , ball_status(dx, dy) {}
+};
+struct JoystickHatEvent {
+    std::weak_ptr<Joystick> joystick;
+    int hat_id;
+    HatStatus hat_status;
+
+    JoystickHatEvent(const std::weak_ptr<Joystick>& _joystick,
+                      int hat,
+                      int status)
+                      : joystick(_joystick)
+                      , hat_id(hat)
+                      , hat_status(status) {}
+};
+struct JoystickButtonPressedEvent {
+    std::weak_ptr<Joystick> joystick;
+    int button;
+
+    JoystickButtonPressedEvent(const std::weak_ptr<Joystick>& _joystick,
+                               int _button)
+                               : joystick(_joystick)
+                               , button(_button) {}
+};
+struct JoystickButtonReleasedEvent {
+    std::weak_ptr<Joystick> joystick;
+    int button;
+
+    JoystickButtonReleasedEvent(const std::weak_ptr<Joystick>& _joystick,
+                               int _button)
+                               : joystick(_joystick)
+                               , button(_button) {}
 };
 
 } // namespace input

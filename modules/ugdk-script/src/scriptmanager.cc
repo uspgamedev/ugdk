@@ -61,9 +61,8 @@ void ScriptManager::ExecuteCode(const string& language, const string& code) {
 
 
 VirtualObj ScriptManager::LoadModule(const string& script) {
-    string filepath = ugdk::system::ResolvePath(
-        "scripts/" + ConvertDottedNotationToPath(script)
-    );
+    string filepath = ugdk::system::CurrentConfiguration().base_path
+            + "scripts/" + ConvertDottedNotationToPath(script);
 
     WrapperMap::iterator it = wrappers_.begin();
     while (it != wrappers_.end()) {

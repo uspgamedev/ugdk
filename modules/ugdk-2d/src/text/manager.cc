@@ -1,6 +1,7 @@
 #include <ugdk/text/manager.h>
 
-#include <ugdk/system/engine.h>
+#include <ugdk/filesystem/module.h>
+#include <ugdk/filesystem/file.h>
 #include <ugdk/debug/log.h>
 #include <ugdk/desktop/module.h>
 #include <ugdk/desktop/window.h>
@@ -56,17 +57,12 @@ TextBox* Manager::GetText(const std::string& text) {
 }
 
 TextBox* Manager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
-    std::string fullpath = ugdk::system::ResolvePath(path);
-    FILE *txtFile = fopen(fullpath.c_str(), "r");
-    if(txtFile == nullptr) return nullptr;
-    char buffer_utf8[MAXLINE];
-    string output;
-    // Read from the UTF-8 encoded file.
-    while(fgets(buffer_utf8, MAXLINE, txtFile)!=nullptr){
-        output.append(buffer_utf8);
-    }
-    fclose(txtFile);
-    return GetText(output, font, width);
+    auto file = filesystem::manager()->OpenFile(path);
+
+    if (!file)
+        return nullptr;
+
+    return GetText(file->GetContents(), font, width);
 }
 
 TextBox* Manager::GetTextFromFile(const std::string& path) {

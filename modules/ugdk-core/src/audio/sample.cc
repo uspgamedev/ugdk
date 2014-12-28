@@ -1,12 +1,30 @@
 #include <algorithm>
 #include "SDL.h"
+
 #include <ugdk/audio/sample.h>
+#include <ugdk/system/exceptions.h>
+#include <ugdk/filesystem/module.h>
+#include <ugdk/filesystem/file.h>
+#include <filesystem/sdlfile.h>
 
 namespace ugdk {
 namespace audio {
 
-Sample::Sample(const std::string& filepath) : data_(nullptr), channel_(-1), volume_(1.0) {
-    data_ = Mix_LoadWAV(filepath.c_str());
+Sample::Sample(const std::string& filepath)
+    : data_(nullptr)
+    , channel_(-1)
+    , volume_(1.0)
+{
+
+    auto file = ugdk::filesystem::manager()->OpenFile(filepath);
+
+    SDL_RWops* rwops;
+    if (auto ptr = dynamic_cast<filesystem::SDLFile*>(file.get())) {
+        rwops = ptr->rwops();
+    } else {
+        throw system::BaseException("NYI: Sample from non-SDLFile.");
+    }
+    data_ = Mix_LoadWAV_RW(rwops, 0);
 }
 
 Sample::~Sample() {

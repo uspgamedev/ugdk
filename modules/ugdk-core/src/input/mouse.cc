@@ -14,10 +14,6 @@ class MouseInputSDLEventHandler : public system::SDLEventHandler {
   public:
     MouseInputSDLEventHandler(Mouse& mouse) : mouse_(mouse) {}
 
-    static system::EventHandler& handler() {
-        return system::CurrentScene().event_handler();
-    }
-
     std::unordered_set<Uint32> TypesHandled() const override {
         return { SDL_MOUSEMOTION, SDL_MOUSEBUTTONDOWN,
                  SDL_MOUSEBUTTONUP, SDL_MOUSEWHEEL };
@@ -39,7 +35,7 @@ class MouseInputSDLEventHandler : public system::SDLEventHandler {
     void MouseMotionHandler(const ::SDL_Event& sdlevent) const {
         mouse_.position_.x = sdlevent.motion.x;
         mouse_.position_.y = sdlevent.motion.y;
-        handler().RaiseEvent(MouseMotionEvent(
+        system::EventHandler::RaiseGlobalEvent(MouseMotionEvent(
             mouse_.position_,
             math::Integer2D(sdlevent.motion.xrel, sdlevent.motion.yrel),
             desktop::manager()->window(sdlevent.motion.windowID)
@@ -50,7 +46,7 @@ class MouseInputSDLEventHandler : public system::SDLEventHandler {
         mouse_.position_.x = sdlevent.button.x;
         mouse_.position_.y = sdlevent.button.y;
         MouseButton button = static_cast<MouseButton>(sdlevent.button.button-1);
-        handler().RaiseEvent(MouseButtonPressedEvent(mouse_.position_, button));
+        system::EventHandler::RaiseGlobalEvent(MouseButtonPressedEvent(mouse_.position_, button));
         mouse_.state_.insert(button);
     }
 
@@ -58,12 +54,12 @@ class MouseInputSDLEventHandler : public system::SDLEventHandler {
         mouse_.position_.x = sdlevent.button.x;
         mouse_.position_.y = sdlevent.button.y;
         MouseButton button = static_cast<MouseButton>(sdlevent.button.button-1);
-        handler().RaiseEvent(MouseButtonReleasedEvent(mouse_.position_, button));
+        system::EventHandler::RaiseGlobalEvent(MouseButtonReleasedEvent(mouse_.position_, button));
         mouse_.state_.erase(button);
     }
 
     void MouseWheelHandler(const ::SDL_Event& sdlevent) const {
-        system::CurrentScene().event_handler().RaiseEvent(MouseWheelEvent(
+        system::EventHandler::RaiseGlobalEvent(MouseWheelEvent(
             math::Integer2D(sdlevent.wheel.x, sdlevent.wheel.y)
         ));
     }

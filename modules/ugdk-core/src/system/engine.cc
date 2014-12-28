@@ -6,6 +6,7 @@
 #include <ugdk/audio/module.h>
 #include <ugdk/resource/module.h>
 #include <ugdk/time/module.h>
+#include <ugdk/filesystem/module.h>
 #include <ugdk/desktop/module.h>
 #ifdef UGDK_3D_ENABLED
 # include <ugdk/desktop/3D/manager.h>
@@ -54,6 +55,7 @@ std::list<std::unique_ptr<action::Scene >> scene_list_;
 std::list<std::function<std::unique_ptr<action::Scene>()>> queued_scene_list_;
 action::Scene*            previous_focused_scene_;
 std::list<std::shared_ptr<const debug::SectionData>> profile_data_list_;
+std::unique_ptr<EventHandler> global_event_handler_;
 Configuration configuration_;
 
 std::unordered_map<Uint32, const SDLEventHandler*> sdlevent_mapper_;
@@ -119,27 +121,6 @@ class SDLQuitEventHandler : public SDLEventHandler {
 
 } // namespace anon
 
-std::string ResolvePath(const std::string& path) {
-    if(path.compare(0, configuration_.base_path.size(), configuration_.base_path) == 0)
-        return path;
-    return configuration_.base_path + path;
-}
-
-std::string GetFileContents(const std::string& filename) {
-    std::ifstream in(ResolvePath(filename).c_str(), std::ios::in);
-    if (in) {
-        std::string contents;
-        in.seekg(0, std::ios::end);
-        contents.resize(in.tellg());
-        in.seekg(0, std::ios::beg);
-        in.read(&contents[0], contents.size());
-        in.close();
-        return(contents);
-    }
-    auto error = errno;
-    throw BaseException("Unable to open file '%s'. Code %d, Reason: %s", filename.c_str(), error, std::strerror(error));
-}
-
 bool Initialize(const Configuration& configuration) {
     if (current_state_ != UGDKState::UNINITIALIZED)
         throw BaseException("UGDK already initialized.");
@@ -148,8 +129,12 @@ bool Initialize(const Configuration& configuration) {
     SDL_Init(0);
 
     configuration_ = configuration;
+    global_event_handler_.reset(new EventHandler);
 
     RegisterSDLHandler(&system_sdlevent_handler);
+
+    if (filesystem::Initialize(new filesystem::Manager))
+        filesystem::manager()->AddSearchPath(configuration_.base_path);
 
     if(!configuration.windows_list.empty()) {
 #ifdef UGDK_3D_ENABLED
@@ -273,12 +258,24 @@ void Run() {
     }
 }
 
+void Suspend() {
+    if (current_state_ != UGDKState::RUNNING)
+        throw BaseException("UGDK not runing.");
+    current_state_ = UGDKState::SUSPENDED;
+}
+
 void Release() {
     if (current_state_ != UGDKState::SUSPENDED)
         throw BaseException("UGDK not suspended.");
     current_state_ = UGDKState::RELEASED;
 
+    for (; !scene_list_.empty(); scene_list_.pop_back()) {
+        scene_list_.back()->Finish();        
+    }
+    queued_scene_list_.clear();
+
     DeregisterSDLHandler(&system_sdlevent_handler);
+    global_event_handler_.reset();
 
     audio::Release();
     input::Release();
@@ -289,6 +286,7 @@ void Release() {
     text::Release();
 #endif
     desktop::Release();
+    filesystem::Release();
 
 #ifdef UGDK_SWIG_ENABLED
     SCRIPT_MANAGER()->Finalize();
@@ -311,7 +309,7 @@ void PushSceneFactory(const std::function<std::unique_ptr<action::Scene>()>& sce
 
 action::Scene& CurrentScene() {
     if (scene_list_.empty())
-        throw 0;
+        throw InvalidOperation("Attempting to get CurrentScene with empty scene list.");
     return *scene_list_.back();
 }
 
@@ -323,10 +321,16 @@ const std::list<std::shared_ptr<const debug::SectionData>>& profile_data_list() 
     return profile_data_list_;
 }
 
-void Suspend() {
-    if (current_state_ != UGDKState::RUNNING)
-        throw BaseException("UGDK not runing.");
-    current_state_ = UGDKState::SUSPENDED;
+const Configuration& CurrentConfiguration() {
+    return configuration_;
+}
+
+EventHandler& GlobalEventHandler() {
+    return *global_event_handler_;
+}
+
+EventHandler& GetCurrentSceneEventHandler() {
+    return CurrentScene().event_handler();
 }
 
 void RegisterSDLHandler(const SDLEventHandler* handler) {

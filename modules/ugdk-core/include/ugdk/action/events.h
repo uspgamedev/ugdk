@@ -18,6 +18,12 @@ struct SceneDefocusEvent {
     SceneDefocusEvent(Scene* _scene) : scene(_scene) {}
 };
 
+struct SceneFinishedEvent {
+    Scene* scene;
+
+    SceneFinishedEvent(Scene* _scene) : scene(_scene) {}
+};
+
 } // namespace action
 } // namespace ugdk
 

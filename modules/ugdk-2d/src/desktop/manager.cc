@@ -93,11 +93,12 @@ std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& s
         return std::shared_ptr<desktop::Window>();
     }
 
-    if(settings.icon.length() > 0) {
+    // FIXME
+    /*if(settings.icon.length() > 0) {
         SDL_Surface* icon = IMG_Load(system::ResolvePath(settings.icon).c_str());
         SDL_SetWindowIcon(window, icon);
         SDL_FreeSurface(icon);
-    }
+    }*/
 
     return shared_ptr<desktop::Window>(new desktop::mode2d::Window(window));
 }

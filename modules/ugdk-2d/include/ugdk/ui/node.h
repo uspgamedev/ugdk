@@ -27,6 +27,7 @@ class Node {
     void set_ignores_effect(const bool _on) {   ignores_effect_ = _on; }
     void set_zindex(const double zindex);
     
+    Node* parent() { return parent_; }
           graphic::Geometry& geometry()          { return geometry_; }
     const graphic::Geometry& geometry()    const { return geometry_; }
           graphic::VisualEffect& effect()        { return effect_; }

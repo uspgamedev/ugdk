@@ -29,12 +29,12 @@ class KeyboardInputSDLEventHandler : public system::SDLEventHandler {
     void KeyDownHandler(const ::SDL_Event& sdlevent) const {
         keyboard_.keystate_.insert(Scancode(sdlevent.key.keysym.scancode));
         if(sdlevent.key.repeat == 0)
-            system::CurrentScene().event_handler().RaiseEvent(KeyPressedEvent(
+            system::EventHandler::RaiseGlobalEvent(KeyPressedEvent(
                 Keycode(sdlevent.key.keysym.sym),
                 Scancode(sdlevent.key.keysym.scancode),
                 Keymod(sdlevent.key.keysym.mod)));
         else
-            system::CurrentScene().event_handler().RaiseEvent(KeyHeldEvent(
+            system::EventHandler::RaiseGlobalEvent(KeyHeldEvent(
                 Keycode(sdlevent.key.keysym.sym),
                 Scancode(sdlevent.key.keysym.scancode),
                 Keymod(sdlevent.key.keysym.mod)));
@@ -42,7 +42,7 @@ class KeyboardInputSDLEventHandler : public system::SDLEventHandler {
     
     void KeyUpHandler(const ::SDL_Event& sdlevent) const {
         keyboard_.keystate_.erase(Scancode(sdlevent.key.keysym.scancode));
-        system::CurrentScene().event_handler().RaiseEvent(KeyReleasedEvent(
+        system::EventHandler::RaiseGlobalEvent(KeyReleasedEvent(
                 Keycode(sdlevent.key.keysym.sym),
                 Scancode(sdlevent.key.keysym.scancode),
                 Keymod(sdlevent.key.keysym.mod)));

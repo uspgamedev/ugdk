@@ -41,7 +41,7 @@ class Scene : public system::TaskPlayer {
     virtual void OnPushed(int index) {}
 
     /// Finishes the scene.
-    void Finish() { End(); finished_ = true; }
+    void Finish();
 
     /// Whether this scene stops the previous music even if wont play any music.
     void StopsPreviousMusic(bool set) { stops_previous_music_ = set; }

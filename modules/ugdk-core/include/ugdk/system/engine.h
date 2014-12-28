@@ -4,15 +4,11 @@
 #include <ugdk/action.h>
 #include <ugdk/debug.h>
 #include <ugdk/system.h>
-#include <ugdk/util.h>
-#include <ugdk/structure/types.h>
 #include <ugdk/system/configuration.h>
-#include <ugdk/system/compatibility.h>
 
 #include <functional>
 #include <list>
 #include <memory>
-#include <string>
 
 #ifdef SWIG
 #define GET_OWNERSHIP(T) T&&
@@ -24,10 +20,6 @@ namespace ugdk {
 namespace system {
 
 typedef std::function<std::unique_ptr<action::Scene> ()> SceneFactory;
-
-/// Expands the given path with configurated base path.
-std::string ResolvePath(const std::string& path);
-std::string GetFileContents(const std::string& filename);
 
 /** @name Engine Management
  ** @{
@@ -44,6 +36,9 @@ bool Initialize();
 
 /// Starts running the engine.
 void Run();
+
+/// Stops the main loop.
+void Suspend();
 
 /// Releases all the resouces allocated by the engine.
 void Release();
@@ -70,15 +65,19 @@ action::Scene& CurrentScene();
 /** The list is changed when PushScene is called. */
 const std::list<std::unique_ptr<action::Scene>>& scene_list();
 
+/** @}
+*/
 
 const std::list<std::shared_ptr<const debug::SectionData>>& profile_data_list();
 
-/** @}
- */
+/// Returns the current configuration.
+const Configuration& CurrentConfiguration();
 
-/// Stops the main loop.
-void Suspend();
+/// Returns the global EventHandler.
+EventHandler& GlobalEventHandler();
 
+/// Returns the EventHandler for the current scene.
+EventHandler& GetCurrentSceneEventHandler();
 
 /** @name Internal
  * @{

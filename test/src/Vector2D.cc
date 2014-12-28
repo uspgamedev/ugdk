@@ -41,6 +41,9 @@ TEST(Vector2D, Operators) {
 
 	{	double c = a * b;
 		EXPECT_EQ(c, -96.0); }
+
+    EXPECT_TRUE(a == a);
+    EXPECT_FALSE(a == b);
 }
 
 TEST(Vector2D, Methods) {
@@ -77,6 +80,16 @@ TEST(Vector2D, Methods) {
     {   Vector2D t = c.Mirrored(mirroraxis::DIAG_DOWN);
         EXPECT_EQ(t.x, -7.2);
         EXPECT_EQ(t.y, -5.6); }
+
+    {   Vector2D v1(5.0, 8.0), v2(2.5, 0.5);
+        Vector2D t = v1.Divided(v2);
+        EXPECT_EQ(t.x, 2);
+        EXPECT_EQ(t.y, 16); }
+
+    {   Vector2D v = a;
+        v.Divide(v);
+        EXPECT_EQ(v.x, 1.0);
+        EXPECT_EQ(v.y, 1.0); }
 }
 
 TEST(Vector2D, TypeSize) {

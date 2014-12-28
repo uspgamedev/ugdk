@@ -30,6 +30,7 @@ class Font {
 
   private:
     double size_;
+    void* ttf_memory_;
     texture_atlas_t* atlas_;
     texture_font_t* freetype_font_;
 };

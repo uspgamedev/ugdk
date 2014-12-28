@@ -46,6 +46,12 @@ void Scene::DeFocus() {
     event_handler_.RaiseEvent(SceneDefocusEvent(this));
 }
 
+void Scene::Finish() {
+    End();
+    event_handler_.RaiseEvent(SceneFinishedEvent(this));
+    finished_ = true;
+}
+
 void Scene::Update(double dt) {
     if(finished_ || !active_)
         return;
