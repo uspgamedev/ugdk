@@ -31,7 +31,9 @@ PhysicsBody::~PhysicsBody() {
 }
 
 void PhysicsBody::set_angular_factor(double x_axis, double y_axis, double z_axis) {
-    body_->setAngularFactor(btVector3(x_axis, y_axis, z_axis));
+    body_->setAngularFactor(btVector3(static_cast<btScalar>(x_axis), 
+                                      static_cast<btScalar>(y_axis), 
+                                      static_cast<btScalar>(z_axis)));
 }
 
 Ogre::Vector3 PhysicsBody::position() const {
@@ -40,14 +42,27 @@ Ogre::Vector3 PhysicsBody::position() const {
 Ogre::Quaternion PhysicsBody::orientation() const {
     return BtOgre::Convert::toOgre(body_->getOrientation());
 }
+Ogre::Vector3 PhysicsBody::linear_velocity() const {
+    return BtOgre::Convert::toOgre(body_->getLinearVelocity());
+}
+Ogre::Vector3 PhysicsBody::angular_velocity() const {
+    return BtOgre::Convert::toOgre(body_->getAngularVelocity());
+}
+Ogre::Vector3 PhysicsBody::GetVelocityInPoint(const Ogre::Vector3& point) const {
+    return BtOgre::Convert::toOgre(body_->getVelocityInLocalPoint(BtOgre::Convert::toBullet(point)));
+}
 
 void PhysicsBody::Translate(double move_x, double move_y, double move_z) {
-    body_->translate(btVector3(move_x, move_y, move_z));
+    body_->translate(btVector3(static_cast<btScalar>(move_x), 
+                               static_cast<btScalar>(move_y), 
+                               static_cast<btScalar>(move_z)));
 }
 
 void PhysicsBody::Move(double delta_x, double delta_y, double delta_z) {
     body_->activate();
-    body_->applyCentralImpulse(btVector3(delta_x, delta_y, delta_z));
+    body_->applyCentralImpulse(btVector3(static_cast<btScalar>(delta_x), 
+                                         static_cast<btScalar>(delta_y), 
+                                         static_cast<btScalar>(delta_z)));
 }
 
 void PhysicsBody::Rotate(double yaw, double pitch, double roll) {
@@ -58,8 +73,12 @@ void PhysicsBody::Rotate(double yaw, double pitch, double roll) {
 }
 
 void PhysicsBody::Scale(double factor_x, double factor_y, double factor_z) {
-    owner()->node().scale(factor_x, factor_y, factor_z);
-    body_->getCollisionShape()->setLocalScaling(btVector3(factor_x, factor_y, factor_z));
+    owner()->node().scale(static_cast<Ogre::Real>(factor_x), 
+                          static_cast<Ogre::Real>(factor_y),
+                          static_cast<Ogre::Real>(factor_z));
+    body_->getCollisionShape()->setLocalScaling(btVector3(static_cast<btScalar>(factor_x), 
+                                                          static_cast<btScalar>(factor_y), 
+                                                          static_cast<btScalar>(factor_z)));
 }
 
 void PhysicsBody::set_restitution(double factor) {

@@ -3,9 +3,11 @@
 
 #include <ugdk/action/3D/component.h>
 #include <OgreVector3.h>
+#include <LinearMath/btVector3.h>
 #include <functional>
 #include <vector>
 
+class btVector3;
 namespace Ogre {
 class Vector3;
 class Quaternion;
@@ -18,9 +20,18 @@ namespace action {
 namespace mode3d {
 namespace component {
 
+struct ContactPoint {
+    btVector3 world_positionA;
+    btVector3 world_positionB;
+    double applied_impulse;
+    double distance;
+
+    ContactPoint(const btVector3& posA, const btVector3& posB, double impulse, double dist) 
+        : world_positionA(posA), world_positionB(posB), applied_impulse(impulse), distance(dist) {}
+};
 using ElementPtr = std::shared_ptr < Element > ;
-using ManifoldPointVector = std::vector < btManifoldPoint > ;
-using CollisionAction = std::function < void(const ElementPtr&, const ElementPtr&, const ManifoldPointVector&) >;
+using ContactPointVector = std::vector < ContactPoint > ;
+using CollisionAction = std::function < void(const ElementPtr&, const ElementPtr&, const ContactPointVector&) >;
 
 class Body : public Component {
 
@@ -38,6 +49,9 @@ class Body : public Component {
 
     virtual Ogre::Vector3 position() const = 0;
     virtual Ogre::Quaternion orientation() const = 0;
+    virtual Ogre::Vector3 linear_velocity() const = 0;
+    virtual Ogre::Vector3 angular_velocity() const = 0;
+    virtual Ogre::Vector3 GetVelocityInPoint(const Ogre::Vector3& point) const = 0;
 
     void Translate(const Ogre::Vector3& move);
     void Move(const Ogre::Vector3& delta);

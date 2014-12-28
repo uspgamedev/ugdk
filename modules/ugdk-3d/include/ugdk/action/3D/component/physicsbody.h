@@ -50,6 +50,9 @@ class PhysicsBody final : public Body {
 
     Ogre::Vector3 position() const override;
     Ogre::Quaternion orientation() const override;
+    Ogre::Vector3 linear_velocity() const override;
+    Ogre::Vector3 angular_velocity() const override;
+    Ogre::Vector3 GetVelocityInPoint(const Ogre::Vector3& point) const override;
 
     void Translate(double move_x, double move_y, double move_z) override;
     void Move(double delta_x, double delta_y, double delta_z) override;

@@ -39,7 +39,9 @@ void SimpleBody::Rotate(double yaw, double pitch, double roll) {
 }
 
 void SimpleBody::Scale(double factor_x, double factor_y, double factor_z) {
-    owner()->node().scale(factor_x, factor_y, factor_z);
+    owner()->node().scale(static_cast<Ogre::Real>(factor_x), 
+                          static_cast<Ogre::Real>(factor_y), 
+                          static_cast<Ogre::Real>(factor_z));
 }
 
 void SimpleBody::OnTaken() {

@@ -54,7 +54,7 @@ Physics::~Physics() {
 void Physics::Update(double dt) {
     // stepSimulation( dt, maxSubSteps, fixedDtSubStep=1/60)
     // dt < maxSubSteps * fixedDtSubStep
-    world_->stepSimulation(dt, 10);
+    world_->stepSimulation(dt, static_cast<btScalar>(10));
     debug_drawer_->step();
 }
 
@@ -83,23 +83,28 @@ void Physics::tickCallback(btDynamicsWorld *world, btScalar timeStep) {
         PhysicsBody* bodyA = static_cast<PhysicsBody*>(contactManifold->getBody0()->getUserPointer());
         PhysicsBody* bodyB = static_cast<PhysicsBody*>(contactManifold->getBody1()->getUserPointer());
 
-        component::ManifoldPointVector points;
+        component::ContactPointVector pointsA;
+        component::ContactPointVector pointsB;
 		int numContacts = contactManifold->getNumContacts();
 		for (int j=0; j<numContacts; j++)
 		{
 			btManifoldPoint& pt = contactManifold->getContactPoint(j);
-			if (pt.getDistance() <= 0)
-                points.push_back(pt);
+            if (pt.getDistance() <= 0) {
+                pointsA.push_back(component::ContactPoint(pt.getPositionWorldOnA(), pt.getPositionWorldOnB(),
+                                                          pt.getAppliedImpulse(), pt.getDistance()));
+                pointsB.push_back(component::ContactPoint(pt.getPositionWorldOnB(), pt.getPositionWorldOnA(),
+                                                          pt.getAppliedImpulse(), pt.getDistance()));
+            }
 		}
 
-        if (points.size() > 0) {
+        if (pointsA.size() > 0) {
             auto actionA = bodyA->action_map_.find(bodyB->collision_group());
             if (actionA != bodyA->action_map_.end()) {
-                actionA->second(bodyA->owner(), bodyB->owner(), points);
+                actionA->second(bodyA->owner(), bodyB->owner(), pointsA);
             }
             auto actionB = bodyB->action_map_.find(bodyA->collision_group());
             if (actionB != bodyB->action_map_.end()) {
-                actionB->second(bodyB->owner(), bodyA->owner(), points);
+                actionB->second(bodyB->owner(), bodyA->owner(), pointsB);
             }
         }
 	}
