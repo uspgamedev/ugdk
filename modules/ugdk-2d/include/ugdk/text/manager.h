@@ -27,7 +27,7 @@ class Manager {
     Font* current_font() const { return current_font_; }
     Font* GetFont(const std::string& name) const;
 
-	void AddFont(const std::string& name, const std::string& path, double size);
+    Font* AddFont(const std::string& name, const std::string& path, double size);
 
     //================
     const std::string& default_language() const { return default_language_; }

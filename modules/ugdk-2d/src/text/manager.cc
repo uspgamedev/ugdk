@@ -77,13 +77,13 @@ Font* Manager::GetFont(const std::string& name) const {
     return nullptr;
 }
 
-void Manager::AddFont(const std::string& name, const std::string& path, double size) {
+Font* Manager::AddFont(const std::string& name, const std::string& path, double size) {
     debug::DebugConditionalLog(fonts_.find(name) != fonts_.end(), debug::LogLevel::INFO, "UGDK",
                                "Replacing a font tag: '", name, "'");
     debug::DebugConditionalLog(fonts_.find(name) == fonts_.end(), debug::LogLevel::INFO, "UGDK",
                                "Loading new font tag: '", name, "'");
     fonts_[name].reset(new Font(path, size));
-    current_font_ = fonts_[name].get();
+    return current_font_ = fonts_[name].get();
 }
 
 bool Manager::RegisterLanguage(const std::string& code, const std::string& language_file) {
