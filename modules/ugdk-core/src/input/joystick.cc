@@ -9,13 +9,9 @@ namespace input {
      
 Joystick::Joystick(SDL_Joystick* joystick)
     : sdljoystick_(joystick)
-{
-    printf("Joystick CREATED %d\n", SDL_JoystickInstanceID(sdljoystick_));
-}
+{}
 
-Joystick::~Joystick() {
-    printf("Joystick DELETED %d\n", SDL_JoystickInstanceID(sdljoystick_));
-}
+Joystick::~Joystick() {}
 
 bool Joystick::IsConnected() const {
     return SDL_JoystickGetAttached(sdljoystick_) == SDL_TRUE;
