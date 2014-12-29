@@ -69,7 +69,8 @@ class AnimationPlayer : public MediaPlayer {
 
     /// Calls the frame changed callback with the current frame.
     void Refresh() {
-        ExecuteFrameChangeCallback();
+        if (current_animation_)
+            ExecuteFrameChangeCallback();
     }
 
   private:
