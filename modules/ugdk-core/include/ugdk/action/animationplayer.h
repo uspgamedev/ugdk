@@ -67,6 +67,11 @@ class AnimationPlayer : public MediaPlayer {
             this->set_current_animation(table_->Get(index));
     }
 
+    /// Calls the frame changed callback with the current frame.
+    void Refresh() {
+        ExecuteFrameChangeCallback();
+    }
+
   private:
     const Vector* current_animation_;
     typename Vector::const_iterator current_frame_;
