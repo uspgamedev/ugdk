@@ -6,7 +6,9 @@
 namespace ugdk {
 namespace action {
     
-MediaPlayer::MediaPlayer() : manager_(nullptr) {}
+MediaPlayer::MediaPlayer()
+    : manager_(nullptr)
+{}
 
 MediaPlayer::~MediaPlayer() {
     if(manager_)
@@ -26,12 +28,12 @@ void MediaPlayer::ChangeMediaManager(MediaManager* manager) {
 }
 
 void MediaPlayer::notifyAllObservers() {
-    for (int i = 0; i < (int)observers_.size(); ++i) {
-        observers_[i]->Tick();
+    for (const auto& observer : observers_) {
+        observer->Tick();
     }
-    for(std::vector< std::function<void (void)> >::iterator it = ticks_.begin();
-        it != ticks_.end(); ++it)
-        (*it)();
+    for (const auto& tick : ticks_) {
+        tick();
+    }
 }
 
 } /* namespace action*/

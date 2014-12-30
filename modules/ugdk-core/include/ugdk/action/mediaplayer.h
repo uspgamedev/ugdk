@@ -1,12 +1,10 @@
 #ifndef UGDK_ACTION_MEDIAPLAYER_H_
 #define UGDK_ACTION_MEDIAPLAYER_H_
 
-#include <vector>
-#include <string>
-
-#include <functional>
-
 #include <ugdk/action.h>
+
+#include <vector>
+#include <functional>
 
 #define DEFAULT_PERIOD 0.1
 
