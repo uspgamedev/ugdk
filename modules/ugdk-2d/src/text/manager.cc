@@ -111,6 +111,8 @@ bool Manager::Setup(const std::string& active_language) {
         return false;
     }
 
+    active_language_ = active_language;
+
     // We'll simply ignore the default language for now... TODO!
     Language lang;
     return lang.Load(registered_languages_[active_language]);

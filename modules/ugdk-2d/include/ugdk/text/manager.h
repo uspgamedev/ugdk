@@ -31,6 +31,7 @@ class Manager {
 
     //================
     const std::string& default_language() const { return default_language_; }
+    const std::string& active_language() const { return active_language_; }
 
     bool RegisterLanguage(const std::string& code, const std::string& language_file);
 
@@ -42,6 +43,7 @@ class Manager {
     std::unordered_map<std::string, std::unique_ptr<Font>> fonts_;
 
     std::string default_language_;
+    std::string active_language_;
     std::unordered_map<std::string, std::string> registered_languages_;
 };
 
