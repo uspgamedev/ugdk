@@ -93,6 +93,8 @@ std::shared_ptr<desktop::Window> Manager::DoCreateWindow(const WindowSettings& s
         return std::shared_ptr<desktop::Window>();
     }
 
+    SDL_GL_SetSwapInterval(settings.vsync ? 1 : 0);
+
     // FIXME
     /*if(settings.icon.length() > 0) {
         SDL_Surface* icon = IMG_Load(system::ResolvePath(settings.icon).c_str());

@@ -8,6 +8,7 @@ WindowSettings::WindowSettings()
     , icon()
     , size(800, 600)
     , fullscreen(false)
+    , vsync(false)
 {}
 
 }  // namespace desktop
