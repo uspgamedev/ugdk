@@ -15,12 +15,12 @@ class Component {
   public:
     virtual ~Component() {}
     virtual std::type_index type() const = 0;
+    std::shared_ptr<Element> owner() const;
   protected:
     Component() {}
     /// TODO: Make this not accessible from Object
     virtual void OnTaken() = 0;
     void Take(const std::weak_ptr<Element> &the_owner);
-    std::shared_ptr<Element> owner() const;
     friend class Element;
   private:
     std::weak_ptr<Element> owner_;
