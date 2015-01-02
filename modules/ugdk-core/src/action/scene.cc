@@ -47,6 +47,8 @@ void Scene::DeFocus() {
 }
 
 void Scene::Finish() {
+    if (finished_)
+        return;
     End();
     event_handler_.RaiseEvent(SceneFinishedEvent(this));
     finished_ = true;
