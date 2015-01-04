@@ -6,6 +6,7 @@
 #include <OgreSceneNode.h>
 #include <OgreSceneManager.h>
 
+
 namespace ugdk {
 namespace action {
 namespace mode3d {
@@ -13,11 +14,15 @@ namespace mode3d {
 using Ogre::Any;
 
 Element::Element(Scene3D& scene, const std::string& name) : scene_(scene), name_(name) {
-    node_ = scene.manager()->getRootSceneNode()->createChildSceneNode(name);
+    if (name.empty())
+        node_ = scene.manager()->getRootSceneNode()->createChildSceneNode();
+    else 
+        node_ = scene.manager()->getRootSceneNode()->createChildSceneNode(name);
     node_->getUserObjectBindings().setUserAny("owner", Any(this));
 }
 
-Element::~Element() {}
+Element::~Element() {
+}
 
 void Element::AddComponent(const std::shared_ptr<Component> &the_component) {
     components_[the_component->type()] = the_component;

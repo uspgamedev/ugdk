@@ -46,10 +46,13 @@ class Body : public Component {
     virtual void set_restitution(double factor) = 0;
     virtual void set_friction(double frict) = 0;
     virtual void set_damping(double linear, double angular) = 0;
+    virtual void SetRespondsOnContact(bool has_response) = 0;
+    virtual void SetContinuousCollisionDetection(double speed_threshold, double sphere_radius) = 0;
 
     virtual Ogre::Vector3 position() const = 0;
     virtual Ogre::Quaternion orientation() const = 0;
     virtual Ogre::Vector3 linear_velocity() const = 0;
+    virtual void set_linear_velocity(const Ogre::Vector3& velocity) = 0;
     virtual Ogre::Vector3 angular_velocity() const = 0;
     virtual Ogre::Vector3 GetVelocityInPoint(const Ogre::Vector3& point) const = 0;
 
