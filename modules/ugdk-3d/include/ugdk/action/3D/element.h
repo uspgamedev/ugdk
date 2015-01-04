@@ -28,6 +28,10 @@ class Element : public std::enable_shared_from_this<Element> {
     Element(Scene3D& scene, const std::string& name="");
     virtual ~Element();
 
+    // to make this class uncopyable
+    Element& operator=(const Element&) = delete;
+    Element(const Element&) = delete;
+
     void AddComponent(const std::shared_ptr<Component> &the_component);
     template <class T>
     T* component();
