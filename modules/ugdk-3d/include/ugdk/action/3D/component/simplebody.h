@@ -23,10 +23,13 @@ class SimpleBody final : public Body {
     void set_restitution(double factor) override {}
     void set_friction(double frict) override {}
     void set_damping(double linear, double angular) override {}
+    void SetRespondsOnContact(bool has_response) override {}
+    void SetContinuousCollisionDetection(double speed_threshold, double sphere_radius) override {}
 
     Ogre::Vector3 position() const override;
     Ogre::Quaternion orientation() const override;
     Ogre::Vector3 linear_velocity() const override;
+    void set_linear_velocity(const Ogre::Vector3& velocity) override {}
     Ogre::Vector3 angular_velocity() const override;
     Ogre::Vector3 GetVelocityInPoint(const Ogre::Vector3& point) const override;
 

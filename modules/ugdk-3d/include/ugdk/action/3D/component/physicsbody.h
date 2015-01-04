@@ -21,17 +21,17 @@ class PhysicsBody final : public Body {
     using Body::Move;
 
     struct PhysicsData {
-        /// rigid body mass (must be >= 0, and 0 means static "infinite mass" object)
+        /** rigid body mass (must be >= 0, and 0 means static "infinite mass" object) */
         double mass;
-        /// flag (power of 2 bit mask) of the collision group this object belongs to
+        /** flag (power of 2 bit mask) of the collision group this object belongs to */
         short collision_group;
-        /// flags (combination of flags - |'ed) of groups this object collides with
+        /**  flags (combination of flags - |'ed) of groups this object collides with */
         short collides_with;
-        /// collision shape of this object
+        /**  collision shape of this object */
         btCollisionShape* shape;
-        /// initial position and orientation of the object
+        /** initial position and orientation of the object */
         btTransform initial;
-        /// offset to center of mass
+        /** offset to center of mass */
         btTransform offset;
 
         PhysicsData();
@@ -47,10 +47,13 @@ class PhysicsBody final : public Body {
     void set_restitution(double factor) override;
     void set_friction(double frict) override;
     void set_damping(double linear, double angular) override;
+    void SetRespondsOnContact(bool has_response) override;
+    void SetContinuousCollisionDetection(double speed_threshold, double sphere_radius) override;
 
     Ogre::Vector3 position() const override;
     Ogre::Quaternion orientation() const override;
     Ogre::Vector3 linear_velocity() const override;
+    void set_linear_velocity(const Ogre::Vector3& velocity) override;
     Ogre::Vector3 angular_velocity() const override;
     Ogre::Vector3 GetVelocityInPoint(const Ogre::Vector3& point) const override;
 

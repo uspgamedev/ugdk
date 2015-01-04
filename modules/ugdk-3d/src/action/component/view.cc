@@ -38,7 +38,7 @@ Ogre::Entity* View::AddEntity(Ogre::Entity* ent) {
 }
 
 Ogre::Entity* View::GetEntity(int index) {
-    if (entities_.size() >= index) return nullptr;
+    if (entities_.size() <= index) return nullptr;
     return entities_.at(index);
 }
 Ogre::Entity* View::GetEntity(const std::string& entName) {

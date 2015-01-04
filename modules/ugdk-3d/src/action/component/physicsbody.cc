@@ -36,6 +36,18 @@ void PhysicsBody::set_angular_factor(double x_axis, double y_axis, double z_axis
                                       static_cast<btScalar>(z_axis)));
 }
 
+void PhysicsBody::SetRespondsOnContact(bool has_response) {
+    if (has_response)
+        body_->setCollisionFlags(body_->getCollisionFlags() & (~btCollisionObject::CF_NO_CONTACT_RESPONSE));
+    else
+        body_->setCollisionFlags(body_->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+}
+
+void PhysicsBody::SetContinuousCollisionDetection(double speed_threshold, double sphere_radius) {
+    body_->setCcdMotionThreshold(static_cast<btScalar>(speed_threshold));
+    body_->setCcdSweptSphereRadius(static_cast<btScalar>(sphere_radius));
+}
+
 Ogre::Vector3 PhysicsBody::position() const {
     return BtOgre::Convert::toOgre(body_->getCenterOfMassPosition());
 }
@@ -44,6 +56,9 @@ Ogre::Quaternion PhysicsBody::orientation() const {
 }
 Ogre::Vector3 PhysicsBody::linear_velocity() const {
     return BtOgre::Convert::toOgre(body_->getLinearVelocity());
+}
+void PhysicsBody::set_linear_velocity(const Ogre::Vector3& velocity) {
+    body_->setLinearVelocity(BtOgre::Convert::toBullet(velocity));
 }
 Ogre::Vector3 PhysicsBody::angular_velocity() const {
     return BtOgre::Convert::toOgre(body_->getAngularVelocity());
