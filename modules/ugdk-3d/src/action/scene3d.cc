@@ -41,6 +41,14 @@ Scene3D::Scene3D(const btVector3& gravity) {
     AddTask(ugdk::system::Task([&](double dt) {
         physics_->Update(dt);
     }, 0.2));
+
+    AddTask(ugdk::system::Task([&](double dt) {
+        for (auto e : to_be_removed_){
+            e->Destroy();
+            elements_.erase(e);
+        }
+        to_be_removed_.clear();
+    }, 2.0));
 }
 
 Scene3D::~Scene3D() {
@@ -136,8 +144,9 @@ const shared_ptr<Element>& Scene3D::AddElement(const std::string& name) {
 }
 
 void Scene3D::DestroyAndRemoveElement(const std::shared_ptr<Element>& element) {
-    element->Destroy();
-    elements_.erase(element);
+    to_be_removed_.push_front(element);
+    //element->Destroy();
+    //elements_.erase(element);
 }
 
 } // namespace mode3d

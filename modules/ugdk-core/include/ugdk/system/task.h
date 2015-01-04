@@ -7,7 +7,10 @@ namespace ugdk {
 namespace system {
 
 class Task {
-  public:
+public:
+    /** Constructs a new Task, with given callable and priority.
+        Priority is tipically in the range [0, 1], and smaller priorities are executed before. 
+        @see TaskPlayer */
     template<typename Callable>
     Task(Callable c, double priotity = 0.5) : priority_(priotity) {
         CallableAdapter<decltype(c(0.0))>::Set(function_, c);
@@ -22,7 +25,7 @@ class Task {
         return priority_ < other.priority_;
     }
 
-  private:
+private:
     template<typename Ret>
     struct CallableAdapter {
         template<typename Callable>

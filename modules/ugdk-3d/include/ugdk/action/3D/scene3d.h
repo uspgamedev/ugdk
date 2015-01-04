@@ -4,6 +4,7 @@
 #include <ugdk/action/scene.h>
 #include <ugdk/action/3D/physics.h>
 #include <unordered_set>
+#include <forward_list>
 
 class btVector3;
 
@@ -44,7 +45,7 @@ public:
 
     /** Creates and returns a new Element in this scene. */
     const std::shared_ptr<Element>& AddElement(const std::string& name="");
-    /** Destroys and removes the given element from this scene. */
+    /** Marks an element to be destroyed and removed from this scene at the end of the frame. */
     void DestroyAndRemoveElement(const std::shared_ptr<Element>& element);
 
     const std::unique_ptr<Physics>& physics() const {
@@ -63,6 +64,7 @@ protected:
 
     std::unique_ptr<Physics> physics_;
     std::unordered_set<std::shared_ptr<Element>> elements_;
+    std::forward_list<std::shared_ptr<Element>> to_be_removed_;
     
 }; // class Scene3D.
 
