@@ -131,9 +131,13 @@ void Scene3D::UpdateFrameStats() {
     
 }
 
-shared_ptr<Element>& Scene3D::AddElement(const std::string& name) {
-    elements_.emplace_back(new Element(*this, name));
-    return elements_.back();
+const shared_ptr<Element>& Scene3D::AddElement(const std::string& name) {
+    return *elements_.emplace(new Element(*this, name)).first;
+}
+
+void Scene3D::DestroyAndRemoveElement(const std::shared_ptr<Element>& element) {
+    element->Destroy();
+    elements_.erase(element);
 }
 
 } // namespace mode3d

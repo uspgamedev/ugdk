@@ -3,6 +3,7 @@
 
 #include <ugdk/action/scene.h>
 #include <ugdk/action/3D/physics.h>
+#include <unordered_set>
 
 class btVector3;
 
@@ -41,11 +42,14 @@ public:
     void UpdateFrameStats();
     void HideFrameStats();
 
-    std::shared_ptr<Element>& AddElement(const std::string& name="");
+    /** Creates and returns a new Element in this scene. */
+    const std::shared_ptr<Element>& AddElement(const std::string& name="");
+    /** Destroys and removes the given element from this scene. */
+    void DestroyAndRemoveElement(const std::shared_ptr<Element>& element);
+
     const std::unique_ptr<Physics>& physics() const {
         return physics_;
     }
-    
     Ogre::SceneManager* manager() const { return scene_mgr_; }
     Camera* camera() const { return camera_; }
 
@@ -58,9 +62,9 @@ protected:
     Ogre::Overlay* fps_stats_;
 
     std::unique_ptr<Physics> physics_;
-    std::vector<std::shared_ptr<Element>> elements_;
+    std::unordered_set<std::shared_ptr<Element>> elements_;
     
-}; // class OgreScene.
+}; // class Scene3D.
 
 
 } // namespace 3D
