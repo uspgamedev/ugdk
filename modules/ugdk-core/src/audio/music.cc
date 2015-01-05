@@ -2,6 +2,7 @@
 #include "SDL.h"
 
 #include <ugdk/audio/music.h>
+#include <ugdk/system/engine.h>
 #include <ugdk/system/exceptions.h>
 #include <ugdk/filesystem/module.h>
 #include <ugdk/filesystem/file.h>
@@ -15,16 +16,15 @@ Music* Music::playing_music_(nullptr);
 Music::Music(const std::string& filepath)
     : data_(nullptr)
     , volume_(1.0)
+    , file_(ugdk::filesystem::manager()->OpenFile(filepath))
 {
-    auto file = ugdk::filesystem::manager()->OpenFile(filepath);
-
     SDL_RWops* rwops;
-    if (auto ptr = dynamic_cast<filesystem::SDLFile*>(file.get())) {
+    if (auto ptr = dynamic_cast<filesystem::SDLFile*>(file_.get())) {
         rwops = ptr->rwops();
     } else {
         throw system::BaseException("NYI: Sample from non-SDLFile.");
     }
-    data_ = Mix_LoadMUS_RW(rwops, 0);
+    data_ = Mix_LoadMUSType_RW(rwops, MUS_NONE, SDL_FALSE);
     Mix_HookMusicFinished(MusicDone);
 }
 
