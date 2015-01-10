@@ -102,7 +102,7 @@ bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, cons
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_combined_texture_image_units);
     textureunit_ids_.reset(new util::IDGenerator(0, max_combined_texture_image_units, -1));
 
-    light_buffer_.reset(new RenderTexture(canvas_size));
+    light_buffer_.reset(new RenderTexture(math::Integer2D(canvas_size)));
 
     shaders_.ReplaceShader(0, CreateShader(false, false));
     shaders_.ReplaceShader(1, CreateShader( true, false));
