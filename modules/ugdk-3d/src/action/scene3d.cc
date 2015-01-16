@@ -144,7 +144,10 @@ const shared_ptr<Element>& Scene3D::AddElement(const std::string& name) {
 }
 
 void Scene3D::DestroyAndRemoveElement(const std::shared_ptr<Element>& element) {
-    to_be_removed_.push_front(element);
+    if (!element->marked_for_removal()) {
+        to_be_removed_.push_front(element);
+        element->marked_for_removal_ = true;
+    }
     //element->Destroy();
     //elements_.erase(element);
 }

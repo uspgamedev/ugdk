@@ -13,7 +13,7 @@ namespace mode3d {
 
 using Ogre::Any;
 
-Element::Element(Scene3D& scene, const std::string& name) : scene_(scene), name_(name) {
+Element::Element(Scene3D& scene, const std::string& name) : scene_(scene), name_(name), marked_for_removal_(false) {
     if (name.empty())
         node_ = scene.manager()->getRootSceneNode()->createChildSceneNode();
     else 

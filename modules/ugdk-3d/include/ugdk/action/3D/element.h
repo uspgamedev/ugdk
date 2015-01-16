@@ -39,6 +39,7 @@ class Element : public std::enable_shared_from_this<Element> {
     void AttachTo(Element& parent);
     void AttachTo(Scene3D& scene);
     void Destroy();
+    bool marked_for_removal() const { return marked_for_removal_; }
 
     Ogre::SceneNode& node() { return *node_; }
     Scene3D& scene() { return scene_; }
@@ -53,6 +54,9 @@ class Element : public std::enable_shared_from_this<Element> {
     Ogre::SceneNode                                                         *node_;
     Scene3D&    scene_;
     std::string name_;
+
+    friend Scene3D;
+    bool marked_for_removal_;
 }; // class Element.
 
 template <class T>
