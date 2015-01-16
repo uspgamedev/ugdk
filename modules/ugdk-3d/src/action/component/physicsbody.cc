@@ -54,6 +54,14 @@ Ogre::Vector3 PhysicsBody::position() const {
 Ogre::Quaternion PhysicsBody::orientation() const {
     return BtOgre::Convert::toOgre(body_->getOrientation());
 }
+void PhysicsBody::set_orientation(const Ogre::Vector3& dir) {
+    btTransform t;
+    body_->getMotionState()->getWorldTransform(t);
+    auto q = BtOgre::Convert::toBullet(Ogre::Vector3::UNIT_Z.getRotationTo(dir));
+    t.setRotation(q);
+    body_->setWorldTransform(t);
+    body_->getMotionState()->setWorldTransform(t);
+}
 Ogre::Vector3 PhysicsBody::linear_velocity() const {
     return BtOgre::Convert::toOgre(body_->getLinearVelocity());
 }

@@ -51,6 +51,7 @@ class Body : public Component {
 
     virtual Ogre::Vector3 position() const = 0;
     virtual Ogre::Quaternion orientation() const = 0;
+    virtual void set_orientation(const Ogre::Vector3& dir) = 0;
     virtual Ogre::Vector3 linear_velocity() const = 0;
     virtual void set_linear_velocity(const Ogre::Vector3& velocity) = 0;
     virtual Ogre::Vector3 angular_velocity() const = 0;

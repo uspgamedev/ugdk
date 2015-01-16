@@ -28,6 +28,7 @@ class SimpleBody final : public Body {
 
     Ogre::Vector3 position() const override;
     Ogre::Quaternion orientation() const override;
+    void set_orientation(const Ogre::Vector3& dir) override;
     Ogre::Vector3 linear_velocity() const override;
     void set_linear_velocity(const Ogre::Vector3& velocity) override {}
     Ogre::Vector3 angular_velocity() const override;

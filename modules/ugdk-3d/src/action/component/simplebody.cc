@@ -22,6 +22,9 @@ Ogre::Vector3 SimpleBody::position() const {
 Ogre::Quaternion SimpleBody::orientation() const {
     return owner()->node().getOrientation();
 }
+void SimpleBody::set_orientation(const Ogre::Vector3& dir) {
+    owner()->node().setOrientation(Ogre::Vector3::UNIT_Z.getRotationTo(dir));
+}
 
 void SimpleBody::Translate(double move_x, double move_y, double move_z) {
     owner()->node().translate(static_cast<Real>(move_x), static_cast<Real>(move_y), static_cast<Real>(move_z));
