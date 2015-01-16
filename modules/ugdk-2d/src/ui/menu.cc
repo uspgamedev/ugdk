@@ -38,7 +38,7 @@ Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::V
             if (intersecting_uielements->size() > 0)
                 SelectUIElement((*intersecting_uielements)[0]);
         }
-        last_mouse_position_ = mouse_pos;
+        last_mouse_position_ = math::Integer2D(mouse_pos);
         if (input->mouse().IsReleased(input::MouseButton::LEFT))
             this->CheckInteraction(mouse_pos);
         if (input->keyboard().IsReleased(input::Scancode::DOWN))

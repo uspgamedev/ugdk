@@ -5,6 +5,8 @@
 #include "SDL_mixer.h"
 
 #include <ugdk/audio.h>
+#include <ugdk/filesystem.h>
+#include <memory>
 
 namespace ugdk {
 namespace audio {
@@ -51,6 +53,7 @@ class Music {
     ~Music();
     Mix_Music *data_;
     double volume_;
+    std::unique_ptr<ugdk::filesystem::File> file_;
 
     static void UpdateVolume(double vol);
     static void MusicDone();

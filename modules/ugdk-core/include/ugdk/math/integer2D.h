@@ -38,7 +38,7 @@ class Integer2D {
     Integer2D(int _x, int _y) : x(_x), y(_y) {}
 
     /// Copy constructor from ugdk::math::Vector2D.
-    Integer2D(const ugdk::math::Vector2D& vec2d);
+    explicit Integer2D(const ugdk::math::Vector2D& vec2d);
 
     ~Integer2D() { }
 
