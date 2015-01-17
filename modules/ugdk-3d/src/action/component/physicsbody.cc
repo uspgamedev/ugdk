@@ -81,11 +81,15 @@ void PhysicsBody::Translate(double move_x, double move_y, double move_z) {
                                static_cast<btScalar>(move_z)));
 }
 
-void PhysicsBody::Move(double delta_x, double delta_y, double delta_z) {
+void PhysicsBody::ApplyImpulse(double imp_x, double imp_y, double imp_z) {
     body_->activate();
-    body_->applyCentralImpulse(btVector3(static_cast<btScalar>(delta_x), 
-                                         static_cast<btScalar>(delta_y), 
-                                         static_cast<btScalar>(delta_z)));
+    body_->applyCentralImpulse(btVector3(static_cast<btScalar>(imp_x), 
+                                         static_cast<btScalar>(imp_y), 
+                                         static_cast<btScalar>(imp_z)));
+}
+void PhysicsBody::ApplyImpulse(const Ogre::Vector3& imp, const Ogre::Vector3& relative_pos) {
+    body_->activate();
+    body_->applyImpulse(BtOgre::Convert::toBullet(imp), BtOgre::Convert::toBullet(relative_pos));
 }
 
 void PhysicsBody::Rotate(double yaw, double pitch, double roll) {

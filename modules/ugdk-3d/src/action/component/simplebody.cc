@@ -30,8 +30,11 @@ void SimpleBody::Translate(double move_x, double move_y, double move_z) {
     owner()->node().translate(static_cast<Real>(move_x), static_cast<Real>(move_y), static_cast<Real>(move_z));
 }
 
-void SimpleBody::Move(double delta_x, double delta_y, double delta_z) {
-    Translate(delta_x, delta_y, delta_z);
+void SimpleBody::ApplyImpulse(double imp_x, double imp_y, double imp_z) {
+    Translate(imp_x, imp_y, imp_z);
+}
+void SimpleBody::ApplyImpulse(const Ogre::Vector3& imp, const Ogre::Vector3& relative_pos) {
+    ApplyImpulse(imp);
 }
 
 void SimpleBody::Rotate(double yaw, double pitch, double roll) {

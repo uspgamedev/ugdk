@@ -10,8 +10,8 @@ namespace mode3d {
 namespace component {
 
 class SimpleBody final : public Body {
-  public:
-    using Body::Move;
+public:
+    using Body::ApplyImpulse;
 
     SimpleBody(const Ogre::Vector3& initial_pos, const Ogre::Quaternion& initial_dir);
     ~SimpleBody();
@@ -35,7 +35,8 @@ class SimpleBody final : public Body {
     Ogre::Vector3 GetVelocityInPoint(const Ogre::Vector3& point) const override;
 
     void Translate(double move_x, double move_y, double move_z) override;
-    void Move(double delta_x, double delta_y, double delta_z) override;
+    void ApplyImpulse(double imp_x, double imp_y, double imp_z) override;
+    void ApplyImpulse(const Ogre::Vector3& imp, const Ogre::Vector3& relative_pos) override;
     void Rotate(double yaw, double pitch, double roll) override;
     void Scale(double factor_x, double factor_y, double factor_z) override;
 

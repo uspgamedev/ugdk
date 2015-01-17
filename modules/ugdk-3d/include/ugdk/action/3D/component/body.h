@@ -58,10 +58,11 @@ class Body : public Component {
     virtual Ogre::Vector3 GetVelocityInPoint(const Ogre::Vector3& point) const = 0;
 
     void Translate(const Ogre::Vector3& move);
-    void Move(const Ogre::Vector3& delta);
+    void ApplyImpulse(const Ogre::Vector3& imp);
 
     virtual void Translate(double move_x, double move_y, double move_z) = 0;
-    virtual void Move(double delta_x, double delta_y, double delta_z) = 0;
+    virtual void ApplyImpulse(double imp_x, double imp_y, double imp_z) = 0;
+    virtual void ApplyImpulse(const Ogre::Vector3& imp, const Ogre::Vector3& relative_pos) = 0;
     virtual void Rotate(double yaw, double pitch, double roll) = 0;
     virtual void Scale(double factor_x, double factor_y, double factor_z) = 0;
 
@@ -82,8 +83,8 @@ inline void Body::Translate(const Ogre::Vector3 &move) {
     this->Translate(move.x, move.y, move.z);
 }
 
-inline void Body::Move(const Ogre::Vector3 &delta) {
-    this->Move(delta.x, delta.y, delta.z);
+inline void Body::ApplyImpulse(const Ogre::Vector3 &delta) {
+    this->ApplyImpulse(delta.x, delta.y, delta.z);
 }
 
 inline void Body::OnTaken() {}
@@ -93,7 +94,7 @@ class NullComponent<Body> : public Body {
   public:
     const static bool is_valid = true;
     virtual void Translate(double move_x, double move_y, double move_z) override {}
-    virtual void Move(double delta_x, double delta_y, double delta_z) override {}
+    virtual void ApplyImpulse(double delta_x, double delta_y, double delta_z) override {}
     virtual void Rotate(double yaw, double pitch, double roll) override {}
     virtual void Scale(double factor_x, double factor_y, double factor_z) override {}
 };
