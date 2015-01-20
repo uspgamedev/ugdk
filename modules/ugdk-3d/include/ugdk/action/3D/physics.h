@@ -2,6 +2,8 @@
 #define UGDK_ACTION_3D_PHYSICS_H_
 
 #include <functional>
+#include <forward_list>
+#include <memory>
 
 namespace BtOgre {
 class DebugDrawer;
@@ -21,6 +23,7 @@ namespace action {
 namespace mode3d {
 
 class Scene3D;
+class Element;
 namespace component {
 class PhysicsBody;
 }
@@ -35,8 +38,12 @@ public:
     void AddBody(component::PhysicsBody* obj);
     void RemoveBody(component::PhysicsBody* obj);
 
-    void set_debug_draw_enabled(bool enable);
+    /** Performs a spherical contact/collision query on the physics world, returning a list with the objects in contact (inside the sphere). */
+    std::forward_list<std::weak_ptr<Element>> ContactQuery(short collision_groups, const btVector3& pos, double radius);
+
+    /** If physics debug drawing is enabled. If it is, UGDK will render a wireframe model of the collision objects. */
     bool debug_draw_enabled();
+    void set_debug_draw_enabled(bool enable);
 
 private:
     btBroadphaseInterface* broadphase_;

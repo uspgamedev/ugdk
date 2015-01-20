@@ -1,6 +1,7 @@
 #include <ugdk/action/3D/physics.h>
 #include <ugdk/action/3D/component/physicsbody.h>
 #include <ugdk/action/3D/scene3d.h>
+#include <ugdk/debug/log.h>
 
 #include <btBulletDynamicsCommon.h>
 #include <BtOgreExtras.h>
@@ -12,9 +13,9 @@ namespace ugdk {
 namespace action {
 namespace mode3d {
 
+using ugdk::debug::Log;
+using ugdk::debug::LogLevel;
 using component::PhysicsBody;
-
-//void tickCallback(btDynamicsWorld *world, btScalar timeStep);
 
 Physics::Physics(const btVector3& grav, Scene3D* scene) {
     // Broadphase is the initial collision detecting: checks for colliding pairs given their bounding boxes
@@ -64,6 +65,56 @@ void Physics::AddBody(PhysicsBody* obj) {
 }
 void Physics::RemoveBody(PhysicsBody* obj) {
     world_->removeRigidBody(obj->body_);
+}
+
+struct ContactQueryCallback : public btDiscreteDynamicsWorld::ContactResultCallback
+{
+    short col_groups;
+    std::forward_list<std::weak_ptr<Element>> result;
+
+    ContactQueryCallback(short _col_groups) : col_groups(_col_groups) 
+    {
+        m_collisionFilterGroup = _col_groups;
+    }
+
+    virtual	btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap,
+        int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)
+    {
+        PhysicsBody* body;
+        if (colObj0Wrap->getCollisionObject()->getUserPointer() == nullptr) {
+            body = static_cast<PhysicsBody*>(colObj1Wrap->getCollisionObject()->getUserPointer());
+        }
+        else if (colObj1Wrap->getCollisionObject()->getUserPointer() == nullptr) {
+            body = static_cast<PhysicsBody*>(colObj0Wrap->getCollisionObject()->getUserPointer());
+        }
+        else {
+            return 0; // no object is the query sphere
+        }
+        if (!body) {
+            Log(LogLevel::WARNING, "Physics ContactQueryCallback", "got a pair with something which is not a PhysicsBody");
+            return 0;
+        }
+
+        if ( (col_groups & body->collision_group()) == body->collision_group() )
+            result.push_front(body->owner());
+
+        return 0;
+    }
+};
+
+std::forward_list<std::weak_ptr<Element>> Physics::ContactQuery(short collision_groups, const btVector3& pos, double radius) {
+    btCollisionObject* sphere = new btCollisionObject();
+    sphere->setCollisionShape(new btSphereShape(static_cast<btScalar>(radius)));
+    sphere->setWorldTransform(btTransform(btQuaternion::getIdentity(), btVector3(pos.x(), pos.y(), pos.z())));
+    sphere->setUserPointer(nullptr);
+    
+    ContactQueryCallback query(collision_groups);
+    world_->contactTest(sphere, query);
+    
+    delete sphere->getCollisionShape();
+    delete sphere;
+
+    return query.result;
 }
 
 void Physics::set_debug_draw_enabled(bool enable) {
