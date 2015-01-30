@@ -1,11 +1,14 @@
 #ifndef UGDK_RESOURCE_MANAGER_H_
 #define UGDK_RESOURCE_MANAGER_H_
 
+#include <ugdk/resource/resourcecontainer.h>
+#include <ugdk/resource/genericcontainer.h>
+#include <ugdk/system/compatibility.h>
+
 #include <typeindex>
 #include <unordered_map>
 #include <memory>
-#include <ugdk/resource/resourcecontainer.h>
-#include <ugdk/resource/genericcontainer.h>
+#include <utility>
 
 namespace ugdk {
 namespace resource {
