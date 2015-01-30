@@ -36,6 +36,9 @@ disable_disown(ugdk::text::LanguageWord* val)
 
 proxy_class(ugdk::action::Scene)
 
+// SWIG fails really hard at wrapping this.
+%ignore AddContainer(std::type_index type, std::unique_ptr<ResourceContainerBase> container);
+
 %include <ugdk/resource/manager.h>
 %include <ugdk/resource/module.h>
 
