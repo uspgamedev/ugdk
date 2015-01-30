@@ -17,7 +17,10 @@
 // pyramidworks
 #include "PyramidWorksGeometry.cc"
 
-// ugdk::graphic
 #ifndef UGDK_3D_ENABLED
+// ugdk::graphic
 #include "Geometry.cc"
+
+// ugdk::resoucr
+#include "ResourceManager.cc"
 #endif

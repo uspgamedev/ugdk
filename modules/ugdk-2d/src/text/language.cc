@@ -18,7 +18,6 @@
 namespace ugdk {
 namespace text {
 
-using std::map;
 using std::string;
 
 #define STRING_LENGTH 1024
