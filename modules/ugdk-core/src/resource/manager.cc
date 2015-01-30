@@ -5,10 +5,7 @@ namespace resource {
 
 Manager::Manager() {}
 
-Manager::~Manager() {
-    for(const auto& it : containers_)
-        delete it.second;
-}
+Manager::~Manager() {}
 
 } // namespace resource
 } // namespace ugdk

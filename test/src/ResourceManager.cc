@@ -31,9 +31,9 @@ TEST(ResourceManager, AddGetOneResource) {
     A* a = new A;
 
     ugdk::resource::Manager manager;
-    manager.add_container(a);
+    manager.AddContainer<int>(std::unique_ptr<A>(a));
 
-    EXPECT_EQ(a, manager.get_container<int>());
+    EXPECT_EQ(a, manager.GetContainer<int>());
 }
 
 TEST(ResourceManager, AddGetManyResource) {
@@ -43,11 +43,11 @@ TEST(ResourceManager, AddGetManyResource) {
     C* c = new C;
 
     ugdk::resource::Manager manager;
-    manager.add_container(a);
-    manager.add_container(b);
-    manager.add_container(c);
+    manager.AddContainer<int>(std::unique_ptr<A>(a));
+    manager.AddContainer<double>(std::unique_ptr<B>(b));
+    manager.AddContainer<std::string>(std::unique_ptr<C>(c));
 
-    EXPECT_EQ(a, manager.get_container<int>());
-    EXPECT_EQ(b, manager.get_container<double>());
-    EXPECT_EQ(c, manager.get_container<std::string>());
+    EXPECT_EQ(a, manager.GetContainer<int>());
+    EXPECT_EQ(b, manager.GetContainer<double>());
+    EXPECT_EQ(c, manager.GetContainer<std::string>());
 }

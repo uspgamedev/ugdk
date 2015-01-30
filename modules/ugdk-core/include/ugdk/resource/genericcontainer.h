@@ -32,7 +32,7 @@ class GenericContainer : public virtual ResourceContainer<T> {
     GenericContainer(Loader_T loader) : loader_(loader) {}
     virtual ~GenericContainer() {}
 
-    void Insert(const std::string& tag, T val) {
+    void Insert(const std::string& tag, T val) override {
         DataIterator it = database_.find(tag);
         if(it == database_.end()) {
             database_[tag] = val;
@@ -42,20 +42,20 @@ class GenericContainer : public virtual ResourceContainer<T> {
         }
     }
 
-    void Replace(const std::string& tag, T val) {
+    void Replace(const std::string& tag, T val) override {
         database_[tag] = val;
     }
 
-    bool Exists(const std::string& tag) const {
+    bool Exists(const std::string& tag) const override {
         return database_.count(tag) > 0;
     }
 
-    T& Find(const std::string& tag) {
+    T& Find(const std::string& tag) override {
         return database_[tag];
     }
     
     /// Warning: GenericContainer doesn't know how to actually load an object.
-    virtual T& Load(const std::string& filepath, const std::string& tag) {
+    virtual T& Load(const std::string& filepath, const std::string& tag) override {
         if(!Exists(tag)) Insert(tag, loader_(filepath));
         return Find(tag);
     }
@@ -81,7 +81,7 @@ class GenericContainer<T*, T* (*) (const std::string&)> : public virtual Resourc
         }
     }
 
-    void Insert(const std::string& tag, T* val) {
+    void Insert(const std::string& tag, T* val) override {
         DataIterator it = database_.find(tag);
         if(it == database_.end() || it->second == nullptr) {
             database_[tag] = val;
@@ -91,7 +91,7 @@ class GenericContainer<T*, T* (*) (const std::string&)> : public virtual Resourc
         }
     }
 
-    void Replace(const std::string& tag, T* val) {
+    void Replace(const std::string& tag, T* val) override {
         DataIterator it = database_.find(tag);
         if(it == database_.end() || it->second == nullptr) {
             database_[tag] = val;
@@ -101,7 +101,7 @@ class GenericContainer<T*, T* (*) (const std::string&)> : public virtual Resourc
         }
     }
     
-    bool Exists(const std::string& tag) const {
+    bool Exists(const std::string& tag) const override {
         typename DataMap::const_iterator it = database_.find(tag);
         return (it != database_.end() && it->second);
     }
@@ -111,7 +111,7 @@ class GenericContainer<T*, T* (*) (const std::string&)> : public virtual Resourc
     }
     
     /// Uses T::Load(const std::string&) in order to Load a new object.
-    virtual T* Load(const std::string& filepath, const std::string& tag) {
+    virtual T* Load(const std::string& filepath, const std::string& tag) override {
         if(Exists(tag)) return Find(tag);
         T* obj = loader_(filepath);
         debug::DebugConditionalLog(obj != nullptr, debug::LogLevel::ERROR, "UGDK",

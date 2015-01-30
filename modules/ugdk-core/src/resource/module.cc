@@ -2,6 +2,7 @@
 
 #include <ugdk/resource/genericcontainer.h>
 #include <ugdk/structure/indexabletable.h>
+#include <ugdk/system/compatibility.h>
 #include <ugdk/debug/log.h>
 
 #ifndef UGDK_3D_ENABLED
@@ -26,10 +27,11 @@ static T* NullLoad(const std::string& filepath) {
 bool Initialize(Manager* manager) {
     if(manager) {        
 #ifndef UGDK_3D_ENABLED
-        manager->add_container(new GenericContainer<graphic::SpriteAnimationTable*>(graphic::LoadSpriteAnimationTableFromFile));
-        manager->add_container(new GenericContainer<graphic::GLTexture*>(graphic::GLTexture::CreateFromFile));
-        manager->add_container(new GenericContainer<graphic::TextureAtlas*>(graphic::TextureAtlas::LoadFromFile));
-        manager->add_container(new GenericContainer<text::LanguageWord*>(NullLoad<text::LanguageWord>));
+
+        manager->CreateContainer<graphic::SpriteAnimationTable*>(graphic::LoadSpriteAnimationTableFromFile);
+        manager->CreateContainer<graphic::GLTexture*>(graphic::GLTexture::CreateFromFile);
+        manager->CreateContainer<graphic::TextureAtlas*>(graphic::TextureAtlas::LoadFromFile);
+        manager->CreateContainer<text::LanguageWord*>(NullLoad<text::LanguageWord>);
 #endif
 
         // The manager initialized correctly, so we can use it.
@@ -55,27 +57,27 @@ Manager* manager() {
 #ifndef UGDK_3D_ENABLED
 
 graphic::SpriteAnimationTable* GetSpriteAnimationTableFromFile(const std::string& file) {
-    return manager()->get_container<graphic::SpriteAnimationTable*>()->Load(file, file);
+    return manager()->GetContainer<graphic::SpriteAnimationTable*>()->Load(file, file);
 }
 
 graphic::GLTexture* GetTextureFromTag(const std::string& tag) {
-    return manager()->get_container<graphic::GLTexture*>()->Find(tag);
+    return manager()->GetContainer<graphic::GLTexture*>()->Find(tag);
 }
 
 graphic::GLTexture* GetTextureFromFile(const std::string& file) {
-    return manager()->get_container<graphic::GLTexture*>()->Load(file, file);
+    return manager()->GetContainer<graphic::GLTexture*>()->Load(file, file);
 }
 
 graphic::TextureAtlas* GetTextureAtlasFromTag(const std::string& tag) {
-    return manager()->get_container<graphic::TextureAtlas*>()->Find(tag);
+    return manager()->GetContainer<graphic::TextureAtlas*>()->Find(tag);
 }
 
 graphic::TextureAtlas* GetTextureAtlasFromFile(const std::string& file) {
-    return manager()->get_container<graphic::TextureAtlas*>()->Load(file, file);
+    return manager()->GetContainer<graphic::TextureAtlas*>()->Load(file, file);
 }
 
 text::LanguageWord* GetLanguageWord(const std::string& tag) {
-    return manager()->get_container<text::LanguageWord*>()->Find(tag);
+    return manager()->GetContainer<text::LanguageWord*>()->Find(tag);
 }
 
 #endif // UGDK_3D_ENABLED
