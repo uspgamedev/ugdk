@@ -41,7 +41,7 @@ void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset) {
 void SetToRectangleAtOrigin(VertexData& data, const math::Vector2D& size) {
     data.CheckSizes("PrepareVertexDataAsRectangle", 4, sizeof(VertexXYUV));
 
-    VertexData::Mapper mapper(data);
+    VertexData::Mapper mapper(data, false);
 
     VertexXYUV* v1 = mapper.Get<VertexXYUV>(0);
     v1->x = 0.0f;
@@ -75,7 +75,7 @@ void SetToAbsoluteRectangleWithAtlasPiece(VertexData& data,
 
     data.CheckSizes("VertexDataSet", 4, sizeof(VertexXYUV));
 
-    VertexData::Mapper mapper(data);
+    VertexData::Mapper mapper(data, false);
 
     VertexXYUV* v1 = mapper.Get<VertexXYUV>(0);
     v1->x = top_left.x;

@@ -21,7 +21,7 @@ class VertexData {
   public:
     class Mapper {
     public:
-        Mapper(VertexData& data);
+        Mapper(VertexData& data, bool read_from_buffer = true);
         ~Mapper();
 
         void operator=(Mapper&) = delete;

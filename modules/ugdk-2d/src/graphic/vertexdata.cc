@@ -6,11 +6,11 @@
 namespace ugdk {
 namespace graphic {
 
-VertexData::Mapper::Mapper(VertexData& data)
+VertexData::Mapper::Mapper(VertexData& data, bool read_from_buffer)
 : data_(data) 
 {
     data.buffer()->bind();
-    mapped_ = static_cast<uint8*>(data.buffer()->map());
+    mapped_ = static_cast<uint8*>(data.buffer()->map(read_from_buffer));
     internal::AssertNoOpenGLError();
 }
 

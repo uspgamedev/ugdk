@@ -106,7 +106,7 @@ namespace graphic {
 		 *
 		 * @return A pointer to memory which represents the buffer.
 		 */
-		virtual void *map() = 0;
+        virtual void *map(bool read_from_buffer) = 0;
 
 		/**
 		 * Unmap a previously mapped VertexBuffer. The buffer must be unmapped
@@ -184,7 +184,7 @@ namespace graphic {
 			 */
 			Mapper(VertexBuffer& buffer)
 				: buf(buffer)
-			{ elems = buf.map(); }
+			{ elems = buf.map(true); }
 
 			/**
 			 * unmaps the buffer
@@ -238,12 +238,12 @@ namespace graphic {
 		virtual ~VertexArray();
 
 		// Implements VertexBuffer.
-		virtual void *map();
-		virtual void unmap();
-		virtual void bind() const;
-		virtual void unbind() const;
-		virtual void fill(size_t offset, size_t size, const void *data);
-		virtual const void *getPointer(size_t offset) const ;
+        virtual void *map(bool read_from_buffer) override;
+        virtual void unmap() override;
+        virtual void bind() const override;
+        virtual void unbind() const override;
+        virtual void fill(size_t offset, size_t size, const void *data) override;
+        virtual const void *getPointer(size_t offset) const override;
 
 	private:
 		// Holds the data.
@@ -273,12 +273,12 @@ namespace graphic {
 		virtual ~VBO();
 
 		// Implements VertexBuffer.
-		virtual void *map();
-		virtual void unmap();
-		virtual void bind() const;
-		virtual void unbind() const;
-		virtual void fill(size_t offset, size_t size, const void *data);
-		virtual const void *getPointer(size_t offset) const ;
+        virtual void *map(bool read_from_buffer) override;
+        virtual void unmap() override;
+        virtual void bind() const override;
+        virtual void unbind() const override;
+        virtual void fill(size_t offset, size_t size, const void *data) override;
+        virtual const void *getPointer(size_t offset) const override;
 
 		// Implements Volatile.
 		bool loadVolatile();

@@ -99,7 +99,7 @@ namespace graphic {
 		delete [] buf;
 	}
 
-	void *VertexArray::map()
+    void *VertexArray::map(bool read_from_buffer)
 	{
 		return buf;
 	}
@@ -150,7 +150,7 @@ namespace graphic {
 			unload(false);
 	}
 
-	void *VBO::map()
+    void *VBO::map(bool read_from_buffer)
 	{
 		// mapping twice could result in memory leaks
 		if (mapped)
@@ -160,8 +160,10 @@ namespace graphic {
 		if (!mapped)
             throw system::BaseException("Out of memory (oh the humanity!)");
     
-		glGetBufferSubData(getTarget(), 0, getSize(), mapped);
-        ugdk::internal::AssertNoOpenGLError();
+        if (read_from_buffer) {
+            glGetBufferSubData(getTarget(), 0, getSize(), mapped);
+            ugdk::internal::AssertNoOpenGLError();
+        }
 
 		return mapped;
 	}
@@ -243,7 +245,7 @@ namespace graphic {
 			GLint size;
 			glGetBufferParameteriv(getTarget(), GL_BUFFER_SIZE, &size);
 
-			const char *src = static_cast<char *>(map());
+			const char *src = static_cast<char *>(map(true));
 
 			if (src)
 			{
