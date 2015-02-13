@@ -21,6 +21,10 @@ void Primitive::set_controller(std::unique_ptr<PrimitiveController>&& controller
 
 #ifdef _MSC_VER
 #if _MSC_VER <= 1800
+Primitive::Primitive(Primitive&& primitive) {
+    *this = std::move(primitive);
+}
+
 Primitive& Primitive::operator=(Primitive&& primitive) {
     texture_ = primitive.texture_;
     vertexdata_ = primitive.vertexdata_;
