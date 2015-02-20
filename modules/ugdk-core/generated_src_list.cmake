@@ -98,7 +98,6 @@ modules/ugdk-core/include/ugdk/math/frame.h
 modules/ugdk-core/include/ugdk/math/integer2D.h
 modules/ugdk-core/include/ugdk/math/vector2D.h
 modules/ugdk-core/include/ugdk/resource.h
-modules/ugdk-core/include/ugdk/resource/genericcontainer.h
 modules/ugdk-core/include/ugdk/resource/manager.h
 modules/ugdk-core/include/ugdk/resource/module.h
 modules/ugdk-core/include/ugdk/resource/resourcecontainer.h

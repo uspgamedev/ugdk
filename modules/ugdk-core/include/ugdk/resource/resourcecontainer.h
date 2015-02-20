@@ -2,40 +2,96 @@
 #define UGDK_RESOURCE_RESOURCECONTAINER_H_
 
 #include <string>
+#include <memory>
+#include <unordered_map>
+
+#ifdef DEBUG
+#include <cstdio>
+#include <typeinfo>
+#define TOSTRING(X) typeid(X).name()
+#else
+#define TOSTRING(X) "<UNKTYPE>"
+#endif
+
+#include <ugdk/system/config.h>
+#include <ugdk/debug/log.h>
 
 namespace ugdk {
 namespace resource {
 
-class ResourceContainerBase {
-  protected: ResourceContainerBase() {}
-  public:    virtual ~ResourceContainerBase() {}
-};
-
 template <class T>
-class ResourceContainer : public ResourceContainerBase {
-  protected: ResourceContainer() {}
+class ResourceContainer {
   public:
-    virtual ~ResourceContainer() {}
+    static ResourceContainer* Get() {
+        return Storage().get();
+    }
+    static void Clear() {
+        Storage().reset();
+    }
+    template<class ...Args>
+    static void Create(Args... args) {
+        Storage().reset(new ResourceContainer(std::forward<Args>(args)...));
+    }
 
-    virtual void Insert( const std::string& tag, T val) = 0;
-    virtual void Replace(const std::string& tag, T val) = 0;
-    virtual bool Exists( const std::string& tag) const = 0;
-    virtual T&   Find(   const std::string& tag) = 0;
-    virtual T&   Load(   const std::string& filepath, const std::string& tag) = 0;
+    ~ResourceContainer() {}
+
+    void Insert(const std::string& tag, T* val);
+    void Replace(const std::string& tag, T* val);
+    bool Exists(const std::string& tag) const;
+    T*   Find(const std::string& tag);
+    T*   Load(const std::string& filepath, const std::string& tag);
+
+  protected:
+    static std::unique_ptr<ResourceContainer>& Storage() {
+        static std::unique_ptr<ResourceContainer> ptr;
+        return ptr;
+    }
+
+  private:
+    using DataMap = std::unordered_map < std::string, std::unique_ptr<T> >;
+    using Loader_T = T* (*)(const std::string&);
+
+    DataMap database_;
+    Loader_T loader_;
+
+    ResourceContainer() : loader_(T::LoadFromFile) {}
+    ResourceContainer(Loader_T loader) : loader_(loader) {}
 };
 
-template <class T>
-class ResourceContainer<T*> : public ResourceContainerBase {
-  protected: ResourceContainer() {}
-  public:
-    virtual ~ResourceContainer() {}
+template<class T>
+void ResourceContainer<T>::Insert(const std::string& tag, T* val) {
+    auto& pos = database_[tag];
+    debug::DebugConditionalLog(!pos, debug::LogLevel::ERROR, "UGDK",
+                               "ResourceContainer<", TOSTRING(T), "> - Tag '", tag, "' already exists.");
+    pos.reset(val);
+}
 
-    virtual void Insert( const std::string& tag, T* val) = 0;
-    virtual void Replace(const std::string& tag, T* val) = 0;
-    virtual bool Exists( const std::string& tag) const = 0;
-    virtual T*   Find(   const std::string& tag) = 0;
-    virtual T*   Load(   const std::string& filepath, const std::string& tag) = 0;
-};
+template<class T>
+void ResourceContainer<T>::Replace(const std::string& tag, T* val) {
+    database_[tag].reset(val);
+}
+
+template<class T>
+bool ResourceContainer<T>::Exists(const std::string& tag) const {
+    typename DataMap::const_iterator it = database_.find(tag);
+    return (it != database_.end() && it->second);
+}
+
+template<class T>
+T* ResourceContainer<T>::Find(const std::string& tag) {
+    return database_[tag].get();
+}
+
+/// Uses T::Load(const std::string&) in order to Load a new object.
+template<class T>
+T* ResourceContainer<T>::Load(const std::string& filepath, const std::string& tag) {
+    if (Exists(tag)) return Find(tag);
+    T* obj = loader_(filepath);
+    debug::DebugConditionalLog(obj != nullptr, debug::LogLevel::ERROR, "UGDK",
+                                "GenericContainer<", TOSTRING(T), "> - loader_ for '", tag, "' returned nullptr.");
+    Insert(tag, obj);
+    return obj;
+}
 
 } // namespace resource
 } // namespace ugdk

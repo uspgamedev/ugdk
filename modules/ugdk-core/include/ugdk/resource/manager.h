@@ -2,13 +2,10 @@
 #define UGDK_RESOURCE_MANAGER_H_
 
 #include <ugdk/resource/resourcecontainer.h>
-#include <ugdk/resource/genericcontainer.h>
 #include <ugdk/system/compatibility.h>
 
-#include <typeindex>
-#include <unordered_map>
-#include <memory>
 #include <utility>
+#include <vector>
 
 namespace ugdk {
 namespace resource {
@@ -18,31 +15,20 @@ class Manager {
     Manager();
     ~Manager();
     
-    void AddContainer(std::type_index type, std::unique_ptr<ResourceContainerBase> container) {
-        containers_[type] = std::move(container);
-    }
-
-    template <class T>
-    void AddContainer(std::unique_ptr<ResourceContainer<T>> container) {
-        AddContainer(typeid(T), std::move(container));
-    }
-
     template <class T, class ...Args>
     void CreateContainer(Args... args) {
-        containers_[typeid(T)] = MakeUnique<GenericContainer<T>>(std::forward<Args>(args)...);
+        ResourceContainer<T>::Create(std::forward<Args>(args)...);
+        clear_functions_.push_back(&ResourceContainer<T>::Clear);
     }
 
 
     template <class T>
     ResourceContainer<T>* GetContainer() const {
-        auto base = containers_.find(typeid(T));
-        if(base == containers_.end())
-            return nullptr;
-        return dynamic_cast<ResourceContainer<T>*>(base->second.get());
+        return ResourceContainer<T>::Get();
     }
     
   private:
-    std::unordered_map<std::type_index, std::unique_ptr<ResourceContainerBase>> containers_;
+    std::vector<void(*)(void)> clear_functions_;
 };
 
 } // namespace resource
