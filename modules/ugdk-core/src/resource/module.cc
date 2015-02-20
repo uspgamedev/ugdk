@@ -16,13 +16,6 @@ namespace resource {
 
 static Manager* reference_ = NULL;
 
-template <class T>
-static T* NullLoad(const std::string& filepath) {
-    debug::DebugLog(debug::LogLevel::WARNING, "UGDK",
-                    "NullLoad<", TOSTRING(T), "> called with path '", filepath, "'");
-    return nullptr;
-}
-
 bool Initialize(Manager* manager) {
     if(manager) {        
 #ifndef UGDK_3D_ENABLED

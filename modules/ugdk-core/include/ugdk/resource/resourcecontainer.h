@@ -93,6 +93,13 @@ T* ResourceContainer<T>::Load(const std::string& filepath, const std::string& ta
     return obj;
 }
 
+template <class T>
+inline T* NullLoad(const std::string& filepath) {
+    debug::DebugLog(debug::LogLevel::WARNING, "UGDK",
+                    "NullLoad<", TOSTRING(T), "> called with path '", filepath, "'");
+    return nullptr;
+}
+
 } // namespace resource
 } // namespace ugdk
 

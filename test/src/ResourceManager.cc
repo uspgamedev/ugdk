@@ -3,51 +3,39 @@
 #include <ugdk/resource/manager.h>
 #include <ugdk/resource/resourcecontainer.h>
 
+#include <functional>
+
 namespace resourcemanager_test {
-    static int zero = 0;
+    class First {};
 
-    template<class Dummy>
-    struct DummyContainer : ugdk::resource::ResourceContainer<Dummy> {
+    class CallOnDestroy {
+    public:
+        CallOnDestroy(std::function<void(void)> f) : f_(f) {}
+        ~CallOnDestroy() { f_(); }
 
-        static Dummy& default_value() {
-            static Dummy value;
-            return value;
-        }
-
-        void Insert(const std::string& tag, Dummy val) override {}
-        void Replace(const std::string& tag, Dummy val) override {}
-        bool Exists(const std::string& tag) const override { return false; }
-        Dummy&   Find(const std::string& tag) override { return default_value(); }
-        Dummy&   Load(const std::string& filepath, const std::string& tag) override { return default_value(); }
+    private:
+        std::function<void(void)> f_;
     };
-
-    using A = DummyContainer < int > ;
-    using B = DummyContainer < double >;
-    using C = DummyContainer < std::string >;
 }
 
-TEST(ResourceManager, AddGetOneResource) {
-    using namespace resourcemanager_test;
-    A* a = new A;
-
+TEST(ResourceManager, CreateContainer) {
     ugdk::resource::Manager manager;
-    manager.AddContainer<int>(std::unique_ptr<A>(a));
+    manager.CreateContainer<resourcemanager_test::First>(&ugdk::resource::NullLoad<resourcemanager_test::First>);
 
-    EXPECT_EQ(a, manager.GetContainer<int>());
+    EXPECT_TRUE(manager.GetContainer<resourcemanager_test::First>() != nullptr);
 }
 
-TEST(ResourceManager, AddGetManyResource) {
+TEST(ResourceManager, Destructor) {
     using namespace resourcemanager_test;
-    A* a = new A;
-    B* b = new B;
-    C* c = new C;
 
-    ugdk::resource::Manager manager;
-    manager.AddContainer<int>(std::unique_ptr<A>(a));
-    manager.AddContainer<double>(std::unique_ptr<B>(b));
-    manager.AddContainer<std::string>(std::unique_ptr<C>(c));
-
-    EXPECT_EQ(a, manager.GetContainer<int>());
-    EXPECT_EQ(b, manager.GetContainer<double>());
-    EXPECT_EQ(c, manager.GetContainer<std::string>());
+    bool destroyed_ = false;
+    {
+        ugdk::resource::Manager manager;
+        manager.CreateContainer<CallOnDestroy>(&ugdk::resource::NullLoad<CallOnDestroy>);
+        ASSERT_TRUE(manager.GetContainer<CallOnDestroy>() != nullptr);
+        manager.GetContainer<CallOnDestroy>()->Insert("Random", new CallOnDestroy([&] {
+            destroyed_ = true;
+        }));
+    }
+    EXPECT_TRUE(destroyed_);
 }
