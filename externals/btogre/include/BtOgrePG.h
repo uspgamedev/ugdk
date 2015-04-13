@@ -32,7 +32,7 @@ class RigidBodyState : public btMotionState {
                     const btTransform &offset = btTransform::getIdentity(),
                     bool only_position = false)
         : transform_(transform), center_of_mass_offset_(offset), node_(node),
-          only_position_(only_position) {}
+          apply_orientation_(only_position) {}
 
     RigidBodyState (Ogre::SceneNode *node, bool only_position = false)
         : transform_(((node != NULL) ? BtOgre::Convert::toBullet(node->getOrientation())
@@ -40,7 +40,7 @@ class RigidBodyState : public btMotionState {
                      ((node != NULL) ? BtOgre::Convert::toBullet(node->getPosition())
                                      : btVector3(0,0,0))),
           center_of_mass_offset_(btTransform::getIdentity()),
-          node_(node), only_position_(only_position) {}
+          node_(node), apply_orientation_(only_position) {}
 
     virtual void getWorldTransform(btTransform &ret) const {
         ret = transform_;
@@ -53,7 +53,7 @@ class RigidBodyState : public btMotionState {
         transform_ = in;
         btTransform transform = in * center_of_mass_offset_;
 
-        if (!only_position_) {
+        if (apply_orientation_) {
             btQuaternion rot = transform.getRotation();
             node_->setOrientation(rot.w(), rot.x(), rot.y(), rot.z());
         }
@@ -71,7 +71,7 @@ class RigidBodyState : public btMotionState {
     btTransform     center_of_mass_offset_;
 
     Ogre::SceneNode *node_;
-    bool            only_position_;
+    bool            apply_orientation_;
 };
 
 //Softbody-Ogre connection goes here!

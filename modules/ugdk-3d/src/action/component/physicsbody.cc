@@ -125,7 +125,7 @@ void PhysicsBody::OnTaken() {
     using BtOgre::RigidBodyState;
     RigidBodyState* motion_state = new RigidBodyState(&owner()->node(), physics_data_.initial,
                                                       physics_data_.offset,
-                                                      !physics_data_.apply_orientation);
+                                                      physics_data_.apply_orientation);
 
     btVector3 inertia(0,0,0);
     if (physics_data_.mass > 0.0)
