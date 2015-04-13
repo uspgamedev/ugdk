@@ -19,6 +19,7 @@ PhysicsBody::PhysicsData::PhysicsData() {
     auto identity = BtOgre::Convert::toBullet(Ogre::Quaternion::IDENTITY);
     initial = btTransform(identity, btVector3(0, 0, 0));
     offset = btTransform(identity, btVector3(0, 0, 0));
+    apply_orientation = true;
 }
 
 PhysicsBody::~PhysicsBody() {
@@ -121,17 +122,18 @@ void PhysicsBody::set_damping(double linear, double angular) {
 }
 
 void PhysicsBody::OnTaken() {
-    BtOgre::RigidBodyState* motionState = new BtOgre::RigidBodyState(&owner()->node(),
-                                                                     physics_data_.initial,
-                                                                     physics_data_.offset);
+    using BtOgre::RigidBodyState;
+    RigidBodyState* motion_state = new RigidBodyState(&owner()->node(), physics_data_.initial,
+                                                      physics_data_.offset,
+                                                      physics_data_.apply_orientation);
 
     btVector3 inertia(0,0,0);
     if (physics_data_.mass > 0.0)
         physics_data_.shape->calculateLocalInertia(static_cast<btScalar>(physics_data_.mass),
                                                    inertia);
-    btRigidBody::btRigidBodyConstructionInfo bodyInfo(static_cast<btScalar>(physics_data_.mass),
-                                                      motionState, physics_data_.shape, inertia);
-    body_ = new btRigidBody(bodyInfo);
+    btRigidBody::btRigidBodyConstructionInfo body_info(static_cast<btScalar>(physics_data_.mass),
+                                                      motion_state, physics_data_.shape, inertia);
+    body_ = new btRigidBody(body_info);
     body_->setLinearFactor(btVector3(1,1,1));
     body_->setActivationState(DISABLE_DEACTIVATION);
     body_->setUserPointer(this);
