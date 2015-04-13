@@ -25,53 +25,53 @@ namespace BtOgre {
 
 //A MotionState is Bullet's way of informing you about updates to an object.
 //Pass this MotionState to a btRigidBody to have your SceneNode updated automaticaly.
-class RigidBodyState : public btMotionState
-{
-    protected:
-        btTransform mTransform;
-        btTransform mCenterOfMassOffset;
+class RigidBodyState : public btMotionState {
 
-        Ogre::SceneNode *mNode;
+  public:
+    RigidBodyState (Ogre::SceneNode *node, const btTransform &transform,
+                    const btTransform &offset = btTransform::getIdentity(),
+                    bool only_position = false)
+        : transform_(transform), center_of_mass_offset_(offset), node_(node),
+          only_position_(only_position) {}
 
-    public:
-        RigidBodyState(Ogre::SceneNode *node, const btTransform &transform, const btTransform &offset = btTransform::getIdentity())
-            : mTransform(transform),
-              mCenterOfMassOffset(offset),
-              mNode(node)
-        {
-        }
+    RigidBodyState (Ogre::SceneNode *node, bool only_position = false)
+        : transform_(((node != NULL) ? BtOgre::Convert::toBullet(node->getOrientation())
+                                     : btQuaternion(0,0,0,1)),
+                     ((node != NULL) ? BtOgre::Convert::toBullet(node->getPosition())
+                                     : btVector3(0,0,0))),
+          center_of_mass_offset_(btTransform::getIdentity()),
+          node_(node), only_position_(only_position) {}
 
-        RigidBodyState(Ogre::SceneNode *node)
-            : mTransform(((node != NULL) ? BtOgre::Convert::toBullet(node->getOrientation()) : btQuaternion(0,0,0,1)),
-                         ((node != NULL) ? BtOgre::Convert::toBullet(node->getPosition())    : btVector3(0,0,0))),
-              mCenterOfMassOffset(btTransform::getIdentity()),
-              mNode(node)
-        {
-        }
+    virtual void getWorldTransform(btTransform &ret) const {
+        ret = transform_;
+    }
 
-        virtual void getWorldTransform(btTransform &ret) const
-        {
-            ret = mTransform;
-        }
+    virtual void setWorldTransform(const btTransform &in) {
+        if (node_ == NULL)
+            return;
 
-        virtual void setWorldTransform(const btTransform &in)
-        {
-            if (mNode == NULL)
-                return;
+        transform_ = in;
+        btTransform transform = in * center_of_mass_offset_;
 
-            mTransform = in;
-            btTransform transform = in * mCenterOfMassOffset;
-
+        if (!only_position_) {
             btQuaternion rot = transform.getRotation();
-            btVector3 pos = transform.getOrigin();
-            mNode->setOrientation(rot.w(), rot.x(), rot.y(), rot.z());
-            mNode->setPosition(pos.x(), pos.y(), pos.z());
+            node_->setOrientation(rot.w(), rot.x(), rot.y(), rot.z());
         }
+        btVector3 pos = transform.getOrigin();
+        node_->setPosition(pos.x(), pos.y(), pos.z());
+    }
 
-        void setNode(Ogre::SceneNode *node)
-        {
-            mNode = node;
-        }
+    void setNode(Ogre::SceneNode *node) {
+        node_ = node;
+    }
+
+  protected:
+
+    btTransform     transform_;
+    btTransform     center_of_mass_offset_;
+
+    Ogre::SceneNode *node_;
+    bool            only_position_;
 };
 
 //Softbody-Ogre connection goes here!

@@ -33,7 +33,8 @@ class PhysicsBody final : public Body {
         btTransform initial;
         /** offset to center of mass */
         btTransform offset;
-
+        /** wheter orientation is applied to Ogre's node or not */
+        bool apply_orientation;
         PhysicsData();
     };
 
