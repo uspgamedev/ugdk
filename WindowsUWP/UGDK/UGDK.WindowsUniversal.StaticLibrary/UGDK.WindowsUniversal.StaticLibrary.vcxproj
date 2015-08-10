@@ -219,6 +219,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\externals\sdl2\WindowsUWP\SDL-UWP.vcxproj">
+      <Project>{c8df6173-06a1-4f56-a9bc-2002596b30e9}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\..\packages\ANGLE.WindowsStore.2.1.2\build\native\ANGLE.WindowsStore.targets" Condition="Exists('..\..\packages\ANGLE.WindowsStore.2.1.2\build\native\ANGLE.WindowsStore.targets')" />
