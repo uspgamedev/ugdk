@@ -1,0 +1,7 @@
+/ipch
+/.vs
+*.sdf
+*.opensdf
+*.vcxproj.filters
+/Output/
+/Objs/
