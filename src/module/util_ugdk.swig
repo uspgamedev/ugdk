@@ -19,6 +19,8 @@
 #pragma warning( push )
 #pragma warning( disable : 4267 )
 #pragma warning( disable : 4701 )
+#pragma warning( disable : 4456 )
+#pragma warning( disable : 4459 )
 #endif
 
 %}
