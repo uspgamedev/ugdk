@@ -1,0 +1,666 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ugdk-core">
+      <UniqueIdentifier>{899cda79-4067-4044-ad22-8a86a5e6fad0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ugdk-2d">
+      <UniqueIdentifier>{4e42cb5f-2371-490f-a0b1-c881354e4828}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ugdk-script">
+      <UniqueIdentifier>{21cfb6d5-9be5-4c9e-990a-5c311939f4d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ugdk-script\lua">
+      <UniqueIdentifier>{d9a2581b-067a-4a4a-ab24-040f0bb141b7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\action\mediaplayer.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\action\scene.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\audio\audio-manager.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\audio\audio-module.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\audio\music.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\audio\sample.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\debug\log.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\debug\profiler.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\desktop\desktop-manager.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\desktop\desktop-module.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\desktop\windowsettings.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\filesystem\file.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\filesystem\filesystem-manager.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\filesystem\filesystem-module.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\filesystem\sdlfile.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\input\input-manager.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\input\input-module.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\input\joystick.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\input\joystickstatus.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\input\keyboard.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\input\keycode.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\input\mouse.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\input\textinput.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\math\frame.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\math\integer2D.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\math\vector2D.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\pyramidworks\collision\collisionclass.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\pyramidworks\collision\collisionmanager.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\pyramidworks\collision\collisionobject.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\pyramidworks\geometry\circle.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\pyramidworks\geometry\convexpolygon.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\pyramidworks\geometry\rect.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\resource\resource-manager.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\resource\resource-module.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\system\configuration.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\system\engine.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\system\exceptions.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\system\taskplayer.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\time\time-manager.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\time\time-module.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\time\timeaccumulator.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\util\idgenerator.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\util\utf8.cc">
+      <Filter>ugdk-core</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\desktop\desktop2d-manager.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\desktop\window.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\canvas.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\defaultshaders.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\drawmode.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\gltexture.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\graphic-manager.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\graphic-module.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\light.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\pixelsurface.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\primitive.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\primitivecontroller.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\primitivesetup.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\rendertarget.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\rendertexture.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\shader.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\shaderprogram.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\sprite.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\spritetypes.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\textureatlas.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\textureunit.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\vertexbuffer.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\vertexdata.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\text\font.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\text\functions.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\text\label.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\text\language.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\text\languageword.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\text\text-manager.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\text\text-module.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\text\textbox.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\ui\button.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\ui\drawable\texturedrectangle.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\ui\drawable\uiprimitive.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\ui\menu.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\ui\node.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\ui\uielement.cc">
+      <Filter>ugdk-2d</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-script\src\initscripts.cc">
+      <Filter>ugdk-script</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-script\src\scriptmanager.cc">
+      <Filter>ugdk-script</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-script\src\virtualobj.cc">
+      <Filter>ugdk-script</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-script\src\languages\lua\basegear.cc">
+      <Filter>ugdk-script\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-script\src\languages\lua\bootstrapgear.cc">
+      <Filter>ugdk-script\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-script\src\languages\lua\datagear.cc">
+      <Filter>ugdk-script\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-script\src\languages\lua\luadata.cc">
+      <Filter>ugdk-script\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-script\src\languages\lua\luamodules.cc">
+      <Filter>ugdk-script\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-script\src\languages\lua\luawrapper.cc">
+      <Filter>ugdk-script\lua</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\filesystem\sdlfile.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\src\system\sdleventhandler.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\pyramidworks\collision\collisionclass.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\pyramidworks\collision\collisiondata.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\pyramidworks\collision\collisionmanager.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\pyramidworks\collision\collisionobject.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\pyramidworks\collision.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\pyramidworks\geometry\circle.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\pyramidworks\geometry\convexpolygon.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\pyramidworks\geometry\geometricshape.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\pyramidworks\geometry\rect.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\pyramidworks\geometry.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\action\animationplayer.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\action\events.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\action\mediamanager.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\action\mediaplayer.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\action\observer.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\action\scene.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\action.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\audio\manager.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\audio\module.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\audio\music.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\audio\sample.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\audio.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\debug\log.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\debug\profiler.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\debug.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\desktop\manager.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\desktop\module.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\desktop\window.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\desktop\windowsettings.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\desktop.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\filesystem\file.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\filesystem\manager.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\filesystem\module.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\filesystem.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\graphic.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\events.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\joystick.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\joystickstatus.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\keyboard.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\keycode.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\manager.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\module.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\mouse.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\mousebutton.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\scancode.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input\textinput.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\input.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\math\frame.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\math\integer2D.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\math\vector2D.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\math.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\resource\manager.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\resource\module.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\resource\resourcecontainer.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\resource.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\script.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\structure\box.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\structure\indexabletable.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\structure\intervalkdtree.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\structure\types.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\structure\vertex.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\structure.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\system\compatibility.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\system\configuration.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\system\engine.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\system\eventhandler.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\system\exceptions.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\system\task.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\system\taskplayer.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\system.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\text.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\time\manager.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\time\module.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\time\timeaccumulator.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\time.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\ui.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\util\idgenerator.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\util\uncopyable.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\util\utf8.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-core\include\ugdk\util.h">
+      <Filter>ugdk-core</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\gltexture.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\pixelsurface.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\src\graphic\vertexbuffer.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\desktop\2D\manager.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\desktop\2D\window.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\canvas.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\defaultshaders.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\drawmode.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\exceptions.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\geometry.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\light.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\manager.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\module.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\opengl.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\primitive.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\primitivecontroller.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\primitivesetup.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\rendertarget.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\rendertexture.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\shader.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\shaderprogram.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\sprite.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\spriteanimationframe.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\spritetypes.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\textureatlas.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\textureunit.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\vertexdata.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\graphic\visualeffect.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\text\font.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\text\functions.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\text\label.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\text\language.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\text\languageword.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\text\manager.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\text\module.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\text\textbox.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\ui\button.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\ui\drawable\primitive.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\ui\drawable\texturedrectangle.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\ui\drawable.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\ui\hookpoint.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\ui\menu.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\ui\node.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\modules\ugdk-2d\include\ugdk\ui\uielement.h">
+      <Filter>ugdk-2d</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
