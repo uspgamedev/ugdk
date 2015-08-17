@@ -102,37 +102,45 @@
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,9 +150,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,9 +164,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|arm'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1;%(ClCompile.PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -166,9 +178,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|arm'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1;%(ClCompile.PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -178,9 +192,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -190,9 +206,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)/</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
