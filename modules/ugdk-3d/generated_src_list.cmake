@@ -7,7 +7,7 @@ modules/ugdk-3d/src/action/component/view.cc
 modules/ugdk-3d/src/action/element.cc
 modules/ugdk-3d/src/action/physics.cc
 modules/ugdk-3d/src/action/scene3d.cc
-modules/ugdk-3d/src/desktop/manager.cc
+modules/ugdk-3d/src/desktop/desktop3d-manager.cc
 modules/ugdk-3d/src/desktop/window.cc
 )
 SET(GENERATED_HEADERS
