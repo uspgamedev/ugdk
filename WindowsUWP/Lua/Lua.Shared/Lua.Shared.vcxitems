@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{F4861C4E-61A8-4CB3-9B96-F5A523B248E1}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lapi.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lauxlib.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lcode.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ldebug.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ldo.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lfunc.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lgc.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\llex.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\llimits.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lmem.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lobject.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lopcodes.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lparser.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lstate.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lstring.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ltable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ltm.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lua.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\luaconf.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lualib.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lundump.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lvm.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lzio.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lapi.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lauxlib.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lbaselib.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lcode.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ldblib.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ldebug.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ldo.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ldump.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lfunc.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lgc.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\linit.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\liolib.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\llex.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lmathlib.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lmem.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\loadlib.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lobject.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lopcodes.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\loslib.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lparser.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lstate.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lstring.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lstrlib.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ltable.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ltablib.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\ltm.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lua.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\luac.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lundump.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lvm.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\lzio.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\lua-5.1\src\print.c" />
+  </ItemGroup>
+</Project>
