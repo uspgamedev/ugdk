@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Glew\Glew.Android.StaticLibrary\Glew.Android.StaticLibrary.vcxproj">
+      <Project>{7ebb0069-9dba-45a3-a343-9848241dda13}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\Json\Json.Android.StaticLibrary\Json.Android.StaticLibrary.vcxproj">
       <Project>{25e145ed-ddcf-4716-88ec-1314863fbe1e}</Project>
     </ProjectReference>

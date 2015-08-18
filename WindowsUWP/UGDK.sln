@@ -50,6 +50,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Freetype.Shared", "Freetype
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Freetype.WindowsUniversal.StaticLibrary", "Freetype\Freetype.WindowsUniversal.StaticLibrary\Freetype.WindowsUniversal.StaticLibrary.vcxproj", "{8DD66271-1B6F-419C-BE43-3AF6A7D422E8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Glew", "Glew", "{286C0741-B492-4307-86BB-E434A41F0283}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glew.Shared", "Glew\Glew.Shared\Glew.Shared.vcxitems", "{3E63DB66-B4E4-471F-8BCF-B3FC445E4B42}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glew.Android.StaticLibrary", "Glew\Glew.Android.StaticLibrary\Glew.Android.StaticLibrary.vcxproj", "{7EBB0069-9DBA-45A3-A343-9848241DDA13}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glew.iOS.StaticLibrary", "Glew\Glew.iOS.StaticLibrary\Glew.iOS.StaticLibrary.vcxproj", "{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glew.WindowsUniversal.StaticLibrary", "Glew\Glew.WindowsUniversal.StaticLibrary\Glew.WindowsUniversal.StaticLibrary.vcxproj", "{29630415-D44B-4B88-93BD-084BA4139B5B}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Freetype\Freetype.Shared\Freetype.Shared.vcxitems*{aecf8592-365f-4411-8b79-158d92adc40a}*SharedItemsImports = 9
@@ -60,12 +70,16 @@ Global
 		Json\Json.Shared\Json.Shared.vcxitems*{8ea91e85-b972-4887-a90a-d68cb0f573ae}*SharedItemsImports = 4
 		Json\Json.Shared\Json.Shared.vcxitems*{25e145ed-ddcf-4716-88ec-1314863fbe1e}*SharedItemsImports = 4
 		Freetype\Freetype.Shared\Freetype.Shared.vcxitems*{f61945be-1109-4775-8061-133d56ecb441}*SharedItemsImports = 4
+		Glew\Glew.Shared\Glew.Shared.vcxitems*{29630415-d44b-4b88-93bd-084ba4139b5b}*SharedItemsImports = 4
 		Json\Json.Shared\Json.Shared.vcxitems*{3888d0f2-6349-431c-bb59-53a4f906ba39}*SharedItemsImports = 9
 		UGDK\UGDK.Shared\UGDK.Shared.vcxitems*{57ef1bf6-585a-4548-a997-04b458c2c63b}*SharedItemsImports = 4
 		Json\Json.Shared\Json.Shared.vcxitems*{ceb0220b-34b2-4d3c-a1d5-eb90d25bbaa6}*SharedItemsImports = 4
+		Glew\Glew.Shared\Glew.Shared.vcxitems*{3e63db66-b4e4-471f-8bcf-b3fc445e4b42}*SharedItemsImports = 9
 		Freetype\Freetype.Shared\Freetype.Shared.vcxitems*{bb78c21b-140e-4bbd-9ca0-f04ede4ff039}*SharedItemsImports = 4
 		Lua\Lua.Shared\Lua.Shared.vcxitems*{f4861c4e-61a8-4cb3-9b96-f5a523b248e1}*SharedItemsImports = 9
 		UGDK\UGDK.Shared\UGDK.Shared.vcxitems*{74ba2ad8-ba52-4f97-8198-a73abc86fe51}*SharedItemsImports = 4
+		Glew\Glew.Shared\Glew.Shared.vcxitems*{ed5659e8-87a4-4215-b407-1a3a0d8fdf6d}*SharedItemsImports = 4
+		Glew\Glew.Shared\Glew.Shared.vcxitems*{7ebb0069-9dba-45a3-a343-9848241dda13}*SharedItemsImports = 4
 		Lua\Lua.Shared\Lua.Shared.vcxitems*{e9561ce6-a71d-45db-b44a-30c234dee56a}*SharedItemsImports = 4
 		Lua\Lua.Shared\Lua.Shared.vcxitems*{0746bd3e-3603-4d7a-9ecf-4e555c6b9c97}*SharedItemsImports = 4
 	EndGlobalSection
@@ -218,6 +232,38 @@ Global
 		{8DD66271-1B6F-419C-BE43-3AF6A7D422E8}.Release|x64.Build.0 = Release|x64
 		{8DD66271-1B6F-419C-BE43-3AF6A7D422E8}.Release|x86.ActiveCfg = Release|Win32
 		{8DD66271-1B6F-419C-BE43-3AF6A7D422E8}.Release|x86.Build.0 = Release|Win32
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13}.Debug|ARM.ActiveCfg = Debug|ARM
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13}.Debug|ARM.Build.0 = Debug|ARM
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13}.Debug|x64.ActiveCfg = Debug|x86
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13}.Debug|x86.ActiveCfg = Debug|x86
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13}.Debug|x86.Build.0 = Debug|x86
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13}.Release|ARM.ActiveCfg = Release|ARM
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13}.Release|ARM.Build.0 = Release|ARM
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13}.Release|x64.ActiveCfg = Release|x86
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13}.Release|x86.ActiveCfg = Release|x86
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13}.Release|x86.Build.0 = Release|x86
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}.Debug|ARM.ActiveCfg = Debug|ARM
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}.Debug|ARM.Build.0 = Debug|ARM
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}.Debug|x64.ActiveCfg = Debug|x86
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}.Debug|x86.ActiveCfg = Debug|x86
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}.Debug|x86.Build.0 = Debug|x86
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}.Release|ARM.ActiveCfg = Release|ARM
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}.Release|ARM.Build.0 = Release|ARM
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}.Release|x64.ActiveCfg = Release|x86
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}.Release|x86.ActiveCfg = Release|x86
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}.Release|x86.Build.0 = Release|x86
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Debug|ARM.ActiveCfg = Debug|ARM
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Debug|ARM.Build.0 = Debug|ARM
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Debug|x64.ActiveCfg = Debug|x64
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Debug|x64.Build.0 = Debug|x64
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Debug|x86.ActiveCfg = Debug|Win32
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Debug|x86.Build.0 = Debug|Win32
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Release|ARM.ActiveCfg = Release|ARM
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Release|ARM.Build.0 = Release|ARM
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Release|x64.ActiveCfg = Release|x64
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Release|x64.Build.0 = Release|x64
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Release|x86.ActiveCfg = Release|Win32
+		{29630415-D44B-4B88-93BD-084BA4139B5B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -240,5 +286,9 @@ Global
 		{F61945BE-1109-4775-8061-133D56ECB441} = {6E352251-8B4F-464C-851A-96B874274DEE}
 		{AECF8592-365F-4411-8B79-158D92ADC40A} = {6E352251-8B4F-464C-851A-96B874274DEE}
 		{8DD66271-1B6F-419C-BE43-3AF6A7D422E8} = {6E352251-8B4F-464C-851A-96B874274DEE}
+		{3E63DB66-B4E4-471F-8BCF-B3FC445E4B42} = {286C0741-B492-4307-86BB-E434A41F0283}
+		{7EBB0069-9DBA-45A3-A343-9848241DDA13} = {286C0741-B492-4307-86BB-E434A41F0283}
+		{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D} = {286C0741-B492-4307-86BB-E434A41F0283}
+		{29630415-D44B-4B88-93BD-084BA4139B5B} = {286C0741-B492-4307-86BB-E434A41F0283}
 	EndGlobalSection
 EndGlobal

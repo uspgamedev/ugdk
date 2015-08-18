@@ -27,9 +27,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{57ef1bf6-585a-4548-a997-04b458c2c63b}</ProjectGuid>
+    <ProjectGuid>{29630415-D44B-4B88-93BD-084BA4139B5B}</ProjectGuid>
     <Keyword>StaticLibrary</Keyword>
-    <RootNamespace>UGDK</RootNamespace>
+    <RootNamespace>Glew</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <AppContainerApplication>true</AppContainerApplication>
@@ -76,7 +76,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
-    <Import Project="..\UGDK.Shared\UGDK.Shared.vcxitems" Label="Shared" />
+    <Import Project="..\Glew.Shared\Glew.Shared.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -102,44 +102,44 @@
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\modules\ugdk-script\include;$(ProjectDir)..\..\..\modules\ugdk-script\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)..\..\..\externals\lua-5.1\src;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\externals\glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\modules\ugdk-script\include;$(ProjectDir)..\..\..\modules\ugdk-script\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)..\..\..\externals\lua-5.1\src;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\externals\glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\modules\ugdk-script\include;$(ProjectDir)..\..\..\modules\ugdk-script\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)..\..\..\externals\lua-5.1\src;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\externals\glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\modules\ugdk-script\include;$(ProjectDir)..\..\..\modules\ugdk-script\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)..\..\..\externals\lua-5.1\src;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\externals\glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\modules\ugdk-script\include;$(ProjectDir)..\..\..\modules\ugdk-script\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)..\..\..\externals\lua-5.1\src;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\externals\glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <GenerateManifest>false</GenerateManifest>
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\modules\ugdk-script\include;$(ProjectDir)..\..\..\modules\ugdk-script\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)..\..\..\externals\lua-5.1\src;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\externals\glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;GLEW_STATIC</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
@@ -153,7 +153,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;GLEW_STATIC</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -167,7 +167,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1;%(ClCompile.PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1;%(ClCompile.PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;GLEW_STATIC</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
@@ -181,7 +181,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1;%(ClCompile.PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_ARM_WINAPI_PARTITION_DESKTOP_SDK_AVAILABLE=1;%(ClCompile.PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;GLEW_STATIC</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -195,7 +195,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;GLEW_STATIC</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <Link>
@@ -209,7 +209,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;GLEW_STATIC</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -224,9 +224,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\externals\sdl2\WindowsUWP\SDL-UWP.vcxproj">
       <Project>{c8df6173-06a1-4f56-a9bc-2002596b30e9}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Glew\Glew.WindowsUniversal.StaticLibrary\Glew.WindowsUniversal.StaticLibrary.vcxproj">
-      <Project>{29630415-d44b-4b88-93bd-084ba4139b5b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\Json\Json.WindowsUniversal.StaticLibrary\Json.WindowsUniversal.StaticLibrary.vcxproj">
       <Project>{8ea91e85-b972-4887-a90a-d68cb0f573ae}</Project>

@@ -18,20 +18,9 @@
       <Platform>x86</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Glew\Glew.iOS.StaticLibrary\Glew.iOS.StaticLibrary.vcxproj">
-      <Project>{ed5659e8-87a4-4215-b407-1a3a0d8fdf6d}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Json\Json.iOS.StaticLibrary\Json.iOS.StaticLibrary.vcxproj">
-      <Project>{ceb0220b-34b2-4d3c-a1d5-eb90d25bbaa6}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Lua\Lua.iOS.StaticLibrary\Lua.iOS.StaticLibrary.vcxproj">
-      <Project>{e9561ce6-a71d-45db-b44a-30c234dee56a}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{c98773cb-5816-47ae-94df-240e2e4b0b9a}</ProjectGuid>
-    <RootNamespace>UGDK</RootNamespace>
+    <ProjectGuid>{ED5659E8-87A4-4215-B407-1A3A0D8FDF6D}</ProjectGuid>
+    <RootNamespace>Glew</RootNamespace>
     <Keyword>iOS</Keyword>
     <ApplicationType>iOS</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -62,29 +51,29 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Label="Shared">
-    <Import Project="..\UGDK.Shared\UGDK.Shared.vcxitems" Label="Shared" />
+    <Import Project="..\Glew.Shared\Glew.Shared.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\externals\glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\externals\glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\externals\glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <OutDir>$(SolutionDir)Output\$(ProjectName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Objs\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)..\..\..\modules\ugdk-core\include;$(ProjectDir)..\..\..\modules\ugdk-core\src;$(ProjectDir)..\..\..\modules\ugdk-2d\include;$(ProjectDir)..\..\..\modules\ugdk-2d\src;$(ProjectDir)..\..\..\externals\glm;$(ProjectDir)..\..\..\externals\libjson;$(ProjectDir)..\..\..\externals\freetype-gl;$(ProjectDir)..\..\..\externals\freetype\include;$(ProjectDir)..\..\..\externals\glew\include;$(ProjectDir)..\..\..\externals\sdl2\SDL\include;$(ProjectDir)..\..\..\externals\sdl2-image\SDL_image;$(ProjectDir)..\..\..\externals\sdl2-mixer\SDL_mixer;$(ProjectDir)include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\..\externals\glew\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <ClCompile>
@@ -92,6 +81,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <CppLanguageStandard>c++11</CppLanguageStandard>
+      <PreprocessorDefinitions>;GLEW_STATIC</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
@@ -100,6 +90,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <CppLanguageStandard>c++11</CppLanguageStandard>
+      <PreprocessorDefinitions>;GLEW_STATIC</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
@@ -108,6 +99,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <CppLanguageStandard>c++11</CppLanguageStandard>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -116,6 +108,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Enabled</ExceptionHandling>
       <CppLanguageStandard>c++11</CppLanguageStandard>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);GLEW_STATIC</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
