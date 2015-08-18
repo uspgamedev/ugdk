@@ -18,6 +18,14 @@
       <Platform>x86</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Json\Json.Android.StaticLibrary\Json.Android.StaticLibrary.vcxproj">
+      <Project>{25e145ed-ddcf-4716-88ec-1314863fbe1e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Lua\Lua.Android.StaticLibrary\Lua.Android.StaticLibrary.vcxproj">
+      <Project>{0746bd3e-3603-4d7a-9ecf-4e555c6b9c97}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{74ba2ad8-ba52-4f97-8198-a73abc86fe51}</ProjectGuid>
     <Keyword>Android</Keyword>

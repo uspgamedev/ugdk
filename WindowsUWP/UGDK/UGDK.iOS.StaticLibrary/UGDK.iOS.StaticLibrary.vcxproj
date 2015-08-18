@@ -18,6 +18,14 @@
       <Platform>x86</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Json\Json.iOS.StaticLibrary\Json.iOS.StaticLibrary.vcxproj">
+      <Project>{ceb0220b-34b2-4d3c-a1d5-eb90d25bbaa6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Lua\Lua.iOS.StaticLibrary\Lua.iOS.StaticLibrary.vcxproj">
+      <Project>{e9561ce6-a71d-45db-b44a-30c234dee56a}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{c98773cb-5816-47ae-94df-240e2e4b0b9a}</ProjectGuid>
     <RootNamespace>UGDK</RootNamespace>
