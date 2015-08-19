@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\texture-atlas.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\texture-font.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\vec234.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\vector.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\freetype-gl.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\mat4.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\opengl.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\platform.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\texture-font.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\vector.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\mat4.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\platform.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\texture-atlas.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\externals\freetype-gl\README" />
+  </ItemGroup>
+</Project>
