@@ -222,6 +222,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\externals\sdl2-mixer\WindowsUWP\SDL_mixer-UWP.vcxproj">
+      <Project>{3a833c7a-c776-4202-9dbd-bc879b23c605}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\externals\sdl2\WindowsUWP\SDL-UWP.vcxproj">
       <Project>{c8df6173-06a1-4f56-a9bc-2002596b30e9}</Project>
     </ProjectReference>
