@@ -10,13 +10,16 @@ class DrawMode {
     static DrawMode LINE_STRIP();
     static DrawMode LINE_LOOP();
     static DrawMode LINES();
-    static DrawMode LINE_STRIP_ADJACENCY();
-    static DrawMode LINES_ADJACENCY();
     static DrawMode TRIANGLE_STRIP();
     static DrawMode TRIANGLE_FAN();
     static DrawMode TRIANGLES();
+
+#ifndef UGDK_USING_GLES
+	static DrawMode LINE_STRIP_ADJACENCY();
+	static DrawMode LINES_ADJACENCY();
     static DrawMode TRIANGLE_STRIP_ADJACENCY();
     static DrawMode TRIANGLES_ADJACENCY();
+#endif
 
     int mode() const;
 
