@@ -7,3 +7,6 @@
 [submodule "externals/sdl2-mixer"]
 	path = externals/sdl2-mixer
 	url = https://github.com/uspgamedev/ugdk-sdlmixer.git
+[submodule "externals/libjson"]
+	path = externals/libjson
+	url = https://github.com/henriquegemignani/libjson.git

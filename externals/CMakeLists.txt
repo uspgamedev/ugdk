@@ -109,6 +109,7 @@ if(NOT ANDROID AND NOT UGDK_3D_ENABLED)
     endif(UGDK_INTERNAL_GLEW)
 endif(NOT ANDROID AND NOT UGDK_3D_ENABLED)
 
+init_submodule(libjson)
 add_subdirectory(libjson)
 
 ########################
