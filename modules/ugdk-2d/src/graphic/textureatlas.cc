@@ -17,15 +17,15 @@ void TextureAtlas::BoundPiece::ConvertToAtlas(float in_u, float in_v, float *out
     int size_x = piece_->size.x;
     int size_y = piece_->size.y;
     if (piece_->rotated_90_clockwise) {
-        in_v = 1.0 - in_v;
+        in_v = 1.0f - in_v;
         std::swap(in_u, in_v);
         std::swap(size_x, size_y);
     }
     if (piece_->horizontal_flip) {
-        in_u = 1.0 - in_u;
+        in_u = 1.0f - in_u;
     }
     if (piece_->vertical_flip) {
-        in_v = 1.0 - in_v;
+        in_v = 1.0f - in_v;
     }
     *out_u = (piece_->position.x + (in_u) * size_x) / atlas_->texture_->width();
     *out_v = (piece_->position.y + (in_v) * size_y) / atlas_->texture_->height();
