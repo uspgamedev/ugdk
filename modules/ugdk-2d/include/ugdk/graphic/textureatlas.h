@@ -19,8 +19,12 @@ namespace graphic {
 
 class TextureAtlas {
   struct Piece {
-    Piece(const math::Integer2D& pos, const math::Integer2D& s) : position(pos), size(s) {}
+    Piece(const math::Integer2D& pos, const math::Integer2D& s)
+        : position(pos), size(s), horizontal_flip(false), vertical_flip(false), rotated_90_clockwise(false) {}
     math::Integer2D position, size;
+    bool horizontal_flip;
+    bool vertical_flip;
+    bool rotated_90_clockwise;
   };
   public:
     class BoundPiece {

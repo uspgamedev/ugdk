@@ -14,8 +14,21 @@ void TextureAtlas::BoundPiece::ConvertToAtlas(float *u, float *v) const {
 }
         
 void TextureAtlas::BoundPiece::ConvertToAtlas(float in_u, float in_v, float *out_u, float *out_v) const {
-    *out_u = (piece_->position.x + (in_u) * piece_->size.x) / atlas_->texture_->width();
-    *out_v = (piece_->position.y + (in_v) * piece_->size.y) / atlas_->texture_->height();
+    int size_x = piece_->size.x;
+    int size_y = piece_->size.y;
+    if (piece_->rotated_90_clockwise) {
+        in_v = 1.0 - in_v;
+        std::swap(in_u, in_v);
+        std::swap(size_x, size_y);
+    }
+    if (piece_->horizontal_flip) {
+        in_u = 1.0 - in_u;
+    }
+    if (piece_->vertical_flip) {
+        in_v = 1.0 - in_v;
+    }
+    *out_u = (piece_->position.x + (in_u) * size_x) / atlas_->texture_->width();
+    *out_v = (piece_->position.y + (in_v) * size_y) / atlas_->texture_->height();
 }
 
 TextureAtlas::TextureAtlas(const graphic::GLTexture* texture, std::size_t size)
@@ -44,9 +57,11 @@ TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
         auto&& frame_info = frame["frame"];
         // Ignoring frame["trimmed"]
         // Ignoring frame["rotated"]
-        atlas->AddPiece(frame.name(),
+        size_t index = atlas->AddPiece(frame.name(),
                         math::Integer2D(frame_info["x"].as_int(), frame_info["y"].as_int()),
                         math::Integer2D(frame_info["w"].as_int(), frame_info["h"].as_int()));
+        
+        atlas->pieces_[index].rotated_90_clockwise = frame["rotated"].as_bool();
     }
     return atlas;
 }
