@@ -14,8 +14,8 @@ void TextureAtlas::BoundPiece::ConvertToAtlas(float *u, float *v) const {
 }
         
 void TextureAtlas::BoundPiece::ConvertToAtlas(float in_u, float in_v, float *out_u, float *out_v) const {
-    int size_x = piece_->size.x;
-    int size_y = piece_->size.y;
+    int size_x = piece_->trimmed_size.x;
+    int size_y = piece_->trimmed_size.y;
     if (piece_->rotated_90_clockwise) {
         in_v = 1.0f - in_v;
         std::swap(in_u, in_v);
@@ -55,13 +55,19 @@ TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
     TextureAtlas* atlas = new TextureAtlas(gltexture, frames.size());
     for (const auto& frame : frames) {
         auto&& frame_info = frame["frame"];
-        // Ignoring frame["trimmed"]
-        // Ignoring frame["rotated"]
         size_t index = atlas->AddPiece(frame.name(),
                         math::Integer2D(frame_info["x"].as_int(), frame_info["y"].as_int()),
                         math::Integer2D(frame_info["w"].as_int(), frame_info["h"].as_int()));
         
-        atlas->pieces_[index].rotated_90_clockwise = frame["rotated"].as_bool();
+        auto& piece = atlas->pieces_[index];
+        piece.rotated_90_clockwise = frame["rotated"].as_bool();
+        if (frame["trimmed"].as_bool()) {
+            auto&& spriteSourceSize = frame["spriteSourceSize"];
+            piece.offset.x = spriteSourceSize["x"].as_int();
+            piece.offset.y = spriteSourceSize["y"].as_int();
+            piece.trimmed_size.x = spriteSourceSize["w"].as_int();
+            piece.trimmed_size.y = spriteSourceSize["h"].as_int();
+        }
     }
     return atlas;
 }

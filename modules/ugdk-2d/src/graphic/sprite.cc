@@ -32,8 +32,10 @@ void PrimitiveControllerSprite::ChangeToAtlasFrame(std::size_t frame_number) {
 }
     
 void PrimitiveControllerSprite::ChangeToBoundPiece(TextureAtlas::BoundPiece& piece) {
-    glm::vec4 top_left = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
-    glm::vec4 bottom_right = glm::vec4(piece.size().x, piece.size().y, 0.0, 1.0);
+    glm::vec4 top_left = glm::vec4(static_cast<float>(piece.offset().x), static_cast<float>(piece.offset().y), 0.0f, 1.0f);
+    glm::vec4 bottom_right = glm::vec4(piece.trimmed_size().x + static_cast<float>(piece.offset().x),
+                                       piece.trimmed_size().y + static_cast<float>(piece.offset().y),
+                                       0.0, 1.0);
     VertexDataManipulation::SetToAbsoluteRectangleWithAtlasPiece(*owner_->vertexdata(), top_left, bottom_right, piece);
 }
     

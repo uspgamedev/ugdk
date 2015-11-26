@@ -20,8 +20,9 @@ namespace graphic {
 class TextureAtlas {
   struct Piece {
     Piece(const math::Integer2D& pos, const math::Integer2D& s)
-        : position(pos), size(s), horizontal_flip(false), vertical_flip(false), rotated_90_clockwise(false) {}
-    math::Integer2D position, size;
+        : position(pos), size(s), trimmed_size(s)
+        , horizontal_flip(false), vertical_flip(false), rotated_90_clockwise(false) {}
+    math::Integer2D position, size, trimmed_size, offset;
     bool horizontal_flip;
     bool vertical_flip;
     bool rotated_90_clockwise;
@@ -35,6 +36,8 @@ class TextureAtlas {
         const TextureAtlas* atlas() const { return atlas_; }
         const math::Integer2D& position() const { return piece_->position; }
         const math::Integer2D& size() const { return piece_->size; }
+        const math::Integer2D& trimmed_size() const { return piece_->trimmed_size; }
+        const math::Integer2D& offset() const { return piece_->offset; }
 
         void ConvertToAtlas(float *u, float *v) const;
         void ConvertToAtlas(float in_u, float in_v, float *out_u, float *out_v) const;
