@@ -37,7 +37,7 @@ enum class VertexType;
 
 class SpriteAnimationFrame;
 using SpriteAnimation = ::std::vector<std::unique_ptr<SpriteAnimationFrame>>;
-using SpriteAnimationPlayer = ::ugdk::action::AnimationPlayer<SpriteAnimationFrame>;
+using SpriteAnimationPlayer = ::ugdk::action::AnimationPlayer<SpriteAnimation>;
 using SpriteAnimationTable = ::ugdk::structure::IndexableTable<SpriteAnimation>;
 
 }  // namespace graphic

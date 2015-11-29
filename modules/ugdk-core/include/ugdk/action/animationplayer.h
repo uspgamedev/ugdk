@@ -11,10 +11,10 @@
 namespace ugdk {
 namespace action {
 
-template<class Frame>
+template<class Animation>
 class AnimationPlayer : public MediaPlayer {
   public:
-    using Animation = std::vector<std::unique_ptr<Frame>>;
+    using Frame = typename Animation::value_type::element_type;
     using FrameChangedCallback = std::function<void(const Frame&)>;
     using AnimationTable = structure::IndexableTable<Animation>;
 
