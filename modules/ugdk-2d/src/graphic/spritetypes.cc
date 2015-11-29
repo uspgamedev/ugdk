@@ -10,8 +10,8 @@ namespace ugdk {
 namespace graphic {
     
 namespace {
-    SpriteAnimationFrame* build_frame(const JSONNode& jsondata) {
-        SpriteAnimationFrame* frame = new SpriteAnimationFrame(jsondata["name"].as_string());
+    std::unique_ptr<SpriteAnimationFrame> build_frame(const JSONNode& jsondata) {
+        auto frame = MakeUnique<SpriteAnimationFrame>(jsondata["name"].as_string());
 
         if (jsondata.find("color") != jsondata.end()) {
             auto&& colorjson = jsondata["color"];
@@ -79,7 +79,7 @@ SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepa
         auto frames_array_json = animation_json;
         element->reserve(frames_array_json.size());
         for (const auto& frame_json : frames_array_json) {
-            element->push_back(build_frame(frame_json));
+            element->emplace_back(build_frame(frame_json));
         }
 
         table->Add(animation_json.name(), std::move(element));

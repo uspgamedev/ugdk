@@ -12,10 +12,7 @@ namespace ugdk {
 namespace structure {
 
 template<class T>
-class IndexableTable { private: IndexableTable() {} };
-
-template<class T>
-class IndexableTable<T*> {
+class IndexableTable {
   public:
     static const int MAX_NUM_INDEX = 1024;
 

@@ -4,6 +4,7 @@
 #include <ugdk/action.h>
 #include <ugdk/structure.h>
 #include <vector>
+#include <memory>
 
 namespace ugdk {
 namespace graphic {
@@ -35,9 +36,9 @@ class Manager;
 enum class VertexType;
 
 class SpriteAnimationFrame;
-using SpriteAnimation = ::std::vector<SpriteAnimationFrame*>;
+using SpriteAnimation = ::std::vector<std::unique_ptr<SpriteAnimationFrame>>;
 using SpriteAnimationPlayer = ::ugdk::action::AnimationPlayer<SpriteAnimationFrame>;
-using SpriteAnimationTable = ::ugdk::structure::IndexableTable<SpriteAnimation*>;
+using SpriteAnimationTable = ::ugdk::structure::IndexableTable<SpriteAnimation>;
 
 }  // namespace graphic
 }  // namespace ugdk

@@ -10,7 +10,7 @@ TEST(IndexableTable, MapMethods) {
     int *a = new int;
     int *b = new int;
     int *c = new int;
-    IndexableTable<int*> table;
+    IndexableTable<int> table;
     table.Add("first", std::unique_ptr<int>(a));
     table.Add("second", std::unique_ptr<int>(b));
     
@@ -33,7 +33,7 @@ struct TestData {
 TEST(IndexableTable, DeleteElements) {
     int count = 3;
     {
-        IndexableTable<TestData*> table;
+        IndexableTable<TestData> table;
         table.Add("first", ugdk::MakeUnique<TestData>(&count));
         table.Add("second", ugdk::MakeUnique<TestData>(&count));
         table.Add("third", ugdk::MakeUnique<TestData>(&count));
@@ -47,7 +47,7 @@ TEST(IndexableTable, DeleteElements) {
 TEST(IndexableTable, Id) {
     int *a = new int; 
     int *b = new int;
-    IndexableTable<int*> table;
+    IndexableTable<int> table;
     table.Add("first", std::unique_ptr<int>(a));
     table.Add("second", std::unique_ptr<int>(b));
     
@@ -61,7 +61,7 @@ TEST(IndexableTable, Id) {
 
 TEST(IndexableTable, InvalidOperation) {
     {
-        IndexableTable<int*> table;
+        IndexableTable<int> table;
         table.Add("null", nullptr);
         EXPECT_FALSE(table.ReleaseIndex(5));
     }

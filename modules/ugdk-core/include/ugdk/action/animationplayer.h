@@ -14,10 +14,11 @@ namespace action {
 template<class Frame>
 class AnimationPlayer : public MediaPlayer {
   public:
-    using Animation = std::vector<Frame*>;
+    using Animation = std::vector<std::unique_ptr<Frame>>;
     using FrameChangedCallback = std::function<void(const Frame&)>;
+    using AnimationTable = structure::IndexableTable<Animation>;
 
-    AnimationPlayer(const structure::IndexableTable<Animation*> *table)
+    AnimationPlayer(const AnimationTable* table)
         : current_animation_(nullptr)
         , elapsed_time_(0.0)
         , table_(table) 
@@ -77,7 +78,7 @@ class AnimationPlayer : public MediaPlayer {
     const Animation* current_animation_;
     typename Animation::const_iterator current_frame_;
     double elapsed_time_;
-    const structure::IndexableTable<Animation*> *table_;
+    const AnimationTable* table_;
     FrameChangedCallback frame_change_callback_;
 
     void set_current_animation(const Animation* anim) {

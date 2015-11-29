@@ -182,7 +182,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif ()
 
 if (MSVC) 
-    add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /fp:fast /MP)
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS /D_VARIADIC_MAX=10 /W4 /wd4100 /wd4127 /wd4201 /wd4211 /wd4250 /wd4706 /wd4503 /fp:fast /MP)
 endif ()
 
 # =============================
