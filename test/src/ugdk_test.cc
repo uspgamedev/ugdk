@@ -18,6 +18,9 @@
 #include "PyramidWorksGeometry.cc"
 
 #ifndef UGDK_3D_ENABLED
+// ugdk::action
+#include "AnimationPlayer.cc"
+
 // ugdk::graphic
 #include "Geometry.cc"
 
