@@ -19,7 +19,7 @@ class IndexableTable<T*> {
     static const int MAX_NUM_INDEX = 1024;
 
     IndexableTable(int expected_size = 16) : index_generator_(0, MAX_NUM_INDEX - 1, -1) {
-        indexes_.reserve(expected_size);
+        indices_.reserve(expected_size);
     }
     ~IndexableTable() {
         for(auto& entry : data_)
@@ -38,7 +38,7 @@ class IndexableTable<T*> {
         if(it == data_.end()) return false;
         T* val = it->second;
         data_.erase(it);
-        removeIndexes(val);
+        removeIndices(val);
         if(val) delete val;
         return true;
     }
@@ -50,7 +50,7 @@ class IndexableTable<T*> {
     }
     
     /// Instant access to an element, using a pre-generated ID.
-    T* Get(int index) const { return indexes_[index]; }
+    T* Get(int index) const { return indices_[index]; }
 
     // Optimizes access to the animations identified by the given name.
     // The caller should be conscious of the returned indexes for later use
@@ -62,9 +62,9 @@ class IndexableTable<T*> {
         if(!val) return index_generator_.error_value();
         int id = index_generator_.GenerateID();
         if(id != index_generator_.error_value()) {
-            if(static_cast<decltype(indexes_.size())>(id) >= indexes_.size())
-                indexes_.resize(id + 1);
-            indexes_[id] = val;
+            if(static_cast<decltype(indices_.size())>(id) >= indices_.size())
+                indices_.resize(id + 1);
+            indices_[id] = val;
         }
         return id;
     }
@@ -77,17 +77,17 @@ class IndexableTable<T*> {
     }
 
   private:
-    void removeIndexes(T* val) {
-        for(int id = 0; id < static_cast<int>(indexes_.size()); ++id)
-            if(indexes_[id] == val) {
-                indexes_[id] = nullptr;
+    void removeIndices(T* val) {
+        for(int id = 0; id < static_cast<int>(indices_.size()); ++id)
+            if(indices_[id] == val) {
+                indices_[id] = nullptr;
                 index_generator_.ReleaseID(id);
             }
     }
 
     util::IDGenerator                   index_generator_;
     std::unordered_map<std::string, T*> data_;
-    std::vector<T*>                     indexes_;
+    std::vector<T*>                     indices_;
 };
 
 } // namespace structure
