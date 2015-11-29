@@ -156,8 +156,8 @@ class VirtualObj {
     struct function_helper<R(Args...), typename std::enable_if<is_virtual_primitive<R>::value>::type> {
         static std::function< R(Args...)> CreateFunction(const VirtualObj& data) {
             return [data](Args... args) -> R {
-                auto callf = std::mem_fn(&VirtualObj::Call<Args...>);
-                return callf(data, args...).template value<R>(false);
+                auto result = data.Call<Args...>(args...);
+                return result.value<R>(false);
             };
         }
     };
@@ -166,8 +166,8 @@ class VirtualObj {
     struct function_helper<R(Args...), typename std::enable_if<!is_virtual_primitive<R>::value>::type> {
         static std::function< R(Args...)> CreateFunction(const VirtualObj& data) {
             return [data](Args... args) -> R {
-                auto callf = std::mem_fn(&VirtualObj::Call<Args...>);
-                return *callf(data, args...).template value<R*>(false);
+                auto result = data.Call<Args...>(args...);
+                return result.value<R*>(false);
             };
         }
     };
