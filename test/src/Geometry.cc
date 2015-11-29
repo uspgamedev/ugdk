@@ -12,9 +12,9 @@ TEST(Geometry, Constructors) {
     Geometry m;
     EXPECT_EQ(glm::mat4(), m.AsMat4());
 
-    {   Geometry m(Vector2D(15.0, -10.0), Vector2D(0.5, 0.4), -17.8);
-        Geometry copy(m);
-        EXPECT_EQ(m.AsMat4(), copy.AsMat4());
+    {   Geometry m2(Vector2D(15.0, -10.0), Vector2D(0.5, 0.4), -17.8);
+        Geometry copy(m2);
+        EXPECT_EQ(m2.AsMat4(), copy.AsMat4());
     }
 }
 

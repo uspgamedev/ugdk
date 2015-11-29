@@ -14,10 +14,10 @@ namespace action {
 template<class Frame>
 class AnimationPlayer : public MediaPlayer {
   public:
-    typedef std::vector<Frame*> Vector;
-    typedef std::function<void(const Frame&)> FrameChangedCallback;
+    using Animation = std::vector<Frame*>;
+    using FrameChangedCallback = std::function<void(const Frame&)>;
 
-    AnimationPlayer(const structure::IndexableTable<Vector*> *table)
+    AnimationPlayer(const structure::IndexableTable<Animation*> *table)
         : current_animation_(nullptr)
         , elapsed_time_(0.0)
         , table_(table) 
@@ -27,7 +27,7 @@ class AnimationPlayer : public MediaPlayer {
         frame_change_callback_ = callback;
     }
 
-    const Vector* current_animation() const {
+    const Animation* current_animation() const {
         return current_animation_;
     }
 
@@ -74,13 +74,13 @@ class AnimationPlayer : public MediaPlayer {
     }
 
   private:
-    const Vector* current_animation_;
-    typename Vector::const_iterator current_frame_;
+    const Animation* current_animation_;
+    typename Animation::const_iterator current_frame_;
     double elapsed_time_;
-    const structure::IndexableTable<Vector*> *table_;
+    const structure::IndexableTable<Animation*> *table_;
     FrameChangedCallback frame_change_callback_;
 
-    void set_current_animation(const Vector* anim) {
+    void set_current_animation(const Animation* anim) {
         auto previous_anim = current_animation_;
         current_animation_ = anim;
         if (anim != previous_anim)

@@ -3,6 +3,7 @@
 #include <ugdk/system/exceptions.h>
 #include <ugdk/filesystem/module.h>
 #include <ugdk/filesystem/file.h>
+#include <ugdk/system/compatibility.h>
 #include <libjson.h>
 
 namespace ugdk {
@@ -73,12 +74,15 @@ SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepa
     SpriteAnimationTable* table = new SpriteAnimationTable(json_node.size());
     for (const auto& animation_json : json_node) {
 
-        auto element = new std::vector<SpriteAnimationFrame*>;
-        for (const auto& frame_json : animation_json) {
+        auto element = MakeUnique<SpriteAnimation>();
+
+        auto frames_array_json = animation_json;
+        element->reserve(frames_array_json.size());
+        for (const auto& frame_json : frames_array_json) {
             element->push_back(build_frame(frame_json));
         }
 
-        table->Add(animation_json.name(), element);
+        table->Add(animation_json.name(), std::move(element));
     }
 
     return table;

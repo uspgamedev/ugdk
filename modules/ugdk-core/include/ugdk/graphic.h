@@ -35,8 +35,9 @@ class Manager;
 enum class VertexType;
 
 class SpriteAnimationFrame;
+using SpriteAnimation = ::std::vector<SpriteAnimationFrame*>;
 using SpriteAnimationPlayer = ::ugdk::action::AnimationPlayer<SpriteAnimationFrame>;
-using SpriteAnimationTable = ::ugdk::structure::IndexableTable<std::vector<SpriteAnimationFrame*>*>;
+using SpriteAnimationTable = ::ugdk::structure::IndexableTable<SpriteAnimation*>;
 
 }  // namespace graphic
 }  // namespace ugdk

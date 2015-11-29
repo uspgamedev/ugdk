@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <memory>
 
 namespace ugdk {
 namespace structure {
@@ -21,32 +22,37 @@ class IndexableTable<T*> {
     IndexableTable(int expected_size = 16) : index_generator_(0, MAX_NUM_INDEX - 1, -1) {
         indices_.reserve(expected_size);
     }
-    ~IndexableTable() {
-        for(auto& entry : data_)
-            if(entry.second) delete entry.second;
-    }
+    ~IndexableTable() {}
 
     size_t size() const {
         return data_.size();
     }
 
-    void Add(const std::string& name, T* element) { data_[name] = element; }
+    void Add(const std::string& name, std::unique_ptr<T> element) {
+        data_[name] = std::move(element);
+    }
 
+    /// Removes the element with the given name.
     /** @return False if element don't exist, true otherwise. */
     bool Remove(const std::string& name) {
         auto it = data_.find(name);
-        if(it == data_.end()) return false;
-        T* val = it->second;
+        if (it == data_.end()) {
+            return false;
+        }
+        removeIndices(it->second.get());
         data_.erase(it);
-        removeIndices(val);
-        if(val) delete val;
         return true;
     }
 
     /// Searches for the element with the given name.
     T* Search(const std::string& name) const { 
         auto it = data_.find(name);
-        return (it != data_.end()) ? it->second : nullptr;
+        if (it == data_.end()) {
+            return nullptr;
+        }
+        else {
+            return it->second.get();
+        }
     }
     
     /// Instant access to an element, using a pre-generated ID.
@@ -59,11 +65,14 @@ class IndexableTable<T*> {
     /// Generates an ID for future instant access.
     int MakeIndex(const std::string& name) {
         T* val = Search(name);
-        if(!val) return index_generator_.error_value();
+        if (!val) {
+            return index_generator_.error_value();
+        }
         int id = index_generator_.GenerateID();
         if(id != index_generator_.error_value()) {
-            if(static_cast<decltype(indices_.size())>(id) >= indices_.size())
+            if (static_cast<decltype(indices_.size())>(id) >= indices_.size()) {
                 indices_.resize(id + 1);
+            }
             indices_[id] = val;
         }
         return id;
@@ -78,16 +87,17 @@ class IndexableTable<T*> {
 
   private:
     void removeIndices(T* val) {
-        for(int id = 0; id < static_cast<int>(indices_.size()); ++id)
-            if(indices_[id] == val) {
+        for (int id = 0; id < static_cast<int>(indices_.size()); ++id) {
+            if (indices_[id] == val) {
                 indices_[id] = nullptr;
                 index_generator_.ReleaseID(id);
             }
+        }
     }
 
-    util::IDGenerator                   index_generator_;
-    std::unordered_map<std::string, T*> data_;
-    std::vector<T*>                     indices_;
+    util::IDGenerator index_generator_;
+    std::unordered_map<std::string, std::unique_ptr<T>> data_;
+    std::vector<T*> indices_;
 };
 
 } // namespace structure
