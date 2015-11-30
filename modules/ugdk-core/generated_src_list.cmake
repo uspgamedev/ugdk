@@ -57,6 +57,7 @@ modules/ugdk-core/include/pyramidworks/geometry/convexpolygon.h
 modules/ugdk-core/include/pyramidworks/geometry/geometricshape.h
 modules/ugdk-core/include/pyramidworks/geometry/rect.h
 modules/ugdk-core/include/ugdk/action.h
+modules/ugdk-core/include/ugdk/action/animation.h
 modules/ugdk-core/include/ugdk/action/animationplayer.h
 modules/ugdk-core/include/ugdk/action/events.h
 modules/ugdk-core/include/ugdk/action/mediamanager.h

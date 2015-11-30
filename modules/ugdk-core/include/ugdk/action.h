@@ -8,10 +8,10 @@ class MediaPlayer;
 class MediaManager;
 
 template<class T>
-class AnimationPlayer;
+class Animation;
 
 template<class T>
-class TableAnimationPlayer;
+class AnimationPlayer;
 
 class Scene;
 class Observer;

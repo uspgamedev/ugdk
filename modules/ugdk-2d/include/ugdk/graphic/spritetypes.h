@@ -5,6 +5,7 @@
 
 // The following includes are necessary to use SpriteAnimationPlayer and SpriteAnimationTable.
 #include <ugdk/graphic/spriteanimationframe.h>
+#include <ugdk/action/animation.h>
 #include <ugdk/action/animationplayer.h>
 #include <ugdk/structure/indexabletable.h>
 

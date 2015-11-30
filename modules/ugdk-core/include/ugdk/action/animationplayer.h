@@ -3,6 +3,7 @@
 
 #include <ugdk/action/mediaplayer.h>
 #include <ugdk/structure/indexabletable.h>
+#include <ugdk/action/animation.h>
 
 #include <string>
 #include <vector>
@@ -11,17 +12,18 @@
 namespace ugdk {
 namespace action {
 
-template<class Animation>
+template<class Frame>
 class AnimationPlayer : public MediaPlayer {
   public:
-    using Frame = typename Animation::value_type::element_type;
-    using FrameChangedCallback = std::function<void(const Frame&)>;
+    using Animation = ::ugdk::action::Animation<Frame>;
     using AnimationTable = structure::IndexableTable<Animation>;
+    using FrameChangedCallback = std::function<void(const Frame&)>;
 
     AnimationPlayer(const AnimationTable* table)
         : current_animation_(nullptr)
         , elapsed_time_(0.0)
-        , table_(table) 
+        , table_(table)
+        , notified_(false)
     {}
 
     void set_frame_change_callback(const FrameChangedCallback& callback) {
@@ -33,7 +35,7 @@ class AnimationPlayer : public MediaPlayer {
     }
 
     const Frame& current_animation_frame() const {
-        return **current_frame_;
+        return *current_animation_->frames()[current_frame_];
     }
 
     void Update(double dt) {
@@ -49,8 +51,9 @@ class AnimationPlayer : public MediaPlayer {
 
     /// Restarts the current animation from the first frame.
     void RestartAnimation() {
+        notified_ = false;
         elapsed_time_  = 0.0;
-        current_frame_ = current_animation_->begin();
+        current_frame_ = 0;
         ExecuteFrameChangeCallback();
     }
 
@@ -76,10 +79,11 @@ class AnimationPlayer : public MediaPlayer {
 
   private:
     const Animation* current_animation_;
-    typename Animation::const_iterator current_frame_;
+    int current_frame_;
     double elapsed_time_;
     const AnimationTable* table_;
     FrameChangedCallback frame_change_callback_;
+    bool notified_;
 
     void set_current_animation(const Animation* anim) {
         auto previous_anim = current_animation_;
@@ -97,14 +101,22 @@ class AnimationPlayer : public MediaPlayer {
         bool notify = false;
 
         ++current_frame_;
-        if(current_frame_ == current_animation_->end()) {
-            current_frame_ = current_animation_->begin();
+        if(current_frame_ >= current_animation_->frames().size()) {
+            if (current_animation_->repeat() == Animation::AnimationRepeat::LOOP) {
+                current_frame_ = 0;
+                notified_ = false;
+            }
+            else {
+                --current_frame_;
+            }
             notify = true;
         }
         ExecuteFrameChangeCallback();
             
-        if(notify)
+        if (notify && !notified_) {
             notifyAllObservers();
+            notified_ = true;
+        }
     }
 };
 

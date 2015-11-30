@@ -13,7 +13,7 @@ struct Frame {
     double period() const { return 1; }
 };
 
-using FrameVector = std::vector<std::unique_ptr<Frame>>;
+using FrameVector = action::Animation<Frame>;
 using TestTable = structure::IndexableTable<FrameVector>;
 
 std::unique_ptr<TestTable> SetupTable() {
@@ -21,22 +21,22 @@ std::unique_ptr<TestTable> SetupTable() {
 
     {
         auto v = MakeUnique<FrameVector>();
-        v->emplace_back(new Frame(1));
+        v->frames().emplace_back(new Frame(1));
         table->Add("First", std::move(v));
     }
 
     {
         auto v = MakeUnique<FrameVector>();
-        v->emplace_back(new Frame(10));
-        v->emplace_back(new Frame(11));
+        v->frames().emplace_back(new Frame(10));
+        v->frames().emplace_back(new Frame(11));
         table->Add("Second", std::move(v));
     }
 
     {
         auto v = MakeUnique<FrameVector>();
-        v->emplace_back(new Frame(20));
-        v->emplace_back(new Frame(21));
-        v->emplace_back(new Frame(22));
+        v->frames().emplace_back(new Frame(20));
+        v->frames().emplace_back(new Frame(21));
+        v->frames().emplace_back(new Frame(22));
         table->Add("Third", std::move(v));
     }
 
@@ -45,7 +45,7 @@ std::unique_ptr<TestTable> SetupTable() {
 
 TEST(AnimationPlayer, Getters) {
     auto table = SetupTable();
-    action::AnimationPlayer<FrameVector> player(table.get());
+    action::AnimationPlayer<Frame> player(table.get());
     player.Select("First");
     EXPECT_EQ(table->Search("First"), player.current_animation());
     player.Refresh();
@@ -55,7 +55,7 @@ TEST(AnimationPlayer, Getters) {
 
 TEST(AnimationPlayer, Callback) {
     auto table = SetupTable();
-    action::AnimationPlayer<FrameVector> player(table.get());
+    action::AnimationPlayer<Frame> player(table.get());
 
     int callback_called_count = 0;
     int espected_id;
@@ -72,7 +72,7 @@ TEST(AnimationPlayer, Callback) {
 
 TEST(AnimationPlayer, Update) {
     auto table = SetupTable();
-    action::AnimationPlayer<FrameVector> player(table.get());
+    action::AnimationPlayer<Frame> player(table.get());
 
     int callback_called_count = 0;
     int espected_id;

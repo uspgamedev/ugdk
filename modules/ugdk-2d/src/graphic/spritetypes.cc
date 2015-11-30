@@ -59,6 +59,11 @@ namespace {
 
         return frame;
     }
+
+    std::unordered_map<std::string, SpriteAnimation::AnimationRepeat> repeat_string_to_enum = {
+        { "loop", SpriteAnimation::AnimationRepeat::LOOP },
+        { "none", SpriteAnimation::AnimationRepeat::NONE },
+    };
 }
 
 SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepath) {
@@ -73,13 +78,25 @@ SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepa
     auto json_node = libjson::parse(contents);
     SpriteAnimationTable* table = new SpriteAnimationTable(json_node.size());
     for (const auto& animation_json : json_node) {
-
         auto element = MakeUnique<SpriteAnimation>();
 
         auto frames_array_json = animation_json;
-        element->reserve(frames_array_json.size());
+        if (animation_json.type() == JSON_NODE) {
+            frames_array_json = animation_json["frames"];
+
+            std::string repeat;
+            try {
+                repeat = animation_json.at("repeat").as_string();
+            }
+            catch (std::out_of_range) {}
+            if (!repeat.empty()) {
+                element->set_repeat(repeat_string_to_enum.at(repeat));
+            }
+        }
+
+        element->frames().reserve(frames_array_json.size());
         for (const auto& frame_json : frames_array_json) {
-            element->emplace_back(build_frame(frame_json));
+            element->frames().emplace_back(build_frame(frame_json));
         }
 
         table->Add(animation_json.name(), std::move(element));
