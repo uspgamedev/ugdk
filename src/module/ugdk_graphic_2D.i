@@ -11,8 +11,6 @@
 
 %{
 
-#include <ugdk/graphic/geometry.h>
-#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/light.h>
 #include <ugdk/graphic/drawmode.h>
 #include <ugdk/graphic/canvas.h>
@@ -24,8 +22,6 @@
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/graphic/primitive.h>
-#include <ugdk/graphic/spriteanimationframe.h>
-#include <ugdk/graphic/spritetypes.h>
 #include <ugdk/graphic/shader.h>
 #include <ugdk/graphic/shaderprogram.h>
 #include "graphic/gltexture.h"
@@ -38,18 +34,12 @@
 
 %ignore ugdk::graphic::SpritesheetData::frames() const;
 
-%newobject ugdk::graphic::Geometry::Compose(const Geometry* mod1, const Geometry* mod2);
-%newobject ugdk::graphic::Geometry::Copy(const Geometry* mod2);
-
-%rename(ComposeNew) ugdk::graphic::Geometry::Compose(const Geometry* mod1, const Geometry* mod2);
-
 %include <ugdk/graphic.h>
-%include <ugdk/graphic/geometry.h>
-%include <ugdk/graphic/visualeffect.h>
 
 %import(module="ugdk_system") <ugdk/structure/types.h>
 %import(module="ugdk_action") <ugdk/action.h>
 %import(module="ugdk_graphic") <ugdk/graphic.h>
+%import(module="ugdk_structure") <ugdk/structure.h>
 
 %include <ugdk/graphic/drawmode.h>
 %include <ugdk/graphic/canvas.h>
@@ -58,8 +48,6 @@
 %include <ugdk/graphic/textureunit.h>
 %include <ugdk/graphic/rendertarget.h>
 %include <ugdk/graphic/rendertexture.h>
-%include <ugdk/graphic/spriteanimationframe.h>
-%include <ugdk/graphic/spritetypes.h>
 %include <ugdk/graphic/shader.h>
 %include <ugdk/graphic/shaderprogram.h>
 %include <ugdk/structure/indexabletable.h>
@@ -70,16 +58,11 @@
 %include <ugdk/graphic/manager.h>
 %include <ugdk/graphic/module.h>
 
-%template(SpriteAnimationPlayer) ugdk::action::AnimationPlayer<ugdk::graphic::SpriteAnimationFrame>;
-%template(SpriteAnimationTable) ugdk::structure::IndexableTable<std::vector<ugdk::graphic::SpriteAnimationFrame*>*>;
-
 namespace ugdk {
 namespace graphic {
 	export_class(DrawMode)
     export_class(Canvas)
     export_class(Light)
-    export_class(Geometry)
-    export_class(VisualEffect)
     export_class(TextureAtlas)
 	export_class(TextureUnit)
 	export_class(RenderTarget)
@@ -87,7 +70,6 @@ namespace graphic {
     export_class(Manager)
     export_class(Primitive)
     export_class(VertexData)
-    export_class(SpriteAnimationFrame)
 	export_class(Shader)
 	export_class(ShaderProgram)
 }

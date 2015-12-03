@@ -10,20 +10,16 @@
 // ???
 #include "IDGenerator.cc"
 
-// ugdk::math
-#include "Vector2D.cc"
-#include "Integer2D.cc"
-
-// pyramidworks
-#include "PyramidWorksGeometry.cc"
-
-#ifndef UGDK_3D_ENABLED
 // ugdk::action
 #include "AnimationPlayer.cc"
 
-// ugdk::graphic
+// ugdk::math
+#include "Vector2D.cc"
+#include "Integer2D.cc"
 #include "Geometry.cc"
 
-// ugdk::resoucr
+// ugdk::resource
 #include "ResourceManager.cc"
-#endif
+
+// pyramidworks
+#include "PyramidWorksGeometry.cc"

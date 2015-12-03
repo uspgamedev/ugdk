@@ -6,11 +6,11 @@
 #include <ugdk/action.h>
 
 #include <ugdk/action/animationplayer.h>
+#include <ugdk/action/spritetypes.h>
 #include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/graphic/textureatlas.h>
 #include <ugdk/graphic/primitivecontroller.h>
-#include <ugdk/graphic/spritetypes.h>
 #include <ugdk/system/compatibility.h>
 
 #include <string>
@@ -25,7 +25,7 @@ namespace VertexDataManipulation {
 void ApplyPositionOffset(VertexData& data, const math::Vector2D& offset);
 void SetToRectangleAtOrigin(VertexData& data, const math::Vector2D& size);
 void SetToAbsoluteRectangleWithAtlasPiece(VertexData& data, const glm::vec4& top_left, const glm::vec4& bottom_right, const TextureAtlas::BoundPiece& piece);
-void SetUsingSpriteFrameInformation(VertexData& data, const math::Vector2D& position, const graphic::SpriteAnimationFrame&, const TextureAtlas::BoundPiece&);
+void SetUsingSpriteFrameInformation(VertexData& data, const math::Vector2D& position, const action::SpriteAnimationFrame&, const TextureAtlas::BoundPiece&);
 
 } // namespace VertexDataManipulation
 
@@ -37,7 +37,7 @@ struct Sprite {
     static void Prepare(Primitive&, const TextureAtlas* spritesheet);
     static void Render(const Primitive&, Canvas& canvas);
 
-    static std::shared_ptr<graphic::SpriteAnimationPlayer> CreateSpriteAnimationPlayer(Primitive&, const graphic::SpriteAnimationTable* table);
+    static std::shared_ptr<action::SpriteAnimationPlayer> CreateSpriteAnimationPlayer(Primitive&, const action::SpriteAnimationTable* table);
 };
 
 struct Rectangle {

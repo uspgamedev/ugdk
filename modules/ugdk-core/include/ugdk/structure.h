@@ -23,6 +23,9 @@ namespace ikdtree {
 template<class T>
 class IndexableTable;
 
+class VisualEffect;
+struct Color;
+
 }  // namespace structures
 }  // namespace ugdk
 

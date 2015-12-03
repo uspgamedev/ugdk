@@ -1,6 +1,5 @@
 #include <ugdk/text/textbox.h>
 
-#include <ugdk/graphic/geometry.h>
 #include <ugdk/text/font.h>
 #include <ugdk/text/label.h>
 #include <ugdk/graphic/canvas.h>
@@ -62,7 +61,7 @@ void TextBox::Draw(graphic::Canvas& canvas) const {
         else if(ident_style_ == RIGHT)
             off_x = (width_ - label->width()) * 1.0;
 
-        canvas.PushAndCompose(graphic::Geometry(math::Vector2D(off_x, off_y) - hotspot_));
+        canvas.PushAndCompose(math::Geometry(math::Vector2D(off_x, off_y) - hotspot_));
         label->Draw(canvas);
         canvas.PopGeometry();
 

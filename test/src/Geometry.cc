@@ -1,10 +1,9 @@
 #include "gtest/gtest.h"
 #include <glm/glm.hpp>
-#include <ugdk/graphic/geometry.h>
+#include <ugdk/math/geometry.h>
 
 using ugdk::math::Vector2D;
-using ugdk::Color;
-using ugdk::graphic::Geometry;
+using ugdk::math::Geometry;
 
 #define PI 3.1415926535897932384626433832795
 

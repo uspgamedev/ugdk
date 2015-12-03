@@ -23,6 +23,10 @@ namespace {
         canvas.SendVertexData(*data, VertexType::TEXTURE, 2 * sizeof(GLfloat), 2);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
+
+    using action::SpriteAnimationFrame;
+    using action::SpriteAnimationPlayer;
+    using math::Geometry;
 }
 
 namespace VertexDataManipulation {
@@ -142,7 +146,7 @@ namespace PrimitiveSetup {
     }
 
     std::shared_ptr<SpriteAnimationPlayer> Sprite::CreateSpriteAnimationPlayer(
-            Primitive& primitive, const SpriteAnimationTable* table) {
+            Primitive& primitive, const action::SpriteAnimationTable* table) {
         Primitive* p = &primitive;
         auto player = std::make_shared<SpriteAnimationPlayer>(table);
         player->set_frame_change_callback([p](const SpriteAnimationFrame& frame) {

@@ -20,11 +20,11 @@ bool RenderTarget::IsActive() const {
     return is_bound_;
 }
 
-const Geometry& RenderTarget::projection_matrix() const {
+const math::Geometry& RenderTarget::projection_matrix() const {
     return projection_matrix_;
 }
 
-void RenderTarget::Clear(Color color) {
+void RenderTarget::Clear(structure::Color color) {
     system::AssertCondition<system::InvalidOperation>(IsActive(), "RenderTarget must be active for Clear.");
     glClearColor(color.r, color.g, color.b, color.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

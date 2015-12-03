@@ -1,5 +1,5 @@
-#ifndef UGDK_GRAPHIC_GEOMETRY_H_
-#define UGDK_GRAPHIC_GEOMETRY_H_
+#ifndef UGDK_MATH_GEOMETRY_H_
+#define UGDK_MATH_GEOMETRY_H_
 
 #include <ugdk/math/vector2D.h>
 
@@ -10,7 +10,7 @@
 
 
 namespace ugdk {
-namespace graphic {
+namespace math {
 
 class Geometry {
   public:
@@ -83,7 +83,7 @@ class Geometry {
     glm::mat4 matrix_;
 };
 
-}  // namespace graphic
+}  // namespace math
 }  // namespace ugdk
 
-#endif /* UGDK_GRAPHIC_MODIFIER_H_ */
+#endif /* UGDK_MATH_MODIFIER_H_ */

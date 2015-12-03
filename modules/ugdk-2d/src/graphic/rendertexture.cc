@@ -46,7 +46,7 @@ math::Vector2D RenderTexture::size() const {
     return math::Vector2D(texture_->width(), texture_->height());
 }
 
-void RenderTexture::set_projection_matrix(const Geometry& geometry) {
+void RenderTexture::set_projection_matrix(const math::Geometry& geometry) {
     projection_matrix_ = geometry;
 }
 

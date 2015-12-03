@@ -71,7 +71,7 @@ math::Vector2D Canvas::size() const {
     return render_target_->size();
 }
 
-void Canvas::PushAndCompose(const Geometry& geometry) {
+void Canvas::PushAndCompose(const math::Geometry& geometry) {
     geometry_stack_.reserve(geometry_stack_.size() + 1);
     geometry_stack_.emplace_back(geometry_stack_.back());
     geometry_stack_.back().Compose(geometry);
@@ -79,7 +79,7 @@ void Canvas::PushAndCompose(const Geometry& geometry) {
         SendGeometry();
 }
 
-void Canvas::PushAndCompose(const VisualEffect& effect) {
+void Canvas::PushAndCompose(const structure::VisualEffect& effect) {
     visualeffect_stack_.reserve(visualeffect_stack_.size() + 1);
     visualeffect_stack_.emplace_back(visualeffect_stack_.back());
     visualeffect_stack_.back().Compose(effect);
@@ -101,7 +101,7 @@ void Canvas::PopVisualEffect() {
         SendEffect();
 }
 
-void Canvas::Clear(Color color) {
+void Canvas::Clear(structure::Color color) {
     render_target_->Clear(color);
 }
 
@@ -146,7 +146,7 @@ void Canvas::SendGeometry() {
 }
      
 void Canvas::SendEffect() {
-    const Color& c = current_visualeffect().color();
+    const structure::Color& c = current_visualeffect().color();
     glUniform4f(shader_program_->UniformLocation("effect_color"),
                 static_cast<GLfloat>(c.r),
                 static_cast<GLfloat>(c.g),

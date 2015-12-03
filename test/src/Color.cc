@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
-#include <ugdk/structure/types.h>
+#include <ugdk/structure/color.h>
 
 namespace {
 
-using ugdk::Color;
+using ugdk::structure::Color;
 
 TEST(Color, Constructors) {
     Color id;

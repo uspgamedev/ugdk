@@ -10,6 +10,7 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/math/frame.h>
+#include <ugdk/math/geometry.h>
 
 %}
 
@@ -36,11 +37,19 @@
 
 %include <ugdk/math/frame.h>
 
+%newobject ugdk::math::Geometry::Compose(const Geometry* mod1, const Geometry* mod2);
+%newobject ugdk::math::Geometry::Copy(const Geometry* mod2);
+%rename(ComposeNew) ugdk::math::Geometry::Compose(const Geometry* mod1, const Geometry* mod2);
+
+%include <ugdk/math/geometry.h>
+
+
 namespace ugdk {
 namespace math {
     export_class(Vector2D)
     export_class(Integer2D)
     export_class(Frame)
+    export_class(Geometry)
 }
 }
  

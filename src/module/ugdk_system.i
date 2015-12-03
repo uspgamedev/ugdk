@@ -25,6 +25,7 @@
 %import(module="ugdk_math") <ugdk/math.h>
 %import(module="ugdk_resource") <ugdk/resource.h>
 %import(module="ugdk_time") <ugdk/time.h>
+%import(module="ugdk_structure") <ugdk/structure.h>
 
 %import(module="ugdk_math") <ugdk/math/vector2D.h>
 
@@ -36,8 +37,6 @@
 %include <ugdk/system/taskplayer.h>
 
 namespace ugdk {
-	export_class(Color)
-
 namespace system {
 	export_class(Configuration)
 	export_class(TaskPlayer)

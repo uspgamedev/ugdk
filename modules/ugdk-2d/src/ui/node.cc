@@ -2,7 +2,6 @@
 
 #include <ugdk/graphic/opengl.h>
 #include <ugdk/graphic/manager.h>
-#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/ui/drawable.h>
 
