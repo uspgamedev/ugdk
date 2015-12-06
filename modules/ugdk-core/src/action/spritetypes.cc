@@ -1,4 +1,4 @@
-#include <ugdk/graphic/spritetypes.h>
+#include <ugdk/action/spritetypes.h>
 
 #include <ugdk/system/exceptions.h>
 #include <ugdk/filesystem/module.h>
@@ -7,7 +7,7 @@
 #include <libjson.h>
 
 namespace ugdk {
-namespace graphic {
+namespace action {
     
 namespace {
     std::unique_ptr<SpriteAnimationFrame> build_frame(const JSONNode& jsondata) {
@@ -15,7 +15,7 @@ namespace {
 
         if (jsondata.find("color") != jsondata.end()) {
             auto&& colorjson = jsondata["color"];
-            frame->effect().set_color(Color(
+            frame->effect().set_color(structure::Color(
                 colorjson.at(0).as_float(),
                 colorjson.at(1).as_float(),
                 colorjson.at(2).as_float(),
@@ -40,7 +40,7 @@ namespace {
         if (jsondata.find("rotation") != jsondata.end()) {
             rot = jsondata.at("rotation").as_float();
         }
-        frame->geometry() = graphic::Geometry(offset, scale, rot);
+        frame->geometry() = math::Geometry(offset, scale, rot);
 
         ugdk::Mirror mirror = ugdk::MIRROR_NONE;
         try {

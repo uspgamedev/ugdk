@@ -2,7 +2,7 @@
 #define HORUSEYE_FRAMEWORK_LIGHT_H_
 
 #include <ugdk/math/vector2D.h>
-#include <ugdk/structure/types.h>
+#include <ugdk/structure/color.h>
 #include <ugdk/graphic.h>
 #include <ugdk/graphic/vertexdata.h>
 
@@ -17,14 +17,14 @@ class Light {
     const ugdk::math::Vector2D& dimension() const { return dimension_; }
     void set_dimension(const ugdk::math::Vector2D& dimension);
 
-    const Color& color() const { return color_; }
-    void set_color(const Color& color) { color_ = color; }
+    const structure::Color& color() const { return color_; }
+    void set_color(const structure::Color& color) { color_ = color; }
 
     void Draw(Canvas&);
 
   private:
 	ugdk::math::Vector2D dimension_;
-    Color color_;
+    structure::Color color_;
     VertexData data_;
 };
 

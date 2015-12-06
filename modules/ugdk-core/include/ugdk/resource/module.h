@@ -5,8 +5,11 @@
 
 #include <ugdk/system/config.h>
 
+#include <ugdk/action.h>
 #include <ugdk/graphic.h>
 #include <ugdk/text.h>
+#include <ugdk/structure.h>
+#include <ugdk/action/spritetypes.h>
 
 namespace ugdk {
 namespace resource {
@@ -20,10 +23,10 @@ void Release();
 /// Getter for the manager of the module.
 Manager* manager();
 
+action::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
 #ifndef UGDK_3D_ENABLED
-graphic::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
-graphic::GLTexture*             GetTextureFromTag(const std::string& tag);
-graphic::GLTexture*             GetTextureFromFile(const std::string& file);
+graphic::GLTexture*              GetTextureFromTag(const std::string& tag);
+graphic::GLTexture*              GetTextureFromFile(const std::string& file);
 graphic::TextureAtlas*           GetTextureAtlasFromTag(const std::string& tag);
 graphic::TextureAtlas*           GetTextureAtlasFromFile(const std::string& file);
 text::LanguageWord*              GetLanguageWord(const std::string& tag);

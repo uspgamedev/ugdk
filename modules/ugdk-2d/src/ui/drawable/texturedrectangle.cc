@@ -42,7 +42,7 @@ TexturedRectangle::~TexturedRectangle() {}
 void TexturedRectangle::Draw(graphic::Canvas& canvas) const {
     if(draw_setup_function_) draw_setup_function_(this, canvas);
 
-    canvas.PushAndCompose(Geometry(math::Vector2D(-hotspot_)));
+    canvas.PushAndCompose(math::Geometry(math::Vector2D(-hotspot_)));
 
     TextureUnit unit = manager()->ReserveTextureUnit(texture_);
     canvas.SendUniform("drawable_texture", unit);

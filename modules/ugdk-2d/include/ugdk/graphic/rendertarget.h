@@ -2,8 +2,9 @@
 #define UGDK_GRAPHIC_RENDERTARGET_H_
 
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/geometry.h>
+#include <ugdk/math/geometry.h>
 #include <ugdk/math/vector2D.h>
+#include <ugdk/structure/color.h>
 
 namespace ugdk {
 namespace graphic {
@@ -13,18 +14,18 @@ class RenderTarget {
     virtual ~RenderTarget();
 
     bool IsActive() const;
-    const Geometry& projection_matrix() const;
+    const math::Geometry& projection_matrix() const;
     virtual math::Vector2D size() const = 0;
 
     /** Pre-requisite: must be active. */
-    void Clear(Color);
+    void Clear(structure::Color);
 
   protected:
     RenderTarget();
     virtual void Bind();
     virtual void Unbind();
 
-    Geometry projection_matrix_;
+    math::Geometry projection_matrix_;
 
   private:
     virtual void UpdateViewport() = 0;

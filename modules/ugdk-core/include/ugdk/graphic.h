@@ -1,8 +1,6 @@
 #ifndef UGDK_GRAPHIC_H_
 #define UGDK_GRAPHIC_H_
 
-#include <ugdk/action.h>
-#include <ugdk/structure.h>
 #include <vector>
 #include <memory>
 
@@ -10,8 +8,6 @@ namespace ugdk {
 namespace graphic {
 
 // Data
-class Geometry;
-class VisualEffect;
 class VertexData;
 class Primitive;
 class PrimitiveController;
@@ -34,11 +30,6 @@ class Light;
 class Manager;
 
 enum class VertexType;
-
-class SpriteAnimationFrame;
-using SpriteAnimation = ::ugdk::action::Animation<SpriteAnimationFrame>;
-using SpriteAnimationPlayer = ::ugdk::action::AnimationPlayer<SpriteAnimationFrame>;
-using SpriteAnimationTable = ::ugdk::structure::IndexableTable<SpriteAnimation>;
 
 }  // namespace graphic
 }  // namespace ugdk

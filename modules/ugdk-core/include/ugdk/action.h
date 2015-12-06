@@ -16,6 +16,10 @@ class AnimationPlayer;
 class Scene;
 class Observer;
 
+class SpriteAnimationFrame;
+using SpriteAnimation = ::ugdk::action::Animation<SpriteAnimationFrame>;
+using SpriteAnimationPlayer = ::ugdk::action::AnimationPlayer<SpriteAnimationFrame>;
+
 }  // namespace action
 }  // namespace ugdk
 

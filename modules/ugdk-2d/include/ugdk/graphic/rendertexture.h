@@ -3,7 +3,6 @@
 
 #include <ugdk/graphic/rendertarget.h>
 
-#include <ugdk/graphic.h>
 #include <ugdk/math.h>
 #include <ugdk/system/compatibility.h>
 
@@ -21,7 +20,7 @@ class RenderTexture : public RenderTarget {
     virtual math::Vector2D size() const override;
     graphic::GLTexture* texture() const { return texture_.get(); }
 
-    void set_projection_matrix(const Geometry&);
+    void set_projection_matrix(const math::Geometry&);
 
   protected:
     virtual void Bind() override;

@@ -4,8 +4,8 @@
 #include <ugdk/system/compatibility.h>
 #include <ugdk/debug/log.h>
 
+#include <ugdk/action/spritetypes.h>
 #ifndef UGDK_3D_ENABLED
-#include <ugdk/graphic/spritetypes.h>
 #include <ugdk/graphic/textureatlas.h>
 #include <ugdk/text/languageword.h>
 #include "graphic/gltexture.h"
@@ -20,7 +20,7 @@ bool Initialize(Manager* manager) {
     if(manager) {        
 #ifndef UGDK_3D_ENABLED
 
-        manager->CreateContainer<graphic::SpriteAnimationTable>(graphic::LoadSpriteAnimationTableFromFile);
+        manager->CreateContainer<action::SpriteAnimationTable>(action::LoadSpriteAnimationTableFromFile);
         manager->CreateContainer<graphic::GLTexture>(graphic::GLTexture::CreateFromFile);
         manager->CreateContainer<graphic::TextureAtlas>(graphic::TextureAtlas::LoadFromFile);
         manager->CreateContainer<text::LanguageWord>(NullLoad<text::LanguageWord>);
@@ -48,8 +48,8 @@ Manager* manager() {
 
 #ifndef UGDK_3D_ENABLED
 
-graphic::SpriteAnimationTable* GetSpriteAnimationTableFromFile(const std::string& file) {
-    return manager()->GetContainer<graphic::SpriteAnimationTable>()->Load(file, file);
+action::SpriteAnimationTable* GetSpriteAnimationTableFromFile(const std::string& file) {
+    return manager()->GetContainer<action::SpriteAnimationTable>()->Load(file, file);
 }
 
 graphic::GLTexture* GetTextureFromTag(const std::string& tag) {

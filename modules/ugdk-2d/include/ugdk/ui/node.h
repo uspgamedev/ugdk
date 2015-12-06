@@ -2,8 +2,8 @@
 #define UGDK_GRAPHIC_NODE_H_
 
 #include <ugdk/graphic.h>
-#include <ugdk/graphic/geometry.h>
-#include <ugdk/graphic/visualeffect.h>
+#include <ugdk/math/geometry.h>
+#include <ugdk/structure/visualeffect.h>
 #include <ugdk/ui.h>
 
 #include <vector>
@@ -28,10 +28,10 @@ class Node {
     void set_zindex(const double zindex);
     
     Node* parent() { return parent_; }
-          graphic::Geometry& geometry()          { return geometry_; }
-    const graphic::Geometry& geometry()    const { return geometry_; }
-          graphic::VisualEffect& effect()        { return effect_; }
-    const graphic::VisualEffect& effect()  const { return effect_; }
+          math::Geometry& geometry()          { return geometry_; }
+    const math::Geometry& geometry()    const { return geometry_; }
+          structure::VisualEffect& effect()        { return effect_; }
+    const structure::VisualEffect& effect()  const { return effect_; }
           Drawable* drawable()          { return drawable_.get(); }
     const Drawable* drawable()    const { return drawable_.get(); }
           bool   active()         const { return   active_; }
@@ -45,8 +45,8 @@ class Node {
     void SortChildren();
 
   private:
-    graphic::Geometry geometry_;
-    graphic::VisualEffect effect_;
+    math::Geometry geometry_;
+    structure::VisualEffect effect_;
     std::unique_ptr<Drawable> drawable_;
     bool active_;
     bool ignores_effect_;

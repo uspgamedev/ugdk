@@ -7,16 +7,22 @@
 %{
 
 #include <ugdk/structure.h>
+#include <ugdk/structure/types.h>
 #include <ugdk/structure/box.h>
 #include <ugdk/structure/indexabletable.h>
 #include <ugdk/structure/intervalkdtree.h>
+#include <ugdk/structure/color.h>
+#include <ugdk/structure/visualeffect.h>
 
 %}
 
 %include <ugdk/structure.h>
+%include <ugdk/structure/types.h>
 %include <ugdk/structure/box.h>
 %include <ugdk/structure/indexabletable.h>
 %include <ugdk/structure/intervalkdtree.h>
+%include <ugdk/structure/color.h>
+%include <ugdk/structure/visualeffect.h>
 
 
 %template(Box2D) ugdk::structure::Box<2>;
@@ -30,6 +36,7 @@ static ugdk::structure::Box<2> CreateBox2D(double a1, double a2, double b1, doub
 
 namespace ugdk {
 namespace structure {
+    export_class(Color)
 }
 }
  

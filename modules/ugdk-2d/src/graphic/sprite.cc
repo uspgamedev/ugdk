@@ -3,7 +3,7 @@
 #include <ugdk/graphic/textureatlas.h>
 #include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/primitivesetup.h>
-#include <ugdk/graphic/spriteanimationframe.h>
+#include <ugdk/action/spriteanimationframe.h>
 
 namespace ugdk {
 namespace graphic {
@@ -14,7 +14,7 @@ PrimitiveControllerSprite::PrimitiveControllerSprite(const TextureAtlas *sprites
 
 PrimitiveControllerSprite::~PrimitiveControllerSprite() {}
 
-void PrimitiveControllerSprite::ChangeToAnimationFrame(const SpriteAnimationFrame& frame) {
+void PrimitiveControllerSprite::ChangeToAnimationFrame(const action::SpriteAnimationFrame& frame) {
     auto&& piece = spritesheet_->PieceAt(frame.atlas_frame_name());
 
     owner_->set_visualeffect(frame.effect());

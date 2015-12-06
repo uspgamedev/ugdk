@@ -30,9 +30,10 @@ enable_disown(ugdk::text::LanguageWord* val)
 %template(ResourceContainer_LanguageWord) ugdk::resource::ResourceContainer<ugdk::text::LanguageWord*>;
 disable_disown(ugdk::text::LanguageWord* val)
 
-%import <ugdk/action.h>
-%import <ugdk/graphic.h>
-%import <ugdk/text.h>
+%import(module="ugdk_action") <ugdk/action.h>
+%import(module="ugdk_action") <ugdk/action/spritetypes.h>
+%import(module="ugdk_graphic") <ugdk/graphic.h>
+%import(module="ugdk_text") <ugdk/text.h>
 
 proxy_class(ugdk::action::Scene)
 

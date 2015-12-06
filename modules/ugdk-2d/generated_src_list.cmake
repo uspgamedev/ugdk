@@ -19,7 +19,6 @@ modules/ugdk-2d/src/graphic/rendertexture.cc
 modules/ugdk-2d/src/graphic/shader.cc
 modules/ugdk-2d/src/graphic/shaderprogram.cc
 modules/ugdk-2d/src/graphic/sprite.cc
-modules/ugdk-2d/src/graphic/spritetypes.cc
 modules/ugdk-2d/src/graphic/textureatlas.cc
 modules/ugdk-2d/src/graphic/textureunit.cc
 modules/ugdk-2d/src/graphic/vertexbuffer.cc
@@ -47,7 +46,6 @@ modules/ugdk-2d/include/ugdk/graphic/canvas.h
 modules/ugdk-2d/include/ugdk/graphic/defaultshaders.h
 modules/ugdk-2d/include/ugdk/graphic/drawmode.h
 modules/ugdk-2d/include/ugdk/graphic/exceptions.h
-modules/ugdk-2d/include/ugdk/graphic/geometry.h
 modules/ugdk-2d/include/ugdk/graphic/light.h
 modules/ugdk-2d/include/ugdk/graphic/manager.h
 modules/ugdk-2d/include/ugdk/graphic/module.h
@@ -60,12 +58,9 @@ modules/ugdk-2d/include/ugdk/graphic/rendertexture.h
 modules/ugdk-2d/include/ugdk/graphic/shader.h
 modules/ugdk-2d/include/ugdk/graphic/shaderprogram.h
 modules/ugdk-2d/include/ugdk/graphic/sprite.h
-modules/ugdk-2d/include/ugdk/graphic/spriteanimationframe.h
-modules/ugdk-2d/include/ugdk/graphic/spritetypes.h
 modules/ugdk-2d/include/ugdk/graphic/textureatlas.h
 modules/ugdk-2d/include/ugdk/graphic/textureunit.h
 modules/ugdk-2d/include/ugdk/graphic/vertexdata.h
-modules/ugdk-2d/include/ugdk/graphic/visualeffect.h
 modules/ugdk-2d/include/ugdk/text/font.h
 modules/ugdk-2d/include/ugdk/text/functions.h
 modules/ugdk-2d/include/ugdk/text/label.h

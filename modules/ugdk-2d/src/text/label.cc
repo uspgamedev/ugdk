@@ -4,8 +4,6 @@
 
 #include <ugdk/structure/types.h>
 #include <ugdk/graphic/module.h>
-#include <ugdk/graphic/geometry.h>
-#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/text/font.h>
 #include <ugdk/util/utf8.h>
@@ -20,7 +18,7 @@ namespace ugdk {
 namespace text {
 
 using namespace graphic;
-using ugdk::Color;
+using ugdk::structure::Color;
 
 Label::Label(const std::string& utf8_message, Font *font) 
     : font_(font)
@@ -68,7 +66,7 @@ const ugdk::math::Vector2D& Label::size() const {
 }
 
 void Label::Draw(Canvas& canvas) const {
-    canvas.PushAndCompose(Geometry(-hotspot_));
+    canvas.PushAndCompose(math::Geometry(-hotspot_));
     
     if(draw_setup_function_) draw_setup_function_(this, canvas);
 

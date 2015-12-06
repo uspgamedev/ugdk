@@ -1,10 +1,10 @@
-#ifndef UGDK_GRAPHIC_VISUALEFFECT_H_
-#define UGDK_GRAPHIC_VISUALEFFECT_H_
+#ifndef UGDK_STRUCTURE_VISUALEFFECT_H_
+#define UGDK_STRUCTURE_VISUALEFFECT_H_
 
-#include <ugdk/structure/types.h>
+#include <ugdk/structure/color.h>
 
 namespace ugdk {
-namespace graphic {
+namespace structure {
 
 class VisualEffect {
   public:
@@ -15,7 +15,7 @@ class VisualEffect {
     /**
      * @param color The color.
      */
-    VisualEffect(const ugdk::Color& color, bool _visible = true) :
+    VisualEffect(const Color& color, bool _visible = true) :
         color_(color), visible_(_visible) {}
 
     ~VisualEffect() {}
@@ -24,10 +24,10 @@ class VisualEffect {
     /**@name Getters and Setters
      *@{
      */
-    const ugdk::Color& color() const { return color_; }
+    const Color& color() const { return color_; }
     bool visible() const { return visible_; }
 
-    void set_color(const ugdk::Color& _color) { color_ = _color; }
+    void set_color(const Color& _color) { color_ = _color; }
     void set_visible(bool _visible) { visible_ = _visible; }
     /**@}
      */
@@ -49,11 +49,11 @@ class VisualEffect {
     }
 
   private:
-    ugdk::Color color_;
+    Color color_;
     bool visible_;
 };
 
-}  // namespace graphic
+}  // namespace structure
 }  // namespace ugdk
 
-#endif // UGDK_GRAPHIC_VISUALEFFECT_H_
+#endif // UGDK_STRUCTURE_VISUALEFFECT_H_

@@ -1,6 +1,7 @@
 SET(GENERATED_SRC
 modules/ugdk-core/src/action/mediaplayer.cc
 modules/ugdk-core/src/action/scene.cc
+modules/ugdk-core/src/action/spritetypes.cc
 modules/ugdk-core/src/audio/manager.cc
 modules/ugdk-core/src/audio/module.cc
 modules/ugdk-core/src/audio/music.cc
@@ -64,6 +65,8 @@ modules/ugdk-core/include/ugdk/action/mediamanager.h
 modules/ugdk-core/include/ugdk/action/mediaplayer.h
 modules/ugdk-core/include/ugdk/action/observer.h
 modules/ugdk-core/include/ugdk/action/scene.h
+modules/ugdk-core/include/ugdk/action/spriteanimationframe.h
+modules/ugdk-core/include/ugdk/action/spritetypes.h
 modules/ugdk-core/include/ugdk/audio.h
 modules/ugdk-core/include/ugdk/audio/manager.h
 modules/ugdk-core/include/ugdk/audio/module.h
@@ -96,6 +99,7 @@ modules/ugdk-core/include/ugdk/input/scancode.h
 modules/ugdk-core/include/ugdk/input/textinput.h
 modules/ugdk-core/include/ugdk/math.h
 modules/ugdk-core/include/ugdk/math/frame.h
+modules/ugdk-core/include/ugdk/math/geometry.h
 modules/ugdk-core/include/ugdk/math/integer2D.h
 modules/ugdk-core/include/ugdk/math/vector2D.h
 modules/ugdk-core/include/ugdk/resource.h
@@ -109,6 +113,7 @@ modules/ugdk-core/include/ugdk/structure/indexabletable.h
 modules/ugdk-core/include/ugdk/structure/intervalkdtree.h
 modules/ugdk-core/include/ugdk/structure/types.h
 modules/ugdk-core/include/ugdk/structure/vertex.h
+modules/ugdk-core/include/ugdk/structure/visualeffect.h
 modules/ugdk-core/include/ugdk/system.h
 modules/ugdk-core/include/ugdk/system/compatibility.h
 modules/ugdk-core/include/ugdk/system/configuration.h

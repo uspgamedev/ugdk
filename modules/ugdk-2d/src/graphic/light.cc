@@ -3,7 +3,7 @@
 #include <ugdk/graphic/opengl.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/graphic/visualeffect.h>
+#include <ugdk/structure/visualeffect.h>
 
 namespace ugdk {
 namespace graphic {
@@ -44,10 +44,10 @@ void Light::Draw(Canvas &canvas) {
     canvas.SendUniform("decayment", 2.4f);
     canvas.SendUniform("minimum_radius", 0.05f);
     canvas.SendUniform("dimension", dimension_.x, dimension_.y);
-    canvas.PushAndCompose(VisualEffect(color_));
+    canvas.PushAndCompose(structure::VisualEffect(color_));
     canvas.SendVertexData(data_, VertexType::VERTEX, 0);
     graphic::manager()->DisableVertexType(VertexType::TEXTURE);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    canvas.DrawArrays(DrawMode::TRIANGLE_STRIP(), 0, 4);
 
     canvas.PopVisualEffect();
     canvas.ChangeShaderProgram(old_program);

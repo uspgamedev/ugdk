@@ -28,7 +28,7 @@ public:
 
     void Resize(const math::Vector2D& canvas_size) {
         size_ = canvas_size;
-        projection_matrix_ = Geometry(math::Vector2D(-1.0, 1.0), math::Vector2D(2.0/size_.x, -2.0/size_.y));
+        projection_matrix_ = math::Geometry(math::Vector2D(-1.0, 1.0), math::Vector2D(2.0/size_.x, -2.0/size_.y));
     }
 
     void SaveToTexture(graphic::GLTexture* texture) {
@@ -177,7 +177,7 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
         // Lights are simply added together.
         glBlendFunc(GL_ONE, GL_ONE);
 
-        light_canvas.Clear(Color(0.0, 0.0, 0.0, 0.0));
+        light_canvas.Clear(structure::Color(0.0, 0.0, 0.0, 0.0));
         render_light_function(light_canvas);
     
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

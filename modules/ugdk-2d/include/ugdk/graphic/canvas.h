@@ -2,10 +2,10 @@
 #define UGDK_GRAPHIC_CANVAS_H_
 
 #include <ugdk/graphic/drawmode.h>
-#include <ugdk/graphic/geometry.h>
 #include <ugdk/graphic/manager.h>
-#include <ugdk/graphic/visualeffect.h>
 #include <ugdk/math/vector2D.h>
+#include <ugdk/math/geometry.h>
+#include <ugdk/structure/visualeffect.h>
 #include <ugdk/structure/types.h>
 
 #include <ugdk/desktop.h>
@@ -35,18 +35,18 @@ class Canvas {
     /// Queries if this object is currently bound.
     bool IsActive() const;
     math::Vector2D size() const;
-    const Geometry& current_geometry() const { return geometry_stack_.back(); }
-    const VisualEffect& current_visualeffect() const { return visualeffect_stack_.back(); }
+    const math::Geometry& current_geometry() const { return geometry_stack_.back(); }
+    const structure::VisualEffect& current_visualeffect() const { return visualeffect_stack_.back(); }
     const ShaderProgram* shader_program() const { return shader_program_; }
 
-    void PushAndCompose(const Geometry& geometry);
-    void PushAndCompose(const VisualEffect& effect);
+    void PushAndCompose(const math::Geometry& geometry);
+    void PushAndCompose(const structure::VisualEffect& effect);
 
     void PopGeometry();
     void PopVisualEffect();
 
     //
-    void Clear(Color);
+    void Clear(structure::Color);
     
     // Shader variables.
 
@@ -71,8 +71,8 @@ class Canvas {
     void SendEffect();
 
     RenderTarget* render_target_;
-    std::vector<Geometry> geometry_stack_;
-    std::vector<VisualEffect> visualeffect_stack_;
+    std::vector<math::Geometry> geometry_stack_;
+    std::vector<structure::VisualEffect> visualeffect_stack_;
     const ShaderProgram* shader_program_;
     Canvas* previous_canvas_;
     Canvas* next_canvas_;

@@ -243,7 +243,7 @@ void Run() {
 #ifndef UGDK_3D_ENABLED
                 if(graphic::manager()) {
                     graphic::Canvas canvas(graphic::manager()->screen());
-                    canvas.Clear(Color(0.0, 0.0, 0.0, 0.0));
+                    canvas.Clear(structure::Color(0.0, 0.0, 0.0, 0.0));
                     canvas.ChangeShaderProgram(graphic::manager()->shaders().current_shader());
                     for (auto& scene : scene_list_)
                         scene->Render(canvas);
