@@ -9,6 +9,7 @@ namespace system {
 
 class SDLEventHandler {
   public:
+	virtual ~SDLEventHandler() {}
     virtual std::unordered_set<Uint32> TypesHandled() const = 0;
     virtual void Handle(const ::SDL_Event&) const = 0;
 };

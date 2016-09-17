@@ -11,7 +11,7 @@ namespace input {
 
 class KeyboardInputSDLEventHandler : public system::SDLEventHandler {
   public:
-    KeyboardInputSDLEventHandler(Keyboard& keyboard) : keyboard_(keyboard) {}
+    explicit KeyboardInputSDLEventHandler(Keyboard& keyboard) : keyboard_(keyboard) {}
 
     std::unordered_set<Uint32> TypesHandled() const override {
         return { SDL_KEYDOWN, SDL_KEYUP };
@@ -50,7 +50,7 @@ class KeyboardInputSDLEventHandler : public system::SDLEventHandler {
 
 
   private:
-    void operator=(const KeyboardInputSDLEventHandler&);
+    void operator=(const KeyboardInputSDLEventHandler&) = delete;
 
     Keyboard& keyboard_;
 };
