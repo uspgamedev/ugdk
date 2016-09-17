@@ -11,7 +11,7 @@ namespace action {
     
 namespace {
     std::unique_ptr<SpriteAnimationFrame> build_frame(const JSONNode& jsondata) {
-        auto frame = MakeUnique<SpriteAnimationFrame>(jsondata["name"].as_string());
+        auto frame = MakeUnique<SpriteAnimationFrame>(jsondata["name"].as_string().c_str());
 
         if (jsondata.find("color") != jsondata.end()) {
             auto&& colorjson = jsondata["color"];
@@ -60,7 +60,7 @@ namespace {
         return frame;
     }
 
-    std::unordered_map<std::string, SpriteAnimation::AnimationRepeat> repeat_string_to_enum = {
+    std::unordered_map<json_string, SpriteAnimation::AnimationRepeat> repeat_string_to_enum = {
         { "loop", SpriteAnimation::AnimationRepeat::LOOP },
         { "none", SpriteAnimation::AnimationRepeat::NONE },
     };
@@ -71,7 +71,7 @@ SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepa
     if (!file)
         return nullptr;
 
-    auto contents = file->GetContents();
+    auto contents = json_string(file->GetContents().c_str());
     if (!libjson::is_valid(contents))
         throw system::BaseException("Invalid json: %s\n", filepath.c_str());
 
@@ -84,13 +84,9 @@ SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepa
         if (animation_json.type() == JSON_NODE) {
             frames_array_json = animation_json["frames"];
 
-            std::string repeat;
-            try {
-                repeat = animation_json.at("repeat").as_string();
-            }
-            catch (std::out_of_range) {}
-            if (!repeat.empty()) {
-                element->set_repeat(repeat_string_to_enum.at(repeat));
+			auto repeat = animation_json.find("repeat");
+            if (repeat != animation_json.end()) {
+                element->set_repeat(repeat_string_to_enum.at(repeat->as_string()));
             }
         }
 
@@ -99,7 +95,7 @@ SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepa
             element->frames().emplace_back(build_frame(frame_json));
         }
 
-        table->Add(animation_json.name(), std::move(element));
+        table->Add(animation_json.name().c_str(), std::move(element));
     }
 
     return table;

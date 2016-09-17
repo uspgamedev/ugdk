@@ -44,7 +44,7 @@ TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
     if (!json_file)
         throw system::BaseException("File not found: %s.json\n", filepath.c_str());
 
-    auto contents = json_file->GetContents();
+    auto contents = json_string(json_file->GetContents().c_str());
     if (!libjson::is_valid(contents))
         throw system::BaseException("Invalid json: %s.json\n", filepath.c_str());
 
@@ -55,7 +55,7 @@ TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
     TextureAtlas* atlas = new TextureAtlas(gltexture, frames.size());
     for (const auto& frame : frames) {
         auto&& frame_info = frame["frame"];
-        size_t index = atlas->AddPiece(frame.name(),
+        size_t index = atlas->AddPiece(frame.name().c_str(),
                         math::Integer2D(frame_info["x"].as_int(), frame_info["y"].as_int()),
                         math::Integer2D(frame_info["w"].as_int(), frame_info["h"].as_int()));
         
