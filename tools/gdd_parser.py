@@ -7,7 +7,7 @@ parser.add_argument("input", help="Path to input file")
 parser.add_argument("output", help="Path to output file")
 args = parser.parse_args()
 
-valid_properties = {'fps', 'repeat'}
+valid_properties = {'fps', 'repeat', 'period'}
 properties = {}
 
 result_table = {}
@@ -56,7 +56,10 @@ def parse_property(input):
     if name == 'repeat':
         current_animation['repeat'] = split[1]
     elif len(split) > 1:
-        properties[name] = float(split[1])
+        if name == "period":
+            properties["fps"] = 1/float(split[1])
+        else:
+            properties[name] = float(split[1])
     else:
         properties[name] = True
 
