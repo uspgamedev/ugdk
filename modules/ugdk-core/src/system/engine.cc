@@ -195,6 +195,18 @@ void Run() {
     current_state_ = UGDKState::RUNNING;
 
     while (current_state_ == UGDKState::RUNNING) {
+        // Start the frame time as first thing
+        double delta_t;
+        if (auto time_manager = time::manager()) {
+            time_manager->Update();
+            delta_t = (time_manager->TimeDifference()) / 1000.0;
+        } else {
+            delta_t = 0.0;
+        }
+
+        // Over-compensation for lag causes bugs.
+        delta_t = std::min(delta_t, 0.1);
+
         // Pre-frame start logic
         DefocusRoutine();
         DeleteFinishedScenes();
@@ -208,16 +220,6 @@ void Run() {
 
         // Frame starts here!
         FocusRoutine();
-
-        double delta_t;
-        if(time::manager()) {
-            time::manager()->Update();
-            delta_t = (time::manager()->TimeDifference())/1000.0;
-        } else
-            delta_t = 0.0;
-
-        // Over-compensation for lag causes bugs.
-        delta_t = std::min(delta_t, 0.1);
 
         if(input::manager())
             input::manager()->Update();
