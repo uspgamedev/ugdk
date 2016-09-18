@@ -233,15 +233,15 @@ void Run() {
             break;
 
         {
-            debug::ProfileSection section("Frame");
+            debug::ProfileSection frame_section("Frame");
             {
-                debug::ProfileSection section("Update");
+                debug::ProfileSection update_section("Update");
                 for(auto& scene : scene_list_)
                     scene->Update(delta_t);
             }
 
             if(desktop::manager()) {
-                debug::ProfileSection section("Render");
+                debug::ProfileSection render_section("Render");
 #ifndef UGDK_3D_ENABLED
                 if(graphic::manager()) {
                     graphic::Canvas canvas(graphic::manager()->screen());
@@ -253,7 +253,7 @@ void Run() {
 #endif
                 desktop::manager()->PresentAll();
             }
-            profile_data_list_.push_back(section.data());
+            profile_data_list_.push_back(frame_section.data());
         }
         while(profile_data_list_.size() > 10)
             profile_data_list_.pop_front();
