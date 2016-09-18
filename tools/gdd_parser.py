@@ -72,7 +72,7 @@ valueparsers = {
     'name': lambda x: x,
     'color': transform_color,
     'alpha': lambda x: float(x),
-    'position': lambda x: map(float, x.split(' ')),
+    'position': lambda x: list(map(float, x.split(' '))),
     'size': lambda x: map(float, x.split(' ')),
     'rotation': lambda x: float(x),
     'mirror': lambda x: x,
