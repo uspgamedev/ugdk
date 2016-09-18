@@ -15,6 +15,7 @@ class GLTexture {
     static GLTexture* CreateFromFile(const std::string& filepath);
     static GLTexture* CreateFromSurface(SDL_Surface* data);
     static GLTexture* CreateRawTexture(int texture_width, int texture_height);
+    static void set_texture_filter(GLint);
 
     GLuint id() const { return id_; }
     int width() const { return texture_width_; }

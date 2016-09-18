@@ -45,6 +45,8 @@ class Manager {
     void AttachTo(const std::shared_ptr<desktop::Window>&);
     void ResizeScreen(const math::Vector2D& canvas_size);
 
+    void SetUserNearestNeighborTextures(bool enabled);
+
 #ifndef SWIG
     TextureUnit ReserveTextureUnit(const graphic::GLTexture* texture = nullptr);
 #endif

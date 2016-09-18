@@ -22,7 +22,7 @@ namespace graphic {
 
 class RenderScreen : public RenderTarget {
 public:
-    math::Vector2D size() const {
+    math::Vector2D size() const override {
         return size_;
     }
 
@@ -67,6 +67,14 @@ void Manager::AttachTo(const std::shared_ptr<desktop::Window>& window) {
 
 void Manager::ResizeScreen(const math::Vector2D& canvas_size) {
     screen_->Resize(canvas_size);
+}
+
+void Manager::SetUserNearestNeighborTextures(bool enabled) {
+    if (enabled) {
+        GLTexture::set_texture_filter(GL_NEAREST);
+    } else {
+        GLTexture::set_texture_filter(GL_LINEAR);
+    }
 }
 
 bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, const math::Vector2D& canvas_size) {

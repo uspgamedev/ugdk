@@ -19,6 +19,8 @@ namespace ugdk {
 namespace graphic {
 
 namespace {
+    GLint current_texture_filter = GL_LINEAR;
+
     bool ConvertSurfaceToTexture(SDL_Surface* data, GLuint* texture_, int* texture_width_, int* texture_height_) {
         Uint8 *raw = static_cast<Uint8*>(malloc(data->w * data->h * 4));
         Uint8 *dstPixel = raw;
@@ -79,8 +81,8 @@ namespace {
 
         /*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);*/
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, current_texture_filter);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, current_texture_filter);
 
 #ifndef UGDK_USING_GLES
         glHint(GL_TEXTURE_COMPRESSION_HINT, GL_NICEST);
@@ -164,6 +166,10 @@ GLTexture* GLTexture::CreateRawTexture(int texture_width, int texture_height) {
     GLuint texture;
     glGenTextures( 1, &texture );
     return new GLTexture(texture, texture_width, texture_height);
+}
+
+void GLTexture::set_texture_filter(GLint filter) {
+    current_texture_filter = filter;
 }
 
 GLTexture::GLTexture(GLuint gltexture, int texture_width, int texture_height) 
