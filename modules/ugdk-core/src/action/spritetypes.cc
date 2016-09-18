@@ -43,19 +43,19 @@ namespace {
         frame->geometry() = math::Geometry(offset, scale, rot);
 
         ugdk::Mirror mirror = ugdk::MIRROR_NONE;
-        try {
-            if (jsondata.at("mirrorh").as_bool())
-                mirror |= ugdk::MIRROR_HFLIP;
-        } catch (std::out_of_range) {}
-        try {
-            if (jsondata.at("mirrorv").as_bool())
+
+        auto mirrorh = jsondata.find("mirrorh");
+        if (mirrorh != jsondata.end() && mirrorh->as_bool())
+            mirror |= ugdk::MIRROR_HFLIP;
+
+        auto mirrorv = jsondata.find("mirrorv");
+        if (mirrorv != jsondata.end() && mirrorh->as_bool())
                 mirror |= ugdk::MIRROR_VFLIP;
-        } catch (std::out_of_range) {}
         frame->set_mirror(mirror);
 
-        try {
-            frame->set_period(jsondata.at("period").as_float());
-        } catch (std::out_of_range) {}
+        auto period = jsondata.find("period");
+        if (period != jsondata.end())
+            frame->set_period(period->as_float());
 
         return frame;
     }
