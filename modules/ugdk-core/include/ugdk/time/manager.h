@@ -17,6 +17,9 @@ class Manager {
     /*  @return Time elapsed since initialization, in milliseconds */
     uint32 TimeElapsed() const;
 
+    /*  @return Time elapsed since start of the frame, in milliseconds */
+    uint32 TimeElapsedInFrame() const;
+
     // Devolve quanto tempo se passou desde a iteracao anterior, em milisegundos
     /*  @return Time elapsed since last frame, in milliseconds */
     uint32 TimeDifference() const;

@@ -18,6 +18,10 @@ uint32 Manager::TimeElapsed() const {
     return current_time_ - initial_time_;
 }
 
+uint32 Manager::TimeElapsedInFrame() const{
+    return SDL_GetTicks() - current_time_;
+}
+
 uint32 Manager::TimeDifference() const {
     return current_time_ - last_update_;
 }
