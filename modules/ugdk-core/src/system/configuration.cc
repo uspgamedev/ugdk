@@ -17,6 +17,9 @@ Configuration::Configuration()
     , input_enabled(true)
 
     , time_enabled(true)
+
+    , limit_frame_time_with_sleep(false)
+    , target_frame_time(1000 / 60)
     {}
 
 } // namespace system

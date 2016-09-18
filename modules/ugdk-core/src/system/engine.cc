@@ -255,6 +255,12 @@ void Run() {
         }
         while(profile_data_list_.size() > 10)
             profile_data_list_.pop_front();
+
+        if (configuration_.limit_frame_time_with_sleep && time::manager()) {
+            auto frame_time = time::manager()->TimeElapsedInFrame();
+            if (frame_time < configuration_.target_frame_time)
+                SDL_Delay(configuration_.target_frame_time - frame_time);
+        }
     }
 }
 

@@ -25,6 +25,9 @@ struct Configuration {
 
     bool time_enabled;
 
+    bool limit_frame_time_with_sleep;
+    uint32 target_frame_time;
+
     Configuration();
 };
 
