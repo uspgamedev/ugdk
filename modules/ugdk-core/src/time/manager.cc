@@ -14,15 +14,15 @@ void Manager::Update() {
     current_time_ = SDL_GetTicks();
 }
 
-uint32 Manager::TimeElapsed() {
+uint32 Manager::TimeElapsed() const {
     return current_time_ - initial_time_;
 }
 
-uint32 Manager::TimeDifference() {
+uint32 Manager::TimeDifference() const {
     return current_time_ - last_update_;
 }
 
-uint32 Manager::TimeSince(uint32 t0) {
+uint32 Manager::TimeSince(uint32 t0) const {
     return current_time_ - t0 - initial_time_;
 }
 

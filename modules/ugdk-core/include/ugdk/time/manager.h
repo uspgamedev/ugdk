@@ -15,14 +15,14 @@ class Manager {
     void Update();
 
     /*  @return Time elapsed since initialization, in milliseconds */
-    uint32 TimeElapsed();
+    uint32 TimeElapsed() const;
 
     // Devolve quanto tempo se passou desde a iteracao anterior, em milisegundos
     /*  @return Time elapsed since last frame, in milliseconds */
-    uint32 TimeDifference();
+    uint32 TimeDifference() const;
 
     // Devolve quanto tempo se passou desde um ponto no tempo
-    uint32 TimeSince(uint32 t0);
+    uint32 TimeSince(uint32 t0) const;
 
   private:
     uint32 initial_time_, current_time_, last_update_;
