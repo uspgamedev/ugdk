@@ -19,8 +19,9 @@ class AnimationPlayer : public MediaPlayer {
     using AnimationTable = structure::IndexableTable<Animation>;
     using FrameChangedCallback = std::function<void(const Frame&)>;
 
-    AnimationPlayer(const AnimationTable* table)
+    explicit AnimationPlayer(const AnimationTable* table)
         : current_animation_(nullptr)
+        , current_frame_(0)
         , elapsed_time_(0.0)
         , table_(table)
         , notified_(false)
@@ -38,7 +39,7 @@ class AnimationPlayer : public MediaPlayer {
         return *current_animation_->frames()[current_frame_];
     }
 
-    void Update(double dt) {
+    void Update(double dt) override {
         if (!current_animation_) return;
         elapsed_time_ += dt;
 
@@ -59,16 +60,16 @@ class AnimationPlayer : public MediaPlayer {
 
     /// Change the current animation to a new animation from the previously selected AnimationSet.
     /**Given a animation name (a string), the function changes the current animation to a new animation of AnimationSet*/
-    void Select(const std::string& name) {
+    void Select(const std::string& name, bool reset_animation_if_different = true) {
         if(table_)
-            this->set_current_animation(table_->Search(name));
+            this->set_current_animation(table_->Search(name), reset_animation_if_different);
     }
 
     /// Change the current animation to a new animation from the previo2usly selected AnimationSet.
     /**Given a animation index (a integer), the function changes the current animation to a new animation of AnimationSet*/
-    void Select(int index) {
+    void Select(int index, bool reset_animation_if_different = true) {
         if(table_)
-            this->set_current_animation(table_->Get(index));
+            this->set_current_animation(table_->Get(index), reset_animation_if_different);
     }
 
     /// Calls the frame changed callback with the current frame.
@@ -85,11 +86,17 @@ class AnimationPlayer : public MediaPlayer {
     FrameChangedCallback frame_change_callback_;
     bool notified_;
 
-    void set_current_animation(const Animation* anim) {
+    void set_current_animation(const Animation* anim, bool reset_animation_if_different) {
         auto previous_anim = current_animation_;
         current_animation_ = anim;
-        if (anim != previous_anim)
-            RestartAnimation();
+
+        if (anim != previous_anim) {
+            if (reset_animation_if_different || current_frame_ >= current_animation_->frames().size()) {
+                RestartAnimation();
+            } else {
+                ExecuteFrameChangeCallback();
+            }
+        }
     }
 
     void ExecuteFrameChangeCallback() {
