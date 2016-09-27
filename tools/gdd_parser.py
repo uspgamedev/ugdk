@@ -77,6 +77,7 @@ valueparsers = {
     'rotation': lambda x: float(x),
     'mirror': lambda x: x,
     'period': lambda x: float(x),
+    'visible': lambda x: x.lower() == "true",
 }
 
 

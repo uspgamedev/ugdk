@@ -13,15 +13,20 @@ namespace {
     std::unique_ptr<SpriteAnimationFrame> build_frame(const JSONNode& jsondata) {
         auto frame = MakeUnique<SpriteAnimationFrame>(jsondata["name"].as_string().c_str());
 
-        if (jsondata.find("color") != jsondata.end()) {
-            auto&& colorjson = jsondata["color"];
-            frame->effect().set_color(structure::Color(
-                colorjson.at(0).as_float(),
-                colorjson.at(1).as_float(),
-                colorjson.at(2).as_float(),
-                colorjson.at(3).as_float()
-            ));
-        }
+		if (jsondata.find("color") != jsondata.end()) {
+			auto&& colorjson = jsondata["color"];
+			frame->effect().set_color(structure::Color(
+				colorjson.at(0).as_float(),
+				colorjson.at(1).as_float(),
+				colorjson.at(2).as_float(),
+				colorjson.at(3).as_float()
+			));
+		}
+
+		auto visible = jsondata.find("visible");
+		if (visible != jsondata.end()) {
+			frame->effect().set_visible(visible->as_bool());
+		}
 
         // Geometry
         math::Vector2D offset;
