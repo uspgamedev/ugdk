@@ -21,14 +21,6 @@ DrawMode DrawMode::LINES() {
     return DrawMode(GL_LINES);
 }
 
-DrawMode DrawMode::LINE_STRIP_ADJACENCY() {
-    return DrawMode(GL_LINE_STRIP_ADJACENCY);
-}
-
-DrawMode DrawMode::LINES_ADJACENCY() {
-    return DrawMode(GL_LINES_ADJACENCY);
-}
-
 DrawMode DrawMode::TRIANGLE_STRIP() {
     return DrawMode(GL_TRIANGLE_STRIP);
 }
@@ -41,6 +33,15 @@ DrawMode DrawMode::TRIANGLES() {
     return DrawMode(GL_TRIANGLES);
 }
 
+#ifndef UGDK_USING_GLES
+DrawMode DrawMode::LINE_STRIP_ADJACENCY() {
+    return DrawMode(GL_LINE_STRIP_ADJACENCY);
+}
+
+DrawMode DrawMode::LINES_ADJACENCY() {
+    return DrawMode(GL_LINES_ADJACENCY);
+}
+
 DrawMode DrawMode::TRIANGLE_STRIP_ADJACENCY() {
     return DrawMode(GL_TRIANGLE_STRIP_ADJACENCY);
 }
@@ -48,6 +49,7 @@ DrawMode DrawMode::TRIANGLE_STRIP_ADJACENCY() {
 DrawMode DrawMode::TRIANGLES_ADJACENCY() {
     return DrawMode(GL_TRIANGLES_ADJACENCY);
 }
+#endif
 
 int DrawMode::mode() const {
     return mode_;
