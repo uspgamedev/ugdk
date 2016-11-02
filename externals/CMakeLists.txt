@@ -16,7 +16,7 @@ option(UGDK_FORCE_SUBMODULES     "Set to ON to force the submodules to the commi
 
 if(${UGDK_FORCE_SUBMODULES})
     macro(init_submodule SUBMODULE)
-        find_host_package(Git REQUIRED)
+        find_package(Git REQUIRED)
         execute_process(COMMAND ${GIT_EXECUTABLE} submodule update --init ${SUBMODULE}
                         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
     endmacro()
