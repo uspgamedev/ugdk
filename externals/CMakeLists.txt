@@ -12,7 +12,7 @@ endmacro()
 
 ########################
 
-option(UGDK_FORCE_SUBMODULES     "Set to ON to force the submodules to the commited version." ON)
+option(UGDK_FORCE_SUBMODULES     "Set to ON to force the submodules to the commited version." OFF)
 
 if(${UGDK_FORCE_SUBMODULES})
     macro(init_submodule SUBMODULE)
@@ -31,7 +31,7 @@ if(ANDROID)
     set(UGDK_INTERNAL_SDL2       ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
     set(UGDK_INTERNAL_SDL2_IMAGE ON CACHE BOOL "Set to ON to use an internal SDL2_image instead of the system one." FORCE)
     set(UGDK_INTERNAL_SDL2_MIXER ON CACHE BOOL "Set to ON to use an internal SDL2_mixer instead of the system one." FORCE)
-	
+
 else()
     macro(check_package OPTION_VAR PKG_NAME)
         find_package(${PKG_NAME} ${ARGN} QUIET)
@@ -41,7 +41,7 @@ else()
         endif()
     endmacro(check_package)
 
-    
+
     check_package(SDL2 SDL2)
 	check_package(SDL2_MIXER SDL2_mixer)
 	check_package(FREETYPE Freetype)
@@ -152,14 +152,14 @@ if(UGDK_3D_ENABLED)
             set (FREETYPE_INCLUDE_DIR_freetype2 ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
             set (FREETYPE_INCLUDE_DIR_ft2build ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
         endif(UGDK_INTERNAL_FREETYPE)
-       
+
         add_subdirectory(Ogre)
         set(UGDK_OGRE_LIBRARIES ${OGRE_LIBRARIES} PARENT_SCOPE)
         set(UGDK_OGRE_INCLUDE_DIRS ${OGRE_INCLUDE_DIRS} PARENT_SCOPE)
     else()
         set(UGDK_OGRE_LIBRARIES ${OGRE_LIBRARIES})
         set(UGDK_OGRE_INCLUDE_DIRS ${OGRE_INCLUDE_DIRS})
-        
+
         set(OGRE_COMPONENTS Plugin_BSPSceneManager;Plugin_CgProgramManager;Plugin_OctreeSceneManager;
                             Plugin_OctreeZone;Plugin_ParticleFX;Plugin_PCZSceneManager;RenderSystem_GL;
                             RenderSystem_GL3Plus;RenderSystem_GLES;RenderSystem_GLES2;RenderSystem_Direct3D9;
@@ -173,7 +173,7 @@ if(UGDK_3D_ENABLED)
         set(UGDK_OGRE_LIBRARIES ${UGDK_OGRE_LIBRARIES} PARENT_SCOPE)
         set(UGDK_OGRE_INCLUDE_DIRS ${UGDK_OGRE_INCLUDE_DIRS} PARENT_SCOPE)
     endif()
-    
+
 
     ########################
     ## BULLET PHYSICS
