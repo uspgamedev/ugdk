@@ -86,7 +86,7 @@ ShaderProgram* LightShader() {
         vertex_shader.AddCodeBlock("out highp vec2 lightPosition;" "\n"
                                    "uniform highp vec2 dimension;" "\n"
                                    );
-        vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition * dimension,0,1);" "\n");
+        vertex_shader.AddLineInMain("	gl_Position =  geometry_matrix * vec4(vertexPosition * dimension, 0.0, 1.0);" "\n");
         vertex_shader.AddLineInMain("   lightPosition = vertexPosition;" "\n");
         vertex_shader.GenerateSource();
 
