@@ -52,6 +52,9 @@ TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
     graphic::GLTexture* gltexture = graphic::GLTexture::CreateFromFile(
             filepath + ".png");
 
+    if (!gltexture)
+        throw system::BaseException("Could not load: %s.png\n", filepath.c_str());
+
     TextureAtlas* atlas = new TextureAtlas(gltexture, frames.size());
     for (const auto& frame : frames) {
         auto&& frame_info = frame["frame"];
