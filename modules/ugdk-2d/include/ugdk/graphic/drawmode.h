@@ -14,11 +14,13 @@ class DrawMode {
     static DrawMode TRIANGLE_FAN();
     static DrawMode TRIANGLES();
 
+#ifndef SWIG
 #ifndef UGDK_USING_GLES
     static DrawMode LINE_STRIP_ADJACENCY();
     static DrawMode LINES_ADJACENCY();
     static DrawMode TRIANGLE_STRIP_ADJACENCY();
     static DrawMode TRIANGLES_ADJACENCY();
+#endif
 #endif
 
     int mode() const;
