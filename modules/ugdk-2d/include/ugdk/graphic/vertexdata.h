@@ -17,6 +17,8 @@ namespace ugdk {
 namespace graphic {
 
 class VertexBuffer;
+struct VertexDataSpecification;
+
 class VertexData {
   public:
     class Mapper {
@@ -36,10 +38,11 @@ class VertexData {
         VertexData& data_;
         ugdk::uint8* mapped_;
 
-        void Validate(const char* name, std::size_t size, std::size_t index);
+        void Validate(const char* name, std::size_t size, std::size_t index) const;
     };
 
-    VertexData(std::size_t num_vertices, std::size_t vertex_size, bool dynamic, bool ignore_vbo = false);
+    explicit VertexData(std::size_t num_vertices, std::size_t vertex_size, bool dynamic, bool ignore_vbo = false);
+    explicit VertexData(const VertexDataSpecification&);
     ~VertexData();
 
     const std::unique_ptr<VertexBuffer>& buffer() const { return buffer_; }
@@ -63,7 +66,9 @@ struct VertexDataSpecification {
     bool dynamic;
 };
 
-std::shared_ptr<VertexData> CreateVertexDataWithSpecification(const VertexDataSpecification&);
+inline std::shared_ptr<VertexData> CreateVertexDataWithSpecification(const VertexDataSpecification& specification) {
+    return std::make_shared<VertexData>(specification);
+}
 
 }  // namespace graphic
 }  // namespace ugdk

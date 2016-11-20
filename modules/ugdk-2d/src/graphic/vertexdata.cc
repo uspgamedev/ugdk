@@ -19,7 +19,7 @@ VertexData::Mapper::~Mapper() {
     data_.buffer()->unbind();
 }
         
-void VertexData::Mapper::Validate(const char* name, std::size_t size, std::size_t index) {
+void VertexData::Mapper::Validate(const char* name, std::size_t size, std::size_t index) const {
     if (size > data_.vertex_size())
         throw system::BaseException("Incompatible type '%s' with size %u exceeds vertex buffer size of %u.", name, size, data_.vertex_size());
     
@@ -42,6 +42,10 @@ VertexData::VertexData(std::size_t num_vertices, std::size_t vertex_size, bool d
     assert(vertex_size > 0);
 }
 
+VertexData::VertexData(const VertexDataSpecification& specification)
+    : VertexData(specification.num_vertices, specification.vertex_size, specification.dynamic)
+{}
+
 VertexData::~VertexData() {}
     
 void VertexData::CheckSizes(const char* caller_name, std::size_t test_num_vertices, std::size_t test_vertex_size) const {
@@ -50,10 +54,6 @@ void VertexData::CheckSizes(const char* caller_name, std::size_t test_num_vertic
 
     if (test_vertex_size > 0 && vertex_size_ < test_vertex_size)
         throw system::BaseException("Unsufficient vertex size for %s. Needs %u bytes, found %u.", caller_name, test_vertex_size, vertex_size_);
-}
-
-std::shared_ptr<VertexData> CreateVertexDataWithSpecification(const VertexDataSpecification& specification) {
-    return std::make_shared<VertexData>(specification.num_vertices, specification.vertex_size, specification.dynamic);
 }
 
 }  // namespace graphic

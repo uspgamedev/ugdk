@@ -17,13 +17,6 @@ namespace {
         GLfloat x, y, u, v;
     };
 
-    void RenderPrimitiveAsRectangle(const Primitive& primitive, Canvas& canvas) {
-        auto data = primitive.vertexdata();
-        canvas.SendVertexData(*data, VertexType::VERTEX, 0, 2);
-        canvas.SendVertexData(*data, VertexType::TEXTURE, 2 * sizeof(GLfloat), 2);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    }
-
     using action::SpriteAnimationFrame;
     using action::SpriteAnimationPlayer;
     using math::Geometry;
@@ -137,12 +130,12 @@ namespace PrimitiveSetup {
     void Sprite::Prepare(Primitive& primitive, const TextureAtlas* spritesheet) {
         primitive.set_texture(spritesheet->texture());
         primitive.set_vertexdata(CreateVertexDataWithSpecification(Sprite::vertexdata_specification));
-        primitive.set_controller(std::unique_ptr<PrimitiveControllerSprite>(new PrimitiveControllerSprite(spritesheet)));
+        primitive.set_controller(ugdk::MakeUnique<PrimitiveControllerSprite>(spritesheet));
         primitive.set_drawfunction(Sprite::Render);
     }
     
     void Sprite::Render(const Primitive& primitive, Canvas& canvas) {
-        RenderPrimitiveAsRectangle(primitive, canvas);
+        Rectangle::Render(primitive, canvas);
     }
 
     std::shared_ptr<SpriteAnimationPlayer> Sprite::CreateSpriteAnimationPlayer(
@@ -166,7 +159,7 @@ namespace PrimitiveSetup {
                             const math::Vector2D& size) {
         primitive.set_texture(texture);
         primitive.set_vertexdata(CreateVertexDataWithSpecification(Rectangle::vertexdata_specification));
-        primitive.set_controller(std::unique_ptr<PrimitiveController>(new PrimitiveController));
+        primitive.set_controller(ugdk::MakeUnique<PrimitiveController>());
         primitive.set_drawfunction(Rectangle::Render);
 
         VertexDataManipulation::SetToRectangleAtOrigin(*primitive.vertexdata(), size);
@@ -177,7 +170,13 @@ namespace PrimitiveSetup {
     }
 
     void Rectangle::Render(const Primitive& primitive, Canvas& canvas) {
-        RenderPrimitiveAsRectangle(primitive, canvas);
+        RenderVertexData(canvas, *primitive.vertexdata());
+    }
+
+    void Rectangle::RenderVertexData(Canvas& canvas, const VertexData& data) {
+        canvas.SendVertexData(data, VertexType::VERTEX, 0, 2);
+        canvas.SendVertexData(data, VertexType::TEXTURE, 2 * sizeof(GLfloat), 2);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     }
 
 } // namespace PrimitiveSetup

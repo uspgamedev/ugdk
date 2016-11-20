@@ -46,6 +46,7 @@ struct Rectangle {
     static void Prepare(Primitive&, const graphic::GLTexture*, const math::Vector2D& size);
     static void Prepare(Primitive&, const graphic::GLTexture*);
     static void Render(const Primitive&, Canvas& canvas);
+    static void RenderVertexData(Canvas& canvas, const VertexData& data);
 };
 
 } // namespace PrimitiveSetup

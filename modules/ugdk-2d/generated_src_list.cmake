@@ -6,6 +6,7 @@ modules/ugdk-2d/src/graphic/defaultshaders.cc
 modules/ugdk-2d/src/graphic/drawmode.cc
 modules/ugdk-2d/src/graphic/gltexture.cc
 modules/ugdk-2d/src/graphic/gltexture.h
+modules/ugdk-2d/src/graphic/immediate.cc
 modules/ugdk-2d/src/graphic/light.cc
 modules/ugdk-2d/src/graphic/manager.cc
 modules/ugdk-2d/src/graphic/module.cc
@@ -46,6 +47,7 @@ modules/ugdk-2d/include/ugdk/graphic/canvas.h
 modules/ugdk-2d/include/ugdk/graphic/defaultshaders.h
 modules/ugdk-2d/include/ugdk/graphic/drawmode.h
 modules/ugdk-2d/include/ugdk/graphic/exceptions.h
+modules/ugdk-2d/include/ugdk/graphic/immediate.h
 modules/ugdk-2d/include/ugdk/graphic/light.h
 modules/ugdk-2d/include/ugdk/graphic/manager.h
 modules/ugdk-2d/include/ugdk/graphic/module.h
