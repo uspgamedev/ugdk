@@ -1,14 +1,12 @@
-
-
 == Dependencies
 
 Required:
-- CMake 2.8.11
+- CMake 3.0.0
 - A C++11 conformant compiler.
-- OpenGL headers (Package 'mesa-common-dev' on Debian)
+- OpenGL headers (Package 'libgl1-mesa-dev' on Debian)
 
 
-Android Build:
+Android Build: currently unsupported
 - Android SDK Tools 20131030 or higher (https://developer.android.com/sdk/index.html)
 - Android NDK r9 or higher (http://developer.android.com/tools/sdk/ndk/index.html)
 
@@ -22,24 +20,21 @@ Built if needed:
 
 
 Indirectly built if needed:
-- libpng 1.6.3 # when building SDL_image
-- zlib 1.2.8 # when building libpng
+- libpng-dev 1.6.3 # when building SDL_image
+- zlib1g-dev 1.2.8 # when building libpng
 
 
 Optional:
-- swig 3.0 ## Needed for the script system
-- Python 2.7 ## To be used in the script system
-- libvorbis ## For ogg loading when building SDL_mixer
+- libvorbis-dev ## For ogg loading when building SDL_mixer
 
 
 Embedded Libraries:
-- lua 5.1 # Always built when the script system is enabled.
 - glm 0.9.5.2 # Header only library
 
 
 Compatible compilers:
-- g++ 4.7 or higher
-- clang 3.3 (maybe lesser)
+- g++ 5.4.0 or higher
+- clang 3.8 (maybe lesser)
 - Microsoft Visual Studio 2013 or newer
 
 =
@@ -57,9 +52,9 @@ The following CMake variables changes what is built.
 - UGDK_INTERNAL_SDL2       ## build and link against the embedded SDL2
 - UGDK_INTERNAL_SDL2_IMAGE ## build and link against the embedded SDL2_image
 - UGDK_INTERNAL_SDL2_MIXER ## build and link against the embedded SDL2_mixer
-- UGDK_CREATE_BINDINGS     ## activates the script system. Forced FALSE if SWIG is unavailable.
-- UGDK_LUA_BINDINGS        ## with the script system enabled, build embedded Lua and activate it in the script system.
-- UGDK_PYTHON_BINDINGS     ## with the script system enabled, activate Python in the script system. Forced FALSE if Python is not found.
+- UGDK_CREATE_BINDINGS     ##    No longer going to be supported
+- UGDK_LUA_BINDINGS        ##       No longer going to be supported
+- UGDK_PYTHON_BINDINGS     ##   No longer going to be supported
 
 
 == Build instructions
@@ -104,12 +99,12 @@ OLD, tofix?
 
 
 =========
-Mac OS X:
+Mac OS X: outdated
 =========
 
 1) Install CMake 2.8 or a higher version
 
-2) Install the following libraries: 
+2) Install the following libraries:
 - SDL 1.2
 - SDL_Image 1.2
 - SDL_Mixer 1.2
@@ -148,5 +143,3 @@ containing the following libraries:
 3) Using CMake, generate the project files for the IDE you wish to use.
 
 4) Build using the generated project.
-
-
