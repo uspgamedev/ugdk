@@ -1,9 +1,12 @@
 language: cpp
 
+dist: trusty
+sudo: required
+
 compiler:
   - gcc
   - clang
-  
+
 env:
   - UGDK3D=true
   - UGDK3D=false
