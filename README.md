@@ -1,6 +1,6 @@
 USP Game Development Kit
 For compiling instructions go to
-./HOW_TO_COMPILE.txt
+[Compilation Instructions](./HOW_TO_COMPILE.txt "HOW_TO_COMPILE.txt")
 
 Homepage: http://uspgamedev.org/ugdk/
 
