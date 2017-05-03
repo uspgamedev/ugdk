@@ -52,10 +52,6 @@ The following CMake variables changes what is built.
 - UGDK_INTERNAL_SDL2       ## build and link against the embedded SDL2
 - UGDK_INTERNAL_SDL2_IMAGE ## build and link against the embedded SDL2_image
 - UGDK_INTERNAL_SDL2_MIXER ## build and link against the embedded SDL2_mixer
-- UGDK_CREATE_BINDINGS     ##    No longer going to be supported
-- UGDK_LUA_BINDINGS        ##       No longer going to be supported
-- UGDK_PYTHON_BINDINGS     ##   No longer going to be supported
-
 
 == Build instructions
 
