@@ -72,6 +72,9 @@ endmacro(load_source_for_module)
 set(UGDK_SRC)
 set(UGDK_HEADERS)
 
+load_source_for_module(ugdk-core)
+load_source_for_module(ugdk-${UGDK_GRAPHIC_MODULE})
+
 # Create the targets for all the dependencies.
 add_subdirectory(externals)
 
