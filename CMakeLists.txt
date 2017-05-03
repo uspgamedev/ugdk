@@ -66,21 +66,8 @@ CONFIGURE_FILE(
 
 #################
 
-macro(load_source_for_module NAME)
-    include(modules/${NAME}/generated_src_list.cmake)
-
-    list(APPEND UGDK_SRC ${GENERATED_SRC})
-    list(APPEND UGDK_HEADERS ${GENERATED_HEADERS})
-
-    unset(GENERATED_SRC)
-    unset(GENERATED_HEADERS)
-endmacro(load_source_for_module)
-
 set(UGDK_SRC)
 set(UGDK_HEADERS)
-
-load_source_for_module(ugdk-core)
-load_source_for_module(ugdk-${UGDK_GRAPHIC_MODULE})
 
 # Create the targets for all the dependencies.
 add_subdirectory(externals)
@@ -97,30 +84,6 @@ include(cmake/Package.cmake)
 # Bindings configuration
 set(UGDK_LIBRARIES)
 set(UGDK_LIBRARIES_DEBUG)
-set(UGDK_LANGUAGES_LIST)
-
-if (UGDK_CREATE_BINDINGS)
-    load_source_for_module(ugdk-script)
-
-    set(UGDK_MODULE_SRC)
-    include(src/swig_module_list.cmake)
-    include(src/swig_${UGDK_GRAPHIC_MODULE}_module_list.cmake)
-    list(APPEND UGDK_MODULE_SRC ${UGDK_MODULE_${UGDK_GRAPHIC_MODULE}_SRC})
-
-    if (UGDK_LUA_BINDINGS)
-        list(APPEND UGDK_LANGUAGES_LIST Lua)
-        include(cmake/languages/Lua.cmake)
-    endif()
-    if (UGDK_PYTHON_BINDINGS)
-        include(cmake/languages/Python.cmake)
-        list(APPEND UGDK_LANGUAGES_LIST Python)
-    endif()
-
-    include(cmake/CreateBindings.cmake)
-    create_modules(UGDK_LANGUAGES_LIST UGDK_MODULE_SRC "UGDK" GENERATED_SRC)
-    set(UGDK_SWIG_ENABLED True)
-
-endif (UGDK_CREATE_BINDINGS)
 #########################################################
 
 if(NOT ANDROID)
@@ -199,14 +162,6 @@ target_include_directories(libugdk
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/include"
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/src")
 
-if (UGDK_CREATE_BINDINGS)
-    target_include_directories(libugdk
-        PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/include"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-script/src"
-        PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src" # for SWIG
-        )
-endif()
-
 # Add GLM dependency
 target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})
 
@@ -244,10 +199,6 @@ endif(ANDROID)
 include(cmake/ExecutableFunctions.cmake)
 
 
-if (UNIX AND PYTHONLIBS_FOUND)
-    set(UGDK_INSTALL_LOCATION "${CMAKE_INSTALL_PREFIX}/${UGDK_INSTALL_LOCATION_RELATIVE}")
-endif (UNIX AND PYTHONLIBS_FOUND)
-
 set (UGDK_OGRE_STATIC ${OGRE_STATIC})
 
 configure_file (
@@ -268,19 +219,6 @@ install(DIRECTORY modules/ugdk-${UGDK_GRAPHIC_MODULE}/include/
         DESTINATION include/${UGDK_LIBRARY_NAME}
         FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
 
-if (UGDK_CREATE_BINDINGS)
-    install(DIRECTORY modules/ugdk-script/include/
-            DESTINATION include/${UGDK_LIBRARY_NAME}
-            FILES_MATCHING PATTERN "*.h" PATTERN "*.th" PATTERN "*.tcc")
-endif()
-
-
-if (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src/generated/
-            DESTINATION ${UGDK_INSTALL_LOCATION_RELATIVE}/${UGDK_BIGVERSION}/python
-            FILES_MATCHING PATTERN "*.py")
-endif (PYTHONLIBS_FOUND AND PYTHON_INCLUDE_DIR AND EXISTS "${PYTHON_INCLUDE_DIR}/patchlevel.h")
-
 # Export variables for any project using UGDK as subdirectory
 set(UGDK_HEADERS ${UGDK_HEADERS} PARENT_SCOPE)
 
@@ -288,4 +226,3 @@ set(UGDK_HEADERS ${UGDK_HEADERS} PARENT_SCOPE)
 if(UGDK_BUILD_TESTS)
     add_subdirectory(test)
 endif(UGDK_BUILD_TESTS)
-
