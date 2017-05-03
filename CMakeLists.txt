@@ -65,6 +65,9 @@ CONFIGURE_FILE(
 )
 
 #################
+macro(load_source_for_module NAME)
+    include(modules/${NAME}/generated_src_list.cmake)
+endmacro(load_source_for_module)
 
 set(UGDK_SRC)
 set(UGDK_HEADERS)
