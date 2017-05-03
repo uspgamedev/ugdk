@@ -1,51 +1,46 @@
-
-
 == Dependencies
 
 Required:
-- CMake 2.8.11
+- CMake 3.0.0
 - A C++11 conformant compiler.
-- OpenGL headers (Package 'mesa-common-dev' on Debian)
+- OpenGL headers (Package 'libgl1-mesa-dev' on Debian)
 
 
-Android Build:
+Android Build: currently unsupported
 - Android SDK Tools 20131030 or higher (https://developer.android.com/sdk/index.html)
 - Android NDK r9 or higher (http://developer.android.com/tools/sdk/ndk/index.html)
 
 
 Built if needed:
-- SDL 2.0.1
-- SDL_image 2.0
-- SDL_mixer 2.0
-- freetype 2.5.2 (may work with lesser)
-- glew
+- SDL 2.0.5
+- SDL_image 2.0.1
+- SDL_mixer 2.0.1
+- freetype 2.6.3 (may work with lesser)
+- glew 2.0
 
 
 Indirectly built if needed:
-- libpng 1.6.3 # when building SDL_image
-- zlib 1.2.8 # when building libpng
+- libpng-dev 1.6.3 # when building SDL_image
+- zlib1g-dev 1.2.8 # when building libpng
 
 
 Optional:
-- swig 3.0 ## Needed for the script system
-- Python 2.7 ## To be used in the script system
-- libvorbis ## For ogg loading when building SDL_mixer
+- libvorbis-dev ## For ogg loading when building SDL_mixer
 
 
 Embedded Libraries:
-- lua 5.1 # Always built when the script system is enabled.
-- glm 0.9.5.2 # Header only library
+- glm 0.9.8.1 # Header only library
 
 
 Compatible compilers:
-- g++ 4.7 or higher
-- clang 3.3 (maybe lesser)
-- Microsoft Visual Studio 2013 or newer
+- g++ 5.4.0 or higher
+- clang 3.8 (maybe lesser)
+- Microsoft Visual Studio 2015 or newer
 
 =
-For Windows, you can use the libsdownloader script to automatically
+For Windows, you can use vcpkg to automatically
 download and install SWIG and SDL.
-It's located at git://uspgamedev.org/libsdownloader.git
+It's located at git://github.com/Microsoft/vcpkg.git
 
 == Controlling what is Built
 
@@ -57,9 +52,9 @@ The following CMake variables changes what is built.
 - UGDK_INTERNAL_SDL2       ## build and link against the embedded SDL2
 - UGDK_INTERNAL_SDL2_IMAGE ## build and link against the embedded SDL2_image
 - UGDK_INTERNAL_SDL2_MIXER ## build and link against the embedded SDL2_mixer
-- UGDK_CREATE_BINDINGS     ## activates the script system. Forced FALSE if SWIG is unavailable.
-- UGDK_LUA_BINDINGS        ## with the script system enabled, build embedded Lua and activate it in the script system.
-- UGDK_PYTHON_BINDINGS     ## with the script system enabled, activate Python in the script system. Forced FALSE if Python is not found.
+- UGDK_CREATE_BINDINGS     ##    No longer going to be supported
+- UGDK_LUA_BINDINGS        ##       No longer going to be supported
+- UGDK_PYTHON_BINDINGS     ##   No longer going to be supported
 
 
 == Build instructions
@@ -83,6 +78,8 @@ Windows:
 
 Open the CMake GUI.
 Choose as the 'Where is the source code' to be the path to the directory containing this file.
+Click on Add Entry and create a FILEPATH variable named CMAKE_TOOLCHAIN_FILE and
+assert it's value to \vcpkg\scripts\buildsystems\vcpkg.cmake.
 Choose any path for 'Build the binaries'.
 
 ---------
@@ -104,12 +101,12 @@ OLD, tofix?
 
 
 =========
-Mac OS X:
+Mac OS X: outdated
 =========
 
 1) Install CMake 2.8 or a higher version
 
-2) Install the following libraries: 
+2) Install the following libraries:
 - SDL 1.2
 - SDL_Image 1.2
 - SDL_Mixer 1.2
@@ -132,7 +129,7 @@ Windows
 =======
 
 1) Have the following software installed:
-- CMake 2.8.11 or higher
+- CMake 3.8.0 or higher
 
 1.1) Optional software:
 - SWIG 2.0.4 (must be on PATH)
@@ -141,12 +138,10 @@ Windows
 
 2) Set the SDL2DIR variable to a folder that contains a include and a lib directories,
 containing the following libraries:
-- SDL 2.0
-- SDL_Image 2.0
-- SDL_Mixer 2.0
+- SDL 2.0.5
+- SDL_Image 2.0.1
+- SDL_Mixer 2.0.1
 
 3) Using CMake, generate the project files for the IDE you wish to use.
 
 4) Build using the generated project.
-
-

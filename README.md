@@ -1,4 +1,7 @@
 USP Game Development Kit
+For compiling instructions go to
+[Compilation Instructions](./HOW_TO_COMPILE.txt "HOW_TO_COMPILE.txt")
+
 Homepage: http://uspgamedev.org/ugdk/
 
 [![Build Status](https://travis-ci.org/uspgamedev/ugdk.svg?branch=master)](https://travis-ci.org/uspgamedev/ugdk)

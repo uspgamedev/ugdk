@@ -3,7 +3,7 @@ language: cpp
 compiler:
   - gcc
   - clang
-  
+
 env:
   - UGDK3D=true
   - UGDK3D=false
