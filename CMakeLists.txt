@@ -201,12 +201,12 @@ endif(ANDROID)
 include(cmake/ExecutableFunctions.cmake)
 
 
-set (UGDK_OGRE_STATIC ${OGRE_STATIC})
+
 
 configure_file (
     "cmake/config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/include/ugdk/system/config.h"
-)
+) 
 
 install(TARGETS libugdk
     DESTINATION lib

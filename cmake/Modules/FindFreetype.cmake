@@ -7,6 +7,8 @@
 # free to make use of it in any way you like.
 #-------------------------------------------------------------------
 
+#Even though we dont use OGRE anymore, we need this one to use FreeType
+
 # - Try to find FreeType
 # Once done, this will define
 #
