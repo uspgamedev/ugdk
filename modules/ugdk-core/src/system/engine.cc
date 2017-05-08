@@ -8,18 +8,11 @@
 #include <ugdk/time/module.h>
 #include <ugdk/filesystem/module.h>
 #include <ugdk/desktop/module.h>
-#ifdef UGDK_3D_ENABLED
-# include <ugdk/desktop/3D/manager.h>
-#else
 # include <ugdk/desktop/2D/manager.h>
 # include <ugdk/graphic/module.h>
 # include <ugdk/graphic/canvas.h>
 # include <ugdk/text/module.h>
-#endif
 
-#ifdef UGDK_SWIG_ENABLED
-# include <ugdk/script/scriptmanager.h>
-#endif
 #include <ugdk/action/scene.h>
 #include <ugdk/debug/profiler.h>
 #include <ugdk/debug/log.h>
@@ -137,30 +130,17 @@ bool Initialize(const Configuration& configuration) {
         filesystem::manager()->AddSearchPath(configuration_.base_path);
 
     if(!configuration.windows_list.empty()) {
-#ifdef UGDK_3D_ENABLED
-        desktop::Manager *deskmanager = new desktop::mode3d::Manager(configuration.ogre_plugins, configuration.ogre_renderer);
-#else
         desktop::Manager *deskmanager = new desktop::mode2d::Manager;
-#endif
         if(!desktop::Initialize(deskmanager))
             return ErrorLog("system::Initialize failed - desktop::Initialize returned false.");
         for(const auto& window_config : configuration.windows_list)
             desktop::manager()->CreateWindow(window_config);
-#ifndef UGDK_3D_ENABLED
-        if(!graphic::Initialize(new graphic::Manager,
-                                    desktop::manager()->primary_window(),
-                                    configuration.canvas_size))
-            return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
-
-        if (!text::Initialize(new text::Manager(configuration.default_language)))
-            return ErrorLog("system::Initialize failed - text::Initialize returned false.");
-#endif
     }
-    
+
     if(configuration.audio_enabled)
         if(!audio::Initialize(new audio::Manager))
             return ErrorLog("system::Initialize failed - audio::Initialize returned false.");
-    
+
     if(configuration.input_enabled) {
         if(!input::Initialize(new input::Manager))
             return ErrorLog("system::Initialize failed - input::Initialize returned false.");
@@ -172,11 +152,6 @@ bool Initialize(const Configuration& configuration) {
 
     if(!resource::Initialize(new resource::Manager))
         return ErrorLog("system::Initialize failed - resource::Initialize returned false.");
-
-#ifdef UGDK_SWIG_ENABLED
-    if (!SCRIPT_MANAGER()->Initialize())
-        return ErrorLog("system::Initialize failed - SCRIPT_MANAGER()->Initialize returned false.");
-#endif
 
     previous_focused_scene_ = nullptr;
     current_state_ = UGDKState::SUSPENDED;
@@ -228,7 +203,7 @@ void Run() {
             audio::manager()->Update();
 
         HandleSDLEvents();
-    
+
         if (current_state_ != UGDKState::RUNNING)
             break;
 
@@ -242,15 +217,7 @@ void Run() {
 
             if(desktop::manager()) {
                 debug::ProfileSection render_section("Render");
-#ifndef UGDK_3D_ENABLED
-                if(graphic::manager()) {
-                    graphic::Canvas canvas(graphic::manager()->screen());
-                    canvas.Clear(structure::Color(0.0, 0.0, 0.0, 0.0));
-                    canvas.ChangeShaderProgram(graphic::manager()->shaders().current_shader());
-                    for (auto& scene : scene_list_)
-                        scene->Render(canvas);
-                }
-#endif
+
                 desktop::manager()->PresentAll();
             }
             profile_data_list_.push_back(frame_section.data());
@@ -278,7 +245,7 @@ void Release() {
     current_state_ = UGDKState::RELEASED;
 
     for (; !scene_list_.empty(); scene_list_.pop_back()) {
-        scene_list_.back()->Finish();        
+        scene_list_.back()->Finish();
     }
     queued_scene_list_.clear();
 
@@ -289,17 +256,9 @@ void Release() {
     input::Release();
     resource::Release();
     time::Release();
-#ifndef UGDK_3D_ENABLED
-    graphic::Release();
-    text::Release();
-#endif
+
     desktop::Release();
     filesystem::Release();
-
-#ifdef UGDK_SWIG_ENABLED
-    SCRIPT_MANAGER()->Finalize();
-    delete SCRIPT_MANAGER();
-#endif
 
     assert(sdlevent_mapper_.empty());
 
