@@ -27,19 +27,14 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Mo
 # make it prominent in the GUI.
 option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
-option(UGDK_3D_ENABLED           "Set to ON to enable the 3D module - Ogre rendering + Bullet physics." OFF)
 option(UGDK_BUILD_TESTS          "Set to ON to enable building tests." ON)
 option(UGDK_CREATE_BINDINGS      "Set to ON to generate bindings for supported script languages." ON)
 option(UGDK_LUA_BINDINGS         "Set to ON to enable Lua as one of the languages to create bindings." ON)
 option(UGDK_PYTHON_BINDINGS      "Set to ON to enable Python as one of the languages to create bindings." ON)
 
-message(STATUS "3D Enabled: ${UGDK_3D_ENABLED}")
 
-if (UGDK_3D_ENABLED)
-    set(UGDK_GRAPHIC_MODULE 3d)
-else()
-    set(UGDK_GRAPHIC_MODULE 2d)
-endif()
+set(UGDK_GRAPHIC_MODULE 2d)
+
 set(UGDK_LIBRARY_NAME ugdk${UGDK_BIGVERSION}-${UGDK_GRAPHIC_MODULE})
 
 ########################################
@@ -186,15 +181,10 @@ endif (WIN32)
 target_link_libraries(libugdk LINK_PUBLIC ${UGDK_LIBRARIES})
 
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
-if(UGDK_3D_ENABLED)
-  target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2 libjson ${BULLET_LIBRARIES} ${UGDK_OGRE_LIBRARIES} BtOgre)
-  target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${UGDK_OGRE_INCLUDE_DIRS})
-else()
-  target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 libjson freetype-gl)
+target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 libjson freetype-gl)
     if(NOT ANDROID)
         target_link_libraries(libugdk LINK_PUBLIC glew)
     endif()
-endif()
 
 set_target_properties(libugdk PROPERTIES
     PROJECT_NAME UGDK
