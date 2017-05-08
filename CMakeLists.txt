@@ -29,9 +29,6 @@ option(BUILD_SHARED_LIBS "Build shared libraries (DLLs)." OFF)
 
 option(UGDK_3D_ENABLED           "Set to ON to enable the 3D module - Ogre rendering + Bullet physics." OFF)
 option(UGDK_BUILD_TESTS          "Set to ON to enable building tests." ON)
-option(UGDK_CREATE_BINDINGS      "Set to ON to generate bindings for supported script languages." ON)
-option(UGDK_LUA_BINDINGS         "Set to ON to enable Lua as one of the languages to create bindings." ON)
-option(UGDK_PYTHON_BINDINGS      "Set to ON to enable Python as one of the languages to create bindings." ON)
 
 message(STATUS "3D Enabled: ${UGDK_3D_ENABLED}")
 
