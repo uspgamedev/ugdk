@@ -45,12 +45,9 @@ else()
     check_package(SDL2 SDL2)
 	check_package(SDL2_MIXER SDL2_mixer)
 	check_package(FREETYPE Freetype)
-    if(UGDK_3D_ENABLED)
-        check_package(OGRE OGRE)
-    else()
-		check_package(SDL2_IMAGE SDL2_image)
-		check_package(GLEW GLEW 1.5)
-	endif()
+    check_package(SDL2_IMAGE SDL2_image)
+	check_package(GLEW GLEW 1.5)
+	
 endif()
 
 ########################
@@ -118,79 +115,18 @@ add_subdirectory(libjson)
 if(UGDK_INTERNAL_FREETYPE)
 	add_subdirectory(freetype)
 
-elseif(NOT UGDK_3D_ENABLED)
-	add_library(freetype STATIC IMPORTED GLOBAL)
-	set_target_properties(freetype PROPERTIES
-        IMPORTED_LOCATION "${FREETYPE_LIBRARY_REL}"
-        IMPORTED_LOCATION_RELEASE "${FREETYPE_LIBRARY_REL}"
-        IMPORTED_LOCATION_DEBUG "${FREETYPE_LIBRARY_DBG}"
-		INTERFACE_INCLUDE_DIRECTORIES "${FREETYPE_INCLUDE_DIRS}")
+else(UGDK_INTERNAL_FREETYPE)
+    add_library(freetype STATIC IMPORTED GLOBAL)
+    set_target_properties(freetype PROPERTIES
+    IMPORTED_LOCATION "${FREETYPE_LIBRARY_REL}"
+    IMPORTED_LOCATION_RELEASE "${FREETYPE_LIBRARY_REL}"
+    IMPORTED_LOCATION_DEBUG "${FREETYPE_LIBRARY_DBG}"
+        INTERFACE_INCLUDE_DIRECTORIES "${FREETYPE_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_FREETYPE)
 
+
 ########################
-## 3D Module
+## freetype-gl
 ########################
-if(UGDK_3D_ENABLED)
-
-    ########################
-    ## OGRE
-    ########################
-    if(UGDK_INTERNAL_OGRE)
-        set (OGRE_STATIC TRUE CACHE BOOL "Forcing static build" FORCE)
-        set (OGRE_ARCHIVE_OUTPUT ${LIB_DIR})
-        set (OGRE_LIBRARY_OUTPUT ${LIB_DIR})
-        set (OGRE_RUNTIME_OUTPUT ${LIB_DIR})
-        set (OGRE_INCLUDE_DIRS "" CACHE INTERNAL "Ogre external include directories")
-        set (OGRE_LIBRARIES "" CACHE INTERNAL "Compiled Ogre libraries")
-        if(UGDK_INTERNAL_FREETYPE)
-            set (FREETYPE_FT2BUILD_INCLUDE_DIR ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
-            set (FREETYPE_LIBRARY freetype CACHE STRING "" FORCE)
-            set (FREETYPE_LIBRARY_DBG freetype CACHE STRING "" FORCE)
-            set (FREETYPE_LIBRARY_REL freetype CACHE STRING "" FORCE)
-            set (FREETYPE_FOUND ON CACHE BOOL "" FORCE)
-            set (FREETYPE_INCLUDE_DIR ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
-            set (FREETYPE_INCLUDE_DIR_freetype2 ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
-            set (FREETYPE_INCLUDE_DIR_ft2build ${freetype_SOURCE_DIR}/include CACHE PATH "" FORCE)
-        endif(UGDK_INTERNAL_FREETYPE)
-       
-        add_subdirectory(Ogre)
-        set(UGDK_OGRE_LIBRARIES ${OGRE_LIBRARIES} PARENT_SCOPE)
-        set(UGDK_OGRE_INCLUDE_DIRS ${OGRE_INCLUDE_DIRS} PARENT_SCOPE)
-    else()
-        set(UGDK_OGRE_LIBRARIES ${OGRE_LIBRARIES})
-        set(UGDK_OGRE_INCLUDE_DIRS ${OGRE_INCLUDE_DIRS})
-        
-        set(OGRE_COMPONENTS Plugin_BSPSceneManager;Plugin_CgProgramManager;Plugin_OctreeSceneManager;
-                            Plugin_OctreeZone;Plugin_ParticleFX;Plugin_PCZSceneManager;RenderSystem_GL;
-                            RenderSystem_GL3Plus;RenderSystem_GLES;RenderSystem_GLES2;RenderSystem_Direct3D9;
-                            RenderSystem_Direct3D11;Paging;Terrain;Volume;Overlay)
-        foreach(it ${OGRE_COMPONENTS})
-            if(OGRE_${it}_FOUND)
-                list(APPEND UGDK_OGRE_LIBRARIES ${OGRE_${it}_LIBRARIES})
-                list(APPEND UGDK_OGRE_INCLUDE_DIRS ${OGRE_${it}_INCLUDE_DIR})
-            endif()
-        endforeach()
-        set(UGDK_OGRE_LIBRARIES ${UGDK_OGRE_LIBRARIES} PARENT_SCOPE)
-        set(UGDK_OGRE_INCLUDE_DIRS ${UGDK_OGRE_INCLUDE_DIRS} PARENT_SCOPE)
-    endif()
-    
-
-    ########################
-    ## BULLET PHYSICS
-    ########################
-    set (BULLET_INCLUDE_DIRS "" CACHE INTERNAL "Bullet external include directories")
-    set (BULLET_LIBRARIES "" CACHE INTERNAL "Compiled Bullet libraries")
-    add_subdirectory(BulletPhysics)
-
-    ########################
-    ## BtOgre
-    ########################
-    add_subdirectory(btogre) #generates target BtOgre
-else(UGDK_3D_ENABLED)
-
-	########################
-	## freetype-gl
-	########################
-	add_subdirectory(freetype-gl)
-endif(UGDK_3D_ENABLED)
+    add_subdirectory(freetype-gl)
 
