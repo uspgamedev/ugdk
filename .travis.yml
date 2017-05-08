@@ -19,7 +19,7 @@ before_install:
 install:
   - if $UGDK3D ; then sudo apt-get install libfreetype6-dev libfreeimage-dev libzzip-dev libxrandr-dev libxaw7-dev freeglut3-dev; fi
   - if $UGDK3D ; then sudo dpkg -i ogre-1.9_20141005-1_amd64.deb; fi
-  - sudo apt-get install swig3.0 cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libgl1-mesa-dev libglu1-mesa-dev
+  - sudo apt-get install cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libgl1-mesa-dev libglu1-mesa-dev
   - sudo apt-get install --force-yes g++-4.7
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.7" CC="gcc-4.7"; fi
 
@@ -27,7 +27,6 @@ script:
   - cmake -DUGDK_3D_ENABLED=$UGDK3D .
   - make libugdk
   - make ugdk_test
-  - make ugdk_script_test
   - ./test/ugdk_test
 
 notifications:

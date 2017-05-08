@@ -14,9 +14,6 @@
 #cmakedefine UGDK_INSTALL_LOCATION "@UGDK_INSTALL_LOCATION@"
 ///
 
-#cmakedefine UGDK_SWIG_ENABLED
-#cmakedefine UGDK_LUA_ENABLED
-#cmakedefine UGDK_PYTHON_ENABLED
 #cmakedefine UGDK_3D_ENABLED
 #define UGDK_ENABLED(X) UGDK_##X##_ENABLED
 

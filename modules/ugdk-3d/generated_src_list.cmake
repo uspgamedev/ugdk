@@ -12,8 +12,8 @@ modules/ugdk-3d/src/desktop/window.cc
 )
 SET(GENERATED_HEADERS
 modules/ugdk-3d/include/ugdk/action/3D/camera.h
-modules/ugdk-3d/include/ugdk/action/3D/component.h
 modules/ugdk-3d/include/ugdk/action/3D/component/body.h
+modules/ugdk-3d/include/ugdk/action/3D/component.h
 modules/ugdk-3d/include/ugdk/action/3D/component/physicsbody.h
 modules/ugdk-3d/include/ugdk/action/3D/component/simplebody.h
 modules/ugdk-3d/include/ugdk/action/3D/component/view.h

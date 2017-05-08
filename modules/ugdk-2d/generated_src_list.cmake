@@ -52,8 +52,8 @@ modules/ugdk-2d/include/ugdk/graphic/light.h
 modules/ugdk-2d/include/ugdk/graphic/manager.h
 modules/ugdk-2d/include/ugdk/graphic/module.h
 modules/ugdk-2d/include/ugdk/graphic/opengl.h
-modules/ugdk-2d/include/ugdk/graphic/primitive.h
 modules/ugdk-2d/include/ugdk/graphic/primitivecontroller.h
+modules/ugdk-2d/include/ugdk/graphic/primitive.h
 modules/ugdk-2d/include/ugdk/graphic/primitivesetup.h
 modules/ugdk-2d/include/ugdk/graphic/rendertarget.h
 modules/ugdk-2d/include/ugdk/graphic/rendertexture.h
