@@ -17,6 +17,7 @@ install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.7" CC="gcc-4.7"; fi
 
 script:
+  - cmake .
   - make libugdk
   - make ugdk_test
   - ./test/ugdk_test
