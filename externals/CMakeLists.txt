@@ -4,7 +4,7 @@ option(UGDK_INTERNAL_FREETYPE    "Set to ON to use an internal freetype instead 
 option(UGDK_INTERNAL_SDL2        "Set to ON to use an internal SDL2 instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2_IMAGE  "Set to ON to use an internal SDL2_image instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2_MIXER  "Set to ON to use an internal SDL2_mixer instead of the system one." OFF)
-option(UGDK_INTERNAL_OGRE        "Set to ON to use an internal OGRE instead of the system one." OFF)
+
 
 macro(update_list LISTNAME VALUE)
     set(${LISTNAME} "${${LISTNAME}};${VALUE}" CACHE INTERNAL "")
@@ -95,7 +95,7 @@ else(UGDK_INTERNAL_SDL2_MIXER)
         INTERFACE_INCLUDE_DIRECTORIES "${SDL2_MIXER_INCLUDE_DIRS}")
 endif(UGDK_INTERNAL_SDL2_MIXER)
 
-if(NOT ANDROID AND NOT UGDK_3D_ENABLED)
+if(NOT ANDROID)
     if(UGDK_INTERNAL_GLEW)
         add_subdirectory(glew) # Defines 'glew'
     else(UGDK_INTERNAL_GLEW)
@@ -104,7 +104,7 @@ if(NOT ANDROID AND NOT UGDK_3D_ENABLED)
             IMPORTED_LOCATION "${GLEW_LIBRARIES}"
             INTERFACE_INCLUDE_DIRECTORIES "${GLEW_INCLUDE_DIRS}")
     endif(UGDK_INTERNAL_GLEW)
-endif(NOT ANDROID AND NOT UGDK_3D_ENABLED)
+endif(NOT ANDROID)
 
 init_submodule(libjson)
 add_subdirectory(libjson)
