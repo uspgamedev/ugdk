@@ -10,12 +10,6 @@
 #include <list>
 #include <memory>
 
-#ifdef SWIG
-#define GET_OWNERSHIP(T) T&&
-#else
-#define GET_OWNERSHIP(T) T
-#endif
-
 namespace ugdk {
 namespace system {
 
@@ -56,7 +50,7 @@ void PushSceneFactory(const std::function<std::unique_ptr<action::Scene>()>& sce
 
 /// Queues a scene to be added just before the start of the next frame.
 /** @param scene The scene to be added. */
-void PushScene(GET_OWNERSHIP(std::unique_ptr<action::Scene>) scene);
+void PushScene(std::unique_ptr<action::Scene> scene);
 
 /// Returns the currently focused scene.
 action::Scene& CurrentScene();

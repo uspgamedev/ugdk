@@ -19,11 +19,6 @@
 struct SDL_Window;
 typedef void* SDL_GLContext;
 
-#ifdef SWIG
-// Nested class not supported
-#pragma SWIG nowarn=325
-#endif
-
 namespace ugdk {
 namespace graphic {
 
@@ -47,9 +42,7 @@ class Manager {
 
     void SetUserNearestNeighborTextures(bool enabled);
 
-#ifndef SWIG
     TextureUnit ReserveTextureUnit(const graphic::GLTexture* texture = nullptr);
-#endif
     void DisableVertexType(VertexType);
     unsigned int LocationForVertexType(VertexType);
 

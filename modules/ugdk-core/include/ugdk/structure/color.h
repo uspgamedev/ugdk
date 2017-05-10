@@ -48,9 +48,7 @@ struct Color {
 };
 
 //static Color BLACK = {0.0, 0.0, 0.0};
-#ifndef SWIG
 static const Color WHITE(1.0, 1.0, 1.0);
-#endif
 
 } // namespace structure
 } // namespace ugdk
