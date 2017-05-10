@@ -44,7 +44,7 @@ class IndexableTable {
     }
 
     /// Searches for the element with the given name.
-    T* Search(const std::string& name) const { 
+    T* Search(const std::string& name) const {
         auto it = data_.find(name);
         if (it == data_.end()) {
             return nullptr;
@@ -53,7 +53,7 @@ class IndexableTable {
             return it->second.get();
         }
     }
-    
+
     /// Instant access to an element, using a pre-generated ID.
     T* Get(int index) const { return indices_[index]; }
 
@@ -77,12 +77,27 @@ class IndexableTable {
         return id;
     }
 
-    /** 
+    /**
     @arg id Id to be released.
     @return True on successful release, false otherwise. */
     bool ReleaseIndex(int id) {
         return index_generator_.ReleaseID(id) == id;
     }
+
+    //Begin end methods for the instance's data data_
+    auto begin() {
+        return unordered_map.begin();
+    }
+    auto end() {
+        return unordered_map.end();
+    }
+    auto begin() const {
+        return unordered_map.begin();
+    }
+    auto end() const {
+        return unordered_map.end();
+    }
+
 
   private:
     void removeIndices(T* val) {
