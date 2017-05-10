@@ -14,6 +14,3 @@ find_files ugdk-core > modules/ugdk-core/generated_src_list.cmake
 
 # 2D SOURCE
 find_files ugdk-2d > modules/ugdk-2d/generated_src_list.cmake
-
-# 3D SOURCE
-find_files ugdk-3d > modules/ugdk-3d/generated_src_list.cmake

@@ -24,13 +24,6 @@ void Release();
 Manager* manager();
 
 action::SpriteAnimationTable*    GetSpriteAnimationTableFromFile(const std::string& file);
-#ifndef UGDK_3D_ENABLED
-graphic::GLTexture*              GetTextureFromTag(const std::string& tag);
-graphic::GLTexture*              GetTextureFromFile(const std::string& file);
-graphic::TextureAtlas*           GetTextureAtlasFromTag(const std::string& tag);
-graphic::TextureAtlas*           GetTextureAtlasFromFile(const std::string& file);
-text::LanguageWord*              GetLanguageWord(const std::string& tag);
-#endif // UGDK_3D_ENABLED
 
 } // namespace resource
 } // namespace ugdk

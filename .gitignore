@@ -55,8 +55,5 @@ cg.dll
 
 /include/ugdk/system/config.h
 /externals/sdl2-build/
-/externals/Ogre/include/OgreBuildSettings.h
-/externals/Ogre/lib/
-/externals/Ogre/pkgconfig/
-/externals/Ogre/Dependencies/
+
 
