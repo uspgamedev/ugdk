@@ -97,19 +97,19 @@ class IndexableTable {
 
             ~IndexIterable() {}
 
-            typename std::vector::iterator begin() {
+            typename std::vector<T*>::iterator begin() {
                 return index_vector_.begin();
             }
 
-            typename std::vector::iterator end() {
+            typename std::vector<T*>::iterator end() {
                 return index_vector_ = end();
             }
 
-            typename std::vector::iterator begin() const {
+            typename std::vector<T*>::iterator begin() const {
                 return index_vector_.begin();
             }
 
-            typename std::vector::iterator end() const {
+            typename std::vector<T*>::iterator end() const {
                 return index_vector_ = end();
             }
     };
