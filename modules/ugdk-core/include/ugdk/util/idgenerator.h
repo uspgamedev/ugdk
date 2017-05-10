@@ -7,7 +7,7 @@
 
 namespace ugdk {
 namespace util {
-class IDGenerator : {
+class IDGenerator {
   public:
     IDGenerator(int min_id, int max_id, int error_value);
     IDGenerator(const IDGenerator& rhs) = delete;
