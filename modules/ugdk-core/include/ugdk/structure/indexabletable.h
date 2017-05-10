@@ -86,6 +86,9 @@ class IndexableTable {
 
     // Allows to return iteratiors to the index vector
     class IndexIterable {
+        private:
+        std::vector<T*> & index_vector_;
+
         public:
 
             IndexIterable() : indices_ {
@@ -94,6 +97,14 @@ class IndexableTable {
 
             ~IndexIterable() {}
 
+            decltype(index_vector_.begin()) begin() {
+                return index_vector_.begin();
+            }
+
+            decltype(index_vector_ = end()) end() {
+                return index_vector_ = end();
+            }
+
             decltype(index_vector_.begin()) begin() const {
                 return index_vector_.begin();
             }
@@ -101,22 +112,18 @@ class IndexableTable {
             decltype(index_vector_ = end()) end() const {
                 return index_vector_ = end();
             }
-
-        private:
-            std::vector<T*> & index_vector_;
-
-    }
+    };
     //Begin end methods for the instance's data data_
-    decltype(data_.begin()) begin() const {
+    typename std::unordered_map<std::string, std::unique_ptr<T>>::iterator begin() {
         return data_.begin();
     }
-    decltype(data_.begin()) end() const {
+    typename std::unordered_map<std::string, std::unique_ptr<T>>::iterator end() {
         return data_.end();
     }
-    decltype(data_.begin()) begin() const {
+    typename std::unordered_map<std::string, std::unique_ptr<T>>::const_iterator begin() const {
         return data_.begin();
     }
-    decltype(data_.begin()) end() const {
+    typename std::unordered_map<std::string, std::unique_ptr<T>>::const_iterator end() const {
         return data_.end();
     }
 
