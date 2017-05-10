@@ -88,7 +88,7 @@ class IndexableTable {
     class IndexIterable {
         public:
 
-            IndexIterable() {
+            IndexIterable() : indices_ {
                 index_vector_ = indices_;
             }
 
@@ -107,10 +107,10 @@ class IndexableTable {
 
     }
     //Begin end methods for the instance's data data_
-    decltype(data_.begin()) begin() {
+    decltype(data_.begin()) begin() const {
         return data_.begin();
     }
-    decltype(data_.begin()) end() {
+    decltype(data_.begin()) end() const {
         return data_.end();
     }
     decltype(data_.begin()) begin() const {
