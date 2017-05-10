@@ -9,11 +9,6 @@
 #include <vector>
 #include <unordered_map>
 
-#ifdef SWIG
-// Nested class not supported
-#pragma SWIG nowarn=325
-#endif
-
 namespace ugdk {
 namespace graphic {
 
@@ -74,7 +69,6 @@ class TextureAtlas {
         return names_.at(name);
     }
 
-#ifndef SWIG
     BoundPiece PieceAt(size_t i) const {
         return BoundPiece(this, &pieces_[i]);
     }
@@ -82,7 +76,6 @@ class TextureAtlas {
     BoundPiece PieceAt(const std::string& name) const { 
         return PieceAt(NameToId(name));
     }
-#endif
 
   private:
     const graphic::GLTexture* texture_;

@@ -39,9 +39,6 @@ class Primitive {
     Primitive& operator=(Primitive&&);
 #endif
 #endif
-#ifndef SWIG
-    void set_controller(std::unique_ptr<PrimitiveController>&& controller);
-#endif
 
   protected:
     const graphic::GLTexture* texture_;

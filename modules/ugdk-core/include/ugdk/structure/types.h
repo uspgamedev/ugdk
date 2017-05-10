@@ -3,10 +3,6 @@
 
 #include <stdint.h>
 
-#ifdef SWIG
-#pragma SWIG nowarn=312
-#endif
-
 namespace ugdk {
 
 typedef uint8_t uint8;
