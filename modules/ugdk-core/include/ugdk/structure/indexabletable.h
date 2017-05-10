@@ -86,12 +86,10 @@ class IndexableTable {
 
     // Allows to return iteratiors to the index vector
     class IndexIterable {
-        private:
-        std::vector<T*> & index_vector_;
 
         public:
 
-            IndexIterable(indices_) : std::vector<T*> (index_vector_) {}
+            IndexIterable(std::vector<T*> & indices_) : index_vector_(indices_) {}
 
             ~IndexIterable() {}
 
@@ -110,6 +108,9 @@ class IndexableTable {
             typename std::vector<T*>::iterator end() const {
                 return index_vector_ = end();
             }
+
+        private:
+        std::vector<T*> & index_vector_;
     };
     //Begin end methods for the instance's data data_
     typename std::unordered_map<std::string, std::unique_ptr<T>>::iterator begin() {
