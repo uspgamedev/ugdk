@@ -89,21 +89,21 @@ class IndexableTable {
         public:
             
             IndexIterable() {
-                index_vector = indices_;
+                index_vector_ = indices_;
             }
 
             ~IndexIterable() {}
 
-            auto begin() const { 
-                return v.begin() 
+            decltype(index_vector_.begin()) begin() const { 
+                return index_vector_.begin(); 
             }
 
-            auto end() const { 
-                return v.end()
+            decltype(index_vector_ = end()) end() const { 
+                return index_vector_ = end();
             }
 
         private:
-            std::vector<T*> & index_vector; 
+            std::vector<T*> & index_vector_; 
 
     }
 
