@@ -91,7 +91,7 @@ class IndexableTable {
 
         public:
 
-            IndexIterable(std::vector<T*> indices_) : (index_vector_) {}
+            IndexIterable(indices_) : std::vector<T*> (index_vector_) {}
 
             ~IndexIterable() {}
 
