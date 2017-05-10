@@ -39,7 +39,7 @@ Compatible compilers:
 
 =
 For Windows, you can use vcpkg to automatically
-download and install SWIG and SDL.
+download and install SDL.
 It's located at git://github.com/Microsoft/vcpkg.git
 
 == Controlling what is Built
