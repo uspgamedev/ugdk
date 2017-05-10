@@ -107,17 +107,17 @@ class IndexableTable {
 
     }
     //Begin end methods for the instance's data data_
-    decltype(unordered_map.begin()) begin() {
-        return unordered_map.begin();
+    decltype(data_.begin()) begin() {
+        return data_.begin();
     }
-    decltype(unordered_map.begin()) end() {
-        return unordered_map.end();
+    decltype(data_.begin()) end() {
+        return data_.end();
     }
-    decltype(unordered_map.begin()) begin() const {
-        return unordered_map.begin();
+    decltype(data_.begin()) begin() const {
+        return data_.begin();
     }
-    decltype(unordered_map.begin()) end() const {
-        return unordered_map.end();
+    decltype(data_.begin()) end() const {
+        return data_.end();
     }
 
   private:
