@@ -91,9 +91,7 @@ class IndexableTable {
 
         public:
 
-            IndexIterable() : indices_ {
-                index_vector_ = indices_;
-            }
+            IndexIterable() (data_) : (index_vector_) {}
 
             ~IndexIterable() {}
 
