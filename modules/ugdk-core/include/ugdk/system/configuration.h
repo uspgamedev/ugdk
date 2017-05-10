@@ -13,13 +13,11 @@ namespace system {
 struct Configuration {
     std::string        base_path;
     std::string default_language;
-    
+
     bool audio_enabled;
 
     std::vector<desktop::WindowSettings> windows_list;
     math::Vector2D canvas_size;
-    std::vector<std::string> ogre_plugins;
-    std::string ogre_renderer;
 
     bool input_enabled;
 

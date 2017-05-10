@@ -11,8 +11,6 @@ Configuration::Configuration()
 
     , windows_list(1, desktop::WindowSettings())
     , canvas_size(800.0, 600.0)
-    , ogre_plugins({ "RenderSystem_GL", "Plugin_OctreeSceneManager" })
-    , ogre_renderer("OpenGL Rendering Subsystem")
 
     , input_enabled(true)
 
