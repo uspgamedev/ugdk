@@ -84,45 +84,41 @@ class IndexableTable {
         return index_generator_.ReleaseID(id) == id;
     }
 
-<<<<<<< HEAD
     // Allows to return iteratiors to the index vector
     class IndexIterable {
         public:
-            
+
             IndexIterable() {
                 index_vector_ = indices_;
             }
 
             ~IndexIterable() {}
 
-            decltype(index_vector_.begin()) begin() const { 
-                return index_vector_.begin(); 
+            decltype(index_vector_.begin()) begin() const {
+                return index_vector_.begin();
             }
 
-            decltype(index_vector_ = end()) end() const { 
+            decltype(index_vector_ = end()) end() const {
                 return index_vector_ = end();
             }
 
         private:
-            std::vector<T*> & index_vector_; 
+            std::vector<T*> & index_vector_;
 
     }
-=======
     //Begin end methods for the instance's data data_
-    auto begin() {
+    decltype(unordered_map.begin()) begin() {
         return unordered_map.begin();
     }
-    auto end() {
+    decltype(unordered_map.begin()) end() {
         return unordered_map.end();
     }
-    auto begin() const {
+    decltype(unordered_map.begin()) begin() const {
         return unordered_map.begin();
     }
-    auto end() const {
+    decltype(unordered_map.begin()) end() const {
         return unordered_map.end();
     }
-
->>>>>>> 6945587bdb56a23ebd570b0bef4db8f9fabaa0fe
 
   private:
     void removeIndices(T* val) {
