@@ -84,6 +84,29 @@ class IndexableTable {
         return index_generator_.ReleaseID(id) == id;
     }
 
+    // Allows to return iteratiors to the index vector
+    class IndexIterable {
+        public:
+            
+            IndexIterable() {
+                index_vector = indices_;
+            }
+
+            ~IndexIterable() {}
+
+            auto begin() const { 
+                return v.begin() 
+            }
+
+            auto end() const { 
+                return v.end()
+            }
+
+        private:
+            std::vector<T*> & index_vector; 
+
+    }
+
   private:
     void removeIndices(T* val) {
         for (int id = 0; id < static_cast<int>(indices_.size()); ++id) {
