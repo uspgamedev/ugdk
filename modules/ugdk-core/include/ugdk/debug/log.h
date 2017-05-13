@@ -40,7 +40,6 @@ inline const char* ConvertLogToString(LogLevel level) {
 
 void RawLog(LogLevel, const std::string& owner, const std::string& message);
 
-#ifndef SWIG
 inline void InsertToStream(std::stringstream& ss) {}
 
 template<typename T, typename... Ts>
@@ -75,8 +74,6 @@ inline void DebugConditionalLog(bool assertion, LogLevel level, const std::strin
         Log(level, owner, std::forward<Ts>(ts)...);
 #endif
 }
-
-#endif // SWIG
 
 }  // namespace debug
 }  // namespace ugdk

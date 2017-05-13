@@ -4,10 +4,6 @@
 #include <ugdk/structure/types.h>
 #include <ugdk/math.h>
 
-#ifdef SWIG
-#pragma SWIG nowarn=312
-#endif
-
 namespace ugdk {
 
 namespace math {

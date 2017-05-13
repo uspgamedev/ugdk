@@ -25,11 +25,9 @@ class IndexableTable {
         return data_.size();
     }
 
-#ifndef SWIG
     void Add(const std::string& name, std::unique_ptr<T> element) {
         data_[name] = std::move(element);
     }
-#endif
 
     /// Removes the element with the given name.
     /** @return False if element don't exist, true otherwise. */
