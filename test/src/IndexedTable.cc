@@ -104,7 +104,7 @@ TEST(IndexableTable, IterateIndices) {
     int id2 = table.MakeIndex("second");
 
     for(auto it : table.GetIndexVector()) {
-        test = (*it == id1 || *it == id2);
+        bool test = (*it == id1 || *it == id2);
         EXPECT_TRUE(test);
     }
 
@@ -122,7 +122,7 @@ TEST(IndexableTable, IterateIndicesConst) {
     int id2 = table.MakeIndex("second");
 
     for(auto it : table.GetIndexVector()) {
-        test = (*it == id1 || *it == id2);
+        bool test = (*it == id1 || *it == id2);
         EXPECT_TRUE(test);
     }
 
