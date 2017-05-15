@@ -105,7 +105,7 @@ TEST(IndexableTable, IterateIndices) {
 
     for(auto it : table.GetIndexVector()) {
         test = (*it == id1 || *it == id2);
-        EXPECT_TRUE()
+        EXPECT_TRUE(test);
     }
 
 }
@@ -123,7 +123,7 @@ TEST(IndexableTable, IterateIndicesConst) {
 
     for(auto it : table.GetIndexVector()) {
         test = (*it == id1 || *it == id2);
-        EXPECT_TRUE()
+        EXPECT_TRUE(test);
     }
 
 }
