@@ -85,10 +85,10 @@ TEST(IndexableTable, IterateTableConst) {
     bool test;
     for (const auto &i : table) {
         test = true;
-        test =       (i.second.get() != v[0])
-                    &&(i.second.get() != v[1])
-                    &&(i.second.get() != v[2]);
-        EXPECT_FALSE(test);
+        test = (i.second.get() == v[0])
+            || (i.second.get() == v[1])
+            || (i.second.get() == v[2]);
+        EXPECT_TRUE(test);
     }
 }
 
