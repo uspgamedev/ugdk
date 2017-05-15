@@ -112,6 +112,12 @@ class IndexableTable {
         private:
         std::vector<T*> & index_vector_;
     };
+
+    IndexIterable indices() {
+        IndexIterable indexes = indices_; 
+        return indexes;
+    }
+
     //Begin end methods for the instance's data data_
     typename std::unordered_map<std::string, std::unique_ptr<T>>::iterator begin() {
         return data_.begin();
