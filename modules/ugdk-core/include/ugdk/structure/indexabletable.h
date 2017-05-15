@@ -98,7 +98,7 @@ class IndexableTable {
             }
 
             typename std::vector<T*>::iterator end() {
-                return index_vector_ = end();
+                return index_vector_.end();
             }
 
             typename std::vector<T*>::iterator begin() const {
@@ -106,7 +106,7 @@ class IndexableTable {
             }
 
             typename std::vector<T*>::iterator end() const {
-                return index_vector_ = end();
+                return index_vector_.end();
             }
 
         private:
@@ -114,7 +114,7 @@ class IndexableTable {
     };
 
     IndexIterable indices() {
-        IndexIterable indexes = indices_; 
+        IndexIterable indexes = indices_;
         return indexes;
     }
 

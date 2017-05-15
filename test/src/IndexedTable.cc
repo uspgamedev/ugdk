@@ -103,8 +103,8 @@ TEST(IndexableTable, IterateIndices) {
     int id1 = table.MakeIndex("first");
     int id2 = table.MakeIndex("second");
 
-    for(auto it : table.GetIndexVector()) {
-        bool test = (*it == id1 || *it == id2);
+    for(auto it : table.indices()) {
+        bool test = (it == table.Get(id1) || it == table.Get(id2));
         EXPECT_TRUE(test);
     }
 
@@ -121,8 +121,8 @@ TEST(IndexableTable, IterateIndicesConst) {
     int id1 = table.MakeIndex("first");
     int id2 = table.MakeIndex("second");
 
-    for(auto it : table.GetIndexVector()) {
-        bool test = (*it == id1 || *it == id2);
+    for(auto it : table.indices()) {
+        bool test = (it == table.Get(id1) || it == table.Get(id2));
         EXPECT_TRUE(test);
     }
 
