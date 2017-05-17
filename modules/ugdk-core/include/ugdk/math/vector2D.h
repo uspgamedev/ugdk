@@ -32,7 +32,7 @@ class Vector2D {
     Vector2D(double _x, double _y) : x(_x), y(_y) {}
 
     /// Copy constructor from Integer2D.
-    Vector2D(const math::Integer2D& int2d);
+    explicit Vector2D(const math::Integer2D& int2d);
 
     ~Vector2D() { }
 
