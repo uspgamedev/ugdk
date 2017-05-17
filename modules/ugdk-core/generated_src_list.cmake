@@ -131,6 +131,5 @@ modules/ugdk-core/include/ugdk/time/timeaccumulator.h
 modules/ugdk-core/include/ugdk/ui.h
 modules/ugdk-core/include/ugdk/util.h
 modules/ugdk-core/include/ugdk/util/idgenerator.h
-modules/ugdk-core/include/ugdk/util/uncopyable.h
 modules/ugdk-core/include/ugdk/util/utf8.h
 )

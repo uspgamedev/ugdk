@@ -7,10 +7,6 @@
 #include <array>
 #include <tuple>
 
-#ifdef SWIG
-#pragma SWIG nowarn=312
-#endif
-
 namespace ugdk {
 namespace math {
 
