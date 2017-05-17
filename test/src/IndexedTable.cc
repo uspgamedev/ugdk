@@ -103,25 +103,7 @@ TEST(IndexableTable, IterateIndices) {
     int id1 = table.MakeIndex("first");
     int id2 = table.MakeIndex("second");
 
-    for(auto it : table.indices()) {
-        bool test = (it == table.Get(id1) || it == table.Get(id2));
-        EXPECT_TRUE(test);
-    }
-
-}
-
-TEST(IndexableTable, IterateIndicesConst) {
-    IndexableTable<TestData> table;
-    int count = 3;
-
-    table.Add("first", ugdk::MakeUnique<TestData>(&count));
-    table.Add("second", ugdk::MakeUnique<TestData>(&count));
-    table.Add("third", ugdk::MakeUnique<TestData>(&count));
-
-    int id1 = table.MakeIndex("first");
-    int id2 = table.MakeIndex("second");
-
-    for(auto it : table.indices()) {
+    for(const auto& it : static_cast<const IndexableTable<TestData>&>(table).indices()) {
         bool test = (it == table.Get(id1) || it == table.Get(id2));
         EXPECT_TRUE(test);
     }
