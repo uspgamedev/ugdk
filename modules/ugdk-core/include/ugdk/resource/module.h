@@ -9,7 +9,6 @@
 #include <ugdk/graphic.h>
 #include <ugdk/text.h>
 #include <ugdk/structure.h>
-#include <ugdk/action/spritetypes.h>
 
 namespace ugdk {
 namespace resource {
