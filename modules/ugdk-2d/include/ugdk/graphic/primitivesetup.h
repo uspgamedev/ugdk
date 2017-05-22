@@ -6,7 +6,7 @@
 #include <ugdk/action.h>
 
 #include <ugdk/action/animationplayer.h>
-#include <ugdk/action/spritetypes.h>
+#include <ugdk/action/json2spriteanimation.h>
 #include <ugdk/graphic/primitive.h>
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/graphic/textureatlas.h>
