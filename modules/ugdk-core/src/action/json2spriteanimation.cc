@@ -1,4 +1,4 @@
-#include <ugdk/action/spritetypes.h>
+#include <ugdk/action/json2spriteanimation.h>
 
 #include <ugdk/system/exceptions.h>
 #include <ugdk/filesystem/module.h>
@@ -8,7 +8,7 @@
 
 namespace ugdk {
 namespace action {
-    
+
 namespace {
     std::unique_ptr<SpriteAnimationFrame> build_frame(const JSONNode& jsondata) {
         auto frame = MakeUnique<SpriteAnimationFrame>(jsondata["name"].as_string().c_str());

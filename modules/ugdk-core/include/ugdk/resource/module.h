@@ -9,7 +9,7 @@
 #include <ugdk/graphic.h>
 #include <ugdk/text.h>
 #include <ugdk/structure.h>
-#include <ugdk/action/spritetypes.h>
+#include <ugdk/action/json2spriteanimation.h>
 
 namespace ugdk {
 namespace resource {

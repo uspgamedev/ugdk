@@ -4,7 +4,6 @@
 #include <ugdk/system/compatibility.h>
 #include <ugdk/debug/log.h>
 
-#include <ugdk/action/spritetypes.h>
 #include <ugdk/graphic/textureatlas.h>
 #include <ugdk/text/languageword.h>
 #include "graphic/gltexture.h"

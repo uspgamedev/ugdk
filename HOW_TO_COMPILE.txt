@@ -39,7 +39,7 @@ Compatible compilers:
 
 =
 For Windows, you can use vcpkg to automatically
-download and install SWIG and SDL.
+download and install SDL.
 It's located at git://github.com/Microsoft/vcpkg.git
 
 == Controlling what is Built
@@ -126,11 +126,6 @@ Windows
 
 1) Have the following software installed:
 - CMake 3.8.0 or higher
-
-1.1) Optional software:
-- SWIG 2.0.4 (must be on PATH)
-- Python 2.6 (must have registry entry)
-- Lua 5.1 (must have LUA_DIR set)
 
 2) Set the SDL2DIR variable to a folder that contains a include and a lib directories,
 containing the following libraries:
