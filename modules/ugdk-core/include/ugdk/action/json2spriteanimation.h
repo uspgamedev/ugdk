@@ -1,5 +1,5 @@
-#ifndef UGDK_ACTION_SPRITETYPES_H_
-#define UGDK_ACTION_SPRITETYPES_H_
+#ifndef JSON_2_SPRITE_ANIMATION_
+#define JSON_2_SPRITE_ANIMATION_
 
 #include <ugdk/action.h>
 
@@ -21,4 +21,4 @@ SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepa
 }  // namespace action
 }  // namespace ugdk
 
-#endif // UGDK_ACTION_SPRITETYPES_H_
+#endif // JSON_2_SPRITE_ANIMATION_
