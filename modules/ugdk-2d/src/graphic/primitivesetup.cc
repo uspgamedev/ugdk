@@ -109,7 +109,7 @@ void SetUsingSpriteFrameInformation(VertexData& data,
 
     Geometry final_transform =
         animation_frame.geometry()
-        * Geometry(position + piece.offset() + mirror_offset, mirror_scale);
+        * Geometry(position + ugdk::math::Vector2D(piece.offset()) + mirror_offset, mirror_scale);
 
     const glm::mat4& mat = final_transform.AsMat4();
     glm::vec4 top_left = mat * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);

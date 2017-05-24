@@ -3,14 +3,17 @@
 
 #include <unordered_set>
 
-#include <ugdk/util/uncopyable.h>
+
 
 namespace ugdk {
 namespace util {
-class IDGenerator : public Uncopyable {
+class IDGenerator {
   public:
     IDGenerator(int min_id, int max_id, int error_value);
+    IDGenerator(const IDGenerator& rhs) = delete;
     ~IDGenerator() {}
+  
+    IDGenerator& operator = (const IDGenerator& rhs) = delete;
 
     /// Generate a new id.
     /** @return The new unique id. */
