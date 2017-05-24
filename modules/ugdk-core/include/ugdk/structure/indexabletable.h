@@ -42,7 +42,7 @@ class IndexableTable {
     }
 
     /// Searches for the element with the given name.
-    T* Search(const std::string& name) const { 
+    T* Search(const std::string& name) const {
         auto it = data_.find(name);
         if (it == data_.end()) {
             return nullptr;
@@ -51,7 +51,7 @@ class IndexableTable {
             return it->second.get();
         }
     }
-    
+
     /// Instant access to an element, using a pre-generated ID.
     T* Get(int index) const { return indices_[index]; }
 
@@ -75,11 +75,51 @@ class IndexableTable {
         return id;
     }
 
-    /** 
+    /**
     @arg id Id to be released.
     @return True on successful release, false otherwise. */
     bool ReleaseIndex(int id) {
         return index_generator_.ReleaseID(id) == id;
+    }
+
+    // Allows to return iteratiors to the index vector
+    class IndexIterable {
+
+        public:
+
+            IndexIterable(const std::vector<T*> & indices_) : index_vector_(indices_) {}
+
+            ~IndexIterable() {}
+
+            typename std::vector<T*>::const_iterator begin() const {
+                return index_vector_.begin();
+            }
+
+            typename std::vector<T*>::const_iterator end() const {
+                return index_vector_.end();
+            }
+
+        private:
+          const std::vector<T*> & index_vector_;
+    };
+
+    IndexIterable indices() const {
+        IndexIterable indexes = indices_;
+        return indexes;
+    }
+
+    //Begin end methods for the instance's data data_
+    typename std::unordered_map<std::string, std::unique_ptr<T>>::iterator begin() {
+        return data_.begin();
+    }
+    typename std::unordered_map<std::string, std::unique_ptr<T>>::iterator end() {
+        return data_.end();
+    }
+    typename std::unordered_map<std::string, std::unique_ptr<T>>::const_iterator begin() const {
+        return data_.begin();
+    }
+    typename std::unordered_map<std::string, std::unique_ptr<T>>::const_iterator end() const {
+        return data_.end();
     }
 
   private:
