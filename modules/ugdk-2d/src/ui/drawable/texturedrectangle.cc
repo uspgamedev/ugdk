@@ -10,6 +10,7 @@
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/primitivesetup.h>
 #include <ugdk/math/integer2D.h>
+#include <ugdk/math/vector2D.h>
 #include "graphic/gltexture.h"
 
 namespace ugdk {
@@ -24,7 +25,7 @@ namespace {
 }
     
 TexturedRectangle::TexturedRectangle(const graphic::GLTexture* texture)
-    : TexturedRectangle(texture, math::Integer2D(texture->width(), texture->height()))
+    : TexturedRectangle(texture, math::Vector2D(texture->width(), texture->height()))
 {}
 
 TexturedRectangle::TexturedRectangle(const graphic::GLTexture* texture, const math::Vector2D& _size)

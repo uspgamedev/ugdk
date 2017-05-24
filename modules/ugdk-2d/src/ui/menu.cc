@@ -1,4 +1,3 @@
-
 #include <ugdk/ui/menu.h>
 #include <ugdk/ui/uielement.h>
 
@@ -32,8 +31,8 @@ Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::V
 
     AddTask([this](double) {
         input::Manager* input = input::manager();
-        ugdk::math::Vector2D mouse_pos = input->mouse().position();
-        if ((mouse_pos - last_mouse_position_).NormOne() > 10e-10) {
+        ugdk::math::Vector2D mouse_pos = ugdk::math::Vector2D(input->mouse().position());
+        if ((mouse_pos - ugdk::math::Vector2D(last_mouse_position_)).NormOne() > 10e-10) {
             auto intersecting_uielements = GetMouseCollision();
             if (intersecting_uielements->size() > 0)
                 SelectUIElement((*intersecting_uielements)[0]);
@@ -109,7 +108,7 @@ void Menu::PositionSelectionDrawables() {
 }
 
 std::shared_ptr< std::vector<UIElement *> > Menu::GetMouseCollision() {
-    math::Vector2D mouse_pos = input::manager()->mouse().position();
+    math::Vector2D mouse_pos = ugdk::math::Vector2D(input::manager()->mouse().position());
     std::array<double, 2> min_coords, max_coords;
     min_coords[0] = mouse_pos.x - 0.5;
     min_coords[1] = mouse_pos.y - 0.5;
