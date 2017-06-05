@@ -1,6 +1,5 @@
 #include <ugdk/action/mediaplayer.h>
 
-#include <ugdk/action/observer.h>
 #include <ugdk/action/mediamanager.h>
 
 namespace ugdk {
