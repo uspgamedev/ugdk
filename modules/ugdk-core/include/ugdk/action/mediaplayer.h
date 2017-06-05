@@ -34,11 +34,6 @@ class MediaPlayer {
 
     virtual void Update(double dt) = 0;
 
-    /// Add a observer object to the animation
-    /** Given an observer object, the function include this in the animation manager
-    *  @param *observer is a pointer to the observer object
-    */
-
     void AddTickFunction(std::function<void (void)> tick);
 
     void ChangeMediaManager(MediaManager*);
