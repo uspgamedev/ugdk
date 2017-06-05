@@ -16,7 +16,7 @@ struct Frame {
 using FrameVector = action::Animation<Frame>;
 using TestTable = structure::IndexableTable<FrameVector>;
 
-std::shared_ptr<TestTable> SetupTable() {
+std::shared_ptr<const TestTable> SetupTable() {
     auto table = std::make_shared<TestTable>();
 
     {
@@ -40,7 +40,7 @@ std::shared_ptr<TestTable> SetupTable() {
         table->Add("Third", std::move(v));
     }
 
-    return std::move(table);
+    return table;
 }
 
 TEST(AnimationPlayer, Getters) {
