@@ -31,7 +31,7 @@ class AnimationPlayer : public MediaPlayer {
         frame_change_callback_ = callback;
     }
 
-    const shared_ptr<Animation> current_animation() const {
+    const std::shared_ptr<Animation> current_animation() const {
         return current_animation_;
     }
 
@@ -79,14 +79,14 @@ class AnimationPlayer : public MediaPlayer {
     }
 
   private:
-    const shared_ptr<Animation> current_animation_;
+    const std::shared_ptr<Animation> current_animation_;
     int current_frame_;
     double elapsed_time_;
-    const shared_ptr<AnimationTable> table_;
+    const std::shared_ptr<AnimationTable> table_;
     FrameChangedCallback frame_change_callback_;
     bool notified_;
 
-    void set_current_animation(const shared_ptr<Animation> anim, bool reset_animation_if_different) {
+    void set_current_animation(const std::shared_ptr<Animation> anim, bool reset_animation_if_different) {
         auto previous_anim = current_animation_;
         current_animation_ = anim;
 
