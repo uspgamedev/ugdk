@@ -1,7 +1,7 @@
 SET(GENERATED_SRC
+modules/ugdk-core/src/action/json2spriteanimation.cc
 modules/ugdk-core/src/action/mediaplayer.cc
 modules/ugdk-core/src/action/scene.cc
-modules/ugdk-core/src/action/json2spriteanimation.cc
 modules/ugdk-core/src/audio/manager.cc
 modules/ugdk-core/src/audio/module.cc
 modules/ugdk-core/src/audio/music.cc
@@ -61,12 +61,11 @@ modules/ugdk-core/include/ugdk/action/animation.h
 modules/ugdk-core/include/ugdk/action/animationplayer.h
 modules/ugdk-core/include/ugdk/action/events.h
 modules/ugdk-core/include/ugdk/action.h
+modules/ugdk-core/include/ugdk/action/json2spriteanimation.h
 modules/ugdk-core/include/ugdk/action/mediamanager.h
 modules/ugdk-core/include/ugdk/action/mediaplayer.h
-modules/ugdk-core/include/ugdk/action/observer.h
 modules/ugdk-core/include/ugdk/action/scene.h
 modules/ugdk-core/include/ugdk/action/spriteanimationframe.h
-modules/ugdk-core/include/ugdk/action/json2spriteanimation.h
 modules/ugdk-core/include/ugdk/audio.h
 modules/ugdk-core/include/ugdk/audio/manager.h
 modules/ugdk-core/include/ugdk/audio/module.h
