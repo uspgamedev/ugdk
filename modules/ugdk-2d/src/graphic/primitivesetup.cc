@@ -139,7 +139,7 @@ namespace PrimitiveSetup {
     }
 
     std::shared_ptr<SpriteAnimationPlayer> Sprite::CreateSpriteAnimationPlayer(
-            Primitive& primitive, const action::SpriteAnimationTable* table) {
+            Primitive& primitive, std::shared_ptr<const action::SpriteAnimationTable> table) {
         Primitive* p = &primitive;
         auto player = std::make_shared<SpriteAnimationPlayer>(table);
         player->set_frame_change_callback([p](const SpriteAnimationFrame& frame) {
