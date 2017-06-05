@@ -14,7 +14,6 @@ template<class T>
 class AnimationPlayer;
 
 class Scene;
-class Observer;
 
 class SpriteAnimationFrame;
 using SpriteAnimation = ::ugdk::action::Animation<SpriteAnimationFrame>;

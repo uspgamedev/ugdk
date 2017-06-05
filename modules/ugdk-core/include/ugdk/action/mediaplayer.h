@@ -38,7 +38,6 @@ class MediaPlayer {
     /** Given an observer object, the function include this in the animation manager
     *  @param *observer is a pointer to the observer object
     */
-    void AddObserver(Observer* observer);
 
     void AddTickFunction(std::function<void (void)> tick);
 
@@ -48,7 +47,6 @@ class MediaPlayer {
     void notifyAllObservers();
 
   private:
-    std::vector<Observer *> observers_;
     std::vector< std::function<void (void)> > ticks_;
     MediaManager* manager_;
 
