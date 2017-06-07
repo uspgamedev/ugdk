@@ -11,7 +11,7 @@
 namespace ugdk {
 namespace audio {
 
-Music* Music::playing_music_(nullptr);
+std::shared_ptr<Music> Music::playing_music_(nullptr);
 
 Music::Music(const std::string& filepath)
     : data_(nullptr)
@@ -45,29 +45,29 @@ void Music::PlayForever() {
 
 void Music::Play(int loops) {
     if(data_ && Mix_PlayMusic(data_, loops) == 0) {
-        playing_music_ = this;
+        playing_music_.reset(this);
         UpdateVolume(volume_);
     }
 }
 
 void Music::Stop() {
-    if(playing_music_ == this) {
+    if(playing_music_.get() == this) {
         Mix_HaltMusic();
-        playing_music_ = nullptr;
+        playing_music_.reset();
     }
 }
 
 bool Music::IsPlaying() const {
-    return playing_music_ == this;
+    return playing_music_.get() == this;
 }
 
 void Music::Pause() {
-    if(playing_music_ == this)
+    if(playing_music_.get() == this)
         Mix_PauseMusic();
 }
 
 void Music::Unpause() {
-    if(playing_music_ == this)
+    if(playing_music_.get() == this)
         Mix_ResumeMusic();
 }
 
@@ -86,7 +86,7 @@ double Music::Volume() {
 }
 
 void Music::MusicDone() {
-    playing_music_ = nullptr;
+    playing_music_.reset();
 }
 
 void Music::UpdateVolume(double vol) {
@@ -95,4 +95,3 @@ void Music::UpdateVolume(double vol) {
 
 } // namespace audio
 } // namespace ugdk
-

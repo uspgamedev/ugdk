@@ -53,18 +53,18 @@ void Manager::Update() {
 }
 
 void Manager::ReleaseSamples() {
-    for(auto it : sample_data_)
-        it->second.reset();
+    for(auto& it : sample_data_)
+        it.second.reset();
 }
 
 void Manager::ReleaseMusics() {
-    for(auto it : music_data_)
-        it->second.reset();
+    for(auto& it : music_data_)
+        it.second.reset();
 }
 
 std::shared_ptr<Sample> Manager::LoadSample(const std::string& filepath) {
     if(sample_data_.find(filepath) == sample_data_.end()) {
-        std::shared_ptr<Sample> sample = new Sample(filepath);
+        std::shared_ptr<Sample> sample ( new Sample(filepath));
         if(sample)
             sample_data_[filepath] = sample;
     }
