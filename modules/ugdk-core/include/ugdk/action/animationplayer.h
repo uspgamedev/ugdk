@@ -19,7 +19,7 @@ class AnimationPlayer : public MediaPlayer {
     using AnimationTable = structure::IndexableTable<Animation>;
     using FrameChangedCallback = std::function<void(const Frame&)>;
 
-    explicit AnimationPlayer(shared_ptr<const AnimationTable> table)
+    explicit AnimationPlayer(std::shared_ptr<const AnimationTable> table)
         : current_animation_(nullptr)
         , current_frame_(0)
         , elapsed_time_(0.0)
