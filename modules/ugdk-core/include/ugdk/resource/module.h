@@ -23,7 +23,6 @@ void Release();
 /// Getter for the manager of the module.
 Manager* manager();
 
-std::shared_ptr<action::SpriteAnimationTable>    GetSpriteAnimationTableFromFile(const std::string& file);
 
 } // namespace resource
 } // namespace ugdk
