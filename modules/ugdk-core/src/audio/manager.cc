@@ -53,20 +53,18 @@ void Manager::Update() {
 }
 
 void Manager::ReleaseSamples() {
-    std::map<std::string, Sample*>::iterator it;
-    for(it = sample_data_.begin(); it != sample_data_.end(); ++it)
-        delete it->second;
+    for(auto it : sample_data_)
+        it->second.reset();
 }
 
 void Manager::ReleaseMusics() {
-    std::map<std::string, std::shared_ptr<Music>::iterator it;
-    for(it = music_data_.begin(); it != music_data_.end(); ++it)
-        delete it->second;
+    for(auto it : music_data_)
+        it->second.reset();
 }
 
 std::shared_ptr<Sample> Manager::LoadSample(const std::string& filepath) {
     if(sample_data_.find(filepath) == sample_data_.end()) {
-        Sample *sample = new Sample(filepath);
+        std::shared_ptr<Sample> sample = new Sample(filepath);
         if(sample)
             sample_data_[filepath] = sample;
     }
