@@ -106,7 +106,7 @@ class Scene : public system::TaskPlayer {
     bool visible_;
 
     /// The background music when this scene is on top.
-    std::shared::ptr<audio::Music> background_music_;
+    std::shared_ptr<audio::Music> background_music_;
 
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;

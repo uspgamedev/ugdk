@@ -57,7 +57,7 @@ class Music {
 
     static void UpdateVolume(double vol);
     static void MusicDone();
-    static Music *playing_music_;
+    static std::shared_ptr<Music> playing_music_;
 
     friend class Manager;
 };

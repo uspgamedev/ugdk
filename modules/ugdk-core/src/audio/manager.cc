@@ -76,7 +76,7 @@ std::shared_ptr<Sample> Manager::LoadSample(const std::string& filepath) {
 
 std::shared_ptr<Music> Manager::LoadMusic(const std::string& filepath) {
     if(music_data_.find(filepath) == music_data_.end()) {
-        std::shared_ptr<Music> music = new Music(filepath);
+        std::shared_ptr<Music> music ( new Music(filepath));
         if(music)
             music_data_[filepath] = music;
     }
