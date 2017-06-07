@@ -45,7 +45,7 @@ std::shared_ptr<TestTable> SetupTable() {
 
 TEST(AnimationPlayer, Getters) {
     auto table = SetupTable();
-    action::AnimationPlayer<Frame> player(table.get());
+    action::AnimationPlayer<Frame> player(table);
     player.Select("First");
     EXPECT_EQ(table->Search("First"), player.current_animation());
     player.Refresh();
