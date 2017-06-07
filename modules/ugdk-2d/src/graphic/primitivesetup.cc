@@ -141,7 +141,7 @@ namespace PrimitiveSetup {
     SpriteAnimationPlayer* Sprite::CreateSpriteAnimationPlayer(
             Primitive& primitive, std::shared_ptr<const action::SpriteAnimationTable> table) {
         Primitive* p = &primitive;
-        SpriteAnimationPlayer* player = new table;
+        SpriteAnimationPlayer* player = new SpriteAnimationPlayer(table);
         player->set_frame_change_callback([p](const SpriteAnimationFrame& frame) {
             if (auto sprite = dynamic_cast<PrimitiveControllerSprite*>(p->controller().get())) {
                 sprite->ChangeToAnimationFrame(frame);
