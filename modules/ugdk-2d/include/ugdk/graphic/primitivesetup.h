@@ -37,7 +37,7 @@ struct Sprite {
     static void Prepare(Primitive&, const TextureAtlas* spritesheet);
     static void Render(const Primitive&, Canvas& canvas);
 
-    static std::shared_ptr<action::SpriteAnimationPlayer> CreateSpriteAnimationPlayer(Primitive&, const action::SpriteAnimationTable* table);
+    static action::SpriteAnimationPlayer* CreateSpriteAnimationPlayer(Primitive&, std::shared_ptr<const action::SpriteAnimationTable> table);
 };
 
 struct Rectangle {

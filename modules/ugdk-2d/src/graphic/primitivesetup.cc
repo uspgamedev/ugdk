@@ -138,10 +138,10 @@ namespace PrimitiveSetup {
         Rectangle::Render(primitive, canvas);
     }
 
-    std::shared_ptr<SpriteAnimationPlayer> Sprite::CreateSpriteAnimationPlayer(
-            Primitive& primitive, const action::SpriteAnimationTable* table) {
+    SpriteAnimationPlayer* Sprite::CreateSpriteAnimationPlayer(
+            Primitive& primitive, std::shared_ptr<const action::SpriteAnimationTable> table) {
         Primitive* p = &primitive;
-        auto player = std::shared_ptr<const SpriteAnimationPlayer>(table);
+        SpriteAnimationPlayer* player = new table;
         player->set_frame_change_callback([p](const SpriteAnimationFrame& frame) {
             if (auto sprite = dynamic_cast<PrimitiveControllerSprite*>(p->controller().get())) {
                 sprite->ChangeToAnimationFrame(frame);
