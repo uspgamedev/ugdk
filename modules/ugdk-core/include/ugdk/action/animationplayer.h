@@ -82,7 +82,7 @@ class AnimationPlayer : public MediaPlayer {
     const Animation* current_animation_;
     int current_frame_;
     double elapsed_time_;
-    const AnimationTable* table_;
+    std::shared_ptr<const AnimationTable> table_;
     FrameChangedCallback frame_change_callback_;
     bool notified_;
 
