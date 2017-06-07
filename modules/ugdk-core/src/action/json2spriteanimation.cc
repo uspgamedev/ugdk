@@ -71,7 +71,7 @@ namespace {
     };
 }
 
-std::shared_ptr<SpriteAnimationTable> LoadSpriteAnimationTableFromFile(const std::string& filepath) {
+std::shared_ptr<const SpriteAnimationTable> LoadSpriteAnimationTableFromFile(const std::string& filepath) {
     auto file = filesystem::manager()->OpenFile(filepath);
     if (!file)
         return nullptr;
