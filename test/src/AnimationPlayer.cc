@@ -16,8 +16,8 @@ struct Frame {
 using FrameVector = action::Animation<Frame>;
 using TestTable = structure::IndexableTable<FrameVector>;
 
-std::unique_ptr<TestTable> SetupTable() {
-    auto table = MakeUnique<TestTable>();
+std::shared_ptr<TestTable> SetupTable() {
+    auto table = std::make_shared<TestTable>();
 
     {
         auto v = MakeUnique<FrameVector>();
