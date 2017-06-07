@@ -81,7 +81,7 @@ std::shared_ptr<SpriteAnimationTable> LoadSpriteAnimationTableFromFile(const std
         throw system::BaseException("Invalid json: %s\n", filepath.c_str());
 
     auto json_node = libjson::parse(contents);
-    std::shared_ptr<SpriteAnimationTable> table = new SpriteAnimationTable(json_node.size());
+    std::shared_ptr<SpriteAnimationTable> table(new SpriteAnimationTable(json_node.size()));
     for (const auto& animation_json : json_node) {
         auto element = MakeUnique<SpriteAnimation>();
 
