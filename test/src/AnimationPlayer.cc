@@ -55,7 +55,7 @@ TEST(AnimationPlayer, Getters) {
 
 TEST(AnimationPlayer, Callback) {
     auto table = SetupTable();
-    action::AnimationPlayer<Frame> player(table.get());
+    action::AnimationPlayer<Frame> player(table);
 
     int callback_called_count = 0;
     int espected_id;
@@ -72,7 +72,7 @@ TEST(AnimationPlayer, Callback) {
 
 TEST(AnimationPlayer, Update) {
     auto table = SetupTable();
-    action::AnimationPlayer<Frame> player(table.get());
+    action::AnimationPlayer<Frame> player(table);
 
     int callback_called_count = 0;
     int espected_id;
