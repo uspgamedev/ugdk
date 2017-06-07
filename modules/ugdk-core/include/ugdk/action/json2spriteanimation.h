@@ -16,7 +16,7 @@ namespace action {
 
 using SpriteAnimationTable = ::ugdk::structure::IndexableTable<SpriteAnimation>;
 
-std::shared_ptr<SpriteAnimationTable> LoadSpriteAnimationTableFromFile(const std::string& filepath);
+std::shared_ptr<const SpriteAnimationTable> LoadSpriteAnimationTableFromFile(const std::string& filepath);
 
 }  // namespace action
 }  // namespace ugdk
