@@ -16,8 +16,8 @@ struct Frame {
 using FrameVector = action::Animation<Frame>;
 using TestTable = structure::IndexableTable<FrameVector>;
 
-std::shared_ptr<const TestTable> SetupTable() {
-    auto table = std::make_shared<TestTable>();
+std::unique_ptr<TestTable> SetupTable() {
+    auto table = MakeUnique<TestTable>();
 
     {
         auto v = MakeUnique<FrameVector>();
@@ -40,12 +40,12 @@ std::shared_ptr<const TestTable> SetupTable() {
         table->Add("Third", std::move(v));
     }
 
-    return table;
+    return std::move(table);
 }
 
 TEST(AnimationPlayer, Getters) {
     auto table = SetupTable();
-    action::AnimationPlayer<Frame> player(table);
+    action::AnimationPlayer<Frame> player(table.get());
     player.Select("First");
     EXPECT_EQ(table->Search("First"), player.current_animation());
     player.Refresh();
@@ -55,7 +55,7 @@ TEST(AnimationPlayer, Getters) {
 
 TEST(AnimationPlayer, Callback) {
     auto table = SetupTable();
-    action::AnimationPlayer<Frame> player(table);
+    action::AnimationPlayer<Frame> player(table.get());
 
     int callback_called_count = 0;
     int espected_id;
@@ -72,7 +72,7 @@ TEST(AnimationPlayer, Callback) {
 
 TEST(AnimationPlayer, Update) {
     auto table = SetupTable();
-    action::AnimationPlayer<Frame> player(table);
+    action::AnimationPlayer<Frame> player(table.get());
 
     int callback_called_count = 0;
     int espected_id;
