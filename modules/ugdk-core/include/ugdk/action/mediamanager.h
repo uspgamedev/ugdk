@@ -2,6 +2,7 @@
 #define UGDK_ACTION_MEDIAMANAGER_H_
 
 #include <set>
+#include <memory>
 
 #include <ugdk/action/mediaplayer.h>
 

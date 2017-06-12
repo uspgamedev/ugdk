@@ -30,7 +30,6 @@ class MediaManager;
 class MediaPlayer {
   public:
     MediaPlayer();
-    virtual ~MediaPlayer();
 
     virtual void Update(double dt) = 0;
 
