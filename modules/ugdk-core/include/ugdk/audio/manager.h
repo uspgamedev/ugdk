@@ -28,22 +28,22 @@ class Manager {
     /// Loads an audio sample.
     /**@param filepath The path to the audio sample.
      */
-    Sample* LoadSample(const std::string& filepath);
+    std::shared_ptr<Sample> LoadSample(const std::string& filepath);
 
     /// Loads a music.
     /**@param filepath The path to the music file.
-     */ 
-    Music* LoadMusic(const std::string& filepath);
+     */
+    std::shared_ptr<Music> LoadMusic(const std::string& filepath);
 
     /// Getter for the music that is currently playing.
     /** @return nullptr is no music is currently playing, a
-        Music* otherwise. */
-    Music* CurrentMusic() const;
+        shared_ptr<Music> otherwise. */
+    std::shared_ptr<Music> CurrentMusic() const;
 
   private:
     static const int NUM_CHANNELS = 16;
-    std::map<std::string, Sample*> sample_data_;
-    std::map<std::string, Music*> music_data_;
+    std::map<std::string, std::shared_ptr<Sample>> sample_data_;
+    std::map<std::string, std::shared_ptr<Music>> music_data_;
 
     void ReleaseSamples();
     void ReleaseMusics();

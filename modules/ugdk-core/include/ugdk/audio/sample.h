@@ -17,6 +17,7 @@ namespace audio {
  */
 class Sample {
   public:
+    ~Sample();
     /// Plays the sound.
     void Play();
 
@@ -34,17 +35,16 @@ class Sample {
 
     /// Sets the volume.
     /** Sets the volume between 0 and 1. 0 is silent, 1 is the max volume.
-      * @param vol The volume. 
+      * @param vol The volume.
      */
     void SetVolume(double vol);
-    
+
     /// Returns the sound's volume.
     /** @return The actual volume, 0.0 <= volume <= 1.0 */
-    double Volume(); 
+    double Volume();
 
   private:
     Sample(const std::string& filepath);
-    ~Sample();
     Mix_Chunk *data_;
     int channel_;
     double volume_;

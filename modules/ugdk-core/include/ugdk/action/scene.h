@@ -36,7 +36,7 @@ class Scene : public system::TaskPlayer {
 
     /// Method called when this Scene leaves the top of the Scene stack.
     virtual void DeFocus();
-    
+
     /// Method called when this scene is pushed to the Engine's Scene stack.
     virtual void OnPushed(int index) {}
 
@@ -68,7 +68,7 @@ class Scene : public system::TaskPlayer {
 
     bool active() const { return active_; }
     void set_active(bool is_active) { active_ = is_active; }
-    
+
     bool visible() const { return visible_; }
     void set_visible(bool is_visible) { visible_ = is_visible; }
 
@@ -78,8 +78,8 @@ class Scene : public system::TaskPlayer {
           system::EventHandler& event_handler()       { return event_handler_; }
     const system::EventHandler& event_handler() const { return event_handler_; }
 
-    audio::Music* background_music() const { return background_music_; }
-    void set_background_music(audio::Music* music) { background_music_ = music; }
+    std::shared_ptr<audio::Music> background_music() const { return background_music_; }
+    void set_background_music(std::shared_ptr<audio::Music> music) { background_music_ = music; }
     /**@}
      */
 
@@ -95,7 +95,7 @@ class Scene : public system::TaskPlayer {
   private:
     /// Used to identify the scene internally.
     std::string identifier_;
-    
+
     /// Tells whether the scene is currently running or not.
     bool active_;
 
@@ -106,7 +106,7 @@ class Scene : public system::TaskPlayer {
     bool visible_;
 
     /// The background music when this scene is on top.
-    audio::Music* background_music_;
+    std::shared_ptr<audio::Music> background_music_;
 
     /// Whether this scene stops the previous music even if wont play any music.
     bool stops_previous_music_;

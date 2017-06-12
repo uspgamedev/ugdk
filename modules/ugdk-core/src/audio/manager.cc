@@ -53,20 +53,18 @@ void Manager::Update() {
 }
 
 void Manager::ReleaseSamples() {
-    std::map<std::string, Sample*>::iterator it;
-    for(it = sample_data_.begin(); it != sample_data_.end(); ++it)
-        delete it->second;
+    for(auto& it : sample_data_)
+        it.second.reset();
 }
 
 void Manager::ReleaseMusics() {
-    std::map<std::string, Music*>::iterator it;
-    for(it = music_data_.begin(); it != music_data_.end(); ++it)
-        delete it->second;
+    for(auto& it : music_data_)
+        it.second.reset();
 }
 
-Sample* Manager::LoadSample(const std::string& filepath) {
+std::shared_ptr<Sample> Manager::LoadSample(const std::string& filepath) {
     if(sample_data_.find(filepath) == sample_data_.end()) {
-        Sample *sample = new Sample(filepath);
+        std::shared_ptr<Sample> sample ( new Sample(filepath));
         if(sample)
             sample_data_[filepath] = sample;
     }
@@ -74,9 +72,9 @@ Sample* Manager::LoadSample(const std::string& filepath) {
     return sample_data_[filepath];
 }
 
-Music* Manager::LoadMusic(const std::string& filepath) {
+std::shared_ptr<Music> Manager::LoadMusic(const std::string& filepath) {
     if(music_data_.find(filepath) == music_data_.end()) {
-        Music *music = new Music(filepath);
+        std::shared_ptr<Music> music ( new Music(filepath));
         if(music)
             music_data_[filepath] = music;
     }
@@ -84,10 +82,9 @@ Music* Manager::LoadMusic(const std::string& filepath) {
     return music_data_[filepath];
 }
 
-Music* Manager::CurrentMusic() const {
+std::shared_ptr<Music> Manager::CurrentMusic() const {
     return Music::playing_music_;
 }
 
 } // namespace audio
 } // namespace ugdk
-

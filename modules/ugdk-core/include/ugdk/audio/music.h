@@ -17,6 +17,7 @@ namespace audio {
  */
 class Music {
   public:
+    ~Music();
     /// Plays this music once.
     void Play();
 
@@ -50,16 +51,16 @@ class Music {
 
   private:
     Music(const std::string& filepath);
-    ~Music();
     Mix_Music *data_;
     double volume_;
     std::unique_ptr<ugdk::filesystem::File> file_;
 
     static void UpdateVolume(double vol);
     static void MusicDone();
-    static Music *playing_music_;
+    static std::shared_ptr<Music> playing_music_;
 
     friend class Manager;
+
 };
 
 } // namespace audio
