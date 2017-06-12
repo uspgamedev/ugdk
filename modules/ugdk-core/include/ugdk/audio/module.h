@@ -6,6 +6,9 @@
 namespace ugdk {
 namespace audio {
 
+
+bool is_active();
+
 /// Initializes the module with the given Manager.
 bool Initialize(std::unique_ptr<Manager> manager);
 
@@ -13,7 +16,7 @@ bool Initialize(std::unique_ptr<Manager> manager);
 void Release();
 
 /// Getter for the manager of the module.
-std::unique_ptr<Manager> manager();
+audio::Manager& manager();
 
 } // namespace audio
 } // namespace ugdk

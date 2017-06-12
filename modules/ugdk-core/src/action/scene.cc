@@ -36,7 +36,7 @@ void Scene::Focus() {
             background_music_->Unpause();
 
     } else if(stops_previous_music_) {
-        std::shared_ptr<audio::Music> current_music = audio::manager()->CurrentMusic();
+        std::shared_ptr<audio::Music> current_music = audio::manager().CurrentMusic();
         if(current_music != nullptr)
             current_music->Stop();
     }

@@ -5,14 +5,18 @@ namespace audio {
 
 static std::unique_ptr<Manager> reference_;
 
+bool is_active() {
+    return static_cast<bool>(reference_);
+}
+
 bool Initialize(std::unique_ptr<Manager> manager) {
     if(manager && manager->Initialize()) {
         // The manager initialized correctly, so we can use it.
-        reference_ = manager;
+        reference_ = std::move(manager);
         return true;
     } else {
         // Error initializing the manager, delete it and don't activate the module.
-        delete manager;
+        manager.reset();
         // TODO: log the error.
         return false;
     }
@@ -21,7 +25,6 @@ bool Initialize(std::unique_ptr<Manager> manager) {
 void Release() {
     if(reference_)
         reference_->Release();
-    delete reference_;
     reference_.reset();
 }
 
