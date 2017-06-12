@@ -18,10 +18,6 @@ void MediaPlayer::AddTickFunction(std::function<void (void)> tick) {
     ticks_.push_back(tick);
 }
 
-void MediaPlayer::ChangeMediaManager(MediaManager* manager) {
-    manager->AddPlayer(this); // This function changes mangaer_
-}
-
 void MediaPlayer::notifyAllObservers() {
     for (const auto& tick : ticks_) {
         tick();
