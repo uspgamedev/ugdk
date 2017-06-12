@@ -34,7 +34,7 @@ namespace system {
 
 namespace {
 
-using std::make_unique;
+
 
 enum class UGDKState {
     UNINITIALIZED,
@@ -141,7 +141,7 @@ bool Initialize(const Configuration& configuration) {
     }
 
     if(configuration.audio_enabled)
-        if(!audio::Initialize(make_unique<audio::Manager>()))
+        if(!audio::Initialize(std::unique_ptr<audio::Manager>(new audio::Manager )))
             return ErrorLog("system::Initialize failed - audio::Initialize returned false.");
 
     if(configuration.input_enabled) {
