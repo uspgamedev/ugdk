@@ -8,10 +8,10 @@
 #include <ugdk/time/module.h>
 #include <ugdk/filesystem/module.h>
 #include <ugdk/desktop/module.h>
-# include <ugdk/desktop/2D/manager.h>
-# include <ugdk/graphic/module.h>
-# include <ugdk/graphic/canvas.h>
-# include <ugdk/text/module.h>
+#include <ugdk/desktop/2D/manager.h>
+#include <ugdk/graphic/module.h>
+#include <ugdk/graphic/canvas.h>
+#include <ugdk/text/module.h>
 
 #include <ugdk/action/scene.h>
 #include <ugdk/debug/profiler.h>
@@ -26,12 +26,15 @@
 #include <fstream>
 #include <cstring>
 #include <cerrno>
+#include <memory>
 #include "SDL.h"
 
 namespace ugdk {
 namespace system {
 
 namespace {
+
+using std::make_unique;
 
 enum class UGDKState {
     UNINITIALIZED,
@@ -138,7 +141,7 @@ bool Initialize(const Configuration& configuration) {
     }
 
     if(configuration.audio_enabled)
-        if(!audio::Initialize(new audio::Manager))
+        if(!audio::Initialize(make_unique<audio::Manager>()))
             return ErrorLog("system::Initialize failed - audio::Initialize returned false.");
 
     if(configuration.input_enabled) {
@@ -199,8 +202,8 @@ void Run() {
         if(input::manager())
             input::manager()->Update();
 
-        if(audio::manager())
-            audio::manager()->Update();
+        if(audio::is_active())
+            audio::manager().Update();
 
         HandleSDLEvents();
 

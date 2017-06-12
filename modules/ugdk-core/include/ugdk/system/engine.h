@@ -23,6 +23,8 @@ typedef std::function<std::unique_ptr<action::Scene> ()> SceneFactory;
 /** @param configuration A Engine::Configuration struct with the planned
  **                      configuration.
  */
+
+ 
 bool Initialize(const Configuration& configuration);
 
 /// Initializes the engine. Calls the other Initialize method with all default arguments.
@@ -87,4 +89,3 @@ void DeregisterSDLHandler(const SDLEventHandler*);
 } // namespace ugdk
 
 #endif
-
