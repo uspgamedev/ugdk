@@ -3,9 +3,9 @@
 namespace ugdk {
 namespace audio {
 
-static Manager* reference_ = nullptr;
+static std::unique_ptr<Manager> reference_;
 
-bool Initialize(Manager* manager) {
+bool Initialize(std::unique_ptr<Manager> manager) {
     if(manager && manager->Initialize()) {
         // The manager initialized correctly, so we can use it.
         reference_ = manager;
@@ -22,11 +22,11 @@ void Release() {
     if(reference_)
         reference_->Release();
     delete reference_;
-    reference_ = nullptr;
+    reference_.reset();
 }
 
-Manager* manager() {
-    return reference_;
+audio::Manager& manager() {
+    return *(reference_.get());
 }
 
 } // namespace audio
