@@ -38,7 +38,7 @@ class MouseInputSDLEventHandler : public system::SDLEventHandler {
         system::EventHandler::RaiseGlobalEvent(MouseMotionEvent(
             mouse_.position_,
             math::Integer2D(sdlevent.motion.xrel, sdlevent.motion.yrel),
-            desktop::manager()->window(sdlevent.motion.windowID)
+            desktop::manager().window(sdlevent.motion.windowID)
         ));
     }
 

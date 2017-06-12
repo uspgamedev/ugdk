@@ -20,14 +20,16 @@
 
 #include <system/sdleventhandler.h>
 
-#include <string>
+#include "SDL.h"
+
 #include <algorithm>
-#include <list>
-#include <fstream>
 #include <cstring>
 #include <cerrno>
 #include <memory>
-#include "SDL.h"
+#include <fstream>
+#include <string>
+#include <list>
+
 
 namespace ugdk {
 namespace system {
@@ -133,11 +135,11 @@ bool Initialize(const Configuration& configuration) {
         filesystem::manager()->AddSearchPath(configuration_.base_path);
 
     if(!configuration.windows_list.empty()) {
-        desktop::Manager *deskmanager = new desktop::mode2d::Manager;
-        if(!desktop::Initialize(deskmanager))
+        std::unique_ptr<desktop::Manager> deskmanager (new desktop::mode2d::Manager);
+        if(!desktop::Initialize(std::move(deskmanager)))
             return ErrorLog("system::Initialize failed - desktop::Initialize returned false.");
         for(const auto& window_config : configuration.windows_list)
-            desktop::manager()->CreateWindow(window_config);
+            desktop::manager().CreateWindow(window_config);
     }
 
     if(configuration.audio_enabled)
@@ -218,10 +220,10 @@ void Run() {
                     scene->Update(delta_t);
             }
 
-            if(desktop::manager()) {
+            if(desktop::is_active()) {
                 debug::ProfileSection render_section("Render");
 
-                desktop::manager()->PresentAll();
+                desktop::manager().PresentAll();
             }
             profile_data_list_.push_back(frame_section.data());
         }
