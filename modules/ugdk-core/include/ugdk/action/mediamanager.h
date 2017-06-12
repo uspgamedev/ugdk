@@ -2,6 +2,7 @@
 #define UGDK_ACTION_MEDIAMANAGER_H_
 
 #include <set>
+#include <memory>
 
 #include <ugdk/action/mediaplayer.h>
 
@@ -12,27 +13,27 @@ class MediaManager {
   public:
     MediaManager() {}
     ~MediaManager() {
-        for(std::set<MediaPlayer*>::iterator it = players_.begin(); it != players_.end(); ++it)
+        for(std::set< std::shared_ptr<MediaPlayer> >::iterator it = players_.begin(); it != players_.end(); ++it)
             (*it)->manager_ = nullptr;
     }
 
     void Update(double dt) {
-        for(std::set<MediaPlayer*>::iterator it = players_.begin(); it != players_.end(); ++it)
+        for(std::set< std::shared_ptr<MediaPlayer> >::iterator it = players_.begin(); it != players_.end(); ++it)
             (*it)->Update(dt);
     }
 
-    void AddPlayer(MediaPlayer* player) {
+    void AddPlayer(std::shared_ptr<MediaPlayer> player) {
         players_.insert(player);
         player->manager_ = this;
     }
 
-    void RemovePlayer(MediaPlayer* player) {
+    void RemovePlayer(std::shared_ptr<MediaPlayer> player) {
         players_.erase(player);
         player->manager_ = nullptr;
     }
 
 private:
-    std::set<MediaPlayer*> players_;
+    std::set< std::shared_ptr<MediaPlayer> > players_;
 
 };
 

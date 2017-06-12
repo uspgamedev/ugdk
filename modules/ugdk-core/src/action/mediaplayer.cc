@@ -9,11 +9,6 @@ MediaPlayer::MediaPlayer()
     : manager_(nullptr)
 {}
 
-MediaPlayer::~MediaPlayer() {
-    if(manager_)
-        manager_->RemovePlayer(this);
-}
-
 void MediaPlayer::AddTickFunction(std::function<void (void)> tick) {
     ticks_.push_back(tick);
 }
