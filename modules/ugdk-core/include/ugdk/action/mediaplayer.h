@@ -36,8 +36,6 @@ class MediaPlayer {
 
     void AddTickFunction(std::function<void (void)> tick);
 
-    void ChangeMediaManager(MediaManager*);
-
   protected:
     void notifyAllObservers();
 
