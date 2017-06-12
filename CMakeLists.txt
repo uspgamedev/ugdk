@@ -109,7 +109,7 @@ if(NOT ANDROID)
 endif(NOT ANDROID)
 
 if (UNIX OR MINGW)
-    add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++11)
+    add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++14)
     #add_definitions(-msse2)
     add_definitions(-Wall
         # TODO: would like these but they produce overwhelming amounts of warnings
@@ -203,7 +203,7 @@ include(cmake/ExecutableFunctions.cmake)
 configure_file (
     "cmake/config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/include/ugdk/system/config.h"
-) 
+)
 
 install(TARGETS libugdk
     DESTINATION lib
