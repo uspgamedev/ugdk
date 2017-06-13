@@ -8,10 +8,6 @@ compiler:
 
 cache: apt
 
-before_install:
-  - sudo add-apt-repository -y ppa:henriquegemignani/uspgamedev
-  - sudo apt-get update
-
 install:
   - sudo apt-get install cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libgl1-mesa-dev libglu1-mesa-dev
 
