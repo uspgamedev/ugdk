@@ -1,15 +1,20 @@
 language: cpp
 dist: trusty
-sudo: required
+sudo: false
 
 compiler:
   - gcc
   - clang
 
-cache: apt
-
-install:
-  - sudo apt-get install cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libgl1-mesa-dev libglu1-mesa-dev
+addons:
+  apt:
+    packages:
+      - cmake
+      - libsdl2-dev
+      - libsdl2-mixer-dev
+      - libgl1-mesa-dev
+      - libglu1-mesa-dev
+      - libpng-dev 
 
 script:
   - cmake .
