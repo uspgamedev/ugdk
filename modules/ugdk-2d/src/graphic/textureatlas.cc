@@ -12,7 +12,7 @@ namespace graphic {
 void TextureAtlas::BoundPiece::ConvertToAtlas(float *u, float *v) const {
     ConvertToAtlas(*u, *v, u, v);
 }
-        
+
 void TextureAtlas::BoundPiece::ConvertToAtlas(float in_u, float in_v, float *out_u, float *out_v) const {
     int size_x = piece_->trimmed_size.x;
     int size_y = piece_->trimmed_size.y;
@@ -40,7 +40,7 @@ TextureAtlas::TextureAtlas(const graphic::GLTexture* texture, std::size_t size)
 TextureAtlas::~TextureAtlas() {}
 
 TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
-    auto json_file = ugdk::filesystem::manager()->OpenFile(filepath + ".json");
+    auto json_file = ugdk::filesystem::manager().OpenFile(filepath + ".json");
     if (!json_file)
         throw system::BaseException("File not found: %s.json\n", filepath.c_str());
 
@@ -58,7 +58,7 @@ TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
         size_t index = atlas->AddPiece(frame.name().c_str(),
                         math::Integer2D(frame_info["x"].as_int(), frame_info["y"].as_int()),
                         math::Integer2D(frame_info["w"].as_int(), frame_info["h"].as_int()));
-        
+
         auto& piece = atlas->pieces_[index];
         piece.rotated_90_clockwise = frame["rotated"].as_bool();
         if (frame["trimmed"].as_bool()) {
@@ -75,7 +75,7 @@ TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
 math::Integer2D TextureAtlas::size() const {
     return math::Integer2D(texture_->width(), texture_->height());
 }
-    
+
 
 }  // namespace graphic
 }  // namespace ugdk

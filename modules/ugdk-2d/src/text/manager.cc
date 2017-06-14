@@ -57,7 +57,7 @@ TextBox* Manager::GetText(const std::string& text) {
 }
 
 TextBox* Manager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
-    auto file = filesystem::manager()->OpenFile(path);
+    auto file = filesystem::manager().OpenFile(path);
 
     if (!file)
         return nullptr;

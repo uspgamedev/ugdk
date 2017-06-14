@@ -147,7 +147,7 @@ TextureUnit Manager::ReserveTextureUnit(const graphic::GLTexture* texture) {
     int id = textureunit_ids_->GenerateID();
     if (id == textureunit_ids_->error_value())
         throw NotSupportedException("Maximum amount of TextureUnits reached.");
-    
+
     TextureUnit unit(id);
     if (texture)
         unit.BindTexture(texture);
@@ -167,8 +167,9 @@ unsigned int Manager::LocationForVertexType(VertexType type) {
     case VertexType::VERTEX:  return 0;
     case VertexType::TEXTURE: return 1;
     case VertexType::COLOR:   return 2;
-    case VertexType::CUSTOM1:   return 3;
+    case VertexType::CUSTOM1: return 3;
     }
+    return -1u; /* It should never get here, but this keeps gcc quiet, so I did it */
 }
 
 action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> render_light_function) {
@@ -187,7 +188,7 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
 
         light_canvas.Clear(structure::Color(0.0, 0.0, 0.0, 0.0));
         render_light_function(light_canvas);
-    
+
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     });
 
@@ -197,7 +198,7 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
 const ShaderProgram* Manager::Shaders::current_shader() const {
     return shaders_[flags_.to_ulong()];
 }
-        
+
 const ShaderProgram* Manager::Shaders::GetSpecificShader(const std::bitset<Manager::Shaders::NUM_FLAGS>& flags) const {
     return shaders_[flags.to_ulong()];
 }
@@ -222,7 +223,7 @@ Manager::Shaders::Shaders() {
     for(unsigned long i = 0; i < max_flags; ++i)
         shaders_[i] = nullptr;
 }
-        
+
 Manager::Shaders::~Shaders() {
     unsigned long max_flags = 1 << NUM_FLAGS;
     for(unsigned long i = 0; i < max_flags; ++i)

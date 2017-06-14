@@ -23,7 +23,7 @@ using std::string;
 #define STRING_LENGTH 1024
 
 std::string LoadTextFromFile(const std::string& path) {
-    auto file = ugdk::filesystem::manager()->OpenFile(path);
+    auto file = ugdk::filesystem::manager().OpenFile(path);
     if (!file)
         return std::string();
 
@@ -163,7 +163,7 @@ void trim_trailing_whitespace(char *str) {
 
 // Fills the map with the information on the given file
 bool Language::Load(const std::string& language_file) {
-    auto file = filesystem::manager()->OpenFile(language_file);
+    auto file = filesystem::manager().OpenFile(language_file);
     if(!file)
         return false;
 
@@ -173,7 +173,7 @@ bool Language::Load(const std::string& language_file) {
     while (file->fgets(buffer_raw, STRING_LENGTH)) {
         // Read from the UTF-8 encoded file.
         trim_trailing_whitespace(buffer_raw);
-   
+
         if(is_blank(buffer_raw)) { // Is this line blank?
             continue;
         }

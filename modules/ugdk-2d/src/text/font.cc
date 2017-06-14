@@ -12,17 +12,17 @@ using std::string;
 using std::wstring;
 using math::Vector2D;
 
-Font::Font(const string& path, double size) 
+Font::Font(const string& path, double size)
     : size_(size)
     , ttf_memory_(nullptr)
 {
 
-    auto file = ugdk::filesystem::manager()->OpenFile(path);
+    auto file = ugdk::filesystem::manager().OpenFile(path);
     auto file_size = file->size();
 
     ttf_memory_ = malloc(file_size);
     file->ReadRaw(ttf_memory_, file_size, 1);
-    
+
     atlas_ = texture_atlas_new(512, 512, 1);
 
     freetype_font_ = texture_font_new_from_memory(
@@ -42,7 +42,7 @@ Font::~Font() {
 double Font::height() const {
     return static_cast<double>(freetype_font_->height);
 }
-    
+
 void Font::HintString(const wstring& string) {
     if(texture_font_load_glyphs(freetype_font_, string.c_str()) > 0) {
         // TODO: Could not generate all glyphs!

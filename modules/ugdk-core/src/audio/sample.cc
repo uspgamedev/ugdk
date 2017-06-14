@@ -16,7 +16,7 @@ Sample::Sample(const std::string& filepath)
     , volume_(1.0)
 {
 
-    auto file = ugdk::filesystem::manager()->OpenFile(filepath);
+    auto file = ugdk::filesystem::manager().OpenFile(filepath);
 
     SDL_RWops* rwops;
     if (auto ptr = dynamic_cast<filesystem::SDLFile*>(file.get())) {

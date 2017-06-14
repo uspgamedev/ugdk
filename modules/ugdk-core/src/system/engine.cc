@@ -131,8 +131,8 @@ bool Initialize(const Configuration& configuration) {
 
     RegisterSDLHandler(&system_sdlevent_handler);
 
-    if (filesystem::Initialize(new filesystem::Manager))
-        filesystem::manager()->AddSearchPath(configuration_.base_path);
+    if (filesystem::Initialize(std::unique_ptr<filesystem::Manager>(new filesystem::Manager )))
+        filesystem::manager().AddSearchPath(configuration_.base_path);
 
     if(!configuration.windows_list.empty()) {
         std::unique_ptr<desktop::Manager> deskmanager (new desktop::mode2d::Manager);

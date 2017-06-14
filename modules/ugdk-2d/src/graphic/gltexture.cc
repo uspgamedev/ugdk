@@ -119,7 +119,7 @@ GLTexture::~GLTexture() {
 }
 
 GLTexture* GLTexture::CreateFromFile(const std::string& filepath) {
-    auto file = ugdk::filesystem::manager()->OpenFile(filepath);
+    auto file = ugdk::filesystem::manager().OpenFile(filepath);
 
     if (!file) {
         debug::Log(debug::LogLevel::ERROR, "UGDK",
@@ -131,7 +131,7 @@ GLTexture* GLTexture::CreateFromFile(const std::string& filepath) {
     SDL_RWops* rwops;
 
     if (auto ptr = dynamic_cast<filesystem::SDLFile*>(file.get())) {
-        rwops = ptr->rwops();        
+        rwops = ptr->rwops();
     } else {
         throw system::BaseException("NYI: GLTexture::CreateFromFile from non-SDLFile.");
     }
@@ -172,7 +172,7 @@ void GLTexture::set_texture_filter(GLint filter) {
     current_texture_filter = filter;
 }
 
-GLTexture::GLTexture(GLuint gltexture, int texture_width, int texture_height) 
+GLTexture::GLTexture(GLuint gltexture, int texture_width, int texture_height)
     : id_(gltexture), texture_width_(texture_width), texture_height_(texture_height) {}
 
 } // namespace graphic

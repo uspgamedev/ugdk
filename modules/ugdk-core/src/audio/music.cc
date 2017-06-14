@@ -16,7 +16,7 @@ std::shared_ptr<Music> Music::playing_music_(nullptr);
 Music::Music(const std::string& filepath)
     : data_(nullptr)
     , volume_(1.0)
-    , file_(ugdk::filesystem::manager()->OpenFile(filepath))
+    , file_(ugdk::filesystem::manager().OpenFile(filepath))
 {
     SDL_RWops* rwops;
     if (auto ptr = dynamic_cast<filesystem::SDLFile*>(file_.get())) {
