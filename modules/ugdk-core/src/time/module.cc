@@ -19,6 +19,10 @@ bool Initialize(std::unique_ptr<Manager> manager) {
     }
 }
 
+bool is_active() {
+    return static_cast<bool>(reference_);
+}
+
 void Release() {
     reference_.reset();
 }

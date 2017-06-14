@@ -177,7 +177,8 @@ void Run() {
     while (current_state_ == UGDKState::RUNNING) {
         // Start the frame time as first thing
         double delta_t;
-        if (auto time_manager = std::unique_ptr<time::Manager>(new time::Manager )) {
+        if (time::is_active()) {
+            auto time_manager = std::unique_ptr<time::Manager>(new time::Manager);
             time_manager->Update();
             delta_t = (time_manager->TimeDifference()) / 1000.0;
         } else {
