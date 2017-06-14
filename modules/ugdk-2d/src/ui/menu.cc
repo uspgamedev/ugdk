@@ -19,34 +19,34 @@ using std::placeholders::_1;
 namespace ugdk {
 namespace ui {
 
-Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, HookPoint hook) 
+Menu::Menu(const ugdk::structure::Box<2>& tree_bounding_box, const ugdk::math::Vector2D& offset, HookPoint hook)
   : node_(new Node)
   , focused_element_(nullptr)
   , objects_tree_(new ObjectTree(tree_bounding_box,5))
-  , hook_(hook) 
+  , hook_(hook)
 {
     node_->geometry().ChangeOffset(offset);
     option_node_[0] = nullptr;
     option_node_[1] = nullptr;
 
     AddTask([this](double) {
-        input::Manager* input = input::manager();
-        ugdk::math::Vector2D mouse_pos = ugdk::math::Vector2D(input->mouse().position());
+        input::Manager& input = input::manager();
+        ugdk::math::Vector2D mouse_pos = ugdk::math::Vector2D(input.mouse().position());
         if ((mouse_pos - ugdk::math::Vector2D(last_mouse_position_)).NormOne() > 10e-10) {
             auto intersecting_uielements = GetMouseCollision();
             if (intersecting_uielements->size() > 0)
                 SelectUIElement((*intersecting_uielements)[0]);
         }
         last_mouse_position_ = math::Integer2D(mouse_pos);
-        if (input->mouse().IsReleased(input::MouseButton::LEFT))
+        if (input.mouse().IsReleased(input::MouseButton::LEFT))
             this->CheckInteraction(mouse_pos);
-        if (input->keyboard().IsReleased(input::Scancode::DOWN))
+        if (input.keyboard().IsReleased(input::Scancode::DOWN))
             this->FocusNextElement(1);
-        if (input->keyboard().IsReleased(input::Scancode::UP))
+        if (input.keyboard().IsReleased(input::Scancode::UP))
             this->FocusNextElement(-1);
 
         for (const auto& it : input_callbacks()) {
-            if (input->keyboard().IsPressed(it.first))
+            if (input.keyboard().IsPressed(it.first))
                 it.second(this);
         }
     });
@@ -108,7 +108,7 @@ void Menu::PositionSelectionDrawables() {
 }
 
 std::shared_ptr< std::vector<UIElement *> > Menu::GetMouseCollision() {
-    math::Vector2D mouse_pos = ugdk::math::Vector2D(input::manager()->mouse().position());
+    math::Vector2D mouse_pos = ugdk::math::Vector2D(input::manager().mouse().position());
     std::array<double, 2> min_coords, max_coords;
     min_coords[0] = mouse_pos.x - 0.5;
     min_coords[1] = mouse_pos.y - 0.5;
@@ -121,7 +121,7 @@ std::shared_ptr< std::vector<UIElement *> > Menu::GetMouseCollision() {
     return results;
 }
 
-void Menu::InteractWithFocused() { 
+void Menu::InteractWithFocused() {
     if(focused_element_)
         focused_element_->Interact();
 }
@@ -141,7 +141,7 @@ void Menu::AddObject(UIElement *obj) {
     if(!focused_element_) SelectUIElement(obj);
 }
 
-void Menu::RemoveObject(UIElement *obj) { 
+void Menu::RemoveObject(UIElement *obj) {
     obj->set_owner(nullptr);
     objects_tree_->Remove(obj);
     node_->RemoveChild(obj->node().get());

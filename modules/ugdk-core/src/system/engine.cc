@@ -147,7 +147,7 @@ bool Initialize(const Configuration& configuration) {
             return ErrorLog("system::Initialize failed - audio::Initialize returned false.");
 
     if(configuration.input_enabled) {
-        if(!input::Initialize(new input::Manager))
+        if(!input::Initialize(std::unique_ptr<input::Manager>(new input::Manager )))
             return ErrorLog("system::Initialize failed - input::Initialize returned false.");
     }
 
@@ -201,8 +201,8 @@ void Run() {
         // Frame starts here!
         FocusRoutine();
 
-        if(input::manager())
-            input::manager()->Update();
+        if(input::is_active())
+            input::manager().Update();
 
         if(audio::is_active())
             audio::manager().Update();
