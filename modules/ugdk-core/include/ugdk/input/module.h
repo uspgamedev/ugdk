@@ -7,6 +7,8 @@
 namespace ugdk {
 namespace input {
 
+bool is_active();
+
 /// Initializes the module with the given Manager.
 bool Initialize(std::unique_ptr<Manager> manager);
 
