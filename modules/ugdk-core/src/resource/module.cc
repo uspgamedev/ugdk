@@ -31,12 +31,10 @@ bool Initialize(std::unique_ptr<Manager> manager) {
 }
 
 void Release() {
-    if(reference_)
-        reference_->Release();
-    reference_.reset();
+     reference_.reset();
 }
 
-audio::Manager& manager() {
+resource::Manager& manager() {
     return *(reference_.get());
 }
 

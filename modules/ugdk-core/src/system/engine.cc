@@ -155,7 +155,7 @@ bool Initialize(const Configuration& configuration) {
         if(!time::Initialize(new time::Manager))
             return ErrorLog("system::Initialize failed - time::Initialize returned false.");
 
-    if(!resource::Initialize(new resource::Manager))
+    if(!resource::Initialize(std::unique_ptr<resource::Manager>(new resource::Manager )))
         return ErrorLog("system::Initialize failed - resource::Initialize returned false.");
 
     previous_focused_scene_ = nullptr;
