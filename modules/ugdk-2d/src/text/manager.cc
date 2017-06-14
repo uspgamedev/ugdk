@@ -42,13 +42,13 @@ bool Manager::Initialize() {
 }
 
 bool Manager::Release() {
-    fonts_.clear();    
+    fonts_.clear();
     return true;
 }
 
 TextBox* Manager::GetText(const std::string& text, const std::string& fonttag, int width) {
     Font *font = fonttag.size() > 0 ? fonts_[fonttag].get() : current_font_;
-    return new TextBox(text, (width == -1) ? desktop::manager()->primary_window()->size().x : width, font);
+    return new TextBox(text, (width == -1) ? desktop::manager().primary_window()->size().x : width, font);
 }
 
 TextBox* Manager::GetText(const std::string& text) {
