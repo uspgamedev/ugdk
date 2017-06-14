@@ -152,7 +152,7 @@ bool Initialize(const Configuration& configuration) {
     }
 
     if(configuration.time_enabled)
-        if(!time::Initialize(new time::Manager))
+        if(!time::Initialize(std::unique_ptr<time::Manager>(new time::Manager )))
             return ErrorLog("system::Initialize failed - time::Initialize returned false.");
 
     if(!resource::Initialize(new resource::Manager))
@@ -177,7 +177,7 @@ void Run() {
     while (current_state_ == UGDKState::RUNNING) {
         // Start the frame time as first thing
         double delta_t;
-        if (auto time_manager = time::manager()) {
+        if (auto time_manager = std::unique_ptr<time::Manager>(new time::Manager )) {
             time_manager->Update();
             delta_t = (time_manager->TimeDifference()) / 1000.0;
         } else {
@@ -230,8 +230,8 @@ void Run() {
         while(profile_data_list_.size() > 10)
             profile_data_list_.pop_front();
 
-        if (configuration_.limit_frame_time_with_sleep && time::manager()) {
-            auto frame_time = time::manager()->TimeElapsedInFrame();
+        if (configuration_.limit_frame_time_with_sleep && std::unique_ptr<time::Manager>(new time::Manager )) {
+            auto frame_time = time::manager().TimeElapsedInFrame();
             if (frame_time < configuration_.target_frame_time)
                 SDL_Delay(configuration_.target_frame_time - frame_time);
         }

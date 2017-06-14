@@ -9,7 +9,7 @@ namespace ugdk {
 namespace time {
 
 TimeAccumulator::TimeAccumulator(int duration_miliseconds) {
-    handler_ = manager();
+    handler_ = &manager();
     Restart(duration_miliseconds);
 }
 

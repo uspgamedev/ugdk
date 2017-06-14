@@ -1,30 +1,30 @@
 #include <ugdk/time/module.h>
+#include <memory>
 
 namespace ugdk {
 namespace time {
 
-static Manager* reference_ = nullptr;
+static std::unique_ptr<Manager> reference_;
 
-bool Initialize(Manager* manager) {
+bool Initialize(std::unique_ptr<Manager> manager) {
     if(manager) {
         // The manager initialized correctly, so we can use it.
-        reference_ = manager;
+        reference_ = std::move(manager);
         return true;
     } else {
         // Error initializing the manager, delete it and don't activate the module.
-        delete manager;
+        manager.reset();
         // TODO: log the error.
         return false;
     }
 }
 
 void Release() {
-    delete reference_;
-    reference_ = nullptr;
+    reference_.reset();
 }
 
-Manager* manager() {
-    return reference_;
+time::Manager& manager() {
+    return *(reference_.get());
 }
 
 } // namespace audio

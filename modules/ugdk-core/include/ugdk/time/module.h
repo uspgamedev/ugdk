@@ -2,18 +2,19 @@
 #define UGDK_TIME_MODULE_H_
 
 #include <ugdk/time/manager.h>
+#include <memory>
 
 namespace ugdk {
 namespace time {
 
 /// Initializes the module with the given Manager.
-bool Initialize(Manager* manager);
+bool Initialize(std::unique_ptr<Manager> manager);
 
 /// Releases the module, disabling it.
 void Release();
 
 /// Getter for the manager of the module.
-Manager* manager();
+time::Manager& manager();
 
 } // namespace time
 } // namespace ugdk
