@@ -3,16 +3,16 @@
 namespace ugdk {
 namespace filesystem {
 
-static Manager* reference_ = nullptr;
+static std::unique_ptr<Manager> reference_;
 
-bool Initialize(Manager* manager) {
-    if(manager && manager->Initialize()) {
+bool Initialize(std::unique_ptr<Manager> manager) {
+    if(manager.get() && manager->Initialize()) {
         // The manager initialized correctly, so we can use it.
-        reference_ = manager;
+        reference_ = std::move(manager);
         return true;
     } else {
         // Error initializing the manager, delete it and don't activate the module.
-        delete manager;
+        manager.reset();
         // TODO: log the error.
         return false;
     }
@@ -21,12 +21,11 @@ bool Initialize(Manager* manager) {
 void Release() {
     if(reference_)
         reference_->Release();
-    delete reference_;
-    reference_ = nullptr;
+    reference_.reset();
 }
 
-Manager* manager() {
-    return reference_;
+filesystem::Manager& manager() {
+    return *(reference_.get());
 }
 
 } // namespace filesystem
