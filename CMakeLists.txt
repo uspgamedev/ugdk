@@ -203,7 +203,7 @@ include(cmake/ExecutableFunctions.cmake)
 configure_file (
     "cmake/config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/include/ugdk/system/config.h"
-) 
+)
 
 install(TARGETS libugdk
     DESTINATION lib
