@@ -173,7 +173,7 @@ bool Language::Load(const std::string& language_file) {
     while (file->fgets(buffer_raw, STRING_LENGTH)) {
         // Read from the UTF-8 encoded file.
         trim_trailing_whitespace(buffer_raw);
-   
+
         if(is_blank(buffer_raw)) { // Is this line blank?
             continue;
         }
@@ -189,7 +189,7 @@ bool Language::Load(const std::string& language_file) {
         } else if(IsWord(buffer_raw)) {
 
             std::pair<LanguageWord*, std::string> result = ReadWord(buffer_raw, reading_type == TITLE_FILES);
-            resource::manager()->GetContainer<LanguageWord>()->Replace(result.second, result.first);
+            resource::manager().GetContainer<LanguageWord>()->Replace(result.second, result.first);
 
         } else {
             // Syntax error!
