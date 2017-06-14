@@ -2,12 +2,13 @@
 #define UGDK_INPUT_MODULE_H_
 
 #include <ugdk/input/manager.h>
+#include <memory>
 
 namespace ugdk {
 namespace input {
 
 /// Initializes the module with the given Manager.
-bool Initialize(std::unique_ptr<Manager> manager)
+bool Initialize(std::unique_ptr<Manager> manager);
 
 /// Releases the module, disabling it.
 void Release();

@@ -12,11 +12,11 @@ bool is_active() {
 bool Initialize(std::unique_ptr<Manager> manager) {
     if(manager && manager->Initialize()) {
         // The manager initialized correctly, so we can use it.
-        reference_ = manager;
+        reference_ = std::move(manager);
         return true;
     } else {
         // Error initializing the manager, delete it and don't activate the module.
-        delete manager;
+        manager.reset();
         // TODO: log the error.
         return false;
     }
