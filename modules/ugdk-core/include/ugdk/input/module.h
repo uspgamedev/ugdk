@@ -7,13 +7,13 @@ namespace ugdk {
 namespace input {
 
 /// Initializes the module with the given Manager.
-bool Initialize(Manager* manager);
+bool Initialize(std::unique_ptr<Manager> manager)
 
 /// Releases the module, disabling it.
 void Release();
 
 /// Getter for the manager of the module.
-Manager* manager();
+input::Manager& manager();
 
 } // namespace input
 } // namespace ugdk
