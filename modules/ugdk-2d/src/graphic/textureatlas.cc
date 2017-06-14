@@ -53,7 +53,7 @@ TextureAtlas* TextureAtlas::LoadFromFile(const std::string& filepath) {
             filepath + ".png");
 
     TextureAtlas* atlas = new TextureAtlas(gltexture, frames.size());
-    for (const auto frame : frames) {
+    for (const auto& frame : frames) {
         auto&& frame_info = frame["frame"];
         size_t index = atlas->AddPiece(frame.name().c_str(),
                         math::Integer2D(frame_info["x"].as_int(), frame_info["y"].as_int()),
