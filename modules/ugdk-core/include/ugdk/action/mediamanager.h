@@ -13,7 +13,7 @@ class MediaManager {
   public:
     MediaManager() {}
     ~MediaManager() {
-        for(std::set< std::shared_ptr<MediaPlayer> >::iterator it = players_.begin(); it != players_.end(); ++it)
+        for( const std::set< std::shared_ptr<MediaPlayer> >::iterator it = players_.begin(); it != players_.end(); ++it)
             (*it)->manager_ = nullptr;
     }
 
@@ -41,5 +41,3 @@ private:
 } /* namespace ugdk */
 
 #endif /* UGDK_ACTION_MEDIAMANAGER_H_ */
-
-
