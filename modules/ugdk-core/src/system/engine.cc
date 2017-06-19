@@ -178,9 +178,9 @@ void Run() {
         // Start the frame time as first thing
         double delta_t;
         if (time::is_active()) {
-            auto time_manager = std::unique_ptr<time::Manager>(new time::Manager);
-            time_manager->Update();
-            delta_t = (time_manager->TimeDifference()) / 1000.0;
+            time::Manager& time_manager = time::manager();
+            time_manager.Update();
+            delta_t = (time_manager.TimeDifference()) / 1000.0;
         } else {
             delta_t = 0.0;
         }
