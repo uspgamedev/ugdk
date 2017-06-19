@@ -13,7 +13,7 @@ class MediaManager {
   public:
     MediaManager() {}
     ~MediaManager() {
-        for( const std::set< std::shared_ptr<MediaPlayer> >::iterator it = players_.begin(); it != players_.end(); ++it)
+        for(std::set< const std::shared_ptr<MediaPlayer> >::iterator it = players_.begin(); it != players_.end(); ++it)
             (*it)->manager_ = nullptr;
     }
 
