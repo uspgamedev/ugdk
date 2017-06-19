@@ -9,6 +9,7 @@ namespace time {
 
 /// Initializes the module with the given Manager.
 bool Initialize(std::unique_ptr<Manager> manager);
+
 bool is_active();
 /// Releases the module, disabling it.
 void Release();
