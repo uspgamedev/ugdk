@@ -13,12 +13,12 @@ class MediaManager {
   public:
     MediaManager() {}
     ~MediaManager() {
-        for(std::shared_ptr<MediaPlayer> it : players_)
+        for(const std::shared_ptr<MediaPlayer> & it : players_)
             it->manager_ = nullptr;
     }
 
     void Update(double dt) {
-        for(std::shared_ptr<MediaPlayer> it : players_)
+        for(const std::shared_ptr<MediaPlayer> & it : players_)
             it->Update(dt);
     }
 
