@@ -8,7 +8,7 @@ namespace ugdk {
 namespace text {
 
 ui::Drawable* LanguageWord::CreateLabel() const {
-    return new text::Label(utf8_text_, text::manager()->GetFont(font_));
+    return new text::Label(utf8_text_, text::manager().GetFont(font_));
 }
 
 } // namespace text

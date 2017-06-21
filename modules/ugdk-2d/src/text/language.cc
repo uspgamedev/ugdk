@@ -73,7 +73,7 @@ static void ReadFont(char* str) {
 
     double font_size = atof(size.c_str());
 
-    text::manager()->AddFont(name, path, font_size);
+    text::manager().AddFont(name, path, font_size);
 }
 
 //===================================================================
