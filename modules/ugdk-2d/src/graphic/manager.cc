@@ -180,8 +180,8 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
         ev.scene->Finish();
     });
     light_scene->set_render_function([render_light_function](graphic::Canvas& canvas) {
-        graphic::Manager* manager = graphic::manager();
-        Canvas light_canvas(manager->light_buffer());
+        graphic::Manager& manager = graphic::manager();
+        Canvas light_canvas(manager.light_buffer());
 
         // Lights are simply added together.
         glBlendFunc(GL_ONE, GL_ONE);

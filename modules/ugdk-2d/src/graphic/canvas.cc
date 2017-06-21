@@ -159,7 +159,7 @@ void Canvas::SendVertexData(const VertexData& data, VertexType type, size_t offs
                             int vertex_per_data) {
     VertexBuffer::Bind bind(*data.buffer().get());
 
-    unsigned int location = manager()->LocationForVertexType(type);
+    unsigned int location = manager().LocationForVertexType(type);
     glEnableVertexAttribArray(location);
 
     glVertexAttribPointer(

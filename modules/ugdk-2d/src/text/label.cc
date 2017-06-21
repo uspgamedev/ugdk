@@ -70,14 +70,14 @@ void Label::Draw(Canvas& canvas) const {
     
     if(draw_setup_function_) draw_setup_function_(this, canvas);
 
-    auto& shaders = graphic::manager()->shaders();
+    auto& shaders = graphic::manager().shaders();
     bool previous_ignore_texture_flag = shaders.IsFlagSet(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR);
     auto previous_program = canvas.shader_program();
 
     shaders.ChangeFlag(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
     canvas.ChangeShaderProgram(shaders.current_shader());
 
-    TextureUnit unit = manager()->ReserveTextureUnit(nullptr);
+    TextureUnit unit = manager().ReserveTextureUnit(nullptr);
     glActiveTexture(GL_TEXTURE0 + unit.id());
     glBindTexture(GL_TEXTURE_2D, font_->freetype_font()->atlas->id);
     canvas.SendUniform("drawable_texture", unit);

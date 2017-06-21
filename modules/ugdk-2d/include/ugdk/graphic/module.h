@@ -13,7 +13,9 @@ bool Initialize(std::unique_ptr<Manager> manager, const std::weak_ptr<desktop::W
 void Release();
 
 /// Getter for the manager of the module.
-std::unique_ptr<Manager &> manager();
+Manager& manager();
+
+bool is_active();
 
 } // namespace graphic
 } // namespace ugdk
