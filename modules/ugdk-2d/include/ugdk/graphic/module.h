@@ -7,13 +7,13 @@ namespace ugdk {
 namespace graphic {
 
 /// Initializes the module with the given Manager.
-bool Initialize(std::unique_ptr<Manager> manager, const std::weak_ptr<desktop::Window>&, const math::Vector2D& canvas_size);
+bool Initialize(std::unique_ptr<graphic::manager > manager, const std::weak_ptr<desktop::Window>&, const math::Vector2D& canvas_size);
 
 /// Releases the module, disabling it.
 void Release();
 
 /// Getter for the manager of the module.
-std::unique_ptr<Manager& > manager();
+std::unique_ptr<graphic::manager & > manager();
 
 } // namespace graphic
 } // namespace ugdk
