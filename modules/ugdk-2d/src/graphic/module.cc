@@ -3,9 +3,9 @@
 namespace ugdk {
 namespace graphic {
 
-static std::unique_ptr<graphic::manager> reference_ = nullptr;;
+static std::unique_ptr<Manager> reference_ = nullptr;;
 
-bool Initialize(std::unique_ptr<graphic::manager > manager, const std::weak_ptr<desktop::Window> & window,
+bool Initialize(std::unique_ptr<Manager> manager, const std::weak_ptr<desktop::Window> & window,
                 const math::Vector2D &canvas_size) {
     if(manager && manager->Initialize(window, canvas_size)) {
         // The manager initialized correctly, so we can use it.
@@ -26,7 +26,7 @@ void Release() {
     reference_ = nullptr;
 }
 
-std::unique_ptr<graphic::manager & > manager() {
+std::unique_ptr<Manager & > manager() {
     return reference_;
 }
 
