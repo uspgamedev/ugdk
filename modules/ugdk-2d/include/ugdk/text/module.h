@@ -7,13 +7,13 @@ namespace ugdk {
 namespace text {
 
 /// Initializes the module with the given Manager.
-bool Initialize(Manager* manager);
-
+bool Initialize(std::unique_ptr<Manager> manager);
+bool is_active();
 /// Releases the module, disabling it.
 void Release();
 
 /// Getter for the manager of the module.
-Manager* manager();
+Manager& manager();
 
 } // namespace text
 } // namespace ugdk
