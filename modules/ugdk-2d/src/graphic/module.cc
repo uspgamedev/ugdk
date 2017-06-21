@@ -3,7 +3,7 @@
 namespace ugdk {
 namespace graphic {
 
-static Manager* reference_ = nullptr;
+static std::unique_ptr<graphic::manager> reference_ = nullptr;;
 
 bool Initialize(std::unique_ptr<graphic::manager > manager, const std::weak_ptr<desktop::Window> & window,
                 const math::Vector2D &canvas_size) {
