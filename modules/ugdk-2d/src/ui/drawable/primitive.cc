@@ -33,7 +33,7 @@ void DrawablePrimitive::Draw(ugdk::graphic::Canvas& canvas) const {
     canvas.PushAndCompose(-hotspot_);
     canvas.ChangeShaderProgram(primitive_->shader_program());
 
-    ugdk::graphic::TextureUnit unit = ugdk::graphic::manager()->ReserveTextureUnit(primitive_->texture());
+    ugdk::graphic::TextureUnit unit = ugdk::graphic::manager().ReserveTextureUnit(primitive_->texture());
     canvas.SendUniform("drawable_texture", unit);
     primitive_->drawfunction()(*primitive_, canvas);
 

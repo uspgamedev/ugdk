@@ -23,7 +23,7 @@ TextureUnit::TextureUnit(TextureUnit&& other)
 
 TextureUnit::~TextureUnit() {
     if (id_ > -1)
-        graphic::manager()->ReleaseTextureUnitID(id_);
+        graphic::manager().ReleaseTextureUnitID(id_);
 }
 
 void TextureUnit::BindTexture(const graphic::GLTexture* texture) {

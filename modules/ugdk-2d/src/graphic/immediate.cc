@@ -12,7 +12,7 @@ namespace immediate {
 namespace {
 
 void RectangleVertexData(Canvas& canvas, VertexData& data, const GLTexture* texture) {
-    auto sprite_unit = ugdk::graphic::manager()->ReserveTextureUnit(texture);
+    auto sprite_unit = ugdk::graphic::manager().ReserveTextureUnit(texture);
     canvas.SendUniform("drawable_texture", sprite_unit);
     PrimitiveSetup::Rectangle::RenderVertexData(canvas, data);
 }

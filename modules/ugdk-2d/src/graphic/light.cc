@@ -40,13 +40,13 @@ void Light::set_dimension(const ugdk::math::Vector2D& dimension) {
 void Light::Draw(Canvas &canvas) {
     const ShaderProgram* old_program = canvas.shader_program();
 
-    canvas.ChangeShaderProgram(graphic::manager()->light_shader());
+    canvas.ChangeShaderProgram(graphic::manager().light_shader());
     canvas.SendUniform("decayment", 2.4f);
     canvas.SendUniform("minimum_radius", 0.05f);
     canvas.SendUniform("dimension", dimension_.x, dimension_.y);
     canvas.PushAndCompose(structure::VisualEffect(color_));
     canvas.SendVertexData(data_, VertexType::VERTEX, 0);
-    graphic::manager()->DisableVertexType(VertexType::TEXTURE);
+    graphic::manager().DisableVertexType(VertexType::TEXTURE);
     canvas.DrawArrays(DrawMode::TRIANGLE_STRIP(), 0, 4);
 
     canvas.PopVisualEffect();

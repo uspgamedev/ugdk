@@ -90,14 +90,14 @@ void DrawTextLine(Canvas& canvas, const Font* font, const std::string& utf8_mess
         first_vector.push_back(static_cast<int>(i) * 4);
     std::vector<int> size_vector(ucs_msg.size(), 4);
 
-    auto& shaders = graphic::manager()->shaders();
+    auto& shaders = graphic::manager().shaders();
     bool previous_ignore_texture_flag = shaders.IsFlagSet(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR);
     auto previous_program = canvas.shader_program();
     
     shaders.ChangeFlag(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
     canvas.ChangeShaderProgram(shaders.current_shader());
 
-    TextureUnit unit = manager()->ReserveTextureUnit(nullptr);
+    TextureUnit unit = manager().ReserveTextureUnit(nullptr);
     glActiveTexture(GL_TEXTURE0 + unit.id());
     glBindTexture(GL_TEXTURE_2D, font->freetype_font()->atlas->id);
     canvas.SendUniform("drawable_texture", unit);
