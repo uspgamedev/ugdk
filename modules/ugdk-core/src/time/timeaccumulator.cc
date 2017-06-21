@@ -8,12 +8,12 @@
 namespace ugdk {
 namespace time {
 
-TimeAccumulator::TimeAccumulator(int duration_miliseconds) : handler_(manager()) {
+TimeAccumulator::TimeAccumulator(int duration_miliseconds) {
     Restart(duration_miliseconds);
 }
 
 int TimeAccumulator::TimeLeft() {
-    return duration_ - (handler_.TimeSince(initial_time_) - time_paused_);
+    return duration_ - (manager().TimeSince(initial_time_) - time_paused_);
 }
 
 bool TimeAccumulator::Expired() {
@@ -27,19 +27,19 @@ void TimeAccumulator::Restart() {
 }
 
 void TimeAccumulator::Restart(int duration) {
-    initial_time_ = handler_.TimeElapsed();
+    initial_time_ = manager().TimeElapsed();
     duration_ = (uint32) duration;
     time_paused_ = when_paused_ = 0;
 }
 
 void TimeAccumulator::Pause() {
     if(when_paused_ == 0)
-        when_paused_ = handler_.TimeElapsed();
+        when_paused_ = manager().TimeElapsed();
 }
 
 void TimeAccumulator::Resume() {
     if(when_paused_ > 0) {
-        time_paused_ += handler_.TimeSince(when_paused_);
+        time_paused_ += manager().TimeSince(when_paused_);
         when_paused_ = 0;
     }
 }

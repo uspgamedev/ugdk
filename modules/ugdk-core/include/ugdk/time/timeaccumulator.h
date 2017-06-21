@@ -35,7 +35,6 @@ class TimeAccumulator {
     bool IsPaused();
 
   private:
-    Manager &handler_;
     uint32 initial_time_, time_paused_, when_paused_, duration_;
 };
 
