@@ -20,8 +20,11 @@ class IListener { public: virtual ~IListener() {} };
 template <class Event>
 class Listener : public virtual IListener {
   public:
+    ~Listener();
+
     virtual void Handle(const Event& ev) = 0;
   private:
+    friend class EventHandler;
     EventHandler * handler_;
 };
 
@@ -49,7 +52,9 @@ class EventHandler {
     template<class Event>
     void AddListener(Listener<Event> & listener) {
         event_handlers_[typeid(Event)].push_front(&listener);
+        listener.handler_ = this;
     }
+
 
     /** Adds an object to listen to all events dispatched to this EventHandler.
         The object must implement the Listener<T> interface for the events it wants to track.
@@ -58,25 +63,6 @@ class EventHandler {
                         RemoveObjectListener.
     */
 
-    // Remove listeners
-
-    void RemoveListener(const std::type_index& type, IListener* listener) {
-        auto handlers = event_handlers_.find(type);
-        if(handlers == event_handlers_.end()) return;
-
-        handlers->second.remove_if([listener](const std::shared_ptr<IListener>& val) {
-            return val.get() == listener;
-        });
-    }
-
-    template<class Event>
-    void RemoveListener(IListener* listener) {
-        RemoveListener(typeid(Event), listener);
-    }
-
-    void RemoveObjectListener(IListener* listener) {
-        object_listeners_.remove(listener);
-    }
 
     /// If true, events raised on this handler will be raised as global events.
     void set_dispatch_as_global(bool flag) {
@@ -107,26 +93,38 @@ class EventHandler {
         auto handlers = event_handlers_.find(typeid(Event));
         if (handlers != event_handlers_.end())
             for (const auto& listener : handlers->second) {
-                Listener<Event>* specific_listener = dynamic_cast<Listener<Event>*>(listener.get());
+                Listener<Event>* specific_listener = dynamic_cast<Listener<Event>*>(listener);
                 assert(specific_listener);
                 specific_listener->Handle(ev);
             }
-
-        for (IListener* listener : object_listeners_) {
-            if (Listener<Event>* specific_listener = dynamic_cast<Listener<Event>*>(listener)) {
-                specific_listener->Handle(ev);
-            }
-        }
     }
 
   private:
-    typedef std::forward_list< std::shared_ptr<IListener> > ListenerVector;
+    typedef std::forward_list< IListener* > ListenerVector;
+    
+    template <class Event>
+    friend class Listener;
 
     std::unordered_map<std::type_index, ListenerVector> event_handlers_;
-    std::forward_list<IListener*> object_listeners_;
     bool dispatch_as_global_;
+
+    template<class Event>
+    void RemoveListener(IListener* listener) {
+        std::type_index type = typeid(Event);
+        auto handlers = event_handlers_.find(type);
+        if(handlers == event_handlers_.end()) return;
+
+        handlers->second.remove_if([listener](const IListener* val) {
+            return val == listener;
+        });
+    }
 };
 
+template<class Event>
+Listener<Event>::~Listener() {
+    if (handler_)
+        handler_->RemoveListener< Event>(this);
+}
 } // namespace system
 } // namespace ugdk
 
