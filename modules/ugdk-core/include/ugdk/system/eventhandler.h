@@ -21,6 +21,8 @@ template <class Event>
 class Listener : public virtual IListener {
   public:
     virtual void Handle(const Event& ev) = 0;
+  private:
+    EventHandler * handler_;
 };
 
 template <class Event>
@@ -44,19 +46,9 @@ class EventHandler {
 
     // Add listeners
 
-    template<class Event, class Handler>
-    IListener* AddListener(Handler handler) {
-        return AddRawListener(typeid(Event), std::make_shared<FunctionListener<Event>>(handler));
-    }
-
     template<class Event>
-    IListener* AddListener(void (*handler)(const Event&)) {
-        return AddRawListener(typeid(Event), std::make_shared<FunctionListener<Event>>(handler));
-    }
-
-    IListener* AddRawListener(const std::type_index& type, const std::shared_ptr<IListener>& listener) {
-        event_handlers_[type].push_front(listener);
-        return listener.get();
+    void AddListener(Listener<Event> & listener) {
+        event_handlers_[typeid(Event)].push_front(&listener);
     }
 
     /** Adds an object to listen to all events dispatched to this EventHandler.
@@ -65,9 +57,6 @@ class EventHandler {
                         received pointer and should be notified when it becomes invalid via
                         RemoveObjectListener.
     */
-    void AddObjectListener(IListener* listener) {
-        object_listeners_.push_front(listener);
-    }
 
     // Remove listeners
 
@@ -88,7 +77,7 @@ class EventHandler {
     void RemoveObjectListener(IListener* listener) {
         object_listeners_.remove(listener);
     }
-    
+
     /// If true, events raised on this handler will be raised as global events.
     void set_dispatch_as_global(bool flag) {
         dispatch_as_global_ = flag;
