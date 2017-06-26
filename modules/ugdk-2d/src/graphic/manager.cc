@@ -172,13 +172,15 @@ unsigned int Manager::LocationForVertexType(VertexType type) {
     return -1u; /* It should never get here, but this keeps gcc quiet, so I did it */
 }
 
+system::FunctionListener<action::SceneFocusEvent> quit_event([](const action::SceneFocusEvent& ev) {
+    ev.scene->Finish();
+}); 
+
 action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> render_light_function) {
     action::Scene* light_scene = new action::Scene;
     light_scene->set_identifier("Light Rendering Scene");
     // This scene has no logic, so quit if you ask for it to be only scene.
-    light_scene->event_handler().AddListener<action::SceneFocusEvent>([](const action::SceneFocusEvent& ev) {
-        ev.scene->Finish();
-    });
+    light_scene->event_handler().AddListener(quit_event);
     light_scene->set_render_function([render_light_function](graphic::Canvas& canvas) {
         graphic::Manager& manager = graphic::manager();
         Canvas light_canvas(manager.light_buffer());
