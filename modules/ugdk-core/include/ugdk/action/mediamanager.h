@@ -22,12 +22,12 @@ class MediaManager {
             it->Update(dt);
     }
 
-    void AddPlayer(std::shared_ptr<MediaPlayer> player) {
+    void AddPlayer(const std::shared_ptr<MediaPlayer>& player) {
         players_.insert(player);
         player->manager_ = this;
     }
 
-    void RemovePlayer(std::shared_ptr<MediaPlayer> player) {
+    void RemovePlayer(const std::shared_ptr<MediaPlayer>& player) {
         players_.erase(player);
         player->manager_ = nullptr;
     }
@@ -41,5 +41,3 @@ private:
 } /* namespace ugdk */
 
 #endif /* UGDK_ACTION_MEDIAMANAGER_H_ */
-
-
