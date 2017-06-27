@@ -1,4 +1,3 @@
-
 option(UGDK_INTERNAL_GLEW        "Set to ON to use an internal GLEW instead of the system one." OFF)
 option(UGDK_INTERNAL_FREETYPE    "Set to ON to use an internal freetype instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2        "Set to ON to use an internal SDL2 instead of the system one." OFF)
@@ -31,7 +30,7 @@ if(ANDROID)
     set(UGDK_INTERNAL_SDL2       ON CACHE BOOL "Set to ON to use an internal SDL2 instead of the system one." FORCE)
     set(UGDK_INTERNAL_SDL2_IMAGE ON CACHE BOOL "Set to ON to use an internal SDL2_image instead of the system one." FORCE)
     set(UGDK_INTERNAL_SDL2_MIXER ON CACHE BOOL "Set to ON to use an internal SDL2_mixer instead of the system one." FORCE)
-	
+
 else()
     macro(check_package OPTION_VAR PKG_NAME)
         find_package(${PKG_NAME} ${ARGN} QUIET)
@@ -41,13 +40,13 @@ else()
         endif()
     endmacro(check_package)
 
-    
+
     check_package(SDL2 SDL2)
 	check_package(SDL2_MIXER SDL2_mixer)
 	check_package(FREETYPE Freetype)
     check_package(SDL2_IMAGE SDL2_image)
 	check_package(GLEW GLEW 1.5)
-	
+
 endif()
 
 ########################
