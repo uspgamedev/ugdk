@@ -71,7 +71,7 @@ namespace {
     };
 }
 
-std::shared_ptr<const SpriteAnimationTable> LoadSpriteAnimationTableFromFile(const std::string& filepath) {
+const SpriteAnimationTable* LoadSpriteAnimationTableFromFile(const std::string& filepath) {
     auto file = filesystem::manager().OpenFile(filepath);
     if (!file)
         return nullptr;
@@ -81,7 +81,7 @@ std::shared_ptr<const SpriteAnimationTable> LoadSpriteAnimationTableFromFile(con
         throw system::BaseException("Invalid json: %s\n", filepath.c_str());
 
     auto json_node = libjson::parse(contents);
-    std::shared_ptr<SpriteAnimationTable> table(new SpriteAnimationTable(json_node.size()));
+    SpriteAnimationTable* table(new SpriteAnimationTable(json_node.size()));
     for (const auto& animation_json : json_node) {
         auto element = MakeUnique<SpriteAnimation>();
 
@@ -108,4 +108,3 @@ std::shared_ptr<const SpriteAnimationTable> LoadSpriteAnimationTableFromFile(con
 
 }  // namespace action
 }  // namespace ugdk
-
