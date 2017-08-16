@@ -8,7 +8,7 @@ namespace system {
 
 class BaseException {
   public:
-    BaseException(const char * fmt, ...); 
+    BaseException(const std::string& fmt, ...); 
     virtual ~BaseException() throw() {}
 
     inline virtual const char * what() const throw() {

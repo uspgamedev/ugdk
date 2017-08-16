@@ -28,7 +28,7 @@
 namespace ugdk {
 namespace system {
 
-BaseException::BaseException(const char * fmt, ...)
+BaseException::BaseException(const std::string& fmt, ...)
 {
     va_list args;
     int size_buffer = 256, size_out;
@@ -39,7 +39,7 @@ BaseException::BaseException(const char * fmt, ...)
         memset(buffer, 0, size_buffer);
 
         va_start(args, fmt);
-        size_out = vsnprintf(buffer, size_buffer, fmt, args);
+        size_out = vsnprintf(buffer, size_buffer, fmt.c_str(), args);
         va_end(args);
 
         // see http://perfec.to/vsnprintf/pasprintf.c
