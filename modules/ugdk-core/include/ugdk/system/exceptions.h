@@ -8,7 +8,10 @@ namespace system {
 
 class BaseException {
   public:
-    BaseException(const std::string& fmt, ...); 
+    template <typename... Args>
+    BaseException(const std::string& fmt, Args... args) {
+        set_reason(fmt.c_str(), args...);
+    }
     virtual ~BaseException() throw() {}
 
     inline virtual const char * what() const throw() {
@@ -17,6 +20,7 @@ class BaseException {
 
   private:
     std::string reason_;
+    void set_reason(const char* fmt, ...);
 };
 
 class InvalidOperation : public BaseException {
