@@ -20,6 +20,7 @@ class IListener { public: virtual ~IListener() {} };
 template <class Event>
 class Listener : public virtual IListener {
   public:
+    Listener() : handler_(nullptr) {}
     ~Listener();
 
     virtual void Handle(const Event& ev) = 0;
@@ -123,7 +124,7 @@ class EventHandler {
 template<class Event>
 Listener<Event>::~Listener() {
     if (handler_)
-        handler_->RemoveListener< Event>(this);
+        handler_->RemoveListener<Event>(this);
 }
 } // namespace system
 } // namespace ugdk
