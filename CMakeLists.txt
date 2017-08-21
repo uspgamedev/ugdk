@@ -109,7 +109,7 @@ if(NOT ANDROID)
 endif(NOT ANDROID)
 
 if (UNIX OR MINGW)
-    add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++11)
+    add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++14)
     #add_definitions(-msse2)
     add_definitions(-Wall
         # TODO: would like these but they produce overwhelming amounts of warnings

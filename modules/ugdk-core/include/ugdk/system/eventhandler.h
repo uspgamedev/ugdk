@@ -50,7 +50,7 @@ class EventHandler {
     // Add listeners
 
     template<class Event>
-    void AddListener(const Listener<Event>& listener) {
+    void AddListener(Listener<Event> & listener) {
         event_handlers_[typeid(Event)].push_front(&listener);
         listener.handler_ = this;
     }
