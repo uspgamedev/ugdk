@@ -32,15 +32,15 @@ class Listener : public virtual IListener {
 template <class Event>
 class FunctionListener : public Listener<Event> {
   public:
-    template<typename Handler>
-    FunctionListener(Handler handler) : handler_(handler) {}
+    template<typename Callback>
+    FunctionListener(Callback handler) : callback_(handler) {}
 
     void Handle(const Event& ev) override {
-        handler_(ev);
+        callback_(ev);
     }
 
   private:
-    std::function<void (const Event&)> handler_;
+    std::function<void (const Event&)> callback_;
 };
 
 class EventHandler {
