@@ -15,25 +15,30 @@
 namespace ugdk {
 namespace system {
 
-class IListener { public: virtual ~IListener() {} };
-
-template <class Event>
-class Listener : public virtual IListener {
+class IListener {
   public:
-    Listener() : handler_(nullptr) {}
-    ~Listener();
-
-    virtual void Handle(const Event& ev) = 0;
+    virtual ~IListener();
+  protected:
+    IListener(const std::type_index& the_type) : handler_(nullptr), type_(the_type) {}
   private:
     friend class EventHandler;
-    EventHandler * handler_;
+    EventHandler *handler_;
+    std::type_index type_;
+};
+
+template <class Event>
+class Listener : public IListener {
+  public:
+    Listener() : IListener(typeid(Event)) {}
+
+    virtual void Handle(const Event& ev) = 0;
 };
 
 template <class Event>
 class FunctionListener : public Listener<Event> {
   public:
     template<typename Callback>
-    FunctionListener(Callback handler) : callback_(handler) {}
+    FunctionListener(Callback the_callback) : Listener<Event>(), callback_(the_callback) {}
 
     void Handle(const Event& ev) override {
         callback_(ev);
@@ -46,13 +51,17 @@ class FunctionListener : public Listener<Event> {
 class EventHandler {
   public:
     EventHandler() : dispatch_as_global_(false) {}
-    ~EventHandler() {}
+    ~EventHandler() {
+        for (auto& pair : event_listeners_)
+            for (auto* listener : pair.second)
+                listener->handler_ = nullptr;
+    }
 
     // Add listeners
 
     template<class Event>
     void AddListener(Listener<Event> & listener) {
-        event_handlers_[typeid(Event)].push_front(&listener);
+        event_listeners_[typeid(Event)].push_front(&listener);
         listener.handler_ = this;
     }
 
@@ -91,8 +100,8 @@ class EventHandler {
         if (dispatch_as_global_)
             RaiseGlobalEvent(ev);
 
-        auto handlers = event_handlers_.find(typeid(Event));
-        if (handlers != event_handlers_.end())
+        auto handlers = event_listeners_.find(typeid(Event));
+        if (handlers != event_listeners_.end())
             for (const auto& listener : handlers->second) {
                 Listener<Event>* specific_listener = dynamic_cast<Listener<Event>*>(listener);
                 assert(specific_listener);
@@ -102,18 +111,20 @@ class EventHandler {
 
   private:
     typedef std::forward_list< IListener* > ListenerVector;
-    
-    template <class Event>
-    friend class Listener;
 
-    std::unordered_map<std::type_index, ListenerVector> event_handlers_;
+    friend class IListener;
+
+    std::unordered_map<std::type_index, ListenerVector> event_listeners_;
     bool dispatch_as_global_;
 
     template<class Event>
     void RemoveListener(IListener* listener) {
-        std::type_index type = typeid(Event);
-        auto handlers = event_handlers_.find(type);
-        if(handlers == event_handlers_.end()) return;
+        RemoveListener(typeid(Event), listener);
+    }
+
+    void RemoveListener(const std::type_index& type, IListener* listener) {
+        auto handlers = event_listeners_.find(type);
+        if(handlers == event_listeners_.end()) return;
 
         handlers->second.remove_if([listener](const IListener* val) {
             return val == listener;
@@ -121,11 +132,12 @@ class EventHandler {
     }
 };
 
-template<class Event>
-Listener<Event>::~Listener() {
+inline
+IListener::~IListener() {
     if (handler_)
-        handler_->RemoveListener<Event>(this);
+        handler_->RemoveListener(type_, this);
 }
+
 } // namespace system
 } // namespace ugdk
 
