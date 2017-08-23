@@ -223,7 +223,10 @@ void Run() {
 
             if(desktop::is_active()) {
                 debug::ProfileSection render_section("Render");
-
+                graphic::Canvas canvas(graphic::manager().screen());
+                for(auto& scene : scene_list_)
+                    if (scene->visible())
+                        scene->Render(canvas);
                 desktop::manager().PresentAll();
             }
             profile_data_list_.push_back(frame_section.data());
