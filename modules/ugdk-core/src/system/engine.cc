@@ -135,7 +135,7 @@ bool Initialize(const Configuration& configuration) {
         filesystem::manager().AddSearchPath(configuration_.base_path);
 
     if(!configuration.windows_list.empty()) {
-        std::unique_ptr<desktop::Manager> deskmanager (new desktop::mode2d::Manager);
+        std::unique_ptr<desktop::Manager> deskmanager(new desktop::Manager);
         if(!desktop::Initialize(std::move(deskmanager)))
             return ErrorLog("system::Initialize failed - desktop::Initialize returned false.");
         for(const auto& window_config : configuration.windows_list)

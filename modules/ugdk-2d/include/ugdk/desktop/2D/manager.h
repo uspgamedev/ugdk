@@ -23,7 +23,7 @@ class Manager final : public desktop::Manager {
 
     bool Initialize() override;
     void Release() override;
-    
+
     void PresentAll() override;
 
   protected:
@@ -32,7 +32,7 @@ class Manager final : public desktop::Manager {
 
   private:
     std::unique_ptr<system::SDLEventHandler> sdlevent_handler_;
-    
+
     friend class DesktopSDLEventHandler;
 };
 
