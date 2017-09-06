@@ -159,7 +159,7 @@ bool Initialize(const Configuration& configuration) {
         return ErrorLog("system::Initialize failed - resource::Initialize returned false.");
 
     if(!graphic::Initialize(std::make_unique<graphic::Manager>(),
-       desktop::manager().primary_window(), math::Vector2D(800, 600)))
+       desktop::manager().primary_window(), configuration_.canvas_size))
         return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
 
     previous_focused_scene_ = nullptr;
