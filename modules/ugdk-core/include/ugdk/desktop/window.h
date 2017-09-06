@@ -15,7 +15,7 @@ namespace desktop {
 
 class Window {
   public:
-    virtual ~Window() {}
+    virtual ~Window();
 
     /// Updates the settings and applies the changes.
     /** Warning: some fullscreen/resolution combinations may be unsupported by the display, resulting
@@ -31,7 +31,7 @@ class Window {
   protected:
     friend class ::ugdk::graphic::Manager;
     friend class ::ugdk::desktop::Manager;
-    Window(SDL_Window* sdl_window) {}
+    Window(SDL_Window* sdl_window);
 
   private:
     SDL_Window* sdl_window_;
