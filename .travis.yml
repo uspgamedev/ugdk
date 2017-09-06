@@ -1,10 +1,11 @@
 language: generic
 dist: trusty
 sudo: false
+os: osx
 
-compiler:
-  - gcc
-  - clang
+#compiler:
+#  - gcc
+#  - clang
 
 matrix:
   include:
