@@ -1,7 +1,6 @@
 SET(GENERATED_SRC
 modules/ugdk-2d/src/desktop/manager.cc
 modules/ugdk-2d/src/desktop/window.cc
-modules/ugdk-2d/src/desktop/.window.cc.swp
 modules/ugdk-2d/src/graphic/immediate.cc
 modules/ugdk-2d/src/graphic/light.cc
 modules/ugdk-2d/src/graphic/pixelsurface.cc
@@ -30,7 +29,6 @@ SET(GENERATED_HEADERS
 modules/ugdk-2d/include/ugdk/desktop/2D/manager.h
 modules/ugdk-2d/include/ugdk/desktop/2D/window.h
 modules/ugdk-2d/include/ugdk/graphic/immediate.h
-modules/ugdk-2d/include/ugdk/graphic/.immediate.h.swp
 modules/ugdk-2d/include/ugdk/graphic/light.h
 modules/ugdk-2d/include/ugdk/graphic/primitivecontroller.h
 modules/ugdk-2d/include/ugdk/graphic/primitive.h

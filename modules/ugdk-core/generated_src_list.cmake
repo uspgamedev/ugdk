@@ -18,7 +18,6 @@ modules/ugdk-core/src/filesystem/module.cc
 modules/ugdk-core/src/filesystem/sdlfile.cc
 modules/ugdk-core/src/filesystem/sdlfile.h
 modules/ugdk-core/src/graphic/canvas.cc
-modules/ugdk-core/src/graphic/.canvas.cc.swp
 modules/ugdk-core/src/graphic/defaultshaders.cc
 modules/ugdk-core/src/graphic/drawmode.cc
 modules/ugdk-core/src/graphic/gltexture.cc
@@ -54,7 +53,6 @@ modules/ugdk-core/src/resource/manager.cc
 modules/ugdk-core/src/resource/module.cc
 modules/ugdk-core/src/system/configuration.cc
 modules/ugdk-core/src/system/engine.cc
-modules/ugdk-core/src/system/.engine.cc.swp
 modules/ugdk-core/src/system/exceptions.cc
 modules/ugdk-core/src/system/sdleventhandler.h
 modules/ugdk-core/src/system/taskplayer.cc
@@ -110,7 +108,6 @@ modules/ugdk-core/include/ugdk/graphic/manager.h
 modules/ugdk-core/include/ugdk/graphic/module.h
 modules/ugdk-core/include/ugdk/graphic/opengl.h
 modules/ugdk-core/include/ugdk/graphic/renderer.h
-modules/ugdk-core/include/ugdk/graphic/.renderer.h.swp
 modules/ugdk-core/include/ugdk/graphic/rendertarget.h
 modules/ugdk-core/include/ugdk/graphic/rendertexture.h
 modules/ugdk-core/include/ugdk/graphic/shader.h
