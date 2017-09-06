@@ -37,7 +37,7 @@ addons:
       - libpng-dev 
 
 script:
-  - cmake .
+  - cmake . -DCMAKE_CXX_COMPILER=$CXX -DCMAKE_C_COMPILER=$CC
   - make libugdk
   - make ugdk_test
   - ./test/ugdk_test
