@@ -34,9 +34,12 @@ addons:
       - libglu1-mesa-dev
       - libpng-dev 
 
-script:
+before_install:
   - eval "$(MATRIX_EVAL)"
-  - cmake . -DCMAKE_CXX_COMPILER=$CXX -DCMAKE_C_COMPILER=$CC
+
+script:
+  - $CXX -v
+  - cmake -DCMAKE_CXX_COMPILER=$CXX -DCMAKE_C_COMPILER=$CC . 
   - make libugdk
   - make ugdk_test
   - ./test/ugdk_test
