@@ -22,6 +22,7 @@ set (UGDK_INSTALL_LOCATION_RELATIVE share/ugdk)
 message ("=== UGDK version ${UGDK_VERSION} ===")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
+set(CMAKE_CXX_STANDARD 14)
 
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
 # make it prominent in the GUI.
@@ -109,7 +110,6 @@ if(NOT ANDROID)
 endif(NOT ANDROID)
 
 if (UNIX OR MINGW)
-    set(CMAKE_CXX_STANDARD 14)
     add_definitions(-ansi -U_FORTIFY_SOURCE)
     #add_definitions(-msse2)
     add_definitions(-Wall
