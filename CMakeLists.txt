@@ -162,9 +162,9 @@ target_include_directories(libugdk
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/include"
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/src")
 
-target_include_directories(libugdk
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/include"
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/src")
+#target_include_directories(libugdk
+#    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/include"
+#    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/src")
 
 # Add GLM dependency
 target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})

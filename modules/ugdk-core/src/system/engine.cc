@@ -11,7 +11,6 @@
 #include <ugdk/desktop/manager.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/text/module.h>
 
 #include <ugdk/action/scene.h>
 #include <ugdk/debug/profiler.h>
