@@ -1,30 +1,28 @@
-language: generic
+language: cpp
 dist: trusty
 sudo: false
-os: osx
-
-#compiler:
-#  - gcc
-#  - clang
 
 matrix:
   include:
-  - os: linux
-    env: COMPILER_NAME=gcc CXX=g++-5 CC=gcc-5
-    addons:
-    apt:
-      packages:
-      - g++-5
-    sources: &sources
-    - llvm-toolchain-precise-3.8
-    - ubuntu-toolchain-r-test
-  - os: linux
-    env: COMPILER_NAME=clang CXX=clang++-3.8 CC=clang-3.8
-    addons:
-      apt:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
         packages:
-          - clang-3.8
-        sources: *sources
+          - g++-5
+        env:
+          - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-precise-3.8
+          packages:
+            - clang-3.8
+          env:
+            - MATRIX_EVAL="CC=clang-3.8 && CXX=clang++-3.8"
 
 addons:
   apt:
@@ -37,7 +35,8 @@ addons:
       - libpng-dev 
 
 script:
-  - cmake . -DCMAKE_CXX_COMPILER=$CXX -DCMAKE_C_COMPILER=$CC
+  - eval "$(MATRIX_EVAL)"
+  - cmake .
   - make libugdk
   - make ugdk_test
   - ./test/ugdk_test
