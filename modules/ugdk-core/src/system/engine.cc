@@ -8,7 +8,7 @@
 #include <ugdk/time/module.h>
 #include <ugdk/filesystem/module.h>
 #include <ugdk/desktop/module.h>
-#include <ugdk/desktop/2D/manager.h>
+#include <ugdk/desktop/manager.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/text/module.h>
@@ -157,6 +157,10 @@ bool Initialize(const Configuration& configuration) {
 
     if(!resource::Initialize(std::unique_ptr<resource::Manager>(new resource::Manager )))
         return ErrorLog("system::Initialize failed - resource::Initialize returned false.");
+
+    if(!graphic::Initialize(std::make_unique<graphic::Manager>(),
+       desktop::manager().primary_window(), math::Vector2D(800, 600)))
+        return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
 
     previous_focused_scene_ = nullptr;
     current_state_ = UGDKState::SUSPENDED;

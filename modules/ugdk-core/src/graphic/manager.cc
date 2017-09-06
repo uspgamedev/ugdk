@@ -2,7 +2,7 @@
 
 #include <ugdk/action/scene.h>
 #include <ugdk/action/events.h>
-#include <ugdk/desktop/2D/window.h>
+#include <ugdk/desktop/window.h>
 #include <ugdk/graphic/defaultshaders.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/graphic/module.h>
@@ -61,7 +61,7 @@ Manager::Manager()
 Manager::~Manager() {}
 
 void Manager::AttachTo(const std::shared_ptr<desktop::Window>& window) {
-    SDL_GL_MakeCurrent(dynamic_cast<desktop::mode2d::Window*>(window.get())->sdl_window_, context_); //FIXME?
+    SDL_GL_MakeCurrent(dynamic_cast<desktop::Window*>(window.get())->sdl_window_, context_); //FIXME?
     screen_->AttachTo(window);
 }
 
@@ -83,7 +83,7 @@ bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, cons
     if(!window)
         return false;
 
-    context_ = SDL_GL_CreateContext(dynamic_cast<desktop::mode2d::Window*>(window.get())->sdl_window_);  //FIXME?
+    context_ = SDL_GL_CreateContext(dynamic_cast<desktop::Window*>(window.get())->sdl_window_);  //FIXME?
     if(!context_)
         return false; //errlog("OpenGL context creation failed: " + string(SDL_GetError()));
 

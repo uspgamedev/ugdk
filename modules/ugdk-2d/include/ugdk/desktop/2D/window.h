@@ -33,7 +33,7 @@ class Window final : public desktop::Window {
     const char* title() const override;
     math::Integer2D size() const override;
     bool fullscreen() const override;
-    bool vsync() const override { return vsync_; }
+    bool vsync() const { return vsync_; }
 
   private:
     SDL_Window* sdl_window_;

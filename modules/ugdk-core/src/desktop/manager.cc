@@ -72,11 +72,6 @@ weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
     return RegisterAndGetWindow(std::shared_ptr<desktop::Window>(new desktop::Window(window)));
 }
 
-std::weak_ptr<Window> Manager::CreateWindow(unsigned long hwnd) {
-
-    return RegisterAndGetWindow(this->DoCreateWindow(hwnd));
-}
-
 std::weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& new_window) {
     windows_[new_window->id()] = new_window;
 
@@ -91,6 +86,11 @@ std::shared_ptr<Window> Manager::window(uint32 index) const {
     if (it == windows_.end())
         return nullptr;
     return it->second;
+}
+
+void Manager::PresentAll() {
+    for(const auto& window : windows_)
+        window.second->Present();
 }
 
 }  // namespace desktop

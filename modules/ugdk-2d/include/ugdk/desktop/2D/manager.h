@@ -21,13 +21,13 @@ class Manager final : public desktop::Manager {
     Manager();
     ~Manager();
 
-    bool Initialize() override;
-    void Release() override;
+    bool Initialize();
+    void Release();
 
     void PresentAll() override;
 
   protected:
-    std::shared_ptr<desktop::Window> DoCreateWindow(const WindowSettings& settings) override;
+    std::shared_ptr<desktop::Window> DoCreateWindow(const WindowSettings& settings);
     std::shared_ptr<desktop::Window> DoCreateWindow(unsigned long hwnd) override;
 
   private:

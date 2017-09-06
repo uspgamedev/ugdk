@@ -18,6 +18,13 @@ Window::~Window() {
     SDL_DestroyWindow(sdl_window_);
 }
 
+void Window::Present() {
+    debug::ProfileSection section("Present window '" + std::string(this->title()) + "'");
+
+    // Swap the buffers to show the backbuffer to the user.
+    SDL_GL_SwapWindow(sdl_window_);
+}
+
 void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync) {
     vsync_ = vsync;
 

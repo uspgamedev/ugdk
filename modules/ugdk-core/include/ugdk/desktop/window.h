@@ -15,7 +15,10 @@ namespace desktop {
 
 class Window {
   public:
-    virtual ~Window();
+    ~Window();
+
+    /// Presents the current canvas in the screen.
+    void Present();
 
     /// Updates the settings and applies the changes.
     /** Warning: some fullscreen/resolution combinations may be unsupported by the display, resulting
@@ -26,7 +29,7 @@ class Window {
     virtual const char* title() const;
     virtual math::Integer2D size() const;
     virtual bool fullscreen() const;
-    virtual bool vsync() const { return vsync_; }
+    bool vsync() const { return vsync_; }
 
   protected:
     friend class ::ugdk::graphic::Manager;
