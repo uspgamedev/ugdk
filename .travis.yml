@@ -23,7 +23,7 @@ matrix:
             - clang-3.8
             - libc++1
       env:
-        - MATRIX_EVAL="CC=clang-3.8 && CXX=clang++-3.8"
+        - MATRIX_EVAL="CC=clang-3.8 && CXX=clang++-3.8 && CXXFLAGS=-stdlib=libc++"
 
 addons:
   apt:
@@ -39,7 +39,7 @@ before_install:
   - eval "$MATRIX_EVAL"
 
 script:
-  - cmake -DCMAKE_CXX_COMPILER=$CXX -DCMAKE_C_COMPILER=$CC . 
+  - cmake -DCMAKE_CXX_COMPILER=$CXX -DCMAKE_C_COMPILER=$CC -DCMAKE_CXX_FLAGS=$CXXFLAGS . 
   - make libugdk
   - make ugdk_test
   - ./test/ugdk_test
