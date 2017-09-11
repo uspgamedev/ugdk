@@ -38,8 +38,8 @@ addons:
       - libglu1-mesa-dev
       - libpng-dev 
 
-#before_install:
-#  - eval "$(MATRIX_EVAL)"
+before_install:
+  - eval "$(MATRIX_EVAL)"
 
 script:
   - $CXX -v
