@@ -39,7 +39,7 @@ addons:
       - libpng-dev 
 
 before_install:
-  - eval "$(MATRIX_EVAL)"
+  - eval "$MATRIX_EVAL"
 
 script:
   - $CXX -v
