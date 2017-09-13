@@ -183,6 +183,9 @@
 //   Int32FromGTestEnv()  - parses an Int32 environment variable.
 //   StringFromGTestEnv() - parses a string environment variable.
 
+// FIXME: we should actually update gtest
+#define GTEST_USE_OWN_TR1_TUPLE 1
+
 #include <ctype.h>   // for isspace, etc
 #include <stddef.h>  // for ptrdiff_t
 #include <stdlib.h>
