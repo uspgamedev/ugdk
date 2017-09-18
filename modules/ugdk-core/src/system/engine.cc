@@ -8,10 +8,9 @@
 #include <ugdk/time/module.h>
 #include <ugdk/filesystem/module.h>
 #include <ugdk/desktop/module.h>
-#include <ugdk/desktop/2D/manager.h>
+#include <ugdk/desktop/manager.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/text/module.h>
 
 #include <ugdk/action/scene.h>
 #include <ugdk/debug/profiler.h>
@@ -135,7 +134,7 @@ bool Initialize(const Configuration& configuration) {
         filesystem::manager().AddSearchPath(configuration_.base_path);
 
     if(!configuration.windows_list.empty()) {
-        std::unique_ptr<desktop::Manager> deskmanager (new desktop::mode2d::Manager);
+        std::unique_ptr<desktop::Manager> deskmanager(new desktop::Manager);
         if(!desktop::Initialize(std::move(deskmanager)))
             return ErrorLog("system::Initialize failed - desktop::Initialize returned false.");
         for(const auto& window_config : configuration.windows_list)
@@ -157,6 +156,10 @@ bool Initialize(const Configuration& configuration) {
 
     if(!resource::Initialize(std::unique_ptr<resource::Manager>(new resource::Manager )))
         return ErrorLog("system::Initialize failed - resource::Initialize returned false.");
+
+    if(!graphic::Initialize(std::make_unique<graphic::Manager>(),
+       desktop::manager().primary_window(), configuration_.canvas_size))
+        return ErrorLog("system::Initialize failed - graphic::Initialize returned false.");
 
     previous_focused_scene_ = nullptr;
     current_state_ = UGDKState::SUSPENDED;
@@ -223,7 +226,10 @@ void Run() {
 
             if(desktop::is_active()) {
                 debug::ProfileSection render_section("Render");
-
+                graphic::Canvas canvas(graphic::manager().screen());
+                for(auto& scene : scene_list_)
+                    if (scene->visible())
+                        scene->Render(canvas);
                 desktop::manager().PresentAll();
             }
             profile_data_list_.push_back(frame_section.data());

@@ -22,6 +22,7 @@ set (UGDK_INSTALL_LOCATION_RELATIVE share/ugdk)
 message ("=== UGDK version ${UGDK_VERSION} ===")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
+set(CMAKE_CXX_STANDARD 14)
 
 # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to
 # make it prominent in the GUI.
@@ -71,7 +72,7 @@ set(UGDK_SRC)
 set(UGDK_HEADERS)
 
 load_source_for_module(ugdk-core)
-load_source_for_module(ugdk-${UGDK_GRAPHIC_MODULE})
+#load_source_for_module(ugdk-${UGDK_GRAPHIC_MODULE})
 
 # Create the targets for all the dependencies.
 add_subdirectory(externals)
@@ -109,7 +110,7 @@ if(NOT ANDROID)
 endif(NOT ANDROID)
 
 if (UNIX OR MINGW)
-    add_definitions(-ansi -U_FORTIFY_SOURCE -std=c++11)
+    add_definitions(-ansi -U_FORTIFY_SOURCE)
     #add_definitions(-msse2)
     add_definitions(-Wall
         # TODO: would like these but they produce overwhelming amounts of warnings
@@ -162,9 +163,9 @@ target_include_directories(libugdk
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/include"
     PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-core/src")
 
-target_include_directories(libugdk
-    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/include"
-    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/src")
+#target_include_directories(libugdk
+#    PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/include"
+#    PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/modules/ugdk-${UGDK_GRAPHIC_MODULE}/src")
 
 # Add GLM dependency
 target_include_directories(libugdk ${CMAKE_INCLUDE_SYSTEM} PUBLIC ${GLM_LOCATION})

@@ -1,12 +1,5 @@
 #include <ugdk/resource/module.h>
 
-#include <ugdk/structure/indexabletable.h>
-#include <ugdk/system/compatibility.h>
-#include <ugdk/debug/log.h>
-
-#include <ugdk/graphic/textureatlas.h>
-#include <ugdk/text/languageword.h>
-#include "graphic/gltexture.h"
 namespace ugdk {
 namespace resource {
 

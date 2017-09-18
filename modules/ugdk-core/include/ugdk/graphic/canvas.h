@@ -6,7 +6,7 @@
 #include <ugdk/math/vector2D.h>
 #include <ugdk/math/geometry.h>
 #include <ugdk/structure/visualeffect.h>
-#include <ugdk/structure/types.h>
+#include <ugdk/structure/color.h>
 
 #include <ugdk/desktop.h>
 #include <ugdk/graphic.h>

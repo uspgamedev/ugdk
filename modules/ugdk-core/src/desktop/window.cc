@@ -1,19 +1,19 @@
-#include <ugdk/desktop/2D/window.h>
+#include <ugdk/desktop/window.h>
 
-#include "SDL_video.h"
-#include "SDL_opengl.h"
 
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/debug/profiler.h>
 
+#include "SDL_video.h"
+#include "SDL_opengl.h"
+
 namespace ugdk {
 namespace desktop {
-namespace mode2d {
 
 Window::Window(SDL_Window* sdl_window)
     : sdl_window_(sdl_window)
 {}
-    
+
 Window::~Window() {
     SDL_DestroyWindow(sdl_window_);
 }
@@ -40,7 +40,7 @@ void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen, bool v
     // the requested resolution, but SDL_SetWindowFullscreen reports no errors in such cases.
     if(fullscreen)
         SDL_SetWindowFullscreen(sdl_window_, SDL_WINDOW_FULLSCREEN);
-    
+
     SDL_GL_SetSwapInterval(vsync_ ? 1 : 0);
 }
 
@@ -48,7 +48,7 @@ void Window::ChangeSettings(const math::Integer2D& size, bool fullscreen, bool v
 uint32 Window::id() const {
     return SDL_GetWindowID(sdl_window_);
 }
-    
+
 const char* Window::title() const {
     return SDL_GetWindowTitle(sdl_window_);
 }
@@ -63,6 +63,5 @@ bool Window::fullscreen() const {
     return (SDL_GetWindowFlags(sdl_window_) & SDL_WINDOW_FULLSCREEN) != 0;
 }
 
-}  // namespace mode2d
 }  // namespace desktop
 }  // namespace ugdk
