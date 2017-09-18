@@ -36,6 +36,8 @@ class VertexData {
         void Validate(const char* name, std::size_t size, std::size_t index) const;
     };
 
+    VertexData();
+    VertexData(VertexData&& rhs);
     explicit VertexData(std::size_t num_vertices, std::size_t vertex_size, bool dynamic, bool ignore_vbo = false);
     explicit VertexData(const VertexDataSpecification&);
     ~VertexData();
