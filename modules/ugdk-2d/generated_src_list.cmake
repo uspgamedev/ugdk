@@ -8,8 +8,6 @@ modules/ugdk-2d/src/graphic/primitivecontroller.cc
 modules/ugdk-2d/src/graphic/primitivesetup.cc
 modules/ugdk-2d/src/graphic/sprite.cc
 modules/ugdk-2d/src/graphic/textureatlas.cc
-modules/ugdk-2d/src/text/label.cc
-modules/ugdk-2d/src/text/textbox.cc
 modules/ugdk-2d/src/ui/button.cc
 modules/ugdk-2d/src/ui/drawable/primitive.cc
 modules/ugdk-2d/src/ui/drawable/texturedrectangle.cc
@@ -25,8 +23,6 @@ modules/ugdk-2d/include/ugdk/graphic/primitive.h
 modules/ugdk-2d/include/ugdk/graphic/primitivesetup.h
 modules/ugdk-2d/include/ugdk/graphic/renderer2D.h
 modules/ugdk-2d/include/ugdk/graphic/sprite.h
-modules/ugdk-2d/include/ugdk/text/label.h
-modules/ugdk-2d/include/ugdk/text/textbox.h
 modules/ugdk-2d/include/ugdk/ui/button.h
 modules/ugdk-2d/include/ugdk/ui/drawable.h
 modules/ugdk-2d/include/ugdk/ui/drawable/primitive.h

@@ -4,7 +4,6 @@
 #include <ugdk/graphic.h>
 #include <ugdk/text.h>
 
-#include <ugdk/ui/drawable.h>
 #include <ugdk/graphic/vertexdata.h>
 #include <ugdk/util/utf8.h>
 #include <ugdk/structure/types.h>
@@ -18,7 +17,7 @@
 namespace ugdk {
 namespace text {
 
-class Label : public ui::Drawable {
+class Label {
   public:
     Label(const std::string& utf8_message, Font* font);
     Label(const std::u32string& ucs4_message, Font* font);
@@ -27,9 +26,7 @@ class Label : public ui::Drawable {
     /// This operation is slow.
     void ChangeMessage(const std::string& utf8_message);
     void ChangeMessage(const std::u32string& ucs4_message);
-
-    void Draw(graphic::Canvas&) const override;
-    const ugdk::math::Vector2D& size() const override;
+    const ugdk::math::Vector2D& size();
 
   private:
     Font* font_;
@@ -41,6 +38,9 @@ class Label : public ui::Drawable {
 };
 
 }  // namespace text
+
+graphic::Canvas& operator<<(graphic::Canvas& canvas, const text::Label& label);
+
 }  // namespace ugdk
 
 #endif // UGDK_TEXT_LABEL_H_

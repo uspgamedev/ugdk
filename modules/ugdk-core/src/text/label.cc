@@ -20,13 +20,13 @@ namespace text {
 using namespace graphic;
 using ugdk::structure::Color;
 
-Label::Label(const std::string& utf8_message, Font *font) 
+Label::Label(const std::string& utf8_message, Font *font)
     : font_(font)
 {
     this->ChangeMessage(utf8_message);
 }
 
-Label::Label(const std::u32string& ucs4_message, Font *font) 
+Label::Label(const std::u32string& ucs4_message, Font *font)
     : font_(font)
 {
     this->ChangeMessage(ucs4_message);
@@ -42,9 +42,9 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
     buffer_.reset();
     first_vector_.clear();
     size_vector_.clear();
-    
+
     assert(font_);
-    
+
     num_characters_ = ucs4_message.size();
     size_ = math::Vector2D(0, font_->height());
 
@@ -65,10 +65,9 @@ const ugdk::math::Vector2D& Label::size() const {
     return size_;
 }
 
-void Label::Draw(Canvas& canvas) const {
-    canvas.PushAndCompose(math::Geometry(-hotspot_));
-    
-    if(draw_setup_function_) draw_setup_function_(this, canvas);
+}  // namespace text
+
+graphic::Canvas& operator<<(graphic::Canvas& canvas, const text::Label& label) {
 
     auto& shaders = graphic::manager().shaders();
     bool previous_ignore_texture_flag = shaders.IsFlagSet(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR);
@@ -85,13 +84,13 @@ void Label::Draw(Canvas& canvas) const {
     canvas.SendVertexData(*buffer_, VertexType::VERTEX, 0, 2);
     canvas.SendVertexData(*buffer_, VertexType::TEXTURE, sizeof(vec2), 2);
 
-#ifdef UGDK_USING_GLES
+    #ifdef UGDK_USING_GLES
     for (size_t i = 0; i < num_characters_; ++i) {
         glDrawArrays(GL_TRIANGLE_STRIP, static_cast<int>(i * 4), 4);
     }
-#else
+    #else
     glMultiDrawArrays(GL_TRIANGLE_STRIP, first_vector_.data(), size_vector_.data(), static_cast<int>(num_characters_));
-#endif
+    #endif
 
     shaders.ChangeFlag(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR, previous_ignore_texture_flag);
     canvas.ChangeShaderProgram(previous_program);
@@ -99,5 +98,4 @@ void Label::Draw(Canvas& canvas) const {
     canvas.PopGeometry();
 }
 
-}  // namespace text
 }  // namespace ugdk
