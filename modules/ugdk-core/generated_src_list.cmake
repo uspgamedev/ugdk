@@ -56,6 +56,12 @@ modules/ugdk-core/src/system/engine.cc
 modules/ugdk-core/src/system/exceptions.cc
 modules/ugdk-core/src/system/sdleventhandler.h
 modules/ugdk-core/src/system/taskplayer.cc
+modules/ugdk-core/src/text/font.cc
+modules/ugdk-core/src/text/functions.cc
+modules/ugdk-core/src/text/language.cc
+modules/ugdk-core/src/text/languageword.cc
+modules/ugdk-core/src/text/manager.cc
+modules/ugdk-core/src/text/module.cc
 modules/ugdk-core/src/time/manager.cc
 modules/ugdk-core/src/time/module.cc
 modules/ugdk-core/src/time/timeaccumulator.cc
@@ -153,7 +159,13 @@ modules/ugdk-core/include/ugdk/system/exceptions.h
 modules/ugdk-core/include/ugdk/system.h
 modules/ugdk-core/include/ugdk/system/task.h
 modules/ugdk-core/include/ugdk/system/taskplayer.h
+modules/ugdk-core/include/ugdk/text/font.h
+modules/ugdk-core/include/ugdk/text/functions.h
 modules/ugdk-core/include/ugdk/text.h
+modules/ugdk-core/include/ugdk/text/language.h
+modules/ugdk-core/include/ugdk/text/languageword.h
+modules/ugdk-core/include/ugdk/text/manager.h
+modules/ugdk-core/include/ugdk/text/module.h
 modules/ugdk-core/include/ugdk/time.h
 modules/ugdk-core/include/ugdk/time/manager.h
 modules/ugdk-core/include/ugdk/time/module.h

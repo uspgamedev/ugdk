@@ -5,8 +5,6 @@
 #include <ugdk/debug/log.h>
 #include <ugdk/desktop/module.h>
 #include <ugdk/desktop/window.h>
-#include <ugdk/text/label.h>
-#include <ugdk/text/textbox.h>
 #include <ugdk/text/font.h>
 #include <ugdk/text/language.h>
 #include <ugdk/util/utf8.h>
@@ -46,29 +44,29 @@ bool Manager::Release() {
     return true;
 }
 
-TextBox* Manager::GetText(const std::string& text, const std::string& fonttag, int width) {
-    Font *font = fonttag.size() > 0 ? fonts_[fonttag].get() : current_font_;
-    return new TextBox(text, (width == -1) ? desktop::manager().primary_window()->size().x : width, font);
-}
-
-TextBox* Manager::GetText(const std::string& text) {
-    std::string blank_font;
-    return GetText(text, blank_font);
-}
-
-TextBox* Manager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
-    auto file = filesystem::manager().OpenFile(path);
-
-    if (!file)
-        return nullptr;
-
-    return GetText(file->GetContents(), font, width);
-}
-
-TextBox* Manager::GetTextFromFile(const std::string& path) {
-    std::string blank_font;
-    return GetTextFromFile(path, blank_font);
-}
+//TextBox* Manager::GetText(const std::string& text, const std::string& fonttag, int width) {
+//    Font *font = fonttag.size() > 0 ? fonts_[fonttag].get() : current_font_;
+//    return new TextBox(text, (width == -1) ? desktop::manager().primary_window()->size().x : width, //font);
+//}
+//
+//TextBox* Manager::GetText(const std::string& text) {
+//    std::string blank_font;
+//    return GetText(text, blank_font);
+//}
+//
+//TextBox* Manager::GetTextFromFile(const std::string& path, const std::string& font, int width) {
+//    auto file = filesystem::manager().OpenFile(path);
+//
+//    if (!file)
+//        return nullptr;
+//
+//    return GetText(file->GetContents(), font, width);
+//}
+//
+//TextBox* Manager::GetTextFromFile(const std::string& path) {
+//    std::string blank_font;
+//    return GetTextFromFile(path, blank_font);
+//}
 
 Font* Manager::GetFont(const std::string& name) const {
     auto it = fonts_.find(name);

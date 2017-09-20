@@ -35,7 +35,7 @@ float FillBufferWithText(const Font* font, const std::u32string& msg, VertexData
         float kerning = 0;
         if(i > 0)
             kerning = texture_glyph_get_kerning(glyph, static_cast<wchar_t>( msg[i-1] ));
-        
+
         pen += kerning;
         float x0  = pen + glyph->offset_x;
         float y0  = static_cast<float>(glyph->offset_y);
@@ -44,29 +44,29 @@ float FillBufferWithText(const Font* font, const std::u32string& msg, VertexData
         y0 = y + font->freetype_font()->height - y0;
         y1 = y + font->freetype_font()->height - y1;
         {
-            VertexXYUV* v1 = mapped_data.Get<VertexXYUV>(buffer_offset + 0);
-            v1->x = x0;
-            v1->y = y0;
-            v1->u = glyph->s0;
-            v1->v = glyph->t0;
+            VertexXYUV &v1 = mapped_data.Get<VertexXYUV>(buffer_offset + 0);
+            v1.x = x0;
+            v1.y = y0;
+            v1.u = glyph->s0;
+            v1.v = glyph->t0;
 
-            VertexXYUV* v2 = mapped_data.Get<VertexXYUV>(buffer_offset + 1);
-            v2->x = x1;
-            v2->y = y0;
-            v2->u = glyph->s1;
-            v2->v = glyph->t0;
+            VertexXYUV &v2 = mapped_data.Get<VertexXYUV>(buffer_offset + 1);
+            v2.x = x1;
+            v2.y = y0;
+            v2.u = glyph->s1;
+            v2.v = glyph->t0;
 
-            VertexXYUV* v3 = mapped_data.Get<VertexXYUV>(buffer_offset + 2);
-            v3->x = x0;
-            v3->y = y1;
-            v3->u = glyph->s0;
-            v3->v = glyph->t1;
+            VertexXYUV &v3 = mapped_data.Get<VertexXYUV>(buffer_offset + 2);
+            v3.x = x0;
+            v3.y = y1;
+            v3.u = glyph->s0;
+            v3.v = glyph->t1;
 
-            VertexXYUV* v4 = mapped_data.Get<VertexXYUV>(buffer_offset + 3);
-            v4->x = x1;
-            v4->y = y1;
-            v4->u = glyph->s1;
-            v4->v = glyph->t1;
+            VertexXYUV &v4 = mapped_data.Get<VertexXYUV>(buffer_offset + 3);
+            v4.x = x1;
+            v4.y = y1;
+            v4.u = glyph->s1;
+            v4.v = glyph->t1;
 
             buffer_offset += 4;
         }
@@ -74,7 +74,7 @@ float FillBufferWithText(const Font* font, const std::u32string& msg, VertexData
     }
     return pen;
 }
-    
+
 void DrawTextLine(Canvas& canvas, const Font* font, const std::string& utf8_message) {
     auto ucs_msg = utf8_to_ucs4(utf8_message);
 
@@ -93,7 +93,7 @@ void DrawTextLine(Canvas& canvas, const Font* font, const std::string& utf8_mess
     auto& shaders = graphic::manager().shaders();
     bool previous_ignore_texture_flag = shaders.IsFlagSet(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR);
     auto previous_program = canvas.shader_program();
-    
+
     shaders.ChangeFlag(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
     canvas.ChangeShaderProgram(shaders.current_shader());
 
