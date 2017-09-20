@@ -28,10 +28,10 @@ class Manager {
 
     /// A virtual keyboard that represents all physical keyboards.
     const Keyboard& keyboard() const { return keyboard_; }
-    
+
     /// A virtual mouse that represents all physical mice.
     const Mouse& mouse() const { return mouse_; }
-    
+
     /// Handles the IME.
     TextInput& text_input() { return text_input_; }
 
