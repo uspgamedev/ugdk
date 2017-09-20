@@ -24,9 +24,9 @@ class VertexData {
         void operator=(Mapper&) = delete;
 
         template<class T>
-        T* Get(std::size_t index) {
+        T& Get(std::size_t index) {
             Validate(typeid(T).name(), sizeof(T), index);
-            return reinterpret_cast<T*>(mapped_ + index * data_.vertex_size());
+            return *reinterpret_cast<T*>(mapped_ + index * data_.vertex_size());
         }
 
     private:
