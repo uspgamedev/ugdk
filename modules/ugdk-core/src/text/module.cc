@@ -6,7 +6,7 @@ namespace text {
 static std::unique_ptr<Manager> reference_;
 
 bool Initialize(std::unique_ptr<Manager> manager) {
-    if(is_active() && manager->Initialize()) {
+    if(manager && manager->Initialize()) {
         // The manager initialized correctly, so we can use it.
         reference_ = std::move(manager);
         return true;

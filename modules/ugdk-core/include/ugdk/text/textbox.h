@@ -13,6 +13,13 @@
 #include <memory>
 
 namespace ugdk {
+
+namespace graphic {
+
+graphic::Canvas& operator<<(graphic::Canvas& canvas, const text::TextBox& label);
+
+} // namespace graphic
+
 namespace text {
 
 class TextBox {
@@ -34,6 +41,8 @@ class TextBox {
     IdentStyle ident_style() const { return ident_style_; }
 
   private:
+    friend graphic::Canvas& graphic::operator<<(graphic::Canvas& canvas,
+                                                const text::TextBox& label);
     Font* font_;
     double width_;
     std::vector< std::unique_ptr<Label> > labels_;
@@ -46,8 +55,6 @@ class TextBox {
 };
 
 }  // namespace text
-
-graphic::Canvas& operator<<(graphic::Canvas& canvas, const text::TextBox& label);
 
 }  // namespace ugdk
 

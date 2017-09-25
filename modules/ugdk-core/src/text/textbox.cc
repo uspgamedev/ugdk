@@ -102,28 +102,34 @@ double TextBox::calculateWidth(std::u32string::const_iterator start, std::u32str
     return width;
 }
 
-}  // namespace graphic
+}  // namespace text
 
-graphic::Canvas& operator<<(graphic::Canvas& canvas, const text::TextBox& label) {
+namespace graphic {
+
+graphic::Canvas& operator<<(graphic::Canvas& canvas, const text::TextBox& box) {
 
     double off_y = 0.0;
-    for(const auto& label : labels_) {
+    for(const auto& label : box.labels_) {
         if (!label) {
-            off_y += font_->height();
+            off_y += box.font_->height();
             continue;
         }
         double off_x = 0.0;
-        if(ident_style_ == CENTER)
-            off_x = (width_ - label->width()) * 0.5;
-        else if(ident_style_ == RIGHT)
-            off_x = (width_ - label->width()) * 1.0;
+        if(box.ident_style_ == text::TextBox::CENTER)
+            off_x = (box.width_ - label->width()) * 0.5;
+        else if(box.ident_style_ == text::TextBox::RIGHT)
+            off_x = (box.width_ - label->width()) * 1.0;
 
         canvas.PushAndCompose(math::Geometry(math::Vector2D(off_x, off_y)));
-        label->Draw(canvas);
+        canvas << *label;
         canvas.PopGeometry();
 
         off_y += label->size().y;
     }
+
+    return canvas;
 }
+
+} // namespace graphic
 
 }  // namespace ugdk

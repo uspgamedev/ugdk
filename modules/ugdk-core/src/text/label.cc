@@ -5,6 +5,7 @@
 #include <ugdk/structure/types.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
+#include <ugdk/graphic/textureunit.h>
 #include <ugdk/text/font.h>
 #include <ugdk/util/utf8.h>
 #include <ugdk/text/functions.h>
@@ -67,8 +68,11 @@ const ugdk::math::Vector2D& Label::size() const {
 
 }  // namespace text
 
+namespace graphic {
+
 graphic::Canvas& operator<<(graphic::Canvas& canvas, const text::Label& label) {
 
+    using namespace graphic;
     auto& shaders = graphic::manager().shaders();
     bool previous_ignore_texture_flag = shaders.IsFlagSet(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR);
     auto previous_program = canvas.shader_program();
@@ -76,26 +80,30 @@ graphic::Canvas& operator<<(graphic::Canvas& canvas, const text::Label& label) {
     shaders.ChangeFlag(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR, true);
     canvas.ChangeShaderProgram(shaders.current_shader());
 
-    TextureUnit unit = manager().ReserveTextureUnit(nullptr);
+    TextureUnit unit = graphic::manager().ReserveTextureUnit(nullptr);
     glActiveTexture(GL_TEXTURE0 + unit.id());
-    glBindTexture(GL_TEXTURE_2D, font_->freetype_font()->atlas->id);
+    glBindTexture(GL_TEXTURE_2D, label.font_->freetype_font()->atlas->id);
     canvas.SendUniform("drawable_texture", unit);
 
-    canvas.SendVertexData(*buffer_, VertexType::VERTEX, 0, 2);
-    canvas.SendVertexData(*buffer_, VertexType::TEXTURE, sizeof(vec2), 2);
+    canvas.SendVertexData(*label.buffer_, VertexType::VERTEX, 0, 2);
+    canvas.SendVertexData(*label.buffer_, VertexType::TEXTURE, sizeof(vec2), 2);
 
     #ifdef UGDK_USING_GLES
-    for (size_t i = 0; i < num_characters_; ++i) {
+    for (size_t i = 0; i < label.num_characters_; ++i) {
         glDrawArrays(GL_TRIANGLE_STRIP, static_cast<int>(i * 4), 4);
     }
     #else
-    glMultiDrawArrays(GL_TRIANGLE_STRIP, first_vector_.data(), size_vector_.data(), static_cast<int>(num_characters_));
+    glMultiDrawArrays(GL_TRIANGLE_STRIP, label.first_vector_.data(), label.size_vector_.data(),
+                      static_cast<int>(label.num_characters_));
     #endif
 
-    shaders.ChangeFlag(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR, previous_ignore_texture_flag);
+    shaders.ChangeFlag(graphic::Manager::Shaders::IGNORE_TEXTURE_COLOR,
+                       previous_ignore_texture_flag);
     canvas.ChangeShaderProgram(previous_program);
 
-    canvas.PopGeometry();
+    return canvas;
 }
+
+} // namespace graphic
 
 }  // namespace ugdk

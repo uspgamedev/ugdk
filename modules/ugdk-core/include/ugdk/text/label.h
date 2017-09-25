@@ -15,6 +15,11 @@
 #include <memory>
 
 namespace ugdk {
+
+namespace graphic {
+Canvas& operator<<(Canvas& canvas, const text::Label& label);
+}
+
 namespace text {
 
 class Label {
@@ -26,9 +31,12 @@ class Label {
     /// This operation is slow.
     void ChangeMessage(const std::string& utf8_message);
     void ChangeMessage(const std::u32string& ucs4_message);
-    const ugdk::math::Vector2D& size();
+    const ugdk::math::Vector2D& size() const;
+    double width() const { return size().x; }
+    double height() const { return size().y; }
 
   private:
+    friend graphic::Canvas& graphic::operator<<(graphic::Canvas& canvas, const text::Label& label);
     Font* font_;
     std::unique_ptr<graphic::VertexData> buffer_;
     std::vector<int> first_vector_, size_vector_;
@@ -38,8 +46,6 @@ class Label {
 };
 
 }  // namespace text
-
-graphic::Canvas& operator<<(graphic::Canvas& canvas, const text::Label& label);
 
 }  // namespace ugdk
 
