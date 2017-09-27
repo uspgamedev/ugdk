@@ -7,6 +7,7 @@
 #include <ugdk/system/eventhandler.h>
 
 #include <set>
+#include <string>
 #include <memory>
 
 struct _SDL_Joystick;
@@ -23,6 +24,9 @@ class Joystick {
 
     /// Get the number of general axis controls.
     int NumAxes() const;
+
+    /// Get the joystick name (from SDL)
+    std::string name() const;
 
     /// Get the number of trackballs.
     /** Trackballs have only relative motion events associated

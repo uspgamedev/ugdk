@@ -6,7 +6,9 @@
 
 namespace ugdk {
 namespace input {
-     
+
+using std::string;
+
 Joystick::Joystick(SDL_Joystick* joystick)
     : sdljoystick_(joystick)
 {}
@@ -19,6 +21,10 @@ bool Joystick::IsConnected() const {
 
 int Joystick::NumAxes() const {
 	return SDL_JoystickNumAxes(sdljoystick_);
+}
+
+string Joystick::name() const {
+    return SDL_JoystickName(sdljoystick_);
 }
 
 int Joystick::NumTrackballs() const {
