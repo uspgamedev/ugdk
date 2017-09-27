@@ -7,9 +7,12 @@
 namespace ugdk {
 namespace text {
 
-//ui::Drawable* LanguageWord::CreateLabel() const {
-//    return new text::Label(utf8_text_, text::manager().GetFont(font_));
-//}
+using std::unique_ptr;
+using std::make_unique;
+
+unique_ptr<Label> LanguageWord::CreateLabel() const {
+    return std::move(make_unique<Label>(utf8_text_, text::manager().GetFont(font_)));
+}
 
 } // namespace text
 } // namespace ugdk
