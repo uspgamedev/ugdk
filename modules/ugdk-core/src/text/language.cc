@@ -2,8 +2,6 @@
 
 #include <ugdk/resource/module.h>
 #include <ugdk/text/module.h>
-#include <ugdk/text/label.h>
-#include <ugdk/text/textbox.h>
 #include <ugdk/filesystem/module.h>
 #include <ugdk/filesystem/file.h>
 #include <ugdk/text/languageword.h>

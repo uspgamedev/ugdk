@@ -11,6 +11,8 @@
 #include <ugdk/desktop/manager.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
+#include <ugdk/text/manager.h>
+#include <ugdk/text/module.h>
 
 #include <ugdk/action/scene.h>
 #include <ugdk/debug/profiler.h>
@@ -153,6 +155,10 @@ bool Initialize(const Configuration& configuration) {
     if(configuration.time_enabled)
         if(!time::Initialize(std::unique_ptr<time::Manager>(new time::Manager )))
             return ErrorLog("system::Initialize failed - time::Initialize returned false.");
+
+
+    if (!text::Initialize(std::make_unique<text::Manager>(configuration.default_language)))
+        return ErrorLog("system::Initialize failed - text::Initialize returned false.");
 
     if(!resource::Initialize(std::unique_ptr<resource::Manager>(new resource::Manager )))
         return ErrorLog("system::Initialize failed - resource::Initialize returned false.");

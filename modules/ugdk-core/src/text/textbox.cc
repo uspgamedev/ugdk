@@ -45,30 +45,6 @@ void TextBox::ChangeMessage(const std::string& utf8_message) {
     }
 }
 
-void TextBox::Draw(graphic::Canvas& canvas) const {
-    
-    if(draw_setup_function_) draw_setup_function_(this, canvas);
-
-    double off_y = 0.0;
-    for(const auto& label : labels_) {
-        if (!label) {
-            off_y += font_->height();
-            continue;
-        }
-        double off_x = 0.0;
-        if(ident_style_ == CENTER)
-            off_x = (width_ - label->width()) * 0.5;
-        else if(ident_style_ == RIGHT)
-            off_x = (width_ - label->width()) * 1.0;
-
-        canvas.PushAndCompose(math::Geometry(math::Vector2D(off_x, off_y) - hotspot_));
-        label->Draw(canvas);
-        canvas.PopGeometry();
-
-        off_y += label->size().y;
-    }
-}
-    
 void TextBox::splitString(const std::u32string& ucs4_message, std::list<std::u32string>& split_ucs4_message) {
     list<std::u32string> line_split;
     {
@@ -90,14 +66,14 @@ void TextBox::splitString(const std::u32string& ucs4_message, std::list<std::u32
             if(calculateWidth(it->begin(), search) > width_)
                 break;
             guaranteed = search;
-        } 
+        }
 
         // If the first word is too big, split it anyway.
         while(guaranteed != it->begin() && calculateWidth(it->begin(), guaranteed) > width_) {
             skip = false;
             guaranteed--;
         }
-        
+
         if(guaranteed != it->end()) {
             auto next = it;
             line_split.emplace(++next, guaranteed + (skip ? 1 : 0), it->end());
@@ -126,5 +102,34 @@ double TextBox::calculateWidth(std::u32string::const_iterator start, std::u32str
     return width;
 }
 
-}  // namespace graphic
+}  // namespace text
+
+namespace graphic {
+
+graphic::Canvas& operator<<(graphic::Canvas& canvas, const text::TextBox& box) {
+
+    double off_y = 0.0;
+    for(const auto& label : box.labels_) {
+        if (!label) {
+            off_y += box.font_->height();
+            continue;
+        }
+        double off_x = 0.0;
+        if(box.ident_style_ == text::TextBox::CENTER)
+            off_x = (box.width_ - label->width()) * 0.5;
+        else if(box.ident_style_ == text::TextBox::RIGHT)
+            off_x = (box.width_ - label->width()) * 1.0;
+
+        canvas.PushAndCompose(math::Geometry(math::Vector2D(off_x, off_y)));
+        canvas << *label;
+        canvas.PopGeometry();
+
+        off_y += label->size().y;
+    }
+
+    return canvas;
+}
+
+} // namespace graphic
+
 }  // namespace ugdk
