@@ -24,8 +24,7 @@ class Window {
     /// Updates the settings and applies the changes.
     /** Warning: some fullscreen/resolution combinations may be unsupported by the display, resulting
         in unoperable windows. */
-    virtual void ChangeSettings(const math::Integer2D& size, const math::Integer2D& canvas_size, 
-                                bool fullscreen, bool vsync);
+    virtual void ChangeSettings(const math::Integer2D& size, bool fullscreen, bool vsync);
 
     virtual uint32 id() const;
     virtual const char* title() const;
