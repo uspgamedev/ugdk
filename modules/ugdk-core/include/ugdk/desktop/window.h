@@ -29,7 +29,7 @@ class Window {
     virtual uint32 id() const;
     virtual const char* title() const;
     virtual math::Integer2D size() const;
-    virtual math::Vector2D canvas_size() const;
+//  virtual math::Vector2D canvas_size() const;
     virtual bool fullscreen() const;
     bool vsync() const { return vsync_; }
 
