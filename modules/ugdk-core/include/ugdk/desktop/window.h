@@ -6,6 +6,7 @@
 #include <ugdk/graphic/manager.h>
 #include <ugdk/desktop/manager.h>
 #include <ugdk/math/integer2D.h>
+#include <ugdk/math/vector2D.h>
 #include <ugdk/structure/types.h>
 
 struct SDL_Window;
