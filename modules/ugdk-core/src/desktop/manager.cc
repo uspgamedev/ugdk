@@ -27,7 +27,11 @@ public:
                 break;
 
             case SDL_WINDOWEVENT_CLOSE:
-                manager_.windows_.erase(sdlevent.window.windowID);
+                int i;
+                for (i = 0; i < manager_.windows_.size(); i++)
+                    if (manager_.windows_[i]->id() == sdlevent.window.windowID)
+                        break;
+                manager_.windows_.erase(manager_.windows_.begin() + i);
                 break;
 
             default:
@@ -73,7 +77,7 @@ weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
 }
 
 std::weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& new_window) {
-    windows_[new_window->id()] = new_window;
+    windows_.push_back(new_window);
 
     if(!primary_window_.lock())
         primary_window_ = new_window;
@@ -82,15 +86,15 @@ std::weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& ne
 }
 
 std::shared_ptr<Window> Manager::window(uint32 index) const {
-    auto it = windows_.find(index);
-    if (it == windows_.end())
+    if (index >= windows_.size())
         return nullptr;
-    return it->second;
+    else
+        return windows_[index];
 }
 
 void Manager::PresentAll() {
     for(const auto& window : windows_)
-        window.second->Present();
+        window->Present();
 }
 
 }  // namespace desktop

@@ -6,7 +6,7 @@
 #include <ugdk/structure/types.h>
 #include <ugdk/system.h>
 
-#include <map>
+#include <vector>
 #include <memory>
 
 namespace ugdk {
@@ -36,7 +36,7 @@ class Manager {
     std::unique_ptr<system::SDLEventHandler> sdlevent_handler_;
 
     std::weak_ptr<Window> primary_window_;
-    std::map< uint32, std::shared_ptr<Window> > windows_;
+    std::vector< std::shared_ptr<Window> > windows_;
 
     friend class DesktopSDLEventHandler;
 };

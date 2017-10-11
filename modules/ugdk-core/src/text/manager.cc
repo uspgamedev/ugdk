@@ -12,6 +12,7 @@
 #include <ugdk/util/utf8.h>
 
 #include <iostream>
+#include <map>
 #include <cstdio>
 #include <cstdlib>
 #include <clocale>
