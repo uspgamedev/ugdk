@@ -1,5 +1,8 @@
+
 #ifndef UGDK_STRUCTURE_VERTEX_H_
 #define UGDK_STRUCTURE_VERTEX_H_
+
+#include <glm/vec2.hpp>
 
 namespace ugdk {
 namespace structure {
@@ -15,6 +18,15 @@ struct VertexXYUV {
         y = _y;
         u = _u;
         v = _v;
+    }
+    void set(const glm::vec2& xy) {
+        x = xy.x;
+        y = xy.y;
+    }
+    void set(const glm::vec2& xy, const glm::vec2& uv) {
+        set(xy);
+        u = uv.x;
+        v = uv.y;
     }
 };
 

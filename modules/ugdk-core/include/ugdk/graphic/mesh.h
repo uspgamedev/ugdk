@@ -2,7 +2,7 @@
 #ifndef UGDK_GRAPHIC_MESH_H_
 #define UGDK_GRAPHIC_MESH_H_
 
-#include <ugdk/graphic/vertexdata.h>
+#include <ugdk/structure/vertex.h>
 
 #include <glm/vec2.hpp>
 
@@ -13,29 +13,25 @@ namespace graphic {
 
 class Canvas;
 
-// TODO
-// Make VertexData::Mapper template, delegating bind/unbind to VertexData
-
-template <typename Position, typename Texel>
+template <typename Vertex>
 class Mesh {
   public:
-    struct Vertex {
-      Position  pos;
-      Texel     tex;
-    };
-    Mesh(const DrawMode& the_mode, const std::vector<Vertex>& the_vtx_data);
-    Mesh(const Mesh& rhs) = delete;
-    Mesh& operator=(const Mesh& rhs) = delete;
-    Mesh(Mesh&& rhs);
-    Mesh& operator=(Mesh&& rhs);
+    /// Alias
+    using VertexArray = std::vector<Vertex>;
+
+    /// Construct mesh with given draw mode
+    Mesh(const DrawMode& the_mode);
+
+    /// 
+    void Fill(const VertexArray& vertices);
     
   private:
     friend Canvas& operator<<(Canvas &canvas, const Mesh<Position, Texel> &mesh);
-    DrawMode    mode_;
-    VertexData  vtx_data_;
+    DrawMode            mode_;
+    std::vector<Vertex> vtx_data_;
 };
 
-using MeshXYUV = Mesh<glm::vec2, glm::vec2>;
+using Mesh2D = Mesh<structure::VertexXYUV>;
 
 template <typename Position, typename Texel>
 Canvas& operator<<(Canvas &canvas, const Mesh<Position, Texel> &mesh);
