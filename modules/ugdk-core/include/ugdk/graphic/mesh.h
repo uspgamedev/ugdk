@@ -13,6 +13,9 @@ namespace graphic {
 
 class Canvas;
 
+// TODO
+// Make VertexData::Mapper template, delegating bind/unbind to VertexData
+
 template <typename Position, typename Texel>
 class Mesh {
   public:
@@ -25,6 +28,7 @@ class Mesh {
     Mesh& operator=(const Mesh& rhs) = delete;
     Mesh(Mesh&& rhs);
     Mesh& operator=(Mesh&& rhs);
+    
   private:
     friend Canvas& operator<<(Canvas &canvas, const Mesh<Position, Texel> &mesh);
     DrawMode    mode_;

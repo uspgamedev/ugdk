@@ -25,9 +25,10 @@ namespace {
     std::unique_ptr<VertexData> square_data_;
 }
 
-float FillBufferWithText(const Font* font, const std::u32string& msg, VertexData::Mapper& mapped_data, float y) {
+float FillBufferWithText(const Font* font, const std::u32string& msg, VertexData& vtx_data, float y) {
     float pen = 0.0f;
     size_t buffer_offset = 0;
+    VertexData::Mapper<VertexXYUV> mapped_data(vtx_data, false);
     for(size_t i = 0; i < msg.size(); ++i ) {
         texture_glyph_t *glyph = texture_font_get_glyph(font->freetype_font(),
                                                         static_cast<wchar_t>(msg[i]));
@@ -44,25 +45,25 @@ float FillBufferWithText(const Font* font, const std::u32string& msg, VertexData
         y0 = y + font->freetype_font()->height - y0;
         y1 = y + font->freetype_font()->height - y1;
         {
-            VertexXYUV &v1 = mapped_data.Get<VertexXYUV>(buffer_offset + 0);
+            VertexXYUV &v1 = mapped_data.Get(buffer_offset + 0);
             v1.x = x0;
             v1.y = y0;
             v1.u = glyph->s0;
             v1.v = glyph->t0;
 
-            VertexXYUV &v2 = mapped_data.Get<VertexXYUV>(buffer_offset + 1);
+            VertexXYUV &v2 = mapped_data.Get(buffer_offset + 1);
             v2.x = x1;
             v2.y = y0;
             v2.u = glyph->s1;
             v2.v = glyph->t0;
 
-            VertexXYUV &v3 = mapped_data.Get<VertexXYUV>(buffer_offset + 2);
+            VertexXYUV &v3 = mapped_data.Get(buffer_offset + 2);
             v3.x = x0;
             v3.y = y1;
             v3.u = glyph->s0;
             v3.v = glyph->t1;
 
-            VertexXYUV &v4 = mapped_data.Get<VertexXYUV>(buffer_offset + 3);
+            VertexXYUV &v4 = mapped_data.Get(buffer_offset + 3);
             v4.x = x1;
             v4.y = y1;
             v4.u = glyph->s1;
@@ -79,10 +80,7 @@ void DrawTextLine(Canvas& canvas, const Font* font, const std::string& utf8_mess
     auto ucs_msg = utf8_to_ucs4(utf8_message);
 
     VertexData data(utf8_message.size() * 4, sizeof(VertexXYUV), false, true);
-    {
-        VertexData::Mapper mapper(data);
-        FillBufferWithText(font, ucs_msg, mapper);
-    }
+    FillBufferWithText(font, ucs_msg, data);
 
     std::vector<int> first_vector;
     first_vector.reserve(ucs_msg.size());

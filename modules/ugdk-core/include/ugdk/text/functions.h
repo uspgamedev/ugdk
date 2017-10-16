@@ -9,7 +9,7 @@
 namespace ugdk {
 namespace text {
 
-float FillBufferWithText(const Font*, const std::u32string&, graphic::VertexData::Mapper& mapped_data, float y = 0.0f);
+float FillBufferWithText(const Font*, const std::u32string&, graphic::VertexData& vtx_data, float y = 0.0f);
 
 void DrawTextLine(graphic::Canvas& canvas, const Font*, const std::string& utf8_message);
 
