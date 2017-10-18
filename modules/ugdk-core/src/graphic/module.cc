@@ -7,7 +7,9 @@ static std::unique_ptr<Manager> reference_;
 
 bool Initialize(std::unique_ptr<Manager> manager, const std::weak_ptr<desktop::Window> & window,
                 const math::Vector2D &canvas_size) {
-    if(manager && manager->Initialize(window, canvas_size)) {
+    std::vector<std::weak_ptr<desktop::Window>> v;
+    v.push_back(window);
+    if(manager && manager->Initialize(v, canvas_size)) {
         // The manager initialized correctly, so we can use it.
         reference_ = std::move(manager);
         return true;

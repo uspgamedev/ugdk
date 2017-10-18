@@ -34,11 +34,15 @@ class Manager {
     Manager();
     ~Manager();
 
-    bool Initialize(const std::weak_ptr<desktop::Window>&, const math::Vector2D& canvas_size);
+    bool Initialize(
+        const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
+        const math::Vector2D& canvas_size
+                   );
     void Release();
 
-    void AttachTo(const std::shared_ptr<desktop::Window>&);
-    void ResizeScreen(const math::Vector2D& canvas_size);
+    void SetActiveScreen(uint32_t index);
+    void AttachCanvasToScreen(uint32_t index, const std::weak_ptr<desktop::Window>& weak_window);
+    void ResizeScreen(uint32_t index, const math::Vector2D& canvas_size);
 
     void SetUserNearestNeighborTextures(bool enabled);
 
@@ -86,7 +90,8 @@ class Manager {
         friend class Manager;
     };
 
-    RenderTarget* screen() const;
+    RenderTarget* screen(uint32_t index) const;
+    uint32_t num_of_screens();
     RenderTexture* light_buffer() const { return light_buffer_.get(); }
 
     graphic::GLTexture* white_texture() { return white_texture_; }
@@ -99,7 +104,7 @@ class Manager {
     void ReleaseTextureUnitID(int id);
 
     SDL_GLContext context_;
-    std::unique_ptr<RenderScreen> screen_;
+    std::vector<std::unique_ptr<RenderScreen> > screens_;
     std::unique_ptr<RenderTexture> light_buffer_;
     std::unique_ptr<util::IDGenerator> textureunit_ids_;
     graphic::GLTexture* white_texture_;

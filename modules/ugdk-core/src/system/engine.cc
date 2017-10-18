@@ -232,7 +232,9 @@ void Run() {
 
             if(desktop::is_active()) {
                 debug::ProfileSection render_section("Render");
-                graphic::Canvas canvas(graphic::manager().screen());
+                auto &manager = graphic::manager()
+                for (uint32_t i=0; i<)
+                graphic::Canvas canvas(graphic::manager().screen(0));
                 for(auto& scene : scene_list_)
                     if (scene->visible())
                         scene->Render(canvas);

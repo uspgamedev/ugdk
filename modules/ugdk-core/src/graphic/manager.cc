@@ -47,7 +47,9 @@ public:
         if(auto window = window_.lock())
             glViewport(0, 0, window->size().x, window->size().y);
     }
-
+    std::weak_ptr<desktop::Window> Window() {
+        return window_;
+    }
 private:
     std::weak_ptr<desktop::Window> window_;
     math::Vector2D size_;
@@ -60,13 +62,18 @@ Manager::Manager()
 
 Manager::~Manager() {}
 
-void Manager::AttachTo(const std::shared_ptr<desktop::Window>& window) {
-    SDL_GL_MakeCurrent(dynamic_cast<desktop::Window*>(window.get())->sdl_window_, context_); //FIXME?
-    screen_->AttachTo(window);
+void Manager::SetActiveScreen(uint32_t index) {
+    SDL_GL_MakeCurrent(
+                       (screens_[index]).get()->Window().lock().get()->sdl_window_,
+                       context_
+                      ); //FIXME?
 }
-
-void Manager::ResizeScreen(const math::Vector2D& canvas_size) {
-    screen_->Resize(canvas_size);
+void Manager::AttachCanvasToScreen(uint32_t index, 
+                                   const std::weak_ptr<desktop::Window>& weak_window) {
+    screens_[index]->AttachTo(weak_window);
+}
+void Manager::ResizeScreen(uint32_t index, const math::Vector2D& canvas_size) {
+    screens_[index]->Resize(canvas_size);
 }
 
 void Manager::SetUserNearestNeighborTextures(bool enabled) {
@@ -77,13 +84,23 @@ void Manager::SetUserNearestNeighborTextures(bool enabled) {
     }
 }
 
-bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, const math::Vector2D& canvas_size) {
+bool Manager::Initialize(
+            const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
+            const math::Vector2D& canvas_size
+    ) {
 
-    auto window = window_weak.lock();
-    if(!window)
+    std::vector<std::shared_ptr<desktop::Window>> windows;
+
+    for (auto _window_ : windows_)
+        windows.push_back(_window_.lock());
+    
+    if (windows.size()==0)
         return false;
+    for (auto _window_ : windows)
+        if (!_window_)
+            return false;
 
-    context_ = SDL_GL_CreateContext(dynamic_cast<desktop::Window*>(window.get())->sdl_window_);  //FIXME?
+    context_ = SDL_GL_CreateContext(dynamic_cast<desktop::Window*>(windows[0].get())->sdl_window_);  //FIXME?
     if(!context_)
         return false; //errlog("OpenGL context creation failed: " + string(SDL_GetError()));
 
@@ -92,10 +109,11 @@ bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, cons
     if (GLEW_OK != err)
         return false; //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
 #endif
-
-    screen_.reset(new RenderScreen);
-    ResizeScreen(canvas_size);
-    AttachTo(window);
+    for (int i = 0; i < screens_.size(); i++) {
+        screens_[i].reset(new RenderScreen);
+        ResizeScreen(i, canvas_size);
+    }
+    SetActiveScreen(0);
 
     // This hint can improve the speed of texturing when perspective-correct texture
     // coordinate interpolation isn't needed, such as when using a glOrtho() projection.
@@ -138,7 +156,7 @@ bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, cons
 
 void Manager::Release() {
     SDL_GL_DeleteContext(context_);
-    screen_.reset();
+    screens_[0].reset();
     light_buffer_.reset();
     textureunit_ids_.reset();
 }
@@ -232,8 +250,8 @@ Manager::Shaders::~Shaders() {
         delete shaders_[i];
 }
 
-RenderTarget* Manager::screen() const {
-    return screen_.get();
+RenderTarget* Manager::screen(uint32_t index) const {
+    return screens_[index].get();
 }
 
 }  // namespace graphic
