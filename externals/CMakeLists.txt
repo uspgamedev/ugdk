@@ -3,6 +3,7 @@ option(UGDK_INTERNAL_FREETYPE    "Set to ON to use an internal freetype instead 
 option(UGDK_INTERNAL_SDL2        "Set to ON to use an internal SDL2 instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2_IMAGE  "Set to ON to use an internal SDL2_image instead of the system one." OFF)
 option(UGDK_INTERNAL_SDL2_MIXER  "Set to ON to use an internal SDL2_mixer instead of the system one." OFF)
+option(UGDK_INTERNAL_OPENAL      "Set to ON to use an internal OpenAl instead of the system one." OFF)
 
 
 macro(update_list LISTNAME VALUE)
@@ -46,6 +47,7 @@ else()
 	check_package(FREETYPE Freetype)
     check_package(SDL2_IMAGE SDL2_image)
 	check_package(GLEW GLEW 1.5)
+    check_package(OPENAL OpenAl)
 
 endif()
 
@@ -129,3 +131,19 @@ endif(UGDK_INTERNAL_FREETYPE)
 ########################
     add_subdirectory(freetype-gl)
 
+########################
+## OpenAl
+########################
+if(UGDK_INTERNAL_OPENAL)
+    init_submodule(openal-soft)
+    add_subdirectory(openal-soft) # Defines 'OpenAl'
+
+else(UGDK_INTERNAL_OPENAL)
+    find_package(OpenAl REQUIRED)
+    add_library(OpenAl STATIC IMPORTED GLOBAL)
+
+    set_target_properties(OpenAL PROPERTIES
+        IMPORTED_LOCATION "${OPENAL_LIBRARY}"
+        IMPORTED_LINK_INTERFACE_LIBRARIES "${OPENAL_LIBRARY}"
+        INTERFACE_INCLUDE_DIRECTORIES "${OPENAL_INCLUDE_DIR}")
+endif(UGDK_INTERNAL_OPENAL)

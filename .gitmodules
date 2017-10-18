@@ -10,3 +10,6 @@
 [submodule "externals/libjson"]
 	path = externals/libjson
 	url = https://github.com/henriquegemignani/libjson.git
+[submodule "externals/openal-soft"]
+	path = externals/openal-soft
+	url = https://github.com/kcat/openal-soft
