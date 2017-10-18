@@ -232,8 +232,11 @@ void Run() {
 
             if(desktop::is_active()) {
                 debug::ProfileSection render_section("Render");
+<<<<<<< HEAD
                 auto &manager = graphic::manager()
                 for (uint32_t i=0; i<)
+=======
+>>>>>>> 4372ed18d6dc8569dde502e01a21433463d51c06
                 graphic::Canvas canvas(graphic::manager().screen(0));
                 for(auto& scene : scene_list_)
                     if (scene->visible())
