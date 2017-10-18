@@ -56,7 +56,7 @@ class Scene : public system::TaskPlayer {
     /**
         Uses the configurated renderfunction.
     */
-    void Render(graphic::Canvas&) const;
+    void Render(std::vector<graphic::Canvas*>& canvases) const;
 
     /** @name Getters and Setters
     @{
@@ -83,7 +83,7 @@ class Scene : public system::TaskPlayer {
     /**@}
      */
 
-    void set_render_function(const std::function<void (graphic::Canvas& canvas)>& render_function) {
+    void set_render_function(const std::function<void (std::vector<graphic::Canvas*>& canvas)>& render_function) {
         render_function_ = render_function;
     }
 
@@ -118,7 +118,7 @@ class Scene : public system::TaskPlayer {
     system::EventHandler event_handler_;
 
     /// Function that is used to render the scene when it's visible.
-    std::function<void (graphic::Canvas& canvas)> render_function_;
+    std::function<void (std::vector<graphic::Canvas*>& canvases)> render_function_;
 }; // class Scene.
 
 } /* namespace action */

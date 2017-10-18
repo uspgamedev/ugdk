@@ -90,6 +90,7 @@ class Manager {
     };
 
     RenderTarget* screen(uint32_t index) const;
+    uint32_t num_screens();
     RenderTexture* light_buffer() const { return light_buffer_.get(); }
 
     graphic::GLTexture* white_texture() { return white_texture_; }

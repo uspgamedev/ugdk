@@ -232,11 +232,21 @@ void Run() {
 
             if(desktop::is_active()) {
                 debug::ProfileSection render_section("Render");
-                graphic::Canvas canvas(graphic::manager().screen(0));
+                
+                auto &manager = graphic::manager();
+                std::vector<graphic::Canvas*> canvases;
+
+                for (uint32_t i=0; i<manager.num_screens(); i++)
+                    canvases.push_back(new graphic::Canvas(manager.screen(i)));
+                
                 for(auto& scene : scene_list_)
                     if (scene->visible())
-                        scene->Render(canvas);
+                        scene->Render(canvases);
                 desktop::manager().PresentAll();
+
+                for (auto canvas_ptr : canvases) {
+                    delete canvas_ptr;
+                }
             }
             profile_data_list_.push_back(frame_section.data());
         }
