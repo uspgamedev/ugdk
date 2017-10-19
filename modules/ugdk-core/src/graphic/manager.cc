@@ -64,22 +64,11 @@ Manager::~Manager() {}
 
 void Manager::SetActiveScreen(uint32_t index) {
     SDL_GL_MakeCurrent(
-<<<<<<< HEAD
-                       (screens_[index]).get()->Window().lock().get()->sdl_window_,
-                       context_
-                      ); //FIXME?
-}
-void Manager::AttachCanvasToScreen(uint32_t index, 
-                                   const std::weak_ptr<desktop::Window>& weak_window) {
-    screens_[index]->AttachTo(weak_window);
-}
-=======
                        dynamic_cast<desktop::Window*>(screens_[index].get())->sdl_window_,
                        context_
                       ); //FIXME?
 }
 
->>>>>>> 4372ed18d6dc8569dde502e01a21433463d51c06
 void Manager::ResizeScreen(uint32_t index, const math::Vector2D& canvas_size) {
     screens_[index]->Resize(canvas_size);
 }

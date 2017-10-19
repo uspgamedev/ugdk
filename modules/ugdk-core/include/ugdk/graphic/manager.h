@@ -91,11 +91,7 @@ class Manager {
     };
 
     RenderTarget* screen(uint32_t index) const;
-<<<<<<< HEAD
-
-=======
     uint32_t num_screens();
->>>>>>> 5dbc14e1f2e84130fcbb93cf53924c1af8187cfc
     RenderTexture* light_buffer() const { return light_buffer_.get(); }
 
     graphic::GLTexture* white_texture() { return white_texture_; }
