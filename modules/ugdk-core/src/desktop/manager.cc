@@ -27,7 +27,7 @@ public:
                 break;
 
             case SDL_WINDOWEVENT_CLOSE:
-                int i;
+                uint32_t i; 
                 for (i = 0; i < manager_.windows_.size(); i++)
                     if (manager_.windows_[i]->id() == sdlevent.window.windowID)
                         break;

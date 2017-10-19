@@ -117,11 +117,11 @@ bool Manager::Initialize(
     if (GLEW_OK != err)
         return false; //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
 #endif
-    for (int i = 0; i < screens_.size(); i++) {
+    for (uint32_t i = 0; i < screens_.size(); i++) {
         screens_[i].reset(new RenderScreen);
         ResizeScreen(i, canvas_size);
     }
-    SetActiveScreen(0);
+    //SetActiveScreen(0);
 
     // This hint can improve the speed of texturing when perspective-correct texture
     // coordinate interpolation isn't needed, such as when using a glOrtho() projection.
@@ -202,12 +202,12 @@ system::FunctionListener<action::SceneFocusEvent> quit_event = [](const action::
     ev.scene->Finish();
 }; 
 
-action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> render_light_function) {
+action::Scene* CreateLightrenderingScene(std::function<void (std::vector<graphic::Canvas*>&)> render_light_function) {
     action::Scene* light_scene = new action::Scene;
     light_scene->set_identifier("Light Rendering Scene");
     // This scene has no logic, so quit if you ask for it to be only scene.
     light_scene->event_handler().AddListener(quit_event);
-    light_scene->set_render_function([render_light_function](graphic::Canvas& canvas) {
+    light_scene->set_render_function([render_light_function](std::vector<graphic::Canvas*> canvases) {
         graphic::Manager& manager = graphic::manager();
         Canvas light_canvas(manager.light_buffer());
 
@@ -215,7 +215,9 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
         glBlendFunc(GL_ONE, GL_ONE);
 
         light_canvas.Clear(structure::Color(0.0, 0.0, 0.0, 0.0));
-        render_light_function(light_canvas);
+        std::vector<graphic::Canvas*> tmp;
+        tmp.push_back(&light_canvas);
+        render_light_function(tmp);
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     });
@@ -260,6 +262,9 @@ Manager::Shaders::~Shaders() {
 
 RenderTarget* Manager::screen(uint32_t index) const {
     return screens_[index].get();
+}
+uint32_t Manager::num_screens() {
+    return screens_.size();
 }
 
 }  // namespace graphic

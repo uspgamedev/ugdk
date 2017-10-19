@@ -6,6 +6,7 @@
 #include <ugdk/debug/profiler.h>
 
 #include <algorithm>
+#include <vector>
 
 namespace ugdk {
 namespace action {
@@ -62,10 +63,10 @@ void Scene::Update(double dt) {
     TaskPlayer::Update(dt);
 }
 
-void Scene::Render(graphic::Canvas& canvas) const {
+void Scene::Render(std::vector<graphic::Canvas*>& canvases) const {
     if(!finished_ && visible_ && render_function_) {
         debug::ProfileSection section("Scene '" + identifier_ + "'");
-        render_function_(canvas);
+        render_function_(canvases);
     }
 }
 

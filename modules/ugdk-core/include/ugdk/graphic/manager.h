@@ -41,10 +41,7 @@ class Manager {
     void Release();
 
     void SetActiveScreen(uint32_t index);
-<<<<<<< HEAD
     void AttachCanvasToScreen(uint32_t index, const std::weak_ptr<desktop::Window>& weak_window);
-=======
->>>>>>> 4372ed18d6dc8569dde502e01a21433463d51c06
     void ResizeScreen(uint32_t index, const math::Vector2D& canvas_size);
 
     void SetUserNearestNeighborTextures(bool enabled);
@@ -94,7 +91,11 @@ class Manager {
     };
 
     RenderTarget* screen(uint32_t index) const;
+<<<<<<< HEAD
 
+=======
+    uint32_t num_screens();
+>>>>>>> 5dbc14e1f2e84130fcbb93cf53924c1af8187cfc
     RenderTexture* light_buffer() const { return light_buffer_.get(); }
 
     graphic::GLTexture* white_texture() { return white_texture_; }
