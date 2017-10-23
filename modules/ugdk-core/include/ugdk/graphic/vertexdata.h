@@ -24,7 +24,7 @@ class VertexData {
     /// Contructs empty data
     VertexData();
 
-    /// Copy constructor
+    /// Move constructor
     VertexData(VertexData&& rhs);
 
     /// Constructs vertex data
