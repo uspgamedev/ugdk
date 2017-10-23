@@ -30,7 +30,9 @@ class Manager {
     std::shared_ptr<Window> window(uint32 index) const;
 
     void PresentAll();
-
+    std::shared_ptr<Window> window(uint32_t index);
+    uint32_t num_windows();
+      
   private:
     std::weak_ptr<Window> RegisterAndGetWindow(const std::shared_ptr<Window>& new_window);
     std::unique_ptr<system::SDLEventHandler> sdlevent_handler_;

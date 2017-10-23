@@ -91,7 +91,13 @@ std::shared_ptr<Window> Manager::window(uint32 index) const {
     else
         return windows_[index];
 }
+std::shared_ptr<Window> Manager::window(uint32_t index) {
+    return windows_[index];
+}
 
+uint32_t Manager::num_windows() {
+    return windows_.size();
+}
 void Manager::PresentAll() {
     for(const auto& window : windows_)
         window->Present();

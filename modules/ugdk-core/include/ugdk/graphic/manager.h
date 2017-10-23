@@ -35,10 +35,12 @@ class Manager {
     ~Manager();
 
     bool Initialize(
-        const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
+        const std::vector<std::shared_ptr<desktop::Window>>& windows_, 
         const math::Vector2D& canvas_size
                    );
     void Release();
+
+    void RegisterScreen(std::weak_ptr<desktop::Window>);
 
     void SetActiveScreen(uint32_t index);
     void AttachCanvasToScreen(uint32_t index, const std::weak_ptr<desktop::Window>& weak_window);

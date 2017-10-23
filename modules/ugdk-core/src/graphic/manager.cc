@@ -61,6 +61,11 @@ Manager::Manager()
     ,   light_shader_(nullptr) {}
 
 Manager::~Manager() {}
+void Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
+    auto screen_ptr = std::make_unique<RenderScreen>();
+    screen_ptr->AttachTo(weak_window);
+    screens_.push_back(std::move(screen_ptr));
+}
 
 void Manager::SetActiveScreen(uint32_t index) {
     SDL_GL_MakeCurrent(
@@ -82,22 +87,25 @@ void Manager::SetUserNearestNeighborTextures(bool enabled) {
 }
 
 bool Manager::Initialize(
-            const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
+            const std::vector<std::shared_ptr<desktop::Window>>& windows_, 
             const math::Vector2D& canvas_size
     ) {
 
     std::vector<std::shared_ptr<desktop::Window>> windows;
-
-    for (auto _window_ : windows_)
-        windows.push_back(_window_.lock());
     
-    if (windows.size()==0)
+    if (windows_.size()==0)
         return false;
-    for (auto _window_ : windows)
+    for (auto _window_ : windows_)
         if (!_window_)
             return false;
 
-    context_ = SDL_GL_CreateContext(dynamic_cast<desktop::Window*>(windows[0].get())->sdl_window_);  //FIXME?
+    for (auto _window_ : windows_) {
+        auto screen_ptr = std::make_unique<RenderScreen>();
+        screen_ptr->AttachTo(_window_);
+        screens_.push_back(std::move(screen_ptr) );
+    }
+
+    context_ = SDL_GL_CreateContext(windows[0].get()->sdl_window_);  //FIXME?
     if(!context_)
         return false; //errlog("OpenGL context creation failed: " + string(SDL_GetError()));
 
