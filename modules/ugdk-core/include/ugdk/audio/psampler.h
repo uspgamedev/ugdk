@@ -2,6 +2,8 @@
 #define UGDK_AUDIO_PSAMPLER_H_
 
 #include <ugdk/system/config.h>
+#include <ugdk/audio/manager.h>
+
 #include "AL.h"
 
 #include <functional>

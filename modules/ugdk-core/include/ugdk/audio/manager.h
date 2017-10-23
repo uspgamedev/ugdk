@@ -9,6 +9,10 @@
 namespace ugdk {
 namespace audio {
 
+enum class AudioFormat {
+    MONO8, MONO16, STEREO8, STEREO16
+};
+
 class Manager {
   public:
     Manager();

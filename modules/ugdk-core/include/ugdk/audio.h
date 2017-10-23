@@ -14,6 +14,8 @@ class WAVSampler;
 class PSampler;
 class Source;
 
+enum class AudioFormat;
+
 } // namespace audio
 } // namespace ugdk
 
