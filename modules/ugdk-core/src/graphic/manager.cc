@@ -90,8 +90,6 @@ bool Manager::Initialize(
             const std::vector<std::shared_ptr<desktop::Window>>& windows_, 
             const math::Vector2D& canvas_size
     ) {
-
-    std::vector<std::shared_ptr<desktop::Window>> windows;
     
     if (windows_.size()==0)
         return false;
@@ -105,7 +103,7 @@ bool Manager::Initialize(
         screens_.push_back(std::move(screen_ptr) );
     }
 
-    context_ = SDL_GL_CreateContext(windows[0].get()->sdl_window_);  //FIXME?
+    context_ = SDL_GL_CreateContext(windows_[0].get()->sdl_window_);  //FIXME?
     if(!context_)
         return false; //errlog("OpenGL context creation failed: " + string(SDL_GetError()));
 
