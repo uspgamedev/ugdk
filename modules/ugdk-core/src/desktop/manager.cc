@@ -78,7 +78,7 @@ weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
 
 std::weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& new_window) {
     windows_.push_back(new_window);
-
+    map_[SDL_GetWindowID( (new_window->sdl_window_) )] = windows_.size() - 1;
     if(!primary_window_.lock())
         primary_window_ = new_window;
 
@@ -91,8 +91,17 @@ std::shared_ptr<Window> Manager::window(uint32 index) const {
     else
         return windows_[index];
 }
+std::shared_ptr<Window> Manager::WindowById(uint32_t id) {
+    return window(MapIdToIndex(id));
+}
+uint32_t Manager::MapIdToIndex(uint32_t id) {
+    return map_[id];
+}
 std::shared_ptr<Window> Manager::window(uint32_t index) {
-    return windows_[index];
+    if (index < windows_.size())
+        return windows_[index];
+    else
+        return std::shared_ptr<Window>();
 }
 
 uint32_t Manager::num_windows() {

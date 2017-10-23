@@ -7,6 +7,7 @@
 #include <ugdk/system.h>
 
 #include <vector>
+#include <unordered_map>
 #include <memory>
 
 namespace ugdk {
@@ -30,6 +31,8 @@ class Manager {
     std::shared_ptr<Window> window(uint32 index) const;
 
     void PresentAll();
+    uint32_t MapIdToIndex(uint32_t id);
+    std::shared_ptr<Window> WindowById(uint32_t id);      
     std::shared_ptr<Window> window(uint32_t index);
     uint32_t num_windows();
       
@@ -39,6 +42,7 @@ class Manager {
 
     std::weak_ptr<Window> primary_window_;
     std::vector< std::shared_ptr<Window> > windows_;
+    std::unordered_map<uint32_t, uint32_t> map_;
 
     friend class DesktopSDLEventHandler;
 };

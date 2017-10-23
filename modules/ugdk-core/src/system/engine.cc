@@ -236,7 +236,7 @@ void Run() {
                 auto &manager = graphic::manager();
                 std::vector<graphic::Canvas*> canvases;
                 
-                std::cout << manager.num_screens() << " Screens" << std::endl;
+                //std::cout << manager.num_screens() << " Screens" << std::endl;
 
                 for (uint32_t i=0; i<manager.num_screens(); i++)
                     canvases.push_back(new graphic::Canvas(manager.screen(i)));
