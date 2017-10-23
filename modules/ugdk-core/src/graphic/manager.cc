@@ -17,6 +17,8 @@
 #include "gltexture.h"
 #include "SDL_video.h"
 
+#include <iostream>
+
 namespace ugdk {
 namespace graphic {
 
@@ -41,6 +43,7 @@ public:
 
     void AttachTo(const std::weak_ptr<desktop::Window>& weak_window) {
         window_ = weak_window;
+        std::cout << "I, (" << this << "), got attached to " << window_.lock().get() << std::endl;
     }
 
     void UpdateViewport() {
@@ -48,6 +51,7 @@ public:
             glViewport(0, 0, window->size().x, window->size().y);
     }
     std::weak_ptr<desktop::Window> Window() {
+        std::cout << this << " : " << window_.lock().get() << std::endl;
         return window_;
     }
 private:
@@ -61,15 +65,24 @@ Manager::Manager()
     ,   light_shader_(nullptr) {}
 
 Manager::~Manager() {}
+
 void Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
     auto screen_ptr = std::make_unique<RenderScreen>();
     screen_ptr->AttachTo(weak_window);
-    screens_.push_back(std::move(screen_ptr));
+    screens_.emplace_back(std::move(screen_ptr));
 }
 
 void Manager::SetActiveScreen(uint32_t index) {
+    std::cout << "& screen [" << index << "] : " <<screen(index) << std::endl;
+    
+    std::cout << "dyn cast [" << index << "] : " <<dynamic_cast<RenderScreen*>(screen(index)) 
+              << std::endl;
+    
+    std::cout << "& window [" << index << "] : " <<dynamic_cast<RenderScreen*>(screen(index))->Window().lock().get()
+              << std::endl;
+    
     SDL_GL_MakeCurrent(
-                       dynamic_cast<desktop::Window*>(screens_[index].get())->sdl_window_,
+                       dynamic_cast<RenderScreen*>(screen(index))->Window().lock()->sdl_window_,
                        context_
                       ); //FIXME?
 }
@@ -87,23 +100,17 @@ void Manager::SetUserNearestNeighborTextures(bool enabled) {
 }
 
 bool Manager::Initialize(
-            const std::vector<std::shared_ptr<desktop::Window>>& windows_, 
+            const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
             const math::Vector2D& canvas_size
     ) {
     
     if (windows_.size()==0)
         return false;
+    
     for (auto _window_ : windows_)
-        if (!_window_)
-            return false;
+        RegisterScreen(_window_);
 
-    for (auto _window_ : windows_) {
-        auto screen_ptr = std::make_unique<RenderScreen>();
-        screen_ptr->AttachTo(_window_);
-        screens_.push_back(std::move(screen_ptr) );
-    }
-
-    context_ = SDL_GL_CreateContext(windows_[0].get()->sdl_window_);  //FIXME?
+    context_ = SDL_GL_CreateContext(windows_[0].lock().get()->sdl_window_);//Set primary window  //FIXME?
     if(!context_)
         return false; //errlog("OpenGL context creation failed: " + string(SDL_GetError()));
 
@@ -113,7 +120,7 @@ bool Manager::Initialize(
         return false; //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
 #endif
     for (uint32_t i = 0; i < screens_.size(); i++) {
-        screens_[i].reset(new RenderScreen);
+        //screens_[i].reset(new RenderScreen);
         ResizeScreen(i, canvas_size);
     }
     //SetActiveScreen(0);

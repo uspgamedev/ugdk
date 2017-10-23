@@ -35,7 +35,7 @@ class Manager {
     ~Manager();
 
     bool Initialize(
-        const std::vector<std::shared_ptr<desktop::Window>>& windows_, 
+        const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
         const math::Vector2D& canvas_size
                    );
     void Release();

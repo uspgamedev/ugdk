@@ -5,6 +5,7 @@
 #include <ugdk/system/engine.h>
 
 #include <system/sdleventhandler.h>
+#include <iostream>
 
 namespace ugdk {
 namespace desktop {
@@ -85,23 +86,21 @@ std::weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& ne
     return new_window;
 }
 
-std::shared_ptr<Window> Manager::window(uint32 index) const {
-    if (index >= windows_.size())
-        return nullptr;
-    else
+std::weak_ptr<Window> Manager::window(uint32 index) const {
+    if (index >= windows_.size()) {
+        std::cout << "FUG\n";
+        return weak_ptr<Window>();
+    }
+    else {
+        std::cout << "&RenderScreen : " << windows_[index].get() << std::endl;
         return windows_[index];
+    }
 }
-std::shared_ptr<Window> Manager::WindowById(uint32_t id) {
+std::weak_ptr<Window> Manager::WindowById(uint32_t id) {
     return window(MapIdToIndex(id));
 }
 uint32_t Manager::MapIdToIndex(uint32_t id) {
     return map_[id];
-}
-std::shared_ptr<Window> Manager::window(uint32_t index) {
-    if (index < windows_.size())
-        return windows_[index];
-    else
-        return std::shared_ptr<Window>();
 }
 
 uint32_t Manager::num_windows() {
