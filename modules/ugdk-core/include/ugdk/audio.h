@@ -8,6 +8,12 @@ class Manager;
 class Music;
 class Sample;
 
+class Sampler;
+class OGGSampler;
+class WAVSampler;
+class PSampler;
+class Source;
+
 } // namespace audio
 } // namespace ugdk
 
