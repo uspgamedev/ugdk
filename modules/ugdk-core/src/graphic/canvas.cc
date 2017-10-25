@@ -26,18 +26,18 @@ Canvas::Canvas(RenderTarget* render_target)
     geometry_stack_.emplace_back(render_target_->projection_matrix());
     visualeffect_stack_.emplace_back();
 
-    if (ACTIVE_CANVAS) {
+    /*if (ACTIVE_CANVAS) {
         previous_canvas_ = ACTIVE_CANVAS;
         previous_canvas_->Unbind();
         previous_canvas_->next_canvas_ = this;
     }
     ACTIVE_CANVAS = this;
-    Bind();
+    Bind();*/
 }
 
 Canvas::~Canvas() {
-    if (IsActive()) {
-        Unbind();
+    Unbind();
+    /*if (IsActive()) {
         if (next_canvas_)
             ACTIVE_CANVAS = next_canvas_;
         else
@@ -51,6 +51,7 @@ Canvas::~Canvas() {
         next_canvas_->previous_canvas_ = previous_canvas_;
     if (previous_canvas_)
         previous_canvas_->next_canvas_ = next_canvas_;
+    */
 }
 
 void Canvas::ChangeShaderProgram(const ShaderProgram* shader_program) {

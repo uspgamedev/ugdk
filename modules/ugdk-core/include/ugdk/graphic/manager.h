@@ -43,7 +43,10 @@ class Manager {
     void RegisterScreen(std::weak_ptr<desktop::Window>);
 
     void SetActiveScreen(uint32_t index);
-    void AttachCanvasToScreen(uint32_t index, const std::weak_ptr<desktop::Window>& weak_window);
+
+    void UseCanvas(graphic::Canvas &);
+
+    //void AttachCanvasToScreen(uint32_t index, const std::weak_ptr<desktop::Window>& weak_window);
     void ResizeScreen(uint32_t index, const math::Vector2D& canvas_size);
 
     void SetUserNearestNeighborTextures(bool enabled);
@@ -113,6 +116,8 @@ class Manager {
     
     Shaders shaders_;
     ShaderProgram* light_shader_;
+    uint32_t active_index_;
+    
 
     friend class ::ugdk::graphic::TextureUnit;
 };

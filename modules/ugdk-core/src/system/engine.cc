@@ -244,7 +244,7 @@ void Run() {
                 for(auto& scene : scene_list_)
                     if (scene->visible())
                         scene->Render(canvases);
-                desktop::manager().PresentAll();
+                //desktop::manager().PresentAll();
 
                 for (auto canvas_ptr : canvases) {
                     delete canvas_ptr;

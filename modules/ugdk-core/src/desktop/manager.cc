@@ -87,13 +87,12 @@ std::weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& ne
 }
 
 std::weak_ptr<Window> Manager::window(uint32 index) const {
-    if (index >= windows_.size()) {
-        std::cout << "FUG\n";
-        return weak_ptr<Window>();
+    if (index < windows_.size()) {
+        return windows_[index];
     }
     else {
-        std::cout << "&RenderScreen : " << windows_[index].get() << std::endl;
-        return windows_[index];
+        std::cout << "FUG\n";
+        return weak_ptr<Window>();
     }
 }
 std::weak_ptr<Window> Manager::WindowById(uint32_t id) {

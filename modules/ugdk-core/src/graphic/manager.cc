@@ -17,8 +17,6 @@
 #include "gltexture.h"
 #include "SDL_video.h"
 
-#include <iostream>
-
 namespace ugdk {
 namespace graphic {
 
@@ -43,7 +41,6 @@ public:
 
     void AttachTo(const std::weak_ptr<desktop::Window>& weak_window) {
         window_ = weak_window;
-        std::cout << "I, (" << this << "), got attached to " << window_.lock().get() << std::endl;
     }
 
     void UpdateViewport() {
@@ -51,7 +48,6 @@ public:
             glViewport(0, 0, window->size().x, window->size().y);
     }
     std::weak_ptr<desktop::Window> Window() {
-        std::cout << this << " : " << window_.lock().get() << std::endl;
         return window_;
     }
 private:
@@ -62,7 +58,9 @@ private:
 Manager::Manager()
     :   light_buffer_(nullptr)
     ,   white_texture_(nullptr)
-    ,   light_shader_(nullptr) {}
+    ,   light_shader_(nullptr)
+    ,   active_index_(0)
+    {}
 
 Manager::~Manager() {}
 
@@ -72,15 +70,16 @@ void Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
     screens_.emplace_back(std::move(screen_ptr));
 }
 
+void Manager::UseCanvas(graphic::Canvas &canvas) {
+    canvas.Bind();
+}
+
 void Manager::SetActiveScreen(uint32_t index) {
-    std::cout << "& screen [" << index << "] : " <<screen(index) << std::endl;
-    
-    std::cout << "dyn cast [" << index << "] : " <<dynamic_cast<RenderScreen*>(screen(index)) 
-              << std::endl;
-    
-    std::cout << "& window [" << index << "] : " <<dynamic_cast<RenderScreen*>(screen(index))->Window().lock().get()
-              << std::endl;
-    
+
+    screen(active_index_)->Unbind();
+    screen(index)->Bind();
+    active_index_ = index;
+
     SDL_GL_MakeCurrent(
                        dynamic_cast<RenderScreen*>(screen(index))->Window().lock()->sdl_window_,
                        context_

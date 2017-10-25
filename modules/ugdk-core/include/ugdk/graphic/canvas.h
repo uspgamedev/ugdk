@@ -65,6 +65,8 @@ class Canvas {
     void DrawArrays(DrawMode, int first_vertex, int vertex_count);
 
   private:
+    friend class ::ugdk::graphic::Manager;
+
     void Bind();
     void Unbind();
     void SendGeometry();
