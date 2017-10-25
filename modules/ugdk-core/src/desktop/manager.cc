@@ -91,7 +91,6 @@ std::weak_ptr<Window> Manager::window(uint32 index) const {
         return windows_[index];
     }
     else {
-        std::cout << "FUG\n";
         return weak_ptr<Window>();
     }
 }
