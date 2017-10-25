@@ -39,7 +39,7 @@ class Mesh {
     friend Canvas& operator<<(Canvas &canvas, const Mesh<T> &mesh);
     DrawMode            mode_;
     GLTexture           *texture_;
-    std::vector<Vertex> vtx_data_;
+    std::vector<Vertex> vertices_;
 };
 
 using Mesh2D = Mesh<structure::VertexXYUV>;
@@ -48,11 +48,30 @@ inline Mesh::Mesh(const DrawMode& the_mode, GLTexture* the_texture)
     : mode_(the_mode), texture_(the_texture) {}
 
 inline void Mesh::Fill(const VertexArray& vertices) {
-    vtx_data_ = vertices;
+    vertices_ = vertices;
 }
 
 template <typename Vertex>
-Canvas& operator<<(Canvas &canvas, const Mesh<Vertex> &mesh);
+Canvas& operator<<(Canvas &canvas, const Mesh<Vertex> &mesh) {
+    static_assert<false>;
+    return canvas;
+}
+
+template <>
+Canvas& operator<<(Canvas &canvas, const Mesh<structure::VertexXYUV> &mesh) {
+    VertexData vtxdata(mesh.vertices_.size(), sizeof(structure::VertexXYUV), false, true);
+    {
+        VertexData::Mapper<Vertex> map(vtxdata);
+        for (size_t i = 0; i < mesh.vertices_.size(); i++)
+            map.Get(i) = mesh.vertices_[i];
+    }
+    graphic::TextureUnit unit = graphic::manager().ReserveTextureUnit(mesh.texture_);
+    canvas.SendUniform("drawable_texture", unit);
+    canvas.SendVertexData(vtxdata, graphic::VertexType::VERTEX, 0, 2);
+    canvas.SendVertexData(vtxdata, graphic::VertexType::TEXTURE, 2 * sizeof(F32), 2);
+    canvas.DrawArrays(mesh.mode_, 0, mesh.vertices_.size());
+    return canvas;
+}
 
 } // namespace ugdk
 } // namespace graphic
