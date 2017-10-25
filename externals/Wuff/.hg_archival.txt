@@ -1,0 +1,6 @@
+repo: c79dcbc0ddd4425f4b93fb997d499ec2f77e283d
+node: 86339ea41fc1cb6f863d710b0aba2f10bdce8414
+branch: default
+latesttag: Wuff 0.0.0.2
+latesttagdistance: 2
+changessincelatesttag: 2

@@ -147,3 +147,8 @@ else(UGDK_INTERNAL_OPENAL)
         IMPORTED_LINK_INTERFACE_LIBRARIES "${OPENAL_LIBRARY}"
         INTERFACE_INCLUDE_DIRECTORIES "${OPENAL_INCLUDE_DIR}")
 endif(UGDK_INTERNAL_OPENAL)
+
+#######################
+## Wuff
+#######################
+add_subdirectory(Wuff)

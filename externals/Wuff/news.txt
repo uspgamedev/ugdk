@@ -1,0 +1,14 @@
+### 2013-10-20 - Wuff 0.0.0.2
+
+- Really fixed the s24 to s16 conversion.
+- Wuff now stops when it reaches the end of the data instead of reading into other chunks.
+
+
+### 2013-10-20 - Wuff 0.0.0.1
+
+- Fixed the s24 to s16 conversion.
+
+
+### 2012-07-25 - Wuff 0.0.0.0
+
+- Initial release of Wuff.

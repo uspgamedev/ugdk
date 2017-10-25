@@ -1,0 +1,92 @@
+Building Wuff
+=============
+
+Wuff targets C89 but should also successfully compile with newer versions of the
+standard or with C++.
+
+Source code files
+-----------------
+
+	include/wuff.h
+
+Declares the types and functions for Wuff and the linking application.
+The .c files listed below include this header and expect a search path to
+point to its directory.
+
+
+	src/wuff.c
+	src/wuff_internal.c
+	src/wuff_convert.c
+	src/wuff_memory.c
+
+These files need to be compiled to successfully build the Wuff library.
+
+
+	src/wuff_internal.h
+	src/wuff_convert.h
+	src/wuff_config.h
+
+Internal headers for function and type declarations. src/wuff_config.h is
+for internal configuration only (you don't need to change or distribute it).
+
+
+Preprocessor macro switches
+---------------------------
+
+WUFF_DYNAMIC_LIB
+
+Define this to make the linker export the Wuff API functions.
+
+---
+
+WUFF_INLINE_OVERRIDE
+
+Wuff tries to use the inline keyword for compilers that support it. Use this
+override in case the detection fails and define `WUFF_INLINE` without a value.
+
+---
+
+WUFF_MEMALLOC_OVERRIDE
+
+By default, Wuff uses C's `malloc` and `free` functions to manage the memory.
+This override will make it drop the definitions and the linker will search for
+your versions of these functions.
+
+	void * wuff_alloc(size_t size);
+	void wuff_free(void * mem);
+
+`wuff_alloc` is expected to return a pointer to a valid memory address with at
+least `size` bytes of memory or NULL if the allocation failed.
+`wuff_free` will be called with the same memory addresses that are returned by
+`wuff_alloc`.
+
+Alternatively, src/wuff_memory.c can be modified directly without the override.
+
+---
+
+WUFF_FORCE_STDINT_H
+
+The Wuff integer type definitions may use the standard C data types `char`,
+`short`, `int`, and `long`. It's assumed that their size in bytes is 1, 2, 4,
+and at least 4 respectively. This macro can fix issues for compilers that use
+different sizes and have the stdint.h header.
+
+Both, Wuff and the linking application, need to have this defined because it's
+resolved in include/wuff.h.
+
+---
+
+WUFF_NO_64BIT_TYPE
+
+If the compiler does not support the `long long` or `int64_t` type, define this
+macro to use a `long` or `int32_t` fallback.
+
+Both, Wuff and the linking application, need to have this defined because it's
+resolved in include/wuff.h.
+
+---
+
+WUFF_GCC_VISIBILITY_OVERRIDE
+
+The internal function are tagged with the hidden visibility attribute. Define
+this override and change `WUFF_INTERN_API` to something else.
