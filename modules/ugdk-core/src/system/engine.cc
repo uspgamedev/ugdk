@@ -243,7 +243,8 @@ void Run() {
                 
                 for(auto& scene : scene_list_)
                     if (scene->visible())
-                        scene->Render(canvases);
+                        for (uint32_t i=0; i<scene->num_functions(); i)
+                            scene->Render(i, canvases[i]);
                 //desktop::manager().PresentAll();
 
                 for (auto canvas_ptr : canvases) {

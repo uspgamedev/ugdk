@@ -82,9 +82,16 @@ class Scene : public system::TaskPlayer {
     void set_background_music(std::shared_ptr<audio::Music> music) { background_music_ = music; }
     /**@}
      */
-
-    void set_render_function(const std::function<void (std::vector<graphic::Canvas*>& canvas)>& render_function) {
-        render_function_ = render_function;
+    
+    uint32_t num_functions();
+    void set_render_function(
+      uint32_t index,  
+      const std::function<void (const graphic::Canvas&)>& render_function
+                            ) {
+          assert(index <= render_functions_.size());
+          if (index == render_functions_.size())
+              render_functions_.emplace_back(render_function);
+          render_functions_[i] = render_function;
     }
 
   protected:
@@ -118,7 +125,7 @@ class Scene : public system::TaskPlayer {
     system::EventHandler event_handler_;
 
     /// Function that is used to render the scene when it's visible.
-    std::function<void (std::vector<graphic::Canvas*>& canvases)> render_function_;
+    std::vector< std::function<void (std::vector<graphic::Canvas*>& canvases)> > render_functions_;
 }; // class Scene.
 
 } /* namespace action */

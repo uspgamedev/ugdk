@@ -54,7 +54,9 @@ void Scene::Finish() {
     event_handler_.RaiseEvent(SceneFinishedEvent(this));
     finished_ = true;
 }
-
+uint32_t Scene::num_functions() {
+    return render_functions_.size();
+}
 void Scene::Update(double dt) {
     if(finished_ || !active_)
         return;
@@ -63,10 +65,10 @@ void Scene::Update(double dt) {
     TaskPlayer::Update(dt);
 }
 
-void Scene::Render(std::vector<graphic::Canvas*>& canvases) const {
+void Scene::Render(const graphic::Canvas& canvas) const {
     if(!finished_ && visible_ && render_function_) {
         debug::ProfileSection section("Scene '" + identifier_ + "'");
-        render_function_(canvases);
+        render_functions_[i](canvases);
     }
 }
 
