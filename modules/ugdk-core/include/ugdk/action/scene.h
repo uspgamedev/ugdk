@@ -56,7 +56,7 @@ class Scene : public system::TaskPlayer {
     /**
         Uses the configurated renderfunction.
     */
-    void Render(std::vector<graphic::Canvas*>& canvases) const;
+    void Render(uint32_t, graphic::Canvas&) const;
 
     /** @name Getters and Setters
     @{
@@ -84,15 +84,7 @@ class Scene : public system::TaskPlayer {
      */
     
     uint32_t num_functions();
-    void set_render_function(
-      uint32_t index,  
-      const std::function<void (const graphic::Canvas&)>& render_function
-                            ) {
-          assert(index <= render_functions_.size());
-          if (index == render_functions_.size())
-              render_functions_.emplace_back(render_function);
-          render_functions_[i] = render_function;
-    }
+    void set_render_function(uint32_t, const std::function<void (graphic::Canvas&)>&);
 
   protected:
     /// Ends the scene activity.
@@ -125,7 +117,7 @@ class Scene : public system::TaskPlayer {
     system::EventHandler event_handler_;
 
     /// Function that is used to render the scene when it's visible.
-    std::vector< std::function<void (std::vector<graphic::Canvas*>& canvases)> > render_functions_;
+    std::vector< std::function<void (graphic::Canvas& canvases)> > render_functions_;
 }; // class Scene.
 
 } /* namespace action */

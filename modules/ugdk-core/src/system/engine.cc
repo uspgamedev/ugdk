@@ -9,6 +9,7 @@
 #include <ugdk/filesystem/module.h>
 #include <ugdk/desktop/module.h>
 #include <ugdk/desktop/manager.h>
+#include <ugdk/desktop/window.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/text/manager.h>
@@ -243,8 +244,14 @@ void Run() {
                 
                 for(auto& scene : scene_list_)
                     if (scene->visible())
-                        for (uint32_t i=0; i<scene->num_functions(); i)
-                            scene->Render(i, canvases[i]);
+                        for (uint32_t i=0; i<scene->num_functions(); i++) {
+                            graphic::manager().SetActiveScreen(0);
+                            graphic::manager().UseCanvas(*canvases[i]);                            
+
+                            scene->Render(i, *canvases[i]);
+
+                            desktop::manager().window(i).lock()->Present();
+                        }
                 //desktop::manager().PresentAll();
 
                 for (auto canvas_ptr : canvases) {

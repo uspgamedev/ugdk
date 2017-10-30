@@ -202,13 +202,15 @@ unsigned int Manager::LocationForVertexType(VertexType type) {
 system::FunctionListener<action::SceneFocusEvent> quit_event = [](const action::SceneFocusEvent& ev) {
     ev.scene->Finish();
 }; 
-
-action::Scene* CreateLightrenderingScene(std::function<void (std::vector<graphic::Canvas*>&)> render_light_function) {
+/*
+action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> render_light_function) {
     action::Scene* light_scene = new action::Scene;
     light_scene->set_identifier("Light Rendering Scene");
     // This scene has no logic, so quit if you ask for it to be only scene.
     light_scene->event_handler().AddListener(quit_event);
-    light_scene->set_render_function([render_light_function](std::vector<graphic::Canvas*> canvases) {
+    light_scene->set_render_function(
+        light_scene->num_functions(),
+        [render_light_function](graphic::Canvas& canvases) {
         graphic::Manager& manager = graphic::manager();
         Canvas light_canvas(manager.light_buffer());
 
@@ -216,15 +218,13 @@ action::Scene* CreateLightrenderingScene(std::function<void (std::vector<graphic
         glBlendFunc(GL_ONE, GL_ONE);
 
         light_canvas.Clear(structure::Color(0.0, 0.0, 0.0, 0.0));
-        std::vector<graphic::Canvas*> tmp;
-        tmp.push_back(&light_canvas);
-        render_light_function(tmp);
+        render_light_function(light_canvas);
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     });
 
     return light_scene;
-}
+}*/
 
 const ShaderProgram* Manager::Shaders::current_shader() const {
     return shaders_[flags_.to_ulong()];
