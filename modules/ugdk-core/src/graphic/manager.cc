@@ -119,10 +119,8 @@ bool Manager::Initialize(
         return false; //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
 #endif
     for (uint32_t i = 0; i < screens_.size(); i++) {
-        //screens_[i].reset(new RenderScreen);
         ResizeScreen(i, canvas_size);
     }
-    //SetActiveScreen(0);
 
     // This hint can improve the speed of texturing when perspective-correct texture
     // coordinate interpolation isn't needed, such as when using a glOrtho() projection.
@@ -165,7 +163,8 @@ bool Manager::Initialize(
 
 void Manager::Release() {
     SDL_GL_DeleteContext(context_);
-    screens_[0].reset();
+    for (uint32_t i = 0; i < this->num_screens(); i++)
+        screens_[i].reset();
     light_buffer_.reset();
     textureunit_ids_.reset();
 }

@@ -253,7 +253,6 @@ void Run() {
 
                             desktop::manager().window(i).lock()->Present();//show or lose it
                         }
-                //desktop::manager().PresentAll();
 
                 for (auto canvas_ptr : canvases) {
                     delete canvas_ptr;

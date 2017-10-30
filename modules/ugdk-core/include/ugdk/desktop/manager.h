@@ -23,6 +23,7 @@ class Manager {
 
     std::weak_ptr<Window> CreateWindow(const WindowSettings& settings);
     // TODO: DestroyWindow
+    void DestroyWindow(uint32_t);
 
     void set_primary_window(const std::weak_ptr<Window>& window) {
         primary_window_ = window;
@@ -41,7 +42,7 @@ class Manager {
 
     std::weak_ptr<Window> primary_window_;
     std::vector< std::shared_ptr<Window> > windows_;
-    std::unordered_map<uint32_t, uint32_t> map_;
+    std::unordered_map<uint32_t, uint32_t> map_id_to_index_;
 
     friend class DesktopSDLEventHandler;
 };

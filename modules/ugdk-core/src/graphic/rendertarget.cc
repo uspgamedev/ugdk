@@ -34,13 +34,11 @@ void RenderTarget::Clear(structure::Color color) {
 }
 
 void RenderTarget::Bind() {
-    //system::AssertCondition<system::InvalidOperation>(!IsActive(), "RenderTarget must be inactive for Bind.");
     is_bound_ = true;
     UpdateViewport();
 }
 
 void RenderTarget::Unbind() {
-    //system::AssertCondition<system::InvalidOperation>(IsActive(), "RenderTarget must be active for Unbind.");
     is_bound_ = false;
 }
 

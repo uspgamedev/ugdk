@@ -8,8 +8,7 @@ static std::unique_ptr<Manager> reference_;
 
 bool Initialize(std::unique_ptr<Manager> manager, 
                 const std::weak_ptr<desktop::Window> & window,
-                const math::Vector2D &canvas_size
-                ) {
+                const math::Vector2D &canvas_size) {
     std::vector<std::weak_ptr<desktop::Window> > v;
     for (uint32_t i=0; i<desktop::manager().num_windows(); i++)
         v.push_back(desktop::manager().window(i));

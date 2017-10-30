@@ -33,11 +33,9 @@ class Manager {
   public:
     Manager();
     ~Manager();
-
-    bool Initialize(
-        const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
-        const math::Vector2D& canvas_size
-                   );
+    
+    bool Initialize(const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
+                    const math::Vector2D& canvas_size);
     void Release();
 
     void RegisterScreen(std::weak_ptr<desktop::Window>);
@@ -46,7 +44,6 @@ class Manager {
 
     void UseCanvas(graphic::Canvas &);
 
-    //void AttachCanvasToScreen(uint32_t index, const std::weak_ptr<desktop::Window>& weak_window);
     void ResizeScreen(uint32_t index, const math::Vector2D& canvas_size);
 
     void SetUserNearestNeighborTextures(bool enabled);
