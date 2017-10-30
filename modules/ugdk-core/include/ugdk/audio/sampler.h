@@ -15,18 +15,19 @@ namespace audio {
 class Sampler {
   public:
     ~Sampler();
-    virtual void GetSample();
+    virtual ALuint GetSample();
     void Rewind();
   private:
     Sampler();
     Sampler(ALsizei size, AudioFormat form, const std::function<void(unsigned long long)>& gen_func);
-    ALuint name_;
-    ALsizei offset_;
+    const std::function<void(unsigned long long)>& gen_func_;
     vector<char> ALbuffer_;
     vector<float> buffer_;
-    ALsizei size_;
+    ALuint name_;
+    ALsizei offset_;
+    ALsizei freq_;
     AudioFormat form_;
-    const std::function<void(unsigned long long)>& gen_func_;
+    static constexpr int DEFAULT_SIZE = 4096;
 };
 
 } // namespace audio
