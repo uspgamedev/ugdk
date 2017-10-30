@@ -245,12 +245,13 @@ void Run() {
                 for(auto& scene : scene_list_)
                     if (scene->visible())
                         for (uint32_t i=0; i<scene->num_functions(); i++) {
-                            graphic::manager().SetActiveScreen(0);
-                            graphic::manager().UseCanvas(*canvases[i]);                            
+                            //Prepare graphics to render with the canvas
+                            graphic::manager().SetActiveScreen(i);
+                            graphic::manager().UseCanvas(*canvases[i]);
 
-                            scene->Render(i, *canvases[i]);
+                            scene->Render(i, *canvases[i]);//do it
 
-                            desktop::manager().window(i).lock()->Present();
+                            desktop::manager().window(i).lock()->Present();//show or lose it
                         }
                 //desktop::manager().PresentAll();
 
