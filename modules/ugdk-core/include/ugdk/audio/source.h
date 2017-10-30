@@ -6,6 +6,7 @@
 #include "AL.h"
 
 #include <vector>
+#include <queue>
 
 namespace ugdk {
 namespace audio {
@@ -15,20 +16,23 @@ class Source {
     Source();
     ~Source();
     bool QueueSampler(Sampler s);
-    Sampler UnqueueSampler();
+    Sampler DequeueSampler();
     void ClearQueue();
     void Play();
     void Pause();
     void Stop();
     void Rewind();
     bool IsPlaying() const;
-    bool IsPaused() const;
     void SetVolume(double vol);
     double Volume() const;
   private:
+    void Update();
     vector<Sampler*> queue_;
-    Sampler *actual_;
+    queue<ALuint> buffers_;
+    size_t curr_sampler_;
+    size_t num_samplers_;
     double volume_;
+    bool is_playing_;
     ALuint name_;
 };
 
