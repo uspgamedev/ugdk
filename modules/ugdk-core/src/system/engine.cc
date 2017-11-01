@@ -244,13 +244,13 @@ void Run() {
                 
                 for(auto& scene : scene_list_)
                     if (scene->visible())
-                        for (uint32_t i=0; i<scene->num_functions(); i++) {
+                        for (uint32_t i=0; i<canvases.size(); i++) {
                             //Prepare graphics to render with the canvas
                             graphic::manager().UseCanvas(*canvases[i]);
 
-                            scene->Render(i, *canvases[i]);
+                            scene->Render(i, *canvases[i]);//do it
                             desktop::manager().window(i).lock()->Present();//show or lose it
-
+                        
                             graphic::manager().FreeCanvas(*canvases[i]);
                         }
 

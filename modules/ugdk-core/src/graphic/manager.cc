@@ -17,6 +17,8 @@
 #include "gltexture.h"
 #include "SDL_video.h"
 
+#include <cassert>
+
 namespace ugdk {
 namespace graphic {
 
@@ -69,7 +71,9 @@ void Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
     screen_ptr->AttachTo(weak_window);
     screens_.emplace_back(std::move(screen_ptr));
 }
-
+void Manager::DeregisterScreen(uint32_t index) {
+    screens_.erase(screens_.begin()+index);
+}
 void Manager::UseCanvas(graphic::Canvas &canvas) {
     canvas.Bind();
     SDL_GL_MakeCurrent(
@@ -256,6 +260,8 @@ Manager::Shaders::~Shaders() {
 }
 
 RenderTarget* Manager::screen(uint32_t index) const {
+    assert(0 <= index && index < screens_.size());
+    assert(screens_[index].get());
     return screens_[index].get();
 }
 uint32_t Manager::num_screens() {

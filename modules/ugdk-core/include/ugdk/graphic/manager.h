@@ -39,6 +39,7 @@ class Manager {
     void Release();
 
     void RegisterScreen(std::weak_ptr<desktop::Window>);
+    void DeregisterScreen(uint32_t index);
 
     void SetActiveScreen(uint32_t index);
 
