@@ -30,6 +30,9 @@ class Mesh {
     /// Alias
     using VertexArray = std::vector<Vertex>;
 
+    /// Default constructor (an invalid mesh)
+    Mesh();
+
     /// Construct mesh with given draw mode
     Mesh(const DrawMode& the_mode, GLTexture* the_texture);
 
@@ -45,6 +48,9 @@ class Mesh {
 };
 
 using Mesh2D = Mesh<structure::VertexXYUV>;
+
+template <typename Vertex>
+inline Mesh<Vertex>::Mesh() : Mesh(DrawMode::TRIANGLES(), nullptr) {}
 
 template <typename Vertex>
 inline Mesh<Vertex>::Mesh(const DrawMode& the_mode, GLTexture* the_texture)
