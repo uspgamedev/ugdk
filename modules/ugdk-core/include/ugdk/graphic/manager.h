@@ -43,6 +43,7 @@ class Manager {
     void SetActiveScreen(uint32_t index);
 
     void UseCanvas(graphic::Canvas &);
+    void FreeCanvas(graphic::Canvas &);
 
     void ResizeScreen(uint32_t index, const math::Vector2D& canvas_size);
 

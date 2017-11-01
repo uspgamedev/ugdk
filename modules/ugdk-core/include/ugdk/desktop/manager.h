@@ -42,7 +42,7 @@ class Manager {
 
     std::weak_ptr<Window> primary_window_;
     std::vector< std::shared_ptr<Window> > windows_;
-    std::unordered_map<uint32_t, uint32_t> map_id_to_index_;
+    std::unordered_map<uint32_t, std::weak_ptr<Window>> map_id_to_window_;
 
     friend class DesktopSDLEventHandler;
 };

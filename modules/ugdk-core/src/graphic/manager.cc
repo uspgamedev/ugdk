@@ -72,18 +72,13 @@ void Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
 
 void Manager::UseCanvas(graphic::Canvas &canvas) {
     canvas.Bind();
-}
-
-void Manager::SetActiveScreen(uint32_t index) {
-
-    screen(active_index_)->Unbind();
-    screen(index)->Bind();
-    active_index_ = index;
-
     SDL_GL_MakeCurrent(
-                       dynamic_cast<RenderScreen*>(screen(index))->Window().lock()->sdl_window_,
+                       dynamic_cast<RenderScreen*>(canvas.render_target_)->Window().lock()->sdl_window_,
                        context_
                       ); //FIXME?
+}
+void Manager::FreeCanvas(graphic::Canvas &canvas) {
+    canvas.Unbind();
 }
 
 void Manager::ResizeScreen(uint32_t index, const math::Vector2D& canvas_size) {
