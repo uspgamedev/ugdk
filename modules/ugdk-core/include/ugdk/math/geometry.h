@@ -26,7 +26,7 @@ class Geometry {
      ** @param rot Rotation angle in radians. 0 points to the right, increases in
      ** counterclockwise fashion.
      */
-    Geometry(const glm::vec2& offset, const glm::vec2& scale = {1.0f, 1.0f}, double rot = 0.0)
+    Geometry(const glm::dvec2& offset, const glm::dvec2& scale = {1.0f, 1.0f}, double rot = 0.0)
     : rotation_(-rot),
     matrix_(float(scale.x*cos(-rot)), -float(scale.x*sin(-rot)), 0.0f, 0.0f, // First column
     float(scale.y*sin(-rot)),  float(scale.y*cos(-rot)), 0.0f, 0.0f,
