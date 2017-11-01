@@ -7,6 +7,7 @@
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include <glm/vec2.hpp>
 
 
 namespace ugdk {
@@ -17,21 +18,24 @@ class Geometry {
     /// Creates an identity Geometry;
     Geometry() : rotation_(0.0), matrix_(1.0f) {}
 
-    ///Creates a new Geometry object with the specified values. 
+    /// Creates a new Geometry object with the specified values. 
     /**
-     * @param offset The offset of the image.
-     * @param scale The size modifiers for the image. X and Y values can be set
-     * independently.
-     * @param rot Rotation angle in radians. 0 points to the right, increases in
-     * counterclockwise fashion.
+     ** @param offset The offset of the image.
+     ** @param scale The size modifiers for the image. X and Y values can be set
+     ** independently.
+     ** @param rot Rotation angle in radians. 0 points to the right, increases in
+     ** counterclockwise fashion.
      */
-    Geometry(const math::Vector2D& offset, const math::Vector2D scale = math::Vector2D(1.0, 1.0), double rot = 0.0)
+    Geometry(const glm::vec2& offset, const glm::vec2& scale = {1.0f, 1.0f}, double rot = 0.0)
     : rotation_(-rot),
-      matrix_(float(scale.x*cos(-rot)), -float(scale.x*sin(-rot)), 0.0f, 0.0f, // First column
-              float(scale.y*sin(-rot)),  float(scale.y*cos(-rot)), 0.0f, 0.0f,
-                                 0.0f,                     0.0f, 1.0f, 0.0f,
-                      float(offset.x),          float(offset.y), 0.0f, 1.0f) {}
-
+    matrix_(float(scale.x*cos(-rot)), -float(scale.x*sin(-rot)), 0.0f, 0.0f, // First column
+    float(scale.y*sin(-rot)),  float(scale.y*cos(-rot)), 0.0f, 0.0f,
+    0.0f,                      0.0f, 1.0f, 0.0f,
+    float(offset.x),           float(offset.y), 0.0f, 1.0f) {}
+    
+    Geometry(const math::Vector2D& offset, const math::Vector2D scale = math::Vector2D(1.0, 1.0), double rot = 0.0)
+    : Geometry(glm::vec2(offset.x, offset.y), glm::vec2(scale.x, scale.y), rot) {}
+    
     // Destructor
     ~Geometry() {}
 
