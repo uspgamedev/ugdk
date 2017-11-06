@@ -5,7 +5,7 @@
 #include <ugdk/audio/manager.h>
 #include <ugdk/audio/WaveDecoder.h>
 
-#include "AL.h"
+#include UGDK_OPENAL_DIR(AL.h)
 #include "Wuff.h"
 
 #include <string>

@@ -2,7 +2,7 @@
 
 #include "SDL.h"
 #include "SDL_mixer.h"
-#include "AL.h"
+#include UGDK_OPENAL_DIR(AL.h)
 
 #include <ugdk/system/engine.h>
 #include <ugdk/audio/sample.h>

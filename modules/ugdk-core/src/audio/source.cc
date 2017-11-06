@@ -2,8 +2,6 @@
 #include <ugdk/audio.h>
 #include <ugdk/audio/sampler.h>
 
-#include "AL.h"
-
 #include <queue>
 
 namespace ugdk {

@@ -1,7 +1,5 @@
 #include <ugdk/audio/sampler.h>
 
-#include "AL.h"
-
 #include <functional>
 #include <vector>
 

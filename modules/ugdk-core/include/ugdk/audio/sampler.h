@@ -4,7 +4,7 @@
 #include <ugdk/system/config.h>
 #include <ugdk/audio/manager.h>
 
-#include "AL.h"
+#include UGDK_OPENAL_DIR(al.h)
 
 #include <functional>
 #include <vector>

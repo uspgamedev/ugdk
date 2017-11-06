@@ -3,7 +3,7 @@
 #include <ugdk/system/config.h>
 #include <ugdk/audio.h>
 
-#include "AL.h"
+#include UGDK_OPENAL_DIR(al.h)
 
 #include <vector>
 #include <queue>
