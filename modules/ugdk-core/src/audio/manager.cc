@@ -2,11 +2,15 @@
 
 #include "SDL.h"
 #include "SDL_mixer.h"
+#include "AL.h"
 
 #include <ugdk/system/engine.h>
 #include <ugdk/audio/sample.h>
 #include <ugdk/audio/music.h>
 #include <ugdk/debug/log.h>
+
+#include <ugdk/audio/source.h>
+#include <ugdk/audio/sampler.h>
 
 namespace ugdk {
 namespace audio {
@@ -39,6 +43,15 @@ bool Manager::Initialize() {
     for(int i=0; i<NUM_CHANNELS; i++)
         Mix_Volume(i, MIX_MAX_VOLUME);
 
+    ALCdevice *Device = alcOpenDevice(NULL);
+    if (Device) {
+          ALCcontext *Context = alcCreateContext(Device, NULL);
+          alcMakeContextCurrent(Context);
+    }
+    else
+        return ErrorLog("Failed to initialize audio device");
+    //g_bEAX = alIsExtensionPresent("EAX2.0");
+
     // sucesso ;)
     return true;
 }
@@ -50,6 +63,8 @@ void Manager::Release() {
 }
 
 void Manager::Update() {
+    for (auto& it : source_data_)
+        it.second.Update();
 }
 
 void Manager::ReleaseSamples() {
@@ -72,6 +87,20 @@ std::shared_ptr<Sample> Manager::LoadSample(const std::string& filepath) {
     return sample_data_[filepath];
 }
 
+std::shared_ptr<Sampler> Manager::LoadSampler(const std::string& name,
+                                              ALsizei size,
+                                              AudioFormat form,
+                                              ALsizei freq,
+                                              const std::function<void(U64)>& gen_func) {
+    if (sampler_data_.find(name) == sample_data_.end()) {
+        std::shared_ptr<Sampler> sampler(new Sampler(size, form, gen_func));
+        if (sampler)
+            sampler_data_[name] = sampler;
+    }
+    return sampler_data_[name];
+}
+
+
 std::shared_ptr<Music> Manager::LoadMusic(const std::string& filepath) {
     if(music_data_.find(filepath) == music_data_.end()) {
         std::shared_ptr<Music> music ( new Music(filepath));
@@ -81,6 +110,16 @@ std::shared_ptr<Music> Manager::LoadMusic(const std::string& filepath) {
 
     return music_data_[filepath];
 }
+
+std::shared_ptr<Source> Manager::LoadSource() {
+    if (source_data_.find(name) == sample_data_.end()) {
+        std::shared_ptr<Sampler> source(new Source());
+        if (source)
+            source_data_[name] = source;
+    }
+    return source_data_[name];
+}
+
 
 std::shared_ptr<Music> Manager::CurrentMusic() const {
     return Music::playing_music_;

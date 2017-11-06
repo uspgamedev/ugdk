@@ -19,13 +19,13 @@ class Sampler {
     void Rewind();
   private:
     Sampler();
-    Sampler(ALsizei size, AudioFormat form, const std::function<void(unsigned long long)>& gen_func);
-    const std::function<void(unsigned long long)>& gen_func_;
+    Sampler(ALsizei size, AudioFormat form, const std::function<void(U64)>& gen_func);
+    const std::function<void(U64)>& gen_func_;
     vector<char> ALbuffer_;
     vector<float> buffer_;
-    ALuint name_;
     ALsizei offset_;
     ALsizei freq_;
+    U64 size_;
     AudioFormat form_;
     static constexpr int DEFAULT_SIZE = 4096;
 };

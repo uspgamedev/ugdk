@@ -1,5 +1,6 @@
 #include <ugdk/system/config.h>
 #include <ugdk/audio.h>
+#include <ugdk/audio/sampler.h>
 
 #include "AL.h"
 
@@ -15,7 +16,12 @@ Source::Source()
     , curr_sampler_(0)
     , buffers_(4)
 {
+    alGetError();
     alGenSources(1, &name_);
+    if (alGetError() != AL_NO_ERROR) {
+        printf("- Error creating source !!\n");
+        exit(1);
+    }
 }
 
 Source::~Source() {}
@@ -83,8 +89,9 @@ void Source::Update() {
         alGetSourcei(name_, AL_BUFFERS_PROCESSED, &proc_buffers);
         if (proc_buffers >= 1) {
             for (int i = 0; i < proc_buffers; i++) {
-                buffers_.pop();
-                alSourceUnqueueBuffers(name_, 1, &(buffers_.front()));
+                ALuint b = buffers_.pop();
+                alSourceUnqueueBuffers(name_, 1, &b);
+                alDeleteBuffers(1, &b);
             }
         }
         while (buffers_.size() < 4) {

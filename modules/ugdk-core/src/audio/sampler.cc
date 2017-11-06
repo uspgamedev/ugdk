@@ -7,7 +7,7 @@
 
 Sampler::Sampler() {}
 
-Sampler::Sampler(ALsizei size, AudioFormat form, ALsizei freq, const std::function<void(unsigned int)>& gen_func)
+Sampler::Sampler(ALsizei size, AudioFormat form, ALsizei freq, const std::function<void(U64)>& gen_func)
     : size_(size)
     , form_(form)
     , freq_(freq)
@@ -20,18 +20,27 @@ Sampler::Sampler(ALsizei size, AudioFormat form, ALsizei freq, const std::functi
 Sampler::~Sampler() {}
 
 virtual ALuint Sampler::GetSample() {
-    if (offset_ >= ALbuffer.size()) {
+    ALuint name = 0;
+    if (offset_ >= ALbuffer_.size()) {
         offset_ = 0;
         return -1;
     }
-    alDeleteBuffers(1, &name_);
-    size_t i;
-    for (i = 0; i < DEFAULT_SIZE && offset_ + i < ALbuffer.size(); i++)
+    ALsizei i;
+    for (i = 0; i < DEFAULT_SIZE && offset_ + i < ALbuffer_.size(); i++)
         buffer_[i] = gen_func_(offset_ + i);
     offset_ += i;
-    alGenBuffers(1, &name_);
-    alBufferData(name_, form_, (ALvoid*)(ALbuffer_.data()), i, freq_);
-    return name_;
+
+    alGetError();
+    alGenBuffers(1, &name);
+
+    if (alGetError() != AL_NO_ERROR) {
+        printf("- Error creating buffers !!\n");
+        exit(1);
+    }
+    
+    alBufferData(name, form_, (ALvoid*)(ALbuffer_.data()), i, freq_);
+
+    return name;
 }
 
 void Sampler::Rewind() {

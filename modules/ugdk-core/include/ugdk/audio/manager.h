@@ -3,8 +3,13 @@
 
 #include <string>
 #include <map>
+#include <functional>
+
 #include <ugdk/audio/music.h>
 #include <ugdk/audio/sample.h>
+
+#include <ugdk/audio/source.h>
+#include <ugdk/audio/sampler.h>
 
 namespace ugdk {
 namespace audio {
@@ -34,10 +39,16 @@ class Manager {
      */
     std::shared_ptr<Sample> LoadSample(const std::string& filepath);
 
+    //std::shared_ptr<Sampler> LoadSampler(const std::string& filepath);
+    std::shared_ptr<Sampler> LoadSampler(const std::string& name, ALsizei size, AudioFormat form,
+                                         ALsizei freq, const std::function<void(U64)>& gen_func);
+
     /// Loads a music.
     /**@param filepath The path to the music file.
      */
     std::shared_ptr<Music> LoadMusic(const std::string& filepath);
+
+    std::shared_ptr<Source> LoadSource();
 
     /// Getter for the music that is currently playing.
     /** @return nullptr is no music is currently playing, a
@@ -49,8 +60,14 @@ class Manager {
     std::map<std::string, std::shared_ptr<Sample>> sample_data_;
     std::map<std::string, std::shared_ptr<Music>> music_data_;
 
+    std::map<std::string, std::shared_ptr<Source>> souce_data_;
+    std::map<std::string, std::shared_ptr<Sampler>> sampler_data_;
+
     void ReleaseSamples();
     void ReleaseMusics();
+
+    void ReleaseSources();
+    void ReleaseSamplers();
 };
 
 } // namespace audio
