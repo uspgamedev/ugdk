@@ -34,6 +34,7 @@ class Canvas {
 
     /// Queries if this object is currently bound.
     bool IsActive() const;
+    bool IsValid() const;
     math::Vector2D size() const;
     const math::Geometry& current_geometry() const { return geometry_stack_.back(); }
     const structure::VisualEffect& current_visualeffect() const { return visualeffect_stack_.back(); }

@@ -5,7 +5,6 @@
 #include <ugdk/system/engine.h>
 
 #include <system/sdleventhandler.h>
-#include <iostream>
 #include <cassert>
 
 namespace ugdk {

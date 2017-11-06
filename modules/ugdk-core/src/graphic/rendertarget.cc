@@ -22,6 +22,10 @@ bool RenderTarget::IsActive() const {
     return is_bound_;
 }
 
+bool RenderTarget::IsValid() const {
+    return is_bound_;
+}
+
 const math::Geometry& RenderTarget::projection_matrix() const {
     return projection_matrix_;
 }

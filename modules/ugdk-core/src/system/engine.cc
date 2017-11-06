@@ -236,27 +236,33 @@ void Run() {
                 
                 auto &manager = graphic::manager();
                 std::vector<graphic::Canvas*> canvases;
-                
+                std::vector<uint32_t> kill_these_screens;
                 //std::cout << manager.num_screens() << " Screens" << std::endl;
 
                 for (uint32_t i=0; i<manager.num_screens(); i++)
                     canvases.push_back(new graphic::Canvas(manager.screen(i)));
                 
+
                 for(auto& scene : scene_list_)
                     if (scene->visible())
                         for (uint32_t i=0; i<canvases.size(); i++) {
                             //Prepare graphics to render with the canvas
-                            graphic::manager().UseCanvas(*canvases[i]);
+                            if (canvases[i]->IsValid()) {
+                                graphic::manager().UseCanvas(*canvases[i]);
 
-                            scene->Render(i, *canvases[i]);//do it
-                            desktop::manager().window(i).lock()->Present();//show or lose it
+                                scene->Render(i, *canvases[i]);//do it
+                                desktop::manager().window(i).lock()->Present();//show or lose it
                         
-                            graphic::manager().FreeCanvas(*canvases[i]);
+                                graphic::manager().FreeCanvas(*canvases[i]);
+                            } else {
+                                kill_these_screens.push_back(i);
+                            }
                         }
-
                 for (auto canvas_ptr : canvases) {
                     delete canvas_ptr;
                 }
+                for (auto index : kill_these_screens)
+                    graphic::manager().DeregisterScreen(index);
             }
             profile_data_list_.push_back(frame_section.data());
         }

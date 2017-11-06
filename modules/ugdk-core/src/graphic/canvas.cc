@@ -30,7 +30,8 @@ Canvas::Canvas(RenderTarget* render_target)
 }
 
 Canvas::~Canvas() {
-    Unbind();
+    if (this->IsValid())
+        Unbind();
 }
 
 void Canvas::ChangeShaderProgram(const ShaderProgram* shader_program) {
@@ -46,6 +47,10 @@ void Canvas::ChangeShaderProgram(const ShaderProgram* shader_program) {
 
 bool Canvas::IsActive() const {
     return ACTIVE_CANVAS == this;
+}
+
+bool Canvas::IsValid() const {
+    return render_target_->IsValid(); 
 }
 
 math::Vector2D Canvas::size() const {

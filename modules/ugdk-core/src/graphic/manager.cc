@@ -42,7 +42,12 @@ public:
     }
 
     void AttachTo(const std::weak_ptr<desktop::Window>& weak_window) {
-        window_ = weak_window;
+        if (weak_window.lock())
+            window_ = weak_window;
+    }
+
+    bool IsValid() const override {
+        return (window_.lock()!=std::shared_ptr<desktop::Window>());
     }
 
     void UpdateViewport() {

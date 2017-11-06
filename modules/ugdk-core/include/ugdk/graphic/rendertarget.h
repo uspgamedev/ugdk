@@ -16,7 +16,9 @@ class RenderTarget {
     virtual ~RenderTarget();
 
     bool IsActive() const;
+    virtual bool IsValid() const;
     const math::Geometry& projection_matrix() const;
+
     virtual math::Vector2D size() const = 0;
 
     /** Pre-requisite: must be active. */
