@@ -2,7 +2,9 @@
 
 #include "SDL.h"
 #include "SDL_mixer.h"
-#include UGDK_OPENAL_DIR(AL.h)
+
+#include UGDK_OPENAL_DIR(al.h)
+#include UGDK_OPENAL_DIR(alc.h)
 
 #include <ugdk/system/engine.h>
 #include <ugdk/audio/sample.h>
@@ -43,10 +45,10 @@ bool Manager::Initialize() {
     for(int i=0; i<NUM_CHANNELS; i++)
         Mix_Volume(i, MIX_MAX_VOLUME);
 
-    ALCdevice *Device = alcOpenDevice(NULL);
-    if (Device) {
-          ALCcontext *Context = alcCreateContext(Device, NULL);
-          alcMakeContextCurrent(Context);
+    ALCdevice *device = alcOpenDevice(NULL);
+    if (device) {
+          ALCcontext *context = alcCreateContext(device, NULL);
+          alcMakeContextCurrent(context);
     }
     else
         return ErrorLog("Failed to initialize audio device");
@@ -64,7 +66,7 @@ void Manager::Release() {
 
 void Manager::Update() {
     for (auto& it : source_data_)
-        it.second.Update();
+        it.second.get()->Update();
 }
 
 void Manager::ReleaseSamples() {
@@ -92,8 +94,8 @@ std::shared_ptr<Sampler> Manager::LoadSampler(const std::string& name,
                                               AudioFormat form,
                                               ALsizei freq,
                                               const std::function<void(U64)>& gen_func) {
-    if (sampler_data_.find(name) == sample_data_.end()) {
-        std::shared_ptr<Sampler> sampler(new Sampler(size, form, gen_func));
+    if (sampler_data_.find(name) == sampler_data_.end()) {
+        std::shared_ptr<Sampler> sampler(new Sampler(size, form, freq, gen_func));
         if (sampler)
             sampler_data_[name] = sampler;
     }
@@ -111,9 +113,9 @@ std::shared_ptr<Music> Manager::LoadMusic(const std::string& filepath) {
     return music_data_[filepath];
 }
 
-std::shared_ptr<Source> Manager::LoadSource() {
-    if (source_data_.find(name) == sample_data_.end()) {
-        std::shared_ptr<Sampler> source(new Source());
+std::shared_ptr<Source> Manager::LoadSource(const std::string& name) {
+    if (source_data_.find(name) == source_data_.end()) {
+        std::shared_ptr<Source> source(new Source());
         if (source)
             source_data_[name] = source;
     }

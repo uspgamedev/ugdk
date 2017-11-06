@@ -3,6 +3,7 @@
 
 #include <ugdk/system/config.h>
 #include <ugdk/audio/manager.h>
+#include <ugdk/structure/types.h>
 
 #include UGDK_OPENAL_DIR(al.h)
 
@@ -19,15 +20,18 @@ class Sampler {
     void Rewind();
   private:
     Sampler();
-    Sampler(ALsizei size, AudioFormat form, const std::function<void(U64)>& gen_func);
+    Sampler(ALsizei size, AudioFormat form, ALsizei freq,
+            const std::function<void(U64)>& gen_func);
     const std::function<void(U64)>& gen_func_;
-    vector<char> ALbuffer_;
-    vector<float> buffer_;
+    std::vector<char> ALbuffer_;
+    std::vector<float> buffer_;
     ALsizei offset_;
     ALsizei freq_;
     U64 size_;
     AudioFormat form_;
     static constexpr int DEFAULT_SIZE = 4096;
+
+    friend class Manager;
 };
 
 } // namespace audio

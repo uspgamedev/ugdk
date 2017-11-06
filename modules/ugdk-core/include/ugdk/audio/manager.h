@@ -48,7 +48,7 @@ class Manager {
      */
     std::shared_ptr<Music> LoadMusic(const std::string& filepath);
 
-    std::shared_ptr<Source> LoadSource();
+    std::shared_ptr<Source> LoadSource(const std::string& name);
 
     /// Getter for the music that is currently playing.
     /** @return nullptr is no music is currently playing, a
@@ -60,7 +60,7 @@ class Manager {
     std::map<std::string, std::shared_ptr<Sample>> sample_data_;
     std::map<std::string, std::shared_ptr<Music>> music_data_;
 
-    std::map<std::string, std::shared_ptr<Source>> souce_data_;
+    std::map<std::string, std::shared_ptr<Source>> source_data_;
     std::map<std::string, std::shared_ptr<Sampler>> sampler_data_;
 
     void ReleaseSamples();

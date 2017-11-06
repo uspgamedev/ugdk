@@ -19,18 +19,17 @@
 
 #cmakedefine UGDK_INSTALL_LOCATION "@UGDK_INSTALL_LOCATION@"
 
+#ifdef CHECKMAC
+# define UGDK_OPENAL_DIR(header) <OpenAL/header>
+#else
+# define UGDK_OPENAL_DIR(header) <AL/header>
+#endif
 
 #ifdef ANDROID
 #include <cstdio>
 #include <jni.h>
 #include <string.h>
 #include <android/log.h>
-
-#ifdef CHECKMAC
-# define UGDK_OPENAL_DIR(header) <OpenAL/header>
-#else
-# define UGDK_OPENAL_DIR(header) <AL/header>
-#endif
 
 #define LOG_TAG "UGDK"
 #define printf(...) __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
