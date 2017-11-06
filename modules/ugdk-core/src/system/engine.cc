@@ -251,8 +251,12 @@ void Run() {
                                 graphic::manager().UseCanvas(*canvases[i]);
 
                                 scene->Render(i, *canvases[i]);//do it
-                                desktop::manager().window(i).lock()->Present();//show or lose it
-                        
+
+                                if (desktop::manager().window(i).lock())
+                                    desktop::manager().window(i).lock()->Present();//show or lose it
+                                else
+                                    desktop::manager().DestroyWindow(i);
+                                
                                 graphic::manager().FreeCanvas(*canvases[i]);
                             } else {
                                 kill_these_screens.push_back(i);

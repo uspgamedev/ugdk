@@ -79,11 +79,21 @@ weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
 }
 
 void Manager::DestroyWindow(uint32_t index) {
+    if (0 <= index && index < windows_.size());
+        windows_.erase(windows_.begin() +index);
+        
+    auto &map = map_id_to_window_;
     std::shared_ptr<Window> target_window = window(index).lock();
-    assert(target_window); //Can't destroy non-existent window.
-
-    map_id_to_window_.erase(SDL_GetWindowID(target_window->sdl_window_));
-    windows_.erase(windows_.begin() +index);
+    if (target_window)
+        map.erase(SDL_GetWindowID(target_window->sdl_window_));
+    else {
+        std::vector<uint32_t> kill_key_vector;
+        for (auto &pair : map)
+            if (!pair.second.lock())
+                kill_key_vector.push_back(pair.first);
+        for (auto key : kill_key_vector)
+            map.erase(key);
+    }
 }
 
 std::weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& new_window) {
