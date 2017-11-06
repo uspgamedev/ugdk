@@ -102,10 +102,8 @@ void Manager::SetUserNearestNeighborTextures(bool enabled) {
     }
 }
 
-bool Manager::Initialize(
-            const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
-            const math::Vector2D& canvas_size
-    ) {
+bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
+                         const math::Vector2D& canvas_size){
     
     if (windows_.size()==0)
         return false;
