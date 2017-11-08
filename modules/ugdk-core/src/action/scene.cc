@@ -4,8 +4,11 @@
 #include <ugdk/audio/module.h>
 #include <ugdk/audio/music.h>
 #include <ugdk/debug/profiler.h>
+#include <ugdk/desktop/module.h>
+
 
 #include <algorithm>
+#include <vector>
 
 namespace ugdk {
 namespace action {
@@ -45,7 +48,6 @@ void Scene::Focus() {
 void Scene::DeFocus() {
     event_handler_.RaiseEvent(SceneDefocusEvent(this));
 }
-
 void Scene::Finish() {
     if (finished_)
         return;
@@ -53,6 +55,24 @@ void Scene::Finish() {
     event_handler_.RaiseEvent(SceneFinishedEvent(this));
     finished_ = true;
 }
+uint32_t Scene::num_functions() {
+    return render_functions_.size();
+}
+void Scene::set_render_function(uint32_t index,
+                                const std::function<void (graphic::Canvas&)>& function) {
+    assert(index <= render_functions_.size()); // check if it's not too big, if it's in the edge then it
+                                               // push_backs
+    if (index == render_functions_.size())
+        render_functions_.emplace_back(function);
+    else
+        render_functions_[index] = function;
+    /* Check if there are enough render-targets ? */
+}
+void Scene::RemoveRenderFunction(uint32_t index) {
+    if (0 <= index && index < render_functions_.size())
+        render_functions_.erase(render_functions_.begin()+index);
+}
+    
 
 void Scene::Update(double dt) {
     if(finished_ || !active_)
@@ -62,10 +82,10 @@ void Scene::Update(double dt) {
     TaskPlayer::Update(dt);
 }
 
-void Scene::Render(graphic::Canvas& canvas) const {
-    if(!finished_ && visible_ && render_function_) {
+void Scene::Render(uint32_t index, graphic::Canvas& canvas) const {
+    if(!finished_ && visible_ && render_functions_[index]) {
         debug::ProfileSection section("Scene '" + identifier_ + "'");
-        render_function_(canvas);
+        render_functions_[index](canvas);
     }
 }
 

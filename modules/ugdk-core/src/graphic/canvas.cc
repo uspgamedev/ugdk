@@ -10,6 +10,8 @@
 #include "vertexbuffer.h"
 #include "gltexture.h"
 
+#include <cassert>
+
 namespace ugdk {
 namespace graphic {
 
@@ -25,32 +27,11 @@ Canvas::Canvas(RenderTarget* render_target)
 {
     geometry_stack_.emplace_back(render_target_->projection_matrix());
     visualeffect_stack_.emplace_back();
-
-    if (ACTIVE_CANVAS) {
-        previous_canvas_ = ACTIVE_CANVAS;
-        previous_canvas_->Unbind();
-        previous_canvas_->next_canvas_ = this;
-    }
-    ACTIVE_CANVAS = this;
-    Bind();
 }
 
 Canvas::~Canvas() {
-    if (IsActive()) {
+    if (this->IsValid())
         Unbind();
-        if (next_canvas_)
-            ACTIVE_CANVAS = next_canvas_;
-        else
-            ACTIVE_CANVAS = previous_canvas_;
-
-        if (ACTIVE_CANVAS)
-            ACTIVE_CANVAS->Bind();
-    }
-
-    if (next_canvas_)
-        next_canvas_->previous_canvas_ = previous_canvas_;
-    if (previous_canvas_)
-        previous_canvas_->next_canvas_ = next_canvas_;
 }
 
 void Canvas::ChangeShaderProgram(const ShaderProgram* shader_program) {
@@ -66,6 +47,10 @@ void Canvas::ChangeShaderProgram(const ShaderProgram* shader_program) {
 
 bool Canvas::IsActive() const {
     return ACTIVE_CANVAS == this;
+}
+
+bool Canvas::IsValid() const {
+    return render_target_->IsValid(); 
 }
 
 math::Vector2D Canvas::size() const {
@@ -131,6 +116,7 @@ void Canvas::SendUniform(const std::string& name, const TextureUnit& unit) {
 }
 
 void Canvas::Bind() {
+    assert(render_target_);
     render_target_->Bind();
     if (shader_program_)
         glUseProgram(shader_program_->id());

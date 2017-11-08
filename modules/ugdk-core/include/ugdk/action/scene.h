@@ -56,7 +56,7 @@ class Scene : public system::TaskPlayer {
     /**
         Uses the configurated renderfunction.
     */
-    void Render(graphic::Canvas&) const;
+    void Render(uint32_t, graphic::Canvas&) const;
 
     /** @name Getters and Setters
     @{
@@ -82,10 +82,10 @@ class Scene : public system::TaskPlayer {
     void set_background_music(std::shared_ptr<audio::Music> music) { background_music_ = music; }
     /**@}
      */
-
-    void set_render_function(const std::function<void (graphic::Canvas& canvas)>& render_function) {
-        render_function_ = render_function;
-    }
+    
+    uint32_t num_functions();
+    void set_render_function(uint32_t, const std::function<void (graphic::Canvas&)>&);
+    void RemoveRenderFunction(uint32_t);
 
   protected:
     /// Ends the scene activity.
@@ -118,7 +118,7 @@ class Scene : public system::TaskPlayer {
     system::EventHandler event_handler_;
 
     /// Function that is used to render the scene when it's visible.
-    std::function<void (graphic::Canvas& canvas)> render_function_;
+    std::vector< std::function<void (graphic::Canvas& canvases)> > render_functions_;
 }; // class Scene.
 
 } /* namespace action */

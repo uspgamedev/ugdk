@@ -15,7 +15,6 @@ struct WindowSettings {
     math::Vector2D canvas_size;
     bool fullscreen;
     bool vsync;
-
     WindowSettings();
 
     WindowSettings(const std::string& _title,

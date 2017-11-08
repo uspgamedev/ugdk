@@ -17,6 +17,8 @@
 #include "gltexture.h"
 #include "SDL_video.h"
 
+#include <cassert>
+
 namespace ugdk {
 namespace graphic {
 
@@ -40,14 +42,21 @@ public:
     }
 
     void AttachTo(const std::weak_ptr<desktop::Window>& weak_window) {
-        window_ = weak_window;
+        if (weak_window.lock())
+            window_ = weak_window;
+    }
+
+    bool IsValid() const override {
+        return (window_.lock()!=std::shared_ptr<desktop::Window>());
     }
 
     void UpdateViewport() {
         if(auto window = window_.lock())
             glViewport(0, 0, window->size().x, window->size().y);
     }
-
+    std::weak_ptr<desktop::Window> Window() {
+        return window_;
+    }
 private:
     std::weak_ptr<desktop::Window> window_;
     math::Vector2D size_;
@@ -56,17 +65,33 @@ private:
 Manager::Manager()
     :   light_buffer_(nullptr)
     ,   white_texture_(nullptr)
-    ,   light_shader_(nullptr) {}
+    ,   light_shader_(nullptr)
+    ,   active_index_(0)
+    {}
 
 Manager::~Manager() {}
 
-void Manager::AttachTo(const std::shared_ptr<desktop::Window>& window) {
-    SDL_GL_MakeCurrent(dynamic_cast<desktop::Window*>(window.get())->sdl_window_, context_); //FIXME?
-    screen_->AttachTo(window);
+void Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
+    auto screen_ptr = std::make_unique<RenderScreen>();
+    screen_ptr->AttachTo(weak_window);
+    screens_.emplace_back(std::move(screen_ptr));
+}
+void Manager::UnregisterScreen(uint32_t index) {
+    screens_.erase(screens_.begin()+index);
+}
+void Manager::UseCanvas(graphic::Canvas &canvas) {
+    canvas.Bind();
+    SDL_GL_MakeCurrent(
+                       dynamic_cast<RenderScreen*>(canvas.render_target_)->Window().lock()->sdl_window_,
+                       context_
+                      ); //FIXME?
+}
+void Manager::FreeCanvas(graphic::Canvas &canvas) {
+    canvas.Unbind();
 }
 
-void Manager::ResizeScreen(const math::Vector2D& canvas_size) {
-    screen_->Resize(canvas_size);
+void Manager::ResizeScreen(uint32_t index, const math::Vector2D& canvas_size) {
+    screens_[index]->Resize(canvas_size);
 }
 
 void Manager::SetUserNearestNeighborTextures(bool enabled) {
@@ -77,13 +102,16 @@ void Manager::SetUserNearestNeighborTextures(bool enabled) {
     }
 }
 
-bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, const math::Vector2D& canvas_size) {
-
-    auto window = window_weak.lock();
-    if(!window)
+bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
+                         const math::Vector2D& canvas_size){
+    
+    if (windows_.size()==0)
         return false;
+    
+    for (auto _window_ : windows_)
+        RegisterScreen(_window_);
 
-    context_ = SDL_GL_CreateContext(dynamic_cast<desktop::Window*>(window.get())->sdl_window_);  //FIXME?
+    context_ = SDL_GL_CreateContext(windows_[0].lock().get()->sdl_window_);//Set primary window  //FIXME?
     if(!context_)
         return false; //errlog("OpenGL context creation failed: " + string(SDL_GetError()));
 
@@ -92,10 +120,9 @@ bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, cons
     if (GLEW_OK != err)
         return false; //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
 #endif
-
-    screen_.reset(new RenderScreen);
-    ResizeScreen(canvas_size);
-    AttachTo(window);
+    for (uint32_t i = 0; i < screens_.size(); i++) {
+        ResizeScreen(i, canvas_size);
+    }
 
     // This hint can improve the speed of texturing when perspective-correct texture
     // coordinate interpolation isn't needed, such as when using a glOrtho() projection.
@@ -138,7 +165,8 @@ bool Manager::Initialize(const std::weak_ptr<desktop::Window>& window_weak, cons
 
 void Manager::Release() {
     SDL_GL_DeleteContext(context_);
-    screen_.reset();
+    for (uint32_t i = 0; i < this->num_screens(); i++)
+        screens_[i].reset();
     light_buffer_.reset();
     textureunit_ids_.reset();
 }
@@ -175,13 +203,15 @@ unsigned int Manager::LocationForVertexType(VertexType type) {
 system::FunctionListener<action::SceneFocusEvent> quit_event = [](const action::SceneFocusEvent& ev) {
     ev.scene->Finish();
 }; 
-
+/*
 action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> render_light_function) {
     action::Scene* light_scene = new action::Scene;
     light_scene->set_identifier("Light Rendering Scene");
     // This scene has no logic, so quit if you ask for it to be only scene.
     light_scene->event_handler().AddListener(quit_event);
-    light_scene->set_render_function([render_light_function](graphic::Canvas& canvas) {
+    light_scene->set_render_function(
+        light_scene->num_functions(),
+        [render_light_function](graphic::Canvas& canvases) {
         graphic::Manager& manager = graphic::manager();
         Canvas light_canvas(manager.light_buffer());
 
@@ -195,7 +225,7 @@ action::Scene* CreateLightrenderingScene(std::function<void (graphic::Canvas&)> 
     });
 
     return light_scene;
-}
+}*/
 
 const ShaderProgram* Manager::Shaders::current_shader() const {
     return shaders_[flags_.to_ulong()];
@@ -232,8 +262,13 @@ Manager::Shaders::~Shaders() {
         delete shaders_[i];
 }
 
-RenderTarget* Manager::screen() const {
-    return screen_.get();
+RenderTarget* Manager::screen(uint32_t index) const {
+    assert(0 <= index && index < screens_.size());
+    assert(screens_[index].get());
+    return screens_[index].get();
+}
+uint32_t Manager::num_screens() {
+    return screens_.size();
 }
 
 }  // namespace graphic

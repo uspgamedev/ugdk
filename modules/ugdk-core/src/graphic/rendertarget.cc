@@ -1,4 +1,6 @@
 #include <ugdk/graphic/rendertarget.h>
+#include <ugdk/graphic/manager.h>
+#include <ugdk/graphic/module.h>
 
 #include <ugdk/graphic/exceptions.h>
 #include <ugdk/graphic/opengl.h>
@@ -20,6 +22,10 @@ bool RenderTarget::IsActive() const {
     return is_bound_;
 }
 
+bool RenderTarget::IsValid() const {
+    return is_bound_;
+}
+
 const math::Geometry& RenderTarget::projection_matrix() const {
     return projection_matrix_;
 }
@@ -38,7 +44,6 @@ void RenderTarget::Bind() {
 }
 
 void RenderTarget::Unbind() {
-    system::AssertCondition<system::InvalidOperation>(IsActive(), "RenderTarget must be active for Unbind.");
     is_bound_ = false;
 }
 

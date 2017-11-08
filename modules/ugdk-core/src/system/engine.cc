@@ -9,6 +9,7 @@
 #include <ugdk/filesystem/module.h>
 #include <ugdk/desktop/module.h>
 #include <ugdk/desktop/manager.h>
+#include <ugdk/desktop/window.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/text/manager.h>
@@ -30,7 +31,7 @@
 #include <fstream>
 #include <string>
 #include <list>
-
+#include <iostream>
 
 namespace ugdk {
 namespace system {
@@ -232,11 +233,43 @@ void Run() {
 
             if(desktop::is_active()) {
                 debug::ProfileSection render_section("Render");
-                graphic::Canvas canvas(graphic::manager().screen());
-                for(auto& scene : scene_list_)
+                
+                auto &manager = graphic::manager();
+                std::vector<graphic::Canvas*> canvases;
+                std::vector<uint32_t> kill_these_screens;
+                
+                for (uint32_t i=0; i<manager.num_screens(); i++)
+                    canvases.push_back(new graphic::Canvas(manager.screen(i)));
+                
+                for(auto& scene : scene_list_) {
+                    std::vector<uint32_t> kill_these_renderf;
                     if (scene->visible())
-                        scene->Render(canvas);
-                desktop::manager().PresentAll();
+                        for (uint32_t i=0; i<canvases.size(); i++) {
+                            //Prepare graphics to render with the canvas
+                            if (canvases[i]->IsValid()) {
+                                graphic::manager().UseCanvas(*canvases[i]);
+
+                                scene->Render(i, *canvases[i]);//do it
+
+                                auto window_ptr = desktop::manager().window(i).lock();
+                                if (window_ptr)
+                                    window_ptr->Present();//show or lose it
+                                else {
+                                    kill_these_renderf.push_back(i);
+                                }
+                                graphic::manager().FreeCanvas(*canvases[i]);
+                            } else {
+                                kill_these_screens.push_back(i);
+                            }
+                        }
+                    for (auto index : kill_these_renderf)
+                        scene->RemoveRenderFunction(index); 
+                }
+                for (auto canvas_ptr : canvases) {
+                    delete canvas_ptr;
+                }
+                for (auto index : kill_these_screens)
+                    graphic::manager().UnregisterScreen(index);
             }
             profile_data_list_.push_back(frame_section.data());
         }
