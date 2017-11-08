@@ -75,8 +75,13 @@ Canvas& operator<<(Canvas &canvas, const Mesh<Vertex> &mesh) {
     return canvas;
 }
 
+/// See https://stackoverflow.com/questions/8854286/how-to-enforce-use-of-template-specialization
+template<typename T> struct fake_dependency: public std::false_type {};
+
 template <typename Vertex>
-void Mesh<Vertex>::StreamTo(Canvas &canvas) const {}
+void Mesh<Vertex>::StreamTo(Canvas &canvas) const {
+    static_assert(fake_dependency<Vertex>::value, "must use specialization");
+}
 
 template <>
 void Mesh<structure::VertexXYUV>::StreamTo(Canvas &canvas) const {
