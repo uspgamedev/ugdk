@@ -32,7 +32,7 @@ public:
                 for (i = 0; i < manager_.windows_.size(); i++)
                     if (manager_.windows_[i]->id() == sdlevent.window.windowID)
                         break;
-                manager_.windows_.erase(manager_.windows_.begin() + i);
+                manager_.DestroyWindow(i);
                 break;
 
             default:

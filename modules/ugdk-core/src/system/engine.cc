@@ -237,12 +237,13 @@ void Run() {
                 auto &manager = graphic::manager();
                 std::vector<graphic::Canvas*> canvases;
                 std::vector<uint32_t> kill_these_screens;
+                std::vector<uint32_t> kill_these_renderf;
 
                 for (uint32_t i=0; i<manager.num_screens(); i++)
                     canvases.push_back(new graphic::Canvas(manager.screen(i)));
                 
 
-                for(auto& scene : scene_list_)
+                for(auto& scene : scene_list_) {
                     if (scene->visible())
                         for (uint32_t i=0; i<canvases.size(); i++) {
                             //Prepare graphics to render with the canvas
@@ -255,15 +256,16 @@ void Run() {
                                 if (window_ptr)
                                     window_ptr->Present();//show or lose it
                                 else {
-                                    desktop::manager().DestroyWindow(i);
-                                    scene->RemoveRenderFunction(i);
+                                    kill_these_renderf.push_back(i);
                                 }
-                                
                                 graphic::manager().FreeCanvas(*canvases[i]);
                             } else {
                                 kill_these_screens.push_back(i);
                             }
                         }
+                    for (auto index : kill_these_renderf)
+                        scene->RemoveRenderFunction(index); 
+                }
                 for (auto canvas_ptr : canvases) {
                     delete canvas_ptr;
                 }
