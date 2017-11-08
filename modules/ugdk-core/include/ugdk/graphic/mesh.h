@@ -36,6 +36,9 @@ class Mesh {
     /// Construct mesh with given draw mode
     Mesh(const DrawMode& the_mode, GLTexture* the_texture);
 
+    /// Tells whether the Mesh is valid
+    bool valid() const;
+
     /// 
     void Fill(const VertexArray& vertices);
 
@@ -55,6 +58,11 @@ inline Mesh<Vertex>::Mesh() : Mesh(DrawMode::TRIANGLES(), nullptr) {}
 template <typename Vertex>
 inline Mesh<Vertex>::Mesh(const DrawMode& the_mode, GLTexture* the_texture)
     : mode_(the_mode), texture_(the_texture) {}
+
+template <typename Vertex>
+inline bool Mesh<Vertex>::valid() const {
+    return static_cast<bool>(this->texture_);
+}
 
 template <typename Vertex>
 inline void Mesh<Vertex>::Fill(const Mesh<Vertex>::VertexArray& vertices) {
