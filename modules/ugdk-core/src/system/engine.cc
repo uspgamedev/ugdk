@@ -239,8 +239,7 @@ void Run() {
                 std::vector<uint32_t> kill_these_screens;
                 
                 for (uint32_t i=0; i<manager.num_screens(); i++)
-                canvases.push_back(new graphic::Canvas(manager.screen(i)));
-                
+                    canvases.push_back(new graphic::Canvas(manager.screen(i)));
                 
                 for(auto& scene : scene_list_) {
                     std::vector<uint32_t> kill_these_renderf;
