@@ -76,7 +76,7 @@ void Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
     screen_ptr->AttachTo(weak_window);
     screens_.emplace_back(std::move(screen_ptr));
 }
-void Manager::DeregisterScreen(uint32_t index) {
+void Manager::UnregisterScreen(uint32_t index) {
     screens_.erase(screens_.begin()+index);
 }
 void Manager::UseCanvas(graphic::Canvas &canvas) {

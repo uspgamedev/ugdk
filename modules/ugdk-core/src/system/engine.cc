@@ -237,7 +237,6 @@ void Run() {
                 auto &manager = graphic::manager();
                 std::vector<graphic::Canvas*> canvases;
                 std::vector<uint32_t> kill_these_screens;
-                //std::cout << manager.num_screens() << " Screens" << std::endl;
 
                 for (uint32_t i=0; i<manager.num_screens(); i++)
                     canvases.push_back(new graphic::Canvas(manager.screen(i)));
@@ -252,10 +251,13 @@ void Run() {
 
                                 scene->Render(i, *canvases[i]);//do it
 
-                                if (desktop::manager().window(i).lock())
-                                    desktop::manager().window(i).lock()->Present();//show or lose it
-                                else
+                                auto window_ptr = desktop::manager().window(i).lock();
+                                if (window_ptr)
+                                    window_ptr->Present();//show or lose it
+                                else {
                                     desktop::manager().DestroyWindow(i);
+                                    scene->RemoveRenderFunction(i);
+                                }
                                 
                                 graphic::manager().FreeCanvas(*canvases[i]);
                             } else {
@@ -266,7 +268,7 @@ void Run() {
                     delete canvas_ptr;
                 }
                 for (auto index : kill_these_screens)
-                    graphic::manager().DeregisterScreen(index);
+                    graphic::manager().UnregisterScreen(index);
             }
             profile_data_list_.push_back(frame_section.data());
         }

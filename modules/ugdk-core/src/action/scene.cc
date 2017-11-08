@@ -68,7 +68,7 @@ void Scene::set_render_function(uint32_t index,
         render_functions_[index] = function;
     /* Check if there are enough render-targets ? */
 }
-void Scene::remove_render_function(uint32_t index) {
+void Scene::RemoveRenderFunction(uint32_t index) {
     if (0 <= index && index < render_functions_.size())
         render_functions_.erase(render_functions_.begin()+index);
 }

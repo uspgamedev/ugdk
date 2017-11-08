@@ -44,7 +44,6 @@ void RenderTarget::Bind() {
 }
 
 void RenderTarget::Unbind() {
-    //system::AssertCondition<system::InvalidOperation>(IsActive(), "RenderTarget must be active for Unbind.");
     is_bound_ = false;
 }
 

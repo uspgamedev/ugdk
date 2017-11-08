@@ -85,7 +85,7 @@ class Scene : public system::TaskPlayer {
     
     uint32_t num_functions();
     void set_render_function(uint32_t, const std::function<void (graphic::Canvas&)>&);
-    void remove_render_function(uint32_t);
+    void RemoveRenderFunction(uint32_t);
 
   protected:
     /// Ends the scene activity.
