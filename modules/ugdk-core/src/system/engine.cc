@@ -237,13 +237,13 @@ void Run() {
                 auto &manager = graphic::manager();
                 std::vector<graphic::Canvas*> canvases;
                 std::vector<uint32_t> kill_these_screens;
-                std::vector<uint32_t> kill_these_renderf;
-
-                for (uint32_t i=0; i<manager.num_screens(); i++)
-                    canvases.push_back(new graphic::Canvas(manager.screen(i)));
                 
-
+                for (uint32_t i=0; i<manager.num_screens(); i++)
+                canvases.push_back(new graphic::Canvas(manager.screen(i)));
+                
+                
                 for(auto& scene : scene_list_) {
+                    std::vector<uint32_t> kill_these_renderf;
                     if (scene->visible())
                         for (uint32_t i=0; i<canvases.size(); i++) {
                             //Prepare graphics to render with the canvas
