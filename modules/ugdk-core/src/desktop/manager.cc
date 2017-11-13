@@ -55,7 +55,7 @@ bool Manager::Initialize() {
 }
 
 void Manager::Release() {
-    system::DeregisterSDLHandler(sdlevent_handler_.get());
+    system::UnregisterSDLHandler(sdlevent_handler_.get());
     sdlevent_handler_.reset();
     windows_.clear();
 }
