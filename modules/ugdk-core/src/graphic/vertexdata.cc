@@ -6,27 +6,6 @@
 namespace ugdk {
 namespace graphic {
 
-VertexData::Mapper::Mapper(VertexData& data, bool read_from_buffer)
-: data_(data)
-{
-    data.buffer()->bind();
-    mapped_ = static_cast<uint8*>(data.buffer()->map(read_from_buffer));
-    internal::AssertNoOpenGLError();
-}
-
-VertexData::Mapper::~Mapper() {
-    data_.buffer()->unmap();
-    data_.buffer()->unbind();
-}
-
-void VertexData::Mapper::Validate(const char* name, std::size_t size, std::size_t index) const {
-    if (size > data_.vertex_size())
-        throw system::BaseException("Incompatible type '%s' with size %u exceeds vertex buffer size of %u.", name, size, data_.vertex_size());
-
-    if (index >= data_.num_vertices())
-        throw system::BaseException("Vertex %u is out of range. (Buffer has %u vertices)", index, data_.num_vertices());
-}
-
 VertexData::VertexData() : num_vertices_(0u), vertex_size_(0u) {}
 
 VertexData::VertexData(VertexData&& rhs)
@@ -62,6 +41,18 @@ void VertexData::CheckSizes(const char* caller_name, std::size_t test_num_vertic
 
     if (test_vertex_size > 0 && vertex_size_ < test_vertex_size)
         throw system::BaseException("Unsufficient vertex size for %s. Needs %u bytes, found %u.", caller_name, test_vertex_size, vertex_size_);
+}
+
+ugdk::uint8* VertexData::Map(bool read_from_buffer) {
+    buffer_->bind();
+    ugdk::uint8* mapped = static_cast<uint8*>(buffer_->map(read_from_buffer));
+    internal::AssertNoOpenGLError();
+    return mapped;
+}
+
+void VertexData::Unmap() {
+    buffer_->unmap();
+    buffer_->unbind();
 }
 
 }  // namespace graphic

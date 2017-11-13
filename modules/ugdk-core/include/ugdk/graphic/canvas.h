@@ -17,14 +17,14 @@
 namespace ugdk {
 namespace graphic {
 
-/**
-    Binds the RenderTarget to allow rendering. Unbinds automatically on destructor.
-    Creating multiple instances at the same time are supported, but the lifetime of
-    the instances should act as a stack.
-    TODO: example about this.
-
-    The only valid calls on inactive instances are const-qualified methods.
-*/
+/// Graphics rendering interface
+/** Binds the RenderTarget to allow rendering. Unbinds automatically on destructor.
+ *  Creating multiple instances at the same time are supported, but the lifetime of
+ *  the instances should act as a stack.
+ *  TODO: example about this.
+ *
+ *  The only valid calls on inactive instances are const-qualified methods.
+ */
 class Canvas {
   public:
     Canvas(RenderTarget* render_target);

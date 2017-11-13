@@ -50,11 +50,7 @@ void Label::ChangeMessage(const std::u32string& ucs4_message) {
     size_ = math::Vector2D(0, font_->height());
 
     buffer_.reset(new VertexData(num_characters_ * 4, 2 * sizeof(vec2), false));
-    {
-        // Leaving the buffer bound may cause texture_font_get_glyph to crash.
-        VertexData::Mapper mapper(*buffer_);
-        size_.x = FillBufferWithText(font_, ucs4_message, mapper, 0.0f);
-    }
+    size_.x = FillBufferWithText(font_, ucs4_message, *buffer_, 0.0f);
 
     first_vector_.reserve(num_characters_);
     for(size_t i = 0; i < num_characters_; ++i )

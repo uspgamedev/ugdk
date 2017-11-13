@@ -4,6 +4,9 @@
 
 #include <ugdk/structure/types.h>
 #include <ugdk/math.h>
+
+#include <glm/vec2.hpp>
+
 #include <array>
 #include <tuple>
 
@@ -33,6 +36,9 @@ class Vector2D {
 
     /// Copy constructor from Integer2D.
     explicit Vector2D(const math::Integer2D& int2d);
+
+    /// Copy constructor from glm::vec2
+    Vector2D(const glm::dvec2 rhs) : x(rhs.x), y(rhs.y) {}
 
     ~Vector2D() { }
 
@@ -185,6 +191,13 @@ class Vector2D {
         return a.Rotate(angle);
     }
 
+
+    /// Copies data from a glm::dvec2
+    Vector2D& operator=(const glm::dvec2& rhs) {
+        x = rhs.x;
+        y = rhs.y;
+        return *this;
+    }
 
 	/// Compares this vector to the given vector, return True if they are equivalent.
 		/** Two vectors are equivalent if the coordinates are equal.
