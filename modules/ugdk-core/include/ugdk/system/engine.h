@@ -80,7 +80,7 @@ EventHandler& GetCurrentSceneEventHandler();
  */
 
 void RegisterSDLHandler(const SDLEventHandler*);
-void DeregisterSDLHandler(const SDLEventHandler*);
+void UnregisterSDLHandler(const SDLEventHandler*);
 
 /** @}
  */

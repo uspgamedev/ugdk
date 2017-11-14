@@ -300,7 +300,7 @@ void Release() {
     }
     queued_scene_list_.clear();
 
-    DeregisterSDLHandler(&system_sdlevent_handler);
+    UnregisterSDLHandler(&system_sdlevent_handler);
     global_event_handler_.reset();
 
     audio::Release();
@@ -358,7 +358,7 @@ void RegisterSDLHandler(const SDLEventHandler* handler) {
     }
 }
 
-void DeregisterSDLHandler(const SDLEventHandler* handler) {
+void UnregisterSDLHandler(const SDLEventHandler* handler) {
     for (const auto& type : handler->TypesHandled()) {
         assert(sdlevent_mapper_[type] == handler);
         sdlevent_mapper_.erase(type);

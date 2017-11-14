@@ -108,10 +108,10 @@ bool Manager::Initialize() {
 }
 
 void Manager::Release() {
-    system::DeregisterSDLHandler(event_handler_.get());
-    system::DeregisterSDLHandler(keyboard_.event_handler());
-    system::DeregisterSDLHandler(mouse_.event_handler());
-    system::DeregisterSDLHandler(text_input_.event_handler());
+    system::UnregisterSDLHandler(event_handler_.get());
+    system::UnregisterSDLHandler(keyboard_.event_handler());
+    system::UnregisterSDLHandler(mouse_.event_handler());
+    system::UnregisterSDLHandler(text_input_.event_handler());
 }
 
 void Manager::Update() {
