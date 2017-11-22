@@ -20,6 +20,7 @@ class RenderTarget {
     const math::Geometry& projection_matrix() const;
 
     virtual math::Vector2D size() const = 0;
+    virtual void Use() = 0;
 
     /** Pre-requisite: must be active. */
     void Clear(structure::Color);

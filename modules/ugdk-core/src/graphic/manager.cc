@@ -9,10 +9,11 @@
 #include <ugdk/graphic/shaderprogram.h>
 #include <ugdk/graphic/rendertarget.h>
 #include <ugdk/graphic/rendertexture.h>
+#include <ugdk/graphic/renderer.h>
+#include <ugdk/graphic/exceptions.h>
 #include <ugdk/debug/profiler.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/util/idgenerator.h>
-#include <ugdk/graphic/exceptions.h>
 
 #include "gltexture.h"
 #include "SDL_video.h"
@@ -100,6 +101,14 @@ void Manager::SetUserNearestNeighborTextures(bool enabled) {
     } else {
         GLTexture::set_texture_filter(GL_LINEAR);
     }
+}
+
+void SetActiveRenderer(std::weak_ptr<Renderer> renderer) {
+    current_renderer_ = renderer;
+}
+
+std::weak_ptr<Renderer> ActiveRenderer() {
+    return current_renderer_;
 }
 
 bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& windows_, 

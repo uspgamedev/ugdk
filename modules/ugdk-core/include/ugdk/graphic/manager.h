@@ -23,6 +23,7 @@ namespace ugdk {
 namespace graphic {
 
 class RenderScreen;
+class Renderer;
 action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_light_function);
 
 enum class VertexType {
@@ -49,6 +50,9 @@ class Manager {
     void ResizeScreen(uint32_t index, const math::Vector2D& canvas_size);
 
     void SetUserNearestNeighborTextures(bool enabled);
+
+    void SetActiveRenderer(std::weak_ptr<Renderer>);
+    std::weak_ptr<Renderer> ActiveRenderer();
 
     TextureUnit ReserveTextureUnit(const graphic::GLTexture* texture = nullptr);
     void DisableVertexType(VertexType);
@@ -116,7 +120,8 @@ class Manager {
     Shaders shaders_;
     ShaderProgram* light_shader_;
     uint32_t active_index_;
-    
+
+    std::weak<Renderer> current_renderer;
 
     friend class ::ugdk::graphic::TextureUnit;
 };

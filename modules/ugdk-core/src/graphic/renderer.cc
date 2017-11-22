@@ -13,7 +13,7 @@ void Renderer::AssignTo(std::weak_ptr<RenderTarget> target) {
 }
 
 bool Renderer::IsValid() {
-    return target_.lock();
+    return (target_.lock() && !(render_steps_.size()) );
 }
 
 void Renderer::AddStep(const std::function<void(graphic::Canvas&)>& render_step) {
