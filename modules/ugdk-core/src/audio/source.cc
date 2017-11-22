@@ -3,16 +3,16 @@
 #include <ugdk/audio/sampler.h>
 
 #include <queue>
+#include <climits>
 
 namespace ugdk {
 namespace audio {
 
 Source::Source()
-    : volume_(1.0)
-    , queue_(10)
+    : curr_sampler_(0)
     , num_samplers_(0)
-    , curr_sampler_(0)
-    , buffers_(4)
+    , volume_(1.0)
+    , is_playing_(false)
 {
     alGetError();
     alGenSources(1, &name_);
@@ -26,46 +26,51 @@ Source::~Source() {}
 
 bool Source::QueueSampler(Sampler *s) {
     if (s != nullptr) {
-        queue_.emplace(s);
+        queue_.emplace(queue_.begin(), s);
         num_samplers_++;
+        return true;
     }
+    return false;
 }
 
-Sampler Source::DequeueSampler() {
+Sampler* Source::DequeueSampler() {
+    Sampler *s = nullptr;
     if (!queue_.empty()) {
-        queue_.pop();
+        s = queue_.back();
+        queue_.pop_back();
         num_samplers_--;
     }
+    return s;
 }
 
 void Source::ClearQueue() {
     while (!queue_.empty())
-        queue_.pop();
+        queue_.pop_back();
 }
 
 void Source::Play() {
     if (!is_playing_) {
-        alSourcePlay(_name);
+        alSourcePlay(name_);
         is_playing_ = true;
     }
 }
 
 void Source::Pause() {
     if (is_playing_) {
-        alSourcePause(_name);
+        alSourcePause(name_);
         is_playing_ = false;
     }
 }
 
 void Source::Stop() {
     Rewind();
-    alSourceStop(_name);
+    alSourceStop(name_);
 }
 
 void Source::Rewind() {
     if (queue_.size() != 0) {
-        curr_sampler_.rewind();
-        curr_sampler_ = queue_[0];
+        queue_[curr_sampler_]->Rewind();
+        curr_sampler_ = 0;
     }
 }
 
@@ -87,14 +92,15 @@ void Source::Update() {
         alGetSourcei(name_, AL_BUFFERS_PROCESSED, &proc_buffers);
         if (proc_buffers >= 1) {
             for (int i = 0; i < proc_buffers; i++) {
-                ALuint b = buffers_.pop();
+                ALuint b = buffers_.back();
+                    buffers_.pop();
                 alSourceUnqueueBuffers(name_, 1, &b);
                 alDeleteBuffers(1, &b);
             }
         }
         while (buffers_.size() < 4) {
-            ALuint b = queue_[curr_sampler_].GetSample();
-            if (b == -1)
+            ALuint b = queue_[curr_sampler_]->GetSample();
+            if (b == UINT_MAX)
                 curr_sampler_ = (curr_sampler_ + 1)%num_samplers_;
             else {
                 buffers_.emplace(b);
@@ -103,3 +109,6 @@ void Source::Update() {
         }
     }
 }
+
+} // namespace audio
+} // namespace ugdk

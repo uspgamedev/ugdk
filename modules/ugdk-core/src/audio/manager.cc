@@ -66,7 +66,7 @@ void Manager::Release() {
 
 void Manager::Update() {
     for (auto& it : source_data_)
-        it.second.get()->Update();
+        it.second->Update();
 }
 
 void Manager::ReleaseSamples() {
@@ -93,7 +93,7 @@ std::shared_ptr<Sampler> Manager::LoadSampler(const std::string& name,
                                               ALsizei size,
                                               AudioFormat form,
                                               ALsizei freq,
-                                              const std::function<void(U64)>& gen_func) {
+                                              const std::function<float(ALsizei)>& gen_func) {
     if (sampler_data_.find(name) == sampler_data_.end()) {
         std::shared_ptr<Sampler> sampler(new Sampler(size, form, freq, gen_func));
         if (sampler)

@@ -21,8 +21,8 @@ class Sampler {
   private:
     Sampler();
     Sampler(ALsizei size, AudioFormat form, ALsizei freq,
-            const std::function<void(U64)>& gen_func);
-    const std::function<void(U64)>& gen_func_;
+            const std::function<float(ALsizei)>& gen_func);
+    const std::function<float(ALsizei)>& gen_func_;
     std::vector<char> ALbuffer_;
     std::vector<float> buffer_;
     ALsizei offset_;

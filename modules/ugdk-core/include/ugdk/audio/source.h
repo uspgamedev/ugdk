@@ -16,8 +16,8 @@ class Source {
   public:
     Source();
     ~Source();
-    bool QueueSampler(Sampler s);
-    Sampler DequeueSampler();
+    bool QueueSampler(Sampler *s);
+    Sampler* DequeueSampler();
     void ClearQueue();
     void Play();
     void Pause();
