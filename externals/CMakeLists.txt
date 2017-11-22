@@ -137,6 +137,8 @@ endif(UGDK_INTERNAL_FREETYPE)
 if(UGDK_INTERNAL_OPENAL)
     init_submodule(openal-soft)
     add_subdirectory(openal-soft) # Defines 'OpenAl'
+    # FIXME: ?
+    set(OPENAL_LIBRARY openal PARENT_SCOPE)
 
 else(UGDK_INTERNAL_OPENAL)
     find_package(OpenAl REQUIRED)

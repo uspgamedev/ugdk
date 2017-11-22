@@ -6,6 +6,8 @@ modules/ugdk-core/src/audio/manager.cc
 modules/ugdk-core/src/audio/module.cc
 modules/ugdk-core/src/audio/music.cc
 modules/ugdk-core/src/audio/sample.cc
+modules/ugdk-core/src/audio/sampler.cc
+modules/ugdk-core/src/audio/source.cc
 modules/ugdk-core/src/debug/log.cc
 modules/ugdk-core/src/debug/profiler.cc
 modules/ugdk-core/src/desktop/manager.cc
@@ -95,6 +97,8 @@ modules/ugdk-core/include/ugdk/audio/manager.h
 modules/ugdk-core/include/ugdk/audio/module.h
 modules/ugdk-core/include/ugdk/audio/music.h
 modules/ugdk-core/include/ugdk/audio/sample.h
+modules/ugdk-core/include/ugdk/audio/sampler.h
+modules/ugdk-core/include/ugdk/audio/source.h
 modules/ugdk-core/include/ugdk/debug.h
 modules/ugdk-core/include/ugdk/debug/log.h
 modules/ugdk-core/include/ugdk/debug/profiler.h
@@ -113,6 +117,7 @@ modules/ugdk-core/include/ugdk/graphic/drawmode.h
 modules/ugdk-core/include/ugdk/graphic/exceptions.h
 modules/ugdk-core/include/ugdk/graphic.h
 modules/ugdk-core/include/ugdk/graphic/manager.h
+modules/ugdk-core/include/ugdk/graphic/mesh.h
 modules/ugdk-core/include/ugdk/graphic/module.h
 modules/ugdk-core/include/ugdk/graphic/opengl.h
 modules/ugdk-core/include/ugdk/graphic/renderer.h

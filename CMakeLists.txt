@@ -178,8 +178,11 @@ endif (WIN32)
 # Libraries for the scripts.
 target_link_libraries(libugdk LINK_PUBLIC ${UGDK_LIBRARIES})
 
+# Link OpenAl
+target_link_libraries(libugdk LINK_PUBLIC ${OPENAL_LIBRARY})
+
 # SDL-mixer must come before SDL itself, or else we may have linking errors.
-target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 libjson freetype-gl OpenAl Wuff)
+target_link_libraries(libugdk LINK_PUBLIC SDL2-mixer SDL2-image SDL2 libjson freetype-gl Wuff)
     if(NOT ANDROID)
         target_link_libraries(libugdk LINK_PUBLIC glew)
     endif()
