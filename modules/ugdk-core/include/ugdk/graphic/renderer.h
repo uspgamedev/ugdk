@@ -14,10 +14,10 @@ class RenderTarget;
 
 class Renderer {
   private:
-    std::weak_ptr<RenderTarget> target_;
+    RenderTarget* target_;
     std::vector<std::function<void(graphic::Canvas&)>> render_steps_;
   public:
-    void AssignTo(std::weak_ptr<RenderTarget>);
+    void AssignTo(RenderTarget*);
     bool IsValid();
 
     /// Emplace a render step into the Renderer

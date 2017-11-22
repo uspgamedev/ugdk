@@ -20,6 +20,7 @@ class ShaderProgram;
 
 class Canvas;
 class RenderTarget;
+class RenderScreen;
 class RenderTexture;
 class TextureUnit;
 

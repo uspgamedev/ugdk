@@ -116,14 +116,11 @@ void Canvas::SendUniform(const std::string& name, const TextureUnit& unit) {
 }
 
 void Canvas::Bind() {
-    assert(render_target_);
-    render_target_->Bind();
     if (shader_program_)
         glUseProgram(shader_program_->id());
 }
 
 void Canvas::Unbind() {
-    render_target_->Unbind();
     glUseProgram(0);
 }
 

@@ -1,10 +1,11 @@
 #ifndef UGDK_GRAPHIC_RENDERTARGET_H_
 #define UGDK_GRAPHIC_RENDERTARGET_H_
 
-#include <ugdk/graphic.h>
 #include <ugdk/math/geometry.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/structure/color.h>
+#include <ugdk/graphic.h>
+#include <ugdk/graphic/renderer.h>
 #include <ugdk/graphic/manager.h>
 #include <ugdk/graphic/module.h>
 
@@ -21,16 +22,16 @@ class RenderTarget {
 
     virtual math::Vector2D size() const = 0;
     virtual void Use() = 0;
-
+    void Render();
     /** Pre-requisite: must be active. */
     void Clear(structure::Color);
     
   protected:
-    virtual void Bind();
-    virtual void Unbind();
-    
+    //virtual void Bind();
+    //virtual void Unbind();
+    // DO WE NEED THIS? WE ALREADY HAVE FOR CANVAS
+
     RenderTarget();
-    
     math::Geometry projection_matrix_;
     
   private:
@@ -40,6 +41,7 @@ class RenderTarget {
     virtual void UpdateViewport() = 0;
     
     bool is_bound_;
+    Renderer my_renderer_;
     
 };
 

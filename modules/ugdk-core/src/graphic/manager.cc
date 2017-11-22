@@ -22,7 +22,7 @@
 
 namespace ugdk {
 namespace graphic {
-
+/*
 class RenderScreen : public RenderTarget {
 public:
     math::Vector2D size() const override {
@@ -62,7 +62,7 @@ private:
     std::weak_ptr<desktop::Window> window_;
     math::Vector2D size_;
 };
-
+*/
 Manager::Manager()
     :   light_buffer_(nullptr)
     ,   white_texture_(nullptr)
@@ -75,11 +75,12 @@ Manager::~Manager() {}
 void Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
     auto screen_ptr = std::make_unique<RenderScreen>();
     screen_ptr->AttachTo(weak_window);
-    screens_.emplace_back(std::move(screen_ptr));
+    targets_.emplace_back(std::move(screen_ptr));
 }
-void Manager::UnregisterScreen(uint32_t index) {
-    screens_.erase(screens_.begin()+index);
+void Manager::UnregisterTarget(uint32_t index) {
+    targets_.erase(targets_.begin()+index);
 }
+/*
 void Manager::UseCanvas(graphic::Canvas &canvas) {
     canvas.Bind();
     SDL_GL_MakeCurrent(
@@ -90,9 +91,9 @@ void Manager::UseCanvas(graphic::Canvas &canvas) {
 void Manager::FreeCanvas(graphic::Canvas &canvas) {
     canvas.Unbind();
 }
-
-void Manager::ResizeScreen(uint32_t index, const math::Vector2D& canvas_size) {
-    screens_[index]->Resize(canvas_size);
+*/
+void Manager::ResizeTarget(uint32_t index, const math::Vector2D& canvas_size) {
+    targets_[index]->Resize(canvas_size);
 }
 
 void Manager::SetUserNearestNeighborTextures(bool enabled) {
@@ -129,8 +130,8 @@ bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& wind
     if (GLEW_OK != err)
         return false; //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
 #endif
-    for (uint32_t i = 0; i < screens_.size(); i++) {
-        ResizeScreen(i, canvas_size);
+    for (uint32_t i = 0; i < targets_.size(); i++) {
+        ResizeTarget(i, canvas_size);
     }
 
     // This hint can improve the speed of texturing when perspective-correct texture
@@ -174,8 +175,8 @@ bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& wind
 
 void Manager::Release() {
     SDL_GL_DeleteContext(context_);
-    for (uint32_t i = 0; i < this->num_screens(); i++)
-        screens_[i].reset();
+    for (uint32_t i = 0; i < this->num_targets(); i++)
+        targets_[i].reset();
     light_buffer_.reset();
     textureunit_ids_.reset();
 }
@@ -271,13 +272,13 @@ Manager::Shaders::~Shaders() {
         delete shaders_[i];
 }
 
-RenderTarget* Manager::screen(uint32_t index) const {
-    assert(0 <= index && index < screens_.size());
-    assert(screens_[index].get());
-    return screens_[index].get();
+RenderTarget* Manager::target(uint32_t index) const {
+    assert(0 <= index && index < targets_.size());
+    assert(targets_[index].get());
+    return targets_[index].get();
 }
-uint32_t Manager::num_screens() {
-    return screens_.size();
+uint32_t Manager::num_targets() {
+    return targets_.size();
 }
 
 }  // namespace graphic

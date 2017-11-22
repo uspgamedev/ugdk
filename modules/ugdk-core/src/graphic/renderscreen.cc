@@ -1,5 +1,5 @@
 
-#include "renderscreen.h"
+#include <ugdk/graphic/renderscreen.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/math/vector2D.h>
 
@@ -9,7 +9,7 @@
 namespace ugdk {
 namespace graphic {
     
-math::Vector2D RenderScreen::size() const override {
+math::Vector2D RenderScreen::size() const {
     return size_;
 }
 
@@ -31,16 +31,21 @@ void RenderScreen::AttachTo(const std::weak_ptr<desktop::Window>& weak_window) {
         window_ = weak_window;
 }
 
-bool RenderScreen::IsValid() const override {
+bool RenderScreen::IsValid() const {
     return (window_.lock()!=std::shared_ptr<desktop::Window>());
 }
 
-void RenderScreen::UpdateViewport() {
+void RenderScreen::UpdateViewport()  {
     if(auto window = window_.lock())
         glViewport(0, 0, window->size().x, window->size().y);
 }
 std::weak_ptr<desktop::Window> RenderScreen::Window() {
     return window_;
+}
+
+void RenderScreen::Use() {
+    SDL_GLContext context = SDL_GL_GetCurrentContext();
+    SDL_GL_MakeCurrent(this->sdl_window_, context);
 }
 
 }

@@ -235,42 +235,22 @@ void Run() {
                 debug::ProfileSection render_section("Render");
                 
                 auto &manager = graphic::manager();
-                std::vector<graphic::Canvas*> canvases;
-                std::vector<uint32_t> kill_these_screens;
-                
-                for (uint32_t i=0; i<manager.num_screens(); i++)
-                    canvases.push_back(new graphic::Canvas(manager.screen(i)));
-                
                 for(auto& scene : scene_list_) {
-                    std::vector<uint32_t> kill_these_renderf;
-                    if (scene->visible())
-                        for (uint32_t i=0; i<canvases.size(); i++) {
-                            //Prepare graphics to render with the canvas
-                            if (canvases[i]->IsValid()) {
-                                graphic::manager().UseCanvas(*canvases[i]);
-
-                                scene->Render(i, *canvases[i]);//do it
-
-                                auto window_ptr = desktop::manager().window(i).lock();
-                                if (window_ptr)
-                                    window_ptr->Present();//show or lose it
-                                else {
-                                    kill_these_renderf.push_back(i);
-                                }
-                                graphic::manager().FreeCanvas(*canvases[i]);
-                            } else {
-                                kill_these_screens.push_back(i);
-                            }
+                    if (scene->visible()) {
+                        std::vector<uint32_t> cleanup_schedule;
+                        for (uint32_t i=0; i < manager.num_targets(); i++) {}
+                            auto current_target = manager.target(i);
+                            if (current_target)
+                                current_target.Render();
+                            else
+                                cleanup_schedule.push_back(i);
                         }
-                    for (auto index : kill_these_renderf)
-                        scene->RemoveRenderFunction(index); 
+                        for (auto dead : cleanup_schedule)
+                            manager.UnregisterTarget(dead);
+                    }   
                 }
-                for (auto canvas_ptr : canvases) {
-                    delete canvas_ptr;
-                }
-                for (auto index : kill_these_screens)
-                    graphic::manager().UnregisterScreen(index);
             }
+        }
             profile_data_list_.push_back(frame_section.data());
         }
         while(profile_data_list_.size() > 10)

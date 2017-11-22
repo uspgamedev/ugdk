@@ -15,16 +15,14 @@ class Window;
 }
 
 namespace graphic {
-
 class GLTexture;
+
 class RenderScreen : public RenderTarget {
   public:
-    math::Vector2D size() const override;
     void Resize(const math::Vector2D&);
     void SaveToTexture(graphic::GLTexture*);
     void AttachTo(const std::weak_ptr<desktop::Window>&);
-    bool IsValid() const override;
-    void UpdateViewport();
+
   private:
     std::weak_ptr<desktop::Window> window_;
     math::Vector2D size_;

@@ -8,12 +8,12 @@
 namespace ugdk {
 namespace graphic {
 
-void Renderer::AssignTo(std::weak_ptr<RenderTarget> target) {
+void Renderer::AssignTo(RenderTarget* target) {
     target_ = target;
 }
 
 bool Renderer::IsValid() {
-    return (target_.lock() && !(render_steps_.size()) );
+    return (target_&& !(render_steps_.size()) );
 }
 
 void Renderer::AddStep(const std::function<void(graphic::Canvas&)>& render_step) {
@@ -31,25 +31,22 @@ uint32_t Renderer::num_steps() {
 }
 
 void Renderer::Process() {
-    auto target = target_.lock();
     system::AssertCondition<system::InvalidOperation>(
-        target,
+        target_,
         "Cannot Renderer::Process() when bound to nullptr");
-    graphic::Canvas canvas(target.get());
-    auto graphic_man = graphic::manager();
-
-    graphic_man.UseCanvas(canvas);
+    graphic::Canvas canvas(target_);
+    canvas.Bind(); //We set the shaderprogram
+    target->Use(); //We mess with the context
     for (auto step : render_steps_) {
         step(canvas);
     }
-    graphic_man.FreeCanvas(canvas);    
+    canvas.Unbind(); // restore shaderprogram
 }
 
 void Renderer::Present() {
-    auto target = target_.lock().get();
-    system::AssertCondition<system::InvalidOperation>(target,
+    system::AssertCondition<system::InvalidOperation>(target_,
                                                       "Cannot Renderer::Present() nullptr.");
-    target->UpdateViewport();
+    target_->UpdateViewport();
 }
 
 } //graphic
