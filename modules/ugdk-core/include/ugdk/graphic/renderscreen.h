@@ -19,11 +19,17 @@ class GLTexture;
 
 class RenderScreen : public RenderTarget {
   public:
-    void Resize(const math::Vector2D&);
+    RenderScreen();
+    RenderScreen(const std::weak_ptr<desktop::Window>&);
+
     void SaveToTexture(graphic::GLTexture*);
     void AttachTo(const std::weak_ptr<desktop::Window>&);
 
+    void Resize(const math::Vector2D &);
+    math::Vector2D size() override;
+    void Use() override;
   private:
+    void UpdateViewport() override;
     std::weak_ptr<desktop::Window> window_;
     math::Vector2D size_;
 };

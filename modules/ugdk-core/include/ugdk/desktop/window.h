@@ -34,6 +34,7 @@ class Window {
 
   protected:
     friend class ::ugdk::graphic::Manager;
+    friend class ::ugdk::graphic::RenderScreen;
     friend class ::ugdk::desktop::Manager;
     Window(SDL_Window* sdl_window);
 

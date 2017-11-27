@@ -19,24 +19,27 @@ class RenderTarget {
     bool IsActive() const;
     virtual bool IsValid() const;
     const math::Geometry& projection_matrix() const;
+    
+    virtual void Resize(const math::Vector2D&);
+    void set_projection_matrix(const math::Geometry&);
 
-    virtual math::Vector2D size() const = 0;
+    virtual math::Vector2D size();
     virtual void Use() = 0;
     void Render();
     /** Pre-requisite: must be active. */
     void Clear(structure::Color);
-    
   protected:
-    //virtual void Bind();
-    //virtual void Unbind();
-    // DO WE NEED THIS? WE ALREADY HAVE FOR CANVAS
 
     RenderTarget();
     math::Geometry projection_matrix_;
     
+    virtual void Bind();
+    virtual void Unbind();
+
   private:
     friend class ::ugdk::graphic::Canvas;
     friend class ::ugdk::graphic::Manager;
+
 
     virtual void UpdateViewport() = 0;
     

@@ -30,7 +30,11 @@ const math::Geometry& RenderTarget::projection_matrix() const {
     return projection_matrix_;
 }
 
-void Render() {
+void RenderTarget::set_projection_matrix(const math::Geometry& geometry) {
+    projection_matrix_ = geometry;
+}
+
+void RenderTarget::Render() {
     my_renderer_.AssignTo(this);
     my_renderer_.Process();
     my_renderer_.Present();

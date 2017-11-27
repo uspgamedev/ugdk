@@ -17,17 +17,17 @@ class RenderTexture : public RenderTarget {
     RenderTexture(const math::Integer2D& size);
     ~RenderTexture();
 
-    virtual math::Vector2D size() const override;
+    math::Vector2D size() const;
+    void Resize(const math::Vector2D&) override;
     graphic::GLTexture* texture() const { return texture_.get(); }
 
-    void set_projection_matrix(const math::Geometry&);
-
+    void Use();
   protected:
-    virtual void Bind() override;
-    virtual void Unbind() override;
 
   private:
-    virtual void UpdateViewport() override;
+    void Bind  () override;
+    void Unbind() override;
+    void UpdateViewport() override;
 
     unsigned int gl_buffer_;
     std::unique_ptr<graphic::GLTexture> texture_;

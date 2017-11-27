@@ -39,7 +39,7 @@ class Manager {
                     const math::Vector2D& canvas_size);
     void Release();
 
-    void RegisterScreen(std::weak_ptr<desktop::Window>);
+    uint32_t RegisterScreen(std::weak_ptr<desktop::Window>);
     /*WE NEED TO ADD A METHOD FOR RENDERTEXTURES*/
 
     void UnregisterTarget(uint32_t index);
@@ -121,7 +121,7 @@ class Manager {
     ShaderProgram* light_shader_;
     uint32_t active_index_;
 
-    std::weak<Renderer> current_renderer;
+    std::weak_ptr<Renderer> current_renderer_;
 
     friend class ::ugdk::graphic::TextureUnit;
 };

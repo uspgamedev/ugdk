@@ -12,6 +12,7 @@
 #include <ugdk/desktop/window.h>
 #include <ugdk/graphic/module.h>
 #include <ugdk/graphic/canvas.h>
+#include <ugdk/graphic/rendertarget.h>
 #include <ugdk/text/manager.h>
 #include <ugdk/text/module.h>
 
@@ -238,10 +239,10 @@ void Run() {
                 for(auto& scene : scene_list_) {
                     if (scene->visible()) {
                         std::vector<uint32_t> cleanup_schedule;
-                        for (uint32_t i=0; i < manager.num_targets(); i++) {}
+                        for (uint32_t i=0; i < manager.num_targets(); i++) {
                             auto current_target = manager.target(i);
                             if (current_target)
-                                current_target.Render();
+                                current_target->Render();
                             else
                                 cleanup_schedule.push_back(i);
                         }
@@ -249,9 +250,8 @@ void Run() {
                             manager.UnregisterTarget(dead);
                     }   
                 }
-            }
-        }
             profile_data_list_.push_back(frame_section.data());
+            }
         }
         while(profile_data_list_.size() > 10)
             profile_data_list_.pop_front();

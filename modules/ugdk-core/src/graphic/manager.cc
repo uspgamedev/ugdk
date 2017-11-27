@@ -9,6 +9,7 @@
 #include <ugdk/graphic/shaderprogram.h>
 #include <ugdk/graphic/rendertarget.h>
 #include <ugdk/graphic/rendertexture.h>
+#include <ugdk/graphic/renderscreen.h>
 #include <ugdk/graphic/renderer.h>
 #include <ugdk/graphic/exceptions.h>
 #include <ugdk/debug/profiler.h>
@@ -72,10 +73,14 @@ Manager::Manager()
 
 Manager::~Manager() {}
 
-void Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
-    auto screen_ptr = std::make_unique<RenderScreen>();
+uint32_t Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
+    std::unique_ptr<RenderScreen> screen_ptr = std::make_unique<RenderScreen>();
     screen_ptr->AttachTo(weak_window);
-    targets_.emplace_back(std::move(screen_ptr));
+    
+    targets_.emplace_back();
+    targets_.back().reset(screen_ptr.release());
+
+    return targets_.size()-1;
 }
 void Manager::UnregisterTarget(uint32_t index) {
     targets_.erase(targets_.begin()+index);
@@ -104,11 +109,11 @@ void Manager::SetUserNearestNeighborTextures(bool enabled) {
     }
 }
 
-void SetActiveRenderer(std::weak_ptr<Renderer> renderer) {
+void Manager::SetActiveRenderer(std::weak_ptr<Renderer> renderer) {
     current_renderer_ = renderer;
 }
 
-std::weak_ptr<Renderer> ActiveRenderer() {
+std::weak_ptr<Renderer> Manager::ActiveRenderer() {
     return current_renderer_;
 }
 
@@ -147,7 +152,9 @@ bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& wind
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &max_combined_texture_image_units);
     textureunit_ids_.reset(new util::IDGenerator(0, max_combined_texture_image_units, -1));
 
-    light_buffer_.reset(new RenderTexture(math::Integer2D(canvas_size)));
+    auto texture_size = math::Integer2D(canvas_size);
+    std::unique_ptr<RenderTexture> tmp_tex_ptr = std::make_unique<RenderTexture>(texture_size); //It's okay not to explicitly use Integer2D
+    light_buffer_.reset(tmp_tex_ptr.release());
 
     shaders_.ReplaceShader(0, CreateShader(false, false));
     shaders_.ReplaceShader(1, CreateShader( true, false));
