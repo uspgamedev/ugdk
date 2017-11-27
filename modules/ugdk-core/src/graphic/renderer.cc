@@ -1,9 +1,11 @@
 
 #include <cassert>
 #include <ugdk/graphic/canvas.h>
-#include <ugdk/graphic/modules.h>
+#include <ugdk/graphic/module.h>
 #include <ugdk/graphic/renderer.h>
 #include <ugdk/graphic/rendertarget.h>
+#include <ugdk/graphic/exceptions.h>
+
 
 namespace ugdk {
 namespace graphic {
@@ -22,7 +24,8 @@ void Renderer::AddStep(const std::function<void(graphic::Canvas&)>& render_step)
 
 void Renderer::ChangeStep(uint32_t index, 
                           const std::function<void(graphic::Canvas&)>& render_step) {
-    assert( 0 <= index && index < render_steps_.size() )
+    system::AssertCondition<system::InvalidOperation>(0 <= index && index < render_steps_.size(),
+                                                      "Cannot change a step beyond the size");
     render_steps_[index] = render_step;
 }
 
@@ -36,7 +39,7 @@ void Renderer::Process() {
         "Cannot Renderer::Process() when bound to nullptr");
     graphic::Canvas canvas(target_);
     canvas.Bind(); //We set the shaderprogram
-    target->Use(); //We mess with the context
+    target_->Use(); //We mess with the context
     for (auto step : render_steps_) {
         step(canvas);
     }

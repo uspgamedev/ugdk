@@ -16,14 +16,14 @@ class RenderTarget {
   public:
     virtual ~RenderTarget();
 
-    bool IsActive() const;
+    virtual bool IsActive() const;
     virtual bool IsValid() const;
     const math::Geometry& projection_matrix() const;
     
     virtual void Resize(const math::Vector2D&);
     void set_projection_matrix(const math::Geometry&);
 
-    virtual math::Vector2D size();
+    virtual math::Vector2D size() const;
     virtual void Use() = 0;
     void Render();
     /** Pre-requisite: must be active. */
@@ -39,7 +39,7 @@ class RenderTarget {
   private:
     friend class ::ugdk::graphic::Canvas;
     friend class ::ugdk::graphic::Manager;
-
+    friend class ::ugdk::graphic::Renderer;
 
     virtual void UpdateViewport() = 0;
     
