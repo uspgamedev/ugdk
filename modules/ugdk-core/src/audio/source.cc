@@ -3,7 +3,8 @@
 #include <ugdk/audio/sampler.h>
 
 #include <queue>
-#include <climits>
+#include <limits>
+#include <iostream>
 
 namespace ugdk {
 namespace audio {
@@ -93,17 +94,21 @@ void Source::Update() {
         if (proc_buffers >= 1) {
             for (int i = 0; i < proc_buffers; i++) {
                 ALuint b = buffers_.back();
-                    buffers_.pop();
+                buffers_.pop();
+                std::cout << "Pop" << std::endl;
                 alSourceUnqueueBuffers(name_, 1, &b);
                 alDeleteBuffers(1, &b);
             }
         }
         while (buffers_.size() < 4) {
             ALuint b = queue_[curr_sampler_]->GetSample();
-            if (b == UINT_MAX)
+            if (b == std::numeric_limits<ALuint>::max()) {
                 curr_sampler_ = (curr_sampler_ + 1)%num_samplers_;
+                std::cout << "Next Sampler" << std::endl;
+            }
             else {
                 buffers_.emplace(b);
+                std::cout << "Push" << std::endl;
                 alSourceQueueBuffers(name_, 1, &b);
             }
         }

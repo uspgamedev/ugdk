@@ -3,12 +3,14 @@
 
 #include <functional>
 #include <vector>
+#include <limits>
+#include <iostream>
 
 namespace ugdk {
 namespace audio {
 
 Sampler::Sampler()
-    : gen_func_([](ALsizei) { return 0.0; })
+    : gen_func_([](U32 n) { return 0.0; })
     , ALbuffer_(DEFAULT_SIZE)
     , buffer_(DEFAULT_SIZE)
     , offset_(0)
@@ -17,10 +19,10 @@ Sampler::Sampler()
     , form_(AudioFormat::MONO8)
 {}
 
-Sampler::Sampler(ALsizei size, AudioFormat form, ALsizei freq, const std::function<float(ALsizei)>& gen_func)
+Sampler::Sampler(ALsizei size, AudioFormat form, ALsizei freq, const std::function<float(U32)>& gen_func)
     : gen_func_(gen_func)
-    , ALbuffer_(DEFAULT_SIZE)
-    , buffer_(DEFAULT_SIZE)
+    , ALbuffer_(size)
+    , buffer_(size)
     , offset_(0)
     , freq_(freq)
     , size_(size)
@@ -31,14 +33,27 @@ Sampler::~Sampler() {}
 
 ALuint Sampler::GetSample() {
     ALuint name = 0;
+    U16 U16_MAX = std::numeric_limits<U16>::max();
+    U8 U8_MAX = std::numeric_limits<U8>::max();
+    U16 *reint_ALbuffer_ = reinterpret_cast<U16*>(ALbuffer_.data());
     if (offset_ >= ALbuffer_.size()) {
         offset_ = 0;
-        return -1;
+        return std::numeric_limits<ALuint>::max();
     }
-    ALsizei i;
-    for (i = 0; i < DEFAULT_SIZE && offset_ + i < ALbuffer_.size(); i++)
-        buffer_[i] = gen_func_(offset_ + i);
-        //ALbuffer_[i] =
+    U32 i;
+    std::cout << "Entered" << std::endl;
+    if (form_ == AudioFormat::MONO8 || form_ == AudioFormat::STEREO8) {
+        for (i = 0; i < DEFAULT_SIZE && offset_ + i < ALbuffer_.size(); i++) {
+            buffer_[i] = gen_func_(offset_ + i);
+            ALbuffer_[i] = (U8)(U8_MAX*buffer_[i]);
+        }
+    }
+    else {
+        for (i = 0; i < DEFAULT_SIZE && offset_ + i < ALbuffer_.size()/2; i++) {
+            buffer_[i] = gen_func_(offset_ + i);
+            reint_ALbuffer_[i] = (U16)(U16_MAX*buffer_[i]);
+        }
+    }
     offset_ += i;
 
     alGetError();
@@ -49,7 +64,7 @@ ALuint Sampler::GetSample() {
         exit(1);
     }
 
-    alBufferData(name, (ALenum)form_, (ALvoid*)(ALbuffer_.data()), i, freq_);
+    alBufferData(name, (ALenum)form_, (ALvoid*)(ALbuffer_.data()), (ALsizei)i, freq_);
 
     return name;
 }

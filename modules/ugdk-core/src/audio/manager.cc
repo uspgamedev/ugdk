@@ -3,9 +3,6 @@
 #include "SDL.h"
 #include "SDL_mixer.h"
 
-#include UGDK_OPENAL_DIR(al.h)
-#include UGDK_OPENAL_DIR(alc.h)
-
 #include <ugdk/system/engine.h>
 #include <ugdk/audio/sample.h>
 #include <ugdk/audio/music.h>
@@ -13,6 +10,8 @@
 
 #include <ugdk/audio/source.h>
 #include <ugdk/audio/sampler.h>
+
+#include <iostream>
 
 namespace ugdk {
 namespace audio {
@@ -45,9 +44,9 @@ bool Manager::Initialize() {
     for(int i=0; i<NUM_CHANNELS; i++)
         Mix_Volume(i, MIX_MAX_VOLUME);
 
-    ALCdevice *device = alcOpenDevice(NULL);
-    if (device) {
-          ALCcontext *context = alcCreateContext(device, NULL);
+    device_ = alcOpenDevice(NULL);
+    if (device_) {
+          ALCcontext *context = alcCreateContext(device_, NULL);
           alcMakeContextCurrent(context);
     }
     else
@@ -62,6 +61,7 @@ void Manager::Release() {
     ReleaseSamples();
     ReleaseMusics();
     Mix_CloseAudio();
+    alcCloseDevice(device_);
 }
 
 void Manager::Update() {
@@ -93,7 +93,7 @@ std::shared_ptr<Sampler> Manager::LoadSampler(const std::string& name,
                                               ALsizei size,
                                               AudioFormat form,
                                               ALsizei freq,
-                                              const std::function<float(ALsizei)>& gen_func) {
+                                              const std::function<float(U32)>& gen_func) {
     if (sampler_data_.find(name) == sampler_data_.end()) {
         std::shared_ptr<Sampler> sampler(new Sampler(size, form, freq, gen_func));
         if (sampler)

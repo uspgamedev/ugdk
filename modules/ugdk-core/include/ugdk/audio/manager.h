@@ -1,15 +1,19 @@
 #ifndef UGDK_AUDIO_MANAGER_H_
 #define UGDK_AUDIO_MANAGER_H_
 
-#include <string>
-#include <map>
-#include <functional>
-
 #include <ugdk/audio/music.h>
 #include <ugdk/audio/sample.h>
 
 #include <ugdk/audio/source.h>
 #include <ugdk/audio/sampler.h>
+#include <ugdk/structure/types.h>
+
+#include UGDK_OPENAL_DIR(al.h)
+#include UGDK_OPENAL_DIR(alc.h)
+
+#include <string>
+#include <map>
+#include <functional>
 
 namespace ugdk {
 namespace audio {
@@ -44,7 +48,7 @@ class Manager {
 
     //std::shared_ptr<Sampler> LoadSampler(const std::string& filepath);
     std::shared_ptr<Sampler> LoadSampler(const std::string& name, ALsizei size, AudioFormat form,
-                                         ALsizei freq, const std::function<float(ALsizei)>& gen_func);
+                                         ALsizei freq, const std::function<float(U32)>& gen_func);
 
     /// Loads a music.
     /**@param filepath The path to the music file.
@@ -65,6 +69,8 @@ class Manager {
 
     std::map<std::string, std::shared_ptr<Source>> source_data_;
     std::map<std::string, std::shared_ptr<Sampler>> sampler_data_;
+
+    ALCdevice *device_;
 
     void ReleaseSamples();
     void ReleaseMusics();
