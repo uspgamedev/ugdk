@@ -82,6 +82,7 @@ uint32_t Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
 
     return targets_.size()-1;
 }
+
 void Manager::UnregisterTarget(uint32_t index) {
     targets_.erase(targets_.begin()+index);
 }

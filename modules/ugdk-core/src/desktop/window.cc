@@ -1,5 +1,5 @@
-#include <ugdk/desktop/window.h>
 
+#include <ugdk/desktop/window.h>
 
 #include <ugdk/graphic/canvas.h>
 #include <ugdk/debug/profiler.h>

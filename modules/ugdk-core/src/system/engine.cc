@@ -39,8 +39,6 @@ namespace system {
 
 namespace {
 
-
-
 enum class UGDKState {
     UNINITIALIZED,
     SUSPENDED,
@@ -250,7 +248,7 @@ void Run() {
                             manager.UnregisterTarget(dead);
                     }   
                 }
-            profile_data_list_.push_back(frame_section.data());
+                profile_data_list_.push_back(frame_section.data());
             }
         }
         while(profile_data_list_.size() > 10)
