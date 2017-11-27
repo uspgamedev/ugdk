@@ -20,10 +20,10 @@ class RenderTarget {
     virtual bool IsValid() const;
     const math::Geometry& projection_matrix() const;
     
-    virtual void Resize(const math::Vector2D&);
+    virtual void Resize(const math::Vector2D&) = 0;
     void set_projection_matrix(const math::Geometry&);
 
-    virtual math::Vector2D size() const;
+    virtual math::Vector2D size() const = 0;
     virtual void Use() = 0;
     void Render();
     /** Pre-requisite: must be active. */
