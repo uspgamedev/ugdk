@@ -69,5 +69,9 @@ void RenderTexture::UpdateViewport() {
     glViewport(0, 0, texture_->width(), texture_->height());
 }
 
+void RenderTexture::Present() {
+    /* IMPLEMENT */
+}
+
 }  // namespace graphic
 }  // namespace ugdk

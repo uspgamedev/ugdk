@@ -29,7 +29,19 @@ void RenderScreen::AttachTo(const std::weak_ptr<desktop::Window>& weak_window) {
 }
 
 bool RenderScreen::IsValid() const {
-    return (window_.lock()!=std::shared_ptr<desktop::Window>());
+    bool check;
+
+    auto window_ptr = window_.lock();
+    check = window_ptr != std::shared_ptr<desktop::Window>();
+    if (!check)
+        return false;
+    
+    auto sdl_window_ptr = window_ptr->sdl_window_;
+    check = SDL_GetWindowID(sdl_window_ptr);
+    if (!check)
+        return false;
+
+    return true;
 }
 
 void RenderScreen::UpdateViewport()  {
@@ -58,6 +70,9 @@ void RenderScreen::Use() {
 
     SDL_GLContext context = SDL_GL_GetCurrentContext();
     SDL_GL_MakeCurrent(sdl_window, context);
+}
+void RenderScreen::Present() {
+    SDL_GL_SwapWindow(window_.lock()->sdl_window_);
 }
 
 }

@@ -21,7 +21,8 @@ class RenderTexture : public RenderTarget {
     void Resize(const math::Vector2D&) override;
     graphic::GLTexture* texture() const { return texture_.get(); }
 
-    void Use();
+    void Use() override;
+    void Present() override;
   protected:
 
   private:

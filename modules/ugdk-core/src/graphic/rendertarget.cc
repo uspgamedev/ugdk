@@ -57,5 +57,9 @@ void RenderTarget::Unbind() {
     is_bound_ = false;
 }
 
+Renderer* RenderTarget::MyRenderer() {
+    return &my_renderer_; 
+}
+
 }  // namespace graphic
 }  // namespace ugdk

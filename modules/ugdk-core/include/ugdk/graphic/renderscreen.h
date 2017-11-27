@@ -32,6 +32,8 @@ class RenderScreen : public RenderTarget {
     void Resize(const math::Vector2D &);
     math::Vector2D size() const override;
     void Use() override;
+    void Present() override;
+
   private:
     void UpdateViewport() override;
     std::weak_ptr<desktop::Window> window_;

@@ -37,19 +37,30 @@ void Renderer::Process() {
     system::AssertCondition<system::InvalidOperation>(
         target_,
         "Cannot Renderer::Process() when bound to nullptr");
+        
+    system::AssertCondition<system::InvalidOperation>(
+        target_->IsValid(),
+        "Cannot Renderer::Process() when bound to invalid");
+
+    if (!target_->IsActive())
+        target_->Bind();
+
     graphic::Canvas canvas(target_);
     canvas.Bind(); //We set the shaderprogram
     target_->Use(); //We mess with the context
     for (auto step : render_steps_) {
         step(canvas);
     }
+
+    target_->Unbind();
     canvas.Unbind(); // restore shaderprogram
 }
 
 void Renderer::Present() {
     system::AssertCondition<system::InvalidOperation>(target_,
-                                                      "Cannot Renderer::Present() nullptr.");
+                                                      "Cannot Renderer::Present() nullptr.");    
     target_->UpdateViewport();
+    target_->Present();
 }
 
 } //graphic

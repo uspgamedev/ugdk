@@ -26,8 +26,11 @@ class RenderTarget {
     virtual math::Vector2D size() const = 0;
     virtual void Use() = 0;
     void Render();
+    virtual void Present() = 0;
     /** Pre-requisite: must be active. */
     void Clear(structure::Color);
+
+    Renderer* MyRenderer();
   protected:
 
     RenderTarget();
