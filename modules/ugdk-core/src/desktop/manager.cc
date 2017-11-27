@@ -1,6 +1,7 @@
 
-#include <ugdk/debug/log.h>
 #include <ugdk/desktop/manager.h>
+
+#include <ugdk/debug/log.h>
 #include <ugdk/desktop/window.h>
 #include <ugdk/system/engine.h>
 #include <ugdk/system/exceptions.h>
