@@ -239,7 +239,7 @@ void Run() {
                         std::vector<uint32_t> cleanup_schedule;
                         for (uint32_t i=0; i < manager.num_targets(); i++) {
                             auto current_target = manager.target(i);
-                            if (current_target)
+                            if (current_target && current_target->IsValid())
                                 current_target->Render();
                             else
                                 cleanup_schedule.push_back(i);
