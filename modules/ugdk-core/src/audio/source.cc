@@ -21,6 +21,9 @@ Source::Source()
         printf("- Error creating source !!\n");
         exit(1);
     }
+    alSourcef(name_, AL_GAIN, 1);
+    alSourcef(name_, AL_PITCH, 1);
+    alSource3f(name_, AL_POSITION, 0, 0, 0);
 }
 
 Source::~Source() {}
@@ -51,8 +54,14 @@ void Source::ClearQueue() {
 
 void Source::Play() {
     if (!is_playing_) {
-        alSourcePlay(name_);
         is_playing_ = true;
+        Update();
+        alGetError();
+        alSourcePlay(name_);
+        if (alGetError() != AL_NO_ERROR) {
+            printf("- Error playing source !!\n");
+            exit(1);
+        }
     }
 }
 
@@ -95,9 +104,13 @@ void Source::Update() {
             for (int i = 0; i < proc_buffers; i++) {
                 ALuint b = buffers_.back();
                 buffers_.pop();
-                std::cout << "Pop" << std::endl;
+                alGetError();
                 alSourceUnqueueBuffers(name_, 1, &b);
                 alDeleteBuffers(1, &b);
+                if (alGetError() != AL_NO_ERROR) {
+                    printf("- Error poping from source !!\n");
+                    exit(1);
+                }
             }
         }
         while (buffers_.size() < 4) {
@@ -108,8 +121,12 @@ void Source::Update() {
             }
             else {
                 buffers_.emplace(b);
-                std::cout << "Push" << std::endl;
+                alGetError();
                 alSourceQueueBuffers(name_, 1, &b);
+                if (alGetError() != AL_NO_ERROR) {
+                    printf("- Error pushing to source !!\n");
+                    exit(1);
+                }
             }
         }
     }

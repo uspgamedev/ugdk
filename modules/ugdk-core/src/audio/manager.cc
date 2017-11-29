@@ -46,12 +46,14 @@ bool Manager::Initialize() {
 
     device_ = alcOpenDevice(NULL);
     if (device_) {
-          ALCcontext *context = alcCreateContext(device_, NULL);
-          alcMakeContextCurrent(context);
+        ALCcontext *context = alcCreateContext(device_, NULL);
+        alcMakeContextCurrent(context);
     }
     else
         return ErrorLog("Failed to initialize audio device");
-    //g_bEAX = alIsExtensionPresent("EAX2.0");
+
+    alListenerf(AL_GAIN, 1);
+    alListener3f(AL_POSITION, 0, 0, 0);
 
     // sucesso ;)
     return true;

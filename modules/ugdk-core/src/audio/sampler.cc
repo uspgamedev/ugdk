@@ -36,23 +36,40 @@ ALuint Sampler::GetSample() {
     U16 U16_MAX = std::numeric_limits<U16>::max();
     U8 U8_MAX = std::numeric_limits<U8>::max();
     U16 *reint_ALbuffer_ = reinterpret_cast<U16*>(ALbuffer_.data());
-    if (offset_ >= ALbuffer_.size()) {
+    if (offset_ >= size_/((int)form_%2 + 1)) {
         offset_ = 0;
         return std::numeric_limits<ALuint>::max();
     }
-    U32 i;
-    std::cout << "Entered" << std::endl;
-    if (form_ == AudioFormat::MONO8 || form_ == AudioFormat::STEREO8) {
-        for (i = 0; i < DEFAULT_SIZE && offset_ + i < ALbuffer_.size(); i++) {
+    U32 i = 0;
+    switch (form_) {
+      case AudioFormat::MONO8:
+        for (i = 0; i < DEFAULT_SIZE && offset_ + i < size_; i++) {
             buffer_[i] = gen_func_(offset_ + i);
             ALbuffer_[i] = (U8)(U8_MAX*buffer_[i]);
         }
-    }
-    else {
-        for (i = 0; i < DEFAULT_SIZE && offset_ + i < ALbuffer_.size()/2; i++) {
+        break;
+      case AudioFormat::MONO16:
+        for (i = 0; i < DEFAULT_SIZE && offset_ + i < size_/2; i++) {
             buffer_[i] = gen_func_(offset_ + i);
             reint_ALbuffer_[i] = (U16)(U16_MAX*buffer_[i]);
         }
+        break;
+      case AudioFormat::STEREO8:
+        for (i = 0; i < DEFAULT_SIZE && offset_ + i < size_; i += 2) {
+            buffer_[i] = gen_func_(offset_ + i);
+            ALbuffer_[i] = (U8)(U8_MAX*buffer_[i]);
+            buffer_[i+1] = buffer_[i];
+            ALbuffer_[i+1] = ALbuffer_[i];
+        }
+        break;
+      case AudioFormat::STEREO16:
+        for (i = 0; i < DEFAULT_SIZE && offset_ + i < size_/2; i += 2) {
+            buffer_[i] = gen_func_(offset_ + i);
+            reint_ALbuffer_[i] = (U16)(U16_MAX*buffer_[i]);
+            buffer_[i+1] = buffer_[i];
+            reint_ALbuffer_[i+1] = reint_ALbuffer_[i];
+        }
+        break;
     }
     offset_ += i;
 
