@@ -102,6 +102,14 @@ weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& new_win
 uint32_t Manager::num_windows() {
     return windows_.size();
 }
+
+weak_ptr<Window> Manager::FindWindowById(U32 window_id) {
+    for (const auto& shared_window : windows_)
+        if (shared_window->id() == window_id)
+            return shared_window;
+    return weak_ptr<Window>();
+}
+
 void Manager::PresentAll() {
     for(const auto& window : windows_)
         window->Present();

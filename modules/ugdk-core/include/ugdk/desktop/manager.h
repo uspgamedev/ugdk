@@ -2,7 +2,6 @@
 #ifndef UGDK_DESKTOP_MANAGER_H_
 #define UGDK_DESKTOP_MANAGER_H_
 
-#include <ugdk/common/iterable_wrapper.h>
 #include <ugdk/desktop.h>
 #include <ugdk/structure/types.h>
 #include <ugdk/system.h>
@@ -27,9 +26,11 @@ class Manager {
     std::weak_ptr<Window> CreateWindow(const WindowSettings& settings);
     void DestroyWindow(const std::weak_ptr<Window>&);
 
-    auto windows() const {
-        // TODO THIS: implement iterator that converts to weak_ptr >.<
-        return common::MakeIterableWrapper(windows_);
+    std::weak_ptr<Window> FindWindowById(U32 window_id);
+
+    void windows(std::vector<std::weak_ptr<Window>>* the_windows) {
+        for (const auto& shared_window : windows_)
+            the_windows->emplace_back(shared_window);
     }
 
     std::weak_ptr<Window> primary_window() const { return primary_window_; }

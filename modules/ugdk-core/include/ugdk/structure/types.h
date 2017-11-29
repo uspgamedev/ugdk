@@ -7,6 +7,7 @@ namespace ugdk {
 
 using F32 = float;
 using F64 = double;
+using U32 = uint32_t;
 
 typedef uint8_t uint8;
 typedef uint16_t uint16;
