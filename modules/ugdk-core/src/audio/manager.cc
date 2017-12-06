@@ -93,11 +93,11 @@ std::shared_ptr<Sample> Manager::LoadSample(const std::string& filepath) {
 
 std::shared_ptr<Sampler> Manager::LoadSampler(const std::string& name,
                                               ALsizei size,
-                                              AudioFormat form,
+                                              bool stereo,
                                               ALsizei freq,
                                               const std::function<double(I32)>& gen_func) {
     if (sampler_data_.find(name) == sampler_data_.end()) {
-        std::shared_ptr<Sampler> sampler(new Sampler(size, form, freq, gen_func));
+        std::shared_ptr<Sampler> sampler(new ProceduralSampler(size, form, freq, gen_func));
         if (sampler)
             sampler_data_[name] = sampler;
     }

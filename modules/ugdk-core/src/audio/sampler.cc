@@ -9,74 +9,57 @@
 namespace ugdk {
 namespace audio {
 
-Sampler::Sampler()
+template <typename T>
+ProceduralSampler<T>::ProceduralSampler()
     : gen_func_([](I32 n) { return 0.0; })
     , ALbuffer_(DEFAULT_SIZE)
     , buffer_(DEFAULT_SIZE)
     , offset_(0)
-    , freq_(0)
+    , stereo_(false)
     , size_(0)
     , form_(AudioFormat::MONO8)
 {}
 
-Sampler::Sampler(ALsizei size, AudioFormat form, ALsizei freq, const std::function<double(I32)>& gen_func)
+template <typename T>
+ProceduralSampler<T>::ProceduralSampler(ALsizei size, bool stereo, ALsizei freq,
+                                     const std::function<double(I32)>& gen_func)
     : gen_func_(gen_func)
     , ALbuffer_(size)
     , buffer_(size)
     , offset_(0)
-    , freq_(freq)
+    , stereo_(stereo)
     , size_(size)
     , form_(form)
 {}
 
-Sampler::~Sampler() {}
+template <typename T>
+ProceduralSampler<T>::~ProceduralSampler() {}
 
-ALuint Sampler::GetSample() {
+template <typename T>
+ALuint ProceduralSampler<T>::GetSample() {
     ALuint name = 0;
-    I16 I16_MAX = std::numeric_limits<I16>::max();
-    I8 I8_MAX = std::numeric_limits<I8>::max();
-    I16 *reint_ALbuffer_ = reinterpret_cast<I16*>(ALbuffer_.data());
+    T T_MAX = std::numeric_limits<T>::max();
     I32 i = 0;
     I32 factor = 1;
     if (offset_ >= size_) {
         offset_ = 0;
         return std::numeric_limits<ALuint>::max();
     }
-    switch (form_) {
-      case AudioFormat::MONO8:
+    if (stereo_) {
         for (i = 0; i < DEFAULT_SIZE && offset_ + i < size_; i++) {
             buffer_[i] = gen_func_(offset_ + i);
-            ALbuffer_[i] = static_cast<U8>(I8_MAX*buffer_[i]);
+            ALbuffer_[i] = static_cast<T>(T_MAX*buffer_[i]);
         }
         offset_ += i;
-        break;
-      case AudioFormat::MONO16:
-        for (i = 0; i < DEFAULT_SIZE/2 && offset_ + i < size_; i++) {
-            buffer_[i] = gen_func_(offset_ + i);
-            reint_ALbuffer_[i] = static_cast<U16>(I16_MAX*buffer_[i]);
-        }
-        factor = 2;
-        offset_ += i;
-        break;
-      case AudioFormat::STEREO8:
+    }
+    else {
         for (i = 0; i < DEFAULT_SIZE && offset_ + i/2 < size_; i += 2) {
             buffer_[i] = gen_func_(offset_ + i/2);
-            ALbuffer_[i] = static_cast<U8>(I8_MAX*buffer_[i]);
+            ALbuffer_[i] = static_cast<T>(T_MAX*buffer_[i]);
             buffer_[i+1] = buffer_[i];
             ALbuffer_[i+1] = ALbuffer_[i];
         }
         offset_ += i/2;
-        break;
-      case AudioFormat::STEREO16:
-        for (i = 0; i < DEFAULT_SIZE/2 && offset_ + i/2 < size_; i += 2) {
-            buffer_[i] = gen_func_(offset_ + i/2);
-            reint_ALbuffer_[i] = static_cast<U16>(I16_MAX*buffer_[i]);
-            buffer_[i+1] = buffer_[i];
-            reint_ALbuffer_[i+1] = reint_ALbuffer_[i];
-        }
-        factor = 2;
-        offset_ += i/2;
-        break;
     }
 
     alGetError();
@@ -87,13 +70,14 @@ ALuint Sampler::GetSample() {
         exit(1);
     }
 
-    alBufferData(name, static_cast<ALenum>(form_), static_cast<ALvoid*>(ALbuffer_.data()),
-                 static_cast<ALsizei>(factor*i), freq_);
+    alBufferData(name, Format<T, stereo_>::value, static_cast<ALvoid*>(ALbuffer_.data()),
+                 static_cast<ALsizei>(i*sizeof(T)), freq_);
 
     return name;
 }
 
-void Sampler::Rewind() {
+template <typename T>
+void ProceduralSampler<T>::Rewind() {
     offset_ = 0;
 }
 

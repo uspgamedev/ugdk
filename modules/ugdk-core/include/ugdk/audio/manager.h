@@ -18,13 +18,6 @@
 namespace ugdk {
 namespace audio {
 
-enum class AudioFormat {
-    MONO8 = AL_FORMAT_MONO8,
-    MONO16 = AL_FORMAT_MONO16,
-    STEREO8 = AL_FORMAT_STEREO8,
-    STEREO16 = AL_FORMAT_STEREO16
-};
-
 class Manager {
   public:
     Manager();
@@ -47,7 +40,7 @@ class Manager {
     std::shared_ptr<Sample> LoadSample(const std::string& filepath);
 
     //std::shared_ptr<Sampler> LoadSampler(const std::string& filepath);
-    std::shared_ptr<Sampler> LoadSampler(const std::string& name, ALsizei size, AudioFormat form,
+    std::shared_ptr<Sampler> LoadSampler(const std::string& name, ALsizei size, bool stereo,
                                          ALsizei freq, const std::function<double(I32)>& gen_func);
 
     /// Loads a music.
