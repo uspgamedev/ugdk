@@ -29,10 +29,9 @@ void RenderScreen::AttachTo(const std::weak_ptr<desktop::Window>& weak_window) {
 }
 
 bool RenderScreen::IsValid() const {
-    bool check;
 
     auto window_ptr = window_.lock();
-    check = window_ptr != std::shared_ptr<desktop::Window>();
+    bool check = static_cast<bool>(window_ptr);
     if (!check)
         return false;
     
