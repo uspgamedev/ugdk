@@ -21,6 +21,7 @@ class RenderScreen : public RenderTarget {
   public:
     RenderScreen();
     RenderScreen(const std::weak_ptr<desktop::Window>&);
+    ~RenderScreen();
 
     void SaveToTexture(graphic::GLTexture*);
     void AttachTo(const std::weak_ptr<desktop::Window>&);

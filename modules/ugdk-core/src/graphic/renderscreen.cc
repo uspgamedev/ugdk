@@ -1,6 +1,7 @@
 
 #include <ugdk/graphic/renderscreen.h>
 #include <ugdk/desktop/window.h>
+#include <ugdk/desktop/module.h>
 #include <ugdk/math/integer2D.h>
 #include <ugdk/math/vector2D.h>
 #include <ugdk/system/exceptions.h>
@@ -14,6 +15,11 @@ namespace graphic {
 RenderScreen::RenderScreen() : window_(std::weak_ptr<desktop::Window>()) {}
 
 RenderScreen::RenderScreen(const std::weak_ptr<desktop::Window>& window) : window_(window) {}
+
+RenderScreen::~RenderScreen() {
+    ugdk::desktop::manager().DestroyWindow(window_);
+}
+
 
 void RenderScreen::SaveToTexture(graphic::GLTexture* texture) {
     glBindTexture(GL_TEXTURE_2D, texture->id());
