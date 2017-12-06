@@ -21,13 +21,13 @@ class Sampler {
   private:
     Sampler();
     Sampler(ALsizei size, AudioFormat form, ALsizei freq,
-            const std::function<float(U32)>& gen_func);
-    const std::function<float(U32)>& gen_func_;
+            const std::function<double(I32)>& gen_func);
+    const std::function<double(I32)>& gen_func_;
     std::vector<char> ALbuffer_;
-    std::vector<float> buffer_;
-    U32 offset_;
+    std::vector<double> buffer_;
+    I32 offset_;
     ALsizei freq_;
-    U64 size_;
+    I64 size_;
     AudioFormat form_;
     static constexpr int DEFAULT_SIZE = 4096;
 

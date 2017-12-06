@@ -95,7 +95,7 @@ std::shared_ptr<Sampler> Manager::LoadSampler(const std::string& name,
                                               ALsizei size,
                                               AudioFormat form,
                                               ALsizei freq,
-                                              const std::function<float(U32)>& gen_func) {
+                                              const std::function<double(I32)>& gen_func) {
     if (sampler_data_.find(name) == sampler_data_.end()) {
         std::shared_ptr<Sampler> sampler(new Sampler(size, form, freq, gen_func));
         if (sampler)
