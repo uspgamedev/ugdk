@@ -39,6 +39,8 @@ namespace system {
 
 namespace {
 
+using std::weak_ptr;
+
 enum class UGDKState {
     UNINITIALIZED,
     SUSPENDED,
@@ -236,13 +238,12 @@ void Run() {
                 auto &manager = graphic::manager();
                 for(auto& scene : scene_list_) {
                     if (scene->visible()) {
-                        std::vector<uint32_t> cleanup_schedule;
-                        for (uint32_t i=0; i < manager.num_targets(); i++) {
-                            auto current_target = manager.target(i);
+                        std::vector<weak_ptr<graphic::RenderTarget>> cleanup_schedule;
+                        for (auto& current_target : manager.targets()) {
                             if (current_target && current_target->IsValid())
                                 current_target->Render();
                             else
-                                cleanup_schedule.push_back(i);
+                                cleanup_schedule.push_back(current_target);
                         }
                         for (auto dead : cleanup_schedule)
                             manager.UnregisterTarget(dead);

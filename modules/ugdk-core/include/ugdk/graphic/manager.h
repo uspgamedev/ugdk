@@ -15,6 +15,7 @@
 #include <bitset>
 #include <functional>
 #include <memory>
+#include <unordered_set>
 
 struct SDL_Window;
 typedef void* SDL_GLContext;
@@ -39,15 +40,13 @@ class Manager {
                     const math::Vector2D& canvas_size);
     void Release();
 
-    uint32_t RegisterScreen(std::weak_ptr<desktop::Window>);
+    std::weak_ptr<RenderScreen> RegisterScreen(std::weak_ptr<desktop::Window>);
     /*WE NEED TO ADD A METHOD FOR RENDERTEXTURES*/
 
-    void UnregisterTarget(uint32_t index);
-    /*
-    void UseCanvas(graphic::Canvas &);
-    void FreeCanvas(graphic::Canvas &);
-    */
-    void ResizeTarget(uint32_t index, const math::Vector2D& canvas_size);
+    std::weak_ptr<RenderTarget> default_target();
+    const std::unordered_set<std::shared_ptr<RenderTarget>>& targets() const;
+
+    void UnregisterTarget(const std::weak_ptr<RenderTarget>& target);
 
     void SetUserNearestNeighborTextures(bool enabled);
 
@@ -98,7 +97,6 @@ class Manager {
         friend class Manager;
     };
 
-    RenderTarget* target(uint32_t index) const;
     uint32_t num_targets();
     RenderTexture* light_buffer() const { return light_buffer_.get(); }
 
@@ -112,11 +110,12 @@ class Manager {
     void ReleaseTextureUnitID(int id);
 
     SDL_GLContext context_;
-    std::vector<std::unique_ptr<RenderTarget> > targets_;
+    std::unordered_set<std::shared_ptr<RenderTarget>> targets_;
     std::unique_ptr<RenderTexture> light_buffer_;
     std::unique_ptr<util::IDGenerator> textureunit_ids_;
     graphic::GLTexture* white_texture_;
     
+    std::shared_ptr<RenderTarget> default_target_;
     Shaders shaders_;
     ShaderProgram* light_shader_;
     uint32_t active_index_;
@@ -125,6 +124,14 @@ class Manager {
 
     friend class ::ugdk::graphic::TextureUnit;
 };
+
+inline std::weak_ptr<RenderTarget> Manager::default_target() {
+    return default_target_;
+}
+
+inline const std::unordered_set<std::shared_ptr<RenderTarget>>& Manager::targets() const {
+    return targets_;
+}
 
 }  // namespace graphic
 }  // namespace ugdk

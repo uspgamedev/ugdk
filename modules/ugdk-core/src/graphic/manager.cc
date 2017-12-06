@@ -19,51 +19,17 @@
 #include "gltexture.h"
 #include "SDL_video.h"
 
+#include <memory>
+
 #include <cassert>
 
 namespace ugdk {
 namespace graphic {
-/*
-class RenderScreen : public RenderTarget {
-public:
-    math::Vector2D size() const override {
-        return size_;
-    }
 
-    void Resize(const math::Vector2D& canvas_size) {
-        size_ = canvas_size;
-        projection_matrix_ = math::Geometry(math::Vector2D(-1.0, 1.0), math::Vector2D(2.0/size_.x, -2.0/size_.y));
-    }
+using std::shared_ptr;
+using std::make_shared;
+using std::weak_ptr;
 
-    void SaveToTexture(graphic::GLTexture* texture) {
-        glBindTexture(GL_TEXTURE_2D, texture->id());
-        //glReadBuffer(GL_BACK); FIXME
-        glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, texture->width(), texture->height());
-        internal::AssertNoOpenGLError();
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
-    void AttachTo(const std::weak_ptr<desktop::Window>& weak_window) {
-        if (weak_window.lock())
-            window_ = weak_window;
-    }
-
-    bool IsValid() const override {
-        return (window_.lock()!=std::shared_ptr<desktop::Window>());
-    }
-
-    void UpdateViewport() {
-        if(auto window = window_.lock())
-            glViewport(0, 0, window->size().x, window->size().y);
-    }
-    std::weak_ptr<desktop::Window> Window() {
-        return window_;
-    }
-private:
-    std::weak_ptr<desktop::Window> window_;
-    math::Vector2D size_;
-};
-*/
 Manager::Manager()
     :   light_buffer_(nullptr)
     ,   white_texture_(nullptr)
@@ -73,33 +39,17 @@ Manager::Manager()
 
 Manager::~Manager() {}
 
-uint32_t Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
-    std::unique_ptr<RenderScreen> screen_ptr = std::make_unique<RenderScreen>();
+weak_ptr<RenderScreen> Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
+    shared_ptr<RenderScreen> screen_ptr = make_shared<RenderScreen>();
     screen_ptr->AttachTo(weak_window);
     
-    targets_.emplace_back();
-    targets_.back().reset(screen_ptr.release());
+    targets_.insert(screen_ptr);
 
-    return targets_.size()-1;
+    return screen_ptr;
 }
 
-void Manager::UnregisterTarget(uint32_t index) {
-    targets_.erase(targets_.begin()+index);
-}
-/*
-void Manager::UseCanvas(graphic::Canvas &canvas) {
-    canvas.Bind();
-    SDL_GL_MakeCurrent(
-                       dynamic_cast<RenderScreen*>(canvas.render_target_)->Window().lock()->sdl_window_,
-                       context_
-                      ); //FIXME?
-}
-void Manager::FreeCanvas(graphic::Canvas &canvas) {
-    canvas.Unbind();
-}
-*/
-void Manager::ResizeTarget(uint32_t index, const math::Vector2D& canvas_size) {
-    targets_[index]->Resize(canvas_size);
+void Manager::UnregisterTarget(const weak_ptr<RenderTarget>& target) {
+    targets_.erase(target.lock());
 }
 
 void Manager::SetUserNearestNeighborTextures(bool enabled) {
@@ -124,8 +74,11 @@ bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& wind
     if (windows_.size()==0)
         return false;
     
-    for (auto _window_ : windows_)
-        RegisterScreen(_window_);
+    for (auto _window_ : windows_) {
+        auto target = RegisterScreen(_window_);
+        if (!default_target_)
+            default_target_ = target.lock();
+    }
 
     context_ = SDL_GL_CreateContext(windows_[0].lock().get()->sdl_window_);//Set primary window  //FIXME?
     if(!context_)
@@ -136,8 +89,8 @@ bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& wind
     if (GLEW_OK != err)
         return false; //errlog("GLEW Error: " + string((const char*)(glewGetErrorString(err))));
 #endif
-    for (uint32_t i = 0; i < targets_.size(); i++) {
-        ResizeTarget(i, canvas_size);
+    for (auto& target_ptr : targets_) {
+        target_ptr->Resize(canvas_size);
     }
 
     // This hint can improve the speed of texturing when perspective-correct texture
@@ -183,8 +136,7 @@ bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& wind
 
 void Manager::Release() {
     SDL_GL_DeleteContext(context_);
-    for (uint32_t i = 0; i < this->num_targets(); i++)
-        targets_[i].reset();
+    targets_.clear();
     light_buffer_.reset();
     textureunit_ids_.reset();
 }
@@ -280,11 +232,6 @@ Manager::Shaders::~Shaders() {
         delete shaders_[i];
 }
 
-RenderTarget* Manager::target(uint32_t index) const {
-    assert(0 <= index && index < targets_.size());
-    assert(targets_[index].get());
-    return targets_[index].get();
-}
 uint32_t Manager::num_targets() {
     return targets_.size();
 }
