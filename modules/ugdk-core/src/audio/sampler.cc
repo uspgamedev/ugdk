@@ -14,10 +14,10 @@ ProceduralSampler<T>::ProceduralSampler()
     : gen_func_([](I32 n) { return 0.0; })
     , ALbuffer_(DEFAULT_SIZE)
     , buffer_(DEFAULT_SIZE)
+    , freq_(1)
     , offset_(0)
-    , stereo_(false)
     , size_(0)
-    , form_(AudioFormat::MONO8)
+    , stereo_(false)
 {}
 
 template <typename T>
@@ -26,26 +26,22 @@ ProceduralSampler<T>::ProceduralSampler(ALsizei size, bool stereo, ALsizei freq,
     : gen_func_(gen_func)
     , ALbuffer_(size)
     , buffer_(size)
+    , freq_(freq)
     , offset_(0)
-    , stereo_(stereo)
     , size_(size)
-    , form_(form)
+    , stereo_(stereo)
 {}
 
 template <typename T>
-ProceduralSampler<T>::~ProceduralSampler() {}
-
-template <typename T>
-ALuint ProceduralSampler<T>::GetSample() {
+ALuint ProceduralSampler<T>::Sample() {
     ALuint name = 0;
     T T_MAX = std::numeric_limits<T>::max();
     I32 i = 0;
-    I32 factor = 1;
     if (offset_ >= size_) {
         offset_ = 0;
         return std::numeric_limits<ALuint>::max();
     }
-    if (stereo_) {
+    if (!stereo_) {
         for (i = 0; i < DEFAULT_SIZE && offset_ + i < size_; i++) {
             buffer_[i] = gen_func_(offset_ + i);
             ALbuffer_[i] = static_cast<T>(T_MAX*buffer_[i]);
@@ -70,8 +66,13 @@ ALuint ProceduralSampler<T>::GetSample() {
         exit(1);
     }
 
-    alBufferData(name, Format<T, stereo_>::value, static_cast<ALvoid*>(ALbuffer_.data()),
-                 static_cast<ALsizei>(i*sizeof(T)), freq_);
+    if (stereo_)
+        alBufferData(name, Format<T>::stereo, static_cast<ALvoid*>(ALbuffer_.data()),
+                     static_cast<ALsizei>(i*sizeof(T)), freq_);
+    else
+        alBufferData(name, Format<T>::mono, static_cast<ALvoid*>(ALbuffer_.data()),
+                     static_cast<ALsizei>(i*sizeof(T)), freq_);
+
 
     return name;
 }

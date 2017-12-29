@@ -13,56 +13,51 @@
 namespace ugdk {
 namespace audio {
 
-template <typename T, bool stereo>
-struct Format {}
+template <typename T>
+struct Format {};
 
 template <>
-struct Format<I8, false> {
-    static ALenum value = ALenum::AL_FORMAT_MONO8;
-}
+struct Format<I8> {
+    static constexpr ALenum mono = AL_FORMAT_MONO8;
+    static constexpr ALenum stereo = AL_FORMAT_STEREO8;
+};
 
 template <>
-struct Format<I8, true> {
-    static ALenum stereo = ALenum::AL_FORMAT_STEREO8;
-}
-
-template <>
-struct Format<I16, false> {
-    static ALenum value = ALenum::AL_FORMAT_MONO16;
-}
-
-template <>
-struct Format<I16, true> {
-    static ALenum stereo = ALenum::AL_FORMAT_STEREO16;
-}
+struct Format<I16> {
+    static constexpr ALenum mono = AL_FORMAT_MONO16;
+    static constexpr ALenum stereo = AL_FORMAT_STEREO16;
+};
 
 class Sampler {
   public:
-    virtual ALuint GetSample() = 0;
+    virtual ALuint Sample() = 0;
     virtual void Rewind() = 0;
-}
+};
 
 template<typename T>
 class ProceduralSampler : public Sampler {
   public:
-    ~ProceduralSampler();
-    virtual ALuint GetSample();
+    ~ProceduralSampler() {};
+    ALuint Sample();
     void Rewind();
   private:
-    Sampler();
-    Sampler(ALsizei size, bool stereo, ALsizei freq,
-            const std::function<double(I32)>& gen_func);
+    ProceduralSampler();
+    ProceduralSampler(ALsizei size, bool stereo, ALsizei freq,
+                      const std::function<double(I32)>& gen_func);
     const std::function<double(I32)>& gen_func_;
     std::vector<T> ALbuffer_;
     std::vector<double> buffer_;
-    I32 offset_;
     ALsizei freq_;
+    I32 offset_;
     I64 size_;
     bool stereo_;
     static constexpr int DEFAULT_SIZE = 4096;
 
     friend class Manager;
 };
+
+template class ProceduralSampler<I8>;
+template class ProceduralSampler<I16>;
 
 } // namespace audio
 } // namespace ugdk

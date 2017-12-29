@@ -41,7 +41,8 @@ class Manager {
 
     //std::shared_ptr<Sampler> LoadSampler(const std::string& filepath);
     std::shared_ptr<Sampler> LoadSampler(const std::string& name, ALsizei size, bool stereo,
-                                         ALsizei freq, const std::function<double(I32)>& gen_func);
+                                         bool bits, ALsizei freq,
+                                         const std::function<double(I32)>& gen_func);
 
     /// Loads a music.
     /**@param filepath The path to the music file.

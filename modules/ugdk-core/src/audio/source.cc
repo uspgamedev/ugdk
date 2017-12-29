@@ -114,7 +114,7 @@ void Source::Update() {
             }
         }
         while (buffers_.size() < 4) {
-            ALuint b = queue_[curr_sampler_]->GetSample();
+            ALuint b = queue_[curr_sampler_]->Sample();
             if (b == std::numeric_limits<ALuint>::max()) {
                 curr_sampler_ = (curr_sampler_ + 1)%num_samplers_;
                 std::cout << "Next Sampler" << std::endl;
