@@ -2,7 +2,7 @@
 #define UGDK_AUDIO_SOURCE_H_
 #include <ugdk/system/config.h>
 #include <ugdk/structure/types.h>
-#include <ugdk/audio.h>
+#include <ugdk/audio/sampler.h>
 
 #include UGDK_OPENAL_DIR(al.h)
 

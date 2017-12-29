@@ -10,7 +10,7 @@ namespace ugdk {
 namespace audio {
 
 template <typename T>
-ProceduralSampler<T>::ProceduralSampler()
+PSampler<T>::PSampler()
     : gen_func_([](I32 n) { return 0.0; })
     , ALbuffer_(DEFAULT_SIZE)
     , buffer_(DEFAULT_SIZE)
@@ -21,7 +21,7 @@ ProceduralSampler<T>::ProceduralSampler()
 {}
 
 template <typename T>
-ProceduralSampler<T>::ProceduralSampler(ALsizei size, bool stereo, ALsizei freq,
+PSampler<T>::PSampler(ALsizei size, bool stereo, ALsizei freq,
                                      const std::function<double(I32)>& gen_func)
     : gen_func_(gen_func)
     , ALbuffer_(size)
@@ -33,7 +33,7 @@ ProceduralSampler<T>::ProceduralSampler(ALsizei size, bool stereo, ALsizei freq,
 {}
 
 template <typename T>
-ALuint ProceduralSampler<T>::Sample() {
+ALuint PSampler<T>::Sample() {
     ALuint name = 0;
     T T_MAX = std::numeric_limits<T>::max();
     I32 i = 0;
@@ -78,7 +78,7 @@ ALuint ProceduralSampler<T>::Sample() {
 }
 
 template <typename T>
-void ProceduralSampler<T>::Rewind() {
+void PSampler<T>::Rewind() {
     offset_ = 0;
 }
 

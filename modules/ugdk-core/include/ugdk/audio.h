@@ -11,10 +11,9 @@ class Sample;
 class Sampler;
 class OGGSampler;
 class WAVSampler;
+template <typename T>
 class PSampler;
 class Source;
-
-enum class AudioFormat;
 
 } // namespace audio
 } // namespace ugdk

@@ -1,5 +1,5 @@
 #include <ugdk/system/config.h>
-#include <ugdk/audio.h>
+#include <ugdk/audio/source.h>
 #include <ugdk/audio/sampler.h>
 
 #include <queue>

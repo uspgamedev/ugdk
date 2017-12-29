@@ -35,14 +35,14 @@ class Sampler {
 };
 
 template<typename T>
-class ProceduralSampler : public Sampler {
+class PSampler : public Sampler {
   public:
-    ~ProceduralSampler() {};
+    ~PSampler() {};
     ALuint Sample();
     void Rewind();
   private:
-    ProceduralSampler();
-    ProceduralSampler(ALsizei size, bool stereo, ALsizei freq,
+    PSampler();
+    PSampler(ALsizei size, bool stereo, ALsizei freq,
                       const std::function<double(I32)>& gen_func);
     const std::function<double(I32)>& gen_func_;
     std::vector<T> ALbuffer_;
@@ -56,8 +56,8 @@ class ProceduralSampler : public Sampler {
     friend class Manager;
 };
 
-template class ProceduralSampler<I8>;
-template class ProceduralSampler<I16>;
+template class PSampler<I8>;
+template class PSampler<I16>;
 
 } // namespace audio
 } // namespace ugdk

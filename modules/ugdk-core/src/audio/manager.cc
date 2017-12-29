@@ -99,12 +99,12 @@ std::shared_ptr<Sampler> Manager::LoadSampler(const std::string& name,
                                               const std::function<double(I32)>& gen_func) {
     if (sampler_data_.find(name) == sampler_data_.end()) {
         if (bits) {
-            std::shared_ptr<Sampler> sampler(new ProceduralSampler<I16>(size, stereo, freq, gen_func));
+            std::shared_ptr<Sampler> sampler(new PSampler<I16>(size, stereo, freq, gen_func));
             if (sampler)
                 sampler_data_[name] = sampler;
         }
         else {
-            std::shared_ptr<Sampler> sampler(new ProceduralSampler<I8>(size, stereo, freq, gen_func));
+            std::shared_ptr<Sampler> sampler(new PSampler<I8>(size, stereo, freq, gen_func));
             if (sampler)
                 sampler_data_[name] = sampler;
         }
