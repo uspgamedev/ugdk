@@ -1,58 +1,32 @@
-#ifndef HORUSEYE_FRAMEWORK_SAMPLE_H_
-#define HORUSEYE_FRAMEWORK_SAMPLE_H_
+#ifndef UGDK_AUDIO_SAMPLER_H_
+#define UGDK_AUDIO_SAMPLER_H_
 
-#include <string>
-#include "SDL_mixer.h"
-
-#include <ugdk/audio.h>
+#include <vector>
+#include <ugdk/structure/types.h>
 
 namespace ugdk {
 namespace audio {
 
-/**@class Sample
- * Note: It isn't possible to instantiate a Sample directly.
- * In order to play a sound, you must call LoadSample() from AudioManager.
- * All memory management is done my the AudioManager.
- * @see AudioManager
- */
-class Sample {
-  public:
-    ~Sample();
-    /// Plays the sound.
-    void Play();
+struct AbstractSampleData {
+    virtual bool is_stereo() const = 0;
+}
 
-    /// Plays this sample until told to stop.
-    void PlayForever();
+template<typename SampleType, bool is_stereo>
+class SampleData;
 
-    /// Plays the sound the given number of times.
-    void Play(int loops);
-
-    /// Stops playing the sound.
-    void Stop();
-
-    /// Returns whether the sound is playing or not.
-    bool IsPlaying();
-
-    /// Sets the volume.
-    /** Sets the volume between 0 and 1. 0 is silent, 1 is the max volume.
-      * @param vol The volume.
-     */
-    void SetVolume(double vol);
-
-    /// Returns the sound's volume.
-    /** @return The actual volume, 0.0 <= volume <= 1.0 */
-    double Volume();
-
-  private:
-    Sample(const std::string& filepath);
-    Mix_Chunk *data_;
-    int channel_;
-    double volume_;
-
-    friend class Manager;
+template<bool is_stereo>
+class SampleData<I8, is_stereo>  : public AbstractSampleData {
+    std::vector<I8> data_;  
+    bool is_stereo() const {return is_stereo;}    
 };
 
-} // namespace audio
-} // namespace ugdk
+template<bool is_stereo>
+class SampleData<I16, is_stereo> : public AbstractSampleData {
+    std::vector<I16> data_;
+    bool is_stereo() const {return is_stereo;}
+};
+
+} // audio
+} // ugdk
 
 #endif

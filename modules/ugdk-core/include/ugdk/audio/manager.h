@@ -1,9 +1,6 @@
 #ifndef UGDK_AUDIO_MANAGER_H_
 #define UGDK_AUDIO_MANAGER_H_
 
-#include <ugdk/audio/music.h>
-#include <ugdk/audio/sample.h>
-
 #include <ugdk/audio/source.h>
 #include <ugdk/audio/sampler.h>
 #include <ugdk/structure/types.h>

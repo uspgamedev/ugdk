@@ -7,6 +7,7 @@
 #include UGDK_OPENAL_DIR(al.h)
 
 #include <vector>
+#include <memory>
 #include <queue>
 
 namespace ugdk {
@@ -16,22 +17,18 @@ class Source {
   public:
     Source();
     ~Source();
-    bool QueueSampler(Sampler *s);
-    Sampler* DequeueSampler();
-    void ClearQueue();
+    void set_sampler(std::shared_ptr<Sampler>);
     void Play();
     void Pause();
     void Stop();
     void Rewind();
-    bool IsPlaying() const;
-    void SetVolume(double vol);
-    double Volume() const;
+    bool is_playing() const;
+    void set_volume(double vol);
+    double volume() const;
   private:
     void Update();
-    std::vector<Sampler*> queue_;
+    std::shared_ptr<Sampler> current_sampler_ptr;
     std::queue<ALuint> buffers_;
-    size_t curr_sampler_;
-    size_t num_samplers_;
     double volume_;
     bool is_playing_;
     ALuint name_;

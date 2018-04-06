@@ -10,9 +10,7 @@ namespace ugdk {
 namespace audio {
 
 Source::Source()
-    : curr_sampler_(0)
-    , num_samplers_(0)
-    , volume_(1.0)
+    : volume_(1.0)
     , is_playing_(false)
 {
     alGetError();
@@ -28,28 +26,8 @@ Source::Source()
 
 Source::~Source() {}
 
-bool Source::QueueSampler(Sampler *s) {
-    if (s != nullptr) {
-        queue_.emplace(queue_.begin(), s);
-        num_samplers_++;
-        return true;
-    }
-    return false;
-}
-
-Sampler* Source::DequeueSampler() {
-    Sampler *s = nullptr;
-    if (!queue_.empty()) {
-        s = queue_.back();
-        queue_.pop_back();
-        num_samplers_--;
-    }
-    return s;
-}
-
-void Source::ClearQueue() {
-    while (!queue_.empty())
-        queue_.pop_back();
+void Source::set_sampler(std::shared_ptr<Sampler> sampler_ptr) {
+    current_sampler_ptr = sampler_ptr;
 }
 
 void Source::Play() {
@@ -78,21 +56,19 @@ void Source::Stop() {
 }
 
 void Source::Rewind() {
-    if (queue_.size() != 0) {
-        queue_[curr_sampler_]->Rewind();
-        curr_sampler_ = 0;
-    }
+    if (current_sampler_ptr)
+        current_sampler_ptr->Rewind();
 }
 
-bool Source::IsPlaying() const {
+bool Source::is_playing() const {
     return is_playing_;
 }
 
-void Source::SetVolume(double vol) {
+void Source::set_volume(double vol) {
     volume_ = std::min(1.0, std::max(0.0, vol));
 }
 
-double Source::Volume() const {
+double Source::volume() const {
     return volume_;
 }
 
@@ -114,19 +90,13 @@ void Source::Update() {
             }
         }
         while (buffers_.size() < 4) {
-            ALuint b = queue_[curr_sampler_]->Sample();
-            if (b == std::numeric_limits<ALuint>::max()) {
-                curr_sampler_ = (curr_sampler_ + 1)%num_samplers_;
-                std::cout << "Next Sampler" << std::endl;
-            }
-            else {
-                buffers_.emplace(b);
-                alGetError();
-                alSourceQueueBuffers(name_, 1, &b);
-                if (alGetError() != AL_NO_ERROR) {
-                    printf("- Error pushing to source !!\n");
-                    exit(1);
-                }
+            ALuint buffer = current_sampler_ptr->Sample();
+            buffers_.emplace(buffer);
+            alGetError();
+            alSourceQueueBuffers(name_, 1, &buffer);
+            if (alGetError() != AL_NO_ERROR) {
+                printf("- Error pushing to source !!\n");
+                exit(1);
             }
         }
     }
