@@ -2,7 +2,7 @@
 #define UGDK_GRAPHIC_MANAGER_H_
 
 #include <ugdk/structure/types.h>
-#include <ugdk/math/vector2D.h>
+#include <ugdk/math.h>
 
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
@@ -40,7 +40,9 @@ class Manager {
                     const math::Vector2D& canvas_size);
     void Release();
 
-    std::weak_ptr<RenderScreen> RegisterScreen(std::weak_ptr<desktop::Window>);
+    std::weak_ptr<RenderScreen> RegisterScreen (std::weak_ptr<desktop::Window>);
+    std::weak_ptr<RenderTexture>RegisterTexture(std::unique_ptr<graphic::GLTexture>&& texture);
+    std::weak_ptr<RenderTexture>RegisterTexture(const math::Integer2D& size);
     /*WE NEED TO ADD A METHOD FOR RENDERTEXTURES*/
 
     std::weak_ptr<RenderTarget> default_target();
@@ -49,9 +51,6 @@ class Manager {
     void UnregisterTarget(const std::weak_ptr<RenderTarget>& target);
 
     void SetUserNearestNeighborTextures(bool enabled);
-
-    void SetActiveRenderer(std::weak_ptr<Renderer>);
-    std::weak_ptr<Renderer> ActiveRenderer();
 
     TextureUnit ReserveTextureUnit(const graphic::GLTexture* texture = nullptr);
     void DisableVertexType(VertexType);
@@ -119,8 +118,6 @@ class Manager {
     Shaders shaders_;
     ShaderProgram* light_shader_;
     uint32_t active_index_;
-
-    std::weak_ptr<Renderer> current_renderer_;
 
     friend class ::ugdk::graphic::TextureUnit;
 };

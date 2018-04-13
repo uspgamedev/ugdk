@@ -30,7 +30,8 @@ class RenderTexture : public RenderTarget {
     void Unbind() override;
     void UpdateViewport() override;
 
-    unsigned int gl_buffer_;
+    GLuint gl_buffer_;
+    GLuint gl_depth_buff_;
     std::unique_ptr<graphic::GLTexture> texture_;
 };
 

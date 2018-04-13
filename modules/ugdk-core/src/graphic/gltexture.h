@@ -17,9 +17,9 @@ class GLTexture {
     static GLTexture* CreateRawTexture(int texture_width, int texture_height);
     static void set_texture_filter(GLint);
 
-    GLuint id() const { return id_; }
-    int width() const { return texture_width_; }
-    int height() const { return texture_height_; }
+    GLuint id()           const { return id_; }
+    int width()           const { return texture_width_; }
+    int height()          const { return texture_height_; }
 
   private:
     GLTexture(GLuint gltexture, int texture_width, int texture_height);

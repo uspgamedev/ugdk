@@ -48,6 +48,19 @@ weak_ptr<RenderScreen> Manager::RegisterScreen(std::weak_ptr<desktop::Window> we
     return screen_ptr;
 }
 
+std::weak_ptr<RenderTexture>Manager::RegisterTexture(std::unique_ptr<graphic::GLTexture>&& texture) {
+    std::make_shared<RenderTexture>  tex_ptr(texture);
+    targets_.insert(tex_ptr);
+    return tex_ptr;
+}
+
+std::weak_ptr<RenderTexture>Manager::RegisterTexture(const math::Integer2D& size) {
+    std::make_shared<RenderTexture>  tex_ptr(size);
+    targets_.insert(tex_ptr);
+    return tex_ptr;
+}
+
+
 void Manager::UnregisterTarget(const weak_ptr<RenderTarget>& target) {
     targets_.erase(target.lock());
 }
@@ -58,14 +71,6 @@ void Manager::SetUserNearestNeighborTextures(bool enabled) {
     } else {
         GLTexture::set_texture_filter(GL_LINEAR);
     }
-}
-
-void Manager::SetActiveRenderer(std::weak_ptr<Renderer> renderer) {
-    current_renderer_ = renderer;
-}
-
-std::weak_ptr<Renderer> Manager::ActiveRenderer() {
-    return current_renderer_;
 }
 
 bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
