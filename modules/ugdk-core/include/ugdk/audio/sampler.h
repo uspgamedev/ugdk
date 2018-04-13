@@ -3,7 +3,7 @@
 
 #include <ugdk/system/config.h>
 #include <ugdk/audio/manager.h>
-#include <ugdk/audio/sample.h>
+#include <ugdk/audio/sampledata.h>
 #include <ugdk/structure/types.h>
 
 #include UGDK_OPENAL_DIR(al.h)
@@ -31,8 +31,8 @@ struct Format<I16> {
 
 class Sampler {
   public:
-    virtual void GenerateSample(Sample&) = 0;
-    virtual void Rewind() = 0;
+    virtual ~Sampler() {}
+    virtual void Sample(SampleData *sample_data) = 0;
 };
 
 template<typename T>

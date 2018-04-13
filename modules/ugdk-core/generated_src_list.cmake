@@ -5,7 +5,6 @@ modules/ugdk-core/src/action/scene.cc
 modules/ugdk-core/src/audio/manager.cc
 modules/ugdk-core/src/audio/module.cc
 modules/ugdk-core/src/audio/music.cc
-modules/ugdk-core/src/audio/sample.cc
 modules/ugdk-core/src/audio/sampler.cc
 modules/ugdk-core/src/audio/source.cc
 modules/ugdk-core/src/debug/log.cc
