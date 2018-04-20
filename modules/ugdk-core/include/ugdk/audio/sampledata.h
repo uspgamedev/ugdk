@@ -10,42 +10,42 @@ namespace ugdk::audio {
 
 class SampleData {
   public:
-    SampleData(U64 size, bool is_stereo);
+    SampleData(U64 size, U8 channel_num);
     void set_sample(U64 index, F64 sample);
-    void set_stereo_sample(U64 index, F64 sample_left, F64 sample_right);
+    void set_channel_sample(U64 index, U8 channel, F64 sample);
     F64 sample(U64 index) const;
-    std::pair<F64, F64> stereo_sample(U64 index) const;
+    F64 channel_sample(U64 index, U8 channel) const;
     U64 size() const;
     U64 bytes() const;
   private:
+    U8                  channel_num_;
     std::vector<F64>    buffer_;
 };
 
-SampleData::SampleData(U64 size, bool is_stereo)
-    : buffer_(size * (is_stereo ? 2ul : 1ul)) {}
+SampleData::SampleData(U64 size, U8 channel_num)
+    : channel_num_(channel_num), buffer_(size * channel_num) {}
 
 void SampleData::set_sample(U64 index, F64 sample) {
     buffer_[index] = sample;
 }
 
-void SampleData::set_stereo_sample(U64 index, F64 sample_left, F64 sample_right) {
-    buffer_[2ul * index] = sample_left;
-    buffer_[2ul * index + 1] = sample_right;
+void SampleData::set_channel_sample(U64 index, U8 channel, F64 sample) {
+    buffer_[channel_num_ * index + channel] = sample;
 }
 
 F64 SampleData::sample(U64 index) const {
     return buffer_[index];
 }
 
-std::pair<F64, F64> SampleData::stereo_sample(U64 index) const {
-    return std::make_pair(buffer_[2ul * index], buffer_[2ul * index + 1]);
+F64 SampleData::channel_sample(U64 index, U8 channel) const {
+    return buffer_[channel_num_ * index + channel];
 }
 
 U64 SampleData::size() const {
     return buffer_.size();
 }
 
-U64 SampleData::size() const {
+U64 SampleData::bytes() const {
     return buffer_.size() * sizeof(F64);
 }
 
