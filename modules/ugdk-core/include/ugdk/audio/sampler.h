@@ -1,3 +1,4 @@
+
 #ifndef UGDK_AUDIO_SAMPLER_H_
 #define UGDK_AUDIO_SAMPLER_H_
 
@@ -31,34 +32,19 @@ struct Format<I16> {
 
 class Sampler {
   public:
-    virtual ~Sampler() {}
-    virtual void Sample(SampleData *sample_data) = 0;
-};
+    using Processor = std::function<void(SampleFrame*)>;
 
-template<typename T>
-class PSampler : public Sampler {
-  public:
-    ~PSampler() {};
-    void GenerateSample(Sample&);
-    void Rewind();
+    void Sample(SampleData *sample_data);
   private:
-    PSampler();
-    PSampler(ALsizei size, bool stereo, ALsizei freq,
-                      const std::function<double(I32)>& gen_func);
-    const std::function<double(I32)>& gen_func_;
-    std::vector<T> ALbuffer_;
-    std::vector<double> buffer_;
-    ALsizei freq_;
-    I32 offset_;
-    I64 size_;
-    bool stereo_;
-    static constexpr int DEFAULT_SIZE = 4096;
+    Sampler(U64 sample_rate, U8 num_channels, const Processor& process);
+
+    const Processor process_;
+    U64 sample_rate_;
+    U64 offset_;
+    U8  num_channels_;
 
     friend class Manager;
 };
-
-template class PSampler<I8>;
-template class PSampler<I16>;
 
 } // namespace audio
 } // namespace ugdk

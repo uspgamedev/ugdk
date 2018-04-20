@@ -1,5 +1,6 @@
-#ifndef UGDK_AUDIO_SAMPLE_H_
-#define UGDK_AUDIO_SAMPLE_H_
+
+#ifndef UGDK_AUDIO_SAMPLEDATA_H_
+#define UGDK_AUDIO_SAMPLEDATA_H_
 
 #include <ugdk/structure/types.h>
 

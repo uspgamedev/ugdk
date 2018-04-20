@@ -9,31 +9,18 @@
 namespace ugdk {
 namespace audio {
 
-template <typename T>
-PSampler<T>::PSampler()
-    : gen_func_([](I32 n) { return 0.0; })
-    , ALbuffer_(DEFAULT_SIZE)
-    , buffer_(DEFAULT_SIZE)
-    , freq_(1)
-    , offset_(0)
-    , size_(0)
-    , stereo_(false)
-{}
+Sampler::Sampler(U64 sample_rate, U8 num_channels, const Processor& process)
+    : process_(process), sample_rate_(sample_rate), offset_(0u), num_channels_(num_channels) {}
 
-template <typename T>
-PSampler<T>::PSampler(ALsizei size, bool stereo, ALsizei freq,
-                                     const std::function<double(I32)>& gen_func)
-    : gen_func_(gen_func)
-    , ALbuffer_(size)
-    , buffer_(size)
-    , freq_(freq)
-    , offset_(0)
-    , size_(size)
-    , stereo_(stereo)
-{}
-
-template <typename T>
-ALuint PSampler<T>::Sample() {
+void Sampler::Sample(SampleData *sample_data) {
+    for (U64 i = 0; i < sample_data->size(); i++) {
+        SampleFrame frame(offset_ + i, sample_rate_, num_channels_);
+        process_(&frame);
+        for (U8 j = 0; j < num_channels_; j++)
+            sample_data->set_channel_sample(i, j, frame.channel(j));
+    }
+    offset_ += sample_data->size();
+    /*
     ALuint name = 0;
     T T_MAX = std::numeric_limits<T>::max();
     I32 i = 0;
@@ -75,11 +62,7 @@ ALuint PSampler<T>::Sample() {
 
 
     return name;
-}
-
-template <typename T>
-void PSampler<T>::Rewind() {
-    offset_ = 0;
+    */
 }
 
 } // namespace audio

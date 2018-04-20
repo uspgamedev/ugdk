@@ -3,6 +3,7 @@
 
 #include <ugdk/audio/source.h>
 #include <ugdk/audio/sampler.h>
+#include <ugdk/audio/sampleframe.h>
 #include <ugdk/structure/types.h>
 
 #include UGDK_OPENAL_DIR(al.h)
@@ -37,9 +38,8 @@ class Manager {
     std::shared_ptr<Sample> LoadSample(const std::string& filepath);
 
     //std::shared_ptr<Sampler> LoadSampler(const std::string& filepath);
-    std::shared_ptr<Sampler> LoadSampler(const std::string& name, ALsizei size, bool stereo,
-                                         bool bits, ALsizei freq,
-                                         const std::function<double(I32)>& gen_func);
+    std::shared_ptr<Sampler> LoadSampler(const std::string& name, U64 sample_rate, U8 num_channels,
+                                         const Sampler::Processor& processor);
 
     /// Loads a music.
     /**@param filepath The path to the music file.

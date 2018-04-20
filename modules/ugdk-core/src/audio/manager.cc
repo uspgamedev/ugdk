@@ -90,27 +90,14 @@ std::shared_ptr<Sample> Manager::LoadSample(const std::string& filepath) {
     return sample_data_[filepath];
 }
 
-std::shared_ptr<Sampler> Manager::LoadSampler(const std::string& name,
-                                              ALsizei size,
-                                              bool stereo,
-                                              bool bits,
-                                              ALsizei freq,
-                                              const std::function<double(I32)>& gen_func) {
+std::shared_ptr<Sampler> Manager::LoadSampler(const std::string& name, U64 sample_rate, U8 num_chanels,
+                                              const std::function<double(I32)>& processor) {
     if (sampler_data_.find(name) == sampler_data_.end()) {
-        if (bits) {
-            std::shared_ptr<Sampler> sampler(new PSampler<I16>(size, stereo, freq, gen_func));
-            if (sampler)
-                sampler_data_[name] = sampler;
-        }
-        else {
-            std::shared_ptr<Sampler> sampler(new PSampler<I8>(size, stereo, freq, gen_func));
-            if (sampler)
-                sampler_data_[name] = sampler;
-        }
+        std::shared_ptr<Sampler> sampler(new Sampler(sample_rate, num_channels, processor));
+        sampler_data_[name] = sampler;
     }
     return sampler_data_[name];
 }
-
 
 std::shared_ptr<Music> Manager::LoadMusic(const std::string& filepath) {
     if(music_data_.find(filepath) == music_data_.end()) {
