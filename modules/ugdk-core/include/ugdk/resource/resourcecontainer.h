@@ -26,6 +26,9 @@ class ResourceContainer {
         return Storage().get();
     }
     static void Clear() {
+        auto &map = ResourceContainer<T>::Storage()->database_;
+        for (auto pair : map)
+            delete pair.second;
         Storage().reset();
     }
     template<class ...Args>
@@ -33,7 +36,9 @@ class ResourceContainer {
         Storage().reset(new ResourceContainer(std::forward<Args>(args)...));
     }
 
-    ~ResourceContainer() {}
+    ~ResourceContainer() {
+        ResourceContainer<T>::Clear();
+    }
 
     void Insert(const std::string& tag, T* val);
     void Replace(const std::string& tag, T* val);
@@ -48,13 +53,12 @@ class ResourceContainer {
     }
 
   private:
-    using DataMap = std::unordered_map < std::string, std::unique_ptr<T> >;
+    using DataMap = std::unordered_map < std::string, T* >;
     using Loader_T = T* (*)(const std::string&);
 
     DataMap database_;
     Loader_T loader_;
 
-    ResourceContainer() : loader_(T::LoadFromFile) {}
     ResourceContainer(Loader_T loader) : loader_(loader) {}
 };
 
@@ -63,12 +67,13 @@ void ResourceContainer<T>::Insert(const std::string& tag, T* val) {
     auto& pos = database_[tag];
     debug::DebugConditionalLog(!pos, debug::LogLevel::ERROR, "UGDK",
                                "ResourceContainer<", TOSTRING(T), "> - Tag '", tag, "' already exists.");
-    pos.reset(val);
+    pos = val;
 }
 
 template<class T>
 void ResourceContainer<T>::Replace(const std::string& tag, T* val) {
-    database_[tag].reset(val);
+    delete database_[tag];
+    database_[tag] = val;
 }
 
 template<class T>
@@ -79,7 +84,7 @@ bool ResourceContainer<T>::Exists(const std::string& tag) const {
 
 template<class T>
 T* ResourceContainer<T>::Find(const std::string& tag) {
-    return database_[tag].get();
+    return database_[tag];
 }
 
 /// Uses T::Load(const std::string&) in order to Load a new object.

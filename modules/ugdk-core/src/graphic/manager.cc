@@ -16,6 +16,8 @@
 #include <ugdk/math/integer2D.h>
 #include <ugdk/util/idgenerator.h>
 
+#include <ugdk/resource/module.h>
+
 #include "gltexture.h"
 #include "SDL_video.h"
 
@@ -40,7 +42,7 @@ Manager::Manager()
 Manager::~Manager() {}
 
 weak_ptr<RenderScreen> Manager::RegisterScreen(std::weak_ptr<desktop::Window> weak_window) {
-    shared_ptr<RenderScreen> screen_ptr = make_shared<RenderScreen>();
+    auto screen_ptr = make_shared<RenderScreen>();
     screen_ptr->AttachTo(weak_window);
     
     targets_.insert(screen_ptr);
@@ -49,13 +51,13 @@ weak_ptr<RenderScreen> Manager::RegisterScreen(std::weak_ptr<desktop::Window> we
 }
 
 std::weak_ptr<RenderTexture>Manager::RegisterTexture(std::unique_ptr<graphic::GLTexture>&& texture) {
-    std::make_shared<RenderTexture>  tex_ptr(texture);
+    auto tex_ptr = std::make_shared<RenderTexture>(std::move(texture));
     targets_.insert(tex_ptr);
     return tex_ptr;
 }
 
 std::weak_ptr<RenderTexture>Manager::RegisterTexture(const math::Integer2D& size) {
-    std::make_shared<RenderTexture>  tex_ptr(size);
+    auto tex_ptr = std::make_shared<RenderTexture>(size);
     targets_.insert(tex_ptr);
     return tex_ptr;
 }
@@ -76,6 +78,10 @@ void Manager::SetUserNearestNeighborTextures(bool enabled) {
 bool Manager::Initialize(const std::vector<std::weak_ptr<desktop::Window>>& windows_, 
                          const math::Vector2D& canvas_size){
     
+    auto &res_manager = ugdk::resource::manager();
+    auto img_loader_from_file = [](const std::string& path){return GLTexture::CreateFromFile(path);};
+    res_manager.CreateContainer<GLTexture>(img_loader_from_file);
+
     if (windows_.size()==0)
         return false;
     

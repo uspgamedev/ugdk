@@ -1,6 +1,7 @@
 #ifndef UGDK_GRAPHIC_RENDERTEXTURE_H_
 #define UGDK_GRAPHIC_RENDERTEXTURE_H_
 
+#include <ugdk/graphic.h>
 #include <ugdk/graphic/rendertarget.h>
 
 #include <ugdk/math.h>
@@ -30,8 +31,7 @@ class RenderTexture : public RenderTarget {
     void Unbind() override;
     void UpdateViewport() override;
 
-    GLuint gl_buffer_;
-    GLuint gl_depth_buff_;
+    UGDKGLuint *gl_buffer_ptr;
     std::unique_ptr<graphic::GLTexture> texture_;
 };
 

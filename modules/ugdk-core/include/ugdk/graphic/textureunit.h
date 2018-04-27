@@ -4,6 +4,8 @@
 #include <ugdk/graphic.h>
 #include <ugdk/structure/types.h>
 
+#include <string>
+
 namespace ugdk {
 namespace graphic {
 
@@ -17,7 +19,6 @@ class TextureUnit final {
 
     int id() const { return id_; }
     const graphic::GLTexture* texture() const { return texture_; }
-
   private:
     TextureUnit(unsigned int);
 

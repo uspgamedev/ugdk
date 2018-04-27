@@ -177,7 +177,7 @@ GLTexture::GLTexture(GLuint gltexture, int texture_width, int texture_height)
     , texture_width_(texture_width)
     , texture_height_(texture_height) {
 
-    glGenFramebuffers(1, &frame_buffer_);
+    //glGenFramebuffers(1, &frame_buffer_);
 }
 
 } // namespace graphic
