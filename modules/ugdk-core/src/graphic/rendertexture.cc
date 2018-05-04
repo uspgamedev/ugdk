@@ -30,18 +30,21 @@ namespace {
 
 RenderTexture::RenderTexture(std::unique_ptr<graphic::GLTexture>&& texture)
     : texture_(std::move(texture))
+    , gl_buffer_ptr(new UGDKGLuint)
 {
-    glGenFramebuffers(1, &(gl_buffer_ptr->value_));
+    glGenFramebuffers(1, &gl_buffer_ptr->value_);
 }
 
 RenderTexture::RenderTexture(const math::Integer2D& size)
     : texture_(CreateTexture(size))
+    , gl_buffer_ptr(new UGDKGLuint)
 {                           
-    glGenFramebuffers(1, &(gl_buffer_ptr->value_));
+    glGenFramebuffers(1, &gl_buffer_ptr->value_);
 }
 
 RenderTexture::~RenderTexture() {
-    glDeleteFramebuffers(1, &(gl_buffer_ptr->value_));
+    delete gl_buffer_ptr;
+    glDeleteFramebuffers(1, &gl_buffer_ptr->value_);
 }
 
 math::Vector2D RenderTexture::size() const {

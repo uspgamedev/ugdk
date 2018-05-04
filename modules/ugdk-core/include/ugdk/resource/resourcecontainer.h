@@ -26,10 +26,13 @@ class ResourceContainer {
         return Storage().get();
     }
     static void Clear() {
-        auto &map = ResourceContainer<T>::Storage()->database_;
-        for (auto pair : map)
-            delete pair.second;
-        Storage().reset();
+        auto storage = std::move(ResourceContainer<T>::Storage());
+        if (storage) {
+            auto &map = storage->database_;
+            for (auto pair : map)
+                delete pair.second;
+            Storage().reset();
+        }
     }
     template<class ...Args>
     static void Create(Args... args) {
