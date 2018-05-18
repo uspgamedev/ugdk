@@ -52,13 +52,7 @@ void Source::Pause() {
 }
 
 void Source::Stop() {
-    Rewind();
     alSourceStop(name_);
-}
-
-void Source::Rewind() {
-    if (current_sampler_ptr)
-        current_sampler_ptr->Rewind();
 }
 
 bool Source::is_playing() const {
@@ -91,10 +85,11 @@ void Source::Update() {
             }
         }
         while (buffers_.size() < 4) {
-            ALuint buffer = current_sampler_ptr->Sample();
-            buffers_.emplace(buffer);
+            SampleData data(1,1);
+            current_sampler_ptr->Sample(&data);
+            //buffers_.emplace(buffer);
             alGetError();
-            alSourceQueueBuffers(name_, 1, &buffer);
+            //alSourceQueueBuffers(name_, 1, &buffer);
             if (alGetError() != AL_NO_ERROR) {
                 printf("- Error pushing to source !!\n");
                 exit(1);

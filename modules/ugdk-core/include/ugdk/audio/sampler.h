@@ -3,8 +3,8 @@
 #define UGDK_AUDIO_SAMPLER_H_
 
 #include <ugdk/system/config.h>
-#include <ugdk/audio/manager.h>
 #include <ugdk/audio/sampledata.h>
+#include <ugdk/audio/sampleframe.h>
 #include <ugdk/structure/types.h>
 
 #include UGDK_OPENAL_DIR(al.h)

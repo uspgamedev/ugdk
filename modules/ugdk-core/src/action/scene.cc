@@ -19,8 +19,6 @@ Scene::Scene()
   : active_(true)
   , finished_(false)
   , visible_(true)
-  , background_music_(nullptr)
-  , stops_previous_music_(true)
   , event_handler_()
 {
     AddTask(system::Task([&](double dt) {
@@ -32,17 +30,6 @@ Scene::~Scene() {}
 
 void Scene::Focus() {
     event_handler_.RaiseEvent(SceneFocusEvent(this));
-    if(background_music_ != nullptr) {
-        if(!background_music_->IsPlaying())
-            background_music_->PlayForever();
-        else
-            background_music_->Unpause();
-
-    } else if(stops_previous_music_) {
-        std::shared_ptr<audio::Music> current_music = audio::manager().CurrentMusic();
-        if(current_music != nullptr)
-            current_music->Stop();
-    }
 }
 
 void Scene::DeFocus() {
@@ -90,8 +77,6 @@ void Scene::Render(uint32_t index, graphic::Canvas& canvas) const {
 }
 
 void Scene::End() {
-    if(background_music_ != nullptr)
-        background_music_->Pause();
 }
 
 } /* namespace action */

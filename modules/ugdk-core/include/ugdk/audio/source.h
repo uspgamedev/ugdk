@@ -1,6 +1,7 @@
 
 #ifndef UGDK_AUDIO_SOURCE_H_
 #define UGDK_AUDIO_SOURCE_H_
+
 #include <ugdk/system/config.h>
 #include <ugdk/structure/types.h>
 #include <ugdk/audio/sampler.h>
@@ -14,6 +15,8 @@
 namespace ugdk {
 namespace audio {
 
+class Sampler;
+
 class Source {
   public:
     Source();
@@ -22,7 +25,6 @@ class Source {
     void Play();
     void Pause();
     void Stop();
-    void Rewind();
     bool is_playing() const;
     void set_volume(double vol);
     double volume() const;

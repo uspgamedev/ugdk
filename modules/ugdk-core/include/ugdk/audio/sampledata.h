@@ -7,7 +7,8 @@
 #include <vector>
 #include <utility>
 
-namespace ugdk::audio {
+namespace ugdk {
+namespace audio {
 
 class SampleData {
   public:
@@ -23,33 +24,34 @@ class SampleData {
     std::vector<F64>    buffer_;
 };
 
-SampleData::SampleData(U64 size, U8 channel_num)
+inline SampleData::SampleData(U64 size, U8 channel_num)
     : channel_num_(channel_num), buffer_(size * channel_num) {}
 
-void SampleData::set_sample(U64 index, F64 sample) {
+inline void SampleData::set_sample(U64 index, F64 sample) {
     buffer_[index] = sample;
 }
 
-void SampleData::set_channel_sample(U64 index, U8 channel, F64 sample) {
+inline void SampleData::set_channel_sample(U64 index, U8 channel, F64 sample) {
     buffer_[channel_num_ * index + channel] = sample;
 }
 
-F64 SampleData::sample(U64 index) const {
+inline F64 SampleData::sample(U64 index) const {
     return buffer_[index];
 }
 
-F64 SampleData::channel_sample(U64 index, U8 channel) const {
+inline F64 SampleData::channel_sample(U64 index, U8 channel) const {
     return buffer_[channel_num_ * index + channel];
 }
 
-U64 SampleData::size() const {
+inline U64 SampleData::size() const {
     return buffer_.size();
 }
 
-U64 SampleData::bytes() const {
+inline U64 SampleData::bytes() const {
     return buffer_.size() * sizeof(F64);
 }
 
-} // ugdk::audio
+} // audio
+} // ugdk
 
 #endif

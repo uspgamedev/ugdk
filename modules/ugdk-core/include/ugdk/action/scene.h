@@ -43,9 +43,6 @@ class Scene : public system::TaskPlayer {
     /// Finishes the scene.
     void Finish();
 
-    /// Whether this scene stops the previous music even if wont play any music.
-    void StopsPreviousMusic(bool set) { stops_previous_music_ = set; }
-
     /// Logical update of the scene.
     /**
        @param delta_t Time in seconds since last update
@@ -78,8 +75,6 @@ class Scene : public system::TaskPlayer {
           system::EventHandler& event_handler()       { return event_handler_; }
     const system::EventHandler& event_handler() const { return event_handler_; }
 
-    std::shared_ptr<audio::Music> background_music() const { return background_music_; }
-    void set_background_music(std::shared_ptr<audio::Music> music) { background_music_ = music; }
     /**@}
      */
     
@@ -104,12 +99,6 @@ class Scene : public system::TaskPlayer {
 
     /// Tells whether the scene is visible or not.
     bool visible_;
-
-    /// The background music when this scene is on top.
-    std::shared_ptr<audio::Music> background_music_;
-
-    /// Whether this scene stops the previous music even if wont play any music.
-    bool stops_previous_music_;
 
     /// A MediaManager provided for users.
     MediaManager media_manager_;
