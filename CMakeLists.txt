@@ -129,6 +129,12 @@ if (UNIX OR MINGW)
         # And we ignore these warnings...
         -Wno-switch-default # SDL includes causes these. Awaiting CMake 2.8.12 to ignore these properly. TODO
     )
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        message(STATUS "Debug mode enabled")
+        add_definitions(-g -O0)
+    else (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        message(STATUS "Release mode enabled")
+    endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 
     set_source_files_properties(${GENERATED_SRC}
         PROPERTIES
