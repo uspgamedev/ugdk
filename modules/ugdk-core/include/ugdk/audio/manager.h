@@ -1,13 +1,11 @@
 #ifndef UGDK_AUDIO_MANAGER_H_
 #define UGDK_AUDIO_MANAGER_H_
 
+#include <ugdk/system/config.h>
 #include <ugdk/audio/sampler.h>
 #include <ugdk/audio/source.h>
 #include <ugdk/audio/sampleframe.h>
 #include <ugdk/structure/types.h>
-
-#include UGDK_OPENAL_DIR(al.h)
-#include UGDK_OPENAL_DIR(alc.h)
 
 #include <string>
 #include <map>

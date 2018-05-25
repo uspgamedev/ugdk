@@ -2,6 +2,7 @@
 #include <ugdk/system/config.h>
 #include <ugdk/audio/source.h>
 #include <ugdk/audio/sampler.h>
+#include "openal.h"
 
 #include <queue>
 #include <limits>

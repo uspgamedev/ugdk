@@ -1,7 +1,5 @@
-#include <ugdk/audio/manager.h>
 
-#include "SDL.h"
-#include "SDL_mixer.h"
+#include <ugdk/audio/manager.h>
 
 #include <ugdk/system/engine.h>
 #include <ugdk/debug/log.h>
@@ -9,6 +7,10 @@
 #include <ugdk/audio/source.h>
 #include <ugdk/audio/sampler.h>
 #include <ugdk/audio/sampleframe.h>
+
+#include "SDL.h"
+#include "SDL_mixer.h"
+#include "openal.h"
 
 #include <iostream>
 

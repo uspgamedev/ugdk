@@ -1,12 +1,10 @@
 
-#ifndef UGDK_AUDIO_SOURCE_H_
-#define UGDK_AUDIO_SOURCE_H_
+#ifndef UGDK_AUDIO_TRACK_H_
+#define UGDK_AUDIO_TRACK_H_
 
 #include <ugdk/system/config.h>
 #include <ugdk/structure/types.h>
 #include <ugdk/audio/sampler.h>
-
-#include UGDK_OPENAL_DIR(al.h)
 
 #include <vector>
 #include <memory>
@@ -17,10 +15,9 @@ namespace audio {
 
 class Sampler;
 
-class Source {
+class Track {
   public:
-    Source();
-    ~Source();
+    Track();
     void set_sampler(std::shared_ptr<Sampler>);
     void Play();
     void Pause();
@@ -28,18 +25,15 @@ class Source {
     bool is_playing() const;
     void set_volume(double vol);
     double volume() const;
+  protected:
+    virtual ~Track();
+    virtual void Update() = 0;
   private:
-    void Update();
     std::shared_ptr<Sampler> current_sampler_ptr;
-    std::queue<ALuint> buffers_;
-    double volume_;
-    bool is_playing_;
-    ALuint name_;
-
     friend class Manager;
 };
 
 } // namespace audio
 } // namespace ugdk
 
-#endif //UGDK_AUDIO_SOURCE_H_
+#endif //UGDK_AUDIO_TRACK_H_

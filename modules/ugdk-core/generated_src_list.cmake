@@ -95,7 +95,8 @@ modules/ugdk-core/include/ugdk/audio.h
 modules/ugdk-core/include/ugdk/audio/manager.h
 modules/ugdk-core/include/ugdk/audio/module.h
 modules/ugdk-core/include/ugdk/audio/music.h
-modules/ugdk-core/include/ugdk/audio/sample.h
+modules/ugdk-core/include/ugdk/audio/sampledata.h
+modules/ugdk-core/include/ugdk/audio/sampleframe.h
 modules/ugdk-core/include/ugdk/audio/sampler.h
 modules/ugdk-core/include/ugdk/audio/source.h
 modules/ugdk-core/include/ugdk/debug.h
