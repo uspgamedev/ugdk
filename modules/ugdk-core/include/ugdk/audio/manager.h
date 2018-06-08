@@ -3,7 +3,7 @@
 
 #include <ugdk/system/config.h>
 #include <ugdk/audio/sampler.h>
-#include <ugdk/audio/source.h>
+#include <ugdk/audio/track.h>
 #include <ugdk/audio/sampleframe.h>
 #include <ugdk/structure/types.h>
 
@@ -34,17 +34,19 @@ class Manager {
     std::shared_ptr<Sampler> LoadSampler(const std::string& name, U64 sample_rate, U8 num_channels,
                                          const Sampler::Processor& processor);
 
-    std::shared_ptr<Source> LoadSource(const std::string& name);
+    std::shared_ptr<Track> LoadTrack(const std::string& name);
 
   private:
+    struct Backend;
+
     static const int NUM_CHANNELS = 16;
 
-    std::map<std::string, std::shared_ptr<Source>> source_data_;
+    std::map<std::string, std::shared_ptr<Track>> track_data_;
     std::map<std::string, std::shared_ptr<Sampler>> sampler_data_;
 
-    ALCdevice *device_;
+    std::unique_ptr<Backend> backend_;
 
-    void ReleaseSources();
+    void ReleaseTracks();
     void ReleaseSamplers();
 };
 

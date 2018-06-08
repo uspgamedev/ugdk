@@ -4,13 +4,12 @@
 #include <ugdk/system/engine.h>
 #include <ugdk/debug/log.h>
 
-#include <ugdk/audio/source.h>
 #include <ugdk/audio/sampler.h>
 #include <ugdk/audio/sampleframe.h>
 
 #include "SDL.h"
 #include "SDL_mixer.h"
-#include "openal.h"
+#include "openal/openal.h"
 
 #include <iostream>
 
@@ -23,20 +22,24 @@ bool ErrorLog(const std::string& err_msg) {
     debug::Log(debug::CRITICAL, err_msg);
     return false;
 }
-}
 
-Manager::Manager() {
-}
+} // unnamed namespace
 
-Manager::~Manager() {
-}
+struct Manager::Backend final {
+  ALCdevice *device{nullptr};
+  ALCcontext *context{nullptr};
+};
+
+Manager::Manager() : backend_{} {}
+
+Manager::~Manager() {}
 
 bool Manager::Initialize() {
 
-    device_ = alcOpenDevice(NULL);
-    if (device_) {
-        ALCcontext *context = alcCreateContext(device_, NULL);
-        alcMakeContextCurrent(context);
+    backend_->device = alcOpenDevice(NULL);
+    if (backend_->device) {
+        backend_->context = alcCreateContext(backend_->device, NULL);
+        alcMakeContextCurrent(backend_->context);
     }
     else
         return ErrorLog("Failed to initialize audio device");
@@ -49,11 +52,11 @@ bool Manager::Initialize() {
 }
 
 void Manager::Release() {
-    alcCloseDevice(device_);
+    alcCloseDevice(backend_->device);
 }
 
 void Manager::Update() {
-    for (auto& it : source_data_)
+    for (auto& it : track_data_)
         it.second->Update();
 }
 
@@ -66,13 +69,13 @@ std::shared_ptr<Sampler> Manager::LoadSampler(const std::string& name, U64 sampl
     return sampler_data_[name];
 }
 
-std::shared_ptr<Source> Manager::LoadSource(const std::string& name) {
-    if (source_data_.find(name) == source_data_.end()) {
-        std::shared_ptr<Source> source(new Source());
-        if (source)
-            source_data_[name] = source;
+std::shared_ptr<Track> Manager::LoadTrack(const std::string& name) {
+    if (track_data_.find(name) == track_data_.end()) {
+        std::shared_ptr<Track> track{new Track()};
+        if (track)
+            track_data_[name] = track;
     }
-    return source_data_[name];
+    return track_data_[name];
 }
 
 } // namespace audio

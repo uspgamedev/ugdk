@@ -17,7 +17,6 @@ class Sampler;
 
 class Track {
   public:
-    Track();
     void set_sampler(std::shared_ptr<Sampler>);
     void Play();
     void Pause();
@@ -26,11 +25,17 @@ class Track {
     void set_volume(double vol);
     double volume() const;
   protected:
+    Track();
     virtual ~Track();
     virtual void Update() = 0;
   private:
     std::shared_ptr<Sampler> current_sampler_ptr;
     friend class Manager;
+};
+
+class SpatialTrack : public Track {
+  public:
+    SpatialTrack();
 };
 
 } // namespace audio
