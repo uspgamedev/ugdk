@@ -46,14 +46,14 @@ void Renderer::Process() {
         target_->Bind();
 
     graphic::Canvas canvas(target_);
-    canvas.Bind(); //We set the shaderprogram
+    canvas.Bind();
     target_->Use(); //We mess with the context
     for (auto step : render_steps_) {
         step(canvas);
     }
 
     target_->Unbind();
-    canvas.Unbind(); // restore shaderprogram
+    canvas.Unbind();
 }
 
 void Renderer::Present() {

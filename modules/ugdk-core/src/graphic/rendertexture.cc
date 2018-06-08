@@ -47,6 +47,10 @@ RenderTexture::~RenderTexture() {
     glDeleteFramebuffers(1, &gl_buffer_ptr->value_);
 }
 
+bool RenderTexture::IsValid() const {
+    return static_cast<bool>(texture_);
+}
+
 math::Vector2D RenderTexture::size() const {
     return math::Vector2D(texture_->width(), texture_->height());
 }

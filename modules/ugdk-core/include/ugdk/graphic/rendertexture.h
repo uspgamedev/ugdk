@@ -18,6 +18,8 @@ class RenderTexture : public RenderTarget {
     RenderTexture(const math::Integer2D& size);
     ~RenderTexture();
 
+    bool IsValid() const override;
+
     math::Vector2D size() const;
     void Resize(const math::Vector2D&) override;
     graphic::GLTexture* texture() const { return texture_.get(); }
