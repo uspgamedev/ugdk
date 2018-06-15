@@ -173,7 +173,12 @@ void GLTexture::set_texture_filter(GLint filter) {
 }
 
 GLTexture::GLTexture(GLuint gltexture, int texture_width, int texture_height)
-    : id_(gltexture), texture_width_(texture_width), texture_height_(texture_height) {}
+    : id_(gltexture)
+    , texture_width_(texture_width)
+    , texture_height_(texture_height) {
+
+    //glGenFramebuffers(1, &frame_buffer_);
+}
 
 } // namespace graphic
 } // namespace ugdk

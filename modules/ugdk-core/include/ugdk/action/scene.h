@@ -82,10 +82,6 @@ class Scene : public system::TaskPlayer {
     void set_background_music(std::shared_ptr<audio::Music> music) { background_music_ = music; }
     /**@}
      */
-    
-    uint32_t num_functions();
-    void set_render_function(uint32_t, const std::function<void (graphic::Canvas&)>&);
-    void RemoveRenderFunction(uint32_t);
 
   protected:
     /// Ends the scene activity.

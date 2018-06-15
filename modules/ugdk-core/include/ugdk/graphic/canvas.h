@@ -67,6 +67,7 @@ class Canvas {
 
   private:
     friend class ::ugdk::graphic::Manager;
+    friend class ::ugdk::graphic::Renderer;
 
     void Bind();
     void Unbind();

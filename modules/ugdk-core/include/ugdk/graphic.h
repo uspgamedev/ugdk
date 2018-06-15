@@ -14,12 +14,16 @@ class PrimitiveController;
 class PrimitiveControllerPosition;
 class TextureAtlas;
 struct PixelSurface;
+
 class GLTexture;
+struct UGDKGLuint;
+
 class Shader;
 class ShaderProgram;
 
 class Canvas;
 class RenderTarget;
+class RenderScreen;
 class RenderTexture;
 class TextureUnit;
 

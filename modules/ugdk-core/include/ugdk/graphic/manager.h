@@ -2,7 +2,7 @@
 #define UGDK_GRAPHIC_MANAGER_H_
 
 #include <ugdk/structure/types.h>
-#include <ugdk/math/vector2D.h>
+#include <ugdk/math.h>
 
 #include <ugdk/action.h>
 #include <ugdk/graphic.h>
@@ -15,6 +15,7 @@
 #include <bitset>
 #include <functional>
 #include <memory>
+#include <unordered_set>
 
 struct SDL_Window;
 typedef void* SDL_GLContext;
@@ -23,6 +24,7 @@ namespace ugdk {
 namespace graphic {
 
 class RenderScreen;
+class Renderer;
 action::Scene* CreateLightrenderingScene(std::function<void (Canvas&)> render_light_function);
 
 enum class VertexType {
@@ -38,15 +40,15 @@ class Manager {
                     const math::Vector2D& canvas_size);
     void Release();
 
-    void RegisterScreen(std::weak_ptr<desktop::Window>);
-    void UnregisterScreen(uint32_t index);
+    std::weak_ptr<RenderScreen> RegisterScreen (std::weak_ptr<desktop::Window>);
+    std::weak_ptr<RenderTexture>RegisterTexture(std::unique_ptr<graphic::GLTexture>&& texture);
+    std::weak_ptr<RenderTexture>RegisterTexture(const math::Integer2D& size);
+    /*WE NEED TO ADD A METHOD FOR RENDERTEXTURES*/
 
-    void SetActiveScreen(uint32_t index);
+    std::weak_ptr<RenderTarget> default_target();
+    const std::unordered_set<std::shared_ptr<RenderTarget>>& targets() const;
 
-    void UseCanvas(graphic::Canvas &);
-    void FreeCanvas(graphic::Canvas &);
-
-    void ResizeScreen(uint32_t index, const math::Vector2D& canvas_size);
+    void UnregisterTarget(const std::weak_ptr<RenderTarget>& target);
 
     void SetUserNearestNeighborTextures(bool enabled);
 
@@ -94,8 +96,7 @@ class Manager {
         friend class Manager;
     };
 
-    RenderTarget* screen(uint32_t index) const;
-    uint32_t num_screens();
+    uint32_t num_targets();
     RenderTexture* light_buffer() const { return light_buffer_.get(); }
 
     graphic::GLTexture* white_texture() { return white_texture_; }
@@ -108,18 +109,26 @@ class Manager {
     void ReleaseTextureUnitID(int id);
 
     SDL_GLContext context_;
-    std::vector<std::unique_ptr<RenderScreen> > screens_;
+    std::unordered_set<std::shared_ptr<RenderTarget>> targets_;
     std::unique_ptr<RenderTexture> light_buffer_;
     std::unique_ptr<util::IDGenerator> textureunit_ids_;
     graphic::GLTexture* white_texture_;
     
+    std::shared_ptr<RenderTarget> default_target_;
     Shaders shaders_;
     ShaderProgram* light_shader_;
     uint32_t active_index_;
-    
 
     friend class ::ugdk::graphic::TextureUnit;
 };
+
+inline std::weak_ptr<RenderTarget> Manager::default_target() {
+    return default_target_;
+}
+
+inline const std::unordered_set<std::shared_ptr<RenderTarget>>& Manager::targets() const {
+    return targets_;
+}
 
 }  // namespace graphic
 }  // namespace ugdk

@@ -24,6 +24,8 @@ modules/ugdk-core/src/graphic/gltexture.cc
 modules/ugdk-core/src/graphic/gltexture.h
 modules/ugdk-core/src/graphic/manager.cc
 modules/ugdk-core/src/graphic/module.cc
+modules/ugdk-core/src/graphic/renderer.cc
+modules/ugdk-core/src/graphic/renderscreen.cc
 modules/ugdk-core/src/graphic/rendertarget.cc
 modules/ugdk-core/src/graphic/rendertexture.cc
 modules/ugdk-core/src/graphic/shader.cc
@@ -116,6 +118,7 @@ modules/ugdk-core/include/ugdk/graphic/manager.h
 modules/ugdk-core/include/ugdk/graphic/module.h
 modules/ugdk-core/include/ugdk/graphic/opengl.h
 modules/ugdk-core/include/ugdk/graphic/renderer.h
+modules/ugdk-core/include/ugdk/graphic/renderscreen.h
 modules/ugdk-core/include/ugdk/graphic/rendertarget.h
 modules/ugdk-core/include/ugdk/graphic/rendertexture.h
 modules/ugdk-core/include/ugdk/graphic/shader.h

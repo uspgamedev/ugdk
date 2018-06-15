@@ -1,8 +1,10 @@
 
-#include <ugdk/debug/log.h>
 #include <ugdk/desktop/manager.h>
+
+#include <ugdk/debug/log.h>
 #include <ugdk/desktop/window.h>
 #include <ugdk/system/engine.h>
+#include <ugdk/system/exceptions.h>
 
 #include <system/sdleventhandler.h>
 #include <cassert>
@@ -12,12 +14,14 @@ namespace desktop {
 
 using std::weak_ptr;
 using std::shared_ptr;
+using std::vector;
+using std::unordered_set;
 
 class DesktopSDLEventHandler : public system::SDLEventHandler {
 public:
     DesktopSDLEventHandler(Manager& manager) : manager_(manager) {}
 
-    std::unordered_set<Uint32> TypesHandled() const override {
+    unordered_set<Uint32> TypesHandled() const override {
         return { SDL_WINDOWEVENT };
     }
 
@@ -28,11 +32,11 @@ public:
                 break;
 
             case SDL_WINDOWEVENT_CLOSE:
-                uint32_t i; 
-                for (i = 0; i < manager_.windows_.size(); i++)
-                    if (manager_.windows_[i]->id() == sdlevent.window.windowID)
+                for (auto& window : manager_.windows_)
+                    if (window->id() == sdlevent.window.windowID) {
+                        manager_.DestroyWindow(window);
                         break;
-                manager_.DestroyWindow(i);
+                    }
                 break;
 
             default:
@@ -72,35 +76,22 @@ weak_ptr<Window> Manager::CreateWindow(const WindowSettings& settings) {
        // Couldn't create the window.
        debug::Log(debug::LogLevel::ERROR, "UGDK",
                   "desktop::Manager - Failed to create the window: ", SDL_GetError());
-        return std::shared_ptr<desktop::Window>();
+        return shared_ptr<desktop::Window>();
     }
 
-    return RegisterAndGetWindow(std::shared_ptr<desktop::Window>(new desktop::Window(window)));
+    return RegisterAndGetWindow(shared_ptr<desktop::Window>(new desktop::Window(window)));
 }
 
-void Manager::DestroyWindow(uint32_t index) {
-    if (0 <= index && index < windows_.size());
-        windows_.erase(windows_.begin() +index);
-        
-    auto &map = map_id_to_window_;
-    std::shared_ptr<Window> target_window = window(index).lock();
-    if (target_window)
-        map.erase(SDL_GetWindowID(target_window->sdl_window_));
-    else {
-        std::vector<uint32_t> kill_key_vector;
-        for (auto &pair : map)
-            if (!pair.second.lock())
-                kill_key_vector.push_back(pair.first);
-        for (auto key : kill_key_vector)
-            map.erase(key);
-    }
+void Manager::DestroyWindow(const weak_ptr<Window>& window) {
+    auto window_ptr = window.lock();
+    if (window_ptr)
+        windows_.erase(window_ptr);
 }
 
-std::weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& new_window) {
+weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& new_window) {
     assert(new_window); //Can't register non-existent window.
 
-    windows_.push_back(new_window);
-    map_id_to_window_[SDL_GetWindowID( (new_window->sdl_window_) )] = new_window;
+    windows_.insert(new_window);
 
     if(!primary_window_.lock()) //If we don't have a prim. win. then set it
         primary_window_ = new_window;
@@ -108,21 +99,17 @@ std::weak_ptr<Window> Manager::RegisterAndGetWindow(const shared_ptr<Window>& ne
     return new_window;
 }
 
-std::weak_ptr<Window> Manager::window(uint32 index) const {
-    if (index < windows_.size()) {
-        return windows_[index];
-    }
-    else {
-        return weak_ptr<Window>();
-    }
-}
-std::weak_ptr<Window> Manager::WindowById(uint32_t id) {
-    return map_id_to_window_[id];
-}
-
 uint32_t Manager::num_windows() {
     return windows_.size();
 }
+
+weak_ptr<Window> Manager::FindWindowById(U32 window_id) {
+    for (const auto& shared_window : windows_)
+        if (shared_window->id() == window_id)
+            return shared_window;
+    return weak_ptr<Window>();
+}
+
 void Manager::PresentAll() {
     for(const auto& window : windows_)
         window->Present();

@@ -33,7 +33,6 @@ void TextureUnit::BindTexture(const graphic::GLTexture* texture) {
     glActiveTexture(GL_TEXTURE0 + id_);
     glBindTexture(GL_TEXTURE_2D, texture_->id());
     internal::AssertNoOpenGLError();
-
 }
 
 }  // namespace graphic
