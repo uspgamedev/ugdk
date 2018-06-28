@@ -28,8 +28,7 @@
 namespace ugdk {
 namespace system {
 
-BaseException::BaseException(const char * fmt, ...)
-{
+void BaseException::set_reason(const char* fmt, ...) {
     va_list args;
     int size_buffer = 256, size_out;
     char * buffer;
